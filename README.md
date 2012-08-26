@@ -10,9 +10,9 @@ Installation
 Copy the source into a work space.
 
 EmpathicCivilGameEngine depends on:
-* nodejs
-* socket.io
-* expressjs
+* [nodejs](http://nodejs.org/)
+* [socket.io](http://socket.io/)
+* [expressjs](http://expressjs.com/)
 * (other dependancies to come...)
 
 
