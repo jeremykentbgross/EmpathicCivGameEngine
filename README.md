@@ -3,6 +3,8 @@ EmpathicCivGameEngine
 
 EmpathicCivilGameEngine is an HTML5 / CSS3 / Nodejs Game Engine.
 
+I started it as a hobby project after years of working on professional Game Engines, such as CryEngine3, UnrealEngine3, and building a couple of in house game engines from scratch at startups.
+
 
 Installation
 ===========
