@@ -1,0 +1,110 @@
+////////////////////////////////////////////////////////////////////
+//NOTE: THESE ARE DEFAULTS!! ADD CUSTOM LOCAL CHANGES AT THE BOTTOM!
+//
+//Example:
+//	Add the following to the bottom of the page to turn on the drawing of physics
+// =>
+//	GameSystemVars.Debug.Physics_Draw = true;
+//
+////////////////////////////////////////////////////////////////////
+GameSystemVars = //TODO rename as GameSystemSettings
+{
+	DEBUG : true,//TODO replace GameSystemVars.DEBUG
+	RUN_UNIT_TESTS : true,//TODO replace GameSystemVars.RUN_UNIT_TESTS
+	
+	//TODO appname
+	
+	Graphics :
+	{
+		initWidth : 768,
+		initHeight : 512,
+		//use 3d?
+	},
+	
+	Debug :
+	{
+		//Name_Type, Type = <Print (bool), Draw (bool), DrawColor (color), Size (int/float)>
+		
+		TextMessages_Draw : true,//TODO rename (use in renderer)
+		
+		//scenegraph
+		SceneGraph_Draw : false,
+		
+		//map
+		Map_Draw : false,
+		//TODO colors
+		
+		//physics
+		Physics_Draw : false,
+		//TODO colors
+		
+		//camera
+		GameWorld_CameraTarget_Draw : false,
+		GameWorld_CameraTarget_Size : 10,
+		GameWorld_CameraTarget_DrawColor : "rgba(255, 255, 0, 1)",
+		//TODO draw entity position locators
+		
+		//bsp tree
+		SpacialPartitioningTree_Node_DrawColor : "rgba(64, 64, 64, 1)",
+		SpacialPartitioningTree_OccupiedNode_DrawColor : "rgba(255, 255, 255, 1)",
+		SpacialPartitioningTree_Item_DrawColor : "rgba(128, 0, 128, 1)",
+		
+		//input
+		Input_Draw : false,
+		Input_Active_DrawColor : "rgba(0, 255, 0, 1)",
+		Input_Inactive_DrawColor : "rgba(0, 0, 255, 1)",
+		Input_Print : false,
+		//TODO this goes in input NOT gameworld, how make sure the cursor is rendered?? have renderer listen to input?
+		GameWorld_MouseCursor_Draw : true,
+		GameWorld_MouseCursor_Size : 10,
+		//TODO use active and inactive colors instead?
+		GameWorld_MouseCursor_DrawColor : "rgba(0, 255, 0, 1)",
+		
+		//frame stats
+		FrameStats_Draw : true,
+		FrameStats_DrawColor : "rgba(255, 255, 0, 1)",
+		FrameStats_Print : false,
+		
+		//Object
+		GameObject_Destroy_Print : false,
+		
+		//TODO search for "rgba( in all files		
+		
+		//Network
+		NetworkMessages_Print : true,
+		
+		//default debug text color
+		TextDefault_DrawColor : "rgba(255, 255, 255, 1)",
+		TextBackground_DrawColor : "rgba(0, 0, 0, 0.5)",
+		Text_Size : 12
+	},
+	
+	Input :
+	{
+		//TODO controls
+	},
+	
+	Network :
+	{
+		isServer : false,
+		isMultiplayer : true,
+		GamePort : 1337
+		//TODO editorPort : ??
+	}
+	
+	//TODO make the logger in global or instance space
+};
+
+
+
+///////////////////////////////////////////////////////////////////
+//NOTE: CUSTOM LOCAL CHANGES GO BELOW HERE
+//
+//example:
+//	GameSystemVars.Debug.Physics_Draw = true;
+//
+///////////////////////////////////////////////////////////////////
+
+//GameSystemVars.Debug.Text_Size = 10;
+//GameSystemVars.Graphics.initWidth = 1024;
+//GameSystemVars.Graphics.initHeight = 512;

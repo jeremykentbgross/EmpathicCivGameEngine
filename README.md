@@ -12,9 +12,10 @@ Installation
 Copy the source into a work space.
 
 EmpathicCivilGameEngine depends on:
-* [nodejs](http://nodejs.org/)
-* [socket.io](http://socket.io/)
-* [expressjs](http://expressjs.com/)
+* [nodejs](http://nodejs.org/) -- install
+* [socket.io](http://socket.io/) -- install with npm
+* [expressjs](http://expressjs.com/) -- install with npm
+* [dojo-release-1.7.2](http://dojotoolkit.org/blog/dojo-1-7-2-released) -- needs to be manually copied into the 3rdParty folder.
 * (other dependancies to come...)
 
 

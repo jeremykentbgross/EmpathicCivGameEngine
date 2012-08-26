@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+	</head>
+	
+	<body bgcolor="#000000">
+	
+		<title>J's webpage</title>
+		
+		<!-- TODO rename to appname container or something and set the title in code -->
+		<div id="appname" style="background-color:#0000FF;color:#FFFFFF">        
+			<p>App Name.</p>
+		</div>
+		
+		<!-- TODO rename to something else and set insides in code?? -->
+		<div id="wsad" style="background-color:#FF0000">        
+			<p>Please use WASD keys to move the character. W = Up, A = Right, S = Down, D = Right.</p>
+		</div>
+		
+		<div id="graphics_container">
+		</div>
+		
+		<!-- SETUP default / null assets -->
+		<!-- TODO css this unrendered -->
+		<div id="defaultassets" style="visibility:hidden" >        
+			<img id="defaultimage" src="images/placeholder.png" />
+			<!-- TODO other default / null assets, sound, etc -->
+		</div>
+		
+		<div id="chat_container" style="background-color:#0000FF;color:#FFFFFF">
+		</div>
+		
+		<!-- 3RD PARTY scripts -->
+		<script src="3rdParty/dojo-release-1.7.2/dojo/dojo.js" type="text/javascript">	</script>
+
+		<!-- LOAD GAME scripts -->
+		<script src="scripts/GameLoader.js" type="text/javascript">	</script>
+		<script type="text/javascript">
+			GameLoader.init(false, "");
+		</script>
+
+	</body>
+	
+</html>
