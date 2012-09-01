@@ -264,6 +264,8 @@ http://hobbycoding.posterous.com/the-fastest-websocket-module-for-nodejs
 https://github.com/kazuyukitanimura/websocketBinaryTransferBenchmark
 
 http://marknelson.us/1991/02/01/arithmetic-coding-statistical-modeling-data-compression/
+
+http://webdevrefinery.com/forums/topic/7871-node-how-to-use-socketio-to-push-realtime-events/
 //////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////
 

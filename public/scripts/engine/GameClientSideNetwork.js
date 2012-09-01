@@ -30,16 +30,29 @@ GameEngineLib.createGameNetwork = function(instance, private)
 	instance.init = function()
 	{
 		private.serializer = GameEngineLib.GameSerializers.createGameBinarySerializer();
-		
 		private.maxItemsPerMessage = 255;
 		
-		//Note may need tp be sliced to last '/' in the future
-		var address = document.URL.slice(0, -1) +  ":" + GameSystemVars.Network.GamePort;
-		private.socket = io.connect(address);
+		
+		if(GameSystemVars.Network.GamePort !== null)
+		{
+			//Note may need to be sliced to last '/' in the future
+			var address = document.URL.slice(0, -1) +  ":" + GameSystemVars.Network.GamePort;
+			private.socket = io.connect(address);
+		}
+		else
+		{
+			private.socket = io.connect();
+		}
 		private.socket.on('connect', private.onConnectedToServer);
-		private.socket.on('msg', private.onMsg);
-		//TODO other message channels, ie chat etc?
 		private.socket.on('disconnect', private.onDisconnectedFromServer);
+		
+		//TODO many chat channels? Team, All, etc?
+		//chat channel
+		private.socket.on('msg', private.onMsgRecv);
+		//data channel
+		private.socket.on('data', private.onDataRecv);
+		
+		
 		
 		private.objectHeaderFormat =
 		[
@@ -74,13 +87,15 @@ GameEngineLib.createGameNetwork = function(instance, private)
 		];
 	}
 	
-	instance.sendData = function(inData, inSentListener)
+	
+	
+	instance.sendMessage = function(inMsg, inSentListener)
 	{
 		if(private.socket.socket.connected === true)
 		{
-			private.socket.emit('msg', inData);
+			private.socket.emit('msg', inMsg);
 			if(inSentListener && inSentListener.onSent)
-				inSentListener.onSent(inData);
+				inSentListener.onSent(inMsg);
 		}
 		else
 		{
@@ -92,6 +107,27 @@ GameEngineLib.createGameNetwork = function(instance, private)
 			}
 		}
 	}
+	
+	private.sendData = function(inData, inSentListener)
+	{
+		if(private.socket.socket.connected === true)
+		{
+			private.socket.emit('data', inData);
+			if(inSentListener && inSentListener.onSent)
+				inSentListener.onSent(inData);
+		}
+		else
+		{
+			//TODO queue this for resend when we are connected again
+			
+			if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+			{
+				GameEngineLib.logger.info("Can't send data when disconnected.");
+			}
+		}
+	}
+	
+	
 	
 	private.onConnectedToServer = function()
 	{
@@ -130,7 +166,27 @@ GameEngineLib.createGameNetwork = function(instance, private)
 		);
 	}
 	
-	private.onMsg = function(inData)
+	
+	
+	private.onMsgRecv = function(inMsg)
+	{
+		if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+		{
+			GameEngineLib.logger.info("NetRecv: " + inMsg);
+		}
+		
+		instance.onEvent(
+			{
+				getName : function()
+				{
+					return "Msg"	//TODO rename this
+				},
+				msg : inMsg
+			}
+		);
+	}
+	
+	private.onDataRecv = function(inData)
 	{
 		if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
 		{
@@ -141,12 +197,14 @@ GameEngineLib.createGameNetwork = function(instance, private)
 			{
 				getName : function()
 				{
-					return "Msg"	//TODO rename this
+					return "Data"	//TODO rename this
 				},
 				msg : inData
 			}
 		);
 	}
+	
+	
 	
 	
 	//TODO probably on BOTH sides
@@ -205,13 +263,15 @@ GameEngineLib.createGameNetwork = function(instance, private)
 				object.serialize(private.serializer);
 			}
 			
-			this.sendData(private.serializer.getString());
+			private.sendData(private.serializer.getString());
 			
 			dirtyObjects = dirtyObjects.slice(messageHeader.public.numObjects);
 		}
 	}
 	
-	instance.onMsg = function(inEvent)
+	
+	
+	private.onData = function(inEvent)
 	{
 		/*
 		TODO
@@ -247,7 +307,7 @@ GameEngineLib.createGameNetwork = function(instance, private)
 		}
 	}
 	
-	instance.registerListener("Msg", instance);
+	instance.registerListener("Data", private);
 	
 	
 	

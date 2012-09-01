@@ -24,3 +24,68 @@ GO
 
 unpack
 	throw	//from logerror
+
+
+
+/////////////////////////////////////////
+/////////////////////////////////////////
+
+GameInstance.localUser =
+{
+	name : isServer ? "Server" : int.random().toString();
+}
+
+
+//client side
+OnConnect()
+	send: 'userID', GameInstance.localUser.name;
+	socket.user = new User("server");
+
+
+
+//server side:
+GameInstance.expectedUsers //sent from login or other server(s)
+	
+OnUserID(id)
+{
+	if(Globals.expectedOnlyList)
+	{
+		if(!expected)
+		{
+			disconnect
+			return;
+		}
+	}
+	if(this.users[id] && this.users[id].socket)
+	{
+		//already connected error
+		disconnect
+		return;
+	}
+	if(this.users[id] === null)
+		this.users[id] = new User(name);//contains ping etc
+	
+	this.users[id].socket = socket;
+	socket.user = this.users[id];
+}
+	
+OnDisconnect()
+	socket.user.socket = null;
+	
+OnData/Msg()
+	if(socket.user === null)
+		drop em!
+		
+Serialize()
+{
+	for numObjects
+		get object header
+		find object
+		if(object.owner === source || source === server)
+			serialize
+		else
+			dummy serialize
+			check recent owners
+}
+
+//TODO how to setowner

@@ -29,23 +29,40 @@ GameEngineLib.createGameNetwork = function(instance, private)
 	
 	instance.init = function()
 	{
-		//todo see: http://webdevrefinery.com/forums/topic/7871-node-how-to-use-socketio-to-push-realtime-events/
-		//todo configure (to use flash etc)
-		//		private.listenSocket = GameEngineServer.listenSocket;//GameEngineServer.socketio.listen(/*1337*/GameEngineServer.expressApp);
-		private.listenSocket = GameEngineServer.socketio.listen(GameSystemVars.Network.GamePort);
+		if(GameSystemVars.Network.GamePort !== null)
+		{
+			private.listenSocket = GameEngineServer.socketio.listen(GameSystemVars.Network.GamePort);
+		}
+		else
+		{
+			private.listenSocket = GameEngineServer.listenSocket;
+		}
 		
 		private.listenSocket.sockets.on(
 			"connection",
 			function(socket)
-			{
-				//socket.emit("msg", "hello from server");
-				
+			{				
 				//on message send message to everyone else:
 				socket.on(
 					"msg",
 					function (data)
 					{
+						//TODO append users name
 						socket.broadcast.emit("msg", data);
+						
+						if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+						{
+							GameEngineLib.logger.info("NetRecv: " + data);
+						}
+						//console.log(data);
+					}
+				);
+				
+				socket.on(
+					"data",
+					function (data)
+					{
+						socket.broadcast.emit("data", data);
 						
 						if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
 						{

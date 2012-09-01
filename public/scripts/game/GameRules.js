@@ -178,7 +178,7 @@ GameLib.createGameRules = function(instance, private)
 					{
 						event.preventDefault();
 						
-						GameInstance.Network.sendData(
+						GameInstance.Network.sendMessage(
 							private.chat.value,
 							//sentListener:
 							{
@@ -320,7 +320,7 @@ GameLib.createGameRules = function(instance, private)
 			);
 		}
 		
-		//GameInstance.Network.sendData(inInputEvent.mouseLoc.myX + ", " + inInputEvent.mouseLoc.myY);
+		//GameInstance.Network.sendMessage(inInputEvent.mouseLoc.myX + ", " + inInputEvent.mouseLoc.myY);
 	}
 		
 	

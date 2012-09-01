@@ -11,7 +11,7 @@ Short term notes:
 -port in 'project' c#/c++ code: rays, A*, tree improvements
 -port in minimmo rays and ??
 -port/inspire in 2k4-5 map code
-
+-html hidden image takes up space
 
 
 Network:
@@ -27,10 +27,11 @@ Network:
 -creates new objects too often in serializer/airthmetic/bit packer?
 -much in client side network needs to be in network wrapping the client/server code
 -GameBinarySerialier.js not finished
+-configure socketio (to use flash or whatever etc)
 -prediction?
 --physics.setServerPosition?? (physics component needs cleaning)
 --See Source Engine Prediction
-
+-console chat css
 
 
 Tree updates:
@@ -45,6 +46,16 @@ Tree updates:
 Animation(s):
 -
 -*Character working
+
+
+Localization:
+-All Messages
+
+
+
+Testing:
+-test in ie6 or something for failure to support browser features (canvas, websockets, etc)
+-Search for all TODO/todo/notes
 
 
 

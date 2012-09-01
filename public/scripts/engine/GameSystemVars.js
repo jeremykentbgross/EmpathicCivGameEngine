@@ -92,7 +92,7 @@ GameSystemVars = //TODO rename as GameSystemSettings
 		//TODO search for "rgba( in all files		
 		
 		//Network
-		NetworkMessages_Print : true,
+		NetworkMessages_Print : false,
 		
 		//default debug text color
 		TextDefault_DrawColor : "rgba(255, 255, 255, 1)",
@@ -109,7 +109,7 @@ GameSystemVars = //TODO rename as GameSystemSettings
 	{
 		isServer : false,
 		isMultiplayer : true,
-		GamePort : 1337
+		GamePort : null//1337	//if null then defaults to port 80 and reuses main connection
 		//TODO editorPort : ??
 	}
 	
