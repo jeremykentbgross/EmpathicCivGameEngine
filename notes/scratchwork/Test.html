@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+	<body>
+		<script>
+			//This file is for testing basic stuff quickly!
+		
+		
+			//////////////////////////////////////////////////////////////////
+			//////////////////////////////////////////////////////////////////
+			function typedArrays()
+			{
+				console.log("Team America");
+				var buffer = new ArrayBuffer(64);
+				var int32View = new Int32Array(buffer);
+				for(var i = 0; i < int32View.length; ++i)
+				{
+					int32View[i] = 2 * i;
+				}
+				var int16View = new Int16Array(buffer);
+				for(var i = 0; i < int16View.length; ++i)
+				{
+					console.log(i + ": " + int16View[i]);
+				}
+				//0 01111111 (1)00000000000000000000000
+				//0 10000000 (1)00000000000000000000000
+				//0 10000000 (1)10000000000000000000000
+				//0 10000001 (1)00000000000000000000000
+				//0 10000001 (1)01000000000000000000000
+				
+				console.log("-------------------------");
+				
+				var float32View = new Float32Array(buffer);
+				for(var i = 0; i < float32View.length; ++i)
+				{
+					float32View[i] = i;
+				}
+				for(var i = 0; i < int32View.length; ++i)
+				{
+					var bin = int32View[i].toString(2);
+					for(var j = bin.length; j < 32; ++j)
+						bin = "0" + bin;
+					console.log(i + ": " + int32View[i]
+						+ " " + bin[0] + " " + bin.substr(1,8) + " (1)" + bin.substr(9,23)
+					);
+				}
+			}
+			typedArrays();
+			//////////////////////////////////////////////////////////////////
+			//////////////////////////////////////////////////////////////////
+			
+			
+			//////////////////////////////////////////////////////////////////
+			//////////////////////////////////////////////////////////////////
+			var NameSpace = {};
+			/*NameSpace.Point2 = function Point2(inX, inY)
+			{
+				this.init(inX, inY);
+			}
+			//NameSpace.Point2.prototype.constructor = NameSpace.Point2;
+			NameSpace.Point2.prototype.init = function init(inX, inY)
+			{
+				this.X = inX | 0;
+				this.Y = inY | 0;
+				this._hiddenData = 0;
+			}
+			NameSpace.Point2.prototype.add = function add(inOther)
+			{
+				return new NameSpace.Point2(this.X + inOther.X, this.Y + inOther.Y);
+			}
+			NameSpace.Point2.prototype._print = function _print(inOther)
+			{
+				console.log("(" + this.X + ", " + this.Y + ")");
+			}*/			
+			
+			function Class(namedConstructor, inParent, inDefinition)//TODO staticDefinition param
+			{
+				inParent = inParent || {};
+				
+				//copy static properties
+				for(property in inParent)
+				{
+					//copy parents properties
+					namedConstructor[property] = inParent[property]
+				}
+				
+				for(property in inParent.prototype)
+				{
+					namedConstructor.prototype[property] = inParent.prototype[property];
+				}
+				
+				for(property in inDefinition)
+				{
+					//copy everything in the definition
+					namedConstructor.prototype[property] = inDefinition[property];
+					
+					//make functions static so they can be called by children from parent namespace
+					//if function //TODO
+						namedConstructor[property] = inDefinition[property];
+				}
+				
+				//namedConstructor._parent = inParent;
+				namedConstructor.prototype._parent = inParent;
+				namedConstructor.prototype[inParent.name] = inParent;
+				
+				//getClassStatic?????<=
+				/*namedConstructor.prototype.getClass = function getClass()//??
+				{
+					return namedConstructor;
+				}*/
+				
+				//TODO chain / required functions?
+				
+				return namedConstructor;
+			}
+			
+			
+			
+			
+			
+			
+			
+			
+
+			//////////////////////////////////////////////////////////////////
+			//////////////////////////////////////////////////////////////////
+			
+			
+			
+			//////////////////////////////////////////////////////////////////
+			//////////////////////////////////////////////////////////////////
+			NameSpace.Point2 = Class(
+				function Point2(inX, inY){	this.init(inX, inY);	}
+				,null
+				,{
+					init : function init(inX, inY)
+					{
+						this.X = inX | 0;
+						this.Y = inY | 0;
+						this._hiddenData = 0;
+					}
+					,add : function add(inOther)
+					{
+						return new NameSpace.Point2(
+							this.X + inOther.X
+							,this.Y + inOther.Y
+						);
+					}
+					,_print : function _print(inOther)
+					{
+						console.log("(" + this.X + ", " + this.Y + ")");
+					}
+				}
+			);
+			
+			var p1 = new NameSpace.Point2();
+			var p2 = new NameSpace.Point2(5, 7);
+			var p3 = new NameSpace.Point2(1 , 1);
+			var p4 = p1.add(p2);
+			p4._print();
+			var p5 = p2.add(p3);
+			p5._print();
+			
+			NameSpace.Point3 = Class(
+				function Point3(inX, inY, inZ){	this.init(inX, inY, inZ);	}
+				,NameSpace.Point2
+				,{
+					init : function init(inX, inY, inZ)
+					{
+						//NameSpace.Point3._parent.init.call(this, inX, inY);
+						//Point3._parent.init.call(this, inX, inY);
+						this._parent.init.call(this, inX, inY);
+						this.Z = inZ || 1;
+					}
+					,add : function add(inOther)
+					{
+						return new NameSpace.Point3(
+							this.X + inOther.X
+							,this.Y + inOther.Y
+							,this.Z + inOther.Z
+						);
+					}
+					,_print : function _print(inOther)
+					{
+						console.log("(" + this.X + ", " + this.Y + ", " + this.Z +")");
+					}
+				}
+			);
+			var p6 = new NameSpace.Point3(1, 1, 1);
+			var p7 = new NameSpace.Point3(2, 2, 2);
+			var p8 = p6.add(p7);
+			p8._print();
+			p8.Point2._print();
+			p5.add(p8)._print();
+			
+			
+			
+			NameSpace.Point4 = Class(
+				function Point4(inX, inY, inZ, inW){	this.init(inX, inY, inZ, inW);	}
+				,NameSpace.Point3
+				,{
+					init : function init(inX, inY, inZ, inW)
+					{
+						this._parent.init.call(this, inX, inY, inZ);
+						this.W = inW || 1;
+					}
+					,add : function add(inOther)
+					{
+						return new NameSpace.Point4(
+							this.X + inOther.X
+							,this.Y + inOther.Y
+							,this.Z + inOther.Z
+							,this.W + inOther.W
+						);
+					}
+					,_print : function _print(inOther)
+					{
+						console.log("(" + this.X + ", " + this.Y + ", " + this.Z + ", " + this.W +")");
+					}
+				}
+			);
+			
+			//TODO not fixed:
+			//var p9 = new NameSpace.Point4(5, 5, 5, 5);
+			//var p10 = new NameSpace.Point4(0.5, 0.5, 0.5, 0.5);
+			
+			//////////////////////////////////////////////////////////////////
+			//////////////////////////////////////////////////////////////////
+			
+			
+			
+			//////////////////////////////////////////////////////////////////
+			//////////////////////////////////////////////////////////////////
+			//https://developer.mozilla.org/en-US/docs/DOM/Using_web_workers?redirectlocale=en-US&redirectslug=Using_web_workers
+			/*
+			var worker = new Worker('worker.js');
+			worker.onmessage = function(event) {
+				console.log("Worker said:" + event.data);
+			};
+			//start:
+			worker.postMessage("");*/
+			
+			/*
+			self.onmessage = function(event) {
+				self.postMessage('Hi there!');
+			};
+			*/
+			
+			//////////////////////////////////////////////////////////////////
+			//////////////////////////////////////////////////////////////////
+		</script>
+	</body>
+</html>

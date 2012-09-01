@@ -1,0 +1,43 @@
+
+
+AUDIO:
+-see three has positional audio
+<audio src="sound.mp3" autoplay></audio>
+<audio src="sound.mp3" autoplay loop></audio>
+<audio src="sound.mp3" controls></audio>
+
+<audio controls>
+  <source src="sound.ogg">
+  <source src="sound.mp3">
+</audio>
+
+
+<audio controls>
+  <source src="sound.ogg" type="audio/ogg" >
+  <source src="sound.mp3" type="audio/mp3" >
+</audio>
+
+
+<audio controls>
+  <source src="sound.ogg" type="audio/ogg" >
+  <source src="sound.mp3" type="audio/mp3" >
+  Your browser does not support the audio tag!
+</audio>
+
+<audio controls>
+  <source src="sound.mp3" preload="auto" >
+</audio>
+
+
+<audio id="player" src="sound.mp3"></audio>
+<div>
+	<button onclick="document.getElementById('player').play()">Play</button>
+	<button onclick="document.getElementById('player').pause()">Pause</button>
+	<button onclick="document.getElementById('player').volume+=0.1">Volume Up</button>
+	<button onclick="document.getElementById('player').volume-=0.1">Volume Down</button>
+</div>
+
+
+canplaytype()?
+http://html5doctor.com/native-audio-in-the-browser/
+http://www.catswhocode.com/blog/mastering-the-html5-audio-property

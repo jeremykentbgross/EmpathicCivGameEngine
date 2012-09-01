@@ -1,0 +1,85 @@
+GameInstance.GameObjectClasses.forAll(
+	function(inClass)
+	{
+		console.log(inClass.getName() + "'s:");
+		inClass.forAll(
+			function(inInstance)
+			{
+				inInstance.destroy();
+			}
+		);
+	}
+);
+
+
+GameInstance.GameObjectClasses.serializeAll = function(inSerializer)
+{
+	var numClasses;
+	var className;
+	var classInstance;
+	var numInstances;
+	var instanceName;
+	var instance;
+	var i, j;
+	
+	if(inSerializer.isReading())
+	{
+		numClasses = inSerializer.read("numClasses");
+		
+		for(i = 0; i < numClasses; ++i)
+		{
+			//todo if binary use id instead
+			className = inSerializer.read("className");
+			classInstance = this.findByName(className);
+			
+			if(!classInstance)
+			{
+				if(GameEngineLib.DEBUG)
+					GameEngineLib.logger.error("Unknown class " + className);
+				return;
+			}
+			
+			numInstances = inSerializer.read("numInstances");
+			for(j = 0; j < numInstances; ++j)
+			{
+				//todo if binary use id instead
+				instanceName = inSerializer.read("instanceName");
+				
+				instance = classInstance.findByName(instanceName);
+				if(!instance)
+					instance = classInstance.create(instanceName);
+				
+				instance.serialize(inSerializer);
+			}
+		}
+	}
+	else if(inSerializer.isWriting())
+	{
+		inSerializer.write("numClasses", this.numItems());
+		
+		this.forAll(
+			function(inClass)
+			{				
+				console.log(inClass.getName() + "'s:");
+				
+				//todo if binary use id instead
+				inSerializer.write("className", inClass.getName());
+				
+				inSerializer.write("numInstances", inClass.numItems());
+				inClass.forAll(
+					function(inInstance)
+					{
+						//todo if binary use id instead
+						inSerializer.write("instanceName", inInstance.getName());
+						
+						inInstance.serialize(inSerializer);
+					}
+				);
+			}
+		);
+	}
+}
+
+
+
+GameInstance.GameObjectClasses.serializeAll(testSer);

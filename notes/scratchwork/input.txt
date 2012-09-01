@@ -1,0 +1,8 @@
+WTF IS THIS: something about input across multiple dom elements, could be important
+
+// stop the user getting a
+// text cursor
+document.onselectstart = function()
+{
+    return false;
+};

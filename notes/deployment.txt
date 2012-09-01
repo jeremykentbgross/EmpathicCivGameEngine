@@ -1,0 +1,22 @@
+Deployment
+-obfuscation
+-cloud/scaling
+-oauth (fb/g+/twit/etc) (cassandra?)
+-languages / translate (cassandra?)
+-ads
+-paypal
+-review requests
+-platformize
+-automail exceptions
+-profanity filter?
+-9gag
+-cynicalbrit
+-nathan camarillo
+-Twitter
+-Fb
+-G+
+-Github
+-Linkedin
+-blogger
+-youtube
+-kickstarter

@@ -1,0 +1,20 @@
+animFrame =
+{
+	filename
+	image
+	anchor	//unscaled
+	scale
+	//triggers/events/physics object changes
+}
+animation =
+{
+	animFrames
+	speed
+	bounding box	//THIS IS related 2 the ONE IN THE SCENE MANAGER TREE??
+}
+tileDesc =
+{
+	animation(s)
+	physics + other properties (sound effects, etc)
+}
+tiles = tileDesc[];

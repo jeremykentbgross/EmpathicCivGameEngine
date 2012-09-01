@@ -1,0 +1,38 @@
+function typedArrays()
+{
+	console.log("Team America");
+	var buffer = new ArrayBuffer(64);
+	var int32View = new Int32Array(buffer);
+	for(var i = 0; i < int32View.length; ++i)
+	{
+		int32View[i] = 2 * i;
+	}
+	var int16View = new Int16Array(buffer);
+	for(var i = 0; i < int16View.length; ++i)
+	{
+		console.log(i + ": " + int16View[i]);
+	}
+	//0 01111111 (1)00000000000000000000000
+	//0 10000000 (1)00000000000000000000000
+	//0 10000000 (1)10000000000000000000000
+	//0 10000001 (1)00000000000000000000000
+	//0 10000001 (1)01000000000000000000000
+	
+	console.log("-------------------------");
+	
+	var float32View = new Float32Array(buffer);
+	for(var i = 0; i < float32View.length; ++i)
+	{
+		float32View[i] = i;
+	}
+	for(var i = 0; i < int32View.length; ++i)
+	{
+		var bin = int32View[i].toString(2);
+		for(var j = bin.length; j < 32; ++j)
+			bin = "0" + bin;
+		console.log(i + ": " + int32View[i]
+			+ " " + bin[0] + " " + bin.substr(1,8) + " (1)" + bin.substr(9,23)
+		);
+	}
+}
+typedArrays();

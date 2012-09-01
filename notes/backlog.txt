@@ -1,0 +1,142 @@
+Short term notes:
+-http://stackoverflow.com/questions/5266152/how-to-exit-in-node-js
+-Need to change icon!!
+-move GameEngineLib.logger to GameInstance or something like that?
+-clean scratchwork old files
+-folders
+--private/scripts/<engine/game>/?
+-logger/debugdraw flags?
+-physics component is ineriting entity NOT entitycomponent! WTF?!?! (is it still?)
+-organize weblinks
+-port in 'project' c#/c++ code: rays, A*, tree improvements
+-port in minimmo rays and ??
+-port/inspire in 2k4-5 map code
+
+
+
+Network:
+-need to have object ownership!
+-need to cleanup/improve setting/clearing netdirty (object level + class/instance net lists)
+-position in serializer is not using floats
+-InstanceID [0-255 || 0-65535] with range check (net object ids)
+-port 80 default/null option
+-ping t->; <-t*; dt(*)
+-throw error in bit packer, and encoder and class reading on bad data + disconnect
+-rename netDirty to isNetDirty
+-bitpacker flags for network (ie not always to text, typed arrays?)
+-creates new objects too often in serializer/airthmetic/bit packer?
+-much in client side network needs to be in network wrapping the client/server code
+-GameBinarySerialier.js not finished
+-prediction?
+--physics.setServerPosition?? (physics component needs cleaning)
+--See Source Engine Prediction
+
+
+
+Tree updates:
+-cpp port (recurse up clean) (minmmo dave, project (c# vers also), etc)
+-merge like //option for map solids/surfaces/?vecFields?
+-js _private/prototype
+-indexOf etc
+-node recycle	//recycler mixin?
+
+
+
+Animation(s):
+-
+-*Character working
+
+
+
+Editor
+-edit properties
+-draw maps
+-preview/create sprites
+-particles
+-backend db?
+
+
+
+UI
+-css(3)
+
+
+
+Serializers
+-net ser
+-clone (needed?)
+-fs?
+-ui
+-Json serializer
+
+
+
+Engine features in game schedule:
+-Particles (should be easy w/sprites)
+-Ai systems (as needed)
+-triggers (as needed)
+
+
+
+Engine features in polish:
+-Thread ai/physics/dom (main/render)
+-map prerender
+
+
+
+Physics changes:
+-physics colors
+-Fix multiple detect collisions like scenegraph (for being in different nodes, and report number of collisions in debug draw/print)
+-Private
+-owner Notice of collisions
+-Accurate collision forces
+-Friction
+-Ridged body flag + triggers?
+-forces live between timesteps?
+-ray casts
+
+
+
+Input:
+-serialize
+-see scratchwork
+
+
+
+Linux network opts:
+TCP_NODELAY
+TCP_QUICKACK
+TCP_THIN_LINEAR_TIMEOUTS
+TCP_THIN_DUPACK
+
+
+
+OTHER GOALS:
+-Map Wrapping
+-Proto/arch type entity factory
+-Find and clean todos temps and hacks
+-Class system cleanup
+-animated tiles
+-conversation trees
+-AI
+-event system sorting
+--main update becomes an event^^^??
+-Refactor components into systems??
+-rename everything with out 'game' in the name
+-rename GameRect to AABB2D, including instances
+-update nodejs
+-graphics system to create canvas (or three) and place it *IN DIV*
+-make create class / find class+instanace functions in GameInstance to wrap class manager call
+-Class function chains: instance.functionname.functionchaindown=true
+-array.push instead of array[array.length - 1] = blah
+-make event registry / factory so we know all the possible events and their data + can be created
+-todo rename physics component to physics2D
+-search and clean todo's
+-Css width%
+-Auto Resize?
+-Event of resize
+-Div container for graphics
+-Warning frame catchup!??
+-
+
+

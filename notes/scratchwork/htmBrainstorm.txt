@@ -1,0 +1,88 @@
+http://www.numenta.com/htm-overview/education/Numenta_HTM_Concepts.pdf
+http://www.numenta.com/htm-overview/education/Numenta_HTM_Learning_Algos.pdf
+http://www.alexandria.nu/ai/blog/entry.asp?E=41
+
+
+
+Node
+	1) inputs (children inputs vector) => kmean (find input pattern id, passed up)
+		??(kmean training??: last X input vectors + former cluster center vectors)
+
+	2) prob[id(t-2])[id(t-1)][id(t)] => guess next input pattern id(s): [id(t+1)], to each child pass down expected input(s) from them
+
+OR
+	kmean
+	id(t-2) id(t-1) id(t) combined is id, kmeaned again, then passed up?
+
+
+iff images: HSL/V
+** ** ** **
+** ** ** **
+
+** ** ** **
+** ** ** **
+
+** ** ** **
+** ** ** **
+
+** ** ** **
+** ** ** **
+(share on a layer?)//nodes vs node instances? (only prob+kmean shared)
+
+
+
+mutation rate + 'alphabet(s)'
+
+genes:
+node genes:
+	id//original generation NOT editable
+	#kmean points (learnable?)
+	#kmean adaption memory points
+	kmean retraining period??
+	prob depth?
+link genes:
+	id//original gneration NOT editable
+	parentId, childId
+(static) input/output nodes
+
+(logic => starting tree??)
+
+
+
+
+//prob[value1][value2]
+prob =
+{
+	value
+	count
+	sum
+	node : DLCLL(this)
+
+	valueid : prob{}
+
+	sorted : DLCLL//bubble sorted
+	getNextMostLikely()
+	{
+		return sorted.front();
+	}
+	getProb(valueid)
+	{
+		return this[valueid].count / this.sub
+	}
+
+	increment(valueid)
+	{
+		var item = this[valueid];
+		if(item === null)
+		{
+			item = prob(valueid);
+			sorted.pushback(item.node)
+			this[valueid] = item;
+		}
+		++item.count
+		item.node.bubbleUp();
+		++this.sum
+	}
+}
+
+job sorting by depth/height

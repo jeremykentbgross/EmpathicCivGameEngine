@@ -1,0 +1,30 @@
+
+Design thoughts:
+-achievements
+-Spy vs Spy!!!!!
+-Bal.csv
+-EnPow = (dfcty * YouPow) / En
+-knockback?
+-GW2 item type (range, aoe, etc)
+-nothing is fair: paper rock sissors / starcraft / halo
+-karma
+-3 axis morality
+-Karma ai, person/faction
+-breeding=>
+-Genetic splicing
+-Chem=>
+-nano
+-Prog
+
+-Tank //sheild protector (colors), mirrors, filters, blacklights (optics)
+-Healer
+-Dps
+-Cc
+-Stealth
+-Crafting
+-illusions?
+
+
+MyWorld:
+-webworker/thread safe sandbox api (https://github.com/pgriess/node-webworker)
+

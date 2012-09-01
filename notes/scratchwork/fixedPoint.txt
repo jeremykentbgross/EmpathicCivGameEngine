@@ -1,0 +1,123 @@
+GameEngineLib.FixedPoint = function(inPowerOfOne)
+{
+	var instance = {};
+	var private = {};
+	
+	
+	if(inPowerOfOne < 1)
+		inPowerOfOne = 1;
+	if(inPowerOfOne > 32)
+		inPowerOfOne = 32;
+	inPowerOfOne = Math.floor(inPowerOfOne + 0.5);
+	
+	private.FIXED_ONE = Math.pow(2, inPowerOfOne);
+	
+	/*if(inPowerOfOne === 1)
+		private.precision = 3;
+	else
+		private.precision = Math.pow(10, Math.floor(Math.pow(inPowerOfOne, 0.5) + 0.5));//todo is this good?
+	*/
+	
+	private.value = 0;
+	
+	
+	instance.getFixed = function()
+	{
+		return private.value;
+	}
+	instance.setFixed = function(inFixed)
+	{
+		private.value = Math.floor(inFixed);
+	}
+	
+	
+	instance.getNumber = function()
+	{
+		return (private.value / private.FIXED_ONE)
+	}
+	instance.setNumber = function(inValue)
+	{
+		private.value = Math.floor(inValue * private.FIXED_ONE + 0.5);
+	}
+	
+	
+	instance.getInt = function()
+	{
+		return Math.floor(private.value / private.FIXED_ONE);
+	}
+	
+	
+	instance.getMantissa = function()
+	{
+		var numberValue = private.value / private.FIXED_ONE;
+		//numberValue = Math.round(private.precision * numberValue) / private.precision;
+		return (numberValue - Math.floor(numberValue));
+	}
+	
+	
+	//todo make sure this name matches the vector class(es)
+	instance.mul = function(inOther)
+	{
+		//todo if type number just mult
+		//todo make sure the other has the same accuracy as this one
+		
+		var out = GameEngineLib.FixedPoint(inPowerOfOne);
+		out.setFixed(this.getFixed() * inOther.getFixed() / private.FIXED_ONE);
+		
+		return out;
+	}
+	instance.div = function(inOther)
+	{
+		//todo if type number just mult
+		var out = GameEngineLib.FixedPoint(inPowerOfOne);
+		out.setFixed(private.FIXED_ONE * this.getFixed() / inOther.getFixed());
+		
+		return out;
+	}
+	
+	//todo sin/cos/sqrt etc..
+	
+	
+	return instance;
+}
+
+
+var GETests = GETests || {};
+GETests.testFixedPoint = function()
+{
+	var result;
+	var fx16 = GameEngineLib.FixedPoint(16);
+	
+	console.log("Fixed Tests");
+	
+	result = fx16.getNumber();
+	if(result !== 0.0000)
+		GameEngineLib.logger.error("Get 0 returned " + result);
+		
+	console.log(typeof result);
+	
+	
+	fx16.setNumber(3.7727835);
+	
+	result = fx16.getFixed();
+	if(result != 247253)
+		GameEngineLib.logger.error("Get 247253 returned " + 247253);
+	
+	result = fx16.getNumber();
+	if(Math.abs(result - 3.7728) > 0.0001)
+		GameEngineLib.logger.error("Get 3.7728 returned " + result);
+		
+	result = fx16.getInt();
+	if(result != 3)
+		GameEngineLib.logger.error("Get 3 returned " + result);
+		
+	result = fx16.getMantissa();
+	if(Math.abs(result - 0.7728) > 0.0001)
+		GameEngineLib.logger.error("Get 0.7728 returned " + result);
+		
+	result = fx16.mul(fx16).getNumber();
+	if(Math.abs(result - 14.2338) > 0.0001)
+		GameEngineLib.logger.error("Get 14.2338 returned " + result);
+	
+	
+}();

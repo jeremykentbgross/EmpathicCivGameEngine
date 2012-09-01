@@ -1,0 +1,26 @@
+GameNetwork
+	-client/Server
+	-main bit...
+
+
+user
+	name : guest	//observer
+	access : no
+user
+	name : server
+	access : all
+user
+	name : expected123
+	access : expected123
+	if(discon > timeout)
+		rm?
+	else
+		relink
+		
+ping?
+
+GO
+	netowner
+
+unpack
+	throw	//from logerror

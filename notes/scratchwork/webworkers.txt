@@ -1,0 +1,59 @@
+//////////////////////////////////////////////
+(sandboxes?) https://github.com/pgriess/node-webworker
+
+responseKeys[{time, key}]
+-isResponsive(key)->worker
+
+worker//gtimer()??
+ud(dt)
+  if(dt>16||32)
+  {
+    if(ops>min)
+      --ops
+  }
+  else ++ops
+  for ops do;
+  ifdb post db
+event(dataChange)
+
+global.bThreaded
+//////////////////////////////////////////////
+
+
+
+https://developer.mozilla.org/en-US/docs/DOM/Using_web_workers?redirectlocale=en-US&redirectslug=Using_web_workers
+/*
+var worker = new Worker('worker.js');
+worker.onmessage = function(event) {
+	console.log("Worker said:" + event.data);
+};
+//start:
+worker.postMessage("");*/
+
+/*
+self.onmessage = function(event) {
+	self.postMessage('Hi there!');
+};
+
+
+
+
+
+?????
+main/Rndr(dom)	Ph/A
+ |(In/Nt)->	 |
+ |(Ph/Ai ud)->	 |
+ |(ifwait4res)	 |
+ |(Rndr lastres) |
+ |	<-(res)	 |
+ v		 v
+?????
+main/Rndr(dom)	Ph	A(per team?)
+ |(In/Nt)----->	 |	 |
+ |(Ph/Ai ud)-->	 |	 |
+ |(ifwait4res)	 |	 |
+ |(Rndr lastres) |	 |
+ |	<--(res) |	 |
+ v		 v	 v
+
+

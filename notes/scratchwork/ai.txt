@@ -1,0 +1,115 @@
+//////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////
+kmean
+alife
+HTM
+BT w/B. economics
+karma
+
+Karma/Entity Behavior economics/Enemy Last Known Location/pipe/influence maps/blackboarding/museings
+
+
+Entity.factsTable = {facs:{}, path:cll(), h/m/ap, ELKL[v2], ...}
+facs//rating, shared data(per fact?), LKEL's, etc?
+facs 'burn off +/- karma' //npcs 'witness'/react to karmic actions too? + consider mult fac alignments (dot prod)
+
+//npcs 'witness'/react to karmic actions too?
+=>
+broadcast karmic actions (or temp buff?), BET => heal/attack etc.
+karmic 'burn' distributed between relevant factions?
+
+factions: class/origin/corp/?
+
+ELKL//or LKEL
+update()//increase size, decrease prob for same 'mass'
+//how to sub from region?
+
+BH =
+{
+	value : 0
+	updateValue : function() { value = ... + isCurrent; }
+	update : function() { ... }
+}
+//ex:
+BH.value = max forall nearby where fac > 0, Deltafc = (mhp - hp); deltafac/mhp * fac
+//scurve: 1 / (1 +exp(-(x-0.5)*10))
+
+BET? and BT?
+BT = 
+{
+	BHs : [BH,]
+	update : function()
+	{
+		forall(BHs, updateValue)
+		BHs.sort(/*value*/)
+		if(BHs[0] !== current)
+		{
+			log(changing from current to BHs[0]);
+			current.end();
+			current = BHs[0];
+			current.init()
+		}
+		current.update();
+	}
+}
+
+FSM,stack,queue,RRQueue(patrol)
+
+APipe =
+{
+	actions : CLL()
+	update : function()
+	{
+		var action = actions.next.item
+		if(!action)
+			return;
+		action.update();
+		if(action.finished())
+			actions.next.remove();
+			action = actions.next.item
+		if(!action)
+			return;
+		action.init()
+	}
+}
+
+InfMap => PhySys.containsPoint() => forall coll !me, inf += (loc - rect.center())/rect.WH().len() * FactionRating
+kmean fronts/rears/flanks
+
+
+PhySys.ray()//ordered
+LoS() <==
+A*:H()
+{
+	target.LoS() && !ELKL.forall(item.LoS())
+	infMap
+	personal tertype weights
+}
+
+Phy=>phy,trig,InfMap(LKEL,ranges,etc),snd events/listeners
+
+
+
+
+dfc = max(hl, (mhp - hp))//delta faction change?
+
+//Enemy Last Known Location
+ELKL
+{
+	list
+	map[][]
+	probPer(){return 1/list.size();}
+	map.rt(
+		fn{
+			if(item === target)
+				list.reset();
+				list.insert(target.loc)
+				return false;
+			list.remove(item);
+			if(item.neighbors)
+				addToFlood(item)
+		}
+	)
+
+	//flood
+}
