@@ -1,0 +1,29 @@
+public
+	engine
+		scripts
+			EngineLoader.js	//loads engine
+			Network
+			Physics
+			Entity
+				Components
+			Audio
+			ClassSystem
+			AI
+			...
+		css
+		textures
+		sounds
+		...
+	game
+		gameName.html??
+		scripts
+			GameLoader.js	//loads EngineLoader.js then game files
+		css
+		textures
+		sounds
+		...
+private
+	engine
+		scripts
+			server.js
+			??

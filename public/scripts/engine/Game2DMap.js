@@ -19,212 +19,229 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
+
+//TODO depricated
 GameEngineLib.createGame2DMap = function(instance, private)
 {
+	var temp = new GameEngineLib.Game2DMap();
 	instance = instance || {};
-	private = private || {};
 	
-	//todo debug info
-	
-	instance.init = function(inMapSizeInTiles, inTileSize, inTileSet)
+	for(property in temp)
 	{
-		private.myMapSizeInTiles = inMapSizeInTiles;	//todo round up to power of 2
-		private.myTileSize = inTileSize;
-		private.myMapSize = private.myMapSizeInTiles * private.myTileSize;
-		
-		private.myTileMapTree = GameEngineLib.createGameQuadTree();
-		private.myTileMapTree.init(
-			GameEngineLib.createGame2DAABB(0, 0, private.myMapSize, private.myMapSize),
-			private.myTileSize
-		);
-		
-		private.myTileSet = inTileSet;
+		instance[property] = temp[property]
 	}
-	
-	instance.setTileSet = function(inTileSet)
+	for(property in temp.prototype)
 	{
-		//TODO clean current tilesets physics and scenegraph info
-		
-		private.myTileSet = inTileSet;
-		
-		//TODO walk new tiles tiles and reinsert to physics and scenegraph
-	}
-	
-	instance.addedToWorld = function(inWorld)
-	{
-		private.myWorld = inWorld;
-		//TODO add physics stuff and renderables
-	}
-	//TODO removed from world? and add remove physics stuff from world?
-	
-	instance.getMapLowerRight = function()
-	{
-		return GameEngineLib.createGame2DPoint(private.myMapSize, private.myMapSize);
-	}
-	
-	instance.setTile = function(inX, inY, inTileValue)
-	{
-		if(inX < 0 || private.myMapSizeInTiles <= inX
-			|| inY < 0 || private.myMapSizeInTiles <= inY
-			//todo inTileValue is in range too
-			)
-			return;
-		
-		var position = GameEngineLib.createGame2DPoint(
-			inX * private.myTileSize,
-			inY * private.myTileSize
-		);
-		
-		var tile = {};
-		
-		//setup for the tilemap tree
-		//TODO rename tree rects as such
-		tile.myGame2DAABB = GameEngineLib.createGame2DAABB(
-			position.myX,
-			position.myY,
-			private.myTileSize,
-			private.myTileSize
-		);
-		tile.myTileValue = inTileValue;
-		
-		//if the tile is the same as what is there, don't delete it and return
-		var duplicate = false;
-		private.myTileMapTree.walk(
-			function(item)
-			{
-				if(item.myTileValue === inTileValue)
-					duplicate = true;
-			},
-			tile.myGame2DAABB
-		);
-		if(duplicate)
-		{
-			return;
-		}
-		
-		//insert exclusively! So delete the old one first
-		private.eraseTile(tile);
-		
-		//setup for scenegraph
-		tile.sceneGraphRenderable =
-		{
-			myLayer : 0 +  private.myTileSet.getTileLayer(inTileValue),
-			myAnchorPosition : position,//TODO rename anchorPosition?
-			myGame2DAABB : private.myTileSet.getTileRect(inTileValue, position),
-			render : function(inCanvas2DContext, inCameraRect)
-			{
-				if(GameSystemVars.DEBUG && GameSystemVars.Debug.Map_Draw)
-					return;
-				private.myTileSet.renderTile(
-					inCanvas2DContext,
-					tile.myTileValue,
-					GameEngineLib.createGame2DPoint(
-						this.myAnchorPosition.myX - inCameraRect.myX,
-						this.myAnchorPosition.myY - inCameraRect.myY
-					)
-				);
-			}
-		};
-		
-		//setup physics objects
-		var physicsRect = private.myTileSet.getPhysicsRect(inTileValue, position);
-		if(physicsRect)
-		{
-			//note if need be, could use a tree to merge physics objects to nearest squares for optimization
-			tile.physicsObj = private.myWorld.getPhysics().createNewPhysicsObject();
-			tile.physicsObj.setGame2DAABB(physicsRect);
-		}		
-		
-		//insert to tilemap
-		private.myTileMapTree.insertToSmallestContaining(tile);
-		
-		//insert to scenegraph
-		private.myWorld.getSceneGraph().insertItem(tile.sceneGraphRenderable);
-	}
-	
-	private.eraseTile = function(tile)
-	{
-		var deletedTiles = [];
-		
-		//delete from the tilemap tree
-		private.myTileMapTree.deleteContained(tile.myGame2DAABB, deletedTiles);
-		if(GameSystemVars.DEBUG)
-		{
-			if(deletedTiles.length > 1)
-				GameEngineLib.logger.error("Deleted too many tiles " + deletedTiles.length);
-		}
-		
-		for(var i in deletedTiles)
-		{
-			//remove from scenegraph
-			private.myWorld.getSceneGraph().removeItem(deletedTiles[i].sceneGraphRenderable);
-			
-			//remove from physics
-			if(deletedTiles[i].physicsObj)
-			{
-				deletedTiles[i].physicsObj.release();
-				//console.log("Deleting physics object");
-			}
-		}
-	}
-	
-	instance.clearTile = function(inX, inY)
-	{
-		if(inX < 0 || private.myMapSizeInTiles <= inX
-			|| inY < 0 || private.myMapSizeInTiles <= inY)
-			return;
-			
-		var tile = {};
-		tile.myGame2DAABB = GameEngineLib.createGame2DAABB(
-			inX * private.myTileSize,
-			inY * private.myTileSize,
-			private.myTileSize,
-			private.myTileSize
-		);
-		
-		private.eraseTile(tile);
-	}
-	
-	instance.toTileCoordinate = function(inWorldCoordinate)
-	{
-		return Math.floor(inWorldCoordinate / private.myTileSize);
-	}
-	
-	instance.debugDraw = function(inCanvas2DContext, inCameraRect)
-	{
-		GameInstance.Graphics.drawDebugText("Debug Drawing Tile Map");
-		
-		private.myTileMapTree.walk(
-			function(item)
-			{
-				var itemRect = item.myGame2DAABB;
-				private.myTileSet.renderTileInRect(
-					inCanvas2DContext,
-					item.myTileValue,
-					GameEngineLib.createGame2DAABB
-					(
-						itemRect.myX - inCameraRect.myX,
-						itemRect.myY - inCameraRect.myY,
-						private.myTileSize,
-						private.myTileSize
-					)
-				)
-			},
-			inCameraRect
-		);
-		
-		private.myTileMapTree.debugDraw(inCanvas2DContext, inCameraRect);//TODO map colors?
-	}
-	
-	instance.destroy = function(){}//TODO
-	instance.serialize = function(){}//TODO
-
-	
-	instance.isWrappable = function()
-	{
-		return false;//TODO this is a HACK; make this a value that can be set on init
-		//set up scenegraph and physics for wrapping
+		instance[property] = temp.prototype[property];
 	}
 	
 	return instance;
+}
+
+
+GameEngineLib.Game2DMap = function Game2DMap(){}//TODO make this the same as init?
+GameEngineLib.Game2DMap.prototype.constructor = GameEngineLib.Game2DMap;
+
+//TODO document TileSet!!
+GameEngineLib.Game2DMap.prototype.init = function init(inMapSizeInTiles, inTileSize, inTileSet)
+{
+	this._myMapSizeInTiles = inMapSizeInTiles;	//todo round up to power of 2
+	this._myTileSize = inTileSize;
+	this._myMapSize = this._myMapSizeInTiles * this._myTileSize;
+	
+	this._myTileMapTree = GameEngineLib.createGameQuadTree();
+	this._myTileMapTree.init(
+		GameEngineLib.createGame2DAABB(0, 0, this._myMapSize, this._myMapSize),
+		this._myTileSize
+	);
+	
+	this._myTileSet = inTileSet;
+}
+
+GameEngineLib.Game2DMap.prototype.setTileSet = function setTileSet(inTileSet)
+{
+	//TODO clean current tilesets physics and scenegraph info
+	
+	this._myTileSet = inTileSet;
+	
+	//TODO walk new tiles tiles and reinsert to physics and scenegraph
+}
+
+GameEngineLib.Game2DMap.prototype.addedToWorld = function addedToWorld(inWorld)
+{
+	this._myWorld = inWorld;
+	//TODO add physics stuff and renderables
+}
+//TODO removed from world? and add remove physics stuff from world?
+
+GameEngineLib.Game2DMap.prototype.getMapLowerRight = function getMapLowerRight()
+{
+	return GameEngineLib.createGame2DPoint(this._myMapSize, this._myMapSize);
+}
+
+GameEngineLib.Game2DMap.prototype.setTile = function setTile(inX, inY, inTileValue)
+{
+	var _this_ = this;//TODO find/replace '_this_' and 'that' to 'thisClassName'?
+	if(inX < 0 || this._myMapSizeInTiles <= inX
+		|| inY < 0 || this._myMapSizeInTiles <= inY
+		//TODO inTileValue is in range too
+		)
+		return;
+	
+	var position = GameEngineLib.createGame2DPoint(
+		inX * this._myTileSize,
+		inY * this._myTileSize
+	);
+	
+	var tile = {};
+	
+	//setup for the tilemap tree
+	//TODO rename tree rects as such
+	tile.myGame2DAABB = GameEngineLib.createGame2DAABB(
+		position.myX,
+		position.myY,
+		this._myTileSize,
+		this._myTileSize
+	);
+	tile.myTileValue = inTileValue;
+	
+	//if the tile is the same as what is there, don't delete it and return
+	var duplicate = false;
+	this._myTileMapTree.walk(
+		function(item)
+		{
+			if(item.myTileValue === inTileValue)
+				duplicate = true;
+		},
+		tile.myGame2DAABB
+	);
+	if(duplicate)
+	{
+		return;
+	}
+	
+	//insert exclusively! So delete the old one first
+	this._eraseTile(tile);
+	
+	//setup for scenegraph
+	tile.sceneGraphRenderable =
+	{
+		myLayer : 0 +  _this_._myTileSet.getTileLayer(inTileValue),
+		myAnchorPosition : position,//TODO rename anchorPosition?
+		myGame2DAABB : _this_._myTileSet.getTileRect(inTileValue, position),
+		render : function(inCanvas2DContext, inCameraRect)
+		{
+			if(GameSystemVars.DEBUG && GameSystemVars.Debug.Map_Draw)
+				return;
+			_this_._myTileSet.renderTile(
+				inCanvas2DContext,
+				tile.myTileValue,
+				GameEngineLib.createGame2DPoint(//TODO maybe subtraction?
+					this.myAnchorPosition.myX - inCameraRect.myX,
+					this.myAnchorPosition.myY - inCameraRect.myY
+				)
+			);
+		}
+	};
+	
+	//setup physics objects
+	var physicsRect = this._myTileSet.getPhysicsRect(inTileValue, position);
+	if(physicsRect)
+	{
+		//note if need be, could use a tree to merge physics objects to nearest squares for optimization
+		tile.physicsObj = this._myWorld.getPhysics().createNewPhysicsObject();
+		tile.physicsObj.setGame2DAABB(physicsRect);
+	}		
+	
+	//insert to tilemap
+	this._myTileMapTree.insertToSmallestContaining(tile);
+	
+	//insert to scenegraph
+	this._myWorld.getSceneGraph().insertItem(tile.sceneGraphRenderable);
+}
+
+GameEngineLib.Game2DMap.prototype._eraseTile = function _eraseTile(tile)
+{
+	var deletedTiles = [];
+	
+	//delete from the tilemap tree
+	this._myTileMapTree.deleteContained(tile.myGame2DAABB, deletedTiles);
+	if(GameSystemVars.DEBUG)
+	{
+		if(deletedTiles.length > 1)
+			GameEngineLib.logger.error("Deleted too many tiles " + deletedTiles.length);
+	}
+	
+	for(var i in deletedTiles)
+	{
+		//remove from scenegraph
+		this._myWorld.getSceneGraph().removeItem(deletedTiles[i].sceneGraphRenderable);
+		
+		//remove from physics
+		if(deletedTiles[i].physicsObj)
+		{
+			deletedTiles[i].physicsObj.release();
+			//console.log("Deleting physics object");
+		}
+	}
+}
+
+GameEngineLib.Game2DMap.prototype.clearTile = function clearTile(inX, inY)
+{
+	if(inX < 0 || this._myMapSizeInTiles <= inX
+		|| inY < 0 || this._myMapSizeInTiles <= inY)
+		return;
+		
+	var tile = {};
+	tile.myGame2DAABB = GameEngineLib.createGame2DAABB(
+		inX * this._myTileSize,
+		inY * this._myTileSize,
+		this._myTileSize,
+		this._myTileSize
+	);
+	
+	this._eraseTile(tile);
+}
+
+GameEngineLib.Game2DMap.prototype.toTileCoordinate = function toTileCoordinate(inWorldCoordinate)
+{
+	return Math.floor(inWorldCoordinate / this._myTileSize);
+}
+
+GameEngineLib.Game2DMap.prototype.debugDraw = function debugDraw(inCanvas2DContext, inCameraRect)
+{
+	var _this_ = this;
+	GameInstance.Graphics.drawDebugText("Debug Drawing Tile Map");
+	
+	this._myTileMapTree.walk(
+		function(item)
+		{
+			var itemRect = item.myGame2DAABB;
+			_this_._myTileSet.renderTileInRect(
+				inCanvas2DContext,
+				item.myTileValue,
+				GameEngineLib.createGame2DAABB
+				(
+					itemRect.myX - inCameraRect.myX,
+					itemRect.myY - inCameraRect.myY,
+					_this_._myTileSize,
+					_this_._myTileSize
+				)
+			)
+		},
+		inCameraRect
+	);
+	
+	this._myTileMapTree.debugDraw(inCanvas2DContext, inCameraRect);//TODO map colors?
+}
+
+GameEngineLib.Game2DMap.prototype.destroy = function destroy(){}//TODO
+GameEngineLib.Game2DMap.prototype.serialize = function serialize(){}//TODO
+
+
+GameEngineLib.Game2DMap.prototype.isWrappable = function isWrappable()
+{
+	return false;//TODO this is a HACK; make this a value that can be set on init
+	//set up scenegraph and physics for wrapping
 }
