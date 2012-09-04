@@ -7,11 +7,11 @@ Short term notes:
 --private/scripts/<engine/game>/?
 -logger/debugdraw flags?
 -physics component is ineriting entity NOT entitycomponent! WTF?!?! (is it still?)
--organize weblinks
 -port in 'project' c#/c++ code: rays, A*, tree improvements
 -port in minimmo rays and ??
 -port/inspire in 2k4-5 map code
 -html hidden image takes up space
+-class refactor 2dphysics was skipped, go back to it.
 
 
 Network:
