@@ -27,3 +27,13 @@ private
 		scripts
 			server.js
 			??
+
+
+Servernamespace.private=
+{
+	Secret keys
+}
+
+Engineloader
+Gameloader (inc engine)
+ServerLoader(inc private secrets + gameloader)

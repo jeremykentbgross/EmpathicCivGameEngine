@@ -1,0 +1,58 @@
+SEE Test2.html
+
+Speach bubbles:
+http://nicolasgallagher.com/pure-css-speech-bubbles/demo/
+http://nicolasgallagher.com/pure-css-speech-bubbles/demo/default.css
+
+
+		<!-- container	-->
+        <div style="position:absolute; top:0px; left:0px;">
+			
+			<!-- display:none;	-->
+			<img src="me.jpg" width="100" style="display:none;" />
+			
+			<!-- background	-->
+			<img src="me.jpg" width="300"/>
+			
+			<!-- overlay	-->
+			<div style="position:absolute; margin:10px; bottom:0px; left:0px; width:50%; color:#ffffff; background-color:#000000; border-color:#ffff00; opacity:0.5;">
+				
+				<!-- text container	-->
+				<div>
+					<p style="margin:0px; color:#ffff00;">
+						<!-- name w/link properly colored	-->
+						<a href="http://www.facebook.com/" style="color:inherit;" target="_blank">Me:</a>
+						This is a paragraph blah blah
+					</p>
+					<p style="margin:0px; color:#ff2020;">
+						<!-- name w/link properly colored	-->
+						<a href="http://www.facebook.com/arzu.czotscher" style="color:inherit;" target="_blank">Arzu:</a>
+						This is a paragraph
+					</p>
+					<p style="margin:0px; color:#ff8000;">
+						<!-- name w/link properly colored	-->
+						<a href="http://www.facebook.com/" style="color:inherit;" target="_blank">Me:</a>
+						This is a paragraph
+					</p>
+					<p style="margin:0px; color:#8080ff;">
+						<!-- name w/link properly colored	-->
+						<a href="http://www.facebook.com/" style="color:inherit;" target="_blank"><img src="me.jpg" width="20" />Me:</a>
+						This is a paragraph
+					</p>
+					<p style="margin:0px;				">
+						<!-- name w/link properly colored	-->
+						<a href="http://www.facebook.com/" style="color:inherit;" target="_blank">Me:</a>
+						This is a paragraph
+					</p>
+				</div>
+				
+				<!-- input	-->
+				<input type="text" id="testInput" maxlength="64"
+					style="font-weight:bold; color:#00ff00; background-color:#000000; border-color:#ffff00; width:90%;" />
+					
+			</div>			
+        </div>
+        
+        
+        
+

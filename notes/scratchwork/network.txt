@@ -89,3 +89,22 @@ Serialize()
 }
 
 //TODO how to setowner
+
+User
+-name (reflect)
+-publicid ("")
+-privateid
+
+Net err (wrong user, not identifird user)
+
+Socketio use websockets or flash, no polling.
+
+Ws.js
+
+User.netiopolicy =
+{
+connect()
+reconnect()
+update()
+//example: owned objs, world, visible in world, less frequent@distance, etc
+}

@@ -1,0 +1,57 @@
+/*
+			get src / html etc as text strings
+http://www.bennadel.com/blog/1829-Script-Tags-jQuery-And-Html-Text-And-Contents-.htm
+*/
+
+
+
+function foo(param)
+{
+	console.log("cheers: " + param + " dude!");
+}
+console.log(foo.toString());
+eval("foo(" + foo.toString() + ")");
+var foo2 = foo.toString();
+foo2 = foo2.replace("foo","bar");
+foo2 = foo2.replace("cheers","TeamAmerica");
+console.log(foo2);
+eval(foo2);
+bar("123");
+foo2 = foo2.replace("TeamAmerica", "FuckYeah");
+eval(foo2);
+bar("456");
+
+/*
+if(condition)
+{
+	ops
+}
+
+[
+	OpIf : { condition:..., ops:[...] }
+	OpWhile : { condition:..., ops:[...] }
+	OpFor/all : { count/list:..., ops:[...] }
+	OpFunc : { name:..., params:[], ops:[] }
+	OpFuncCall : { name:..., params:[]}	//native AND user (drop down list in UI block)
+	OpVar : { name:..., defaultValue:... }
+	OpAssign : { name:..., value:... }	//name:(drop down list in UI block)
+	OpAdd/Sub/Mul/Div/And/Or/Parens
+	etc
+	//checks user entered values are alphanumeric only
+	//maybe uses var table to validate variables are real, and or finds if functions exist, etc.
+]
+
+//back buffer color detector for drag and drop
+++nestable block type++++++++
++++++++++++++++++++++++++++++
+++
++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++
+
+eval(
+	Compiler.buildJSFromJSON(jasonFuncDef)	//UserScripts[OpFunc.name] = ...;
+);
+
+*/
+			
+			//http://stackoverflow.com/questions/11810883/is-it-possible-to-safely-use-eval-in-a-web-worker-to-execute-arbitrary-user-code

@@ -28,3 +28,45 @@ Design thoughts:
 MyWorld:
 -webworker/thread safe sandbox api (https://github.com/pgriess/node-webworker)
 
+
+---
+All need team abilities:
+
+1:
+Turrets
+Sheilds
+Doors
+Bots gen?(here?)
+
+2:
+Mines (diff areas)
+Destroy+collapse(walls)
+Prox
+Remote
+
+3:
+Power
+Hp
+Supply
+Gas/disease?
+
+4:
+Cams
+Teleporter
+Sniper
+Slinger
+Submachine
+Cloak (team?)
+
+5:
+Rockets
+Grenade launch
+Flames
+Assult
+Bots gen?
+
+?:
+Minions
+Pits
+
+---------

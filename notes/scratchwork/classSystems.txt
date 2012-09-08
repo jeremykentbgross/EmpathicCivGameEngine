@@ -237,3 +237,15 @@ function Blah()
 Blah.prototype.constructor = Blah;
 Blah.prototype.func1 = function func1(){}
 Blah.prototype._func2 = function _func2(){}
+
+
+namespace.className.create()
+{
+	Var instance = new className();
+	Register instance;
+	Return instance;
+}
+Class(..)
+{
+	Constructor.create = ...();
+}

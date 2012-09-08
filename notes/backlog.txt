@@ -32,6 +32,7 @@ Network:
 --physics.setServerPosition?? (physics component needs cleaning)
 --See Source Engine Prediction
 -console chat css
+-no server updates when no clients.
 
 
 Tree updates:
@@ -40,7 +41,15 @@ Tree updates:
 -js _private/prototype
 -indexOf etc
 -node recycle	//recycler mixin?
+-solid tree: physicalize()+ begin/end physicalChangeBatch()
 
+Map:
+-tileset class
+-tile class
+
+Chat System:
+-chat class w/dojo css
+-see scratchwork
 
 
 Animation(s):
@@ -65,7 +74,7 @@ Editor
 -preview/create sprites
 -particles
 -backend db?
-
+-background color editor (hotpink)
 
 
 UI
@@ -79,7 +88,7 @@ Serializers
 -fs?
 -ui
 -Json serializer
-
+-string mode / binary mode serialize/bitpacker
 
 
 Engine features in game schedule:
@@ -148,6 +157,11 @@ OTHER GOALS:
 -Event of resize
 -Div container for graphics
 -Warning frame catchup!??
--
+-_this_, that -> instance
+-get rid of prefix "my"
+-timer centered update (precursor to webworkers)
+--Main loop: try/catch show error
+-business doc
+-sandbox (Distributed eval from approved users only! (editor/admin))
 
 
