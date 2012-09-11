@@ -40,7 +40,7 @@ GameEngineLib.createGame2DCamera = function(instance, private)
 
 
 
-
+//TODO derive 2d camera from rect
 
 
 GameEngineLib.Game2DCamera = function Game2DCamera()

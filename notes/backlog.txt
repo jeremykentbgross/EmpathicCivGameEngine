@@ -165,3 +165,95 @@ OTHER GOALS:
 -sandbox (Distributed eval from approved users only! (editor/admin))
 
 
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+-=Class Refactor:=-
+
+
+
+//////////////////////////////////////////////Staged:
+
+****Priority:
+-GameObject.js
+-GameEventSystem.js
+-GameEntity.js
+-(component?)??	//TODO new file
+-GameEntityComponent_2DCamera.js
+-GameEntityComponent_2DPhysics.js
+-GameEntityComponent_Input.js
+-GameEntityComponent_Sprite.js
+****:Priority
+
+-Game2DPhysics.js
+-GameFrameWork.js
+-GameInput.js
+-GameArithmeticCompression.js
+-GameAssetManager.js
+-GameBinarySerializer.js
+-GameBitPacker.js
+-GameCircularDoublyLinkedListNode.js
+-GameClientSideNetwork.js
+-GameEngineLogger.js                  
+-GameObjectClassFactory.js
+-GameQuadTree.js
+-GameRegistry.js
+-GameSpriteManager.js
+-GameSystemVars.js
+-GameTimer.js
+-GameLoader.js
+-GameRunner.js
+-/game/GameRules.js
+-/alife/GameRules.js
+-TODO_TestMultPacker.js
+-TestGameArithmeticCompression.js
+-TestGameBinarySerializer.js
+-TestGameBitPacker.js
+-TestGameEventSystem.js
+-TestGameObjectClassSystem.js
+
+//////////////////////////////////////////////:Staged
+
+
+
+//////////////////////////////////////////////Stage 1 (unclosure):
+
+****Priority:
+-Game2DTileSet.js
+-Game2DMap.js
+-Game2DWorld.js
+****:Priority
+
+-Game2DAABB.js
+-Game2DCamera.js
+-Game2DGraphics.js
+-Game2DPoint.js
+-Game2DSceneGraph.js
+
+//////////////////////////////////////////////:Stage 1 (unclosure)
+
+
+
+//////////////////////////////////////////////Stage 2 (class'ified + replace xx.create()):
+
+-
+
+//////////////////////////////////////////////:Stage 2 (class'ified + replace xx.create())
+
+
+
+
+//////////////////////////////////////////////Stage 3 (finished):
+
+-
+
+//////////////////////////////////////////////:Stage 3 (finished)
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////

@@ -19,14 +19,31 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
+
+//TODO depricated
 GameEngineLib.createGame2DTileSet = function(instance, private)
 {
+	var temp = new GameEngineLib.Game2DTileSet();
 	instance = instance || {};
-	private = private || {};
 	
-	//TODO debug info
-		
-	private.myTiles =	[];
+	for(property in temp)
+	{
+		instance[property] = temp[property]
+	}
+	for(property in temp.prototype)
+	{
+		instance[property] = temp.prototype[property];
+	}
+	
+	return instance;
+}
+
+
+
+GameEngineLib.Game2DTileSet = function Game2DTileSet()
+{	
+	this._myTiles =	[];
 	/*
 	//TODO target impl:
 	animFrame =
@@ -51,82 +68,91 @@ GameEngineLib.createGame2DTileSet = function(instance, private)
 	}
 	tiles = tileDesc[];
 	*/
-	
-	
-	instance.init = function(inTiles)
-	{
-		private.myTiles = inTiles || private.myTiles;
-		
-		for(var i = 0; i < private.myTiles.length; ++i)
-		{
-			var tile = private.myTiles[i];
-			if(!GameSystemVars.Network.isServer)
-				GameInstance.AssetManager.loadImage(tile.fileName, tile);
-			private.maxLayers = tile.layer;//TODO is this needed? maybe for map floors vs tileset layer
-		}
-	}
+}
+GameEngineLib.Game2DTileSet.prototype.constructor = GameEngineLib.Game2DTileSet;
 
+
+
+GameEngineLib.Game2DTileSet.prototype.init = function init(inTiles)
+{
+	this._myTiles = inTiles || this._myTiles;
 	
-	instance.renderTile = function(inCanvasContext, inID, inTargetPoint)
+	for(var i = 0; i < this._myTiles.length; ++i)
 	{
-		/*
-		//TODO Allow scaling?
-		context . drawImage(image, dx, dy)
-		context . drawImage(image, dx, dy, dw, dh)
-		context . drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
-		=>tile.scaledRect
-		*/
-		var tile = private.myTiles[inID];
-		inCanvasContext.drawImage(
-			tile.image,
-			inTargetPoint.myX - tile.anchor.myX,//todo consider possible =>tile.scaledRect
-			inTargetPoint.myY - tile.anchor.myY
-		);
+		var tile = this._myTiles[i];
+		if(!GameSystemVars.Network.isServer)
+			GameInstance.AssetManager.loadImage(tile.fileName, tile);
+		this._maxLayers = tile.layer;//TODO is this needed? maybe for map floors vs tileset layer (not used atm I think)
 	}
+}
+
+
+
+GameEngineLib.Game2DTileSet.prototype.renderTile = function renderTile(inCanvasContext, inID, inTargetPoint)
+{
+	/*
+	//TODO Allow scaling?
+	context . drawImage(image, dx, dy)
+	context . drawImage(image, dx, dy, dw, dh)
+	context . drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
+	=>tile.scaledRect
+	*/
+	var tile = this._myTiles[inID];
+	inCanvasContext.drawImage(
+		tile.image,
+		inTargetPoint.myX - tile.anchor.myX,//todo consider possible =>tile.scaledRect
+		inTargetPoint.myY - tile.anchor.myY
+	);
+}
+
+
+
+GameEngineLib.Game2DTileSet.prototype.renderTileInRect = function renderTileInRect(inCanvasContext, inID, inTargetRect)
+{
+	inCanvasContext.drawImage(
+		this._myTiles[inID].image,
+		inTargetRect.myX,
+		inTargetRect.myY,
+		inTargetRect.myWidth,
+		inTargetRect.myHeight
+	);
+}
+
+
+
+GameEngineLib.Game2DTileSet.prototype.getTileRect = function getTileRect(inID, inPosition)
+{
+	var tile = this._myTiles[inID];
+	inPosition = inPosition || GameEngineLib.createGame2DPoint();
 	
-	instance.renderTileInRect = function(inCanvasContext, inID, inTargetRect)
-	{
-		inCanvasContext.drawImage(
-			private.myTiles[inID].image,
-			inTargetRect.myX,
-			inTargetRect.myY,
-			inTargetRect.myWidth,
-			inTargetRect.myHeight
-		);
-	}
+	return GameEngineLib.createGame2DAABB(
+		inPosition.myX - tile.anchor.myX,
+		inPosition.myY - tile.anchor.myY,
+		tile.size.myX,//image.width,//todo consider possible =>tile.scaledRect
+		tile.size.myY//image.height
+	);
+}
+
+
+
+GameEngineLib.Game2DTileSet.prototype.getTileLayer = function getTileLayer(inID)
+{
+	return this._myTiles[inID].layer;
+}
+
+
+
+GameEngineLib.Game2DTileSet.prototype.getPhysicsRect = function getPhysicsRect(inID, inPosition)
+{
+	var physicsRect = this._myTiles[inID].physics;
 	
-	instance.getTileRect = function(inID, inPosition)
-	{
-		var tile = private.myTiles[inID];
-		inPosition = inPosition || GameEngineLib.createGame2DPoint();
-		
-		return GameEngineLib.createGame2DAABB(
-			inPosition.myX - tile.anchor.myX,
-			inPosition.myY - tile.anchor.myY,
-			tile.size.myX,//image.width,//todo consider possible =>tile.scaledRect
-			tile.size.myY//image.height
-		);
-	}
+	if(!physicsRect)
+		return null;
 	
-	instance.getTileLayer = function(inID)
-	{
-		return private.myTiles[inID].layer;
-	}
-	
-	instance.getPhysicsRect = function(inID, inPosition)
-	{
-		var physicsRect = private.myTiles[inID].physics;
-		
-		if(!physicsRect)
-			return null;
-		
-		return GameEngineLib.createGame2DAABB(
-			inPosition.myX + physicsRect.myX,
-			inPosition.myY + physicsRect.myY,
-			physicsRect.myWidth,//todo consider possible =>tile.scaledRect
-			physicsRect.myHeight
-		);
-	}
-	
-	return instance;
+	return GameEngineLib.createGame2DAABB(
+		inPosition.myX + physicsRect.myX,
+		inPosition.myY + physicsRect.myY,
+		physicsRect.myWidth,//todo consider possible =>tile.scaledRect
+		physicsRect.myHeight
+	);
 }
