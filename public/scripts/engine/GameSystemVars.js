@@ -92,6 +92,8 @@ GameSystemVars = //TODO rename as GameSystemSettings
 		//TODO search for "rgba( in all files		
 		
 		//Network
+		NetworkMessages_Draw : false,
+		NetworkMessages_DrawColor : "rgba(0, 255, 0, 1)",
 		NetworkMessages_Print : false,
 		
 		//default debug text color

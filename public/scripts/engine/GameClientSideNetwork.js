@@ -83,6 +83,7 @@ GameEngineLib.createGameNetwork = function(instance, private)
 				net : true,
 				min : 1,
 				max : private.maxItemsPerMessage
+				//user ? //for server to verify before forwarding?
 			}
 		];
 	}
@@ -219,27 +220,42 @@ GameEngineLib.createGameNetwork = function(instance, private)
 		var objectHeader = { public : {} };
 		var dirtyObjects = [];
 		
-		//TODO probably better to have a net dirty list instead of iterating over everything!
-		//TODO have class printing elsewhere for debugging, selecting, and maybe (probably) even editing
+		if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Draw)
+		{
+			GameInstance.Graphics.drawDebugText(
+				"Network:",
+				GameSystemVars.Debug.NetworkMessages_DrawColor
+			);
+		}
+		
+		//TODO have a net dirty class list instead of iterating over everything!
 		GameInstance.GameObjectClasses.forAll(
 			function(inClass)
 			{
-				GameInstance.Graphics.drawDebugText(
-					inClass.getName()
-					//,color
-				);
-				if(inClass.flags.net)
+				//TODO get rid of this when we have class dirty list instead of looping thru all classes.
+				if(!inClass.flags.net)
+					return;
+					
+				if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Draw)
+				{
 					GameInstance.Graphics.drawDebugText(
-						"***"
-						//,color
+						"    " + inClass.getName(),
+						GameSystemVars.Debug.NetworkMessages_DrawColor
 					);
+				}
 				
 				inClass.forAll(
 					function(inObject)
 					{
-						GameInstance.Graphics.drawDebugText("    -" + inObject.getName()/*, color*/);
 						if(inClass.flags.net && inObject.netDirty())
 						{
+							if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Draw)
+							{
+								GameInstance.Graphics.drawDebugText(
+									"        -" + inObject.getName()
+									,GameSystemVars.Debug.NetworkMessages_DrawColor
+								);
+							}
 							dirtyObjects.push(inObject);
 						}
 					}

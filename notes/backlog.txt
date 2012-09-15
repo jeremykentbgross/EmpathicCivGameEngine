@@ -11,7 +11,6 @@ Short term notes:
 -port in minimmo rays and ??
 -port/inspire in 2k4-5 map code
 -html hidden image takes up space
--class refactor 2dphysics was skipped, go back to it.
 
 
 Network:
@@ -163,6 +162,7 @@ OTHER GOALS:
 --Main loop: try/catch show error
 -business doc
 -sandbox (Distributed eval from approved users only! (editor/admin))
+-should have GameEvent to 'new' instead of this { getname:func() etc.. }
 
 
 

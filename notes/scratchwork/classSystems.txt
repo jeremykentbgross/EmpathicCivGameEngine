@@ -239,9 +239,9 @@ Blah.prototype.func1 = function func1(){}
 Blah.prototype._func2 = function _func2(){}
 
 
-namespace.className.create()
+namespace.className.create(params)
 {
-	Var instance = new className();
+	Var instance = new className(params);
 	Register instance;
 	Return instance;
 }
@@ -249,3 +249,7 @@ Class(..)
 {
 	Constructor.create = ...();
 }
+Class(constructor,{methods},[{parent}s,])
+
+Class = new Class(Class,{?},[registry,??]);//copy static stuff too? (if class?)
+myClass = Class.create(constructor,{methods},[{parent}s,]);
