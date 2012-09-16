@@ -197,7 +197,6 @@ OTHER GOALS:
 -GameBinarySerializer.js
 -GameBitPacker.js
 -GameCircularDoublyLinkedListNode.js
--GameClientSideNetwork.js
 -GameEngineLogger.js                  
 -GameObjectClassFactory.js
 -GameQuadTree.js
@@ -233,7 +232,7 @@ OTHER GOALS:
 -Game2DGraphics.js
 -Game2DPoint.js
 -Game2DSceneGraph.js
-
+-GameClientSideNetwork.js
 //////////////////////////////////////////////:Stage 1 (unclosure)
 
 

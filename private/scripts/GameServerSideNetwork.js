@@ -103,7 +103,7 @@ GameEngineLib.GameNetwork.prototype._onDataRecv = function _onDataRecv(inData)
 
 
 
-GameEngineLib.GameNetwork.prototype.isUpdating = function()
+GameEngineLib.GameNetwork.prototype.isUpdating = function isUpdating()
 {
 	return false;//TEMP HACK
 }

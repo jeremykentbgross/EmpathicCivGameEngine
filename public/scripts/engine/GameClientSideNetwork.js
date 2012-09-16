@@ -22,16 +22,15 @@
 GameEngineLib.GameNetwork = function GameNetwork()
 {
 	GameEngineLib.createEventSystem(this);//TODO inherit
-	//this.registerListener("Data", this);
 	//if instance exists, error?
 	GameEngineLib.GameNetwork.instance = this;
 }
 
 GameEngineLib.GameNetwork.prototype.constructor = GameEngineLib.GameNetwork;
 
-GameEngineLib.GameNetwork.create = function create()//TODO params
+GameEngineLib.GameNetwork.create = function create()
 {
-	return new GameEngineLib.GameNetwork();//TODO params
+	return new GameEngineLib.GameNetwork();
 }
 
 
