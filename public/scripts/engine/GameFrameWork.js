@@ -192,7 +192,7 @@ GameEngineLib.createGameFrameWork = function(instance, private)
 		
 		if(GameSystemVars.Network.isMultiplayer)
 		{
-			instance.Network = GameEngineLib.createGameNetwork();
+			instance.Network = GameEngineLib.GameNetwork.create();
 			instance.Network.init();
 			instance.UpdateOrder.push(instance.Network);
 		}

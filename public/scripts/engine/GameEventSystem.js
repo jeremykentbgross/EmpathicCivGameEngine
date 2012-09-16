@@ -19,6 +19,19 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+GameEngineLib.GameEvent = function GameEvent(inEventName)
+{
+	this._eventName = inEventName;
+}
+GameEngineLib.GameEvent.prototype.constructor = GameEngineLib.GameEvent;
+
+GameEngineLib.GameEvent.prototype.getName = function getName()
+{
+	return this._eventName;
+}
+
+
+
 GameEngineLib.createEventSystem = function(instance, private)
 {
 	instance = instance || {};
@@ -74,7 +87,7 @@ GameEngineLib.createEventSystem = function(instance, private)
 		var callbackName;
 		
 		eventName = inEvent.getName();
-		callbackName = "on" + eventName;
+		callbackName = "on" + eventName;//TODO axe "on" here and have users add it!
 		
 		head = private.myEventListeners[eventName];
 		if(!head)

@@ -19,80 +19,91 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.createGameNetwork = function(instance, private)
+GameEngineLib.GameNetwork = function GameNetwork()
 {
-	instance = instance || {};
-	private = private || {};
-	//TODO debug data
-	
-	//GameEngineLib.createEventSystem(instance);
-	
-	instance.init = function()
+	GameEngineLib.GameNetwork.instance = this;
+}
+GameEngineLib.GameNetwork.prototype.constructor = GameEngineLib.GameNetwork;
+
+GameEngineLib.GameNetwork.create = function create()
+{
+	return new GameEngineLib.GameNetwork();
+}
+
+
+
+GameEngineLib.GameNetwork.prototype.init = function init()
+{
+	if(GameSystemVars.Network.GamePort !== null)
 	{
-		if(GameSystemVars.Network.GamePort !== null)
-		{
-			private.listenSocket = GameEngineServer.socketio.listen(GameSystemVars.Network.GamePort);
-		}
-		else
-		{
-			private.listenSocket = GameEngineServer.listenSocket;
-		}
-		
-		private.listenSocket.sockets.on(
-			"connection",
-			function(socket)
-			{				
-				//on message send message to everyone else:
-				socket.on(
-					"msg",
-					function (data)
-					{
-						//TODO append users name
-						socket.broadcast.emit("msg", data);
-						
-						if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
-						{
-							GameEngineLib.logger.info("NetRecv: " + data);
-						}
-						//console.log(data);
-					}
-				);
-				
-				socket.on(
-					"data",
-					function (data)
-					{
-						socket.broadcast.emit("data", data);
-						
-						if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
-						{
-							GameEngineLib.logger.info("NetRecv: " + data);
-						}
-						//console.log(data);
-					}
-				);
-				
-				//on disconnect tell everyone that they are gone
-				socket.on(
-					"disconnect",
-					function()
-					{
-						//private.listenSocket.sockets.emit("msg", "User Disconnected");
-					}
-				);
-				
-				//tell everone they have connected:
-				//socket.broadcast.emit("msg", "User Connected");
-			}
-		);
-		
-		console.log("TCP Server running.");
+		this._listenSocket = GameEngineServer.socketio.listen(GameSystemVars.Network.GamePort);
+	}
+	else
+	{
+		this._listenSocket = GameEngineServer.listenSocket;
 	}
 	
-	instance.isUpdating = function()
-	{
-		return false;//TEMP HACK
-	}
+	this._listenSocket.sockets.on("connection", this._onClientConnected);
 	
-	return instance;
+	console.log("TCP Server running.");
+}
+
+
+
+GameEngineLib.GameNetwork.prototype._onClientConnected = function _onClientConnected(inConnectedSocket)
+{
+	var _this_ = GameEngineLib.GameNetwork.instance;
+	
+	//TODO event
+	
+	inConnectedSocket.on("msg", _this_._onMsgRecv);
+	inConnectedSocket.on("data", _this_._onDataRecv);
+	inConnectedSocket.on("disconnect", _this_._onClientDisconnected);
+	
+	//tell everone they have connected:
+	inConnectedSocket.broadcast.emit("msg", "User Connected");
+}
+
+
+
+GameEngineLib.GameNetwork.prototype._onClientDisconnected = function _onClientDisconnected()
+{
+	//this == socket disconnecting!
+	var _this_ = GameEngineLib.GameNetwork.instance;
+	
+	_this_._listenSocket.sockets.emit("msg", "User Disconnected");
+	
+	//on disconnect tell everyone that they are gone
+}
+
+
+
+GameEngineLib.GameNetwork.prototype._onMsgRecv = function _onMsgRecv(inMsg)
+{
+	//TODO append users name
+	this.broadcast.emit("msg", inMsg);
+	
+	if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+	{
+		GameEngineLib.logger.info("NetRecv: " + inMsg);
+	}
+}
+
+
+
+GameEngineLib.GameNetwork.prototype._onDataRecv = function _onDataRecv(inData)
+{
+	this.broadcast.emit("data", inData);
+			
+	if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+	{
+		GameEngineLib.logger.info("NetRecv: " + inData);
+	}
+}
+
+
+
+GameEngineLib.GameNetwork.prototype.isUpdating = function()
+{
+	return false;//TEMP HACK
 }
