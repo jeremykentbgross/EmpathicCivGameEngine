@@ -138,7 +138,7 @@ GameEngineLib.createEntityComponent_2DPhysics = function(instance, private)
 			}
 		);
 		private.position = physicsUpdateInfo.position;
-		private.netDirty = true;
+		this.setNetDirty();
 		//TODO event velocity
 		
 		/*console.log(
@@ -147,16 +147,6 @@ GameEngineLib.createEntityComponent_2DPhysics = function(instance, private)
 			physicsUpdateInfo.velocity.myX + " " +
 			physicsUpdateInfo.velocity.myY + " "
 		);*/
-	}
-	
-	instance.netDirty = function()
-	{
-		if(private.netDirty)
-		{
-			private.netDirty = false;
-			return true;
-		}
-		return false;
 	}
 	
 	return instance;

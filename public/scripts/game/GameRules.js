@@ -118,7 +118,15 @@ GameLib.createGameRules = function(instance, private)
 		if(!GameSystemVars.Network.isServer)
 			GameInstance.Input.registerListener("Input", private);
 		
-			
+		private.onIdentifiedUser = function(inEvent)
+		{
+			console.log("setting owner for physics component: " + inEvent.userName );
+			private.entity1Physics.deref().setNetOwner(inEvent.userName);
+		}
+		GameInstance.Network.registerListener(
+			"IdentifiedUser",
+			private
+		);
 		
 		
 		//TODO creating chat UI should NOT be here

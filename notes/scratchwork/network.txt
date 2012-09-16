@@ -108,3 +108,9 @@ reconnect()
 update()
 //example: owned objs, world, visible in world, less frequent@distance, etc
 }
+
+
+
+======>Object netdirty, owner
+//TODO skip objects we do not own (but queue owner changes in netserialize queue from object?)
+//TODO serialize all objects on start

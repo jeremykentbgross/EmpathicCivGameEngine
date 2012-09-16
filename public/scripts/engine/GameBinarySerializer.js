@@ -22,7 +22,7 @@
 //TODO try to increase the precision of the coder and model(s)
 
 GameEngineLib.GameSerializers = GameEngineLib.GameSerializers || {};
-
+//TODO rename GameSerializer_Binary? actually make it not just binary in the same ser!
 GameEngineLib.GameSerializers.createGameBinarySerializer = function(instance, private)
 {
 	instance = instance || {};
@@ -97,6 +97,17 @@ GameEngineLib.GameSerializers.createGameBinarySerializer = function(instance, pr
 		},
 	]
 	*/
+	instance.serializeBool = function serializeBool(value)
+	{
+		private.integerRangeModel.setMinMax(0, 1);
+		if(private.isWriting)
+			private.compressor.encode(value ? 1 : 0, private.integerRangeModel);
+		else
+			value = private.compressor.decode(private.integerRangeModel) === 1 ? true : false;
+
+		return value;
+	}
+	
 	instance.serializeObject = function(inObject, inDataFormat)
 	{
 		for(var i = 0; i < inDataFormat.length; ++i)
@@ -113,11 +124,13 @@ GameEngineLib.GameSerializers.createGameBinarySerializer = function(instance, pr
 			{
 				case "bool":
 				{
-					private.integerRangeModel.setMinMax(0, 1);
+					//TODO call sub function
+					/*private.integerRangeModel.setMinMax(0, 1);
 					if(private.isWriting)
 						private.compressor.encode(scope[entry.name] ? 1 : 0, private.integerRangeModel);
 					else
-						scope[entry.name] = private.compressor.decode(private.integerRangeModel) === 1 ? true : false;
+						scope[entry.name] = private.compressor.decode(private.integerRangeModel) === 1 ? true : false;*/
+					scope[entry.name] = this.serializeBool(scope[entry.name]);
 				}break;
 				case "int":
 				{

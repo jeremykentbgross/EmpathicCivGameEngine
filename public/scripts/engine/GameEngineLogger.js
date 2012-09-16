@@ -19,6 +19,13 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+GameAssert = function GameAssert(expression, message)
+{
+	if(!expression)
+		throw "Assert failed: '" + message + "'";
+}
+
+
 GameEngineLib.logger = {};
 GameEngineLib.logger.createMsgType = function(inType, inFullPathDefault)
 {
@@ -59,6 +66,7 @@ GameEngineLib.logger.createMsgType = function(inType, inFullPathDefault)
 		}
 	}
 }
+//TODO rename this GameLogger
 GameEngineLib.logger.info = GameEngineLib.logger.createMsgType("INFO");
 GameEngineLib.logger.warn = GameEngineLib.logger.createMsgType("WARNING", true);
 GameEngineLib.logger.error = GameEngineLib.logger.createMsgType("ERROR", true);

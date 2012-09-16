@@ -32,10 +32,30 @@ GameEngineLib.createGameObject = function(instance, private)
 	private.myName = null;
 	private.myID = null;
 	private.myClass = null;
+	private.netOwner = "server";
+	private.netDirty = false;//TODO maybe should start as true?
+	private.objectBaseNetDirty = false;//TODO maybe should start as true?
+	
+	
+	//TODO this should be static!
+	private.format =
+	[
+		{
+			name : "netOwner",
+			scope : "private",
+			type : "string",
+			net : true
+		}
+	];
 	
 	instance.getName = function()
 	{
 		return private.myName;
+	}
+	
+	instance.getPath = function()
+	{
+		return private.myName;//TODO make real path
 	}
 	
 	instance.setName = function(inName)
@@ -113,25 +133,58 @@ GameEngineLib.createGameObject = function(instance, private)
 	}
 	instance.destroy.chainup = true;
 	
+	instance.netDirty = function()//TODO change to isNetDirty
+	{
+		if(private.netDirty)
+		{
+			private.netDirty = false;
+			return true;
+		}
+		return false;
+	}
+	instance.setNetDirty = function()
+	{
+		private.netDirty = true;
+	}
+	
+	instance.setNetOwner = function(inOwner)
+	{
+		private.netOwner = inOwner;
+		this.setNetDirty();
+		private.objectBaseNetDirty = true;
+	}
+	instance.getNetOwner = function()
+	{
+		return private.netOwner;
+	}
+	
 	instance.serialize = function(serializer)
 	{
-		/*if(GameSystemVars.DEBUG)
-			GameEngineLib.logger.info("Serializing GameObject " + GameEngineLib.GameObjectRef(this).getPath());
+		if(!serializer)
+			return;
 		
-		var temp;
+		private.objectBaseNetDirty =
+			serializer.serializeBool(private.objectBaseNetDirty);
 		
-		if(serializer.isReading())
+		if(private.objectBaseNetDirty)
 		{
-			temp = serializer.read("myName");
-			if(temp !== this.getName())
+			if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
 			{
-				this.setName(temp);
+				GameEngineLib.logger.info(this.getPath() + " start owner: " + private.netOwner);
+			}
+			
+			serializer.serializeObject(
+				{ public : instance, private : private },//TODO should be just 'this' soon
+				private.format
+			);
+			
+			if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+			{
+				GameEngineLib.logger.info(this.getPath() + " end owner: " + private.netOwner);
 			}
 		}
-		if(serializer.isWriting())
-		{
-			serializer.write("myName", this.getName());
-		}*/
+		
+		private.objectBaseNetDirty = false;
 	}
 	instance.serialize.chaindown = true;
 	

@@ -113,9 +113,13 @@ GameEngineLib.createGameFrameWork = function(instance, private)
 			// TODO
 			//Init Sound//////////////////////////////////////
 			//////////////////////////////////////////////////
-			
-			// TODO save setup
 		}
+		
+		instance.localUser = GameEngineLib.User.create(
+			GameSystemVars.Network.isServer
+			?"server"
+			:Math.ceil(Math.random()*65535).toString()//TODO use FB id or something in the future
+		);
 		
 		
 		//////////////////////////////////////////////////

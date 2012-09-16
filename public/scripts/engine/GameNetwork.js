@@ -19,6 +19,21 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
+//TODO make server id for smaller messages!!
+GameEngineLib.User = function User(inName)
+{
+	this.name = inName || "guest";
+	//TODO server assigns id (server name) and THAT is what is sent from clients in header?
+}
+GameEngineLib.User.prototype.constructor = GameEngineLib.User;
+GameEngineLib.User.create = function create(inName)
+{
+	return new GameEngineLib.User(inName);
+}
+
+
+
 GameEngineLib.GameNetwork = function GameNetwork()
 {
 	GameEngineLib.createEventSystem(this);//TODO inherit
@@ -60,6 +75,12 @@ GameEngineLib.GameNetwork.prototype.init = function init()
 	this._messageHeaderFormat =
 	[
 		{
+			name : "userName",
+			scope : "public",
+			type : "string",
+			net : true
+		},
+		{
 			name : "numObjects",
 			scope : "public",
 			type : "int",
@@ -70,9 +91,6 @@ GameEngineLib.GameNetwork.prototype.init = function init()
 	];
 	
 	this._serializer = GameEngineLib.GameSerializers.createGameBinarySerializer();
-	
-	
-	
 	
 	if(GameSystemVars.Network.isServer)
 	{
@@ -118,14 +136,16 @@ GameEngineLib.GameNetwork.prototype._onClientConnected = function _onClientConne
 {
 	var _this_ = GameEngineLib.GameNetwork.instance;
 	
-	//TODO event
+	inConnectedSocket.gameUser = GameEngineLib.User.create();
 	
+	//TODO event
+	inConnectedSocket.on("id", _this_._onIdRecv);
 	inConnectedSocket.on("msg", _this_._onMsgRecv);
 	inConnectedSocket.on("data", _this_._onDataRecv);
 	inConnectedSocket.on("disconnect", _this_._onClientDisconnected);
 	
 	//tell everone they have connected:
-	inConnectedSocket.broadcast.emit("msg", "User Connected");
+	inConnectedSocket.broadcast.emit("msg", "User Connected: " + inConnectedSocket.gameUser.name);
 }
 
 
@@ -135,7 +155,7 @@ GameEngineLib.GameNetwork.prototype._onClientDisconnected = function _onClientDi
 	//this == socket disconnecting!
 	var _this_ = GameEngineLib.GameNetwork.instance;
 	
-	_this_._listenSocket.sockets.emit("msg", "User Disconnected");
+	_this_._listenSocket.sockets.emit("msg", "User Disconnected: " + this.gameUser.name);
 	
 	//on disconnect tell everyone that they are gone
 }
@@ -201,6 +221,8 @@ GameEngineLib.GameNetwork.prototype._onConnectedToServer = function _onConnected
 	{
 		GameEngineLib.logger.info("Connected to Server!");
 	}
+	_this_._socket.gameUser = GameEngineLib.User.create("server");
+	_this_._socket.emit("id", GameInstance.localUser.name);
 	
 	//TODO change this to be some kind of hand shake or login or **user verification**?
 	
@@ -224,6 +246,30 @@ GameEngineLib.GameNetwork.prototype._onDisconnectedFromServer = function _onDisc
 
 
 
+GameEngineLib.GameNetwork.prototype._onIdRecv = function _onIdRecv(inId)
+{
+	/*TODO:
+	if(inId === "server" || user is already connected || user not expected)
+		disconnect
+		return
+	assert user is not already renamed from guest
+	*/
+	if(GameSystemVars.DEBUG /*&& GameSystemVars.Debug.NetworkMessages_Print*/)
+	{
+		GameEngineLib.logger.info("Identified User: " + inId);
+	}
+	
+	var _this_ = GameEngineLib.GameNetwork.instance;
+	var event = new GameEngineLib.GameEvent("IdentifiedUser");
+	event.userName = inId;
+	GameEngineLib.GameNetwork.instance.onEvent(event);
+	
+	this.broadcast.emit("msg", this.gameUser.name + " identified as " + inId);
+	this.gameUser.name = inId;
+}
+
+
+
 GameEngineLib.GameNetwork.prototype._onMsgRecv = function _onMsgRecv(inMsg)
 {
 	var _this_ = GameEngineLib.GameNetwork.instance;
@@ -239,8 +285,8 @@ GameEngineLib.GameNetwork.prototype._onMsgRecv = function _onMsgRecv(inMsg)
 	_this_.onEvent(event);
 	if(GameSystemVars.Network.isServer)
 	{
-		//TODO append users name
-		this.broadcast.emit("msg", inMsg);
+		//TODO cap size?
+		this.broadcast.emit("msg", this.gameUser.name + ": " + inMsg);
 	}
 }
 
@@ -258,12 +304,14 @@ GameEngineLib.GameNetwork.prototype._onDataRecv = function _onDataRecv(inData)
 		GameEngineLib.logger.info("NetRecv: " + inData);
 	}
 
-	_this_._onData(event);	//TODO if this errors, don't do the rest, ESP not resend!
-	_this_.onEvent(event);
-	if(GameSystemVars.Network.isServer)
+	if(_this_._onData(event, this))//TODO if this errors, don't do the rest, ESP not resend!
 	{
-		//Note: 'this' is the recieving socket here
-		this.broadcast.emit("data", inData);
+		_this_.onEvent(event);
+		if(GameSystemVars.Network.isServer)//TODO move this into function in 'if'?
+		{
+			//Note: 'this' is the recieving socket here
+			this.broadcast.emit("data", inData);
+		}
 	}
 }
 
@@ -272,7 +320,7 @@ GameEngineLib.GameNetwork.prototype._onDataRecv = function _onDataRecv(inData)
 //TODO probably on BOTH sides
 GameEngineLib.GameNetwork.prototype.isUpdating = function isUpdating()
 {
-	return !GameSystemVars.Network.isServer;//true;//isMultiplayer?? isConnected?
+	return true;//!GameSystemVars.Network.isServer;//true;//isMultiplayer?? isConnected?
 }
 
 
@@ -310,7 +358,8 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 			inClass.forAll(
 				function(inObject)
 				{
-					if(inClass.flags.net && inObject.netDirty())
+					//TODO skip objects we do not own (but queue owner changes in netserialize queue from object?)
+					if(inClass.flags.net && inObject.netDirty() /*&& inObject.getNetOwner() === GameInstance.localUser.name*/)
 					{
 						if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Draw)
 						{
@@ -331,6 +380,7 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 		this._serializer.initWrite({NET : true});
 		
 		messageHeader.public.numObjects = Math.min(this._maxItemsPerMessage, dirtyObjects.length);
+		messageHeader.public.userName = GameInstance.localUser.name;
 		this._serializer.serializeObject(messageHeader, this._messageHeaderFormat);
 		
 		for(var i = 0; i < messageHeader.public.numObjects; ++i)
@@ -356,7 +406,7 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 
 
 
-GameEngineLib.GameNetwork.prototype._onData = function _onData(inEvent)
+GameEngineLib.GameNetwork.prototype._onData = function _onData(inEvent, inSocket)
 {
 	/*
 	TODO
@@ -372,6 +422,13 @@ GameEngineLib.GameNetwork.prototype._onData = function _onData(inEvent)
 	try
 	{
 		this._serializer.serializeObject(messageHeader, this._messageHeaderFormat);
+		
+		//check that the username matches the socket user
+		GameAssert(
+			(messageHeader.public.userName === inSocket.gameUser.name || inSocket.gameUser.name === "server")
+			,"Net user not identifying self correctly: " + (messageHeader.public.userName + " != " + inSocket.gameUser.name)
+		);
+		
 		for(var i = 0; i < messageHeader.public.numObjects; ++i)
 		{
 			this._serializer.serializeObject(objectHeader, this._objectHeaderFormat);
@@ -379,6 +436,11 @@ GameEngineLib.GameNetwork.prototype._onData = function _onData(inEvent)
 			var object = objectClass.findByID(objectHeader.public.instanceID);
 			//TODO if not found, and not server, create it
 			//TODO if !server && !owner && !recentOwnerQueue throw error
+			if(object.getNetOwner() !== messageHeader.public.userName)
+			{
+				console.log("Not the owner!: " + messageHeader.public.userName + " != " + object.getNetOwner());
+				//TODO tell serializer to be in dummy mode!
+			}
 			//TODO if !server && !owner && lenient serializer.dummyRead
 			//else
 			object.serialize(this._serializer);
@@ -388,6 +450,10 @@ GameEngineLib.GameNetwork.prototype._onData = function _onData(inEvent)
 	}
 	catch(error)
 	{
+		GameEngineLib.logger.warn(error);
 		//TODO disconnect? increment damaged packets for this user?
+		return false;
 	}
+	
+	return true;
 }
