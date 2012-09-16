@@ -129,16 +129,11 @@ GameLoader =
 			if(GameSystemVars.Network.isMultiplayer)
 			{
 				include(inSharedPath + "/socket.io/socket.io.js");
-				include(inSharedPath + "scripts/engine/GameClientSideNetwork.js");
 			}
 			include(inSharedPath + "scripts/engine/Game2DGraphics.js");
 			include(inSharedPath + "scripts/engine/GameAssetManager.js");
 		}
-		else
-		{
-			//include(inPrivatePath + "scripts/GameServerSideNetwork.js");
-			include(inSharedPath + "scripts/engine/GameClientSideNetwork.js");
-		}
+		include(inSharedPath + "scripts/engine/GameNetwork.js");
 		include(inSharedPath + "scripts/engine/GameInput.js");
 		
 		include(inSharedPath + "scripts/engine/GameObject.js");
