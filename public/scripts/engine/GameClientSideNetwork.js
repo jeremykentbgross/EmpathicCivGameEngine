@@ -74,38 +74,83 @@ GameEngineLib.GameNetwork.prototype.init = function init()
 	
 	
 	
-	
-	if(GameSystemVars.Network.GamePort !== null)
+	if(GameSystemVars.Network.isServer)
 	{
-		//Note may need to be sliced to last '/' in the future
-		var address = document.URL.slice(0, -1) +  ":" + GameSystemVars.Network.GamePort;
-		this._socket = io.connect(address);
+		if(GameSystemVars.Network.GamePort !== null)
+		{
+			this._listenSocket = GameEngineServer.socketio.listen(GameSystemVars.Network.GamePort);
+		}
+		else
+		{
+			this._listenSocket = GameEngineServer.listenSocket;
+		}
+		
+		this._listenSocket.sockets.on("connection", this._onClientConnected);
+		
+		console.log("TCP Server running.");
 	}
 	else
 	{
-		this._socket = io.connect();
+		if(GameSystemVars.Network.GamePort !== null)
+		{
+			//Note may need to be sliced to last "/" in the future
+			var address = document.URL.slice(0, -1) +  ":" + GameSystemVars.Network.GamePort;
+			this._socket = io.connect(address);
+		}
+		else
+		{
+			this._socket = io.connect();
+		}
+		this._socket.on("connect", this._onConnectedToServer);
+		this._socket.on("disconnect", this._onDisconnectedFromServer);
+		
+		//TODO many chat channels? Team, All, etc?
+		//chat channel
+		this._socket.on("msg", this._onMsgRecv);
+		//data channel
+		this._socket.on("data", this._onDataRecv);
 	}
-	this._socket.on('connect', this._onConnectedToServer);
-	this._socket.on('disconnect', this._onDisconnectedFromServer);
+}
+
+
+
+GameEngineLib.GameNetwork.prototype._onClientConnected = function _onClientConnected(inConnectedSocket)
+{
+	var _this_ = GameEngineLib.GameNetwork.instance;
 	
-	//TODO many chat channels? Team, All, etc?
-	//chat channel
-	this._socket.on('msg', this._onMsgRecv);
-	//data channel
-	this._socket.on('data', this._onDataRecv);
+	//TODO event
 	
+	inConnectedSocket.on("msg", _this_._onMsgRecv);
+	inConnectedSocket.on("data", _this_._onDataRecv);
+	inConnectedSocket.on("disconnect", _this_._onClientDisconnected);
 	
+	//tell everone they have connected:
+	inConnectedSocket.broadcast.emit("msg", "User Connected");
+}
+
+
+
+GameEngineLib.GameNetwork.prototype._onClientDisconnected = function _onClientDisconnected()
+{
+	//this == socket disconnecting!
+	var _this_ = GameEngineLib.GameNetwork.instance;
 	
+	_this_._listenSocket.sockets.emit("msg", "User Disconnected");
 	
+	//on disconnect tell everyone that they are gone
 }
 
 
 
 GameEngineLib.GameNetwork.prototype.sendMessage = function sendMessage(inMsg, inSentListener)
 {
-	if(this._socket.socket.connected === true)
+	if(GameSystemVars.Network.isServer)
 	{
-		this._socket.emit('msg', inMsg);
+		this._listenSocket.sockets.emit("msg", inMsg);
+	}
+	else if(this._socket.socket.connected === true)
+	{
+		this._socket.emit("msg", inMsg);
 		if(inSentListener && inSentListener.onSent)
 			inSentListener.onSent(inMsg);
 	}
@@ -124,9 +169,13 @@ GameEngineLib.GameNetwork.prototype.sendMessage = function sendMessage(inMsg, in
 
 GameEngineLib.GameNetwork.prototype._sendData = function _sendData(inData/*, inSentListener*/)
 {
-	if(this._socket.socket.connected === true)
+	if(GameSystemVars.Network.isServer)
 	{
-		this._socket.emit('data', inData);
+		this._listenSocket.sockets.emit("data", inData);
+	}
+	else if(this._socket.socket.connected === true)
+	{
+		this._socket.emit("data", inData);
 		/*if(inSentListener && inSentListener.onSent)
 			inSentListener.onSent(inData);*/
 	}
@@ -188,6 +237,11 @@ GameEngineLib.GameNetwork.prototype._onMsgRecv = function _onMsgRecv(inMsg)
 	}
 	
 	_this_.onEvent(event);
+	if(GameSystemVars.Network.isServer)
+	{
+		//TODO append users name
+		this.broadcast.emit("msg", inMsg);
+	}
 }
 
 
@@ -204,8 +258,13 @@ GameEngineLib.GameNetwork.prototype._onDataRecv = function _onDataRecv(inData)
 		GameEngineLib.logger.info("NetRecv: " + inData);
 	}
 
-	_this_._onData(event);
+	_this_._onData(event);	//TODO if this errors, don't do the rest, ESP not resend!
 	_this_.onEvent(event);
+	if(GameSystemVars.Network.isServer)
+	{
+		//Note: 'this' is the recieving socket here
+		this.broadcast.emit("data", inData);
+	}
 }
 
 
@@ -213,7 +272,7 @@ GameEngineLib.GameNetwork.prototype._onDataRecv = function _onDataRecv(inData)
 //TODO probably on BOTH sides
 GameEngineLib.GameNetwork.prototype.isUpdating = function isUpdating()
 {
-	return true;//isMultiplayer?? isConnected?
+	return !GameSystemVars.Network.isServer;//true;//isMultiplayer?? isConnected?
 }
 
 
@@ -283,7 +342,13 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 			object.serialize(this._serializer);
 		}
 		
-		this._sendData(this._serializer.getString());
+		var sendData = this._serializer.getString();
+		if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+		{
+			GameEngineLib.logger.info("NetSend: " + sendData);
+		}
+		
+		this._sendData(sendData);
 		
 		dirtyObjects = dirtyObjects.slice(messageHeader.public.numObjects);
 	}

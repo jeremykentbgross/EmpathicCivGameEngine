@@ -96,8 +96,11 @@ GameEngineLib.createInput = function(instance, private)
 		}
 	}
 	
-	instance.init = function(inCanvas)
-	{	
+	instance.initClient = function initClient(inCanvas)
+	{
+		if(GameSystemVars.Network.isServer)
+			return;
+			
 		require(
 			["dojo/on"],
 			function(on)
@@ -127,7 +130,6 @@ GameEngineLib.createInput = function(instance, private)
 				//TODO can i turn off middle mouse button native effect
 			}
 		);
-		
 	}
 	
 	//TODO make update an event so this is not needed

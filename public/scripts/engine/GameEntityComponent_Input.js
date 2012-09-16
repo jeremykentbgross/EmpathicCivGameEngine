@@ -27,8 +27,8 @@ GameEngineLib.createEntityComponent_Input = function(instance, private)
 	
 	//private.keysEventMapper = [];//TODO make keys changable??
 	
-	if(!GameSystemVars.Network.isServer)
-		GameInstance.Input.registerListener("Input", private);//todo add to init and turn on and off?
+	//get update tick from input, even if server and no input device:
+	GameInstance.Input.registerListener("Input", private);//todo add to init and turn on and off?
 	
 	//TODO put this elsewhere??
 	private.speed = 128;
@@ -38,7 +38,6 @@ GameEngineLib.createEntityComponent_Input = function(instance, private)
 	private.left	= GameEngineLib.createGame2DPoint(-1, 0);
 	private.right	= GameEngineLib.createGame2DPoint( 1, 0);
 	
-	if(!GameSystemVars.Network.isServer)
 	private.onInput = function(inInputEvent)
 	{
 		private.direction = GameEngineLib.createGame2DPoint(0, 0);

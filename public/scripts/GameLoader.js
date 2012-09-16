@@ -133,12 +133,14 @@ GameLoader =
 			}
 			include(inSharedPath + "scripts/engine/Game2DGraphics.js");
 			include(inSharedPath + "scripts/engine/GameAssetManager.js");
-			include(inSharedPath + "scripts/engine/GameInput.js");
 		}
 		else
 		{
-			include(inPrivatePath + "scripts/GameServerSideNetwork.js");
+			//include(inPrivatePath + "scripts/GameServerSideNetwork.js");
+			include(inSharedPath + "scripts/engine/GameClientSideNetwork.js");
 		}
+		include(inSharedPath + "scripts/engine/GameInput.js");
+		
 		include(inSharedPath + "scripts/engine/GameObject.js");
 		include(inSharedPath + "scripts/engine/GameRegistry.js");
 		include(inSharedPath + "scripts/engine/GameObjectClassFactory.js");
