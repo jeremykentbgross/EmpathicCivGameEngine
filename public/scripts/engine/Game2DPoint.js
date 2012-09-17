@@ -37,6 +37,11 @@ GameEngineLib.Game2DPoint = function Game2DPoint(inX, inY)
 GameEngineLib.Game2DPoint.prototype.constructor = GameEngineLib.Game2DPoint;
 
 
+GameEngineLib.Game2DPoint.prototype.clone = function clone()
+{
+	return new GameEngineLib.Game2DPoint(this.myX, this.myY);
+}
+
 GameEngineLib.Game2DPoint.prototype.add = function add(inOther)
 {
 	return new GameEngineLib.Game2DPoint(this.myX + inOther.myX, this.myY + inOther.myY);

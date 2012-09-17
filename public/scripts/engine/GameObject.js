@@ -144,13 +144,18 @@ GameEngineLib.createGameObject = function(instance, private)
 	}
 	instance.setNetDirty = function()
 	{
-		private.netDirty = true;
+		//only the owner can write to this
+		if(private.netOwner === GameInstance.localUser.name)
+			private.netDirty = true;
 	}
 	
 	instance.setNetOwner = function(inOwner)
 	{
+		//only the owner or the server can change the ownership
+		if(private.netOwner !== GameInstance.localUser.name && GameInstance.localUser.name !== "server")
+			return;
 		private.netOwner = inOwner;
-		this.setNetDirty();
+		private.netDirty = true;//this.setNetDirty();
 		private.objectBaseNetDirty = true;
 	}
 	instance.getNetOwner = function()

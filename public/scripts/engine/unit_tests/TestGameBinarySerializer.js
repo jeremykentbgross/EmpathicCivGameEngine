@@ -109,7 +109,7 @@ GameUnitTests.registerTest(
 		var net = false;
 		{
 			//write data
-			var serializer = GameEngineLib.GameSerializers.createGameBinarySerializer();
+			var serializer = GameEngineLib.GameBinarySerializer.create();
 			serializer.initWrite({});
 			serializer.serializeObject(outObj, format);
 			
@@ -121,7 +121,7 @@ GameUnitTests.registerTest(
 				public : {},
 				private : {}
 			};
-			serializer = GameEngineLib.GameSerializers.createGameBinarySerializer();
+			serializer = GameEngineLib.GameBinarySerializer.create();
 			serializer.initRead({}, data);
 			serializer.serializeObject(inObj, format);
 		}
@@ -133,7 +133,7 @@ GameUnitTests.registerTest(
 		var net = true;
 		{
 			//write data
-			var serializer = GameEngineLib.GameSerializers.createGameBinarySerializer();
+			var serializer = GameEngineLib.GameBinarySerializer.create();
 			serializer.initWrite({NET : true});
 			serializer.serializeObject(outObj, format);
 			
@@ -145,7 +145,7 @@ GameUnitTests.registerTest(
 				public : {},
 				private : {}
 			};
-			serializer = GameEngineLib.GameSerializers.createGameBinarySerializer();
+			serializer = GameEngineLib.GameBinarySerializer.create();
 			serializer.initRead({NET : true}, data);
 			serializer.serializeObject(inObj, format);
 		}

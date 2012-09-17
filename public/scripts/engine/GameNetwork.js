@@ -37,8 +37,6 @@ GameEngineLib.User.create = function create(inName)
 GameEngineLib.GameNetwork = function GameNetwork()
 {
 	GameEngineLib.createEventSystem(this);//TODO inherit
-	//if instance exists, error?
-	GameEngineLib.GameNetwork.instance = this;
 }
 
 GameEngineLib.GameNetwork.prototype.constructor = GameEngineLib.GameNetwork;
@@ -90,7 +88,7 @@ GameEngineLib.GameNetwork.prototype.init = function init()
 		}
 	];
 	
-	this._serializer = GameEngineLib.GameSerializers.createGameBinarySerializer();
+	this._serializer = GameEngineLib.GameBinarySerializer.create();
 	
 	if(GameSystemVars.Network.isServer)
 	{
@@ -123,6 +121,7 @@ GameEngineLib.GameNetwork.prototype.init = function init()
 		this._socket.on("disconnect", this._onDisconnectedFromServer);
 		
 		//TODO many chat channels? Team, All, etc?
+		
 		//chat channel
 		this._socket.on("msg", this._onMsgRecv);
 		//data channel
@@ -134,7 +133,7 @@ GameEngineLib.GameNetwork.prototype.init = function init()
 
 GameEngineLib.GameNetwork.prototype._onClientConnected = function _onClientConnected(inConnectedSocket)
 {
-	var _this_ = GameEngineLib.GameNetwork.instance;
+	var _this_ = GameInstance.Network;
 	
 	inConnectedSocket.gameUser = GameEngineLib.User.create();
 	
@@ -153,7 +152,7 @@ GameEngineLib.GameNetwork.prototype._onClientConnected = function _onClientConne
 GameEngineLib.GameNetwork.prototype._onClientDisconnected = function _onClientDisconnected()
 {
 	//this == socket disconnecting!
-	var _this_ = GameEngineLib.GameNetwork.instance;
+	var _this_ = GameInstance.Network;
 	
 	_this_._listenSocket.sockets.emit("msg", "User Disconnected: " + this.gameUser.name);
 	
@@ -214,7 +213,7 @@ GameEngineLib.GameNetwork.prototype._sendData = function _sendData(inData/*, inS
 
 GameEngineLib.GameNetwork.prototype._onConnectedToServer = function _onConnectedToServer()
 {
-	var _this_ = GameEngineLib.GameNetwork.instance;
+	var _this_ = GameInstance.Network;
 	var event = new GameEngineLib.GameEvent("ConnectedToServer");
 	
 	if(GameSystemVars.DEBUG /*&& GameSystemVars.Debug.NetworkMessages_Print*/)
@@ -226,14 +225,14 @@ GameEngineLib.GameNetwork.prototype._onConnectedToServer = function _onConnected
 	
 	//TODO change this to be some kind of hand shake or login or **user verification**?
 	
-	GameEngineLib.GameNetwork.instance.onEvent(event);
+	_this_.onEvent(event);
 }
 
 
 
 GameEngineLib.GameNetwork.prototype._onDisconnectedFromServer = function _onDisconnectedFromServer()
 {
-	var _this_ = GameEngineLib.GameNetwork.instance;
+	var _this_ = GameInstance.Network;
 	var event = new GameEngineLib.GameEvent("DisconnectedFromServer");
 	
 	if(GameSystemVars.DEBUG /*&& GameSystemVars.Debug.NetworkMessages_Print*/)
@@ -241,7 +240,7 @@ GameEngineLib.GameNetwork.prototype._onDisconnectedFromServer = function _onDisc
 		GameEngineLib.logger.info("Lost Server!");
 	}
 	
-	GameEngineLib.GameNetwork.instance.onEvent(event);
+	_this_.onEvent(event);
 }
 
 
@@ -259,10 +258,10 @@ GameEngineLib.GameNetwork.prototype._onIdRecv = function _onIdRecv(inId)
 		GameEngineLib.logger.info("Identified User: " + inId);
 	}
 	
-	var _this_ = GameEngineLib.GameNetwork.instance;
+	var _this_ = GameInstance.Network;
 	var event = new GameEngineLib.GameEvent("IdentifiedUser");
 	event.userName = inId;
-	GameEngineLib.GameNetwork.instance.onEvent(event);
+	_this_.onEvent(event);
 	
 	this.broadcast.emit("msg", this.gameUser.name + " identified as " + inId);
 	this.gameUser.name = inId;
@@ -272,7 +271,7 @@ GameEngineLib.GameNetwork.prototype._onIdRecv = function _onIdRecv(inId)
 
 GameEngineLib.GameNetwork.prototype._onMsgRecv = function _onMsgRecv(inMsg)
 {
-	var _this_ = GameEngineLib.GameNetwork.instance;
+	var _this_ = GameInstance.Network;
 	
 	var event = new GameEngineLib.GameEvent("Msg");
 	event.msg = inMsg;
@@ -294,7 +293,7 @@ GameEngineLib.GameNetwork.prototype._onMsgRecv = function _onMsgRecv(inMsg)
 
 GameEngineLib.GameNetwork.prototype._onDataRecv = function _onDataRecv(inData)
 {
-	var _this_ = GameEngineLib.GameNetwork.instance;
+	var _this_ = GameInstance.Network;
 	
 	var event = new GameEngineLib.GameEvent("Data");
 	event.data = inData;
@@ -436,16 +435,20 @@ GameEngineLib.GameNetwork.prototype._onData = function _onData(inEvent, inSocket
 			var object = objectClass.findByID(objectHeader.public.instanceID);
 			//TODO if not found, and not server, create it
 			//TODO if !server && !owner && !recentOwnerQueue throw error
-			if(object.getNetOwner() !== messageHeader.public.userName)
+			if(object.getNetOwner() !== messageHeader.public.userName && messageHeader.public.userName != "server")
 			{
+				//TODO info/warn?
 				console.log("Not the owner!: " + messageHeader.public.userName + " != " + object.getNetOwner());
-				//TODO tell serializer to be in dummy mode!
+				this._serializer.setDummyMode(true);
 			}
 			//TODO if !server && !owner && lenient serializer.dummyRead
 			//else
 			object.serialize(this._serializer);
 			
 			//TODO if server, dirty object (so it will send down to other clients)? or just resend if packet contains no detected problems
+			
+			//clear dummy mode in case we didn't read this object
+			this._serializer.setDummyMode(false);
 		}
 	}
 	catch(error)
