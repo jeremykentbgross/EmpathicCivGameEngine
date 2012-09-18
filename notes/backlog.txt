@@ -179,7 +179,6 @@ OTHER GOALS:
 //////////////////////////////////////////////Staged:
 
 ****Priority:
--GameObject.js
 -GameEventSystem.js
 -GameEntity.js
 -(component?)??	//TODO new file
@@ -194,9 +193,7 @@ OTHER GOALS:
 -GameInput.js
 -GameArithmeticCompression.js
 -GameAssetManager.js
--GameBinarySerializer.js
 -GameBitPacker.js
--GameCircularDoublyLinkedListNode.js
 -GameEngineLogger.js                  
 -GameObjectClassFactory.js
 -GameQuadTree.js
@@ -222,6 +219,7 @@ OTHER GOALS:
 //////////////////////////////////////////////Stage 1 (unclosure):
 
 ****Priority:
+-GameObject.js
 -Game2DTileSet.js
 -Game2DMap.js
 -Game2DWorld.js
@@ -232,7 +230,10 @@ OTHER GOALS:
 -Game2DGraphics.js
 -Game2DPoint.js
 -Game2DSceneGraph.js
--GameClientSideNetwork.js
+-GameNetwork.js
+-GameObjectRef.js
+-GameCircularDoublyLinkedListNode.js
+-GameBinarySerializer.js
 //////////////////////////////////////////////:Stage 1 (unclosure)
 
 

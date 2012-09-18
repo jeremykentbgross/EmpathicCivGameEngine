@@ -19,292 +19,242 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.createGameObject = function(instance, private)
+//TODO depricated:
+GameEngineLib.createGameObject = function createGameObject(instance, private)
 {
+	var temp = new GameEngineLib.GameObject();
 	instance = instance || {};
-	private = private || {};
 	
-	if(GameSystemVars.DEBUG)
+	for(property in temp)
 	{
-		GameEngineLib.addDebugInfo("GameObject", instance, private);
+		instance[property] = temp[property]
 	}
-	
-	private.myName = null;
-	private.myID = null;
-	private.myClass = null;
-	private.netOwner = "server";
-	private.netDirty = false;//TODO maybe should start as true?
-	private.objectBaseNetDirty = false;//TODO maybe should start as true?
-	
-	
-	//TODO this should be static!
-	private.format =
-	[
-		{
-			name : "netOwner",
-			scope : "private",
-			type : "string",
-			net : true
-		}
-	];
-	
-	instance.getName = function()
+	for(property in temp.prototype)
 	{
-		return private.myName;
+		instance[property] = temp.prototype[property];
 	}
-	
-	instance.getPath = function()
-	{
-		return private.myName;//TODO make real path
-	}
-	
-	instance.setName = function(inName)
-	{
-		if(private.myClass)
-			private.myClass.deregister(this);
-			
-		private.myName = inName;
-		if(GameSystemVars.DEBUG)
-			this.debug_myName = inName;
-		
-		if(private.myClass)
-			private.myClass.register(this);
-			
-		//TODO event to all listeners: name changed!
-	}
-		
-	instance.getID = function()
-	{
-		return private.myID;
-	}
-	
-	instance.setID = function(inID)
-	{
-		if(private.myClass)
-			private.myClass.deregister(this);
-			
-		private.myID = inID;
-		if(GameSystemVars.DEBUG)
-			this.debug_myID = inID;
-		
-		if(private.myClass)
-			private.myClass.register(this);
-			
-		//TODO event to all listeners: ID changed!
-	}	
-	
-	instance.getClass = function()
-	{
-		return private.myClass;
-	}
-	
-	instance.setClass = function(inClass)
-	{
-		if(private.myClass)
-			private.myClass.deregister(this);
-		
-		private.myClass = inClass;
-		if(GameSystemVars.DEBUG)
-		{
-			this.debug_myClassName = inClass.getName();
-			this.debug_myClass = inClass;
-		}
-		
-		if(private.myClass)
-			private.myClass.register(this);
-	}
-	
-	instance.destroy = function()
-	{
-		if(GameSystemVars.DEBUG && GameSystemVars.Debug.GameObject_Destroy_Print)
-			GameEngineLib.logger.info("Destroying GameObject " + GameEngineLib.createGameObjectRef(this).getPath(), true);
-			
-		//TODO notify all listeners
-		
-		private.myClass.deregister(this);
-
-		for(var i in this)
-		{
-			if(this.hasOwnProperty(i))
-			{
-				delete this[i];
-			}
-		}
-	}
-	instance.destroy.chainup = true;
-	
-	instance.netDirty = function()//TODO change to isNetDirty
-	{
-		if(private.netDirty)
-		{
-			private.netDirty = false;
-			return true;
-		}
-		return false;
-	}
-	instance.setNetDirty = function()
-	{
-		//only the owner can write to this
-		if(private.netOwner === GameInstance.localUser.name)
-			private.netDirty = true;
-	}
-	
-	instance.setNetOwner = function(inOwner)
-	{
-		//only the owner or the server can change the ownership
-		if(private.netOwner !== GameInstance.localUser.name && GameInstance.localUser.name !== "server")
-			return;
-		private.netOwner = inOwner;
-		private.netDirty = true;//this.setNetDirty();
-		private.objectBaseNetDirty = true;
-	}
-	instance.getNetOwner = function()
-	{
-		return private.netOwner;
-	}
-	
-	instance.serialize = function(serializer)
-	{
-		if(!serializer)
-			return;
-		
-		private.objectBaseNetDirty =
-			serializer.serializeBool(private.objectBaseNetDirty);
-		
-		if(private.objectBaseNetDirty)
-		{
-			if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
-			{
-				GameEngineLib.logger.info(this.getPath() + " start owner: " + private.netOwner);
-			}
-			
-			serializer.serializeObject(
-				{ public : instance, private : private },//TODO should be just 'this' soon
-				private.format
-			);
-			
-			if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
-			{
-				GameEngineLib.logger.info(this.getPath() + " end owner: " + private.netOwner);
-			}
-		}
-		
-		private.objectBaseNetDirty = false;
-	}
-	instance.serialize.chaindown = true;
-	
-	//todo work out how to do this right
-	/*instance.clone = function(cloneInstance, clonePrivate)
-	{
-		cloneInstance.setName("copy of " + this.getName());
-	}*/
-	
-	/*
-	//todo maybe should go in object.prototype??
-	//todo test and test and freaking test this
-	instance.clone = function()
-	{
-		var copy = private.myClass.create();
-		
-		for(var i in this)
-		{
-			if(this.hasOwnProperty(i))//should this be?
-			{
-				//todo if object / object ref: clone it too
-				copy[i] = this[i];
-			}
-		}
-	}*/
 	
 	return instance;
 }
 
 
 
-//todo type checking version known to class
-//todo this should be named with *create* at the start!
-GameEngineLib.createGameObjectRef = function(inPathOrValue)
+
+
+GameEngineLib.GameObject = function GameObject()
 {
-	var outRef = {};
-	var private = {};
+	//TODO this should be static!
+	this._format =
+	[
+		{
+			name : "_netOwner",
+			scope : "private",
+			type : "string",
+			net : true
+		}
+	];
+
+	this._myName = null;
+	this._myID = null;
+	this._myClass = null;
+	this._netOwner = "server";
+	this._netDirty = false;//TODO maybe should start as true?
+	this._objectBaseNetDirty = false;//TODO maybe should start as true?
+}
+GameEngineLib.GameObject.prototype.constructor = GameEngineLib.GameObject;
+
+
+
+GameEngineLib.GameObject.prototype.getName = function getName()
+{
+	return this._myName;
+}
+
+
+
+GameEngineLib.GameObject.prototype.getPath = function getPath()//?? todo is this right to exist?
+{
+	return this._myName;//TODO make real path
+}
+
+
+
+GameEngineLib.GameObject.prototype.setName = function setName(inName)
+{
+	if(this._myClass)
+		this._myClass.deregister(this);
+		
+	this._myName = inName;
+	if(GameSystemVars.DEBUG)
+		this.debug_myName = inName;
 	
-	private.path = null;
-	private.value = null;
-	//todo id {classid,instanceid}	//methodid/propertyid
+	if(this._myClass)
+		this._myClass.register(this);
+		
+	//TODO event to all listeners: name changed!
+}
+
+
 	
+GameEngineLib.GameObject.prototype.getID = function getID()
+{
+	return this._myID;
+}
+
+
+
+GameEngineLib.GameObject.prototype.setID = function setID(inID)
+{
+	if(this._myClass)
+		this._myClass.deregister(this);
+		
+	this._myID = inID;
+	if(GameSystemVars.DEBUG)
+		this.debug_myID = inID;
+	
+	if(this._myClass)
+		this._myClass.register(this);
+		
+	//TODO event to all listeners: ID changed!
+}	
+
+
+
+GameEngineLib.GameObject.prototype.getClass = function getClass()
+{
+	return this._myClass;
+}
+
+
+
+GameEngineLib.GameObject.prototype.setClass = function setClass(inClass)//TODO make private
+{
+	if(this._myClass)
+		this._myClass.deregister(this);
+	
+	this._myClass = inClass;
 	if(GameSystemVars.DEBUG)
 	{
-		GameEngineLib.addDebugInfo("GameObjectRef", outRef, private);
+		this.debug_myClassName = inClass.getName();
+		this.debug_myClass = inClass;
 	}
 	
-	outRef.deref = function()
-	{
-		var objectClass;
-		var pathTokens;
-				
-		if(private.value)
-		{
-			return private.value;
-		}
-		
-		if(private.path === null)
-			return null;
-		
-		pathTokens = private.path.split('\\');
-		if(pathTokens.length !== 2)
-			return null;
-		
-		objectClass = GameInstance.GameObjectClasses.findByName(pathTokens[0]);
-		if(objectClass)
-		{
-			private.value = objectClass.findByName(pathTokens[1]);
-			private.path = null;
-		}
-			
-		return private.value;
-	}
-	
-	//todo make sure class is right (if we type check them later) when assigning
-	
-	//todo try get/set and if they are direct, then have them check the type to decide path, value, or id
-	outRef.setValue = function(inValue)
-	{
-		private.path = null;
-		private.value = inValue;
-	}
-	
-	outRef.setPath = function(inPath)
-	{
-		private.path = inPath;
-		private.value = null;
-	}
-	
-	outRef.getPath = function()
-	{
-		if(private.path === null)
-		{
-			if(private.value !== null)
-			{
-				private.path = private.value.getClass().getName() + "\\" + private.value.getName();
-			}
-		}
-		private.value = null;
-		
-		return private.path;
-	}
-	
-	if(inPathOrValue)
-	{
-		if(typeof inPathOrValue === 'string')
-		{
-			outRef.setPath(inPathOrValue);
-		}
-		//TODO else if(typeof inPathOrValue === 'integer??') handle binary path
-		else
-		{
-			outRef.setValue(inPathOrValue);
-		}
-	}
-	
-	return outRef;
+	if(this._myClass)
+		this._myClass.register(this);
 }
+
+
+//TODO revisit this whole concept
+GameEngineLib.GameObject.prototype.destroy = function destroy()
+{
+	if(GameSystemVars.DEBUG && GameSystemVars.Debug.GameObject_Destroy_Print)
+		GameEngineLib.logger.info("Destroying GameObject " + GameEngineLib.createGameObjectRef(this).getPath(), true);
+		
+	//TODO notify all listeners
+	
+	this._myClass.deregister(this);
+
+	for(var i in this)
+	{
+		if(this.hasOwnProperty(i))
+		{
+			delete this[i];
+		}
+	}
+}
+GameEngineLib.GameObject.prototype.destroy.chainup = true;
+
+
+
+GameEngineLib.GameObject.prototype.netDirty = function netDirty()//TODO change to isNetDirty
+{
+	if(this._netDirty)
+	{
+		this._netDirty = false;
+		return true;
+	}
+	return false;
+}
+
+
+
+GameEngineLib.GameObject.prototype.setNetDirty = function setNetDirty()
+{
+	//only the owner can write to this
+	if(this._netOwner === GameInstance.localUser.name)
+		this._netDirty = true;
+}
+
+
+
+GameEngineLib.GameObject.prototype.setNetOwner = function setNetOwner(inOwner)
+{
+	//only the owner or the server can change the ownership
+	if(this._netOwner !== GameInstance.localUser.name && GameInstance.localUser.name !== "server")
+		return;
+	this._netOwner = inOwner;
+	this._netDirty = true;//this.setNetDirty();
+	this._objectBaseNetDirty = true;
+}
+
+
+
+GameEngineLib.GameObject.prototype.getNetOwner = function getNetOwner()
+{
+	return this._netOwner;
+}
+
+
+
+GameEngineLib.GameObject.prototype.serialize = function serialize(serializer)
+{
+	if(!serializer)
+		return;
+	
+	this._objectBaseNetDirty =
+		serializer.serializeBool(this._objectBaseNetDirty);
+	
+	if(this._objectBaseNetDirty)
+	{
+		if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+		{
+			GameEngineLib.logger.info(this.getPath() + " start owner: " + this._netOwner);
+		}
+		
+		serializer.serializeObject(
+			{ public : this, private : this },//TODO should be just 'this' soon
+			this._format
+		);
+		
+		if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+		{
+			GameEngineLib.logger.info(this.getPath() + " end owner: " + this._netOwner);
+		}
+	}
+	
+	this._objectBaseNetDirty = false;
+}
+GameEngineLib.GameObject.prototype.serialize.chaindown = true;
+
+//todo work out how to do this right
+/*instance.clone = function(cloneInstance, clonePrivate)
+{
+	cloneInstance.setName("copy of " + this.getName());
+}*/
+
+/*
+//todo maybe should go in object.prototype??
+//todo test and test and freaking test this
+instance.clone = function()
+{
+	var copy = private.myClass.create();
+	
+	for(var i in this)
+	{
+		if(this.hasOwnProperty(i))//should this be?
+		{
+			//todo if object / object ref: clone it too
+			copy[i] = this[i];
+		}
+	}
+}*/

@@ -137,6 +137,7 @@ GameLoader =
 		include(inSharedPath + "scripts/engine/GameInput.js");
 		
 		include(inSharedPath + "scripts/engine/GameObject.js");
+		include(inSharedPath + "scripts/engine/GameObjectRef.js");
 		include(inSharedPath + "scripts/engine/GameRegistry.js");
 		include(inSharedPath + "scripts/engine/GameObjectClassFactory.js");
 		include(inSharedPath + "scripts/engine/GameBitPacker.js");
