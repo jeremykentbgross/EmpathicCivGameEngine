@@ -19,120 +19,159 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 GameEngineLib.GameEvent = function GameEvent(inEventName)
 {
 	this._eventName = inEventName;
 }
 GameEngineLib.GameEvent.prototype.constructor = GameEngineLib.GameEvent;
 
+
+
 GameEngineLib.GameEvent.prototype.getName = function getName()
 {
 	return this._eventName;
 }
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
 
 
 
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////
+//TODO depricated:
 GameEngineLib.createEventSystem = function(instance, private)
 {
+	var temp = new GameEngineLib.GameEventSystem();
 	instance = instance || {};
-	private = private || {};
 	
-	if(GameSystemVars.DEBUG)
+	for(property in temp)
 	{
-		GameEngineLib.addDebugInfo("GameEventSystem", instance, private);
+		instance[property] = temp[property]
 	}
-	
-	private.myEventListeners = {};
-	
-	//TODO add listener sorting!
-	instance.registerListener = function(inEventName, inListener)
+	for(property in temp.prototype)
 	{
-		var listenerNode = GameEngineLib.createGameCircularDoublyLinkedListNode();
-		listenerNode.item = inListener;
-		
-		private.myEventListeners[inEventName] = 
-			private.myEventListeners[inEventName] ||
-			GameEngineLib.createGameCircularDoublyLinkedListNode();
-			
-		private.myEventListeners[inEventName].myPrev.insert(listenerNode);
+		instance[property] = temp.prototype[property];
 	}
 	
-	instance.deregisterListener = function(inEventName, inListener)
-	{
-		var head;
-		var current;
-		
-		head = private.myEventListeners[inEventName];
-		if(!head)
-			return;
-		current = head.myNext;
-		
-		while(current !== head)
-		{
-			if(current.item === inListener)
-			{
-				current.remove();
-				return;
-			}
-			
-			current = current.myNext;
-		}
-	}
-	
-	instance.onEvent = function(inEvent)
-	{
-		var head;
-		var current;
-		var eventName;
-		var callbackName;
-		
-		eventName = inEvent.getName();
-		callbackName = "on" + eventName;//TODO axe "on" here and have users add it!
-		
-		head = private.myEventListeners[eventName];
-		if(!head)
-			return;
-		current = head.myNext;
-		
-		while(current !== head)
-		{
-			try
-			{
-				current.item[callbackName](inEvent);
-			}
-			catch(error)
-			{
-				console.log(error.stack);
-			}
-			
-			current = current.myNext;
-		}
-	}
-			
-	instance.serialize = function(serializer)
-	{		
-		if(GameSystemVars.DEBUG)
-			GameEngineLib.logger.info("Serializing EventSystem " + GameEngineLib.GameObjectRef(this).getPath());
-			
-		/*if(serializer.isReading())
-		{
-		}
-		else if(serializer.isWriting())
-		{
-		}*/
-	}
-	/*
-	instance.clone = function(cloneInstance, clonePrivate)
-	{
-		cloneInstance.bIsEntity = this.bIsEntity;
-	}
-	*/
-	instance.destroy = function(serializer)
-	{		
-		if(GameSystemVars.DEBUG)
-			GameEngineLib.logger.info("Destroying EventSystem " + GameEngineLib.GameObjectRef(this).getPath());
-	}
-	
-	//add stuff
 	return instance;
 }
+
+
+
+
+
+//TODO consider making GameObject inherit this as many things might want to listen to its state!
+GameEngineLib.GameEventSystem = function GameEventSystem()
+{
+	this._eventListeners = {};
+}
+GameEngineLib.GameEventSystem.prototype.constructor = GameEngineLib.GameEventSystem;
+
+
+
+//TODO add listener sorting (may need to be an array then and use custom sorting?)!
+GameEngineLib.GameEventSystem.prototype.registerListener = function registerListener(inEventName, inListener)
+{
+	var listenerNode = GameEngineLib.createGameCircularDoublyLinkedListNode();
+	listenerNode.item = inListener;
+	
+	this._eventListeners[inEventName] = 
+		this._eventListeners[inEventName] ||
+		GameEngineLib.createGameCircularDoublyLinkedListNode();
+		
+	this._eventListeners[inEventName].myPrev.insert(listenerNode);
+}
+
+
+
+GameEngineLib.GameEventSystem.prototype.deregisterListener = function deregisterListener(inEventName, inListener)
+{
+	var head;
+	var current;
+	
+	head = this._eventListeners[inEventName];
+	if(!head)
+		return;
+	current = head.myNext;
+	
+	while(current !== head)
+	{
+		if(current.item === inListener)
+		{
+			current.remove();
+			return;
+		}
+		
+		current = current.myNext;
+	}
+}
+
+
+
+GameEngineLib.GameEventSystem.prototype.onEvent = function onEvent(inEvent)
+{
+	var head;
+	var current;
+	var eventName;
+	var callbackName;
+	
+	eventName = inEvent.getName();
+	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	callbackName = "on" + eventName;//TODO axe "on" here and have users add it!!!!!!!!!!!!!!!!!!!!
+	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	
+	head = this._eventListeners[eventName];
+	if(!head)
+		return;
+	current = head.myNext;
+	
+	while(current !== head)
+	{
+		try
+		{
+			current.item[callbackName](inEvent);
+		}
+		catch(error)
+		{
+			console.log(error.stack);
+		}
+		
+		current = current.myNext;
+	}
+}
+
+
+
+GameEngineLib.GameEventSystem.prototype.serialize = function serialize(serializer)
+{		
+	if(GameSystemVars.DEBUG)
+		GameEngineLib.logger.info("Serializing EventSystem " + GameEngineLib.GameObjectRef(this).getPath());
+		
+	/*if(serializer.isReading())
+	{
+	}
+	else if(serializer.isWriting())
+	{
+	}*/
+}
+
+
+
+/*
+GameEngineLib.GameEventSystem.prototype.clone = function(cloneInstance, clonePrivate)
+{
+	cloneInstance.bIsEntity = this.bIsEntity;
+}
+*/
+
+
+
+GameEngineLib.GameEventSystem.prototype.destroy = function destroy(serializer)
+{		
+	if(GameSystemVars.DEBUG)
+		GameEngineLib.logger.info("Destroying EventSystem " + GameEngineLib.GameObjectRef(this).getPath());
+}
+/////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////

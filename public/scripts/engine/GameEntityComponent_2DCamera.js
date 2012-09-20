@@ -19,61 +19,92 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+//TODO depricated!
 GameEngineLib.createEntityComponent_2DCamera = function(instance, private)
 {
+	var temp = new GameEngineLib.EntityComponent_2DCamera();
 	instance = instance || {};
-	private = private || {};
 	
-	GameEngineLib.createGame2DCamera(instance, private);
-	
-	instance.onAddedToEntity = function(inEntity)
+	for(property in temp)
 	{
-		private.myOwner = inEntity;
-		
-		//register for events
-		private.myOwner.registerListener("UpdatePosition", this);
-		private.myOwner.registerListener("AddedToWorld", this);
-		private.myOwner.registerListener("RemovedFromWorld", this);
-		
-		//TODO owner.event(getposition, myPos);??
+		instance[property] = temp[property]
 	}
-	
-	instance.onRemovedFromEntity = function()
+	for(property in temp.prototype)
 	{
-		//unregister for events
-		private.myOwner.unregisterListener("UpdatePosition", this);
-		private.myOwner.unregisterListener("AddedToWorld", this);
-		private.myOwner.unregisterListener("RemovedFromWorld", this);
-		
-		private.myOwner = null;
-	}
-	
-	instance.destroy = function(){}//TODO
-	instance.serialize = function(){}//TODO
-	
-	
-	instance.onAddedToWorld = function(inEvent)
-	{
-		private.myMap = inEvent.world.getMap();
-		//todo register as a camera entity with the world
-	}
-	instance.onRemovedFromWorld = function(inEvent)
-	{
-		//todo unregister as a camera entity with the world
-		private.myMap = null;
-	}
-	
-	instance.getTargetPosition = function()
-	{
-		return private.position;
-	}
-	
-	instance.onUpdatePosition = function(inEvent)
-	{
-		//TODO look into bug why camera lags behind entity (maybe due to event listener order?)
-		private.position = inEvent.position;
-		this.centerOn(private.position, private.myMap.deref());
+		instance[property] = temp.prototype[property];
 	}
 	
 	return instance;
+}
+
+
+
+
+GameEngineLib.EntityComponent_2DCamera = function EntityComponent_2DCamera()
+{
+	GameEngineLib.createGame2DCamera(this, null);//TODO inherit!
+}
+GameEngineLib.EntityComponent_2DCamera.prototype.constructor = GameEngineLib.EntityComponent_2DCamera;
+
+
+
+GameEngineLib.EntityComponent_2DCamera.prototype.onAddedToEntity = function onAddedToEntity(inEntity)
+{
+	this._myOwner = inEntity;//TODO this should be done in the parent (EntityComponent) and not be needed here!!
+	
+	//register for events
+	this._myOwner.registerListener("UpdatePosition", this);
+	this._myOwner.registerListener("AddedToWorld", this);
+	this._myOwner.registerListener("RemovedFromWorld", this);
+	
+	//TODO owner.event(getposition, myPos);??
+}
+
+
+
+GameEngineLib.EntityComponent_2DCamera.prototype.onRemovedFromEntity = function onRemovedFromEntity()
+{
+	//unregister for events
+	this._myOwner.unregisterListener("UpdatePosition", this);
+	this._myOwner.unregisterListener("AddedToWorld", this);
+	this._myOwner.unregisterListener("RemovedFromWorld", this);
+	
+	this._myOwner = null;
+}
+
+
+
+GameEngineLib.EntityComponent_2DCamera.prototype.destroy = function destroy(){}//TODO
+GameEngineLib.EntityComponent_2DCamera.prototype.serialize = function serialize(){}//TODO
+
+
+
+GameEngineLib.EntityComponent_2DCamera.prototype.onAddedToWorld = function onAddedToWorld(inEvent)
+{
+	this._myMap = inEvent.world.getMap();
+	//todo register as a camera entity with the world
+}
+
+
+
+GameEngineLib.EntityComponent_2DCamera.prototype.onRemovedFromWorld = function onRemovedFromWorld(inEvent)
+{
+	//todo unregister as a camera entity with the world
+	this._myMap = null;
+}
+
+
+
+GameEngineLib.EntityComponent_2DCamera.prototype.getTargetPosition = function getTargetPosition()
+{
+	return this._position;
+}
+
+
+
+GameEngineLib.EntityComponent_2DCamera.prototype.onUpdatePosition = function onUpdatePosition(inEvent)
+{
+	//TODO look into bug why camera lags behind entity (maybe due to event listener order?)
+	this._position = inEvent.position;
+	this.centerOn(this._position, this._myMap.deref());
 }

@@ -122,6 +122,8 @@ GameLoader =
 		
 		//****************************************************************************
 		//****************************** ENGINE SCRIPTS ******************************
+		
+		//TODO order these better:
 		include(inSharedPath + "scripts/engine/GameEngineLogger.js");
 		include(inSharedPath + "scripts/engine/GameCircularDoublyLinkedListNode.js");
 		if(!inIsServer)
@@ -146,10 +148,12 @@ GameLoader =
 		include(inSharedPath + "scripts/engine/GameBinarySerializer.js");
 		include(inSharedPath + "scripts/engine/GameEventSystem.js");
 		include(inSharedPath + "scripts/engine/GameEntity.js");
-		include(inSharedPath + "scripts/engine/GameEntityComponent_Sprite.js");
-		include(inSharedPath + "scripts/engine/GameEntityComponent_Input.js");
-		include(inSharedPath + "scripts/engine/GameEntityComponent_2DPhysics.js");
+		include(inSharedPath + "scripts/engine/GameEntityComponent.js");
 		include(inSharedPath + "scripts/engine/GameEntityComponent_2DCamera.js");
+		include(inSharedPath + "scripts/engine/GameEntityComponent_Input.js");
+		include(inSharedPath + "scripts/engine/GameEntityComponent_Sprite.js");
+		include(inSharedPath + "scripts/engine/GameEntityComponent_2DPhysics.js");
+		
 		include(inSharedPath + "scripts/engine/GameTimer.js");
 		include(inSharedPath + "scripts/engine/GameFrameWork.js");
 		include(inSharedPath + "scripts/engine/Game2DAABB.js");
