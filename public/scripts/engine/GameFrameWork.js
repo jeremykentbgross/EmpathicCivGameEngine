@@ -115,11 +115,19 @@ GameEngineLib.createGameFrameWork = function(instance, private)
 			//////////////////////////////////////////////////
 		}
 		
-		instance.localUser = GameEngineLib.User.create(
-			GameSystemVars.Network.isServer
-			?"server"
-			:Math.ceil(Math.random()*65535).toString()//TODO use FB id or something in the future
-		);
+		if(GameSystemVars.Network.isServer)
+		{
+			instance.localUser = new GameEngineLib.User("Server", GameEngineLib.User.USER_IDS.SERVER);
+		}
+		else
+		{
+			//TODO use FB id or something in the future
+			instance.localUser = new GameEngineLib.User(
+				"NewUser" + Math.floor(Math.random()*65536)
+				,GameEngineLib.User.USER_IDS.NEW_USER
+			);
+		}
+		
 		
 		
 		//////////////////////////////////////////////////

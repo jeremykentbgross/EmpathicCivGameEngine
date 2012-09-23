@@ -62,7 +62,11 @@ GameEngineLib.logger.createMsgType = function(inType, inFullPathDefault)
 				index2 = stackPath.indexOf("\n", index + 1);
 				stackPath = " " + stackPath.slice(index, index2);
 			}
-			console.log(inType + ": \"" + inMsg + "\"" + stackPath);
+			console.log(
+				(GameSystemVars.Network.isServer?"\n":"") +
+				inType + ": \"" + inMsg + "\"" + stackPath
+				+ (GameSystemVars.Network.isServer?"\n":"")
+			);
 		}
 	}
 }

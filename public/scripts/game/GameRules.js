@@ -120,8 +120,8 @@ GameLib.createGameRules = function(instance, private)
 		
 		private.onIdentifiedUser = function(inEvent)
 		{
-			console.log("setting owner for physics component: " + inEvent.userName );
-			private.entity1Physics.deref().setNetOwner(inEvent.userName);
+			console.log("setting owner for physics component: " + inEvent.user.userName );
+			private.entity1Physics.deref().setNetOwner(inEvent.user.userID);
 		}
 		GameInstance.Network.registerListener(
 			"IdentifiedUser",

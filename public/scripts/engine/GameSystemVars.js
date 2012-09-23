@@ -94,7 +94,7 @@ GameSystemVars = //TODO rename as GameSystemSettings
 		//Network
 		NetworkMessages_Draw : false,
 		NetworkMessages_DrawColor : "rgba(0, 255, 0, 1)",
-		NetworkMessages_Print : true,
+		NetworkMessages_Print : false,
 		
 		//default debug text color
 		TextDefault_DrawColor : "rgba(255, 255, 255, 1)",

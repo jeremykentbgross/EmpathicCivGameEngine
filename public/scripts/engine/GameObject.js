@@ -49,15 +49,17 @@ GameEngineLib.GameObject = function GameObject()
 		{
 			name : "_netOwner",
 			scope : "private",
-			type : "string",
-			net : true
+			type : "int",
+			net : true,
+			min : 0,
+			max : GameEngineLib.User.USER_IDS.MAX_EVER
 		}
 	];
 
 	this._myName = null;
 	this._myID = null;
 	this._myClass = null;
-	this._netOwner = "server";
+	this._netOwner = GameEngineLib.User.USER_IDS.SERVER;
 	this._netDirty = false;//TODO maybe should start as true?
 	this._objectBaseNetDirty = false;//TODO maybe should start as true?
 }
@@ -181,7 +183,7 @@ GameEngineLib.GameObject.prototype.netDirty = function netDirty()//TODO change t
 GameEngineLib.GameObject.prototype.setNetDirty = function setNetDirty()
 {
 	//only the owner can write to this
-	if(this._netOwner === GameInstance.localUser.name)
+	if(this._netOwner === GameInstance.localUser.userID)
 		this._netDirty = true;
 }
 
@@ -190,7 +192,8 @@ GameEngineLib.GameObject.prototype.setNetDirty = function setNetDirty()
 GameEngineLib.GameObject.prototype.setNetOwner = function setNetOwner(inOwner)
 {
 	//only the owner or the server can change the ownership
-	if(this._netOwner !== GameInstance.localUser.name && GameInstance.localUser.name !== "server")
+	if(this._netOwner !== GameInstance.localUser.userID
+		&& GameInstance.localUser.userID !== GameEngineLib.User.USER_IDS.SERVER)
 		return;
 	this._netOwner = inOwner;
 	this._netDirty = true;//this.setNetDirty();
