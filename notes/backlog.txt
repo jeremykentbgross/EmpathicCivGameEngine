@@ -163,7 +163,7 @@ OTHER GOALS:
 -business doc
 -sandbox (Distributed eval from approved users only! (editor/admin))
 -should have GameEvent to 'new' instead of this { getname:func() etc.. }
-
+-GameEvent folder (so none are undocumented!)
 
 
 
@@ -177,11 +177,6 @@ OTHER GOALS:
 
 
 //////////////////////////////////////////////Staged:
-
-****Priority:
--GameEntityComponent_Input.js
--GameEntityComponent_Sprite.js
-****:Priority
 
 -Game2DPhysics.js
 -GameFrameWork.js
@@ -222,6 +217,8 @@ OTHER GOALS:
 -GameEntityComponent.js
 -GameEntityComponent_2DCamera.js
 -GameEntityComponent_2DPhysics.js
+-GameEntityComponent_Input.js
+-GameEntityComponent_Sprite.js
 ****:Priority
 
 -Game2DAABB.js

@@ -100,6 +100,7 @@ GameLib.createGameRules = function(instance, private)
 		//TODO test adding components and world in different orders
 		private.entity1 = GameInstance.GameObjectClasses.findByName("Entity").create();
 		private.entity1Sprite = GameInstance.GameObjectClasses.findByName("EntityComponent_Sprite").create();
+		private.entity1Sprite.deref().init();
 		private.entity1.deref().addComponent(private.entity1Sprite);
 		private.entity1Input = GameInstance.GameObjectClasses.findByName("EntityComponent_Input").create();
 		private.entity1.deref().addComponent(private.entity1Input);

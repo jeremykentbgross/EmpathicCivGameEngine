@@ -53,6 +53,7 @@ GameEngineLib.GameEntityComponent.prototype.onAddedToEntity = function onAddedTo
 	{
 		this.onRemovedFromEntity();
 	}
+	this._myOwner = inEntity;
 	
 	//todo register for events
 }
@@ -62,6 +63,7 @@ GameEngineLib.GameEntityComponent.prototype.onAddedToEntity.chaindown = true;
 
 GameEngineLib.GameEntityComponent.prototype.onRemovedFromEntity = function onRemovedFromEntity()
 {
+	this._myOwner = null;
 	//todo unregister for events
 }
 GameEngineLib.GameEntityComponent.prototype.onRemovedFromEntity.chainup = true;
