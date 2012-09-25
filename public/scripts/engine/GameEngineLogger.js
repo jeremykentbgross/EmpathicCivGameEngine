@@ -22,7 +22,7 @@
 GameAssert = function GameAssert(expression, message)
 {
 	if(!expression)
-		throw "Assert failed: '" + message + "'";
+		throw new Error("Assert failed: '" + message + "'");
 }
 
 
@@ -76,6 +76,7 @@ GameEngineLib.logger.warn = GameEngineLib.logger.createMsgType("WARNING", true);
 GameEngineLib.logger.error = GameEngineLib.logger.createMsgType("ERROR", true);
 
 
+//TODO depricated!
 GameEngineLib.addDebugInfo = function(className, instance, private)
 {
 	var propertyName;

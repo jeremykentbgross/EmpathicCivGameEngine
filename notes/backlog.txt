@@ -192,7 +192,6 @@ OTHER GOALS:
 -GameEngineLogger.js                  
 -GameObjectClassFactory.js
 -GameQuadTree.js
--GameRegistry.js
 -GameSpriteManager.js
 -GameSystemVars.js
 -GameTimer.js
@@ -234,6 +233,7 @@ OTHER GOALS:
 -GameObjectRef.js
 -GameCircularDoublyLinkedListNode.js
 -GameBinarySerializer.js
+-GameRegistry.js
 //////////////////////////////////////////////:Stage 1 (unclosure)
 
 

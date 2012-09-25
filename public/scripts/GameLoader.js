@@ -72,6 +72,7 @@ GameLoader =
 		GameEngineLib = {};
 		GameLib = {};
 		GameInstance = null;
+		GameClassRegistryMap = {};
 		
 		//GameEngineLib.include = include;//TODO needed?
 				
@@ -124,6 +125,8 @@ GameLoader =
 		//****************************** ENGINE SCRIPTS ******************************
 		
 		//TODO order these better:
+		include(inSharedPath + "scripts/engine/GameRegistry.js");
+		include(inSharedPath + "scripts/engine/GameClass.js");
 		include(inSharedPath + "scripts/engine/GameEngineLogger.js");
 		include(inSharedPath + "scripts/engine/GameCircularDoublyLinkedListNode.js");
 		if(!inIsServer)
@@ -140,7 +143,6 @@ GameLoader =
 		
 		include(inSharedPath + "scripts/engine/GameObject.js");
 		include(inSharedPath + "scripts/engine/GameObjectRef.js");
-		include(inSharedPath + "scripts/engine/GameRegistry.js");
 		include(inSharedPath + "scripts/engine/GameObjectClassFactory.js");
 		include(inSharedPath + "scripts/engine/GameBitPacker.js");
 		//include(inSharedPath + "scripts/engine/MultPacker.js");//TODO
@@ -184,6 +186,7 @@ GameLoader =
 		if(GameSystemVars.RUN_UNIT_TESTS)
 		{			
 			//ENGINE UNIT TESTS:
+			include(inSharedPath + "scripts/engine/unit_tests/TestGameClass.js");
 			include(inSharedPath + "scripts/engine/unit_tests/TestGameBitPacker.js");
 			include(inSharedPath + "scripts/engine/unit_tests/TestGameEventSystem.js");
 			include(inSharedPath + "scripts/engine/unit_tests/TestGameObjectClassSystem.js");

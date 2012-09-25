@@ -143,6 +143,9 @@ GameEngineLib.createGameFrameWork = function(instance, private)
 		
 		//////////////////////////////////////////////////
 		//Init Native GameObject Classes//////////////////
+		GameClassRegistryMap = {}; //TODO new system!
+		//TODO class.registerClass();//TODO consider making array to run thru?
+		
 		//TODO make this class the GameObjectClassFactory directly by passing in instance and private?
 		//TODO also needs to manage prefabs?
 		instance.GameObjectClasses = GameEngineLib.createGameObjectClassFactory();

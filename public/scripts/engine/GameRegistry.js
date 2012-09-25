@@ -19,83 +19,103 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//todo register with (object,name,id)
+//TODO depricated
 GameEngineLib.createGameRegistry = function(instance, private)
 {
+	var temp = new GameEngineLib.GameRegistry();
 	instance = instance || {};
-	private = private || {};
 	
-	private.itemCount = 0;
-	
-	if(GameSystemVars.DEBUG)
+	for(property in temp)
 	{
-		GameEngineLib.addDebugInfo("GameRegistry", instance, private);
+		instance[property] = temp[property]
+	}
+	for(property in temp.prototype)
+	{
+		instance[property] = temp.prototype[property];
 	}
 	
-	private.myInstancesByName = {};
-	private.myInstancesByID = [];
-	private.unusedInstanceIDs = [];	//TODO magic/check number for handles
-	private.maxID = 0;
+	return instance;
+}
+
+
+
+GameEngineLib.GameRegistry = function GameRegistry()
+{
+	this._itemCount = 0;
+	this._instancesByName = {};
+	this._instancesByID = [];
+	this._unusedInstanceIDs = [];	//TODO magic/check number for handles
+	this._maxID = 0;
+}
+GameEngineLib.GameRegistry.prototype.constructor = GameEngineLib.GameRegistry;
+
+
 	
-	instance.getMaxID = function()
-	{
-		return private.maxID;
-	}
+GameEngineLib.GameRegistry.prototype.getMaxID = function getMaxID()
+{
+	return this._maxID;
+}
+
+//todo take name parameter as well so it is not always assuming the object is named?
+GameEngineLib.GameRegistry.prototype.register = function register(inObject)
+{
+	var id = inObject.getID();
+	var name = inObject.getName();
 	
-	//todo take name parameter as well so it is not always assuming the object is named?
-	instance.register = function(inObject)
-	{
-		var id = inObject.getID();//TODO maybe this class should set the id istead of setting it??  And gen magic numbers too!
-		private.maxID = Math.max(private.maxID, id);
-		private.myInstancesByName[inObject.getName()] = inObject;
-		private.myInstancesByID[id] = inObject;	
-		delete private.unusedInstanceIDs[id];
-		++private.itemCount;
-	}
+	this._maxID = Math.max(this._maxID, id);
 	
-	//todo take name parameter as well so it is not always assuming the object is named?
-	instance.deregister = function(inObject)
-	{
-		var id = inObject.getID();
-		delete private.myInstancesByName[inObject.getName()];
-		delete private.myInstancesByID[id];
-		private.unusedInstanceIDs[id] = id;
-		--private.itemCount;
-	}
+	this._instancesByName[name] = inObject;
+	this._instancesByID[id] = inObject;	
 	
-	//todo change this to just find() and check they type (index vs name)
-	instance.findByName = function(inName)
-	{
-		return private.myInstancesByName[inName];
-	}
+	delete this._unusedInstanceIDs[id];
 	
-	instance.findByID = function(inID)
-	{
-		return private.myInstancesByID[inID];
-	}
+	++this._itemCount;
+}
+
+//todo take name parameter as well so it is not always assuming the object is named?
+GameEngineLib.GameRegistry.prototype.deregister = function deregister(inObject)
+{
+	var id = inObject.getID();
+	var name = inObject.getName();
 	
-	instance.forAll = function(inFunction)
+	delete this._instancesByName[name];
+	delete this._instancesByID[id];
+	
+	this._unusedInstanceIDs[id] = id;
+	
+	--this._itemCount;
+}
+
+//todo change this to just find() and check they type (index vs name)
+GameEngineLib.GameRegistry.prototype.findByName = function findByName(inName)
+{
+	return this._instancesByName[inName];
+}
+
+GameEngineLib.GameRegistry.prototype.findByID = function findByID(inID)
+{
+	return this._instancesByID[inID];
+}
+
+GameEngineLib.GameRegistry.prototype.forAll = function forAll(inFunction)
+{
+	for(var i in this._instancesByName)
 	{
-		for(var i in private.myInstancesByName)
+		if(this._instancesByName.hasOwnProperty(i))//todo check if object?
 		{
-			if(private.myInstancesByName.hasOwnProperty(i))//todo check if object?
-			{
-				inFunction(private.myInstancesByName[i]);
-			}
+			inFunction(this._instancesByName[i]);
 		}
 	}
-	
-	instance.numItems = function()
-	{
-		return private.itemCount;
-	}
-	
-	instance.getUnusedID = function()
-	{
-		for(var i in private.unusedInstanceIDs)
-			return i;
-		return undefined;
-	}
+}
 
-	return instance;
+GameEngineLib.GameRegistry.prototype.numItems = function numItems()
+{
+	return this._itemCount;
+}
+
+GameEngineLib.GameRegistry.prototype.getUnusedID = function getUnusedID()
+{
+	for(var i in this._unusedInstanceIDs)
+		return i;
+	return this._maxID + 1;
 }
