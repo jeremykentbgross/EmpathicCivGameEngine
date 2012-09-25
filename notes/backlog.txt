@@ -208,15 +208,11 @@ OTHER GOALS:
 //////////////////////////////////////////////Stage 1 (unclosure):
 
 ****Priority:
+-GameEntityComponent_Input.js
+-GameEntityComponent_Sprite.js
 -Game2DTileSet.js
 -Game2DMap.js
 -Game2DWorld.js
--GameEntity.js
--GameEntityComponent.js
--GameEntityComponent_2DCamera.js
--GameEntityComponent_2DPhysics.js
--GameEntityComponent_Input.js
--GameEntityComponent_Sprite.js
 ****:Priority
 
 -Game2DAABB.js
@@ -238,6 +234,10 @@ OTHER GOALS:
 
 ****Priority:
 -GameObject.js
+-GameEntity.js
+-GameEntityComponent.js
+-GameEntityComponent_2DCamera.js
+-GameEntityComponent_2DPhysics.js
 ****:Priority
 
 //////////////////////////////////////////////:Stage 2 (class'ified + replace xx.create())

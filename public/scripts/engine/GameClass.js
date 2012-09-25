@@ -28,6 +28,18 @@ inParams:{
 	ChainDown : ["..",..],
 	Definition,
 }
+
+GameEngineLib.Class({
+	Constructor : ,
+	Parents : [],
+	ChainUp : [],
+	ChainDown : [],
+	Definition :
+	{
+		
+	}
+});
+
 */
 
 GameEngineLib.Class = function Class(inParams)
@@ -216,12 +228,12 @@ GameEngineLib.Class = function Class(inParams)
 	for(var i in chainDownMethods)
 	{
 		var funcName = chainDownMethods[i];
-		inConstructor.prototype[funcName] = GameEngineLib.Class.createChainDownCall(parentChain, funcName);
+		//TODO PUT BACK: inConstructor.prototype[funcName] = GameEngineLib.Class.createChainDownCall(parentChain, funcName);
 	}
 	for(var i in chainUpMethods)
 	{
 		var funcName = chainUpMethods[i];
-		inConstructor.prototype[funcName] = GameEngineLib.Class.createChainUpCall(parentChain, funcName);
+		//TODO PUT BACK: inConstructor.prototype[funcName] = GameEngineLib.Class.createChainUpCall(parentChain, funcName);
 	}
 	
 	return inConstructor;

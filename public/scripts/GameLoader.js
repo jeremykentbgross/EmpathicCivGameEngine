@@ -125,9 +125,9 @@ GameLoader =
 		//****************************** ENGINE SCRIPTS ******************************
 		
 		//TODO order these better:
+		include(inSharedPath + "scripts/engine/GameEngineLogger.js");
 		include(inSharedPath + "scripts/engine/GameRegistry.js");
 		include(inSharedPath + "scripts/engine/GameClass.js");
-		include(inSharedPath + "scripts/engine/GameEngineLogger.js");
 		include(inSharedPath + "scripts/engine/GameCircularDoublyLinkedListNode.js");
 		if(!inIsServer)
 		{
@@ -140,6 +140,8 @@ GameLoader =
 		}
 		include(inSharedPath + "scripts/engine/GameNetwork.js");
 		include(inSharedPath + "scripts/engine/GameInput.js");
+		
+		include(inSharedPath + "scripts/engine/Game2DCamera.js");
 		
 		include(inSharedPath + "scripts/engine/GameObject.js");
 		include(inSharedPath + "scripts/engine/GameObjectRef.js");
@@ -163,7 +165,6 @@ GameLoader =
 		include(inSharedPath + "scripts/engine/GameQuadTree.js");
 		include(inSharedPath + "scripts/engine/Game2DSceneGraph.js");
 		include(inSharedPath + "scripts/engine/Game2DMap.js");
-		include(inSharedPath + "scripts/engine/Game2DCamera.js");
 		include(inSharedPath + "scripts/engine/Game2DPhysics.js");
 		include(inSharedPath + "scripts/engine/Game2DTileSet.js");
 		include(inSharedPath + "scripts/engine/Game2DWorld.js");

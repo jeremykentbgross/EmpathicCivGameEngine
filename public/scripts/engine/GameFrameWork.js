@@ -145,7 +145,10 @@ GameEngineLib.createGameFrameWork = function(instance, private)
 		//Init Native GameObject Classes//////////////////
 		GameClassRegistryMap = {}; //TODO new system!
 		GameEngineLib.GameObject.registerClass();
-		//TODO class.registerClass();//TODO consider making array to run thru?
+		GameEngineLib.GameEntity.registerClass();
+		GameEngineLib.GameEntityComponent.registerClass();
+		GameEngineLib.EntityComponent_2DCamera.registerClass();
+		GameEngineLib.EntityComponent_2DPhysics.registerClass();
 		
 		//TODO make this class the GameObjectClassFactory directly by passing in instance and private?
 		//TODO also needs to manage prefabs?

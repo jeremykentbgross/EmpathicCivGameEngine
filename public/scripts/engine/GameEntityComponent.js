@@ -39,39 +39,30 @@ GameEngineLib.createEntityComponent = function(instance, private)
 
 
 
-
-
-
-GameEngineLib.GameEntityComponent = function GameEntityComponent(){}
-GameEngineLib.GameEntityComponent.prototype.constructor = GameEngineLib.GameEntityComponent;
-
-
-
-GameEngineLib.GameEntityComponent.prototype.onAddedToEntity = function onAddedToEntity(inEntity)
-{
-	if(this._myOwner)
+GameEngineLib.GameEntityComponent = GameEngineLib.Class({
+	Constructor : function GameEntityComponent(){},
+	Parents : [GameEngineLib.GameObject],
+	ChainUp : ["onRemovedFromEntity"],
+	ChainDown : ["onAddedToEntity"],
+	Definition :
 	{
-		this.onRemovedFromEntity();
+		onAddedToEntity : function onAddedToEntity(inEntity)
+		{
+			if(this._myOwner)
+			{
+				this.onRemovedFromEntity();
+			}
+			this._myOwner = inEntity;
+			
+			//todo register for events
+		},
+		onRemovedFromEntity : function onRemovedFromEntity()
+		{
+			this._myOwner = null;
+			//todo unregister for events
+		},
+		
+		destroy : function destroy(){},
+		serialize : function serialize(){}
 	}
-	this._myOwner = inEntity;
-	
-	//todo register for events
-}
-GameEngineLib.GameEntityComponent.prototype.onAddedToEntity.chaindown = true;
-
-
-
-GameEngineLib.GameEntityComponent.prototype.onRemovedFromEntity = function onRemovedFromEntity()
-{
-	this._myOwner = null;
-	//todo unregister for events
-}
-GameEngineLib.GameEntityComponent.prototype.onRemovedFromEntity.chainup = true;
-
-
-
-GameEngineLib.GameEntityComponent.prototype.destroy = function destroy(){}//TODO
-
-
-
-GameEngineLib.GameEntityComponent.prototype.serialize = function serialize(){}//TODO
+});

@@ -39,120 +39,106 @@ GameEngineLib.createEntity = function(instance, private)//constructor
 
 
 
-GameEngineLib.GameEntity = function GameEntity()
-{
-	//TODO should this be 'map' (this object) instead?  Very likely it seems
-	//this._myComponents = {}	<=!
-	this._myComponents = GameEngineLib.createGameCircularDoublyLinkedListNode();
-	
-	//TODO change Entity to inherit this instead!
-	this._myComponentEventSystem = GameInstance.GameObjectClasses.findByName("EventSystem").create().deref();//HACK!!
-}
-GameEngineLib.GameEntity.prototype.constructor = GameEngineLib.GameEntity;
-
-
-
-GameEngineLib.GameEntity.prototype.addComponent = function addComponent(inComponent)
-{
-	var node = GameEngineLib.createGameCircularDoublyLinkedListNode();
-	node.item = inComponent;
-	this._myComponents.myPrev.insert(node);
-	inComponent.deref().onAddedToEntity(this);//TODO make onAddedToEntity a proper event for the Components?
-	//TODO if world onAddedToWorld
-}
-
-
-
-GameEngineLib.GameEntity.prototype.removeComponent = function removeComponent(inComponent)
-{
-	var head = this._myComponents;
-	var node = head;
-	
-	while(node !== head)
+GameEngineLib.GameEntity = GameEngineLib.Class({
+	Constructor : function GameEntity()
 	{
-		if(node.item === inComponent)
+		//TODO should this be 'map' (this object) instead?  Very likely it seems
+		//this._myComponents = {}	<=!
+		this._myComponents = GameEngineLib.createGameCircularDoublyLinkedListNode();
+		
+		//TODO change Entity to inherit this instead!
+		this._myComponentEventSystem = GameInstance.GameObjectClasses.findByName("EventSystem").create().deref();//HACK!!
+	},
+	
+	Parents : [GameEngineLib.GameObject],
+	
+	ChainUp : null,
+	ChainDown : null,
+	
+	Definition :
+	{
+		addComponent : function addComponent(inComponent)
 		{
-			node.remove();
-			break;
-		}
-		node = node.myNext;
-	}
-	
-	//TODO if world onRemovedFromWorld
-	inComponent.onRemovedFromEntity();
-}
-
-//TODO make onAddedTo/RemovedFromWorld events part of the entity and it can set the world along with its components?
-GameEngineLib.GameEntity.prototype.addedToWorld = function addedToWorld(inWorld)
-{
-	if(this._myWorld)
-	{
-		this.removedFromWorld();
-	}
-	this._myWorld = inWorld;
-	this.onEvent(
+			var node = GameEngineLib.createGameCircularDoublyLinkedListNode();
+			node.item = inComponent;
+			this._myComponents.myPrev.insert(node);
+			inComponent.deref().onAddedToEntity(this);//TODO make onAddedToEntity a proper event for the Components?
+			//TODO if world onAddedToWorld
+		},
+		removeComponent : function removeComponent(inComponent)
 		{
-			getName : function(){return "AddedToWorld";},
-			world : inWorld
-		}
-	);
-}
-GameEngineLib.GameEntity.prototype.removedFromWorld = function removedFromWorld()
-{
-	this._myWorld = null;
-	this.onEvent(
+			var head = this._myComponents;
+			var node = head;
+			
+			while(node !== head)
+			{
+				if(node.item === inComponent)
+				{
+					node.remove();
+					break;
+				}
+				node = node.myNext;
+			}
+			
+			//TODO if world onRemovedFromWorld
+			inComponent.onRemovedFromEntity();
+		},
+		
+		//TODO make onAddedTo/onRemovedFromWorld events so entity can set the world along with its components???
+		addedToWorld : function addedToWorld(inWorld)//TODO rename onAddedToWorld
 		{
-			getName : function(){return "RemovedFromWorld";},
-			world : inWorld
-		}
-	);
-}
-GameEngineLib.GameEntity.prototype.getWorld = function getWorld()
-{
-	return this._myWorld;
-}
-
-
-
-GameEngineLib.GameEntity.prototype.onEvent = function onEvent(inEvent)
-{
-	this._myComponentEventSystem.onEvent(inEvent);
-}
-
-
-//TODO remove these via inheritance!
-GameEngineLib.GameEntity.prototype.registerListener = function registerListener(inEventName, inListener)
-{
-	this._myComponentEventSystem.registerListener(inEventName, inListener);
-}
-GameEngineLib.GameEntity.prototype.deregisterListener = function deregisterListener(inEventName, inListener)
-{
-	this._myComponentEventSystem.deregisterListener(inEventName, inListener);
-}
-
-
-
-GameEngineLib.GameEntity.prototype.serialize = function serialize(serializer)
-{		
-	if(GameSystemVars.DEBUG)
-		GameEngineLib.logger.info("Serializing Entity " + GameEngineLib.GameObjectRef(this).getPath());
-	
-	//TODO serialize component references, and likely the world as well!
-	
-	/*if(serializer.isReading())
-	{
-		this.bIsEntity = serializer.read("bIsEntity");
+			if(this._myWorld)
+			{
+				this.removedFromWorld();
+			}
+			this._myWorld = inWorld;
+			this.onEvent(
+				{
+					getName : function(){return "AddedToWorld";},
+					world : inWorld
+				}
+			);
+		},
+		removedFromWorld : function removedFromWorld()//TODO rename onRemovedFromWorld
+		{
+			this._myWorld = null;
+			this.onEvent(
+				{
+					getName : function(){return "RemovedFromWorld";},
+					world : inWorld
+				}
+			);
+		},
+		getWorld : function getWorld()
+		{
+			return this._myWorld;
+		},
+		
+		///////////////////////////////////////////////////
+		//TODO remove these via inheritance!///////////////
+		onEvent : function onEvent(inEvent)
+		{
+			this._myComponentEventSystem.onEvent(inEvent);
+		},
+		registerListener : function registerListener(inEventName, inListener)
+		{
+			this._myComponentEventSystem.registerListener(inEventName, inListener);
+		},
+		deregisterListener : function deregisterListener(inEventName, inListener)
+		{
+			this._myComponentEventSystem.deregisterListener(inEventName, inListener);
+		},
+		//TODO remove these via inheritance!///////////////
+		///////////////////////////////////////////////////
+		
+		destroy : function destroy()
+		{		
+			/*if(GameSystemVars.DEBUG)//TODO debug entitys
+			{
+				GameEngineLib.logger.info("Destroying Entity " + GameEngineLib.GameObjectRef(this).getPath());
+			}*/
+		},
+		
+		serialize : function serialize(inSerializer){},
 	}
-	else if(serializer.isWriting())
-	{
-		serializer.write("bIsEntity", this.bIsEntity);
-	}*/
-}
-
-//TODO should auto gen wrapper for these that deregister it
-GameEngineLib.GameEntity.prototype.destroy = function destroy(serializer)
-{		
-	if(GameSystemVars.DEBUG)
-		GameEngineLib.logger.info("Destroying Entity " + GameEngineLib.GameObjectRef(this).getPath());
-}
-
+});
