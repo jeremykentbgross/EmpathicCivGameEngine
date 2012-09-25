@@ -40,7 +40,7 @@ GameEngineLib.GameObjectRef = function GameObjectRef(inPathOrValue)
 		{
 			this.setPath(inPathOrValue);
 		}
-		//TODO else if(typeof inPathOrValue === 'integer??') handle binary path
+		//TODO else if(typeof inPathOrValue === 'number') handle binary path
 		else
 		{
 			this.setValue(inPathOrValue);

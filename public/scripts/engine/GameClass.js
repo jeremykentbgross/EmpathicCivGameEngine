@@ -38,7 +38,6 @@ GameEngineLib.Class = function Class(inParams)
 	
 	var chainUpMethods = {};//these are maps to prevent them being duplicated
 	var chainDownMethods = {};
-	var constructorSrc = inConstructor.toString();
 	
 	for(var parentIndex in inParents)
 	{
@@ -46,10 +45,12 @@ GameEngineLib.Class = function Class(inParams)
 		
 		if(GameSystemVars.DEBUG)
 		{
-			if(constructorSrc.indexOf("this."+parent.name) === -1)
+			if(inConstructor.toString().indexOf("this."+parent.name) === -1)
+			{
 				GameEngineLib.logger.warn(
 					inConstructor.name + " does not call parent constructor " + parent.name
 				);
+			}
 		}
 		
 		//copy static properties

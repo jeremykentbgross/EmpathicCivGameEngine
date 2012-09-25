@@ -144,6 +144,7 @@ GameEngineLib.createGameFrameWork = function(instance, private)
 		//////////////////////////////////////////////////
 		//Init Native GameObject Classes//////////////////
 		GameClassRegistryMap = {}; //TODO new system!
+		GameEngineLib.GameObject.registerClass();
 		//TODO class.registerClass();//TODO consider making array to run thru?
 		
 		//TODO make this class the GameObjectClassFactory directly by passing in instance and private?

@@ -208,8 +208,6 @@ OTHER GOALS:
 //////////////////////////////////////////////Stage 1 (unclosure):
 
 ****Priority:
--GameEventSystem.js
--GameObject.js
 -Game2DTileSet.js
 -Game2DMap.js
 -Game2DWorld.js
@@ -231,13 +229,16 @@ OTHER GOALS:
 -GameCircularDoublyLinkedListNode.js
 -GameBinarySerializer.js
 -GameRegistry.js
+-GameEventSystem.js
 //////////////////////////////////////////////:Stage 1 (unclosure)
 
 
 
 //////////////////////////////////////////////Stage 2 (class'ified + replace xx.create()):
 
--
+****Priority:
+-GameObject.js
+****:Priority
 
 //////////////////////////////////////////////:Stage 2 (class'ified + replace xx.create())
 

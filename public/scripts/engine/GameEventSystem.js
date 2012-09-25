@@ -144,31 +144,24 @@ GameEngineLib.GameEventSystem.prototype.onEvent = function onEvent(inEvent)
 
 
 
+
+//TODO WTF???
 GameEngineLib.GameEventSystem.prototype.serialize = function serialize(serializer)
 {		
 	if(GameSystemVars.DEBUG)
 		GameEngineLib.logger.info("Serializing EventSystem " + GameEngineLib.GameObjectRef(this).getPath());
-		
-	/*if(serializer.isReading())
-	{
-	}
-	else if(serializer.isWriting())
-	{
-	}*/
+//	if(serializer.isReading())
+//	{
+//	}
+//	else if(serializer.isWriting())
+//	{
+//	}
 }
-
-
-
-/*
-GameEngineLib.GameEventSystem.prototype.clone = function(cloneInstance, clonePrivate)
-{
-	cloneInstance.bIsEntity = this.bIsEntity;
-}
-*/
-
-
-
-GameEngineLib.GameEventSystem.prototype.destroy = function destroy(serializer)
+//GameEngineLib.GameEventSystem.prototype.clone = function(cloneInstance, clonePrivate)
+//{
+//	cloneInstance.bIsEntity = this.bIsEntity;
+//}
+GameEngineLib.GameEventSystem.prototype.destroy = function destroy(serializer)//WTF??
 {		
 	if(GameSystemVars.DEBUG)
 		GameEngineLib.logger.info("Destroying EventSystem " + GameEngineLib.GameObjectRef(this).getPath());
