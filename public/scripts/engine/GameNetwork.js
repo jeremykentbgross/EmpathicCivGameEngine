@@ -67,7 +67,6 @@ GameEngineLib.GameNetwork.prototype.init = function init()
 	[
 		{
 			name : "classID",
-			scope : "public",
 			type : "int",
 			net : true,
 			min : 0,
@@ -75,7 +74,6 @@ GameEngineLib.GameNetwork.prototype.init = function init()
 		},
 		{
 			name : "instanceID",
-			scope : "public",
 			type : "int",
 			net : true,
 			min : 0,
@@ -86,7 +84,6 @@ GameEngineLib.GameNetwork.prototype.init = function init()
 	[
 		{
 			name : "userID",
-			scope : "public",
 			type : "int",
 			net : true,
 			min : 0,
@@ -94,13 +91,15 @@ GameEngineLib.GameNetwork.prototype.init = function init()
 		},
 		{
 			name : "numObjects",
-			scope : "public",
 			type : "int",
 			net : true,
 			min : 1,
 			max : this._maxItemsPerMessage
 		}
 	];
+	
+	this._messageHeader = {};
+	this._objectHeader = {};
 	
 	this._serializer = GameEngineLib.GameBinarySerializer.create();
 	
@@ -381,8 +380,6 @@ GameEngineLib.GameNetwork.prototype.isUpdating = function isUpdating()
 
 GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 {
-	var messageHeader = { public : {} };	//TODO could make these class members as they used here and on recieve all the time.
-	var objectHeader = { public : {} };
 	var dirtyObjects = [];
 	
 	if(!GameSystemVars.Network.isServer
@@ -439,16 +436,16 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 	{
 		this._serializer.initWrite({NET : true});
 		
-		messageHeader.public.numObjects = Math.min(this._maxItemsPerMessage, dirtyObjects.length);
-		messageHeader.public.userID = GameInstance.localUser.userID;
-		this._serializer.serializeObject(messageHeader, this._messageHeaderFormat);
+		this._messageHeader.numObjects = Math.min(this._maxItemsPerMessage, dirtyObjects.length);
+		this._messageHeader.userID = GameInstance.localUser.userID;
+		this._serializer.serializeObject(this._messageHeader, this._messageHeaderFormat);
 		
-		for(var i = 0; i < messageHeader.public.numObjects; ++i)
+		for(var i = 0; i < this._messageHeader.numObjects; ++i)
 		{
 			var object = dirtyObjects[i];
-			objectHeader.public.classID = object.getClass().getID();
-			objectHeader.public.instanceID = object.getID();
-			this._serializer.serializeObject(objectHeader, this._objectHeaderFormat);
+			this._objectHeader.classID = object.getClass().getID();
+			this._objectHeader.instanceID = object.getID();
+			this._serializer.serializeObject(this._objectHeader, this._objectHeaderFormat);
 			object.serialize(this._serializer);
 		}
 		
@@ -460,7 +457,7 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 		
 		this._sendData(sendData);
 		
-		dirtyObjects = dirtyObjects.slice(messageHeader.public.numObjects);
+		dirtyObjects = dirtyObjects.slice(this._messageHeader.numObjects);
 	}
 }
 
@@ -476,9 +473,6 @@ GameEngineLib.GameNetwork.prototype._onData = function _onData(inEvent, inSocket
 	
 	this._serializer.initRead({NET : true}, inEvent.data);
 	
-	var messageHeader = { public : {} };
-	var objectHeader = { public : {} };
-	
 	if(!GameSystemVars.Network.isServer
 		&& GameSystemVars.DEBUG
 		&& GameSystemVars.Debug.NetworkMessages_Draw)
@@ -491,20 +485,20 @@ GameEngineLib.GameNetwork.prototype._onData = function _onData(inEvent, inSocket
 	
 	try
 	{
-		this._serializer.serializeObject(messageHeader, this._messageHeaderFormat);
+		this._serializer.serializeObject(this._messageHeader, this._messageHeaderFormat);
 		
 		//check that the username matches the socket user
 		GameAssert(
-			(messageHeader.public.userID === inSocket.gameUser.userID
+			(this._messageHeader.userID === inSocket.gameUser.userID
 			|| inSocket.gameUser.userID === GameEngineLib.User.USER_IDS.SERVER)
-			,"Net user not identifying self correctly: " + (messageHeader.public.userID + " != " + inSocket.gameUser.userID)
+			,"Net user not identifying self correctly: " + (this._messageHeader.userID + " != " + inSocket.gameUser.userID)
 		);
 		
-		for(var i = 0; i < messageHeader.public.numObjects; ++i)
+		for(var i = 0; i < this._messageHeader.numObjects; ++i)
 		{
-			this._serializer.serializeObject(objectHeader, this._objectHeaderFormat);
-			var objectClass = GameEngineLib.Class.getInstanceRegistry().findByID(objectHeader.public.classID);
-			var object = objectClass.getInstanceRegistry().findByID(objectHeader.public.instanceID);
+			this._serializer.serializeObject(this._objectHeader, this._objectHeaderFormat);
+			var objectClass = GameEngineLib.Class.getInstanceRegistry().findByID(this._objectHeader.classID);
+			var object = objectClass.getInstanceRegistry().findByID(this._objectHeader.instanceID);
 			
 			if(!GameSystemVars.Network.isServer
 				&& GameSystemVars.DEBUG
@@ -522,11 +516,11 @@ GameEngineLib.GameNetwork.prototype._onData = function _onData(inEvent, inSocket
 			}
 			//TODO if not found, and not server, create it
 			//TODO if !server && !owner && !recentOwnerQueue throw error
-			if(object.getNetOwner() !== messageHeader.public.userID
-				&& messageHeader.public.userID != GameEngineLib.User.USER_IDS.SERVER)
+			if(object.getNetOwner() !== this._messageHeader.userID
+				&& this._messageHeader.userID != GameEngineLib.User.USER_IDS.SERVER)
 			{
 				//TODO info/warn?
-				console.log("Not the owner!: " + messageHeader.public.userID + " != " + object.getNetOwner());
+				console.log("Not the owner!: " + this._messageHeader.userID + " != " + object.getNetOwner());
 				this._serializer.setDummyMode(true);
 			}
 			//TODO if !server && !owner && lenient serializer.dummyRead

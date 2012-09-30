@@ -27,19 +27,16 @@ GameUnitTests.registerTest(
 		var format = [
 			{
 				name : "aBool1",
-				scope : "public",
 				type : "bool",
 				net : false
 			},
 			{
 				name : "aBool2",
-				scope : "public",
 				type : "bool",
 				net : false
 			},
 			{
 				name : "X",
-				scope : "private",
 				type : "int",
 				min : 0,
 				max : 65535,
@@ -47,7 +44,6 @@ GameUnitTests.registerTest(
 			},
 			{
 				name : "Y",
-				scope : "private",
 				type : "float",
 				min : 0,
 				max : 65535,
@@ -56,24 +52,17 @@ GameUnitTests.registerTest(
 			},
 			{
 				name : "aString",
-				scope : "public",
 				type : "string",
 				net : false
 			}
 		];
 		
 		var outObj = {
-			public :
-			{
-				aBool1 : true,
-				aBool2 : false,
-				aString : "Jeremy's Games are so freaking awesome, and his tech is top notch!"
-			},
-			private :
-			{
-				X : 375,
-				Y : 41512.123
-			}
+			aBool1 : true,
+			aBool2 : false,
+			aString : "Jeremy's Games are so freaking awesome, and his tech is top notch!",
+			X : 375,
+			Y : 41512.123
 		};
 		
 		var testResults = function()
@@ -83,21 +72,21 @@ GameUnitTests.registerTest(
 				var entry = format[i];
 				if(net && !entry.net)
 				{
-					if(outObj[entry.scope][entry.name] === inObj[entry.scope][entry.name])
+					if(outObj[entry.name] === inObj[entry.name])
 					{
 						GameEngineLib.logger.error(
 							entry.scope + "." + entry.name + " miss match: " +
-							outObj[entry.scope][entry.name] + " === " + inObj[entry.scope][entry.name]);
+							outObj[entry.name] + " === " + inObj[entry.name]);
 						passedTest = false;
 					}
 				}
 				else
 				{
-					if(outObj[entry.scope][entry.name] !== inObj[entry.scope][entry.name])
+					if(outObj[entry.name] !== inObj[entry.name])
 					{
 						GameEngineLib.logger.error(
 							entry.scope + "." + entry.name + " miss match: " +
-							outObj[entry.scope][entry.name] + " !== " + inObj[entry.scope][entry.name]);
+							outObj[entry.name] + " !== " + inObj[entry.name]);
 						passedTest = false;
 					}
 				}
@@ -117,10 +106,7 @@ GameUnitTests.registerTest(
 			var data = serializer.getString();
 			
 			//read data
-			var inObj = {
-				public : {},
-				private : {}
-			};
+			var inObj = {};
 			serializer = GameEngineLib.GameBinarySerializer.create();
 			serializer.initRead({}, data);
 			serializer.serializeObject(inObj, format);

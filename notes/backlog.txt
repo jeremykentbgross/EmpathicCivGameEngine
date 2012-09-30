@@ -6,7 +6,6 @@ Short term notes:
 -folders
 --private/scripts/<engine/game>/?
 -logger/debugdraw flags?
--physics component is ineriting entity NOT entitycomponent! WTF?!?! (is it still?)
 -port in 'project' c#/c++ code: rays, A*, tree improvements
 -port in minimmo rays and ??
 -port/inspire in 2k4-5 map code
@@ -14,11 +13,9 @@ Short term notes:
 
 
 Network:
--need to have object ownership!
 -need to cleanup/improve setting/clearing netdirty (object level + class/instance net lists)
--position in serializer is not using floats
+-position in serializer is not using floats (still?)
 -InstanceID [0-255 || 0-65535] with range check (net object ids)
--port 80 default/null option
 -ping t->; <-t*; dt(*)
 -throw error in bit packer, and encoder and class reading on bad data + disconnect
 -rename netDirty to isNetDirty
@@ -167,6 +164,10 @@ OTHER GOALS:
 -use registries to find leaked gameobjects
 -update logger
 
+-objectref
+-complete serializers/system!
+-more things should be considered net print? basic vs advanced
+
 
 
 
@@ -174,10 +175,7 @@ OTHER GOALS:
 ////////////////////////////////////////////////////////////////////////////////////////////
 -=Class Refactor:=-
 
-
-
 //////////////////////////////////////////////Staged:
-
 -Game2DPhysics.js
 -GameFrameWork.js
 -GameInput.js
@@ -200,13 +198,9 @@ OTHER GOALS:
 -TestGameBitPacker.js
 -TestGameEventSystem.js
 -TestGameObjectClassSystem.js
-
 //////////////////////////////////////////////:Staged
 
-
-
 //////////////////////////////////////////////Stage 1 (unclosure):
-
 -Game2DAABB.js
 -Game2DCamera.js
 -Game2DGraphics.js
@@ -220,11 +214,11 @@ OTHER GOALS:
 -GameEventSystem.js
 //////////////////////////////////////////////:Stage 1 (unclosure)
 
-
-
 //////////////////////////////////////////////Stage 2 (class'ified + replace xx.create()):
+-
+//////////////////////////////////////////////:Stage 2 (class'ified + replace xx.create())
 
-****Priority:
+//////////////////////////////////////////////To Serialize:
 -GameObject.js
 -GameEntity.js
 -GameEntityComponent.js
@@ -235,20 +229,7 @@ OTHER GOALS:
 -Game2DMap.js
 -Game2DTileSet.js
 -Game2DWorld.js
-****:Priority
-
-//////////////////////////////////////////////:Stage 2 (class'ified + replace xx.create())
-
-
-
-
-//////////////////////////////////////////////Stage 3 (finished):
-
--
-
-//////////////////////////////////////////////:Stage 3 (finished)
-
-
+//////////////////////////////////////////////:To Serialize
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////

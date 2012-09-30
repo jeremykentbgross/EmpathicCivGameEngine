@@ -22,19 +22,6 @@
 GameEngineLib.GameObject = GameEngineLib.Class({
 	Constructor : function GameObject()
 	{
-		//TODO this should be static!
-		this._format =
-		[
-			{
-				name : "_netOwner",
-				scope : "private",
-				type : "int",
-				net : true,
-				min : 0,
-				max : GameEngineLib.User.USER_IDS.MAX_EVER
-			}
-		];
-		
 		var registry = this.getClass().getInstanceRegistry()
 		var instanceID = registry.getUnusedID();
 
@@ -49,7 +36,7 @@ GameEngineLib.GameObject = GameEngineLib.Class({
 		//TODO register for net create
 	},
 	
-	//Parents : [],//TODO eventsystem
+	//Parents : [],//TODO eventsystem??
 	
 	flags : {},
 	
@@ -58,6 +45,17 @@ GameEngineLib.GameObject = GameEngineLib.Class({
 	
 	Definition :
 	{
+		_serializeFormat :
+		[
+			{
+				name : "_netOwner",
+				type : "int",
+				net : true,
+				min : 0,
+				max : GameEngineLib.User.USER_IDS.MAX_EVER
+			}
+		],
+		
 		getName : function getName()
 		{
 			return this._name;
@@ -153,10 +151,7 @@ GameEngineLib.GameObject = GameEngineLib.Class({
 					GameEngineLib.logger.info(this.getTxtPath() + " start owner: " + this._netOwner);
 				}
 				
-				serializer.serializeObject(
-					{ public : this, private : this },//TODO should be just 'this' soon
-					this._format
-				);
+				serializer.serializeObject(this, this.GameObject._serializeFormat);
 				
 				if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
 				{

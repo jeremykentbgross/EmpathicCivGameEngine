@@ -38,6 +38,18 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 	
 	Definition :
 	{
+		_serializeFormat :
+		[
+			{
+				name : "_position",//??TODO Target Position, can set velocity towards this instead of the position
+				net : true,
+				type : "position",
+				min : null,	//this._range.getLeftTop(),
+				max : null	//this._range.getRightBottom(),
+			}
+			//TODO rect NOT net!
+		],
+		
 		init : function init()//TODO needed?
 		{
 		},
@@ -71,25 +83,10 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 		
 		serialize : function serialize(inSerializer)
 		{
-			var _this_ = this;
-			inSerializer.serializeObject(
-				{
-					public : _this_,
-					private : _this_
-				},
-				//TODO put this in class
-				[
-					{
-						name : "_position",//??TODO Target Position, can set velocity towards this instead of the position
-						scope : "private",
-						net : true,
-						type : "position",
-						min : _this_._range.getLeftTop(),
-						max : _this_._range.getRightBottom(),
-					}
-					//TODO rect NOT net!
-				]
-			);
+			var format = this.EntityComponent_2DPhysics._serializeFormat;
+			format[0].min = this._range.getLeftTop();
+			format[0].max = this._range.getRightBottom();
+			inSerializer.serializeObject(this, this.EntityComponent_2DPhysics._serializeFormat);
 			
 			if(inSerializer.isReading())
 			{
@@ -100,11 +97,11 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 				this._physicsObject.setGame2DAABB(this._boundingRect);
 				
 				//set position and let everyone else know
-				this._myOwner.onEvent(
+				this._myOwner.onEvent(//TODO real event, not temp object
 					{
 						getName : function(){return "UpdatePosition";},
-						position : _this_._position,//TODO clone
-						boundingRect : _this_._boundingRect//TODO need to serialize this!, TODO clone
+						position : this._position,//TODO clone
+						boundingRect : this._boundingRect//TODO need to serialize this!, TODO clone
 					}
 				);
 			}

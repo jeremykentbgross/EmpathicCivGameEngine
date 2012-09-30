@@ -63,12 +63,10 @@ GameEngineLib.GameBinarySerializer.prototype._init = function _init(inFlags)
 		createEvenProbabilityIntegerRangeModel();
 }
 
-//TODO get rid of scope!!
 /*
 dataDesc = [
 	{
 		name : //variable name
-		scope : //public / private
 		net : true/false,
 		min : //int or float
 		max : //int or float
@@ -76,7 +74,7 @@ dataDesc = [
 		//values : []//possible values (strings?/enums)?
 		type :
 				//X - int
-				//X - float
+				//X - float	//TODO rename as 'real'
 				//X - bool
 				//X - string
 				//O - filename
@@ -105,28 +103,27 @@ GameEngineLib.GameBinarySerializer.prototype.serializeObject = function serializ
 			continue;
 		}
 		
-		var scope = inObject[entry.scope];
 		switch(entry.type)
 		{
 			case "bool":
 			{
-				scope[entry.name] = this.serializeBool(scope[entry.name]);
+				inObject[entry.name] = this.serializeBool(inObject[entry.name]);
 			}break;
 			case "int":
 			{
-				scope[entry.name] = this.serializeInt(scope[entry.name], entry.min, entry.max);
+				inObject[entry.name] = this.serializeInt(inObject[entry.name], entry.min, entry.max);
 			}break;
 			case "float":
 			{
-				scope[entry.name] = this.serializeFloat(scope[entry.name], entry.min, entry.max, entry.precision);
+				inObject[entry.name] = this.serializeFloat(inObject[entry.name], entry.min, entry.max, entry.precision);
 			}break;
 			case "string":
 			{
-				scope[entry.name] = this.serializeString(scope[entry.name]);
+				inObject[entry.name] = this.serializeString(inObject[entry.name]);
 			}break;
 			case "position":
 			{
-				scope[entry.name] = this.serializePoint2D(scope[entry.name], entry.min, entry.max/*, entry.precision*/);
+				inObject[entry.name] = this.serializePoint2D(inObject[entry.name], entry.min, entry.max/*, entry.precision*/);
 			}break;
 		}
 	}
@@ -169,8 +166,8 @@ GameEngineLib.GameBinarySerializer.prototype.serializeFloat = function serialize
 	precision = Math.pow(10, precision);
 	
 	//TODO consider if I should modify the originals like this, and if so, what notification should be given
-	//scope[entry.name] = Math.min(scope[entry.name], entry.max);
-	//scope[entry.name] = Math.max(scope[entry.name], entry.min);
+	//obj[entry.name] = Math.min(obj[entry.name], entry.max);
+	//obj[entry.name] = Math.max(obj[entry.name], entry.min);
 	
 	//note the precision is distributed manually because it causes floating point errors if I don't
 	var wholePart = Math.floor(value);

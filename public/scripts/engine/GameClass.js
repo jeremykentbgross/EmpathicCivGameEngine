@@ -103,6 +103,8 @@ GameEngineLib.Class = function Class(inParams)
 		inConstructor.prototype[parent.name] = parent;
 	}
 	
+	inConstructor.prototype[inConstructor.name] = inConstructor;
+	
 	if(inParents)
 	{
 		inConstructor._parent = inParents[0];
