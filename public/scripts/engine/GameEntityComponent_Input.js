@@ -42,76 +42,84 @@ GameEngineLib.createEntityComponent_Input = function(instance, private)
 
 
 //TODO rename CharacterInput??
-GameEngineLib.EntityComponent_Input = function EntityComponent_Input()
+GameEngineLib.EntityComponent_Input = GameEngineLib.Class(
 {
-	//this._keysEventMapper = [];//TODO make keys changable??
-	
-	//TODO put this elsewhere??
-	this._speed = 128;
-	
-	this._up		= GameEngineLib.createGame2DPoint( 0,-1);
-	this._down	= GameEngineLib.createGame2DPoint( 0, 1);
-	this._left	= GameEngineLib.createGame2DPoint(-1, 0);
-	this._right	= GameEngineLib.createGame2DPoint( 1, 0);
-}
-GameEngineLib.EntityComponent_Input.prototype.constructor = GameEngineLib.EntityComponent_Input;
-
-
-GameEngineLib.EntityComponent_Input.prototype.onInput = function onInput(inInputEvent)
-{
-	this._direction = GameEngineLib.createGame2DPoint(0, 0);
-	
-	if(inInputEvent.keys["W"])
+	Constructor : function EntityComponent_Input()
 	{
-		this._direction = this._direction.add(this._up);
-	}
-	if(inInputEvent.keys["S"])
-	{
-		this._direction = this._direction.add(this._down);
-	}
-	if(inInputEvent.keys["A"])
-	{
-		this._direction = this._direction.add(this._left);
-	}
-	if(inInputEvent.keys["D"])
-	{
-		this._direction = this._direction.add(this._right);
-	}
-	
-	//unitize it, then multiply by speed
-	this._direction = this._direction.unit().multiply(this._speed);
-	
-	if(this._myOwner)
-	{
-		this._myOwner.onEvent(
-			{
-				getName : function(){return "RequestVelocity";},
-				direction : this._direction
-			}
-		);
-	}
-	else
-	{
-		GameEngineLib.logger.warn("Should not be getting input updates right now.");
-	}
-}
+		//this._keysEventMapper = [];//TODO make keys changable??
 		
+		//TODO put this elsewhere??
+		this._speed = 128;
+		
+		this._up		= GameEngineLib.createGame2DPoint( 0,-1);
+		this._down	= GameEngineLib.createGame2DPoint( 0, 1);
+		this._left	= GameEngineLib.createGame2DPoint(-1, 0);
+		this._right	= GameEngineLib.createGame2DPoint( 1, 0);
+	},
+	
+	Parents : [GameEngineLib.GameEntityComponent],
+	
+	ChainUp : [],
+	ChainDown : [],
+	
+	Definition :
+	{
+		onInput : function onInput(inInputEvent)
+		{
+			this._direction = GameEngineLib.createGame2DPoint(0, 0);
+			
+			if(inInputEvent.keys["W"])
+			{
+				this._direction = this._direction.add(this._up);
+			}
+			if(inInputEvent.keys["S"])
+			{
+				this._direction = this._direction.add(this._down);
+			}
+			if(inInputEvent.keys["A"])
+			{
+				this._direction = this._direction.add(this._left);
+			}
+			if(inInputEvent.keys["D"])
+			{
+				this._direction = this._direction.add(this._right);
+			}
+			
+			//unitize it, then multiply by speed
+			this._direction = this._direction.unit().multiply(this._speed);
+			
+			if(this._myOwner)
+			{
+				this._myOwner.onEvent(
+					{
+						getName : function(){return "RequestVelocity";},
+						direction : this._direction
+					}
+				);
+			}
+			else
+			{
+				GameEngineLib.logger.warn("Should not be getting input updates right now.");
+			}
+		},
+		
+		onAddedToEntity : function onAddedToEntity(inEntity)//TODO chain me
+		{
+			GameInstance.Input.registerListener("Input", this);
+			//todo register for events
+		},
 
-GameEngineLib.EntityComponent_Input.prototype.onAddedToEntity = function onAddedToEntity(inEntity)//TODO chain me
-{
-	GameInstance.Input.registerListener("Input", this);
-	//todo register for events
-}
+		onRemovedFromEntity : function onRemovedFromEntity()//TODO chain me
+		{
+			GameInstance.Input.deregisterListener("Input", this);
+			//todo unregister for events
+		},
+		
+		destroy : function destroy()
+		{
+			this.onRemovedFromEntity();
+		},
 
-GameEngineLib.EntityComponent_Input.prototype.onRemovedFromEntity = function onRemovedFromEntity()//TODO chain me
-{
-	GameInstance.Input.deregisterListener("Input", this);
-	//todo unregister for events
-}
-
-GameEngineLib.EntityComponent_Input.prototype.destroy = function destroy()
-{
-	this.onRemovedFromEntity();
-}
-
-GameEngineLib.EntityComponent_Input.prototype.serialize = function serialize(){}//TODO
+		serialize : function serialize(){}//TODO
+	}
+});

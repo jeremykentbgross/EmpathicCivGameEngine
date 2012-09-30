@@ -39,196 +39,181 @@ GameEngineLib.createGame2DWorld = function(instance, private)
 }
 
 
-GameEngineLib.Game2DWorld = function Game2DWorld(){}//TODO init here?
-GameEngineLib.Game2DWorld.prototype.constructor = GameEngineLib.Game2DWorld;
 
-
-
-GameEngineLib.Game2DWorld.prototype.getPhysics = function getPhysics()
+GameEngineLib.Game2DWorld = GameEngineLib.Class(
 {
-	return this._physics;
-}
-
-
-
-GameEngineLib.Game2DWorld.prototype.getMap = function getMap()
-{
-	return this._map;
-}
-
-
-
-GameEngineLib.Game2DWorld.prototype.getSceneGraph = function getSceneGraph()
-{
-	return this._sceneGraph;
-}
-
-
-
-GameEngineLib.Game2DWorld.prototype.init = function init(inMapSizeInTiles, inTileSize, inMinPhysicsPartitionSize)
-{
-	this._mapsize = inMapSizeInTiles * inTileSize;
-	this._sceneGraph = GameEngineLib.createGame2DSceneGraph();
-	this._sceneGraph.init(this._mapsize, inTileSize);
+	Constructor : function Game2DWorld(){},//TODO init here?
 	
-	this._physics = GameEngineLib.createGame2DPhysics();
-	this._physics.init(this._mapsize, inMinPhysicsPartitionSize);
-	GameInstance.UpdateOrder.push(this._physics);//TODO make it join a physics updater, not this
+	Parents : [GameEngineLib.GameObject],
 	
-	//setup default tileset consisting of nothing but the placeholder
-	var tileset = GameEngineLib.createGame2DTileSet();
-	tileset.init(
-		[
+	ChainUp : [],
+	ChainDown : [],
+	
+	Definition :
+	{
+		getPhysics : function getPhysics()
+		{
+			return this._physics;
+		},
+
+		getMap : function getMap()
+		{
+			return this._map;
+		},
+
+		getSceneGraph : function getSceneGraph()
+		{
+			return this._sceneGraph;
+		},
+
+		init : function init(inMapSizeInTiles, inTileSize, inMinPhysicsPartitionSize)
+		{
+			this._mapsize = inMapSizeInTiles * inTileSize;
+			this._sceneGraph = GameEngineLib.createGame2DSceneGraph();
+			this._sceneGraph.init(this._mapsize, inTileSize);
+			
+			this._physics = GameEngineLib.createGame2DPhysics();
+			this._physics.init(this._mapsize, inMinPhysicsPartitionSize);
+			GameInstance.UpdateOrder.push(this._physics);//TODO make it join a physics updater, not this
+			
+			//setup default tileset consisting of nothing but the placeholder
+			var tileset = GameEngineLib.createGame2DTileSet();
+			tileset.init(
+				[
+					{
+						fileName : "images/placeholder.png"//TODO have this listed in systemvars
+						,anchor : GameEngineLib.createGame2DPoint()
+						,layer : 0
+					},
+				]
+			);
+			
+			//TODO make a shorter call than this?
+			this._map = GameInstance.GameObjectClasses.findByName("Game2DMap").create();
+			this._map.deref().init(inMapSizeInTiles, inTileSize, tileset);
+			this._map.deref().addedToWorld(this);
+			
+			this._entityMap = {};
+			
+			this._defaultCamera = GameEngineLib.createGame2DCamera();
+			this._camera = null;
+			
+			//for listening to cursor position.
+			//TODO Only needed to debug draw cursor which should likely be elsewhere?
+			if(!GameSystemVars.Network.isServer)
+				GameInstance.Input.registerListener("Input", this);
+		},
+
+		addEntity : function addEntity(inEntity)
+		{
+			//TODO beware bug created by adding an entity by a name which could change, add this to namechange listener
+			this._entityMap[inEntity.getPath()] = inEntity;
+			inEntity.deref().addedToWorld(this);
+		},
+		//TODO remove entity
+
+		setCamera : function setCamera(in2DCamera)
+		{
+			this._camera = in2DCamera;
+		},
+		//TODO get camera?
+
+		getCurrentCamera : function getCurrentCamera()//TODO maybe should be public?
+		{
+			return (this._camera ? this._camera.deref() : this._defaultCamera);
+		},
+
+		//if(!GameSystemVars.Network.isServer)//TODO axe if?
+		render : function render(inCanvas2DContext)
+		{
+			var camera = this.getCurrentCamera();
+			
+			//debug draw the map		
+			if(GameSystemVars.DEBUG && GameSystemVars.Debug.Map_Draw)
 			{
-				fileName : "images/placeholder.png"//TODO have this listed in systemvars
-				,anchor : GameEngineLib.createGame2DPoint()
-				,layer : 0
-			},
-		]
-	);
-	
-	//TODO make a shorter call than this?
-	this._map = GameInstance.GameObjectClasses.findByName("Game2DMap").create();
-	this._map.deref().init(inMapSizeInTiles, inTileSize, tileset);
-	this._map.deref().addedToWorld(this);
-	
-	this._entityMap = {};
-	
-	this._defaultCamera = GameEngineLib.createGame2DCamera();
-	this._camera = null;
-	
-	//for listening to cursor position.
-	//TODO Only needed to debug draw cursor which should likely be elsewhere?
-	if(!GameSystemVars.Network.isServer)
-		GameInstance.Input.registerListener("Input", this);
-}
+				this._map.deref().debugDraw(inCanvas2DContext, camera.getRect());
+			}
+			
+			//render scene graph (note it will ommit map if map is debug drawn)
+			//TODO maybe should do that ^^^ here with an iff instead of inside for clarity / consistency? (why didnt I before? seperate sprites etc?)
+			this._sceneGraph.render(inCanvas2DContext, camera.getRect());		
+			
+			//debug draw scenegraph
+			if(GameSystemVars.DEBUG && GameSystemVars.Debug.SceneGraph_Draw)
+			{
+				this._sceneGraph.debugDraw(inCanvas2DContext, camera.getRect());
+			}
+			
+			//debug draw physics
+			if(GameSystemVars.DEBUG && GameSystemVars.Debug.Physics_Draw)
+			{
+				this._physics.debugDraw(inCanvas2DContext, camera.getRect());
+			}
+			
+			//debug draw camera target point
+			if(GameSystemVars.DEBUG && GameSystemVars.Debug.GameWorld_CameraTarget_Draw)
+			{
+				var target = GameEngineLib.createGame2DAABB(
+					0,
+					0,
+					GameSystemVars.Debug.GameWorld_CameraTarget_Size,
+					GameSystemVars.Debug.GameWorld_CameraTarget_Size
+				);
+				
+				target.setLeftTop(
+					//center target rect on camera target by subtracting half its width/height
+					camera.getTargetPosition().subtract(
+						target.getWidthHeight().multiply(0.5)
+					).
+					//now account for the cameras actual world location
+					subtract(
+						camera.getRect().getLeftTop()
+					)
+				);
+							
+				//setup the color
+				inCanvas2DContext.fillStyle = GameSystemVars.Debug.GameWorld_CameraTarget_DrawColor;
+				//draw the target
+				inCanvas2DContext.fillRect(target.myX, target.myY, target.myWidth, target.myHeight);
+			}
+			
+			//debugdraw cursor
+			if(GameSystemVars.DEBUG && GameSystemVars.Debug.GameWorld_MouseCursor_Draw)
+			{
+				var target = GameEngineLib.createGame2DAABB(
+					0,
+					0,
+					GameSystemVars.Debug.GameWorld_MouseCursor_Size,
+					GameSystemVars.Debug.GameWorld_MouseCursor_Size
+				);
+				
+				//center on mouse position by subtracting half the cursor size
+				target.setLeftTop(
+					this._mouseLoc.subtract(
+						target.getWidthHeight().multiply(0.5)
+					)
+				);
+				
+				//setup the color
+				inCanvas2DContext.fillStyle = GameSystemVars.Debug.GameWorld_MouseCursor_DrawColor;
+				//debug draw it
+				inCanvas2DContext.fillRect(target.myX, target.myY, target.myWidth, target.myHeight);
+			}
+		},
 
+		getBoundingBox : function getBoundingBox()
+		{
+			return GameEngineLib.createGame2DAABB(0, 0, this._mapsize, this._mapsize);
+		},
 
-
-GameEngineLib.Game2DWorld.prototype.addEntity = function addEntity(inEntity)
-{
-	//TODO beware bug created by adding an entity by a name which could change, add this to namechange listener
-	this._entityMap[inEntity.getPath()] = inEntity;
-	inEntity.deref().addedToWorld(this);
-}
-
-//TODO remove entity
-
-
-
-GameEngineLib.Game2DWorld.prototype.setCamera = function setCamera(in2DCamera)
-{
-	this._camera = in2DCamera;
-}
-
-//TODO get camera?
-
-
-
-GameEngineLib.Game2DWorld.prototype.getCurrentCamera = function getCurrentCamera()//TODO maybe should be public?
-{
-	return (this._camera ? this._camera.deref() : this._defaultCamera);
-}
-
-
-
-if(!GameSystemVars.Network.isServer)//TODO axe if?
-GameEngineLib.Game2DWorld.prototype.render = function render(inCanvas2DContext)
-{
-	var camera = this.getCurrentCamera();
-	
-	//debug draw the map		
-	if(GameSystemVars.DEBUG && GameSystemVars.Debug.Map_Draw)
-	{
-		this._map.deref().debugDraw(inCanvas2DContext, camera.getRect());
-	}
-	
-	//render scene graph (note it will ommit map if map is debug drawn)
-	//TODO maybe should do that ^^^ here with an iff instead of inside for clarity / consistency? (why didnt I before? seperate sprites etc?)
-	this._sceneGraph.render(inCanvas2DContext, camera.getRect());		
-	
-	//debug draw scenegraph
-	if(GameSystemVars.DEBUG && GameSystemVars.Debug.SceneGraph_Draw)
-	{
-		this._sceneGraph.debugDraw(inCanvas2DContext, camera.getRect());
-	}
-	
-	//debug draw physics
-	if(GameSystemVars.DEBUG && GameSystemVars.Debug.Physics_Draw)
-	{
-		this._physics.debugDraw(inCanvas2DContext, camera.getRect());
-	}
-	
-	//debug draw camera target point
-	if(GameSystemVars.DEBUG && GameSystemVars.Debug.GameWorld_CameraTarget_Draw)
-	{
-		var target = GameEngineLib.createGame2DAABB(
-			0,
-			0,
-			GameSystemVars.Debug.GameWorld_CameraTarget_Size,
-			GameSystemVars.Debug.GameWorld_CameraTarget_Size
-		);
+		destroy : function destroy(){},//TODO
+		serialize : function serialize(){},//TODO
 		
-		target.setLeftTop(
-			//center target rect on camera target by subtracting half its width/height
-			camera.getTargetPosition().subtract(
-				target.getWidthHeight().multiply(0.5)
-			).
-			//now account for the cameras actual world location
-			subtract(
-				camera.getRect().getLeftTop()
-			)
-		);
-					
-		//setup the color
-		inCanvas2DContext.fillStyle = GameSystemVars.Debug.GameWorld_CameraTarget_DrawColor;
-		//draw the target
-		inCanvas2DContext.fillRect(target.myX, target.myY, target.myWidth, target.myHeight);
+		//TODO should cursor drawing be here? probably not, maybe move to GameFrameWork (instance)
+		//if(!GameSystemVars.Network.isServer)//TODO axe if?
+		onInput : function onInput(inInputEvent)
+		{
+			this._mouseLoc = inInputEvent.mouseLoc;
+		}
 	}
-	
-	//debugdraw cursor
-	if(GameSystemVars.DEBUG && GameSystemVars.Debug.GameWorld_MouseCursor_Draw)
-	{
-		var target = GameEngineLib.createGame2DAABB(
-			0,
-			0,
-			GameSystemVars.Debug.GameWorld_MouseCursor_Size,
-			GameSystemVars.Debug.GameWorld_MouseCursor_Size
-		);
-		
-		//center on mouse position by subtracting half the cursor size
-		target.setLeftTop(
-			this._mouseLoc.subtract(
-				target.getWidthHeight().multiply(0.5)
-			)
-		);
-		
-		//setup the color
-		inCanvas2DContext.fillStyle = GameSystemVars.Debug.GameWorld_MouseCursor_DrawColor;
-		//debug draw it
-		inCanvas2DContext.fillRect(target.myX, target.myY, target.myWidth, target.myHeight);
-	}
-}
-
-
-
-GameEngineLib.Game2DWorld.prototype.getBoundingBox = function getBoundingBox()
-{
-	return GameEngineLib.createGame2DAABB(0, 0, this._mapsize, this._mapsize);
-}
-
-
-
-GameEngineLib.Game2DWorld.prototype.destroy = function destroy(){}//TODO
-
-
-
-GameEngineLib.Game2DWorld.prototype.serialize = function serialize(){}//TODO
-
-
-//TODO should cursor drawing be here? probably not, maybe move to GameFrameWork (instance)
-if(!GameSystemVars.Network.isServer)//TODO axe if?
-GameEngineLib.Game2DWorld.prototype.onInput = function onInput(inInputEvent)
-{
-	this._mouseLoc = inInputEvent.mouseLoc;
-}
+});

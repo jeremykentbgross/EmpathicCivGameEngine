@@ -149,6 +149,11 @@ GameEngineLib.createGameFrameWork = function(instance, private)
 		GameEngineLib.GameEntityComponent.registerClass();
 		GameEngineLib.EntityComponent_2DCamera.registerClass();
 		GameEngineLib.EntityComponent_2DPhysics.registerClass();
+		GameEngineLib.EntityComponent_Input.registerClass();
+		GameEngineLib.EntityComponent_Sprite.registerClass();
+		GameEngineLib.Game2DMap.registerClass();
+		GameEngineLib.Game2DTileSet.registerClass();
+		GameEngineLib.Game2DWorld.registerClass();
 		
 		//TODO make this class the GameObjectClassFactory directly by passing in instance and private?
 		//TODO also needs to manage prefabs?
