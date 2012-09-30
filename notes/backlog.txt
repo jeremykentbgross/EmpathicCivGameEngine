@@ -164,8 +164,8 @@ OTHER GOALS:
 -sandbox (Distributed eval from approved users only! (editor/admin))
 -should have GameEvent to 'new' instead of this { getname:func() etc.. }
 -GameEvent folder (so none are undocumented!)
-
-
+-use registries to find leaked gameobjects
+-update logger
 
 
 

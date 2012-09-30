@@ -19,41 +19,24 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//TODO depricated!
-GameEngineLib.createEntity = function(instance, private)//constructor
-{
-	var temp = new GameEngineLib.GameEntity();
-	instance = instance || {};
-	
-	for(property in temp)
-	{
-		instance[property] = temp[property]
-	}
-	for(property in temp.prototype)
-	{
-		instance[property] = temp.prototype[property];
-	}
-	
-	return instance;
-}
-
-
-
 GameEngineLib.GameEntity = GameEngineLib.Class({
 	Constructor : function GameEntity()
 	{
+		this.GameObject();
 		//TODO should this be 'map' (this object) instead?  Very likely it seems
 		//this._myComponents = {}	<=!
 		this._myComponents = GameEngineLib.createGameCircularDoublyLinkedListNode();
 		
 		//TODO change Entity to inherit this instead!
-		this._myComponentEventSystem = GameInstance.GameObjectClasses.findByName("EventSystem").create().deref();//HACK!!
+		this._myComponentEventSystem = GameEngineLib.GameEventSystem.create();//HACK!!
 	},
 	
 	Parents : [GameEngineLib.GameObject],
 	
-	ChainUp : null,
-	ChainDown : null,
+	flags : {},
+	
+	ChainUp : [],
+	ChainDown : [],
 	
 	Definition :
 	{

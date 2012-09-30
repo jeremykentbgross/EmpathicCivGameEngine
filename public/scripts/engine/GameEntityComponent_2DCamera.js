@@ -19,32 +19,14 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//TODO depricated!
-GameEngineLib.createEntityComponent_2DCamera = function(instance, private)
-{
-	var temp = new GameEngineLib.EntityComponent_2DCamera();
-	instance = instance || {};
-	
-	for(property in temp)
-	{
-		instance[property] = temp[property]
-	}
-	for(property in temp.prototype)
-	{
-		instance[property] = temp.prototype[property];
-	}
-	
-	return instance;
-}
-
-
-
 GameEngineLib.EntityComponent_2DCamera = GameEngineLib.Class({
 	Constructor : function EntityComponent_2DCamera()
 	{
+		this.GameEntityComponent();
 		this.Game2DCamera();
 	},
 	Parents : [GameEngineLib.GameEntityComponent, GameEngineLib.Game2DCamera],
+	flags : {},
 	ChainUp : null,
 	ChainDown : null,
 	Definition :

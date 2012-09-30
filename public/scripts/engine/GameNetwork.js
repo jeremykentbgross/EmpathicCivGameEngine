@@ -71,7 +71,7 @@ GameEngineLib.GameNetwork.prototype.init = function init()
 			type : "int",
 			net : true,
 			min : 0,
-			max : GameInstance.GameObjectClasses.getMaxID()
+			max : GameEngineLib.Class.getInstanceRegistry().getMaxID()
 		},
 		{
 			name : "instanceID",
@@ -298,7 +298,7 @@ GameEngineLib.GameNetwork.prototype._onIdRecv = function _onIdRecv(inID)
 			this.gameUser.userID = inID.userID = ++(GameEngineLib.User.USER_IDS.CURRENT_MAX);
 			this.emit("id", this.gameUser);
 			
-			GameEngineLib.logger.info("New userid FOR: " + inID.userName + " : " + this.gameUser.userID);
+			GameEngineLib.logger.info("New UserID FOR: " + inID.userName + " : " + this.gameUser.userID);
 		}
 		else
 		{
@@ -385,23 +385,27 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 	var objectHeader = { public : {} };
 	var dirtyObjects = [];
 	
-	if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Draw)
+	if(!GameSystemVars.Network.isServer
+		&& GameSystemVars.DEBUG
+		&& GameSystemVars.Debug.NetworkMessages_Draw)
 	{
 		GameInstance.Graphics.drawDebugText(
-			"Network:",
+			"Network out:",
 			GameSystemVars.Debug.NetworkMessages_DrawColor
 		);
 	}
 	
 	//TODO have a net dirty class list instead of iterating over everything!
-	GameInstance.GameObjectClasses.forAll(
+	GameEngineLib.Class.getInstanceRegistry().forAll(
 		function(inClass)
 		{
 			//TODO get rid of this when we have class dirty list instead of looping thru all classes.
 			if(!inClass.flags.net)
 				return;
 				
-			if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Draw)
+			if(!GameSystemVars.Network.isServer
+				&& GameSystemVars.DEBUG
+				&& GameSystemVars.Debug.NetworkMessages_Draw)
 			{
 				GameInstance.Graphics.drawDebugText(
 					"    " + inClass.getName(),
@@ -409,13 +413,15 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 				);
 			}
 			
-			inClass.forAll(
+			inClass.getInstanceRegistry().forAll(
 				function(inObject)
 				{
 					//TODO skip objects we do not own (but queue owner changes in netserialize queue from object?)
 					if(inClass.flags.net && inObject.netDirty() /*&& inObject.getNetOwner() === GameInstance.localUser.name*/)
 					{
-						if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Draw)
+						if(!GameSystemVars.Network.isServer
+							&& GameSystemVars.DEBUG
+							&& GameSystemVars.Debug.NetworkMessages_Draw)
 						{
 							GameInstance.Graphics.drawDebugText(
 								"        -" + inObject.getName()
@@ -473,6 +479,16 @@ GameEngineLib.GameNetwork.prototype._onData = function _onData(inEvent, inSocket
 	var messageHeader = { public : {} };
 	var objectHeader = { public : {} };
 	
+	if(!GameSystemVars.Network.isServer
+		&& GameSystemVars.DEBUG
+		&& GameSystemVars.Debug.NetworkMessages_Draw)
+	{
+		GameInstance.Graphics.drawDebugText(
+			"Network in:",
+			GameSystemVars.Debug.NetworkMessages_DrawColor
+		);
+	}
+	
 	try
 	{
 		this._serializer.serializeObject(messageHeader, this._messageHeaderFormat);
@@ -487,8 +503,23 @@ GameEngineLib.GameNetwork.prototype._onData = function _onData(inEvent, inSocket
 		for(var i = 0; i < messageHeader.public.numObjects; ++i)
 		{
 			this._serializer.serializeObject(objectHeader, this._objectHeaderFormat);
-			var objectClass = GameInstance.GameObjectClasses.findByID(objectHeader.public.classID);
-			var object = objectClass.findByID(objectHeader.public.instanceID);
+			var objectClass = GameEngineLib.Class.getInstanceRegistry().findByID(objectHeader.public.classID);
+			var object = objectClass.getInstanceRegistry().findByID(objectHeader.public.instanceID);
+			
+			if(!GameSystemVars.Network.isServer
+				&& GameSystemVars.DEBUG
+				&& GameSystemVars.Debug.NetworkMessages_Draw)
+			{
+				//TODO not show same class name more than once, just instance (ie make print list for the end!)
+				GameInstance.Graphics.drawDebugText(
+					"    " + objectClass.getName(),
+					GameSystemVars.Debug.NetworkMessages_DrawColor
+				);
+				GameInstance.Graphics.drawDebugText(
+					"        -" + object.getName()
+					,GameSystemVars.Debug.NetworkMessages_DrawColor
+				);
+			}
 			//TODO if not found, and not server, create it
 			//TODO if !server && !owner && !recentOwnerQueue throw error
 			if(object.getNetOwner() !== messageHeader.public.userID

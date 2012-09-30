@@ -19,35 +19,19 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//TODO depricated!
-GameEngineLib.createEntityComponent_2DPhysics = function(instance, private)
-{
-	var temp = new GameEngineLib.EntityComponent_2DPhysics();
-	instance = instance || {};
-	
-	for(property in temp)
-	{
-		instance[property] = temp[property]
-	}
-	for(property in temp.prototype)
-	{
-		instance[property] = temp.prototype[property];
-	}
-	
-	return instance;
-}
-
-
-
 GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 	Constructor : function EntityComponent_2DPhysics()
 	{
+		this.GameEntityComponent();
+		
 		this._position = GameEngineLib.createGame2DPoint(32, 32);//??needed? use mid instead?
 		this._boundingRect = GameEngineLib.createGame2DAABB(0, 0, 64, 64);
 		this._range = GameEngineLib.createGame2DAABB(0, 0, 256, 256);//TODO used? Set when added to world?
 	},
 	
 	Parents : [GameEngineLib.GameEntityComponent],
+	
+	flags : { net : true },
 	
 	ChainUp : [],
 	ChainDown : [],

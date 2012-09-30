@@ -19,33 +19,12 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//TODO depricated
-GameEngineLib.createEntityComponent_Input = function(instance, private)
-{
-	var temp = new GameEngineLib.EntityComponent_Input();
-	instance = instance || {};
-	
-	for(property in temp)
-	{
-		instance[property] = temp[property]
-	}
-	for(property in temp.prototype)
-	{
-		instance[property] = temp.prototype[property];
-	}
-	
-	//GameInstance.Input.registerListener("Input", instance);
-	
-	return instance;
-}
-
-
-
 //TODO rename CharacterInput??
 GameEngineLib.EntityComponent_Input = GameEngineLib.Class(
 {
 	Constructor : function EntityComponent_Input()
 	{
+		this.GameEntityComponent();
 		//this._keysEventMapper = [];//TODO make keys changable??
 		
 		//TODO put this elsewhere??
@@ -58,6 +37,8 @@ GameEngineLib.EntityComponent_Input = GameEngineLib.Class(
 	},
 	
 	Parents : [GameEngineLib.GameEntityComponent],
+	
+	flags : {},
 	
 	ChainUp : [],
 	ChainDown : [],

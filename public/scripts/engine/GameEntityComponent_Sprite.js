@@ -19,30 +19,11 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//TODO depricated
-GameEngineLib.createEntityComponent_Sprite = function(instance, private)
-{
-	var temp = new GameEngineLib.EntityComponent_Sprite();
-	instance = instance || {};
-	
-	for(property in temp)
-	{
-		instance[property] = temp[property]
-	}
-	for(property in temp.prototype)
-	{
-		instance[property] = temp.prototype[property];
-	}
-	
-	return instance;
-}
-
-
-
 GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
 {
 	Constructor : function EntityComponent_Sprite()
 	{
+		this.GameEntityComponent();
 		this._position = GameEngineLib.createGame2DPoint();
 		this._myFrames = [{}];
 		this._myCurrentFrame = 0;
@@ -59,6 +40,8 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
 	},
 	
 	Parents : [GameEngineLib.GameEntityComponent],
+	
+	flags : {},
 	
 	ChainUp : [],
 	ChainDown : [],

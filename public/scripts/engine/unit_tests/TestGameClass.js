@@ -27,6 +27,7 @@ GameUnitTests.registerTest(
 		ClassNamespace.TestClass1 = GameEngineLib.Class({
 			Constructor : function TestClass1(){},
 			Parents : null,
+			flags : {},
 			Definition :
 			{
 				Func1 : function Func1()
@@ -42,6 +43,7 @@ GameUnitTests.registerTest(
 				this.TestClass1();
 			},
 			Parents : [ClassNamespace.TestClass1],
+			flags : {},
 			Definition :
 			{
 				Func2 : function Func2()
@@ -74,6 +76,7 @@ GameUnitTests.registerTest(
 				this.counter = 0;
 			},
 			Parents : [GameEngineLib.GameObject],
+			flags : {},
 			ChainUp : ["chainUp"],
 			ChainDown : ["chainDown"],
 			Definition :
@@ -93,7 +96,7 @@ GameUnitTests.registerTest(
 		ClassNamespace.TestObjectClass1.registerClass();
 		
 		var foundClass = GameEngineLib.Class.getInstanceRegistry().findByName("TestObjectClass1");
-		var testObjectClass1 = foundClass.create();
+		var testObjectClass1 = foundClass.create().deref();
 		GameAssert(testObjectClass1.isA(ClassNamespace.TestObjectClass1), "isA() Failed on found created class!");
 		
 		var found = foundClass.getInstanceRegistry().findByName(testObjectClass1.getName());
@@ -111,6 +114,7 @@ GameUnitTests.registerTest(
 				this.TestObjectClass1();
 			},
 			Parents : [ClassNamespace.TestObjectClass1],
+			flags : {},
 			Definition :
 			{
 				destroy : function destroy(){},
@@ -126,7 +130,7 @@ GameUnitTests.registerTest(
 			}
 		});
 		
-		var chainTestObject = ClassNamespace.TestObjectClass2.create();
+		var chainTestObject = ClassNamespace.TestObjectClass2.create().deref();
 		chainTestObject.chainUp();
 		chainTestObject.chainDown();
 		

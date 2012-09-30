@@ -68,6 +68,10 @@ GameEngineLib.GameEventSystem = function GameEventSystem()
 	this._eventListeners = {};
 }
 GameEngineLib.GameEventSystem.prototype.constructor = GameEngineLib.GameEventSystem;
+GameEngineLib.GameEventSystem.create = function create()
+{
+	return new GameEngineLib.GameEventSystem();
+}
 
 
 

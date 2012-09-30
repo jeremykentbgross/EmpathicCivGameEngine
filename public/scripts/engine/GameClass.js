@@ -32,6 +32,7 @@ inParams:{
 GameEngineLib.Class({
 	Constructor : ,
 	Parents : [],
+	flags : {},
 	ChainUp : [],
 	ChainDown : [],
 	Definition :
@@ -136,6 +137,9 @@ GameEngineLib.Class = function Class(inParams)
 		inConstructor[property] = inDefinition[property];
 	}
 	
+	//TODO should do this better.  Like maybe inherit parent flags?
+	inConstructor.flags = inParams.flags;
+	
 
 	//build a parent chain for the chain up and down calls
 	//and figure if this is a managed object (derived from GameObject)
@@ -174,14 +178,7 @@ GameEngineLib.Class = function Class(inParams)
 		
 		inConstructor.create = function create()
 		{
-			var instance = new inConstructor();
-			var registry = inConstructor.getInstanceRegistry()
-			var instanceID = registry.getUnusedID();
-			instance.setID(instanceID);
-			instance.setName("Instance_" + instanceID);
-			registry.register(instance);
-			//TODO return GameObjectRef!
-			return instance;
+			return new GameEngineLib.GameObjectRef(new inConstructor());
 		}
 				
 		inConstructor.getInstanceRegistry = function getInstanceRegistry()
@@ -192,11 +189,11 @@ GameEngineLib.Class = function Class(inParams)
 			}
 			return GameClassRegistryMap[inConstructor];
 		}
-		//TODO put this back
-		/*inConstructor.getClass = inConstructor.prototype.getClass = function getClass()
+		
+		inConstructor.getClass = inConstructor.prototype.getClass = function getClass()
 		{
 			return inConstructor;
-		}*/
+		}
 		
 		inConstructor.getName = function getName()
 		{
@@ -228,12 +225,12 @@ GameEngineLib.Class = function Class(inParams)
 	for(var i in chainDownMethods)
 	{
 		var funcName = chainDownMethods[i];
-		//TODO PUT BACK: inConstructor.prototype[funcName] = GameEngineLib.Class.createChainDownCall(parentChain, funcName);
+		inConstructor.prototype[funcName] = GameEngineLib.Class.createChainDownCall(parentChain, funcName);
 	}
 	for(var i in chainUpMethods)
 	{
 		var funcName = chainUpMethods[i];
-		//TODO PUT BACK: inConstructor.prototype[funcName] = GameEngineLib.Class.createChainUpCall(parentChain, funcName);
+		inConstructor.prototype[funcName] = GameEngineLib.Class.createChainUpCall(parentChain, funcName);
 	}
 	
 	return inConstructor;
@@ -248,6 +245,11 @@ GameEngineLib.Class.getInstanceRegistry = function getInstanceRegistry()
 		GameClassRegistryMap.Class = new GameEngineLib.GameRegistry();
 	}
 	return GameClassRegistryMap.Class;
+}
+
+GameEngineLib.Class.createInstanceRegistry = function createInstanceRegistry()
+{
+	GameClassRegistryMap = {};
 }
 
 

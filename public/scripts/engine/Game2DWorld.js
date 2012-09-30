@@ -19,32 +19,16 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-//TODO depricated
-GameEngineLib.createGame2DWorld = function(instance, private)
-{
-	var temp = new GameEngineLib.Game2DWorld();
-	instance = instance || {};
-	
-	for(property in temp)
-	{
-		instance[property] = temp[property]
-	}
-	for(property in temp.prototype)
-	{
-		instance[property] = temp.prototype[property];
-	}
-	
-	return instance;
-}
-
-
-
 GameEngineLib.Game2DWorld = GameEngineLib.Class(
 {
-	Constructor : function Game2DWorld(){},//TODO init here?
+	Constructor : function Game2DWorld()
+	{
+		this.GameObject();
+	},
 	
 	Parents : [GameEngineLib.GameObject],
+	
+	flags : {},
 	
 	ChainUp : [],
 	ChainDown : [],
@@ -77,7 +61,7 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class(
 			GameInstance.UpdateOrder.push(this._physics);//TODO make it join a physics updater, not this
 			
 			//setup default tileset consisting of nothing but the placeholder
-			var tileset = GameEngineLib.createGame2DTileSet();
+			var tileset = GameEngineLib.Game2DTileSet.create().deref();//TODO don't deref
 			tileset.init(
 				[
 					{
@@ -88,8 +72,7 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class(
 				]
 			);
 			
-			//TODO make a shorter call than this?
-			this._map = GameInstance.GameObjectClasses.findByName("Game2DMap").create();
+			this._map = GameEngineLib.Game2DMap.create();
 			this._map.deref().init(inMapSizeInTiles, inTileSize, tileset);
 			this._map.deref().addedToWorld(this);
 			

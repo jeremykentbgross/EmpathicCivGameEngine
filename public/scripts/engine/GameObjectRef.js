@@ -19,20 +19,12 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//TODO depricated =>GameEngineLib.GameObjectRef.create()??
-GameEngineLib.createGameObjectRef = function(inPathOrValue)
-{
-	return new GameEngineLib.GameObjectRef(inPathOrValue);
-}
-
-
-
 //todo type checking version so ref is of a type known to class?
 GameEngineLib.GameObjectRef = function GameObjectRef(inPathOrValue)
 {
 	this._path = null;
 	this._value = null;
-	//todo id {classid,instanceid}	//methodid/propertyid
+	//todo id {classid,instanceid}
 	
 	if(inPathOrValue)
 	{
@@ -72,10 +64,10 @@ GameEngineLib.GameObjectRef.prototype.deref = function deref()
 		return null;
 	//todo error/warn otherwise
 	
-	objectClass = GameInstance.GameObjectClasses.findByName(pathTokens[0]);
+	objectClass = GameEngineLib.Class.getInstanceRegistry().findByName(pathTokens[0]);
 	if(objectClass)
 	{
-		this._value = objectClass.findByName(pathTokens[1]);
+		this._value = objectClass.getInstanceRegistry().findByName(pathTokens[1]);
 		this._path = null;
 	}
 		
@@ -100,13 +92,13 @@ GameEngineLib.GameObjectRef.prototype.setPath = function setPath(inPath)
 
 
 
-GameEngineLib.GameObjectRef.prototype.getPath = function getPath()
+GameEngineLib.GameObjectRef.prototype.getPath = function getPath()//TODO txt path vs bin path
 {
 	if(this._path === null)
 	{
 		if(this._value !== null)
 		{
-			this._path = this._value.getClass().getName() + "\\" + this._value.getName();
+			this._path = this._value.getTxtPath();
 		}
 	}
 	this._value = null;

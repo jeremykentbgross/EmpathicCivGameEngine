@@ -19,33 +19,12 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-
-//TODO depricated
-GameEngineLib.createGame2DTileSet = function(instance, private)
-{
-	var temp = new GameEngineLib.Game2DTileSet();
-	instance = instance || {};
-	
-	for(property in temp)
-	{
-		instance[property] = temp[property]
-	}
-	for(property in temp.prototype)
-	{
-		instance[property] = temp.prototype[property];
-	}
-	
-	return instance;
-}
-
-
-
-
 GameEngineLib.Game2DTileSet = GameEngineLib.Class(
 {
 	Constructor : function Game2DTileSet()
-	{	
+	{
+		this.GameObject();
+		
 		this._myTiles =	[];
 		/*
 		//TODO target impl:
@@ -74,6 +53,8 @@ GameEngineLib.Game2DTileSet = GameEngineLib.Class(
 	},
 	
 	Parents : [GameEngineLib.GameObject],
+	
+	flags : {},
 	
 	ChainUp : [],
 	ChainDown : [],
@@ -152,6 +133,9 @@ GameEngineLib.Game2DTileSet = GameEngineLib.Class(
 				physicsRect.myWidth,//todo consider possible =>tile.scaledRect
 				physicsRect.myHeight
 			);
-		}
+		},
+		
+		destroy : function destroy(){},//TODO
+		serialize : function serialize(){}//TODO
 	}
 });

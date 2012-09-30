@@ -19,32 +19,16 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-
-//TODO depricated
-GameEngineLib.createGame2DMap = function(instance, private)
+GameEngineLib.Game2DMap = GameEngineLib.Class(
 {
-	var temp = new GameEngineLib.Game2DMap();
-	instance = instance || {};
-	
-	for(property in temp)
+	Constructor : function Game2DMap()
 	{
-		instance[property] = temp[property]
-	}
-	for(property in temp.prototype)
-	{
-		instance[property] = temp.prototype[property];
-	}
-	
-	return instance;
-}
-
-
-
-GameEngineLib.Game2DMap = GameEngineLib.Class({
-	Constructor : function Game2DMap(){},//TODO make this the same as init?
+		this.GameObject();
+	},
 	
 	Parents : [GameEngineLib.GameObject],
+	
+	flags : {},
 	
 	ChainUp : [],
 	ChainDown : [],

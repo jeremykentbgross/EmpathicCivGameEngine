@@ -19,29 +19,13 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//TODO depricated
-GameEngineLib.createEntityComponent = function(instance, private)
-{		
-	var temp = new GameEngineLib.GameEntityComponent();
-	instance = instance || {};
-	
-	for(property in temp)
-	{
-		instance[property] = temp[property]
-	}
-	for(property in temp.prototype)
-	{
-		instance[property] = temp.prototype[property];
-	}
-	
-	return instance;
-}
-
-
-
 GameEngineLib.GameEntityComponent = GameEngineLib.Class({
-	Constructor : function GameEntityComponent(){},
+	Constructor : function GameEntityComponent()
+	{
+		this.GameObject();
+	},
 	Parents : [GameEngineLib.GameObject],
+	flags : {},
 	ChainUp : ["onRemovedFromEntity"],
 	ChainDown : ["onAddedToEntity"],
 	Definition :

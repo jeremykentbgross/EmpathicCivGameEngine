@@ -40,7 +40,7 @@ GameLib.createGameRules = function(instance, private)
 		var mapSizeInTiles = 16;
 		var tileSize = 64;
 		var minPhysicsPartitionSize = 8;
-		private.GameWorld = GameInstance.GameObjectClasses.findByName("Game2DWorld").create();
+		private.GameWorld = GameEngineLib.Game2DWorld.create();
 		private.GameWorld.deref().init(
 			mapSizeInTiles
 			,tileSize
@@ -48,7 +48,7 @@ GameLib.createGameRules = function(instance, private)
 		);
 		
 		//todo should be created with factory?
-		var tileset = GameEngineLib.createGame2DTileSet();
+		var tileset = GameEngineLib.Game2DTileSet.create().deref();
 		tileset.init(
 			[
 				{
@@ -98,15 +98,15 @@ GameLib.createGameRules = function(instance, private)
 		
 		//TODO test removing components on button preass??
 		//TODO test adding components and world in different orders
-		private.entity1 = GameInstance.GameObjectClasses.findByName("Entity").create();
-		private.entity1Sprite = GameInstance.GameObjectClasses.findByName("EntityComponent_Sprite").create();
+		private.entity1 = GameEngineLib.GameEntity.create();
+		private.entity1Sprite = GameEngineLib.EntityComponent_Sprite.create();
 		private.entity1Sprite.deref().init();
 		private.entity1.deref().addComponent(private.entity1Sprite);
-		private.entity1Input = GameInstance.GameObjectClasses.findByName("EntityComponent_Input").create();
+		private.entity1Input = GameEngineLib.EntityComponent_Input.create();
 		private.entity1.deref().addComponent(private.entity1Input);
-		private.entity1Physics = GameInstance.GameObjectClasses.findByName("EntityComponent_2DPhysics").create();
+		private.entity1Physics = GameEngineLib.EntityComponent_2DPhysics.create();
 		private.entity1.deref().addComponent(private.entity1Physics);
-		private.entity1Camera = GameInstance.GameObjectClasses.findByName("EntityComponent_2DCamera").create();
+		private.entity1Camera = GameEngineLib.EntityComponent_2DCamera.create();
 		private.entity1Camera.deref().init(
 			//GameInstance.Graphics.getWidth(),
 			//GameInstance.Graphics.getHeight()
@@ -121,7 +121,7 @@ GameLib.createGameRules = function(instance, private)
 		
 		private.onIdentifiedUser = function(inEvent)
 		{
-			console.log("setting owner for physics component: " + inEvent.user.userName );
+			GameEngineLib.logger.info("setting owner for physics component: " + inEvent.user.userName );
 			private.entity1Physics.deref().setNetOwner(inEvent.user.userID);
 		}
 		GameInstance.Network.registerListener(

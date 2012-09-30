@@ -143,7 +143,7 @@ GameEngineLib.createGameFrameWork = function(instance, private)
 		
 		//////////////////////////////////////////////////
 		//Init Native GameObject Classes//////////////////
-		GameClassRegistryMap = {}; //TODO new system!
+		GameEngineLib.Class.createInstanceRegistry();
 		GameEngineLib.GameObject.registerClass();
 		GameEngineLib.GameEntity.registerClass();
 		GameEngineLib.GameEntityComponent.registerClass();
@@ -154,66 +154,10 @@ GameEngineLib.createGameFrameWork = function(instance, private)
 		GameEngineLib.Game2DMap.registerClass();
 		GameEngineLib.Game2DTileSet.registerClass();
 		GameEngineLib.Game2DWorld.registerClass();
+		//TODO thinnking EventSystem maybe should not be a gameobject
 		
-		//TODO make this class the GameObjectClassFactory directly by passing in instance and private?
 		//TODO also needs to manage prefabs?
-		instance.GameObjectClasses = GameEngineLib.createGameObjectClassFactory();
-		instance.GameObjectClasses.create(
-			"GameObject",
-			null,
-			GameEngineLib.createGameObject
-		);
-		instance.GameObjectClasses.create(//TODO thinnking maybe this should not be a gameobject
-			"EventSystem",
-			null,
-			GameEngineLib.createEventSystem
-		);
-		instance.GameObjectClasses.create(
-			"Entity",
-			null,
-			GameEngineLib.createEntity
-		);
-		instance.GameObjectClasses.create(
-			"EntityComponent",
-			null,
-			GameEngineLib.createEntityComponent
-		);
-		instance.GameObjectClasses.create(
-			"EntityComponent_Sprite",
-			"EntityComponent",
-			GameEngineLib.createEntityComponent_Sprite
-		);
-		instance.GameObjectClasses.create(
-			"EntityComponent_Input",
-			"EntityComponent",
-			GameEngineLib.createEntityComponent_Input
-		);
-		instance.GameObjectClasses.create(
-			"EntityComponent_2DPhysics",//TODO rename 2D
-			"EntityComponent",
-			GameEngineLib.createEntityComponent_2DPhysics,
-			{net:true}
-		);
-		instance.GameObjectClasses.create(
-			"EntityComponent_2DCamera",
-			"EntityComponent",
-			GameEngineLib.createEntityComponent_2DCamera
-		);
-		instance.GameObjectClasses.create(
-			"Game2DWorld",//todo make this a component?
-			null,
-			GameEngineLib.createGame2DWorld
-		);
-		instance.GameObjectClasses.create(
-			"Game2DTileSet",
-			null,
-			GameEngineLib.createGame2DTileSet
-		);
-		instance.GameObjectClasses.create(
-			"Game2DMap",
-			null,
-			GameEngineLib.createGame2DMap
-		);
+		
 		//Init Native GameObject Classes//////////////////
 		//////////////////////////////////////////////////
 		

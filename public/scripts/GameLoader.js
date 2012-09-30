@@ -85,18 +85,18 @@ GameLoader =
 					function()
 					{
 						var test;
-						console.log("\n************************\n");
-						console.log("***Running Unit Tests***\n");
+						console.log("\n************************");
+						console.log("***Running Unit Tests***");
 						for(var i = 0; i < this.tests.length; ++i)
 						{
 							test = this.tests[i];
-							console.log("\nRunning Test: " + test.testName + "\n");
+							console.log("\nRunning Test: " + test.testName);
 							try
 							{
 								if(!test())
 									GameEngineLib.logger.error("Failed Test: " + test.testName);//console.log("Failed Test: " + test.testName + "\n");
 								else
-									console.log("Passed Test: " + test.testName + "\n");
+									console.log("Passed Test: " + test.testName);
 							}
 							catch(error)
 							{
@@ -104,7 +104,7 @@ GameLoader =
 								console.log("Failed Test: " + test.testName + " with exception " + error + "\n");
 							}
 						}
-						console.log("\n***Running Unit Tests***\n");
+						console.log("\n***Running Unit Tests***");
 						console.log("************************\n\n");
 					},
 				registerTest :
@@ -112,7 +112,7 @@ GameLoader =
 					{
 						inTest.testName = inTestName;
 						this.tests[this.tests.length] = inTest;
-						console.log("Registered Test: " + inTest.testName + "\n");
+						console.log("Registered Test: " + inTest.testName);
 					}
 			};
 		}
@@ -145,7 +145,6 @@ GameLoader =
 		
 		include(inSharedPath + "scripts/engine/GameObject.js");
 		include(inSharedPath + "scripts/engine/GameObjectRef.js");
-		include(inSharedPath + "scripts/engine/GameObjectClassFactory.js");
 		include(inSharedPath + "scripts/engine/GameBitPacker.js");
 		//include(inSharedPath + "scripts/engine/MultPacker.js");//TODO
 		include(inSharedPath + "scripts/engine/GameArithmeticCompression.js");
@@ -190,7 +189,6 @@ GameLoader =
 			include(inSharedPath + "scripts/engine/unit_tests/TestGameClass.js");
 			include(inSharedPath + "scripts/engine/unit_tests/TestGameBitPacker.js");
 			include(inSharedPath + "scripts/engine/unit_tests/TestGameEventSystem.js");
-			include(inSharedPath + "scripts/engine/unit_tests/TestGameObjectClassSystem.js");
 			//include(inSharedPath + "scripts/engine/unit_tests/TestMultPacker.js ");//TODO
 			include(inSharedPath + "scripts/engine/unit_tests/TestGameArithmeticCompression.js");
 			include(inSharedPath + "scripts/engine/unit_tests/TestGameBinarySerializer.js");
