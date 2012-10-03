@@ -61,7 +61,7 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class(
 			GameInstance.UpdateOrder.push(this._physics);//TODO make it join a physics updater, not this
 			
 			//setup default tileset consisting of nothing but the placeholder
-			var tileset = GameEngineLib.Game2DTileSet.create().deref();//TODO don't deref
+			var tileset = GameEngineLib.Game2DTileSet.create();
 			tileset.init(
 				[
 					{
@@ -73,8 +73,8 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class(
 			);
 			
 			this._map = GameEngineLib.Game2DMap.create();
-			this._map.deref().init(inMapSizeInTiles, inTileSize, tileset);
-			this._map.deref().addedToWorld(this);
+			this._map.init(inMapSizeInTiles, inTileSize, tileset);
+			this._map.addedToWorld(this);
 			
 			this._entityMap = {};
 			
@@ -90,8 +90,8 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class(
 		addEntity : function addEntity(inEntity)
 		{
 			//TODO beware bug created by adding an entity by a name which could change, add this to namechange listener
-			this._entityMap[inEntity.getPath()] = inEntity;
-			inEntity.deref().addedToWorld(this);
+			this._entityMap[inEntity.getTxtPath()] = inEntity;
+			inEntity.addedToWorld(this);
 		},
 		//TODO remove entity
 
@@ -103,7 +103,7 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class(
 
 		getCurrentCamera : function getCurrentCamera()//TODO maybe should be public?
 		{
-			return (this._camera ? this._camera.deref() : this._defaultCamera);
+			return (this._camera ? this._camera : this._defaultCamera);
 		},
 
 		//if(!GameSystemVars.Network.isServer)//TODO axe if?
@@ -114,7 +114,7 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class(
 			//debug draw the map		
 			if(GameSystemVars.DEBUG && GameSystemVars.Debug.Map_Draw)
 			{
-				this._map.deref().debugDraw(inCanvas2DContext, camera.getRect());
+				this._map.debugDraw(inCanvas2DContext, camera.getRect());
 			}
 			
 			//render scene graph (note it will ommit map if map is debug drawn)

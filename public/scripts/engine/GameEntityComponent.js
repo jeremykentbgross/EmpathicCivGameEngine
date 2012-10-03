@@ -30,20 +30,17 @@ GameEngineLib.GameEntityComponent = GameEngineLib.Class({
 	ChainDown : ["onAddedToEntity"],
 	Definition :
 	{
-		onAddedToEntity : function onAddedToEntity(inEntity)
+		onAddedToEntity : function onAddedToEntity(inEvent)
 		{
-			if(this._myOwner)
+			if(this._owner)
 			{
 				this.onRemovedFromEntity();
 			}
-			this._myOwner = inEntity;
-			
-			//todo register for events
+			this._owner = inEvent.entity;
 		},
-		onRemovedFromEntity : function onRemovedFromEntity()
+		onRemovedFromEntity : function onRemovedFromEntity(inEvent)
 		{
-			this._myOwner = null;
-			//todo unregister for events
+			this._owner = null;
 		},
 		
 		destroy : function destroy(){},

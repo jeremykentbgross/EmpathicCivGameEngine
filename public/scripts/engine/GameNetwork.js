@@ -535,7 +535,7 @@ GameEngineLib.GameNetwork.prototype._onData = function _onData(inEvent, inSocket
 	}
 	catch(error)
 	{
-		GameEngineLib.logger.warn(error);
+		console.log(error.stack);
 		//TODO disconnect? increment damaged packets for this user?
 		return false;
 	}

@@ -54,6 +54,7 @@ GameEngineLib.GameObject = GameEngineLib.Class({
 				min : 0,
 				max : GameEngineLib.User.USER_IDS.MAX_EVER
 			}
+			//TODO name/id (NOT net)
 		],
 		
 		getName : function getName()
@@ -134,6 +135,11 @@ GameEngineLib.GameObject = GameEngineLib.Class({
 		getNetOwner : function getNetOwner()
 		{
 			return this._netOwner;
+		},
+		
+		getRef : function getRef()
+		{
+			return new GameEngineLib.GameObjectRef(this);
 		},
 		
 		serialize : function serialize(serializer)

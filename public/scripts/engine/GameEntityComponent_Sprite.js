@@ -94,14 +94,14 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
 			);*/
 		},
 
-		onAddedToEntity : function(inEntity)
+		onAddedToEntity : function(inEvent)
 		{
-			//this._myOwner = inEntity;
+			var owner = this._owner;//inEvent.entity;
 			
 			//register for events
-			this._myOwner.registerListener("UpdatePosition", this);
-			this._myOwner.registerListener("AddedToWorld", this);
-			this._myOwner.registerListener("RemovedFromWorld", this);
+			owner.registerListener("UpdatePosition", this);
+			owner.registerListener("AddedToWorld", this);
+			owner.registerListener("RemovedFromWorld", this);
 			
 			//TODO owner.event(getposition, myPos);
 			//todo add to scene graph
@@ -109,14 +109,16 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
 
 		onRemovedFromEntity : function()
 		{
+			var owner = this._owner;//inEvent.entity;
+			
 			//unregister for events
-			this._myOwner.unregisterListener("UpdatePosition", this);
-			this._myOwner.unregisterListener("AddedToWorld", this);
-			this._myOwner.unregisterListener("RemovedFromWorld", this);
+			owner.deregisterListener("UpdatePosition", this);
+			owner.deregisterListener("AddedToWorld", this);
+			owner.deregisterListener("RemovedFromWorld", this);
 			
 			//todo remove from scenegraph
 			
-			//this._myOwner = null;
+			//this._owner = null;
 		},
 
 		onUpdatePosition : function(inEvent)

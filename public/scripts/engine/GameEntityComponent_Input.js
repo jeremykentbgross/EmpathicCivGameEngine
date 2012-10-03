@@ -69,9 +69,9 @@ GameEngineLib.EntityComponent_Input = GameEngineLib.Class(
 			//unitize it, then multiply by speed
 			this._direction = this._direction.unit().multiply(this._speed);
 			
-			if(this._myOwner)
+			if(this._owner)
 			{
-				this._myOwner.onEvent(
+				this._owner.onEvent(
 					{
 						getName : function(){return "RequestVelocity";},
 						direction : this._direction

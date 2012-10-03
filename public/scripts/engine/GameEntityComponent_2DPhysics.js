@@ -54,26 +54,28 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 		{
 		},
 		
-		onAddedToEntity : function onAddedToEntity(inEntity)
+		onAddedToEntity : function onAddedToEntity(inEvent)
 		{
-			//this._myOwner = inEntity;
+			var owner = this._owner;//inEntity.entity;
 		
 			//register for events		
-			this._myOwner.registerListener("RequestVelocity", this);
-			this._myOwner.registerListener("AddedToWorld", this);
-			this._myOwner.registerListener("RemovedFromWorld", this);
+			owner.registerListener("RequestVelocity", this);
+			owner.registerListener("AddedToWorld", this);
+			owner.registerListener("RemovedFromWorld", this);
 			
 			//TODO owner.event(getposition, myPos);??
 		},
 		
-		onRemovedFromEntity : function onRemovedFromEntity()
+		onRemovedFromEntity : function onRemovedFromEntity(inEvent)
 		{
-			//unregister for events
-			this._myOwner.unregisterListener("RequestVelocity", this);
-			this._myOwner.unregisterListener("AddedToWorld", this);
-			this._myOwner.unregisterListener("RemovedFromWorld", this);
+			var owner = this._owner;//inEntity.entity;
 			
-			//this._myOwner = null;
+			//unregister for events
+			owner.deregisterListener("RequestVelocity", this);
+			owner.deregisterListener("AddedToWorld", this);
+			owner.deregisterListener("RemovedFromWorld", this);
+			
+			//this._owner = null;
 		},
 		
 		destroy : function destroy()
@@ -97,7 +99,7 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 				this._physicsObject.setGame2DAABB(this._boundingRect);
 				
 				//set position and let everyone else know
-				this._myOwner.onEvent(//TODO real event, not temp object
+				this._owner.onEvent(//TODO real event, not temp object
 					{
 						getName : function(){return "UpdatePosition";},
 						position : this._position,//TODO clone
@@ -139,7 +141,7 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 		onPhysObjectUpdate : function onPhysObjectUpdate(physicsUpdateInfo)
 		{
 			//TODO use GameEvent! Make collection of known game events!
-			this._myOwner.onEvent(
+			this._owner.onEvent(
 				{
 					getName : function(){return "UpdatePosition";},//TODO should be UpdatePositionVelocity
 					position : physicsUpdateInfo.position,

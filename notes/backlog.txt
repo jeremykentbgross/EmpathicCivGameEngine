@@ -163,13 +163,12 @@ OTHER GOALS:
 -GameEvent folder (so none are undocumented!)
 -use registries to find leaked gameobjects
 -update logger
+-get rid of 'my' prefix
 
--objectref
 -complete serializers/system!
 -more things should be considered net print? basic vs advanced
-
-
-
+-search for 'onEvent' and make sure it is always passed event objects!
+-add/remove world/entity not events?
 
 ////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -219,16 +218,16 @@ OTHER GOALS:
 //////////////////////////////////////////////:Stage 2 (class'ified + replace xx.create())
 
 //////////////////////////////////////////////To Serialize:
--GameObject.js
--GameEntity.js
--GameEntityComponent.js
--GameEntityComponent_2DCamera.js
--GameEntityComponent_2DPhysics.js
--GameEntityComponent_Input.js
--GameEntityComponent_Sprite.js
--Game2DMap.js
--Game2DTileSet.js
--Game2DWorld.js
+O-GameObject.js
+ -GameEntity.js
+ -GameEntityComponent.js
+ -GameEntityComponent_2DCamera.js
+ -GameEntityComponent_2DPhysics.js
+ -GameEntityComponent_Input.js
+ -GameEntityComponent_Sprite.js
+ -Game2DMap.js
+ -Game2DTileSet.js
+ -Game2DWorld.js
 //////////////////////////////////////////////:To Serialize
 
 ////////////////////////////////////////////////////////////////////////////////////////////

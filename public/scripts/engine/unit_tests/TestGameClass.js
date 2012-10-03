@@ -96,7 +96,7 @@ GameUnitTests.registerTest(
 		ClassNamespace.TestObjectClass1.registerClass();
 		
 		var foundClass = GameEngineLib.Class.getInstanceRegistry().findByName("TestObjectClass1");
-		var testObjectClass1 = foundClass.create().deref();
+		var testObjectClass1 = foundClass.create();
 		GameAssert(testObjectClass1.isA(ClassNamespace.TestObjectClass1), "isA() Failed on found created class!");
 		
 		var found = foundClass.getInstanceRegistry().findByName(testObjectClass1.getName());
@@ -130,7 +130,7 @@ GameUnitTests.registerTest(
 			}
 		});
 		
-		var chainTestObject = ClassNamespace.TestObjectClass2.create().deref();
+		var chainTestObject = ClassNamespace.TestObjectClass2.create();
 		chainTestObject.chainUp();
 		chainTestObject.chainDown();
 		

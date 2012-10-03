@@ -87,3 +87,40 @@ GameEngineLib.GameCircularDoublyLinkedListNode.prototype.forAllReverse = functio
 	}while(current != last);
 }
 
+
+
+GameEngineLib.GameCircularDoublyLinkedListNode.prototype.findNodeContaining = function findNodeContaining(inValue)
+{
+	var last = this;
+	var current = this;
+	do{
+		if(inValue === current.item)
+			return current;
+		current = current.myNext;
+	}while(current != last);
+
+	return null;
+}
+
+
+
+GameEngineLib.GameCircularDoublyLinkedListNode.prototype.size = function size()
+{
+	var last = this;
+	var current = this.myNext;
+	var count = 0;
+	while(current != last)
+	{
+		++count;
+		current = current.myNext;
+	}
+	
+	return count;
+}
+
+
+
+GameEngineLib.GameCircularDoublyLinkedListNode.prototype.length = function length()
+{
+	return this.size();
+}

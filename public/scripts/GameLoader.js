@@ -150,6 +150,7 @@ GameLoader =
 		include(inSharedPath + "scripts/engine/GameArithmeticCompression.js");
 		include(inSharedPath + "scripts/engine/GameBinarySerializer.js");
 		include(inSharedPath + "scripts/engine/GameEventSystem.js");
+		include(inSharedPath + "scripts/engine/GameEvent.js");
 		include(inSharedPath + "scripts/engine/GameEntity.js");
 		include(inSharedPath + "scripts/engine/GameEntityComponent.js");
 		include(inSharedPath + "scripts/engine/GameEntityComponent_2DCamera.js");
@@ -192,6 +193,7 @@ GameLoader =
 			//include(inSharedPath + "scripts/engine/unit_tests/TestMultPacker.js ");//TODO
 			include(inSharedPath + "scripts/engine/unit_tests/TestGameArithmeticCompression.js");
 			include(inSharedPath + "scripts/engine/unit_tests/TestGameBinarySerializer.js");
+			include(inSharedPath + "scripts/engine/unit_tests/TestGameEntity.js");
 			
 			
 			//GAME UNIT TESTS:

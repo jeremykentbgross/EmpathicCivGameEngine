@@ -141,7 +141,11 @@ GameEngineLib.Class = function Class(inParams)
 	
 	//TODO should do this better.  Like maybe inherit parent flags?
 	inConstructor.flags = inParams.flags;
-	
+
+	inConstructor.create = function create()
+	{
+		return new inConstructor();
+	}	
 
 	//build a parent chain for the chain up and down calls
 	//and figure if this is a managed object (derived from GameObject)
@@ -159,15 +163,7 @@ GameEngineLib.Class = function Class(inParams)
 		current = current._parent;
 	}
 	
-	if(!managed)
-	{
-		inConstructor.create = function create()
-		{
-			var instance = new inConstructor();
-			return instance;
-		}
-	}
-	else
+	if(managed)
 	{
 		inConstructor.registerClass = function registerClass()
 		{
@@ -177,12 +173,7 @@ GameEngineLib.Class = function Class(inParams)
 			inConstructor._classID = classRegistry.getUnusedID();
 			classRegistry.register(inConstructor);
 		}
-		
-		inConstructor.create = function create()
-		{
-			return new GameEngineLib.GameObjectRef(new inConstructor());
-		}
-				
+						
 		inConstructor.getInstanceRegistry = function getInstanceRegistry()
 		{
 			if(!GameClassRegistryMap[inConstructor])

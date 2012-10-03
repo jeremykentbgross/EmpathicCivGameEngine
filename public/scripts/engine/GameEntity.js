@@ -23,15 +23,15 @@ GameEngineLib.GameEntity = GameEngineLib.Class({
 	Constructor : function GameEntity()
 	{
 		this.GameObject();
-		//TODO should this be 'map' (this object) instead?  Very likely it seems
-		//this._myComponents = {}	<=!
-		this._myComponents = GameEngineLib.createGameCircularDoublyLinkedListNode();
+		this.GameEventSystem();//
 		
-		//TODO change Entity to inherit this instead!
-		this._myComponentEventSystem = GameEngineLib.GameEventSystem.create();//HACK!!
+		this._components = GameEngineLib.createGameCircularDoublyLinkedListNode();
 	},
 	
-	Parents : [GameEngineLib.GameObject],
+	Parents : [
+		GameEngineLib.GameObject,
+		GameEngineLib.GameEventSystem//
+	],
 	
 	flags : {},
 	
@@ -42,86 +42,75 @@ GameEngineLib.GameEntity = GameEngineLib.Class({
 	{
 		addComponent : function addComponent(inComponent)
 		{
-			var node = GameEngineLib.createGameCircularDoublyLinkedListNode();
-			node.item = inComponent;
-			this._myComponents.myPrev.insert(node);
-			inComponent.deref().onAddedToEntity(this);//TODO make onAddedToEntity a proper event for the Components?
-			//TODO if world onAddedToWorld
+			this._components.myPrev.insert(new GameEngineLib.GameCircularDoublyLinkedListNode(inComponent));
+			
+			inComponent.onAddedToEntity(new GameEngineLib.GameEvent_AddedToEntity(this));
+			
+			if(this._world)
+			{
+				inComponent.onAddedToWorld(new GameEngineLib.GameEvent_AddedToWorld(this._world));
+			}
 		},
 		removeComponent : function removeComponent(inComponent)
 		{
-			var head = this._myComponents;
-			var node = head;
+			var containingNode = this._components.findNodeContaining(inComponent);
 			
-			while(node !== head)
+			if(containingNode)
 			{
-				if(node.item === inComponent)
+				containingNode.remove();
+				if(this._world)
 				{
-					node.remove();
-					break;
+					inComponent.onRemovedFromWorld(new GameEngineLib.GameEvent_RemovedFromWorld(this._world));
 				}
-				node = node.myNext;
+				inComponent.onRemovedFromEntity(new GameEngineLib.GameEvent_RemovedFromEntity(this));
 			}
-			
-			//TODO if world onRemovedFromWorld
-			inComponent.onRemovedFromEntity();
 		},
 		
+		//TODO maybe make added/removed+Entity/World NOT events (to save 'new' events that may not be needed)?
 		//TODO make onAddedTo/onRemovedFromWorld events so entity can set the world along with its components???
 		addedToWorld : function addedToWorld(inWorld)//TODO rename onAddedToWorld
 		{
-			if(this._myWorld)
+			if(this._world)
 			{
 				this.removedFromWorld();
 			}
-			this._myWorld = inWorld;
-			this.onEvent(
-				{
-					getName : function(){return "AddedToWorld";},
-					world : inWorld
-				}
-			);
+			this._world = inWorld;
+			this.onEvent(new GameEngineLib.GameEvent_AddedToWorld(this._world));
 		},
 		removedFromWorld : function removedFromWorld()//TODO rename onRemovedFromWorld
 		{
-			this._myWorld = null;
-			this.onEvent(
-				{
-					getName : function(){return "RemovedFromWorld";},
-					world : inWorld
-				}
-			);
+			this.onEvent(new GameEngineLib.GameEvent_RemovedFromWorld(this._world));
+			this._world = null;
 		},
+		
 		getWorld : function getWorld()
 		{
-			return this._myWorld;
+			return this._world;
 		},
-		
-		///////////////////////////////////////////////////
-		//TODO remove these via inheritance!///////////////
-		onEvent : function onEvent(inEvent)
-		{
-			this._myComponentEventSystem.onEvent(inEvent);
-		},
-		registerListener : function registerListener(inEventName, inListener)
-		{
-			this._myComponentEventSystem.registerListener(inEventName, inListener);
-		},
-		deregisterListener : function deregisterListener(inEventName, inListener)
-		{
-			this._myComponentEventSystem.deregisterListener(inEventName, inListener);
-		},
-		//TODO remove these via inheritance!///////////////
-		///////////////////////////////////////////////////
 		
 		destroy : function destroy()
-		{		
-			/*if(GameSystemVars.DEBUG)//TODO debug entitys
+		{
+			if(this._world)
 			{
-				GameEngineLib.logger.info("Destroying Entity " + GameEngineLib.GameObjectRef(this).getPath());
-			}*/
+				inComponent.onRemovedFromWorld(new GameEngineLib.GameEvent_RemovedFromWorld(this._world));
+			}
+			
+			inComponent.onRemovedFromEntity(new GameEngineLib.GameEvent_RemovedFromEntity(this));
+			
+			this._components.forAll(
+				function(inComponent)
+				{
+					inComponent.destroy();
+				}
+			);
+			
+			this._components = null;//Does this leak? Could do if loose circular references are not released
 		},
 		
-		serialize : function serialize(inSerializer){},
+		serialize : function serialize(inSerializer)
+		{
+			var componentMap = {};
+			//TODO
+		},
 	}
 });

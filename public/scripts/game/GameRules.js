@@ -30,7 +30,7 @@ GameLib.createGameRules = function(instance, private)
 		
 	instance.init = function()
 	{
-		GameEngineLib.logger.info("Setting up Game Rules");
+		//GameEngineLib.logger.info("Setting up Game Rules");
 		
 		//todo register GameLib GameObject classes
 		
@@ -41,14 +41,14 @@ GameLib.createGameRules = function(instance, private)
 		var tileSize = 64;
 		var minPhysicsPartitionSize = 8;
 		private.GameWorld = GameEngineLib.Game2DWorld.create();
-		private.GameWorld.deref().init(
+		private.GameWorld.init(
 			mapSizeInTiles
 			,tileSize
 			,minPhysicsPartitionSize
 		);
 		
 		//todo should be created with factory?
-		var tileset = GameEngineLib.Game2DTileSet.create().deref();
+		var tileset = GameEngineLib.Game2DTileSet.create();
 		tileset.init(
 			[
 				{
@@ -86,7 +86,7 @@ GameLib.createGameRules = function(instance, private)
 		);
 		//TODO wait until it is loaded to set somehow? or make streaming work properly with scene graph
 		
-		var map = private.GameWorld.deref().getMap().deref();
+		var map = private.GameWorld.getMap();
 		map.setTileSet(tileset);
 		
 		//hack put something in the map to start with
@@ -100,21 +100,21 @@ GameLib.createGameRules = function(instance, private)
 		//TODO test adding components and world in different orders
 		private.entity1 = GameEngineLib.GameEntity.create();
 		private.entity1Sprite = GameEngineLib.EntityComponent_Sprite.create();
-		private.entity1Sprite.deref().init();
-		private.entity1.deref().addComponent(private.entity1Sprite);
+		private.entity1Sprite.init();
+		private.entity1.addComponent(private.entity1Sprite);
 		private.entity1Input = GameEngineLib.EntityComponent_Input.create();
-		private.entity1.deref().addComponent(private.entity1Input);
+		private.entity1.addComponent(private.entity1Input);
 		private.entity1Physics = GameEngineLib.EntityComponent_2DPhysics.create();
-		private.entity1.deref().addComponent(private.entity1Physics);
+		private.entity1.addComponent(private.entity1Physics);
 		private.entity1Camera = GameEngineLib.EntityComponent_2DCamera.create();
-		private.entity1Camera.deref().init(
+		private.entity1Camera.init(
 			//GameInstance.Graphics.getWidth(),
 			//GameInstance.Graphics.getHeight()
 		);//TODO get the size from somewhere and not hardcode it
-		private.entity1.deref().addComponent(private.entity1Camera);
+		private.entity1.addComponent(private.entity1Camera);
 		
-		private.GameWorld.deref().addEntity(private.entity1);
-		private.GameWorld.deref().setCamera(private.entity1Camera);//TODO comment out and fix default camera
+		private.GameWorld.addEntity(private.entity1);
+		private.GameWorld.setCamera(private.entity1Camera);//TODO comment out and fix default camera
 		
 		if(!GameSystemVars.Network.isServer)
 			GameInstance.Input.registerListener("Input", private);
@@ -122,12 +122,16 @@ GameLib.createGameRules = function(instance, private)
 		private.onIdentifiedUser = function(inEvent)
 		{
 			GameEngineLib.logger.info("setting owner for physics component: " + inEvent.user.userName );
-			private.entity1Physics.deref().setNetOwner(inEvent.user.userID);
+			private.entity1Physics.setNetOwner(inEvent.user.userID);
 		}
-		GameInstance.Network.registerListener(
-			"IdentifiedUser",
-			private
-		);
+		
+		if(GameSystemVars.Network.isMultiplayer)
+		{
+			GameInstance.Network.registerListener(
+				"IdentifiedUser",
+				private
+			);
+		}
 		
 		
 		//TODO creating chat UI should NOT be here
@@ -263,7 +267,7 @@ GameLib.createGameRules = function(instance, private)
 	instance.render = function(inCanvas2DContext)
 	{
 		//choose items to render
-		private.GameWorld.deref().render(inCanvas2DContext)
+		private.GameWorld.render(inCanvas2DContext)
 	};
 	
 	
@@ -271,8 +275,8 @@ GameLib.createGameRules = function(instance, private)
 	//TODO maybe this should be in an editor or something
 	private.onInput = function(inInputEvent)
 	{				
-		var map = private.GameWorld.deref().getMap().deref();
-		var camPoint = private.GameWorld.deref().getCurrentCamera().getRect().getLeftTop();
+		var map = private.GameWorld.getMap();
+		var camPoint = private.GameWorld.getCurrentCamera().getRect().getLeftTop();
 		var mouseWorldPosition;
 				
 		if(private.drawTile === undefined)

@@ -19,27 +19,6 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////
-GameEngineLib.GameEvent = function GameEvent(inEventName)
-{
-	this._eventName = inEventName;
-}
-GameEngineLib.GameEvent.prototype.constructor = GameEngineLib.GameEvent;
-
-
-
-GameEngineLib.GameEvent.prototype.getName = function getName()
-{
-	return this._eventName;
-}
-/////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////
-
-
-
-/////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////
 //TODO depricated:
 GameEngineLib.createEventSystem = function(instance, private)
 {
@@ -57,8 +36,6 @@ GameEngineLib.createEventSystem = function(instance, private)
 	
 	return instance;
 }
-
-
 
 
 
@@ -124,6 +101,7 @@ GameEngineLib.GameEventSystem.prototype.onEvent = function onEvent(inEvent)
 	eventName = inEvent.getName();
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	callbackName = "on" + eventName;//TODO axe "on" here and have users add it!!!!!!!!!!!!!!!!!!!!
+	//TODO use class name!
 	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	
 	head = this._eventListeners[eventName];
