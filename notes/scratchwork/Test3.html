@@ -1,0 +1,679 @@
+﻿<!DOCTYPE html>
+<html>
+	<body>	
+		<script>
+			
+			function declareObfuscatorCode()
+			{
+				var moreThanOneParamFunc = function(
+					p1,
+					p2
+				){}
+				
+				
+				
+				///////////////////////////////////////////////////////////////////
+				//Obfuscator///////////////////////////////////////////////////////
+				ObfuscatorNameSpace =
+				{
+					DEBUG : true,
+					removeWhiteSpace : false,
+					localization : []
+				};
+				
+				console.log("Declaring Obfuscator Code");
+				
+				ObfuscatorNameSpace.Obfuscator = function Obfuscator()
+				{
+					this._nameSpaces = {};
+					this._functionNames = {};
+					this._parameterNames = {};
+					this._variableNames = {};
+					this._memberNames = {};
+					
+					this._unmappedWordsMap = {};
+					this._wordMap = {};
+					this._ignoreMap = {};
+					
+					this._src = '';
+					this._nextWordCount = 0;
+					
+					this.registerNamespace('this');
+					this.registerNamespace('prototype');
+					
+					this.addIgnore('this');
+					this.addIgnore('prototype');
+					this.addIgnore('break');
+					this.addIgnore('const');
+					this.addIgnore('continue');
+					this.addIgnore('delete');
+					this.addIgnore('do');
+					this.addIgnore('export');
+					this.addIgnore('for');
+					this.addIgnore('function');
+					this.addIgnore('if');
+					this.addIgnore('else');
+					this.addIgnore('import');
+					this.addIgnore('in');
+					this.addIgnore('instanceOf');
+					this.addIgnore('label');
+					this.addIgnore('let');
+					this.addIgnore('new');
+					this.addIgnore('return');
+					this.addIgnore('switch');
+					this.addIgnore('this');
+					this.addIgnore('throw');
+					this.addIgnore('try');
+					this.addIgnore('catch');
+					this.addIgnore('typeof');
+					this.addIgnore('var');
+					this.addIgnore('void');
+					this.addIgnore('while');
+					this.addIgnore('with');
+					this.addIgnore('yield');
+					this.addIgnore('true');
+					this.addIgnore('false');
+					this.addIgnore('null');
+					this.addIgnore('undefined');
+					
+					this._javascriptOperators = 
+					[
+						'+',
+						'-',
+						'*',
+						'/',
+						'%',
+						'++',
+						'--',
+						'=',
+						'+=',
+						'-=',
+						'*=',
+						'/=',
+						'>>=',
+						'<<=',
+						'>>>=',
+						'&=',
+						'|=',
+						'^=',
+						'&',
+						'|',
+						'^',
+						'~',
+						'<<',
+						'>>',
+						'>>>',
+						'==',
+						'!=',
+						'===',
+						'!==',
+						'>',
+						'>=',
+						'<',
+						'<=',
+						'&&',
+						'||',
+						'!',
+						',',
+						'?',
+						':',
+						'true',
+						'false',
+						'null',
+						'undefined',
+						'(',
+						')',
+						'[',
+						']',
+						'{',
+						'}',
+						';',
+						'.',
+					];
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype.addSrc = function addSrc(inSrc)
+				{
+					this._src += inSrc;
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype.registerNamespace = function registerNamespace(inNamespace)
+				{
+					this._nameSpaces[inNamespace] = true;
+					this._addWord(inNamespace);
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype.addIgnore = function addIgnore(inWord)
+				{
+					this._ignoreMap[inWord] = true;
+					delete this._unmappedWordsMap[inWord];
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype.getObfuscatedName = function getObfuscatedName(inWord)
+				{
+					return this._wordMap[inWord].replacement;
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype.getObfuscatedCode = function getObfuscatedCode()
+				{
+					return this._src;
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype._addWord = function _addWord(inWord)
+				{
+					/*if(ObfuscatorNameSpace.DEBUG && typeof inWord !== 'string')
+					{
+						console.log("Error input is not a word!");//TODO this should be an exception!
+					}*/
+					if(!this._wordMap[inWord])
+					{
+						this._wordMap[inWord] = 
+						{
+							count : 1
+							,word : inWord
+							,uniqueInstances : {}
+							,replacement : null
+						};
+					}
+					
+					delete this._unmappedWordsMap[inWord];
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype._addFunctionName = function _addFunctionName(inFunctionName)
+				{
+					this._functionNames[inFunctionName] = true;
+					this.registerNamespace(inFunctionName);
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype._addParameterName = function _addParameterName(inParameterName)
+				{
+					this._parameterNames[inParameterName] = true;
+					this._addWord(inParameterName);
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype._addVariableName = function _addVariableName(inVariableName)
+				{
+					this._variableNames[inVariableName] = true;
+					this._addWord(inVariableName);
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype._addMemberName = function _addMemberName(inMemberName)
+				{
+					this._memberNames[inMemberName] = true;
+					this._addWord(inMemberName);
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype.run = function run()
+				{
+					if(ObfuscatorNameSpace.DEBUG)
+					{
+						console.log("Base NameSpaces:");
+						for(var name in this._nameSpaces)
+						{
+							console.log('\t' + name);
+						}
+					}
+					
+					this._removeComments();
+					this._removeTextForLocalization();
+					this._findAllPotentialWords();
+					this._findFunctionNames();
+					this._findParameterNames();
+					this._findVariableNames();
+					this._findValuesInNamespaces();
+					this._findJSONFields();
+					
+					//remove the ignored words before processing:
+					for(var name in this._ignoreMap)
+					{
+						delete this._wordMap[name];
+						delete this._unmappedWordsMap[name];
+					}
+					
+					if(ObfuscatorNameSpace.DEBUG)
+					{
+						console.log("Final NameSpaces:");
+						for(var name in this._nameSpaces)
+						{
+							console.log('\t' + name);
+						}
+						
+						console.log("Function Names:");
+						for(var name in this._functionNames)
+						{
+							console.log('\t' + name);
+						}
+						
+						console.log("Parameter Variables:");
+						for(var name in this._parameterNames)
+						{
+							console.log('\t' + name);
+						}
+						
+						console.log("Local Variable Names:");
+						for(var name in this._variableNames)
+						{
+							console.log('\t' + name);
+						}
+						
+						console.log("Member Variables:");
+						for(var name in this._memberNames)
+						{
+							console.log('\t' + name);
+						}
+						
+						console.log("\n\n\nIncluded Words:");
+						for(var name in this._wordMap)
+						{
+							console.log('\t' + name);
+						}
+						
+						console.log("Ignored Words:");
+						for(var name in this._ignoreMap)
+						{
+							console.log('\t' + name);
+						}
+						
+						console.log("Unmappable Words:");
+						for(var name in this._unmappedWordsMap)
+						{
+							console.log('\t' + name);
+						}
+					}
+					
+					this._doWordReplacement();
+					
+					if(ObfuscatorNameSpace.removeWhiteSpace)
+					{
+						this._clearWhiteSpace();
+					}
+					
+					//TODO cleanup unneeded data
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype._removeComments = function _removeComments()
+				{
+					var startOfBlock = '\x2f\x2a';
+					var endOfBlock = '\x2a\x2f';
+					
+					/*remove block comments:*/
+					var startIndex = this._src.indexOf(startOfBlock);
+					var endIndex;
+					while(startIndex >= 0)
+					{
+						endIndex = this._src.indexOf(endOfBlock, startIndex) + endOfBlock.length;//end of comment block
+						this._src = this._src.substr(0, startIndex) + this._src.substr(endIndex);
+						
+						startIndex = this._src.indexOf(startOfBlock);//start of comment block
+					}
+					
+					//remove line comments
+					this._src = this._src.replace(/\x2f\x2f[^\n]*\n/g, '\n');
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype._removeTextForLocalization = function _removeTextForLocalization()
+				{
+					var quoteMark = '\x22';
+					var escapeChar = '\x5c';
+					
+					var startIndex = this._src.indexOf(quoteMark);
+					var endIndex;
+					while(startIndex >= 0)
+					{
+						do
+						{
+							//get the end quote
+							endIndex = this._src.indexOf(quoteMark, startIndex + 1);
+							//while this end quote is not an internal escape character (ie printable text quote, not code quote)
+						} while(this._src[endIndex - 1] === escapeChar);
+						endIndex += quoteMark.length;
+						
+						//add this to the localization array
+						ObfuscatorNameSpace.localization.push(this._src.substring(startIndex + 1, endIndex - 1));
+						//replace the code string with the new array value
+						this._src =
+							this._src.substring(0, startIndex) + 
+							'ObfuscatorNameSpace.localization[' + (ObfuscatorNameSpace.localization.length - 1) + ']' +
+							this._src.substring(endIndex);
+						
+						startIndex = this._src.indexOf(quoteMark);//start of comment block
+					}
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype._findAllPotentialWords = function _findAllPotentialWords()
+				{
+					var potentialWords = this._src.match(/\w+/g);
+					
+					for(var i in potentialWords)
+					{
+						this._unmappedWordsMap[potentialWords[i]] = true;
+					}
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype._findFunctionNames = function _findFunctionNames()
+				{
+					var functions = this._src.match(/function\s+\w+/g);
+					
+					for(var i in functions)
+					{
+						functions[i] = functions[i].match(/\s+\w+/)[0].match(/\w+/)[0];
+						this._addFunctionName(functions[i]);
+					}
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype._findParameterNames = function _findParameterNames()
+				{
+					var functionSignatures = this._src.match(/function\s*\w*\s*\x28[^\x29]+\x29/g);
+					var parameters = [];
+					
+					for(var i in functionSignatures)
+					{
+						var params = functionSignatures[i].match(/\x28[^\x29]*\x29/)[0].match(/\w+/g);
+						for(j in params)
+						{
+							parameters.push(params[j]);
+							this._addParameterName(params[j]);
+						}
+					}
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype._findVariableNames = function _findVariableNames()
+				{
+					var variables = this._src.match(/var\s+\w+/g);
+					
+					for(var i in variables)
+					{
+						variables[i] = variables[i].match(/\s\w+/)[0].match(/\w+/)[0];
+						this._addVariableName(variables[i]);
+					}
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype._findValuesInNamespaces = function _findValuesInNamespaces()
+				{
+					var valuesInNameSpaces = [];
+					var regEx = new RegExp();
+					
+					for(var nameSpace in this._nameSpaces)
+					{
+						regEx.compile(nameSpace + '\\x2e\\w+', 'g');
+						var values = this._src.match(regEx);
+						for(var i in values)
+						{
+							values[i] = values[i].match(/\x2e\w+/)[0].match(/\w+/)[0];
+							valuesInNameSpaces.push(values[i]);
+							this._addMemberName(values[i]);
+						}
+					}
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype._findJSONFields = function _findJSONFields()
+				{
+					var fields = this._src.match(/[\x2c\x7b]\s*\w+\s*\x3a/g);
+					
+					for(var i in fields)
+					{
+						fields[i] = fields[i].match(/\w+/)[0];
+						this._addMemberName(fields[i]);
+					}
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype._clearWhiteSpace = function _clearWhiteSpace()
+				{
+					this._src = this._src.replace(/\n/g, '');
+					this._src = this._src.replace(/\s+/g, ' ');
+										
+					var regEx = new RegExp();
+					
+					for(var i in this._javascriptOperators)
+					{
+						var hex = this._stringToHex(this._javascriptOperators[i]);
+						regEx.compile('\\s*' + hex + '\\s*', 'g');
+						this._src = this._src.replace(regEx, this._javascriptOperators[i]);
+					}
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype._stringToHex = function _stringToHex(inString)
+				{
+					var hex = '';
+					
+					for(var i = 0; i < inString.length; ++i)
+					{
+						var string = inString.charCodeAt(i).toString(16);
+						string = (string.length === 2 ? string : "0" + string);
+						hex += '\\x' + string;
+					}
+					
+					return hex;
+				}
+				
+				
+				/*
+				This is needed so that the regular expression matcher doesn't miss objects because they are part of two words.
+				Example:
+					j[j.length - 1]
+				The parser will find 'j[' but will miss '[j.' because the '[' is in both words
+				*/
+				ObfuscatorNameSpace.Obfuscator.prototype._spaceOut = function _spaceOut()/////////////////!!!!!!!!!!!!!!!!!!!!
+				{
+					var regEx = new RegExp();
+					
+					for(var i in this._javascriptOperators)
+					{
+						var hex = this._stringToHex(this._javascriptOperators[i]);
+						regEx.compile('[\\s]*' + hex + '[\\s]*', 'g');/////////////////////////////////////////
+						this._src = this._src.replace(regEx, ' ' + this._javascriptOperators[i] + ' ');
+					}
+				}
+				
+				//TODO ignore javascript array properties!
+				
+				ObfuscatorNameSpace.Obfuscator.prototype._doWordReplacement = function _doWordReplacement()
+				{
+					var wordList = [];
+					var regEx = new RegExp();
+					
+					for(var word in this._wordMap)
+					{
+						//get the entry
+						var wordData = this._wordMap[word];
+						
+						//get the instances of the word in the source code
+						regEx.compile('\\W' + word + '\\W', 'g');
+						var instances = this._src.match(regEx);
+						
+						//remember the unique instances
+						for(var i in instances)
+						{
+							wordData.uniqueInstances[instances[i]] = true;
+						}
+						
+						//remember the count
+						wordData.count = instances.length;
+						
+						//add it to the array
+						wordList.push(wordData);
+					}
+					
+					wordList.sort(
+						function(inLHS, inRHS)
+						{
+							var LHV = inLHS.count * inLHS.word.length;
+							var RHV = inRHS.count * inRHS.word.length;
+							if(LHV > RHV)
+							{
+								return -1;
+							}
+							else if(LHV < RHV)
+							{
+								return 1;
+							}
+							return 0;
+						}
+					);
+					
+					for(var i = 0; i < wordList.length; ++i)
+					{
+						var wordData = wordList[i];
+						wordData.replacement = this._genValidWordReplacement();
+						
+						for(var j in wordData.uniqueInstances)
+						{
+							var replacement = j[0] + wordData.replacement + j[j.length-1];
+							regEx.compile(
+								this._stringToHex(j[0])
+								+ wordData.word
+								+ this._stringToHex(j[j.length-1])
+								,'g'
+							);
+							this._src = this._src.replace(regEx, replacement);
+						}
+						console.log(wordData.word + " " + wordData.count);
+					}
+				}
+				//TODO make proper debug flag in system vars!!
+				//TODO search and destroy the console.log
+				
+				ObfuscatorNameSpace.Obfuscator.prototype._genValidWordReplacement = function _genValidWordReplacement()
+				{
+					var replacementWord;
+					
+					do
+					{
+						replacementWord = this._genWordReplacement();
+					} while(
+						this._unmappedWordsMap[replacementWord] ||
+						this._wordMap[replacementWord] ||
+						this._ignoreMap[replacementWord]
+					);
+					
+					return replacementWord;
+				}
+				
+				
+				
+				ObfuscatorNameSpace.Obfuscator.prototype._genWordReplacement = function _genWordReplacement()
+				{
+					var word = '';
+					var currentCount = this._nextWordCount;
+					
+					var temp = currentCount % 52;//TODO rename temp to something better!
+					if(temp < 26)
+						word += String.fromCharCode(currentCount % 26 + 97);
+					else
+						word += String.fromCharCode(currentCount % 26 + 65);
+						
+					currentCount = Math.floor(currentCount/52);
+						
+					while(currentCount)
+					{
+						--currentCount;
+						
+						var temp = currentCount % 52;
+						if(temp < 26)
+							word += String.fromCharCode(currentCount % 26 + 97);
+						else
+							word += String.fromCharCode(currentCount % 26 + 65);
+						//TODO 0-9?
+							
+						currentCount = Math.floor(currentCount/52);
+					}
+					
+					++this._nextWordCount;
+					
+					return word;
+				}
+				
+
+				//Obfuscator///////////////////////////////////////////////////////
+				///////////////////////////////////////////////////////////////////
+			}
+			
+			declareObfuscatorCode();
+			var obf = new ObfuscatorNameSpace.Obfuscator();
+			obf.addSrc(declareObfuscatorCode.toString());
+			obf.registerNamespace('ObfuscatorNameSpace');
+			obf.run();
+			var code1 = obf.getObfuscatedCode();
+			console.log('\n\n' + code1);
+			
+			eval(code1);
+					
+			
+			
+			/*
+			console.log('\n\n' + code1);
+			
+			eval(code1);
+			*/
+			
+			var scriptCode = 
+				obf.getObfuscatedName('declareObfuscatorCode') + '();\n' +
+				'var obf2 = new ' + obf.getObfuscatedName('ObfuscatorNameSpace') + '.' + obf.getObfuscatedName('Obfuscator') + '();\n' +
+				'obf2.' + obf.getObfuscatedName('addSrc') + '(declareObfuscatorCode.toString());\n' +
+				'obf2.' + obf.getObfuscatedName('registerNamespace') + '(\'ObfuscatorNameSpace\');\n' +
+				'obf2.' + obf.getObfuscatedName('run') + '();\n' +
+				'var code2 = obf2.' + obf.getObfuscatedName('getObfuscatedCode') + '();\n'
+			;
+			console.log("Executing code: \n" + scriptCode);
+			
+			Ba();
+			var obf2 = new a.c();
+			obf2.La(declareObfuscatorCode.toString());
+			obf2.o('ObfuscatorNameSpace');
+			obf2.Qa();
+			var code2 = obf2.ta();
+			
+			eval(scriptCode);
+			
+			console.log('\n\n' + code2);
+			
+			/*for(var i = 0; i < 10000; ++i)
+			{
+				console.log(obf._genWordReplacement());
+			}*/
+			
+		</script>
+	</body>
+</html>
