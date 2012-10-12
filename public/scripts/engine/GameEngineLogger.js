@@ -22,8 +22,10 @@
 GameAssert = function GameAssert(expression, message)
 {
 	if(!expression)
+	{
 		throw new Error("Assert failed: '" + message + "'");
-}
+	}
+};
 
 
 GameEngineLib.logger = {};
@@ -68,8 +70,8 @@ GameEngineLib.logger.createMsgType = function(inType, inFullPathDefault)
 				+ (GameSystemVars.Network.isServer?"\n":"")
 			);
 		}
-	}
-}
+	};
+};
 //TODO rename this GameLogger
 GameEngineLib.logger.info = GameEngineLib.logger.createMsgType("INFO");
 GameEngineLib.logger.warn = GameEngineLib.logger.createMsgType("WARNING", true);
@@ -82,6 +84,6 @@ GameEngineLib.addDebugInfo = function(className, instance, private)
 	var propertyName;
 	
 	propertyName = "super_" + className;
-	instance[propertyName] = instance[propertyName] || {}
+	instance[propertyName] = instance[propertyName] || {};
 	instance[propertyName].debug_private = private;
-}
+};

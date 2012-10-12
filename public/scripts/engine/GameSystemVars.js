@@ -38,7 +38,7 @@ GameSystemVars = //TODO rename as GameSystemSettings
 	Graphics :
 	{
 		initWidth : 768,
-		initHeight : 512,
+		initHeight : 512
 		//use 3d?
 	},
 	

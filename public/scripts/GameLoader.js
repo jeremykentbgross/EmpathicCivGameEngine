@@ -42,7 +42,7 @@ GameLoader =
 			include = function(filename)
 			{
 				require([filename, "dojo/domReady"]);
-			}
+			};
 		}
 		else
 		{
@@ -68,7 +68,9 @@ GameLoader =
 		GameSystemVars.Network.isServer = inIsServer;
 		
 		if(inIsServer && !GameSystemVars.Network.isMultiplayer)
+		{
 			return;
+		}
 		
 		//Global Game Objects
 		GameEngineLib = {};
@@ -87,18 +89,23 @@ GameLoader =
 					function()
 					{
 						var test;
+						var i;
 						console.log("\n************************");
 						console.log("***Running Unit Tests***");
-						for(var i = 0; i < this.tests.length; ++i)
+						for(i = 0; i < this.tests.length; ++i)
 						{
 							test = this.tests[i];
 							console.log("\nRunning Test: " + test.testName);
 							try
 							{
 								if(!test())
-									GameEngineLib.logger.error("Failed Test: " + test.testName);//console.log("Failed Test: " + test.testName + "\n");
+								{
+									GameEngineLib.logger.error("Failed Test: " + test.testName);
+								}
 								else
+								{
 									console.log("Passed Test: " + test.testName);
+								}
 							}
 							catch(error)
 							{
