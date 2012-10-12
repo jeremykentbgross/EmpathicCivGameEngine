@@ -19,14 +19,14 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.createGameFrameWork = function(instance, private)
+GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 {
 	instance = instance || {};
-	private = private || {};
+	PRIVATE = PRIVATE || {};
 	
 	if(GameSystemVars.DEBUG)
 	{
-		GameEngineLib.addDebugInfo("GameFrameWork", instance, private);
+		GameEngineLib.addDebugInfo("GameFrameWork", instance, PRIVATE);
 	}
 	
 	//////////////////////////////////////////////////
@@ -77,10 +77,10 @@ GameEngineLib.createGameFrameWork = function(instance, private)
 	instance.UpdateOrder = [];
 	
 	//the app is running or not
-	private.running = true;
+	PRIVATE.running = true;
 	
 
-	private.init = function()
+	PRIVATE.init = function()
 	{		
 		//////////////////////////////////////////////////
 		//Init frame times////////////////////////////////
@@ -179,7 +179,7 @@ GameEngineLib.createGameFrameWork = function(instance, private)
 	
 	
 	
-	private.update = function(time)
+	PRIVATE.update = function(time)
 	{		
 		var aveDt = instance.GameTimer.update(time);
 		
@@ -195,8 +195,8 @@ GameEngineLib.createGameFrameWork = function(instance, private)
 			instance.Graphics.render(instance.GameRules);
 		
 		//loop by sending browser event to queue a call to this function again
-		if(private.running)
-			requestAnimFrame(private.update);
+		if(PRIVATE.running)
+			requestAnimFrame(PRIVATE.update);
 		//else shut down?
 	}
 	///////////////////////////////////////////////////
@@ -209,9 +209,9 @@ GameEngineLib.createGameFrameWork = function(instance, private)
 	{
 		try
 		{
-			if(private.init())
+			if(PRIVATE.init())
 			{
-				requestAnimFrame(private.update);
+				requestAnimFrame(PRIVATE.update);
 			}
 			else
 			{
@@ -226,7 +226,7 @@ GameEngineLib.createGameFrameWork = function(instance, private)
 	
 	instance.exit = function()
 	{
-		private.running = false;
+		PRIVATE.running = false;
 		//TODO clean everything?
 	}
 	

@@ -21,10 +21,10 @@
 
 //todo make this a GameObject also!!
 //todo rename game rules
-GameLib.createGameRules = function(instance, private)
+GameLib.createGameRules = function(instance, PRIVATE)
 {
 	instance = instance || {};
-	private = private || {};
+	PRIVATE = PRIVATE || {};
 	
 	//todo add debug info
 		
@@ -40,8 +40,8 @@ GameLib.createGameRules = function(instance, private)
 		var mapSizeInTiles = 16;
 		var tileSize = 64;
 		var minPhysicsPartitionSize = 8;
-		private.GameWorld = GameEngineLib.Game2DWorld.create();
-		private.GameWorld.init(
+		PRIVATE.GameWorld = GameEngineLib.Game2DWorld.create();
+		PRIVATE.GameWorld.init(
 			mapSizeInTiles
 			,tileSize
 			,minPhysicsPartitionSize
@@ -86,7 +86,7 @@ GameLib.createGameRules = function(instance, private)
 		);
 		//TODO wait until it is loaded to set somehow? or make streaming work properly with scene graph
 		
-		var map = private.GameWorld.getMap();
+		var map = PRIVATE.GameWorld.getMap();
 		map.setTileSet(tileset);
 		
 		//hack put something in the map to start with
@@ -98,38 +98,38 @@ GameLib.createGameRules = function(instance, private)
 		
 		//TODO test removing components on button preass??
 		//TODO test adding components and world in different orders
-		private.entity1 = GameEngineLib.GameEntity.create();
-		private.entity1Sprite = GameEngineLib.EntityComponent_Sprite.create();
-		private.entity1Sprite.init();
-		private.entity1.addComponent(private.entity1Sprite);
-		private.entity1Input = GameEngineLib.EntityComponent_Input.create();
-		private.entity1.addComponent(private.entity1Input);
-		private.entity1Physics = GameEngineLib.EntityComponent_2DPhysics.create();
-		private.entity1.addComponent(private.entity1Physics);
-		private.entity1Camera = GameEngineLib.EntityComponent_2DCamera.create();
-		private.entity1Camera.init(
+		PRIVATE.entity1 = GameEngineLib.GameEntity.create();
+		PRIVATE.entity1Sprite = GameEngineLib.EntityComponent_Sprite.create();
+		PRIVATE.entity1Sprite.init();
+		PRIVATE.entity1.addComponent(PRIVATE.entity1Sprite);
+		PRIVATE.entity1Input = GameEngineLib.EntityComponent_Input.create();
+		PRIVATE.entity1.addComponent(PRIVATE.entity1Input);
+		PRIVATE.entity1Physics = GameEngineLib.EntityComponent_2DPhysics.create();
+		PRIVATE.entity1.addComponent(PRIVATE.entity1Physics);
+		PRIVATE.entity1Camera = GameEngineLib.EntityComponent_2DCamera.create();
+		PRIVATE.entity1Camera.init(
 			//GameInstance.Graphics.getWidth(),
 			//GameInstance.Graphics.getHeight()
 		);//TODO get the size from somewhere and not hardcode it
-		private.entity1.addComponent(private.entity1Camera);
+		PRIVATE.entity1.addComponent(PRIVATE.entity1Camera);
 		
-		private.GameWorld.addEntity(private.entity1);
-		private.GameWorld.setCamera(private.entity1Camera);//TODO comment out and fix default camera
+		PRIVATE.GameWorld.addEntity(PRIVATE.entity1);
+		PRIVATE.GameWorld.setCamera(PRIVATE.entity1Camera);//TODO comment out and fix default camera
 		
 		if(!GameSystemVars.Network.isServer)
-			GameInstance.Input.registerListener("Input", private);
+			GameInstance.Input.registerListener("Input", PRIVATE);
 		
-		private.onIdentifiedUser = function(inEvent)
+		PRIVATE.onIdentifiedUser = function(inEvent)
 		{
 			GameEngineLib.logger.info("setting owner for physics component: " + inEvent.user.userName );
-			private.entity1Physics.setNetOwner(inEvent.user.userID);
+			PRIVATE.entity1Physics.setNetOwner(inEvent.user.userID);
 		}
 		
 		if(GameSystemVars.Network.isMultiplayer)
 		{
 			GameInstance.Network.registerListener(
 				"IdentifiedUser",
-				private
+				PRIVATE
 			);
 		}
 		
@@ -147,7 +147,7 @@ GameLib.createGameRules = function(instance, private)
 						'&' : '&amp;'
 					};
 					
-					private.state = domConstruct.create(
+					PRIVATE.state = domConstruct.create(
 	    				"p",
 	    				{
 	    					id : "status",
@@ -157,7 +157,7 @@ GameLib.createGameRules = function(instance, private)
 						chat_container
 					);
 					
-					private.form = domConstruct.create(
+					PRIVATE.form = domConstruct.create(
 	    				"form",
 	    				{
 	    					id : "chat_form",
@@ -167,7 +167,7 @@ GameLib.createGameRules = function(instance, private)
 						chat_container
 					);
 					
-					private.chat = domConstruct.create(
+					PRIVATE.chat = domConstruct.create(
 	    				"input",
 	    				{
 	    					id : "chat",
@@ -175,10 +175,10 @@ GameLib.createGameRules = function(instance, private)
 	    					type : "text",
 	    					placeholder : "type and press enter to chat"
 						},
-						private.form
+						PRIVATE.form
 					);
 					
-					private.log = domConstruct.create(
+					PRIVATE.log = domConstruct.create(
 	    				"ul",
 	    				{
 	    					id : "log"
@@ -187,24 +187,24 @@ GameLib.createGameRules = function(instance, private)
 						chat_container
 					);
 					
-					private.onChatSubmit = function(event)
+					PRIVATE.onChatSubmit = function(event)
 					{
 						event.preventDefault();
 						
 						GameInstance.Network.sendMessage(
-							private.chat.value,
+							PRIVATE.chat.value,
 							//sentListener:
 							{
 								onSent : function(inData)
 								{
-									private.sendChatToChatLog(private.chat.value);
-									private.chat.value = '';
+									PRIVATE.sendChatToChatLog(PRIVATE.chat.value);
+									PRIVATE.chat.value = '';
 								}
 							}
 						);
 					}
 					
-					private.sendChatToChatLog = function(inMessage)
+					PRIVATE.sendChatToChatLog = function(inMessage)
 					{
 						//todo remove the the oldest one
 						var msg = domConstruct.create(
@@ -217,41 +217,41 @@ GameLib.createGameRules = function(instance, private)
 									)
 								//TODO css class
 							},
-							private.log
+							PRIVATE.log
 							,"first"
 						);
 					}
 					
-					on(private.form, 'submit', private.onChatSubmit);
+					on(PRIVATE.form, 'submit', PRIVATE.onChatSubmit);
 				}
 			);
-			private.onConnectedToServer = function(inEvent)
+			PRIVATE.onConnectedToServer = function(inEvent)
 			{
 				//TODO remove the UI stuff from this class?
-				private.state.className = 'success';//TODO classname css!! (more in this file)
-				private.state.innerHTML = 'Socket Open';
+				PRIVATE.state.className = 'success';//TODO classname css!! (more in this file)
+				PRIVATE.state.innerHTML = 'Socket Open';
 			}
 			GameInstance.Network.registerListener(
 				"ConnectedToServer",
-				private
+				PRIVATE
 			);
-			private.onDisconnectedFromServer = function(inEvent)
+			PRIVATE.onDisconnectedFromServer = function(inEvent)
 			{
 				//TODO remove the UI stuff from this class?
-				private.state.className = 'fail';//TODO classname css!! (more in this file)
-				private.state.innerHTML = 'Socket Closed';
+				PRIVATE.state.className = 'fail';//TODO classname css!! (more in this file)
+				PRIVATE.state.innerHTML = 'Socket Closed';
 			}
 			GameInstance.Network.registerListener(
 				"DisconnectedFromServer",
-				private
+				PRIVATE
 			);
-			private.onMsg = function(inEvent)
+			PRIVATE.onMsg = function(inEvent)
 			{
-				private.sendChatToChatLog(inEvent.msg);
+				PRIVATE.sendChatToChatLog(inEvent.msg);
 			}
 			GameInstance.Network.registerListener(
 				"Msg",
-				private
+				PRIVATE
 			);
 		}
 		
@@ -267,20 +267,20 @@ GameLib.createGameRules = function(instance, private)
 	instance.render = function(inCanvas2DContext)
 	{
 		//choose items to render
-		private.GameWorld.render(inCanvas2DContext)
+		PRIVATE.GameWorld.render(inCanvas2DContext)
 	};
 	
 	
 	
 	//TODO maybe this should be in an editor or something
-	private.onInput = function(inInputEvent)
+	PRIVATE.onInput = function(inInputEvent)
 	{				
-		var map = private.GameWorld.getMap();
-		var camPoint = private.GameWorld.getCurrentCamera().getRect().getLeftTop();
+		var map = PRIVATE.GameWorld.getMap();
+		var camPoint = PRIVATE.GameWorld.getCurrentCamera().getRect().getLeftTop();
 		var mouseWorldPosition;
 				
-		if(private.drawTile === undefined)
-			private.drawTile = 0;
+		if(PRIVATE.drawTile === undefined)
+			PRIVATE.drawTile = 0;
 		
 		if(inInputEvent.keysPressed["o"])
 		{
@@ -296,23 +296,23 @@ GameLib.createGameRules = function(instance, private)
 		}
 		if(inInputEvent.keysPressed["0"])
 		{
-			private.drawTile = 0;
+			PRIVATE.drawTile = 0;
 		}
 		if(inInputEvent.keysPressed["1"])
 		{
-			private.drawTile = 1;
+			PRIVATE.drawTile = 1;
 		}
 		if(inInputEvent.keysPressed["2"])
 		{
-			private.drawTile = 2;
+			PRIVATE.drawTile = 2;
 		}
 		if(inInputEvent.keysPressed["3"])
 		{
-			private.drawTile = 3;
+			PRIVATE.drawTile = 3;
 		}
 		if(inInputEvent.keysPressed["4"])
 		{
-			private.drawTile = 4;
+			PRIVATE.drawTile = 4;
 		}
 		
 		if(inInputEvent.buttons[2])
@@ -329,7 +329,7 @@ GameLib.createGameRules = function(instance, private)
 			map.setTile(
 				map.toTileCoordinate(mouseWorldPosition.myX),
 				map.toTileCoordinate(mouseWorldPosition.myY),
-				private.drawTile
+				PRIVATE.drawTile
 			);
 		}
 		

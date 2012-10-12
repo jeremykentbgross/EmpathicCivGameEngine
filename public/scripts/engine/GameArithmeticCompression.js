@@ -94,115 +94,115 @@ GameEngineLib.GameArithmeticCompressionModels.createEvenProbabilityIntegerRangeM
 GameEngineLib.createGameArithmeticCompression = function()
 {
 	var instance = {};
-	var private = {};
+	var PRIVATE = {};
 	
 	if(GameSystemVars.DEBUG)
 	{
-		GameEngineLib.addDebugInfo("GameArithmeticCompression", instance, private);
+		GameEngineLib.addDebugInfo("GameArithmeticCompression", instance, PRIVATE);
 	}
 	
-	private.bitPacker = GameEngineLib.createGameBitPacker();
+	PRIVATE.bitPacker = GameEngineLib.createGameBitPacker();
 	
-	private.BITS = 32;//16;
-	private.ONE = Math.pow(2, private.BITS);						//(2^16bits) - 1 == 65535 == 0xffff:
-	private.QUARTER = (private.ONE) / 4;							//16384 == 0x4000://SMSB (Second most Significant bit)
-	private.HALF = 2 * private.QUARTER;								//32768 == 0x8000	//MSB (Most Significant bit)
-	private.THREEQUARTERS = private.HALF + private.QUARTER;	//49152 == 0xC000	//SMSB + MSB
+	PRIVATE.BITS = 32;//16;
+	PRIVATE.ONE = Math.pow(2, PRIVATE.BITS);						//(2^16bits) - 1 == 65535 == 0xffff:
+	PRIVATE.QUARTER = (PRIVATE.ONE) / 4;							//16384 == 0x4000://SMSB (Second most Significant bit)
+	PRIVATE.HALF = 2 * PRIVATE.QUARTER;								//32768 == 0x8000	//MSB (Most Significant bit)
+	PRIVATE.THREEQUARTERS = PRIVATE.HALF + PRIVATE.QUARTER;	//49152 == 0xC000	//SMSB + MSB
 	
-	private.high = private.ONE - 1;
-	private.low = 0;
-	private.underflow_bits = 0;
-	private.encoded = 0;
+	PRIVATE.high = PRIVATE.ONE - 1;
+	PRIVATE.low = 0;
+	PRIVATE.underflow_bits = 0;
+	PRIVATE.encoded = 0;
 	
 	
 	instance.getString = function()
 	{
-		++private.underflow_bits;
-		if(private.low < private.QUARTER)
+		++PRIVATE.underflow_bits;
+		if(PRIVATE.low < PRIVATE.QUARTER)
 		{
-			private.bitPacker.pack(0, 1);	//write lowMSB (low & 0x8000)
-			while(private.underflow_bits > 0)
+			PRIVATE.bitPacker.pack(0, 1);	//write lowMSB (low & 0x8000)
+			while(PRIVATE.underflow_bits > 0)
 			{
-				private.bitPacker.pack(1, 1);	//write ~lowMSB (~low & 0x8000)
-				--private.underflow_bits;
+				PRIVATE.bitPacker.pack(1, 1);	//write ~lowMSB (~low & 0x8000)
+				--PRIVATE.underflow_bits;
 			}
 		}
 		else
 		{
-			private.bitPacker.pack(1, 1);	//write lowMSB (low & 0x8000)
-			while(private.underflow_bits > 0)
+			PRIVATE.bitPacker.pack(1, 1);	//write lowMSB (low & 0x8000)
+			while(PRIVATE.underflow_bits > 0)
 			{
-				private.bitPacker.pack(0, 1);	//write ~lowMSB (~low & 0x8000)
-				--private.underflow_bits;
+				PRIVATE.bitPacker.pack(0, 1);	//write ~lowMSB (~low & 0x8000)
+				--PRIVATE.underflow_bits;
 			}
 		}
 		
-		return private.bitPacker.getString();
+		return PRIVATE.bitPacker.getString();
 	}
 	
 	
 	instance.setString = function(inString)
 	{
-		private.bitPacker.setString(inString);
+		PRIVATE.bitPacker.setString(inString);
 		
-		private.high = private.ONE - 1;
-		private.low = 0;
-		private.underflow_bits = 0;
-		private.encoded = 0;
+		PRIVATE.high = PRIVATE.ONE - 1;
+		PRIVATE.low = 0;
+		PRIVATE.underflow_bits = 0;
+		PRIVATE.encoded = 0;
 		
-		for(var i = 0; i < private.BITS; ++i)
+		for(var i = 0; i < PRIVATE.BITS; ++i)
 		{
-			private.encoded = private.encoded * 2 + private.bitPacker.unpack(1);
+			PRIVATE.encoded = PRIVATE.encoded * 2 + PRIVATE.bitPacker.unpack(1);
 		}
 	}
 	
 	
 	instance.encode = function(value, inModel)
 	{
-		var encodeRange = (private.high - private.low) + 1;
+		var encodeRange = (PRIVATE.high - PRIVATE.low) + 1;
 		
 		var valueRange = inModel.getProbabilityRange(value);
 		
-		private.high = Math.floor(private.low + encodeRange * valueRange.high - 1);
-		private.low = Math.floor(private.low + encodeRange * valueRange.low);
+		PRIVATE.high = Math.floor(PRIVATE.low + encodeRange * valueRange.high - 1);
+		PRIVATE.low = Math.floor(PRIVATE.low + encodeRange * valueRange.low);
 		
-		for(var loops = 0; loops < private.BITS; ++loops)
+		for(var loops = 0; loops < PRIVATE.BITS; ++loops)
 		{
 			/*
 			The first two cases are a combination of one:
 			if((high & 0x8000) == (low & 0x8000))
 			*/
-			if(private.high < private.HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 0
+			if(PRIVATE.high < PRIVATE.HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 0
 			{
-				private.bitPacker.pack(0, 1);	//write lowMSB (low & 0x8000)
-				while(private.underflow_bits > 0)
+				PRIVATE.bitPacker.pack(0, 1);	//write lowMSB (low & 0x8000)
+				while(PRIVATE.underflow_bits > 0)
 				{
-					private.bitPacker.pack(1, 1);	//write ~lowMSB (~low & 0x8000)
-					--private.underflow_bits;
+					PRIVATE.bitPacker.pack(1, 1);	//write ~lowMSB (~low & 0x8000)
+					--PRIVATE.underflow_bits;
 				}
 			}
-			else if(private.low >= private.HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 1
+			else if(PRIVATE.low >= PRIVATE.HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 1
 			{
-				private.bitPacker.pack(1, 1);	//write lowMSB (low & 0x8000)
-				while(private.underflow_bits > 0)
+				PRIVATE.bitPacker.pack(1, 1);	//write lowMSB (low & 0x8000)
+				while(PRIVATE.underflow_bits > 0)
 				{
-					private.bitPacker.pack(0, 1);	//write ~lowMSB (~low & 0x8000)
-					--private.underflow_bits;
+					PRIVATE.bitPacker.pack(0, 1);	//write ~lowMSB (~low & 0x8000)
+					--PRIVATE.underflow_bits;
 				}
 				
 				//remove MSB
-				private.low -= private.HALF;
-				private.high -= private.HALF;
+				PRIVATE.low -= PRIVATE.HALF;
+				PRIVATE.high -= PRIVATE.HALF;
 			}
 			/*
 			Third case is really this:
 			else if((low & 0x4000) && !(high & 0x4000))//SMSB low and not SMSB high
 			*/
-			else if(private.low >= private.QUARTER && private.high <= private.THREEQUARTERS)
+			else if(PRIVATE.low >= PRIVATE.QUARTER && PRIVATE.high <= PRIVATE.THREEQUARTERS)
 			{
-				++private.underflow_bits;
-				private.low -= private.QUARTER;	//low &= 0x3fff; remove SMSB
-				private.high -= private.QUARTER;	//high |= 0x4000;	(borrows from MSB)
+				++PRIVATE.underflow_bits;
+				PRIVATE.low -= PRIVATE.QUARTER;	//low &= 0x3fff; remove SMSB
+				PRIVATE.high -= PRIVATE.QUARTER;	//high |= 0x4000;	(borrows from MSB)
 			}
 			else
 			{
@@ -210,10 +210,10 @@ GameEngineLib.createGameArithmeticCompression = function()
 			}
 			
 			//low <<= 1;
-			private.low = (2 * private.low) % private.ONE;
+			PRIVATE.low = (2 * PRIVATE.low) % PRIVATE.ONE;
 			//high <<= 1;
 			//high |= 1;
-			private.high = (2 * private.high + 1) % private.ONE;
+			PRIVATE.high = (2 * PRIVATE.high + 1) % PRIVATE.ONE;
 		}
 		
 		GameEngineLib.logger.error("Encode failed!");
@@ -222,8 +222,8 @@ GameEngineLib.createGameArithmeticCompression = function()
 	
 	instance.decode = function(inModel)
 	{
-		var encodeRange = (private.high - private.low) + 1;
-		var probability = (private.encoded - private.low) / encodeRange;
+		var encodeRange = (PRIVATE.high - PRIVATE.low) + 1;
+		var probability = (PRIVATE.encoded - PRIVATE.low) / encodeRange;
 		
 		if((probability > 1 || probability < 0))
 		{
@@ -233,33 +233,33 @@ GameEngineLib.createGameArithmeticCompression = function()
 		
 		var valueRange = inModel.getValueFromProbability(probability);
 		
-		private.high = Math.floor(private.low + encodeRange * valueRange.high - 1);
-		private.low = Math.floor(private.low + encodeRange * valueRange.low);
+		PRIVATE.high = Math.floor(PRIVATE.low + encodeRange * valueRange.high - 1);
+		PRIVATE.low = Math.floor(PRIVATE.low + encodeRange * valueRange.low);
 		
-		for(var loops = 0; loops < private.BITS; ++loops)
+		for(var loops = 0; loops < PRIVATE.BITS; ++loops)
 		{
 			/*
 			if((high & 0x8000) == (low & 0x8000))
 			*/
-			if(private.high < private.HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 0
+			if(PRIVATE.high < PRIVATE.HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 0
 			{
 			}
-			else if(private.low >= private.HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 1
+			else if(PRIVATE.low >= PRIVATE.HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 1
 			{
 				//remove MSB
-				private.encoded -= private.HALF;
-				private.low -= private.HALF;
-				private.high -= private.HALF;
+				PRIVATE.encoded -= PRIVATE.HALF;
+				PRIVATE.low -= PRIVATE.HALF;
+				PRIVATE.high -= PRIVATE.HALF;
 			}
 			/*
 			Third case is really this:
 			else if((low & 0x4000) && !(high & 0x4000))//SMSB low and not SMSB high
 			*/
-			else if(private.low >= private.QUARTER && private.high <= private.THREEQUARTERS)
+			else if(PRIVATE.low >= PRIVATE.QUARTER && PRIVATE.high <= PRIVATE.THREEQUARTERS)
 			{
-				private.encoded -= private.QUARTER;
-				private.low -= private.QUARTER;	//low &= 0x3fff; remove SMSB
-				private.high -= private.QUARTER;	//high |= 0x4000;	(borrows from MSB)
+				PRIVATE.encoded -= PRIVATE.QUARTER;
+				PRIVATE.low -= PRIVATE.QUARTER;	//low &= 0x3fff; remove SMSB
+				PRIVATE.high -= PRIVATE.QUARTER;	//high |= 0x4000;	(borrows from MSB)
 			}
 			else
 			{
@@ -267,12 +267,12 @@ GameEngineLib.createGameArithmeticCompression = function()
 			}
 			
 			//low <<= 1;
-			private.low = (2 * private.low) % private.ONE;
+			PRIVATE.low = (2 * PRIVATE.low) % PRIVATE.ONE;
 			//high <<= 1;
 			//high |= 1;
-			private.high = (2 * private.high + 1) % private.ONE;
+			PRIVATE.high = (2 * PRIVATE.high + 1) % PRIVATE.ONE;
 			//(encoded << 1) | inBit
-			private.encoded = (2 * private.encoded + private.bitPacker.unpack(1)) % private.ONE;
+			PRIVATE.encoded = (2 * PRIVATE.encoded + PRIVATE.bitPacker.unpack(1)) % PRIVATE.ONE;
 		}
 		
 		GameEngineLib.logger.error("Did not resolve decoding a symbol before we exceeded the bits it could have fit in!");

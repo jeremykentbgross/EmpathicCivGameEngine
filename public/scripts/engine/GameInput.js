@@ -20,25 +20,25 @@
 */
 
 
-GameEngineLib.createInput = function(instance, private)
+GameEngineLib.createInput = function(instance, PRIVATE)
 {
 	instance = instance || {};
-	private = private || {};
+	PRIVATE = PRIVATE || {};
 	
 	GameEngineLib.createEventSystem(instance);
 	
 	if(GameSystemVars.DEBUG)
 	{
-		GameEngineLib.addDebugInfo("GameInput", instance, private);
+		GameEngineLib.addDebugInfo("GameInput", instance, PRIVATE);
 	}
 	
-	private.mouseLoc = GameEngineLib.createGame2DPoint(0, 0);
-	private.keys = {};
-	private.keysPressed = {};
-	private.buttons = {};
-	private.active = false;
+	PRIVATE.mouseLoc = GameEngineLib.createGame2DPoint(0, 0);
+	PRIVATE.keys = {};
+	PRIVATE.keysPressed = {};
+	PRIVATE.buttons = {};
+	PRIVATE.active = false;
 	
-	private.input = function(inEvent)
+	PRIVATE.input = function(inEvent)
 	{		
 		var eventType = inEvent.type;
 				
@@ -47,21 +47,21 @@ GameEngineLib.createInput = function(instance, private)
 			case 'keydown':
 			case 'keyup':
 				var key = String.fromCharCode(inEvent.keyCode);
-				private.keys[key] = (eventType === 'keydown');
+				PRIVATE.keys[key] = (eventType === 'keydown');
 				break;
 				
 			case 'keypress':
 				var key = String.fromCharCode(inEvent.keyCode);
-				private.keysPressed[key] = true;
+				PRIVATE.keysPressed[key] = true;
 				break;
 				
 			case 'mousedown':
 			case 'mouseup':
-				private.buttons[inEvent.button] = (eventType === 'mousedown');
+				PRIVATE.buttons[inEvent.button] = (eventType === 'mousedown');
 				//dont break so it falls thru
 			case 'mousemove':
-				private.mouseLoc.myX = inEvent.offsetX;
-				private.mouseLoc.myY = inEvent.offsetY;
+				PRIVATE.mouseLoc.myX = inEvent.offsetX;
+				PRIVATE.mouseLoc.myY = inEvent.offsetY;
 				break;
 			/*
 			case 'mousewheel':
@@ -77,22 +77,22 @@ GameEngineLib.createInput = function(instance, private)
 				break;
 			*/	
 			case 'mouseout':
-				private.active = false;
+				PRIVATE.active = false;
 				break;
 				
 			case 'mouseover':
-				private.active = true;
+				PRIVATE.active = true;
 				break;
 			
 			default:
 				break;
 		}
 		
-		if(private.active === false)
+		if(PRIVATE.active === false)
 		{
-			private.keys = {};
-			private.keysPressed = {};
-			private.buttons = {};
+			PRIVATE.keys = {};
+			PRIVATE.keysPressed = {};
+			PRIVATE.buttons = {};
 		}
 	}
 	
@@ -106,23 +106,23 @@ GameEngineLib.createInput = function(instance, private)
 			function(on)
 			{
 				//keys:
-				on(document, "keydown", private.input);
-				on(document, "keyup", private.input);
-				on(document, "keypress", private.input);
+				on(document, "keydown", PRIVATE.input);
+				on(document, "keyup", PRIVATE.input);
+				on(document, "keypress", PRIVATE.input);
 								
 				//mouse:
-				on(inCanvas, "mousedown", private.input);
-				on(inCanvas, "mouseup", private.input);
-				on(inCanvas, "mousemove", private.input);
+				on(inCanvas, "mousedown", PRIVATE.input);
+				on(inCanvas, "mouseup", PRIVATE.input);
+				on(inCanvas, "mousemove", PRIVATE.input);
 				
 				/*
 				//currently unused:
-				on(inCanvas, "mousewheel", private.input);
-				on(inCanvas, "click", private.input);
-				on(inCanvas, "dblclick", private.input);*/
+				on(inCanvas, "mousewheel", PRIVATE.input);
+				on(inCanvas, "click", PRIVATE.input);
+				on(inCanvas, "dblclick", PRIVATE.input);*/
 				
-				on(inCanvas, "mouseout", private.input);
-				on(inCanvas, "mouseover", private.input);
+				on(inCanvas, "mouseout", PRIVATE.input);
+				on(inCanvas, "mouseover", PRIVATE.input);
 								
 				//prevent right click menu on the render area
 				on(inCanvas, "contextmenu", function(event){ event.preventDefault(); } );
@@ -147,21 +147,21 @@ GameEngineLib.createInput = function(instance, private)
 		if(GameSystemVars.DEBUG)
 		{
 			inputString = "Input: " +
-				(private.active ? "Active" : "Inactive" ) + 
-				" X:" + private.mouseLoc.myX + " Y:" + private.mouseLoc.myY + " ";
-			for(i in private.buttons)
+				(PRIVATE.active ? "Active" : "Inactive" ) + 
+				" X:" + PRIVATE.mouseLoc.myX + " Y:" + PRIVATE.mouseLoc.myY + " ";
+			for(i in PRIVATE.buttons)
 			{
-				if(private.buttons[i])
+				if(PRIVATE.buttons[i])
 					inputString += "MB" + i + " ";
 			}
-			for(i in private.keys)
+			for(i in PRIVATE.keys)
 			{
-				if(private.keys[i])
+				if(PRIVATE.keys[i])
 					inputString += "'" + i + "' (" + i.charCodeAt(0) + ") ";
 			}
-			for(i in private.keysPressed)
+			for(i in PRIVATE.keysPressed)
 			{
-				if(private.keysPressed[i])
+				if(PRIVATE.keysPressed[i])
 					inputString += "'" + i + "' (" + i.charCodeAt(0) + ") ";
 			}
 			//todo clicks and wheel
@@ -174,7 +174,7 @@ GameEngineLib.createInput = function(instance, private)
 			{
 				GameInstance.Graphics.drawDebugText(
 					inputString,
-					(private.active ?
+					(PRIVATE.active ?
 						GameSystemVars.Debug.Input_Active_DrawColor :
 						GameSystemVars.Debug.Input_Inactive_DrawColor
 					)
@@ -188,27 +188,27 @@ GameEngineLib.createInput = function(instance, private)
 			keys : {},
 			keysPressed : {},
 			buttons : {},
-			mouseLoc : GameEngineLib.createGame2DPoint(private.mouseLoc.myX, private.mouseLoc.myY)
+			mouseLoc : GameEngineLib.createGame2DPoint(PRIVATE.mouseLoc.myX, PRIVATE.mouseLoc.myY)
 		}
 		
-		//copy the values from private individually so my internal data cannot be changed by users
-		for(i in private.keys)
+		//copy the values from PRIVATE individually so my internal data cannot be changed by users
+		for(i in PRIVATE.keys)
 		{
-			event.keys[i] = private.keys[i];
+			event.keys[i] = PRIVATE.keys[i];
 		}
-		for(i in private.keysPressed)
+		for(i in PRIVATE.keysPressed)
 		{
-			event.keysPressed[i] = private.keysPressed[i];
+			event.keysPressed[i] = PRIVATE.keysPressed[i];
 		}
-		for(i in private.buttons)
+		for(i in PRIVATE.buttons)
 		{
-			event.buttons[i] = private.buttons[i];
+			event.buttons[i] = PRIVATE.buttons[i];
 		}
 		
 		//send messages for all the listeners for input
 		this.onEvent(event);
 		
-		private.keysPressed = {};
+		PRIVATE.keysPressed = {};
 	}
 	
 	return instance;

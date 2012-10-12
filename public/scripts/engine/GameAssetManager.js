@@ -19,12 +19,12 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.createGameAssetManager = function(instance, private)
+GameEngineLib.createGameAssetManager = function(instance, PRIVATE)
 {
 	instance = instance || {};
-	private = private || {};
+	PRIVATE = PRIVATE || {};
 	
-	private.images = {};
+	PRIVATE.images = {};
 	
 	//TODO make pink say: "loading/missing asset"
 	
@@ -33,7 +33,7 @@ GameEngineLib.createGameAssetManager = function(instance, private)
 		var imageInfo;
 		var i;
 		
-		imageInfo = private.images[inFileName];
+		imageInfo = PRIVATE.images[inFileName];
 		
 		if(imageInfo !== undefined)
 		{
@@ -73,7 +73,7 @@ GameEngineLib.createGameAssetManager = function(instance, private)
 			};
 			//TODO onFailedLoad? set placeholder, else have a grey or clear image for streaming
 						
-			private.images[inFileName] = imageInfo;
+			PRIVATE.images[inFileName] = imageInfo;
 			
 			//set the default image
 			outLoadTarget.image = document.images["defaultimage"];

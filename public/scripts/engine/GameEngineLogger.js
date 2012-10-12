@@ -79,11 +79,11 @@ GameEngineLib.logger.error = GameEngineLib.logger.createMsgType("ERROR", true);
 
 
 //TODO depricated!
-GameEngineLib.addDebugInfo = function(className, instance, private)
+GameEngineLib.addDebugInfo = function(className, instance, PRIVATE)
 {
 	var propertyName;
 	
 	propertyName = "super_" + className;
 	instance[propertyName] = instance[propertyName] || {};
-	instance[propertyName].debug_private = private;
+	instance[propertyName].debug_private = PRIVATE;
 };

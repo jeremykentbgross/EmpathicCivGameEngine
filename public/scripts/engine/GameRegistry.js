@@ -20,7 +20,7 @@
 */
 
 //TODO depricated
-GameEngineLib.createGameRegistry = function(instance, private)
+GameEngineLib.createGameRegistry = function(instance, PRIVATE)
 {
 	var temp = new GameEngineLib.GameRegistry();
 	instance = instance || {};

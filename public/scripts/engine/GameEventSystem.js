@@ -20,7 +20,7 @@
 */
 
 //TODO depricated:
-GameEngineLib.createEventSystem = function(instance, private)
+GameEngineLib.createEventSystem = function(instance, PRIVATE)
 {
 	var temp = new GameEngineLib.GameEventSystem();
 	instance = instance || {};

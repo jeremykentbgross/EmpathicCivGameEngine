@@ -29,7 +29,7 @@ Need to have 2 Optionals on flag or something:
 GameEngineLib.createGameBitPacker = function()
 {
 	var outPacker = {};
-	var private =
+	var PRIVATE =
 	{
 		data : [0],
 		bits : 0,
@@ -38,32 +38,32 @@ GameEngineLib.createGameBitPacker = function()
 	};
 	
 	//constants
-	private.BITCAP = 32;
-	private.MAXBITS = 6;//16;	//max bits per storage element
-	private.MAXPOW = Math.pow(2, private.MAXBITS);
-	private.POWERS = [];
+	PRIVATE.BITCAP = 32;
+	PRIVATE.MAXBITS = 6;//16;	//max bits per storage element
+	PRIVATE.MAXPOW = Math.pow(2, PRIVATE.MAXBITS);
+	PRIVATE.POWERS = [];
 	//make lookup to avoid calling Math.pow alot
-	for(var i = 1; i <= private.BITCAP; ++i)
-		private.POWERS[i] = Math.pow(2, i);
+	for(var i = 1; i <= PRIVATE.BITCAP; ++i)
+		PRIVATE.POWERS[i] = Math.pow(2, i);
 	
 	if(GameSystemVars.DEBUG)
-		GameEngineLib.addDebugInfo("bitPacker", outPacker, private);
+		GameEngineLib.addDebugInfo("bitPacker", outPacker, PRIVATE);
 	
 	outPacker.pack = function(value, bits)
 	{
 		var power;
-		var length = private.data.length;
+		var length = PRIVATE.data.length;
 		
 		if(GameSystemVars.DEBUG)
 		{
 			//TODO print warnings if out of bounds
 			bits = Math.floor(bits);
 			bits = Math.max(bits, 1);
-			bits = Math.min(bits, private.BITCAP);
+			bits = Math.min(bits, PRIVATE.BITCAP);
 		}
 		
 		//power = Math.pow(2, bits);
-		power = private.POWERS[bits];
+		power = PRIVATE.POWERS[bits];
 		
 		if(GameSystemVars.DEBUG)
 		{
@@ -73,38 +73,38 @@ GameEngineLib.createGameBitPacker = function()
 			value = Math.max(value, 0);
 		}
 				
-		private.data[length - 1] += value * private.power;
-		private.power *= power;
-		private.bits += bits;
+		PRIVATE.data[length - 1] += value * PRIVATE.power;
+		PRIVATE.power *= power;
+		PRIVATE.bits += bits;
 		
-		while(private.bits >= private.MAXBITS)
+		while(PRIVATE.bits >= PRIVATE.MAXBITS)
 		{
-			private.bits -= private.MAXBITS;
-			private.power = Math.pow(2, private.bits);
+			PRIVATE.bits -= PRIVATE.MAXBITS;
+			PRIVATE.power = Math.pow(2, PRIVATE.bits);
 			
-			private.data[length] = Math.floor(private.data[length - 1] / private.MAXPOW);
-			private.data[length - 1] -= private.data[length] * private.MAXPOW;
+			PRIVATE.data[length] = Math.floor(PRIVATE.data[length - 1] / PRIVATE.MAXPOW);
+			PRIVATE.data[length - 1] -= PRIVATE.data[length] * PRIVATE.MAXPOW;
 						
-			length = private.data.length;
+			length = PRIVATE.data.length;
 		}
 		
-		private.index = length;
+		PRIVATE.index = length;
 	}
 	
 	outPacker.setString = function(inString)
 	{
 		var length = inString.length;
 		
-		private.data = [];
+		PRIVATE.data = [];
 		
 		for(var i = 0; i < length; ++i)
 		{
-			private.data[i] = inString.charCodeAt(i) - 32;/////HACK with 6 bits
+			PRIVATE.data[i] = inString.charCodeAt(i) - 32;/////HACK with 6 bits
 		}
 		
-		private.bits = 0;
-		private.power = 1;
-		private.index = 0;
+		PRIVATE.bits = 0;
+		PRIVATE.power = 1;
+		PRIVATE.index = 0;
 	}
 	
 	outPacker.getString = function()
@@ -112,12 +112,12 @@ GameEngineLib.createGameBitPacker = function()
 		var length;
 		var outString;
 		
-		length = private.data.length;
+		length = PRIVATE.data.length;
 		outString = "";
 		
 		for(var i = 0; i < length; ++i)
 		{
-			outString = outString + String.fromCharCode(private.data[i] + 32);/////HACK with 6 bits
+			outString = outString + String.fromCharCode(PRIVATE.data[i] + 32);/////HACK with 6 bits
 		}
 		
 		return outString;
@@ -134,28 +134,28 @@ GameEngineLib.createGameBitPacker = function()
 		{
 			bits = Math.floor(bits);
 			bits = Math.max(bits, 1);
-			bits = Math.min(bits, private.BITCAP);
+			bits = Math.min(bits, PRIVATE.BITCAP);
 		}
 		
 		//power = Math.pow(2, bits);
-		power = private.POWERS[bits];
+		power = PRIVATE.POWERS[bits];
 		
-		outValue = private.data[private.index] / private.power || 0;
-		private.power *= power;
-		private.bits += bits;
+		outValue = PRIVATE.data[PRIVATE.index] / PRIVATE.power || 0;
+		PRIVATE.power *= power;
+		PRIVATE.bits += bits;
 		
 		outValue = Math.floor(outValue);
 		outValue %= power;		
 		
-		while(private.bits >= private.MAXBITS)
+		while(PRIVATE.bits >= PRIVATE.MAXBITS)
 		{
-			++private.index;
-			private.bits -= private.MAXBITS;
-			private.power = Math.pow(2, private.bits);
+			++PRIVATE.index;
+			PRIVATE.bits -= PRIVATE.MAXBITS;
+			PRIVATE.power = Math.pow(2, PRIVATE.bits);
 			
-			extraBits = private.data[private.index] || 0;
-			extraBits %= private.power;
-			extraBits *= power / private.power;
+			extraBits = PRIVATE.data[PRIVATE.index] || 0;
+			extraBits %= PRIVATE.power;
+			extraBits *= power / PRIVATE.power;
 			
 			outValue += extraBits;
 		}
@@ -168,8 +168,8 @@ GameEngineLib.createGameBitPacker = function()
 	outPacker.debugPrint = function()
 	{
 		var output = "";
-		for(var i = private.data.length - 1; i >= 0 ; --i)
-			output += private.data[i].toString(2) + " ";
+		for(var i = PRIVATE.data.length - 1; i >= 0 ; --i)
+			output += PRIVATE.data[i].toString(2) + " ";
 		console.log("Bit packer: " + output);
 	}
 	

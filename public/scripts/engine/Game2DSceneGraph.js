@@ -21,7 +21,7 @@
 
 
 //TODO depricated
-GameEngineLib.createGame2DSceneGraph = function(instance, private)
+GameEngineLib.createGame2DSceneGraph = function(instance, PRIVATE)
 {
 	var temp = new GameEngineLib.Game2DSceneGraph();
 	instance = instance || {};

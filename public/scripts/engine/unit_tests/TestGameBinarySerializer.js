@@ -129,7 +129,7 @@ GameUnitTests.registerTest(
 			//read data
 			var inObj = {
 				public : {},
-				private : {}
+				PRIVATE : {}
 			};
 			serializer = GameEngineLib.GameBinarySerializer.create();
 			serializer.initRead({NET : true}, data);

@@ -27,17 +27,17 @@ GameEngineLib.createVector = function(inVectorDimensions)
 
 
 
-GameEngineLib.createKMean = function(instance, private)
+GameEngineLib.createKMean = function(instance, PRIVATE)
 {
 	instance = instance || {};
-	private = private || {};
+	PRIVATE = PRIVATE || {};
 	
 	//todo add debug info
 	
 	
 	
 	
-	private.createCluster = function(inVectorDimensions)
+	PRIVATE.createCluster = function(inVectorDimensions)
 	{
 		var clusterInstance = {};
 		
@@ -100,21 +100,21 @@ GameEngineLib.createKMean = function(instance, private)
 	
 	instance.init = function(inNumOfClusters, inVectorDimensions)
 	{
-		private.numClusters = inNumOfClusters;
-		private.vectorDimensions = inVectorDimensions;
-		private.clusters = [];
+		PRIVATE.numClusters = inNumOfClusters;
+		PRIVATE.vectorDimensions = inVectorDimensions;
+		PRIVATE.clusters = [];
 		
 		for(var i = 0; i < inNumOfClusters; ++i)
 		{
-			private.clusters[i] = private.createCluster(inVectorDimensions);
+			PRIVATE.clusters[i] = PRIVATE.createCluster(inVectorDimensions);
 		}
 	}
 	
 	instance.resetCenters = function()
 	{
-		for(var i = 0; i < private.numClusters; ++i)
+		for(var i = 0; i < PRIVATE.numClusters; ++i)
 		{
-			private.clusters[i].resetCenter();
+			PRIVATE.clusters[i].resetCenter();
 		}
 	}
 	
@@ -125,13 +125,13 @@ GameEngineLib.createKMean = function(instance, private)
 		var bestIndex = 0;
 		
 		//for each cluster:
-		for(var i = 0; i < private.numClusters; ++i)
+		for(var i = 0; i < PRIVATE.numClusters; ++i)
 		{
 			var distanceSquared = 0;
-			var clusterCenter = private.clusters[i].center;
+			var clusterCenter = PRIVATE.clusters[i].center;
 			
 			//get the distance between the data point and the cluster
-			for(var j = 0; j < private.vectorDimensions; ++j)
+			for(var j = 0; j < PRIVATE.vectorDimensions; ++j)
 			{
 				var delta = inDataPoint[j] - clusterCenter[j];
 				distanceSquared += delta * delta;
@@ -153,14 +153,14 @@ GameEngineLib.createKMean = function(instance, private)
 		var bestIndex = -1;
 		
 		//clear points
-		for(var i = 0; i < private.numClusters; ++i)
-			private.clusters[i].resetPoints();
+		for(var i = 0; i < PRIVATE.numClusters; ++i)
+			PRIVATE.clusters[i].resetPoints();
 		
 		//find best fit for data points
 		for(var i = 0; i < inDataPoints.length; ++i)
 		{
 			var bestClusterIndex = this.findBestCluster(inDataPoints[i]);
-			var bestCluster = private.clusters[bestClusterIndex];
+			var bestCluster = PRIVATE.clusters[bestClusterIndex];
 			bestCluster.points.insert(
 				GameEngineLib.createGameCircularDoublyLinkedListNode(inDataPoints[i])
 			);
@@ -168,11 +168,11 @@ GameEngineLib.createKMean = function(instance, private)
 		}
 		
 		//update centers
-		for(var i = 0; i < private.numClusters; ++i)
+		for(var i = 0; i < PRIVATE.numClusters; ++i)
 		{
-			var cluster = private.clusters[i];
+			var cluster = PRIVATE.clusters[i];
 			
-			/*for(var j = 0; j < private.vectorDimensions; ++j)
+			/*for(var j = 0; j < PRIVATE.vectorDimensions; ++j)
 			{
 				cluster.center[j] *= (cluster.numPoints + 1);
 			}*/
@@ -182,13 +182,13 @@ GameEngineLib.createKMean = function(instance, private)
 			{
 				var point = current.item;
 				
-				for(var j = 0; j < private.vectorDimensions; ++j)
+				for(var j = 0; j < PRIVATE.vectorDimensions; ++j)
 				{
 					cluster.center[j] += point[j];
 				}
 			}
 			
-			for(var j = 0; j < private.vectorDimensions; ++j)
+			for(var j = 0; j < PRIVATE.vectorDimensions; ++j)
 			{
 				cluster.center[j] /= (cluster.numPoints + 1)//* 2;
 			}
@@ -198,15 +198,15 @@ GameEngineLib.createKMean = function(instance, private)
 	//HACK for 2D!
 	instance.render = function(inCanvas2DContext, inTargetRect)
 	{
-		for(var i = 0; i < private.numClusters; ++i)
+		for(var i = 0; i < PRIVATE.numClusters; ++i)
 		{
 			/*var colorIndex = (i + 1);
-			private.clusters[i].color = "rgba(" + 
-				Math.floor(colorIndex * 255 / private.numClusters) + "," +
-				Math.floor(colorIndex * 255 / private.numClusters) + "," +
-				Math.floor(colorIndex * 255 / private.numClusters) + "," +
+			PRIVATE.clusters[i].color = "rgba(" + 
+				Math.floor(colorIndex * 255 / PRIVATE.numClusters) + "," +
+				Math.floor(colorIndex * 255 / PRIVATE.numClusters) + "," +
+				Math.floor(colorIndex * 255 / PRIVATE.numClusters) + "," +
 				"1)";*/
-			private.clusters[i].render(inCanvas2DContext, inTargetRect);
+			PRIVATE.clusters[i].render(inCanvas2DContext, inTargetRect);
 		}
 	}
 	
@@ -232,35 +232,35 @@ GameEngineLib.createKMean = function(instance, private)
 
 //todo make this a GameObject also!!
 //todo rename game rules
-GameLib.createGameRules = function(instance, private)
+GameLib.createGameRules = function(instance, PRIVATE)
 {
 	instance = instance || {};
-	private = private || {};
+	PRIVATE = PRIVATE || {};
 	
 	//todo add debug info
 		
 	instance.init = function()
 	{
 		if(!GameSystemVars.Network.isServer)
-			GameInstance.Input.registerListener("Input", private);
+			GameInstance.Input.registerListener("Input", PRIVATE);
 			
 		GameInstance.UpdateOrder.push(this);
 		
-		private.clustersCount = 16;
-		private.vectorDimensions = 2;
-		private.dataPointCount = 1000;
-		private.data = [];
-		for(var i = 0; i < private.dataPointCount; ++i)
+		PRIVATE.clustersCount = 16;
+		PRIVATE.vectorDimensions = 2;
+		PRIVATE.dataPointCount = 1000;
+		PRIVATE.data = [];
+		for(var i = 0; i < PRIVATE.dataPointCount; ++i)
 		{
-			private.data[i] = [];
-			for(var j = 0; j < private.vectorDimensions; ++j)
-				private.data[i][j] = Math.random();
+			PRIVATE.data[i] = [];
+			for(var j = 0; j < PRIVATE.vectorDimensions; ++j)
+				PRIVATE.data[i][j] = Math.random();
 		}
 			
-		private.kmean = GameEngineLib.createKMean();
-		private.kmean.init(
-			private.clustersCount,
-			private.vectorDimensions
+		PRIVATE.kmean = GameEngineLib.createKMean();
+		PRIVATE.kmean.init(
+			PRIVATE.clustersCount,
+			PRIVATE.vectorDimensions
 		);
 		
 		
@@ -270,20 +270,20 @@ GameLib.createGameRules = function(instance, private)
 	instance.isUpdating = function(){return true;}
 	instance.update = function()
 	{
-		private.data = private.data.slice(1, private.data.length);
+		PRIVATE.data = PRIVATE.data.slice(1, PRIVATE.data.length);
 		var newPoint = []
-		for(var j = 0; j < private.vectorDimensions; ++j)
+		for(var j = 0; j < PRIVATE.vectorDimensions; ++j)
 			newPoint[j] = Math.random();
 			
-		private.data.push(newPoint);
+		PRIVATE.data.push(newPoint);
 		
-		private.kmean.clustersData(private.data);
+		PRIVATE.kmean.clustersData(PRIVATE.data);
 	}
 	
 	
 	instance.render = function(inCanvas2DContext)
 	{
-		private.kmean.render(
+		PRIVATE.kmean.render(
 			inCanvas2DContext
 			,GameEngineLib.createGame2DAABB(
 				0,
@@ -297,24 +297,24 @@ GameLib.createGameRules = function(instance, private)
 	
 	
 	//TODO maybe this should be in an editor or something
-	private.onInput = function(inInputEvent)
+	PRIVATE.onInput = function(inInputEvent)
 	{
 		if(inInputEvent.keysPressed["q"])
 		{
-			private.kmean.clustersData(private.data);
+			PRIVATE.kmean.clustersData(PRIVATE.data);
 		}
 		if(inInputEvent.keysPressed["e"])
 		{
-			private.data = private.data.slice(1, private.data.length);
+			PRIVATE.data = PRIVATE.data.slice(1, PRIVATE.data.length);
 			var newPoint = []
-			for(var j = 0; j < private.vectorDimensions; ++j)
+			for(var j = 0; j < PRIVATE.vectorDimensions; ++j)
 				newPoint[j] = Math.random();
 				
-			private.data.push(newPoint);
+			PRIVATE.data.push(newPoint);
 		}
 		if(inInputEvent.keysPressed["r"])
 		{
-			private.kmean.resetCenters();
+			PRIVATE.kmean.resetCenters();
 		}
 		
 		if(inInputEvent.buttons[0])

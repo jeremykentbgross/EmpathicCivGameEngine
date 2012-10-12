@@ -19,26 +19,26 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.createGameTimer = function(instance, private)
+GameEngineLib.createGameTimer = function(instance, PRIVATE)
 {
 	instance = instance || {};
-	private = private || {};
+	PRIVATE = PRIVATE || {};
 	
 	if(GameSystemVars.DEBUG)
 	{
-		GameEngineLib.addDebugInfo("GameTimer", instance, private);
+		GameEngineLib.addDebugInfo("GameTimer", instance, PRIVATE);
 	}
 	
 	instance.init = function()
 	{		
-		private.lastFrameTimeStamp = 0;
-		private.frameCount = 0;
-		private.frameTimes = [];
+		PRIVATE.lastFrameTimeStamp = 0;
+		PRIVATE.frameCount = 0;
+		PRIVATE.frameTimes = [];
 		
 		for(var i = 0; i < 64; ++i)
-			private.frameTimes[i] = 16;
+			PRIVATE.frameTimes[i] = 16;
 			
-		private.lastFrameTimeStamp = (new Date()).getTime();
+		PRIVATE.lastFrameTimeStamp = (new Date()).getTime();
 	}
 	
 	instance.update = function(time)
@@ -50,27 +50,27 @@ GameEngineLib.createGameTimer = function(instance, private)
 			time = (new Date()).getTime();//TODO use .now
 		}
 		
-		private.dt = time - private.lastFrameTimeStamp;
-		private.lastFrameTimeStamp = time;
-		++private.frameCount;
+		PRIVATE.dt = time - PRIVATE.lastFrameTimeStamp;
+		PRIVATE.lastFrameTimeStamp = time;
+		++PRIVATE.frameCount;
 		
 		//TODO handle HUGE dt's (by pausing?)
 		
-		private.frameTimes[private.frameCount % private.frameTimes.length] = private.dt;
-		private.aveDt = 0;
-		for(var i = 0; i < private.frameTimes.length; ++i)
-			private.aveDt += private.frameTimes[i];
-		private.aveDt /= private.frameTimes.length;
+		PRIVATE.frameTimes[PRIVATE.frameCount % PRIVATE.frameTimes.length] = PRIVATE.dt;
+		PRIVATE.aveDt = 0;
+		for(var i = 0; i < PRIVATE.frameTimes.length; ++i)
+			PRIVATE.aveDt += PRIVATE.frameTimes[i];
+		PRIVATE.aveDt /= PRIVATE.frameTimes.length;
 		
 		//TODO update accumulators and fire timer events
 		
 		if(GameSystemVars.DEBUG)
 		{
 			var frameStats = [
-				"Average FPS: " + (1000 / private.aveDt).toFixed(3),
-				"Average MS/F: " + private.aveDt.toFixed(3),
-				"Last Frame Time: " + private.dt,
-				"Frame Count: " + private.frameCount
+				"Average FPS: " + (1000 / PRIVATE.aveDt).toFixed(3),
+				"Average MS/F: " + PRIVATE.aveDt.toFixed(3),
+				"Last Frame Time: " + PRIVATE.dt,
+				"Frame Count: " + PRIVATE.frameCount
 			];
 			if(GameSystemVars.Debug.FrameStats_Draw && !GameSystemVars.Network.isServer)
 			{
@@ -90,12 +90,12 @@ GameEngineLib.createGameTimer = function(instance, private)
 			}
 		}
 		
-		return private.aveDt;
+		return PRIVATE.aveDt;
 	}
 	
 	instance.getFrameCount = function()
 	{
-		return private.frameCount;
+		return PRIVATE.frameCount;
 	}
 	
 	//TODO register timer events / accumulators

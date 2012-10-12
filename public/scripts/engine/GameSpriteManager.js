@@ -19,33 +19,33 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.createGameSpriteManager = function(instance, private)
+GameEngineLib.createGameSpriteManager = function(instance, PRIVATE)
 {
 	instance = instance || {};
-	private = private || {};
+	PRIVATE = PRIVATE || {};
 	
 	//TODO setup debug stuff
 	
 	//TODO set map directly
 	instance.init = function(inMapSizeInTiles, inTileSize)
 	{
-		private.myMapSizeInTiles = inMapSizeInTiles;	//todo round up to power of 2
-		private.myTileSize = inTileSize;
-		private.myMapSize = private.myMapSizeInTiles * private.myTileSize;
+		PRIVATE.myMapSizeInTiles = inMapSizeInTiles;	//todo round up to power of 2
+		PRIVATE.myTileSize = inTileSize;
+		PRIVATE.myMapSize = PRIVATE.myMapSizeInTiles * PRIVATE.myTileSize;
 		
-		private.mySceneQuadTree = GameEngineLib.createGameQuadTree();
-		private.mySceneQuadTree.init(
-			GameEngineLib.createGame2DAABB(0, 0, private.myMapSize, private.myMapSize),
-			private.myTileSize
+		PRIVATE.mySceneQuadTree = GameEngineLib.createGameQuadTree();
+		PRIVATE.mySceneQuadTree.init(
+			GameEngineLib.createGame2DAABB(0, 0, PRIVATE.myMapSize, PRIVATE.myMapSize),
+			PRIVATE.myTileSize
 		);
 		
-		//private.myNextID = 0;
-		//private.mySprites = {};
+		//PRIVATE.myNextID = 0;
+		//PRIVATE.mySprites = {};
 		
 		//hack
 		//todo have tileset as a param too..?
-		/*private.myTileSet = GameEngineLib.createGameCanvasTileSet();
-		private.myTileSet.init(
+		/*PRIVATE.myTileSet = GameEngineLib.createGameCanvasTileSet();
+		PRIVATE.myTileSet.init(
 			inTileSize
 			//,filenames
 		);*/
@@ -61,10 +61,10 @@ GameEngineLib.createGameSpriteManager = function(instance, private)
 			myGame2DAABB : GameEngineLib.createGame2DAABB(),//bounding rect
 			myPositionLocator : GameEngineLib.createGame2DPoint(),
 			//animation and other bullshit?
-			//myID : "SpriteID" + (++private.myNextID).toString(),
+			//myID : "SpriteID" + (++PRIVATE.myNextID).toString(),
 		};
 		//TODO linked list instead? why does this and physics have this? (not active?)
-		//private.mySprites[sprite.myID] = sprite;
+		//PRIVATE.mySprites[sprite.myID] = sprite;
 		
 		outSpriteHandle = {};
 		
@@ -85,50 +85,50 @@ GameEngineLib.createGameSpriteManager = function(instance, private)
 	//TODO insert sprite
 	instance.setTile = function(inX, inY, inTileValue)
 	{
-		if(inX < 0 || private.myMapSizeInTiles <= inX
-			|| inY < 0 || private.myMapSizeInTiles <= inY)
+		if(inX < 0 || PRIVATE.myMapSizeInTiles <= inX
+			|| inY < 0 || PRIVATE.myMapSizeInTiles <= inY)
 			return;
 			
 		var tile = {};
 		tile.myGame2DAABB = GameEngineLib.createGame2DAABB(
-			inX * private.myTileSize,
-			inY * private.myTileSize,
-			private.myTileSize,
-			private.myTileSize
+			inX * PRIVATE.myTileSize,
+			inY * PRIVATE.myTileSize,
+			PRIVATE.myTileSize,
+			PRIVATE.myTileSize
 		);
 		tile.myTileValue = inTileValue;
 		
 		//insert exclusive!
-		private.mySceneQuadTree.deleteContained(tile.myGame2DAABB);
-		private.mySceneQuadTree.insertToSmallestContaining(tile);
+		PRIVATE.mySceneQuadTree.deleteContained(tile.myGame2DAABB);
+		PRIVATE.mySceneQuadTree.insertToSmallestContaining(tile);
 	}
 	
 	//TODO remove sprite
 	instance.clearTile = function(inX, inY)
 	{
-		if(inX < 0 || private.myMapSizeInTiles <= inX
-			|| inY < 0 || private.myMapSizeInTiles <= inY)
+		if(inX < 0 || PRIVATE.myMapSizeInTiles <= inX
+			|| inY < 0 || PRIVATE.myMapSizeInTiles <= inY)
 			return;
 			
 		var tile = {};
 		tile.myGame2DAABB = GameEngineLib.createGame2DAABB(
-			inX * private.myTileSize,
-			inY * private.myTileSize,
-			private.myTileSize,
-			private.myTileSize
+			inX * PRIVATE.myTileSize,
+			inY * PRIVATE.myTileSize,
+			PRIVATE.myTileSize,
+			PRIVATE.myTileSize
 		);
 		
-		private.mySceneQuadTree.deleteContained(tile.myGame2DAABB);//todo should this be delete item?
+		PRIVATE.mySceneQuadTree.deleteContained(tile.myGame2DAABB);//todo should this be delete item?
 	}
 	
 	//TODO sort them by base
 	instance.render = function(inCanvas2DContext, inCameraRect)
 	{
-		private.mySceneQuadTree.walk(
+		PRIVATE.mySceneQuadTree.walk(
 			function(item)
 			{
 				var itemRect = item.myGame2DAABB;
-				private.myTileSet.renderTile(
+				PRIVATE.myTileSet.renderTile(
 					inCanvas2DContext,
 					item.myTileValue,
 					GameEngineLib.createGame2DPoint
@@ -144,13 +144,13 @@ GameEngineLib.createGameSpriteManager = function(instance, private)
 	
 	instance.toTileCoordinate = function(inWorldCoordinate)
 	{
-		return Math.floor(inWorldCoordinate / private.myTileSize);
+		return Math.floor(inWorldCoordinate / PRIVATE.myTileSize);
 	}
 	
 	//debug draw tree
 	instance.debugDraw = function(inCanvas2DContext, inCameraRect, inColor)
 	{
-		private.mySceneQuadTree.debugDraw(inCanvas2DContext, inCameraRect, inColor);
+		PRIVATE.mySceneQuadTree.debugDraw(inCanvas2DContext, inCameraRect, inColor);
 	}
 	
 	/*

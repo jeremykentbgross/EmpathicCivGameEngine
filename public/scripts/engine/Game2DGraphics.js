@@ -25,7 +25,7 @@
 
 
 //TODO depricated!
-GameEngineLib.createGame2DGraphics = function(instance, private)
+GameEngineLib.createGame2DGraphics = function(instance, PRIVATE)
 {
 	var temp = new GameEngineLib.Game2DGraphics();
 	instance = instance || {};

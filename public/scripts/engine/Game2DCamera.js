@@ -20,7 +20,7 @@
 */
 
 //TODO depricated!
-GameEngineLib.createGame2DCamera = function(instance, private)
+GameEngineLib.createGame2DCamera = function(instance, PRIVATE)
 {
 	var temp = new GameEngineLib.Game2DCamera();
 	instance = instance || {};

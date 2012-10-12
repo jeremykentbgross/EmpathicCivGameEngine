@@ -30,8 +30,8 @@ GameEngineLib.createGame2DPhysics = function()
 	
 	
 	/////////////////////////////////////////////////////
-	//private by closure/////////////////////////////////
-	var private = {};//TODO put everything else in here
+	//PRIVATE by closure/////////////////////////////////
+	var PRIVATE = {};//TODO put everything else in here
 	
 	var myDetectionTree;
 	var myWorldSize;
@@ -49,7 +49,7 @@ GameEngineLib.createGame2DPhysics = function()
 	var STATUS__SLEEPING = 1;
 	var STATUS__ACTIVE = 2;
 	var STATUS__ALWAYS_ACTIVE = 3;
-	//private by closure/////////////////////////////////
+	//PRIVATE by closure/////////////////////////////////
 	/////////////////////////////////////////////////////
 	
 	
@@ -76,8 +76,8 @@ GameEngineLib.createGame2DPhysics = function()
 		myCollisions = [];
 		myCollisionsRenderList = [];
 		
-		private.accumulatedTime = 0;
-		private.timestep = 1;
+		PRIVATE.accumulatedTime = 0;
+		PRIVATE.timestep = 1;
 	}
 	
 	//todo cleanup()
@@ -251,17 +251,17 @@ GameEngineLib.createGame2DPhysics = function()
 		var timeStepDeltaTime;
 		var movedThisFrame = {};
 		
-		private.frameUpdateCount = 0;
+		PRIVATE.frameUpdateCount = 0;
 		
 		deltaTime = deltaTime || 1;
 		
-		private.accumulatedTime += deltaTime;
-		timeStepDeltaTime = private.timestep / 1000;//TODO either proc the decimal part here or make it class var
+		PRIVATE.accumulatedTime += deltaTime;
+		timeStepDeltaTime = PRIVATE.timestep / 1000;//TODO either proc the decimal part here or make it class var
 		
-		while(private.accumulatedTime > 1)
+		while(PRIVATE.accumulatedTime > 1)
 		{
-			private.accumulatedTime -= private.timestep;
-			++private.frameUpdateCount;
+			PRIVATE.accumulatedTime -= PRIVATE.timestep;
+			++PRIVATE.frameUpdateCount;
 			
 			//remove all the active nodes from the tree:
 			node = myActivePhysicsObjects.myNext;
@@ -397,7 +397,7 @@ GameEngineLib.createGame2DPhysics = function()
 		var node;
 		
 		GameInstance.Graphics.drawDebugText("Debug Drawing Physics");
-		GameInstance.Graphics.drawDebugText("Frame Update Count:" + private.frameUpdateCount);
+		GameInstance.Graphics.drawDebugText("Frame Update Count:" + PRIVATE.frameUpdateCount);
 		//todo print (and notify) collisions this frame
 		
 		//walk:
