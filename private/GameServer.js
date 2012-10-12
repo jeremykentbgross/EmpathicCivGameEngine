@@ -23,6 +23,8 @@ var path = require("path");
 var http = require("http");
 var express = require("express");
 var socketIO = require("socket.io");
+require("../public/scripts/GameLoader");
+
 
 
 ////////////////////////////////////////////////////////////////////
@@ -30,9 +32,10 @@ var socketIO = require("socket.io");
 GameEngineServer = {};
 
 //Path/Setup
-GameEngineServer.webHostAddress = "localhost";
+GameEngineServer.webHostAddress = "localhost";//TODO this is NOT OK!
 GameEngineServer.webHostPort = 80;
 GameEngineServer.webHostRoot = path.join(path.dirname(__filename), '../public');
+
 
 //http file server
 GameEngineServer.expressApp = express.createServer();
@@ -44,29 +47,54 @@ GameEngineServer.httpServer = http.createServer(GameEngineServer.expressApp);
 GameEngineServer.listenSocket = socketIO.listen(GameEngineServer.httpServer);
 
 
-GameEngineServer.expressApp.configure(
-	function()
-	{
-		GameEngineServer.expressApp.use(express.static(GameEngineServer.webHostRoot));
-		//TODO more configure(s)??
-	}
-);
-//TODO more configure(s) **types**??
- 
+//Paths looks wrong (because they will run from inside the loader)
+GameLoader.init(true, "../../public/", "../../private/");
+
+
+
+if(GameSystemVars.Server.compressClientCode)
+{
+	GameEngineServer.codeCompressor = new GameEngineServer.CodeCompressor("../public/");
+	GameEngineServer.codeCompressor.makeCompactGameLoader();
+	
+	GameEngineServer.expressApp.get(
+		'/scripts/GameLoader.js'
+		,function(req, res){
+			var code = GameEngineServer.codeCompressor.getCompactCode();
+			
+			res.writeHead(
+				200,
+				{
+	  				'Content-Length': code.length,
+				  	'Content-Type': 'text/javascript'
+				}
+			);
+			res.write(code);
+			res.end();
+		}
+	);
+}
+
+
+
 GameEngineServer.expressApp.get(
 	'/*.(js|css|html|png|jpg)'
 	,function(req, res){
-		res.sendfile(req.url);
+		res.sendfile( path.join(GameEngineServer.webHostRoot, req.url) );
 	}
 );
+
+
 
 GameEngineServer.expressApp.get(
 	'/'
 	,function(req, res)
 	{
-		res.sendfile('index.html');
+		res.sendfile( path.join(GameEngineServer.webHostRoot, 'index.html') );	
 	}
 );
+
+
 
 GameEngineServer.httpServer.listen(
 	GameEngineServer.webHostPort
@@ -79,17 +107,18 @@ console.log(
 	+ "Serving files from:\n\t'" + GameEngineServer.webHostRoot + "'\n"
 	+ "------------------\n\n"
 );
-//Web Server////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
 
+/*
+GameEngineServer.expressApp.configure(
+	function()
+	{
+		GameEngineServer.expressApp.use(express.static(GameEngineServer.webHostRoot));
+		//TODO more configure(s)??
+	}
+);*/
+//TODO more configure(s) **types**??
 
-
-////////////////////////////////////////////////////////////////////
-//GameServer////////////////////////////////////////////////////////
-require("./../public/scripts/GameLoader");
-GameLoader.init(true, "../../public/", "../../private/");
-
-//TODO these should be coming from GameRunner instead, here only due to current debug issue with node inspector
+//TODO this should be only in GameRunner, here copied here due to debug issue with node inspector
 if(GameSystemVars.Network.isMultiplayer)
 {
 	//RUN UNIT TEST scripts
@@ -99,5 +128,5 @@ if(GameSystemVars.Network.isMultiplayer)
 	GameInstance = GameEngineLib.createGameFrameWork();
 	GameInstance.run();
 }
-//GameServer////////////////////////////////////////////////////////
+//Web Server////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////

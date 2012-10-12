@@ -52,6 +52,8 @@ GameLoader =
 				};
 				
 			include = require;
+			//TODO obfuscator + tests!
+			include(inPrivatePath + "CodeCompressor.js");
 		}
 		//******************** Setup requestAnimFrame and include ********************
 		//****************************************************************************
