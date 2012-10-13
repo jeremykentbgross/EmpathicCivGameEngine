@@ -43,11 +43,16 @@ GameEngineLib.createGameBitPacker = function()
 	PRIVATE.MAXPOW = Math.pow(2, PRIVATE.MAXBITS);
 	PRIVATE.POWERS = [];
 	//make lookup to avoid calling Math.pow alot
-	for(var i = 1; i <= PRIVATE.BITCAP; ++i)
+	var i;
+	for(i = 1; i <= PRIVATE.BITCAP; ++i)
+	{
 		PRIVATE.POWERS[i] = Math.pow(2, i);
+	}
 	
 	if(GameSystemVars.DEBUG)
+	{
 		GameEngineLib.addDebugInfo("bitPacker", outPacker, PRIVATE);
+	}
 	
 	outPacker.pack = function(value, bits)
 	{
@@ -89,15 +94,16 @@ GameEngineLib.createGameBitPacker = function()
 		}
 		
 		PRIVATE.index = length;
-	}
+	};
 	
 	outPacker.setString = function(inString)
 	{
 		var length = inString.length;
+		var i;
 		
 		PRIVATE.data = [];
 		
-		for(var i = 0; i < length; ++i)
+		for(i = 0; i < length; ++i)
 		{
 			PRIVATE.data[i] = inString.charCodeAt(i) - 32;/////HACK with 6 bits
 		}
@@ -105,23 +111,24 @@ GameEngineLib.createGameBitPacker = function()
 		PRIVATE.bits = 0;
 		PRIVATE.power = 1;
 		PRIVATE.index = 0;
-	}
+	};
 	
 	outPacker.getString = function()
 	{
 		var length;
 		var outString;
+		var i;
 		
 		length = PRIVATE.data.length;
 		outString = "";
 		
-		for(var i = 0; i < length; ++i)
+		for(i = 0; i < length; ++i)
 		{
 			outString = outString + String.fromCharCode(PRIVATE.data[i] + 32);/////HACK with 6 bits
 		}
 		
 		return outString;
-	}
+	};
 	
 	outPacker.unpack = function(bits)
 	{
@@ -161,17 +168,21 @@ GameEngineLib.createGameBitPacker = function()
 		}
 		
 		return outValue;
-	}
+	};
 	
 	//note does not currently print leading 0's
 	//note should probably print in reverse order?
 	outPacker.debugPrint = function()
 	{
 		var output = "";
-		for(var i = PRIVATE.data.length - 1; i >= 0 ; --i)
+		var i;
+		
+		for(i = PRIVATE.data.length - 1; i >= 0 ; --i)
+		{
 			output += PRIVATE.data[i].toString(2) + " ";
+		}
 		console.log("Bit packer: " + output);
-	}
+	};
 	
 	return outPacker;
 };

@@ -30,19 +30,25 @@ GameEngineLib.createGameTimer = function(instance, PRIVATE)
 	}
 	
 	instance.init = function()
-	{		
+	{
+		var i;
+		
 		PRIVATE.lastFrameTimeStamp = 0;
 		PRIVATE.frameCount = 0;
 		PRIVATE.frameTimes = [];
 		
-		for(var i = 0; i < 64; ++i)
+		for(i = 0; i < 64; ++i)
+		{
 			PRIVATE.frameTimes[i] = 16;
+		}
 			
 		PRIVATE.lastFrameTimeStamp = (new Date()).getTime();
-	}
+	};
 	
 	instance.update = function(time)
 	{
+		var i;
+		
 		//prefer the browser presented time if it is availible, but fall back to getting it if its not there
 		if(time === undefined)
 		{
@@ -58,8 +64,10 @@ GameEngineLib.createGameTimer = function(instance, PRIVATE)
 		
 		PRIVATE.frameTimes[PRIVATE.frameCount % PRIVATE.frameTimes.length] = PRIVATE.dt;
 		PRIVATE.aveDt = 0;
-		for(var i = 0; i < PRIVATE.frameTimes.length; ++i)
+		for(i = 0; i < PRIVATE.frameTimes.length; ++i)
+		{
 			PRIVATE.aveDt += PRIVATE.frameTimes[i];
+		}
 		PRIVATE.aveDt /= PRIVATE.frameTimes.length;
 		
 		//TODO update accumulators and fire timer events
@@ -91,14 +99,14 @@ GameEngineLib.createGameTimer = function(instance, PRIVATE)
 		}
 		
 		return PRIVATE.aveDt;
-	}
+	};
 	
 	instance.getFrameCount = function()
 	{
 		return PRIVATE.frameCount;
-	}
+	};
 	
 	//TODO register timer events / accumulators
 	
 	return instance;
-}
+};

@@ -24,7 +24,7 @@
 GameEngineLib.createGame2DPoint = function(inX, inY)
 {
 	return new GameEngineLib.Game2DPoint(inX, inY);
-}
+};
 
 
 
@@ -33,29 +33,29 @@ GameEngineLib.Game2DPoint = function Game2DPoint(inX, inY)
 {
 	this.myX = inX || 0;
 	this.myY = inY || 0;
-}
+};
 GameEngineLib.Game2DPoint.prototype.constructor = GameEngineLib.Game2DPoint;
 
 
 GameEngineLib.Game2DPoint.prototype.clone = function clone()
 {
 	return new GameEngineLib.Game2DPoint(this.myX, this.myY);
-}
+};
 
 GameEngineLib.Game2DPoint.prototype.add = function add(inOther)
 {
 	return new GameEngineLib.Game2DPoint(this.myX + inOther.myX, this.myY + inOther.myY);
-}
+};
 
 GameEngineLib.Game2DPoint.prototype.subtract = function subtract(inOther)
 {
 	return new GameEngineLib.Game2DPoint(this.myX - inOther.myX, this.myY - inOther.myY);
-}
+};
 
 GameEngineLib.Game2DPoint.prototype.multiply = function multiply(inScalar)
 {
 	return new GameEngineLib.Game2DPoint(this.myX * inScalar, this.myY * inScalar);
-}
+};
 
 GameEngineLib.Game2DPoint.prototype.componentMax = function componentMax(inOther)
 {
@@ -63,37 +63,37 @@ GameEngineLib.Game2DPoint.prototype.componentMax = function componentMax(inOther
 		Math.max(this.myX, inOther.myX),
 		Math.max(this.myY, inOther.myY)
 	);
-}
+};
 GameEngineLib.Game2DPoint.prototype.componentMin = function componentMin(inOther)
 {
 	return new GameEngineLib.Game2DPoint(
 		Math.min(this.myX, inOther.myX),
 		Math.min(this.myY, inOther.myY)
 	);
-}
+};
 
 GameEngineLib.Game2DPoint.prototype.lenSq = function lenSq()
 {
 	return this.myX * this.myX + this.myY * this.myY;
-}
+};
 
 GameEngineLib.Game2DPoint.prototype.len = function len()
 {
 	return Math.sqrt(this.myX * this.myX + this.myY * this.myY);
-}
+};
 
 GameEngineLib.Game2DPoint.prototype.unit = function unit()
 {
 	var len = Math.sqrt(this.myX * this.myX + this.myY * this.myY);
 	return new GameEngineLib.Game2DPoint(this.myX / len, this.myY / len);
-}
+};
 
 GameEngineLib.Game2DPoint.prototype.dot = function dot(inOther)
 {
 	return this.myX * inOther.myX + this.myY * inOther.myY;
-}
+};
 
 GameEngineLib.Game2DPoint.prototype.floor = function floor()
 {
 	return new GameEngineLib.Game2DPoint(Math.floor(this.myX), Math.floor(this.myY));
-}
+};

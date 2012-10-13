@@ -68,7 +68,8 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class(
 						fileName : "images/placeholder.png"//TODO have this listed in systemvars
 						,anchor : GameEngineLib.createGame2DPoint()
 						,layer : 0
-					},
+					}
+					//,{}
 				]
 			);
 			
@@ -84,7 +85,9 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class(
 			//for listening to cursor position.
 			//TODO Only needed to debug draw cursor which should likely be elsewhere?
 			if(!GameSystemVars.Network.isServer)
+			{
 				GameInstance.Input.registerListener("Input", this);
+			}
 		},
 
 		addEntity : function addEntity(inEntity)
@@ -103,13 +106,14 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class(
 
 		getCurrentCamera : function getCurrentCamera()//TODO maybe should be public?
 		{
-			return (this._camera ? this._camera : this._defaultCamera);
+			return this._camera || this._defaultCamera;
 		},
 
 		//if(!GameSystemVars.Network.isServer)//TODO axe if?
 		render : function render(inCanvas2DContext)
 		{
 			var camera = this.getCurrentCamera();
+			var target;
 			
 			//debug draw the map		
 			if(GameSystemVars.DEBUG && GameSystemVars.Debug.Map_Draw)
@@ -136,7 +140,7 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class(
 			//debug draw camera target point
 			if(GameSystemVars.DEBUG && GameSystemVars.Debug.GameWorld_CameraTarget_Draw)
 			{
-				var target = GameEngineLib.createGame2DAABB(
+				target = GameEngineLib.createGame2DAABB(
 					0,
 					0,
 					GameSystemVars.Debug.GameWorld_CameraTarget_Size,
@@ -163,7 +167,7 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class(
 			//debugdraw cursor
 			if(GameSystemVars.DEBUG && GameSystemVars.Debug.GameWorld_MouseCursor_Draw)
 			{
-				var target = GameEngineLib.createGame2DAABB(
+				target = GameEngineLib.createGame2DAABB(
 					0,
 					0,
 					GameSystemVars.Debug.GameWorld_MouseCursor_Size,

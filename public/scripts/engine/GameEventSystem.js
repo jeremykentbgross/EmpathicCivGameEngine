@@ -20,14 +20,15 @@
 */
 
 //TODO depricated:
-GameEngineLib.createEventSystem = function(instance, PRIVATE)
+GameEngineLib.createEventSystem = function(instance)
 {
+	var property;
 	var temp = new GameEngineLib.GameEventSystem();
 	instance = instance || {};
 	
 	for(property in temp)
 	{
-		instance[property] = temp[property]
+		instance[property] = temp[property];
 	}
 	for(property in temp.prototype)
 	{
@@ -35,7 +36,7 @@ GameEngineLib.createEventSystem = function(instance, PRIVATE)
 	}
 	
 	return instance;
-}
+};
 
 
 
@@ -43,12 +44,12 @@ GameEngineLib.createEventSystem = function(instance, PRIVATE)
 GameEngineLib.GameEventSystem = function GameEventSystem()
 {
 	this._eventListeners = {};
-}
+};
 GameEngineLib.GameEventSystem.prototype.constructor = GameEngineLib.GameEventSystem;
 GameEngineLib.GameEventSystem.create = function create()
 {
 	return new GameEngineLib.GameEventSystem();
-}
+};
 
 
 
@@ -63,7 +64,7 @@ GameEngineLib.GameEventSystem.prototype.registerListener = function registerList
 		GameEngineLib.createGameCircularDoublyLinkedListNode();
 		
 	this._eventListeners[inEventName].myPrev.insert(listenerNode);
-}
+};
 
 
 
@@ -74,7 +75,9 @@ GameEngineLib.GameEventSystem.prototype.deregisterListener = function deregister
 	
 	head = this._eventListeners[inEventName];
 	if(!head)
+	{
 		return;
+	}
 	current = head.myNext;
 	
 	while(current !== head)
@@ -87,7 +90,7 @@ GameEngineLib.GameEventSystem.prototype.deregisterListener = function deregister
 		
 		current = current.myNext;
 	}
-}
+};
 
 
 
@@ -106,7 +109,9 @@ GameEngineLib.GameEventSystem.prototype.onEvent = function onEvent(inEvent)
 	
 	head = this._eventListeners[eventName];
 	if(!head)
+	{
 		return;
+	}
 	current = head.myNext;
 	
 	while(current !== head)
@@ -122,31 +127,35 @@ GameEngineLib.GameEventSystem.prototype.onEvent = function onEvent(inEvent)
 		
 		current = current.myNext;
 	}
-}
+};
 
 
 
 
 //TODO WTF???
-GameEngineLib.GameEventSystem.prototype.serialize = function serialize(serializer)
-{		
-	if(GameSystemVars.DEBUG)
-		GameEngineLib.logger.info("Serializing EventSystem " + GameEngineLib.GameObjectRef(this).getPath());
-//	if(serializer.isReading())
+//GameEngineLib.GameEventSystem.prototype.serialize = function serialize(serializer)
+//{		
+//	if(GameSystemVars.DEBUG)
 //	{
+//		GameEngineLib.logger.info("Serializing EventSystem " + GameEngineLib.GameObjectRef(this).getPath());
 //	}
-//	else if(serializer.isWriting())
+////	if(serializer.isReading())
+////	{
+////	}
+////	else if(serializer.isWriting())
+////	{
+////	}
+//};
+////GameEngineLib.GameEventSystem.prototype.clone = function(cloneInstance, clonePrivate)
+////{
+////	cloneInstance.bIsEntity = this.bIsEntity;
+////}
+//GameEngineLib.GameEventSystem.prototype.destroy = function destroy(serializer)//WTF??
+//{		
+//	if(GameSystemVars.DEBUG)
 //	{
+//		GameEngineLib.logger.info("Destroying EventSystem " + GameEngineLib.GameObjectRef(this).getPath());
 //	}
-}
-//GameEngineLib.GameEventSystem.prototype.clone = function(cloneInstance, clonePrivate)
-//{
-//	cloneInstance.bIsEntity = this.bIsEntity;
-//}
-GameEngineLib.GameEventSystem.prototype.destroy = function destroy(serializer)//WTF??
-{		
-	if(GameSystemVars.DEBUG)
-		GameEngineLib.logger.info("Destroying EventSystem " + GameEngineLib.GameObjectRef(this).getPath());
-}
+//};
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////

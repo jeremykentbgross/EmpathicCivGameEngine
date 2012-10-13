@@ -25,14 +25,15 @@
 
 
 //TODO depricated!
-GameEngineLib.createGame2DGraphics = function(instance, PRIVATE)
+GameEngineLib.createGame2DGraphics = function(instance)
 {
+	var property;
 	var temp = new GameEngineLib.Game2DGraphics();
 	instance = instance || {};
 	
 	for(property in temp)
 	{
-		instance[property] = temp[property]
+		instance[property] = temp[property];
 	}
 	for(property in temp.prototype)
 	{
@@ -40,14 +41,14 @@ GameEngineLib.createGame2DGraphics = function(instance, PRIVATE)
 	}
 	
 	return instance;
-}
+};
 
 
 
 
 
 
-GameEngineLib.Game2DGraphics = function Game2DGraphics(){}
+GameEngineLib.Game2DGraphics = function Game2DGraphics(){};
 GameEngineLib.Game2DGraphics.prototype.constructor = GameEngineLib.Game2DGraphics;
 
 
@@ -62,7 +63,7 @@ GameEngineLib.Game2DGraphics.prototype.init = function init()
 			_this_._myCanvas = domConstruct.create(
 				"canvas",
 				{
-					id : "canvas",
+					id : "canvas",//TODO different id here!
 					width : GameSystemVars.Graphics.initWidth,
 					height : GameSystemVars.Graphics.initHeight,
 					//TODO localize this:
@@ -81,7 +82,7 @@ GameEngineLib.Game2DGraphics.prototype.init = function init()
 	}
 	this._myCanvas2DContext = this._myCanvas.getContext('2d');
 	
-	this._myBackBufferCanvas = document.createElement('canvas');
+	this._myBackBufferCanvas = document.createElement('canvas');	//TODO create another way, with dojo maybe?
 	this._myBackBufferCanvas.width = this._myCanvas.width;
 	this._myBackBufferCanvas.height = this._myCanvas.height;
 	this._myBackBufferCanvas2DContext = this._myBackBufferCanvas.getContext('2d');
@@ -90,13 +91,14 @@ GameEngineLib.Game2DGraphics.prototype.init = function init()
 	this._debugTextColor = [];
 	
 	return true;
-}
+};
 
 
 
 GameEngineLib.Game2DGraphics.prototype.render = function render(inRenderer)
 {
-	var x = 0, y = 0;
+	var x = 0;
+	var y = 0;
 	var fontSize = GameSystemVars.Debug.Text_Size;
 	
 	//clear canvas
@@ -112,7 +114,8 @@ GameEngineLib.Game2DGraphics.prototype.render = function render(inRenderer)
 		this._myBackBufferCanvas2DContext.font = fontSize + "px Arial";
 
 		var maxWidth = 0;
-		for(var i = 0; i < this._debugText.length; ++i)
+		var i;
+		for(i = 0; i < this._debugText.length; ++i)
 		{
 			var metrics = this._myBackBufferCanvas2DContext.measureText(this._debugText[i]);
 			maxWidth = Math.max(maxWidth, metrics.width);
@@ -125,7 +128,7 @@ GameEngineLib.Game2DGraphics.prototype.render = function render(inRenderer)
 			fontSize * (this._debugText.length + 0.5)
 		);
 		
-		for(var i = 0; i < this._debugText.length; ++i)
+		for(i = 0; i < this._debugText.length; ++i)
 		{
 			this._myBackBufferCanvas2DContext.fillStyle = this._debugTextColor[i];
 			this._myBackBufferCanvas2DContext.fillText(this._debugText[i], x, y+=fontSize);
@@ -137,7 +140,7 @@ GameEngineLib.Game2DGraphics.prototype.render = function render(inRenderer)
 	
 	//draw buffer on screen
 	this._myCanvas2DContext.drawImage(this._myBackBufferCanvas, 0, 0);
-}
+};
 
 
 
@@ -145,7 +148,7 @@ GameEngineLib.Game2DGraphics.prototype.render = function render(inRenderer)
 GameEngineLib.Game2DGraphics.prototype.getDomTarget = function getDomTarget()
 {
 	return this._myCanvas;
-}
+};
 
 
 
@@ -158,18 +161,18 @@ GameEngineLib.Game2DGraphics.prototype.drawDebugText = function drawDebugText(te
 		this._debugText.push(" " + text + " ");
 		this._debugTextColor.push(color);
 	}
-}
+};
 
 //TODO resize canvas listeners (like cameras)
 
 GameEngineLib.Game2DGraphics.prototype.getWidth = function getWidth()
 {
 	return this._myCanvas.width;
-}
+};
 
 
 
 GameEngineLib.Game2DGraphics.prototype.getHeight = function getHeight()
 {
 	return this._myCanvas.height;
-}
+};

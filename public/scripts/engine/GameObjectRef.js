@@ -38,7 +38,7 @@ GameEngineLib.GameObjectRef = function GameObjectRef(inPathOrValue)
 			this.setValue(inPathOrValue);
 		}
 	}
-}
+};
 GameEngineLib.GameObjectRef.prototype.constructor = GameEngineLib.GameObjectRef;
 	
 
@@ -56,12 +56,16 @@ GameEngineLib.GameObjectRef.prototype.deref = function deref()
 	//TODO id
 	
 	if(this._path === null)
+	{
 		return null;
+	}
 	
 	pathTokens = this._path.split('\\');
 	//if valid path
 	if(pathTokens.length !== 2)
+	{
 		return null;
+	}
 	//todo error/warn otherwise
 	
 	objectClass = GameEngineLib.Class.getInstanceRegistry().findByName(pathTokens[0]);
@@ -72,7 +76,7 @@ GameEngineLib.GameObjectRef.prototype.deref = function deref()
 	}
 		
 	return this._value;
-}
+};
 
 
 
@@ -80,7 +84,7 @@ GameEngineLib.GameObjectRef.prototype.setValue = function setValue(inValue)
 {
 	this._path = null;
 	this._value = inValue;
-}
+};
 
 
 
@@ -88,7 +92,7 @@ GameEngineLib.GameObjectRef.prototype.setPath = function setPath(inPath)
 {
 	this._path = inPath;
 	this._value = null;
-}
+};
 
 
 
@@ -104,5 +108,5 @@ GameEngineLib.GameObjectRef.prototype.getPath = function getPath()//TODO txt pat
 	this._value = null;
 	
 	return this._path;
-}
+};
 

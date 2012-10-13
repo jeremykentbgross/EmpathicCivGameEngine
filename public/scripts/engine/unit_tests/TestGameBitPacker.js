@@ -29,8 +29,9 @@ GameUnitTests.registerTest(
 		var string;
 		var passedTest = true;
 		var numValues = 10000;
+		var i;
 		
-		for(var i = 0; i < numValues; ++i)
+		for(i = 0; i < numValues; ++i)
 		{
 			bits[i] = Math.floor(Math.random() * 32);
 			values[i] = Math.floor(Math.random() * Math.pow(2, bits[i]));
@@ -41,7 +42,7 @@ GameUnitTests.registerTest(
 		values[11] = 0;
 		
 		packer = GameEngineLib.createGameBitPacker();
-		for(var i = 0; i < numValues; ++i)
+		for(i = 0; i < numValues; ++i)
 		{
 			packer.pack(values[i], bits[i]);
 		}
@@ -50,7 +51,7 @@ GameUnitTests.registerTest(
 		
 		packer = GameEngineLib.createGameBitPacker();
 		packer.setString(string);
-		for(var i = 0; i < numValues; ++i)
+		for(i = 0; i < numValues; ++i)
 		{
 			value = packer.unpack(bits[i]);
 			if(value !== values[i])

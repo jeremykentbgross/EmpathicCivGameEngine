@@ -78,7 +78,7 @@ GameEngineLib.createGame2DPhysics = function()
 		
 		PRIVATE.accumulatedTime = 0;
 		PRIVATE.timestep = 1;
-	}
+	};
 	
 	//todo cleanup()
 		
@@ -93,7 +93,7 @@ GameEngineLib.createGame2DPhysics = function()
 					return;
 				}
 			
-				var rect = physicsObject.myGame2DAABB.getIntersection(item.myGame2DAABB)
+				var rect = physicsObject.myGame2DAABB.getIntersection(item.myGame2DAABB);
 				if(rect.getArea() > 0)
 				{
 					myCollisions[myCollisions.length] =
@@ -108,14 +108,16 @@ GameEngineLib.createGame2DPhysics = function()
 		);
 		
 		myDetectionTree.insertToAllBestFitting(physicsObject, physicsObject.myOwningNodes);
-	}
+	};
 	var removePhysicsObjectFromTree = function(physicsObject)
 	{
 		var nodeIndex;
 		var nodeArray = physicsObject.myOwningNodes;
 
 		for(nodeIndex in nodeArray)
+		{
 			nodeArray[nodeIndex].deleteItem(physicsObject);//todo optimize this to deleteItemFromNode
+		}
 		/*	
 		myDetectionTree.walk(////////////////////TODO TEMP DEBUG CHECK?? or keep?
 			function(item)
@@ -135,7 +137,7 @@ GameEngineLib.createGame2DPhysics = function()
 		*/
 			
 		physicsObject.myOwningNodes = [];
-	}
+	};
 	
 	
 	
@@ -174,7 +176,7 @@ GameEngineLib.createGame2DPhysics = function()
 			this.setStatic();//removes from active list
 			removePhysicsObjectFromTree(physicsObject);
 			delete myPhysicsObjects[physicsObject.myID];
-		}
+		};
 				
 		phyObjHandle.setStatic = function()
 		{
@@ -184,24 +186,30 @@ GameEngineLib.createGame2DPhysics = function()
 			}
 			physicsObject.myStatus = STATUS__STATIC;
 			//todo remove mass and velocity??
-		}
+		};
 		
 		phyObjHandle.setActive = function()
 		{
 			if(physicsObject.myStatus === STATUS__ACTIVE || physicsObject.myStatus === STATUS__ALWAYS_ACTIVE)
+			{
 				return;
+			}
 			myActivePhysicsObjects.insert(physicsObject.myRegisteredActiveNode);
 			physicsObject.myStatus = STATUS__ACTIVE;
-		}
+		};
 		
 		phyObjHandle.setAlwaysActive = function()
 		{
 			if(physicsObject.myStatus === STATUS__ALWAYS_ACTIVE)
+			{
 				return;
+			}
 			if(physicsObject.myStatus !== STATUS__ACTIVE)
+			{
 				myActivePhysicsObjects.insert(physicsObject.myRegisteredActiveNode);
+			}
 			physicsObject.myStatus = STATUS__ALWAYS_ACTIVE;
-		}
+		};
 		
 		//todo set inactive disabled (ie not in the tree at all)
 		
@@ -214,27 +222,29 @@ GameEngineLib.createGame2DPhysics = function()
 			removePhysicsObjectFromTree(physicsObject);
 			physicsObject.myGame2DAABB.copyFrom(inGame2DAABB);
 			insertPhysicsObjectToTree(physicsObject);
-		}
+		};
 		
 		phyObjHandle.requestVelocity = function(inVelocity)
 		{
 			physicsObject.myVelocity = inVelocity;
 			if(physicsObject.myVelocity.lenSq() > 0.01)
+			{
 				this.setActive();
-		}
+			}
+		};
 		
 		phyObjHandle.setOwner = function(inOwner)
 		{
 			physicsObject.myOwner = inOwner;
-		}
+		};
 		
 		return phyObjHandle;
-	}
+	};
 	
 	outGame2DPhysics.isUpdating = function()
 	{
 		return true;
-	}
+	};
 	
 	//todo take inDeltaTime
 	outGame2DPhysics.update = function(deltaTime)
@@ -271,7 +281,9 @@ GameEngineLib.createGame2DPhysics = function()
 				removePhysicsObjectFromTree(physicsObject);			
 				
 				if(!movedThisFrame[physicsObject.myID])
+				{
 					movedThisFrame[physicsObject.myID] = physicsObject.myGame2DAABB.getLeftTop();
+				}
 				
 				node = node.myNext;
 			}
@@ -383,7 +395,7 @@ GameEngineLib.createGame2DPhysics = function()
 		
 		//todo only sometimes?? or remove need for it with parent pointers <==
 		myDetectionTree.cleanTree();
-	}
+	};
 	
 	
 	
@@ -470,9 +482,9 @@ GameEngineLib.createGame2DPhysics = function()
 			);
 			node = node.myNext;
 		}
-	}
+	};
 	
 		
 	
 	return outGame2DPhysics;
-}
+};

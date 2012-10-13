@@ -22,7 +22,7 @@
 GameEngineLib.GameEvent = function GameEvent(inEventName)
 {
 	this._eventName = inEventName;
-}
+};
 GameEngineLib.GameEvent.prototype.constructor = GameEngineLib.GameEvent;
 
 
@@ -30,7 +30,7 @@ GameEngineLib.GameEvent.prototype.constructor = GameEngineLib.GameEvent;
 GameEngineLib.GameEvent.prototype.getName = function getName()
 {
 	return this._eventName;
-}
+};
 
 
 

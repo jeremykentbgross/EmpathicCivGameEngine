@@ -23,12 +23,12 @@
 //TODO try to increase the precision of the coder and model(s)
 //TODO rename GameSerializer_Binary? actually make it not just binary in the same ser!
 
-GameEngineLib.GameBinarySerializer = function GameBinarySerializer(){}
+GameEngineLib.GameBinarySerializer = function GameBinarySerializer(){};
 GameEngineLib.GameBinarySerializer.prototype.constructor = GameEngineLib.GameBinarySerializer;
 GameEngineLib.GameBinarySerializer.create = function create()
 {
 	return new GameEngineLib.GameBinarySerializer();
-}
+};
 
 /*
 Flags =
@@ -43,14 +43,14 @@ GameEngineLib.GameBinarySerializer.prototype.initWrite = function initWrite(inFl
 {
 	this._isWriting = true;
 	this._init(inFlags);
-}
+};
 
 GameEngineLib.GameBinarySerializer.prototype.initRead = function initRead(inFlags, inData)
 {
 	this._isWriting = false;
 	this._init(inFlags);
 	this._compressor.setString(inData);
-}
+};
 
 GameEngineLib.GameBinarySerializer.prototype._init = function _init(inFlags)
 {
@@ -61,7 +61,7 @@ GameEngineLib.GameBinarySerializer.prototype._init = function _init(inFlags)
 	this._integerRangeModel = GameEngineLib.
 		GameArithmeticCompressionModels.
 		createEvenProbabilityIntegerRangeModel();
-}
+};
 
 /*
 dataDesc = [
@@ -94,7 +94,8 @@ dataDesc = [
 */
 GameEngineLib.GameBinarySerializer.prototype.serializeObject = function serializeObject(inObject, inDataFormat)
 {
-	for(var i = 0; i < inDataFormat.length; ++i)
+	var i;
+	for(i = 0; i < inDataFormat.length; ++i)
 	{
 		var entry = inDataFormat[i];
 		
@@ -106,28 +107,23 @@ GameEngineLib.GameBinarySerializer.prototype.serializeObject = function serializ
 		switch(entry.type)
 		{
 			case "bool":
-			{
 				inObject[entry.name] = this.serializeBool(inObject[entry.name]);
-			}break;
+				break;
 			case "int":
-			{
 				inObject[entry.name] = this.serializeInt(inObject[entry.name], entry.min, entry.max);
-			}break;
+				break;
 			case "float":
-			{
 				inObject[entry.name] = this.serializeFloat(inObject[entry.name], entry.min, entry.max, entry.precision);
-			}break;
+				break;
 			case "string":
-			{
 				inObject[entry.name] = this.serializeString(inObject[entry.name]);
-			}break;
+				break;
 			case "position":
-			{
 				inObject[entry.name] = this.serializePoint2D(inObject[entry.name], entry.min, entry.max/*, entry.precision*/);
-			}break;
+				break;
 		}
 	}
-}
+};
 
 GameEngineLib.GameBinarySerializer.prototype.serializeBool = function serializeBool(value)
 {
@@ -135,15 +131,21 @@ GameEngineLib.GameBinarySerializer.prototype.serializeBool = function serializeB
 	
 	this._integerRangeModel.setMinMax(0, 1);
 	if(this._isWriting)
+	{
 		this._compressor.encode(value ? 1 : 0, this._integerRangeModel);
+	}
 	else
+	{
 		readResult = this._compressor.decode(this._integerRangeModel) === 1 ? true : false;
+	}
 
 	if(!this._dummyMode)
+	{
 		value = readResult;
+	}
 	
 	return value;
-}
+};
 
 GameEngineLib.GameBinarySerializer.prototype.serializeInt = function serializeInt(value, min, max)
 {
@@ -151,15 +153,21 @@ GameEngineLib.GameBinarySerializer.prototype.serializeInt = function serializeIn
 	
 	this._integerRangeModel.setMinMax(min, max);
 	if(this._isWriting)
+	{
 		this._compressor.encode(value, this._integerRangeModel);
+	}
 	else
+	{
 		readResult = this._compressor.decode(this._integerRangeModel);
+	}
 		
 	if(!this._dummyMode)
+	{
 		value = readResult;
+	}
 		
 	return value;
-}
+};
 
 GameEngineLib.GameBinarySerializer.prototype.serializeFloat = function serializeFloat(value, min, max, precision)
 {
@@ -211,32 +219,38 @@ GameEngineLib.GameBinarySerializer.prototype.serializeFloat = function serialize
 	}
 	
 	if(!this._dummyMode)
+	{
 		value = readResult;
+	}
 		
 	return value;
-}
+};
 
 
 GameEngineLib.GameBinarySerializer.prototype.serializeString = function serializeString(value)
 {
 	var readResult = value;
+	var charIndex;
+	var stringLength;
+	var string;
+	
 	//TODO: get a proper dynamic probability model for the strings
 	this._integerRangeModel.setMinMax(0, 65535);
 	if(this._isWriting)
 	{
-		var stringLength = value.length;
-		var string = value;
+		stringLength = value.length;
+		string = value;
 		this._compressor.encode(stringLength, this._integerRangeModel);
-		for(var charIndex = 0; charIndex < stringLength; ++charIndex)
+		for(charIndex = 0; charIndex < stringLength; ++charIndex)
 		{
 			this._compressor.encode(string.charCodeAt(charIndex), this._integerRangeModel);
 		}
 	}
 	else
 	{
-		var stringLength = this._compressor.decode(this._integerRangeModel);
-		var string = "";
-		for(var charIndex = 0; charIndex < stringLength; ++charIndex)
+		stringLength = this._compressor.decode(this._integerRangeModel);
+		string = "";
+		for(charIndex = 0; charIndex < stringLength; ++charIndex)
 		{
 			string += String.fromCharCode(
 				this._compressor.decode(
@@ -248,10 +262,12 @@ GameEngineLib.GameBinarySerializer.prototype.serializeString = function serializ
 	}
 	
 	if(!this._dummyMode)
+	{
 		value = readResult;
+	}
 	
 	return value;
-}
+};
 
 GameEngineLib.GameBinarySerializer.prototype.serializePoint2D = function serializePoint2D(value, min, max)
 {
@@ -261,27 +277,29 @@ GameEngineLib.GameBinarySerializer.prototype.serializePoint2D = function seriali
 	readResult.myY = this.serializeFloat(readResult.myY, min.myY, max.myY, 3);
 	
 	if(!this._dummyMode)
+	{
 		value = readResult;
+	}
 	
 	return value;
-}
+};
 
 GameEngineLib.GameBinarySerializer.prototype.getString = function getString()
 {
 	return this._compressor.getString();
-}
+};
 
 GameEngineLib.GameBinarySerializer.prototype.isReading = function isReading()
 {
 	return !this._isWriting;
-}
+};
 
 GameEngineLib.GameBinarySerializer.prototype.setDummyMode = function setDummyMode(inIsDummyMode)
 {
 	this._dummyMode = inIsDummyMode;
-}
+};
 
 GameEngineLib.GameBinarySerializer.prototype.getDummyMode = function getDummyMode()
 {
 	return this._dummyMode;
-}
+};

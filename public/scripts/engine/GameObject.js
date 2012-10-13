@@ -22,7 +22,7 @@
 GameEngineLib.GameObject = GameEngineLib.Class({
 	Constructor : function GameObject()
 	{
-		var registry = this.getClass().getInstanceRegistry()
+		var registry = this.getClass().getInstanceRegistry();
 		var instanceID = registry.getUnusedID();
 
 		this._name = "Instance_" + instanceID;
@@ -96,7 +96,9 @@ GameEngineLib.GameObject = GameEngineLib.Class({
 		{
 			//TODO have this?
 			if(GameSystemVars.DEBUG && GameSystemVars.Debug.GameObject_Destroy_Print)
+			{
 				GameEngineLib.logger.info("Destroying GameObject " + GameEngineLib.createGameObjectRef(this).getTxtPath(), true);
+			}
 				
 			//TODO notify all listeners
 			//TODO register for net delete
@@ -118,7 +120,9 @@ GameEngineLib.GameObject = GameEngineLib.Class({
 		{
 			//only the owner can write to this
 			if(this._netOwner === GameInstance.localUser.userID)
+			{
 				this._netDirty = true;
+			}
 		},
 		
 		setNetOwner : function setNetOwner(inOwner)
@@ -126,7 +130,9 @@ GameEngineLib.GameObject = GameEngineLib.Class({
 			//only the owner or the server can change the ownership
 			if(this._netOwner !== GameInstance.localUser.userID
 				&& GameInstance.localUser.userID !== GameEngineLib.User.USER_IDS.SERVER)
+			{
 				return;
+			}
 			this._netOwner = inOwner;
 			this._netDirty = true;//this.setNetDirty();
 			this._objectBaseNetDirty = true;
@@ -144,8 +150,10 @@ GameEngineLib.GameObject = GameEngineLib.Class({
 		
 		serialize : function serialize(serializer)
 		{
-			if(!serializer)
+			if(!serializer)//TODO needed still? Try to remove.
+			{
 				return;
+			}
 			
 			this._objectBaseNetDirty =
 				serializer.serializeBool(this._objectBaseNetDirty);

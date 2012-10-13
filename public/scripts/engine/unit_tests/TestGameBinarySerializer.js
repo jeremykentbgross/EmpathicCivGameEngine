@@ -23,6 +23,9 @@ GameUnitTests.registerTest(
 	function()
 	{
 		var passedTest = true;
+		var i;
+		var net;
+		var inObj;
 		
 		var format = [
 			{
@@ -67,7 +70,7 @@ GameUnitTests.registerTest(
 		
 		var testResults = function()
 		{
-			for(var i = 0; i < format.length; ++i)
+			for(i = 0; i < format.length; ++i)
 			{
 				var entry = format[i];
 				if(net && !entry.net)
@@ -91,53 +94,54 @@ GameUnitTests.registerTest(
 					}
 				}
 			}
-		}
+		};
 		
 		
+		
+		///////////////////////////////////////////////
 		//Not net
-		var net = false;
-		{
-			//write data
-			var serializer = GameEngineLib.GameBinarySerializer.create();
-			serializer.initWrite({});
-			serializer.serializeObject(outObj, format);
-			
-			//get the written data to transfer to reader
-			var data = serializer.getString();
-			
-			//read data
-			var inObj = {};
-			serializer = GameEngineLib.GameBinarySerializer.create();
-			serializer.initRead({}, data);
-			serializer.serializeObject(inObj, format);
-		}
+		net = false;
+		
+		//write data
+		var serializer = GameEngineLib.GameBinarySerializer.create();
+		serializer.initWrite({});
+		serializer.serializeObject(outObj, format);
+		
+		//get the written data to transfer to reader
+		var data = serializer.getString();
+		
+		//read data
+		inObj = {};
+		serializer = GameEngineLib.GameBinarySerializer.create();
+		serializer.initRead({}, data);
+		serializer.serializeObject(inObj, format);
+		
 		//compare values in in/out Obj
 		testResults();
+		///////////////////////////////////////////////
 		
 		
+		///////////////////////////////////////////////
 		//net
-		var net = true;
-		{
-			//write data
-			var serializer = GameEngineLib.GameBinarySerializer.create();
-			serializer.initWrite({NET : true});
-			serializer.serializeObject(outObj, format);
-			
-			//get the written data to transfer to reader
-			var data = serializer.getString();
-			
-			//read data
-			var inObj = {
-				public : {},
-				PRIVATE : {}
-			};
-			serializer = GameEngineLib.GameBinarySerializer.create();
-			serializer.initRead({NET : true}, data);
-			serializer.serializeObject(inObj, format);
-		}
+		net = true;
+	
+		//write data
+		serializer = GameEngineLib.GameBinarySerializer.create();
+		serializer.initWrite({NET : true});
+		serializer.serializeObject(outObj, format);
+		
+		//get the written data to transfer to reader
+		data = serializer.getString();
+		
+		//read data
+		inObj = {};
+		serializer = GameEngineLib.GameBinarySerializer.create();
+		serializer.initRead({NET : true}, data);
+		serializer.serializeObject(inObj, format);
+		
 		//compare values in in/out Obj
 		testResults();
-		
+		///////////////////////////////////////////////
 		
 		return passedTest;
 	}

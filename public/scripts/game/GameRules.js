@@ -81,7 +81,8 @@ GameLib.createGameRules = function(instance, PRIVATE)
 					,layer : 1
 					,physics : GameEngineLib.createGame2DAABB(0, 0, 64, 64)
 					,size : GameEngineLib.createGame2DPoint(96,96)
-				},
+				}
+				//,
 			]
 		);
 		//TODO wait until it is loaded to set somehow? or make streaming work properly with scene graph
@@ -90,9 +91,15 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		map.setTileSet(tileset);
 		
 		//hack put something in the map to start with
-		for(var i = 0; i < mapSizeInTiles; ++i)
-			for(var j = 0; j < mapSizeInTiles; ++j)
+		var i;
+		var j;
+		for(i = 0; i < mapSizeInTiles; ++i)
+		{
+			for(j = 0; j < mapSizeInTiles; ++j)
+			{
 				map.setTile(i, j, (i+j)%5);
+			}
+		}
 		
 		//todo add entities to world
 		
@@ -117,13 +124,15 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		PRIVATE.GameWorld.setCamera(PRIVATE.entity1Camera);//TODO comment out and fix default camera
 		
 		if(!GameSystemVars.Network.isServer)
+		{
 			GameInstance.Input.registerListener("Input", PRIVATE);
+		}
 		
 		PRIVATE.onIdentifiedUser = function(inEvent)
 		{
 			GameEngineLib.logger.info("setting owner for physics component: " + inEvent.user.userName );
 			PRIVATE.entity1Physics.setNetOwner(inEvent.user.userID);
-		}
+		};
 		
 		if(GameSystemVars.Network.isMultiplayer)
 		{
@@ -146,43 +155,43 @@ GameLib.createGameRules = function(instance, PRIVATE)
 						'>' : '&gt;',
 						'&' : '&amp;'
 					};
-					
+
 					PRIVATE.state = domConstruct.create(
-	    				"p",
-	    				{
-	    					id : "status",
-	    					//TODO css class
+						"p",
+						{
+							id : "status",
+							//TODO css class
 							innerHTML : "Not connected"
 						},
 						chat_container
 					);
-					
+
 					PRIVATE.form = domConstruct.create(
-	    				"form",
-	    				{
-	    					id : "chat_form",
-	    					//TODO css class
-	    					innerHTML : "Chat"
+						"form",
+						{
+							id : "chat_form",
+							//TODO css class
+							innerHTML : "Chat"
 						},
 						chat_container
 					);
 					
 					PRIVATE.chat = domConstruct.create(
-	    				"input",
-	    				{
-	    					id : "chat",
-	    					//TODO css class
-	    					type : "text",
-	    					placeholder : "type and press enter to chat"
+						"input",
+						{
+							id : "chat",
+							//TODO css class
+							type : "text",
+							placeholder : "type and press enter to chat"
 						},
 						PRIVATE.form
 					);
 					
 					PRIVATE.log = domConstruct.create(
-	    				"ul",
-	    				{
-	    					id : "log"
-	    					//TODO css class
+						"ul",
+						{
+							id : "log"
+							//TODO css class
 						},
 						chat_container
 					);
@@ -202,7 +211,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 								}
 							}
 						);
-					}
+					};
 					
 					PRIVATE.sendChatToChatLog = function(inMessage)
 					{
@@ -220,7 +229,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 							PRIVATE.log
 							,"first"
 						);
-					}
+					};
 					
 					on(PRIVATE.form, 'submit', PRIVATE.onChatSubmit);
 				}
@@ -230,7 +239,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 				//TODO remove the UI stuff from this class?
 				PRIVATE.state.className = 'success';//TODO classname css!! (more in this file)
 				PRIVATE.state.innerHTML = 'Socket Open';
-			}
+			};
 			GameInstance.Network.registerListener(
 				"ConnectedToServer",
 				PRIVATE
@@ -240,7 +249,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 				//TODO remove the UI stuff from this class?
 				PRIVATE.state.className = 'fail';//TODO classname css!! (more in this file)
 				PRIVATE.state.innerHTML = 'Socket Closed';
-			}
+			};
 			GameInstance.Network.registerListener(
 				"DisconnectedFromServer",
 				PRIVATE
@@ -248,7 +257,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 			PRIVATE.onMsg = function(inEvent)
 			{
 				PRIVATE.sendChatToChatLog(inEvent.msg);
-			}
+			};
 			GameInstance.Network.registerListener(
 				"Msg",
 				PRIVATE
@@ -261,13 +270,13 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		
 		
 		return true;
-	}
+	};
 	
 	
 	instance.render = function(inCanvas2DContext)
 	{
 		//choose items to render
-		PRIVATE.GameWorld.render(inCanvas2DContext)
+		PRIVATE.GameWorld.render(inCanvas2DContext);
 	};
 	
 	
@@ -280,37 +289,39 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		var mouseWorldPosition;
 				
 		if(PRIVATE.drawTile === undefined)
+		{
 			PRIVATE.drawTile = 0;
+		}
 		
-		if(inInputEvent.keysPressed["o"])
+		if(inInputEvent.keysPressed['o'])
 		{
 			GameSystemVars.Debug.Map_Draw = !GameSystemVars.Debug.Map_Draw;
 		}
-		if(inInputEvent.keysPressed["p"])
+		if(inInputEvent.keysPressed['p'])
 		{
 			GameSystemVars.Debug.Physics_Draw= !GameSystemVars.Debug.Physics_Draw;
 		}
-		if(inInputEvent.keysPressed["i"])
+		if(inInputEvent.keysPressed['i'])
 		{
 			GameSystemVars.Debug.SceneGraph_Draw= !GameSystemVars.Debug.SceneGraph_Draw;
 		}
-		if(inInputEvent.keysPressed["0"])
+		if(inInputEvent.keysPressed['0'])
 		{
 			PRIVATE.drawTile = 0;
 		}
-		if(inInputEvent.keysPressed["1"])
+		if(inInputEvent.keysPressed['1'])
 		{
 			PRIVATE.drawTile = 1;
 		}
-		if(inInputEvent.keysPressed["2"])
+		if(inInputEvent.keysPressed['2'])
 		{
 			PRIVATE.drawTile = 2;
 		}
-		if(inInputEvent.keysPressed["3"])
+		if(inInputEvent.keysPressed['3'])
 		{
 			PRIVATE.drawTile = 3;
 		}
-		if(inInputEvent.keysPressed["4"])
+		if(inInputEvent.keysPressed['4'])
 		{
 			PRIVATE.drawTile = 4;
 		}
@@ -334,8 +345,8 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		}
 		
 		//GameInstance.Network.sendMessage(inInputEvent.mouseLoc.myX + ", " + inInputEvent.mouseLoc.myY);
-	}
+	};
 		
 	
 	return instance;
-}
+};

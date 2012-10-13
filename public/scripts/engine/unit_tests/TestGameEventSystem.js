@@ -55,7 +55,7 @@ GameUnitTests.registerTest(
 		
 		eventSystem.onEvent(
 			{
-				getName : function(){return "TestEvent"},
+				getName : function(){return "TestEvent";},
 				data : 2
 			}
 		);
@@ -74,7 +74,7 @@ GameUnitTests.registerTest(
 		eventSystem.deregisterListener("TestEvent", listener2);
 		eventSystem.onEvent(
 			{
-				getName : function(){return "TestEvent"},
+				getName : function(){return "TestEvent";},
 				data : 0
 			}
 		);

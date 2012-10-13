@@ -1,5 +1,14 @@
 var fs = require("fs");
 
+/*
+Note:
+Should also run jslint: http://www.jslint.com/
+
+Known globals:
+
+GameLoader window require requestAnimFrame setTimeout GameSystemVars GameEngineLib GameLib GameInstance GameClassRegistryMap GameUnitTests console gameAssert document Image GameEngineServer io
+*/
+
 GameEngineServer.CodeCompressor = function CodeCompressor(inRootPath)
 {
 	this._rootPath = inRootPath;

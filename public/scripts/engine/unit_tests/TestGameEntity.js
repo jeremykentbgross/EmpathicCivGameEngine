@@ -47,7 +47,7 @@ GameUnitTests.registerTest(
 				
 				onRemovedFromEntity : function onRemovedFromEntity(inEvent)
 				{
-					GameAssert(
+					gameAssert(
 						inEvent.entity === this._owner
 						,"Didn't belong to this entity!"
 					);
@@ -64,7 +64,7 @@ GameUnitTests.registerTest(
 				
 				onRemovedFromWorld : function onRemovedFromWorld(inEvent)
 				{
-					GameAssert(this._containingWorld === inEvent.world, "Removing from wrong world");
+					gameAssert(this._containingWorld === inEvent.world, "Removing from wrong world");
 					this._removedWorld = true;
 					this._containingWorld = null;
 				},
@@ -77,7 +77,7 @@ GameUnitTests.registerTest(
 		var component1 = TestComponent.create();
 		entity.addComponent(component1);
 		
-		GameAssert(
+		gameAssert(
 			component1.added === entity
 			&& entity === component1._owner
 			&& component1._containingWorld === 6
@@ -85,14 +85,14 @@ GameUnitTests.registerTest(
 		);
 		
 		entity.addedToWorld(7);
-		GameAssert(
+		gameAssert(
 			component1._removedWorld
 			&& component1._containingWorld === 7,
 			"World not set correctly."
 		);
 		
 		entity.removeComponent(component1);
-		GameAssert(
+		gameAssert(
 			component1.added === null
 			&& null === component1._owner 
 			&& component1._containingWorld === null,

@@ -30,6 +30,7 @@ GameEngineLib.createGameAssetManager = function(instance, PRIVATE)
 	
 	instance.loadImage = function(inFileName, outLoadTarget)
 	{
+		var defaultImageName = "defaultimage";
 		var imageInfo;
 		var i;
 		
@@ -47,7 +48,7 @@ GameEngineLib.createGameAssetManager = function(instance, PRIVATE)
 				imageInfo.listeners.push(outLoadTarget);
 				
 				//set the default image
-				outLoadTarget.image = document.images["defaultimage"];
+				outLoadTarget.image = document.images[defaultImageName];//TODO query this with dojo
 			}
 		}
 		else
@@ -76,9 +77,9 @@ GameEngineLib.createGameAssetManager = function(instance, PRIVATE)
 			PRIVATE.images[inFileName] = imageInfo;
 			
 			//set the default image
-			outLoadTarget.image = document.images["defaultimage"];
+			outLoadTarget.image = document.images[defaultImageName];//TODO query this with dojo
 		}
-	}
+	};
 	
 	return instance;
-}
+};

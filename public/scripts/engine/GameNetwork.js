@@ -26,7 +26,7 @@ GameEngineLib.User = function User(inName, inID)
 	this.userName = inName || "Guest";
 	this.userID = inID || GameEngineLib.User.USER_IDS.GUEST;
 	//TODO use FB id or something in the future
-}
+};
 GameEngineLib.User.prototype.constructor = GameEngineLib.User;
 
 GameEngineLib.User.USER_IDS =
@@ -39,7 +39,7 @@ GameEngineLib.User.USER_IDS =
 	,CURRENT_MAX : 3	//enum max!
 	
 	,MAX_EVER : 65535
-}
+};
 
 
 
@@ -49,14 +49,14 @@ GameEngineLib.User.USER_IDS =
 GameEngineLib.GameNetwork = function GameNetwork()
 {
 	GameEngineLib.createEventSystem(this);//TODO inherit
-}
+};
 
 GameEngineLib.GameNetwork.prototype.constructor = GameEngineLib.GameNetwork;
 
 GameEngineLib.GameNetwork.create = function create()
 {
 	return new GameEngineLib.GameNetwork();
-}
+};
 
 
 		
@@ -143,7 +143,7 @@ GameEngineLib.GameNetwork.prototype.init = function init()
 		//data channel
 		this._socket.on("data", this._onDataRecv);
 	}
-}
+};
 
 
 
@@ -162,7 +162,7 @@ GameEngineLib.GameNetwork.prototype._onClientConnected = function _onClientConne
 	
 	//tell everone they have connected:
 	inConnectedSocket.broadcast.emit("msg", "User Connected: " + inConnectedSocket.gameUser.name);
-}
+};
 
 
 
@@ -176,7 +176,7 @@ GameEngineLib.GameNetwork.prototype._onClientDisconnected = function _onClientDi
 	_this_._listenSocket.sockets.emit("msg", "User Disconnected: " + this.gameUser.name);
 	
 	//TODO event to remove them (tell everyone they are gone)
-}
+};
 
 
 
@@ -190,7 +190,9 @@ GameEngineLib.GameNetwork.prototype.sendMessage = function sendMessage(inMsg, in
 	{
 		this._socket.emit("msg", inMsg);
 		if(inSentListener && inSentListener.onSent)
+		{
 			inSentListener.onSent(inMsg);
+		}
 	}
 	else
 	{
@@ -201,7 +203,7 @@ GameEngineLib.GameNetwork.prototype.sendMessage = function sendMessage(inMsg, in
 			GameEngineLib.logger.info("Can't send message when disconnected.");
 		}
 	}
-}
+};
 
 
 
@@ -226,7 +228,7 @@ GameEngineLib.GameNetwork.prototype._sendData = function _sendData(inData/*, inS
 			GameEngineLib.logger.info("Can't send data when disconnected.");
 		}
 	}
-}
+};
 
 
 
@@ -245,7 +247,7 @@ GameEngineLib.GameNetwork.prototype._onConnectedToServer = function _onConnected
 	//TODO change this to be some kind of hand shake or login or **user verification**?
 	
 	_this_.onEvent(event);
-}
+};
 
 
 
@@ -260,7 +262,7 @@ GameEngineLib.GameNetwork.prototype._onDisconnectedFromServer = function _onDisc
 	}
 	
 	_this_.onEvent(event);
-}
+};
 
 
 
@@ -319,7 +321,7 @@ GameEngineLib.GameNetwork.prototype._onIdRecv = function _onIdRecv(inID)
 			GameEngineLib.logger.info("Server Re-ID's me as: " + inID.userName + " : " + inID.userID);
 		}
 	}
-}
+};
 
 
 
@@ -341,7 +343,7 @@ GameEngineLib.GameNetwork.prototype._onMsgRecv = function _onMsgRecv(inMsg)
 		//TODO cap size?
 		this.broadcast.emit("msg", this.gameUser.name + ": " + inMsg);
 	}
-}
+};
 
 
 
@@ -366,7 +368,7 @@ GameEngineLib.GameNetwork.prototype._onDataRecv = function _onDataRecv(inData)
 			this.broadcast.emit("data", inData);
 		}
 	}
-}
+};
 
 
 
@@ -374,7 +376,7 @@ GameEngineLib.GameNetwork.prototype._onDataRecv = function _onDataRecv(inData)
 GameEngineLib.GameNetwork.prototype.isUpdating = function isUpdating()
 {
 	return true;//!GameSystemVars.Network.isServer;//true;//isMultiplayer?? isConnected?
-}
+};
 
 
 
@@ -398,7 +400,9 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 		{
 			//TODO get rid of this when we have class dirty list instead of looping thru all classes.
 			if(!inClass.flags.net)
+			{
 				return;
+			}
 				
 			if(!GameSystemVars.Network.isServer
 				&& GameSystemVars.DEBUG
@@ -440,7 +444,8 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 		this._messageHeader.userID = GameInstance.localUser.userID;
 		this._serializer.serializeObject(this._messageHeader, this._messageHeaderFormat);
 		
-		for(var i = 0; i < this._messageHeader.numObjects; ++i)
+		var i;
+		for(i = 0; i < this._messageHeader.numObjects; ++i)
 		{
 			var object = dirtyObjects[i];
 			this._objectHeader.classID = object.getClass().getID();
@@ -459,7 +464,7 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 		
 		dirtyObjects = dirtyObjects.slice(this._messageHeader.numObjects);
 	}
-}
+};
 
 
 
@@ -488,13 +493,14 @@ GameEngineLib.GameNetwork.prototype._onData = function _onData(inEvent, inSocket
 		this._serializer.serializeObject(this._messageHeader, this._messageHeaderFormat);
 		
 		//check that the username matches the socket user
-		GameAssert(
+		gameAssert(
 			(this._messageHeader.userID === inSocket.gameUser.userID
 			|| inSocket.gameUser.userID === GameEngineLib.User.USER_IDS.SERVER)
 			,"Net user not identifying self correctly: " + (this._messageHeader.userID + " != " + inSocket.gameUser.userID)
 		);
 		
-		for(var i = 0; i < this._messageHeader.numObjects; ++i)
+		var i;
+		for(i = 0; i < this._messageHeader.numObjects; ++i)
 		{
 			this._serializer.serializeObject(this._objectHeader, this._objectHeaderFormat);
 			var objectClass = GameEngineLib.Class.getInstanceRegistry().findByID(this._objectHeader.classID);
@@ -517,7 +523,7 @@ GameEngineLib.GameNetwork.prototype._onData = function _onData(inEvent, inSocket
 			//TODO if not found, and not server, create it
 			//TODO if !server && !owner && !recentOwnerQueue throw error
 			if(object.getNetOwner() !== this._messageHeader.userID
-				&& this._messageHeader.userID != GameEngineLib.User.USER_IDS.SERVER)
+				&& this._messageHeader.userID !== GameEngineLib.User.USER_IDS.SERVER)
 			{
 				//TODO info/warn?
 				console.log("Not the owner!: " + this._messageHeader.userID + " != " + object.getNetOwner());
@@ -541,4 +547,4 @@ GameEngineLib.GameNetwork.prototype._onData = function _onData(inEvent, inSocket
 	}
 	
 	return true;
-}
+};

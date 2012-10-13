@@ -33,8 +33,13 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
 		//TODO ^^^ same kind of thing for map tiles?
 		
 		if(!GameSystemVars.Network.isServer)
+		{
 			GameInstance.AssetManager.loadImage(/*"images/testsprite.png"*/"images/wall_level01_01.png", this._myFrames[0]);
-		else this._myFrames[0] = {};
+		}
+		else
+		{
+			this._myFrames[0] = {};
+		}
 		
 		this._myFrames[0].offset = GameEngineLib.createGame2DPoint(-64, -64);//(-32, -64-16);//hack
 	},

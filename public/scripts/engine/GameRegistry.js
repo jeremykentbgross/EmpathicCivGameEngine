@@ -20,14 +20,15 @@
 */
 
 //TODO depricated
-GameEngineLib.createGameRegistry = function(instance, PRIVATE)
+GameEngineLib.createGameRegistry = function(instance)
 {
+	var property;
 	var temp = new GameEngineLib.GameRegistry();
 	instance = instance || {};
 	
 	for(property in temp)
 	{
-		instance[property] = temp[property]
+		instance[property] = temp[property];
 	}
 	for(property in temp.prototype)
 	{
@@ -35,7 +36,7 @@ GameEngineLib.createGameRegistry = function(instance, PRIVATE)
 	}
 	
 	return instance;
-}
+};
 
 
 
@@ -46,7 +47,7 @@ GameEngineLib.GameRegistry = function GameRegistry()
 	this._instancesByID = [];
 	this._unusedInstanceIDs = [];	//TODO magic/check number for handles
 	this._maxID = 0;
-}
+};
 GameEngineLib.GameRegistry.prototype.constructor = GameEngineLib.GameRegistry;
 
 
@@ -54,7 +55,7 @@ GameEngineLib.GameRegistry.prototype.constructor = GameEngineLib.GameRegistry;
 GameEngineLib.GameRegistry.prototype.getMaxID = function getMaxID()
 {
 	return this._maxID;
-}
+};
 
 //todo take name parameter as well so it is not always assuming the object is named?
 GameEngineLib.GameRegistry.prototype.register = function register(inObject)
@@ -70,7 +71,7 @@ GameEngineLib.GameRegistry.prototype.register = function register(inObject)
 	delete this._unusedInstanceIDs[id];
 	
 	++this._itemCount;
-}
+};
 
 //todo take name parameter as well so it is not always assuming the object is named?
 GameEngineLib.GameRegistry.prototype.deregister = function deregister(inObject)
@@ -84,38 +85,41 @@ GameEngineLib.GameRegistry.prototype.deregister = function deregister(inObject)
 	this._unusedInstanceIDs[id] = id;
 	
 	--this._itemCount;
-}
+};
 
 //todo change this to just find() and check they type (index vs name)
 GameEngineLib.GameRegistry.prototype.findByName = function findByName(inName)
 {
 	return this._instancesByName[inName];
-}
+};
 
 GameEngineLib.GameRegistry.prototype.findByID = function findByID(inID)
 {
 	return this._instancesByID[inID];
-}
+};
 
 GameEngineLib.GameRegistry.prototype.forAll = function forAll(inFunction)
 {
-	for(var i in this._instancesByName)
+	var i;
+	for(i in this._instancesByName)
 	{
 		if(this._instancesByName.hasOwnProperty(i))//todo check if object?
 		{
 			inFunction(this._instancesByName[i]);
 		}
 	}
-}
+};
 
 GameEngineLib.GameRegistry.prototype.numItems = function numItems()
 {
 	return this._itemCount;
-}
+};
 
 GameEngineLib.GameRegistry.prototype.getUnusedID = function getUnusedID()
 {
-	for(var i in this._unusedInstanceIDs)
-		return i;
+	if(this._unusedInstanceIDs.length)
+	{
+		return this._unusedInstanceIDs[0];
+	}
 	return this._maxID + 1;
-}
+};

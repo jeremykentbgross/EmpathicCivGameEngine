@@ -37,7 +37,7 @@ GameEngineLib.createGameQuadTree = function(instance, PRIVATE)
 		PRIVATE.myChildren = null;
 		PRIVATE.myMinSize = inMinSize || 1;
 		PRIVATE.myItems = [];
-	}
+	};
 	
 	
 	PRIVATE.createChildren = function()
@@ -85,7 +85,7 @@ GameEngineLib.createGameQuadTree = function(instance, PRIVATE)
 				);
 			}
 		}
-	}
+	};
 	
 	
 	
@@ -109,7 +109,9 @@ GameEngineLib.createGameQuadTree = function(instance, PRIVATE)
 				for(i = 0; i < loops; ++i)
 				{
 					if(PRIVATE.myChildren[i].insertToSmallestContaining(inItem, outContainingNodes))
+					{
 						return true;
+					}
 				}
 			}
 			
@@ -129,7 +131,7 @@ GameEngineLib.createGameQuadTree = function(instance, PRIVATE)
 		}
 		
 		return false;
-	}
+	};
 	
 	
 	
@@ -144,10 +146,12 @@ GameEngineLib.createGameQuadTree = function(instance, PRIVATE)
 		var targetNodesSize;//todo make this faster by not doing it every level??
 		var thisNodeSize;//todo make this faster by not doing it every level??
 		
-		minTargetNodesSize = Math.max(inItem.myGame2DAABB.myWidth, inItem.myGame2DAABB.myHeight);
+		var minTargetNodesSize = Math.max(inItem.myGame2DAABB.myWidth, inItem.myGame2DAABB.myHeight);
 		thisNodeSize = Math.max(PRIVATE.myGame2DAABB.myWidth, PRIVATE.myGame2DAABB.myHeight);
 		if(thisNodeSize < minTargetNodesSize)
+		{
 			return false;
+		}
 		
 		if(PRIVATE.myGame2DAABB.intersectsRect(inItem.myGame2DAABB))
 		{
@@ -161,11 +165,15 @@ GameEngineLib.createGameQuadTree = function(instance, PRIVATE)
 				for(i = 0; i < loops; ++i)
 				{
 					if(PRIVATE.myChildren[i].insertToAllBestFitting(inItem, outContainingNodes))
+					{
 						inserted = true;
+					}
 				}
 			}
 			if(inserted)
+			{
 				return true;
+			}
 			
 			
 			/*if(PRIVATE.myItems.indexOf(inItem) !== -1)////////////////TODO DEBUG IS THIS NEEDED?
@@ -183,7 +191,7 @@ GameEngineLib.createGameQuadTree = function(instance, PRIVATE)
 		}
 		
 		return false;
-	}
+	};
 	
 	
 	//TODO outArray[] containing the item
@@ -198,7 +206,7 @@ GameEngineLib.createGameQuadTree = function(instance, PRIVATE)
 		if(PRIVATE.myGame2DAABB.intersectsRect(inItem.myGame2DAABB))
 		{
 			//if there are children and the children are not to small to contain the item:
-			minTargetNodesSize = Math.max(inItem.myGame2DAABB.myWidth, inItem.myGame2DAABB.myHeight);
+			var minTargetNodesSize = Math.max(inItem.myGame2DAABB.myWidth, inItem.myGame2DAABB.myHeight);
 			thisNodeSize = Math.max(PRIVATE.myGame2DAABB.myWidth, PRIVATE.myGame2DAABB.myHeight);
 			if(PRIVATE.myChildren !== null && !(thisNodeSize / 2 < minTargetNodesSize))
 			{
@@ -206,16 +214,20 @@ GameEngineLib.createGameQuadTree = function(instance, PRIVATE)
 				for(i = 0; i < loops; ++i)
 				{
 					if(PRIVATE.myChildren[i].deleteItem(inItem))//TODO this may not be right, maybe should return deleted? not if to keep child??
+					{
 						keepChild = true;
+					}
 				}
 				if(!keepChild)
+				{
 					PRIVATE.myChildren = null;
+				}
 			}
 			
 			loops = PRIVATE.myItems.length;//////TODO should loop these first, if found return, else check children
 			for(i = 0; i < loops; ++i)
 			{
-				item = PRIVATE.myItems[i];
+				var item = PRIVATE.myItems[i];
 				if(item === inItem)
 				{
 					//delete it
@@ -228,7 +240,7 @@ GameEngineLib.createGameQuadTree = function(instance, PRIVATE)
 		}
 		
 		return (PRIVATE.myItems.length !==0) || (PRIVATE.myChildren !== null);
-	}
+	};
 	
 	
 	//TODO outArray[] containing deleted items, see deleteContained below
@@ -252,10 +264,14 @@ GameEngineLib.createGameQuadTree = function(instance, PRIVATE)
 				for(i = 0; i < loops; ++i)
 				{
 					if(PRIVATE.myChildren[i].deleteIntersecting(inGame2DAABB))
+					{
 						keepChild = true;
+					}
 				}
 				if(!keepChild)
+				{
 					PRIVATE.myChildren = null;
+				}
 			}
 		
 			loops = PRIVATE.myItems.length;
@@ -272,7 +288,7 @@ GameEngineLib.createGameQuadTree = function(instance, PRIVATE)
 		}
 		
 		return (PRIVATE.myItems.length !==0) || (PRIVATE.myChildren !== null);
-	}
+	};
 	
 	
 	instance.deleteContained = function(inGame2DAABB, outDeletedItems)
@@ -285,12 +301,16 @@ GameEngineLib.createGameQuadTree = function(instance, PRIVATE)
 		if(inGame2DAABB.containsRect(PRIVATE.myGame2DAABB))
 		{
 			//delete everything
-			for(var i in PRIVATE.myItems)
+			for(i in PRIVATE.myItems)
+			{
 				outDeletedItems.push(PRIVATE.myItems[i]);
+			}
 			
 			//traverse children for deleted items
-			for(var i in PRIVATE.myChildren)
+			for(i in PRIVATE.myChildren)
+			{
 				PRIVATE.myChildren[i].deleteContained(inGame2DAABB, outDeletedItems);
+			}
 			
 			PRIVATE.myChildren = null;
 			PRIVATE.myItems = [];
@@ -308,7 +328,9 @@ GameEngineLib.createGameQuadTree = function(instance, PRIVATE)
 					keepChild = PRIVATE.myChildren[i].deleteContained(inGame2DAABB, outDeletedItems) || keepChild;
 				}
 				if(!keepChild)
+				{
 					PRIVATE.myChildren = null;
+				}
 			}
 		
 			loops = PRIVATE.myItems.length;
@@ -326,7 +348,7 @@ GameEngineLib.createGameQuadTree = function(instance, PRIVATE)
 		}
 		
 		return (PRIVATE.myItems.length !==0) || (PRIVATE.myChildren !== null);
-	}
+	};
 	
 
 	
@@ -346,19 +368,21 @@ GameEngineLib.createGameQuadTree = function(instance, PRIVATE)
 			{
 				item = PRIVATE.myItems[i];
 				if(item.myGame2DAABB.intersectsRect(inGame2DAABB))
+				{
 					inFunction(item);
+				}
 			}
 			if(PRIVATE.myChildren !== null)
 			{
 				loops = PRIVATE.myChildren.length;
 				for(i = 0; i < loops; ++i)
 				{
-					/*if*/(PRIVATE.myChildren[i].walk(inFunction, inGame2DAABB))
+					/*if(*/PRIVATE.myChildren[i].walk(inFunction, inGame2DAABB);
 						//return true;
 				}
 			}
 		}
-	}
+	};
 	
 	
 	
@@ -373,12 +397,14 @@ GameEngineLib.createGameQuadTree = function(instance, PRIVATE)
 		//inCameraRect = inCameraRect || PRIVATE.myGame2DAABB;
 		
 		if(!PRIVATE.myGame2DAABB.intersectsRect(inCameraRect))
+		{
 			return;
+		}
 		
 		if(PRIVATE.myItems.length !== 0)
 		{
 			inCanvas2DContext.strokeStyle = inItemColor;
-			for(var i in PRIVATE.myItems)
+			for(i in PRIVATE.myItems)
 			{
 				inCanvas2DContext.strokeRect(
 					PRIVATE.myItems[i].myGame2DAABB.myX - inCameraRect.myX,
@@ -412,7 +438,7 @@ GameEngineLib.createGameQuadTree = function(instance, PRIVATE)
 				PRIVATE.myChildren[i].debugDraw(inCanvas2DContext, inCameraRect, inNodeColor, inFullNodeColor, inItemColor);
 			}
 		}
-	}
+	};
 	
 	
 	
@@ -423,20 +449,24 @@ GameEngineLib.createGameQuadTree = function(instance, PRIVATE)
 
 		if(PRIVATE.myChildren !== null)
 		{
-			loops = PRIVATE.myChildren.length;
+			var loops = PRIVATE.myChildren.length;
 			for(i = 0; i < loops; ++i)
 			{
 				if(PRIVATE.myChildren[i].cleanTree())
+				{
 					keepChild = true;
+				}
 			}
 			if(!keepChild)
+			{
 				PRIVATE.myChildren = null;
+			}
 		}
 		
 		return (PRIVATE.myItems.length !==0) || (PRIVATE.myChildren !== null);
-	}
+	};
 	
 	
 	
 	return instance;
-}
+};

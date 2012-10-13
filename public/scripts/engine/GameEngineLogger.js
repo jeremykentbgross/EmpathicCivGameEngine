@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameAssert = function GameAssert(expression, message)
+gameAssert = function gameAssert(expression, message)
 {
 	if(!expression)
 	{

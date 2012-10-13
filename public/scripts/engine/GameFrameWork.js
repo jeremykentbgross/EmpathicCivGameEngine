@@ -33,7 +33,9 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 	//Create gamerules instance///////////////////////
 	// todo move default setup code elsewhere?
 	if(GameLib.createGameRules !== undefined)
+	{
 		instance.GameRules = GameLib.createGameRules();//TODO make this an GameObject?
+	}
 	
 	instance.GameRules = 
 		instance.GameRules || { noUserGameRules : true };
@@ -63,9 +65,13 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 			
 			inCanvas2DContext.font = "30px Arial";
 			if(!this.noUserGameRules)
+			{
 				message = "No Game Specific Render Code Is Present!";
+			}
 			else
+			{
 				message = "No Game Specific GameRule Code Is Present!";
+			}
 			x = (inCanvas2DContext.canvas.width - inCanvas2DContext.measureText(message).width) / 2;
 			y = (inCanvas2DContext.canvas.height - 30) / 2;
 			inCanvas2DContext.fillText(message, x, y);
@@ -95,7 +101,9 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 			//Init graphics///////////////////////////////////
 			instance.Graphics = GameEngineLib.createGame2DGraphics();
 			if(!instance.Graphics.init())
+			{
 				return false;
+			}
 			//Init graphics///////////////////////////////////
 			//////////////////////////////////////////////////
 			
@@ -134,7 +142,9 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 		//Init Input//////////////////////////////////////
 		instance.Input = GameEngineLib.createInput();
 		if(!GameSystemVars.Network.isServer)
+		{
 			instance.Input.initClient(instance.Graphics.getDomTarget());
+		}
 		instance.UpdateOrder.push(instance.Input);
 		//Init Input//////////////////////////////////////
 		//////////////////////////////////////////////////
@@ -170,35 +180,42 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 		
 		//return instance.GameRules.init();
 		if(!instance.GameRules.init())
+		{
 			return false;
-		
-		
+		}
 		
 		return true;
-	}
+	};
 	
 	
 	
 	PRIVATE.update = function(time)
-	{		
+	{
+		var i;
 		var aveDt = instance.GameTimer.update(time);
 		
 		//TODO make update list an event system for onUpdate
-		for(var i = 0; i < instance.UpdateOrder.length; ++i)
+		for(i = 0; i < instance.UpdateOrder.length; ++i)
 		{
 			var current = instance.UpdateOrder[i];
 			if(current.isUpdating())//TODO they can return if they are not, meaning we can get rid of this
+			{
 				current.update(aveDt);
+			}
 		}
 		
 		if(!GameSystemVars.Network.isServer)
+		{
 			instance.Graphics.render(instance.GameRules);
+		}
 		
 		//loop by sending browser event to queue a call to this function again
 		if(PRIVATE.running)
+		{
 			requestAnimFrame(PRIVATE.update);
+		}
 		//else shut down?
-	}
+	};
 	///////////////////////////////////////////////////
 	
 
@@ -222,14 +239,14 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 		{
 			console.log(error.stack);
 		}
-	}
+	};
 	
 	instance.exit = function()
 	{
 		PRIVATE.running = false;
 		//TODO clean everything?
-	}
+	};
 	
 	return instance;
 	///////////////////////////////////////////////////
-}
+};

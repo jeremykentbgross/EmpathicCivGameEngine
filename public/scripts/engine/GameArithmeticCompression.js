@@ -82,7 +82,7 @@ GameEngineLib.GameArithmeticCompressionModels.createEvenProbabilityIntegerRangeM
 				};
 			}
 	};
-}
+};
 
 //TODO probabilistic (spell?) model
 
@@ -138,7 +138,7 @@ GameEngineLib.createGameArithmeticCompression = function()
 		}
 		
 		return PRIVATE.bitPacker.getString();
-	}
+	};
 	
 	
 	instance.setString = function(inString)
@@ -150,11 +150,12 @@ GameEngineLib.createGameArithmeticCompression = function()
 		PRIVATE.underflow_bits = 0;
 		PRIVATE.encoded = 0;
 		
-		for(var i = 0; i < PRIVATE.BITS; ++i)
+		var i;
+		for(i = 0; i < PRIVATE.BITS; ++i)
 		{
 			PRIVATE.encoded = PRIVATE.encoded * 2 + PRIVATE.bitPacker.unpack(1);
 		}
-	}
+	};
 	
 	
 	instance.encode = function(value, inModel)
@@ -166,7 +167,8 @@ GameEngineLib.createGameArithmeticCompression = function()
 		PRIVATE.high = Math.floor(PRIVATE.low + encodeRange * valueRange.high - 1);
 		PRIVATE.low = Math.floor(PRIVATE.low + encodeRange * valueRange.low);
 		
-		for(var loops = 0; loops < PRIVATE.BITS; ++loops)
+		var loops;
+		for(loops = 0; loops < PRIVATE.BITS; ++loops)
 		{
 			/*
 			The first two cases are a combination of one:
@@ -217,7 +219,7 @@ GameEngineLib.createGameArithmeticCompression = function()
 		}
 		
 		GameEngineLib.logger.error("Encode failed!");
-	}
+	};
 	
 	
 	instance.decode = function(inModel)
@@ -236,7 +238,8 @@ GameEngineLib.createGameArithmeticCompression = function()
 		PRIVATE.high = Math.floor(PRIVATE.low + encodeRange * valueRange.high - 1);
 		PRIVATE.low = Math.floor(PRIVATE.low + encodeRange * valueRange.low);
 		
-		for(var loops = 0; loops < PRIVATE.BITS; ++loops)
+		var loops;
+		for(loops = 0; loops < PRIVATE.BITS; ++loops)
 		{
 			/*
 			if((high & 0x8000) == (low & 0x8000))
@@ -278,7 +281,7 @@ GameEngineLib.createGameArithmeticCompression = function()
 		GameEngineLib.logger.error("Did not resolve decoding a symbol before we exceeded the bits it could have fit in!");
 		//return valueRange.value;
 		return inModel.min;//should prevent out of range values
-	}
+	};
 	
 	return instance;
-}
+};

@@ -78,7 +78,9 @@ GameEngineLib.Game2DMap = GameEngineLib.Class(
 				|| inY < 0 || this._myMapSizeInTiles <= inY
 				//TODO inTileValue is in range too
 				)
+			{
 				return;
+			}
 			
 			var position = GameEngineLib.createGame2DPoint(
 				inX * this._myTileSize,
@@ -103,7 +105,9 @@ GameEngineLib.Game2DMap = GameEngineLib.Class(
 				function(item)
 				{
 					if(item.myTileValue === inTileValue)
+					{
 						duplicate = true;
+					}
 				},
 				tile.myGame2DAABB
 			);
@@ -118,13 +122,15 @@ GameEngineLib.Game2DMap = GameEngineLib.Class(
 			//setup for scenegraph
 			tile.sceneGraphRenderable =
 			{
-				myLayer : 0 +  _this_._myTileSet.getTileLayer(inTileValue),
+				myLayer : /*0 + ??*/ _this_._myTileSet.getTileLayer(inTileValue),
 				myAnchorPosition : position,//TODO rename anchorPosition?
 				myGame2DAABB : _this_._myTileSet.getTileRect(inTileValue, position),
 				render : function(inCanvas2DContext, inCameraRect)
 				{
 					if(GameSystemVars.DEBUG && GameSystemVars.Debug.Map_Draw)
+					{
 						return;
+					}
 					_this_._myTileSet.renderTile(
 						inCanvas2DContext,
 						tile.myTileValue,
@@ -155,16 +161,19 @@ GameEngineLib.Game2DMap = GameEngineLib.Class(
 		_eraseTile : function _eraseTile(tile)
 		{
 			var deletedTiles = [];
+			var i;
 			
 			//delete from the tilemap tree
 			this._myTileMapTree.deleteContained(tile.myGame2DAABB, deletedTiles);
 			if(GameSystemVars.DEBUG)
 			{
 				if(deletedTiles.length > 1)
+				{
 					GameEngineLib.logger.error("Deleted too many tiles " + deletedTiles.length);
+				}
 			}
 			
-			for(var i in deletedTiles)
+			for(i in deletedTiles)
 			{
 				//remove from scenegraph
 				this._myWorld.getSceneGraph().removeItem(deletedTiles[i].sceneGraphRenderable);
@@ -182,7 +191,9 @@ GameEngineLib.Game2DMap = GameEngineLib.Class(
 		{
 			if(inX < 0 || this._myMapSizeInTiles <= inX
 				|| inY < 0 || this._myMapSizeInTiles <= inY)
+			{
 				return;
+			}
 				
 			var tile = {};
 			tile.myGame2DAABB = GameEngineLib.createGame2DAABB(
@@ -212,14 +223,13 @@ GameEngineLib.Game2DMap = GameEngineLib.Class(
 					_this_._myTileSet.renderTileInRect(
 						inCanvas2DContext,
 						item.myTileValue,
-						GameEngineLib.createGame2DAABB
-						(
+						GameEngineLib.createGame2DAABB(
 							itemRect.myX - inCameraRect.myX,
 							itemRect.myY - inCameraRect.myY,
 							_this_._myTileSize,
 							_this_._myTileSize
 						)
-					)
+					);
 				},
 				inCameraRect
 			);

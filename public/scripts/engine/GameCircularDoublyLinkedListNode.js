@@ -33,7 +33,7 @@ GameEngineLib.GameCircularDoublyLinkedListNode = function GameCircularDoublyLink
 	
 	this.myNext = this;
 	this.myPrev = this;
-}
+};
 GameEngineLib.GameCircularDoublyLinkedListNode.prototype.constructor = GameEngineLib.GameCircularDoublyLinkedListNode;
 
 
@@ -44,14 +44,14 @@ GameEngineLib.GameCircularDoublyLinkedListNode.prototype.insert = function inser
 	node.myNext = this.myNext;
 	this.myNext.myPrev = node;
 	this.myNext = node;
-}
+};
 
 
 
 GameEngineLib.GameCircularDoublyLinkedListNode.prototype.insertBack = function insertBack(inNode)
 {
 	this.myPrev.insert(inNode);
-}
+};
 
 
 
@@ -61,7 +61,7 @@ GameEngineLib.GameCircularDoublyLinkedListNode.prototype.remove = function remov
 	this.myNext.myPrev = this.myPrev;
 	this.myPrevActivePhysObj = null;
 	this.myNextActivePhysObj = null;
-}
+};
 
 
 
@@ -72,8 +72,8 @@ GameEngineLib.GameCircularDoublyLinkedListNode.prototype.forAll = function forAl
 	do{
 		inFunction(current.item, current);
 		current = current.myNext;
-	}while(current != last);
-}
+	} while(current !== last);
+};
 
 
 
@@ -84,8 +84,8 @@ GameEngineLib.GameCircularDoublyLinkedListNode.prototype.forAllReverse = functio
 	do{
 		inFunction(current.item, current);
 		current = current.myPrev;
-	}while(current != last);
-}
+	} while(current !== last);
+};
 
 
 
@@ -95,12 +95,14 @@ GameEngineLib.GameCircularDoublyLinkedListNode.prototype.findNodeContaining = fu
 	var current = this;
 	do{
 		if(inValue === current.item)
+		{
 			return current;
+		}
 		current = current.myNext;
-	}while(current != last);
+	} while(current !== last);
 
 	return null;
-}
+};
 
 
 
@@ -109,18 +111,18 @@ GameEngineLib.GameCircularDoublyLinkedListNode.prototype.size = function size()
 	var last = this;
 	var current = this.myNext;
 	var count = 0;
-	while(current != last)
+	while(current !== last)
 	{
 		++count;
 		current = current.myNext;
 	}
 	
 	return count;
-}
+};
 
 
 
 GameEngineLib.GameCircularDoublyLinkedListNode.prototype.length = function length()
 {
 	return this.size();
-}
+};

@@ -49,19 +49,19 @@ GameEngineLib.EntityComponent_Input = GameEngineLib.Class(
 		{
 			this._direction = GameEngineLib.createGame2DPoint(0, 0);
 			
-			if(inInputEvent.keys["W"])
+			if(inInputEvent.keys['W'])
 			{
 				this._direction = this._direction.add(this._up);
 			}
-			if(inInputEvent.keys["S"])
+			if(inInputEvent.keys['S'])
 			{
 				this._direction = this._direction.add(this._down);
 			}
-			if(inInputEvent.keys["A"])
+			if(inInputEvent.keys['A'])
 			{
 				this._direction = this._direction.add(this._left);
 			}
-			if(inInputEvent.keys["D"])
+			if(inInputEvent.keys['D'])
 			{
 				this._direction = this._direction.add(this._right);
 			}

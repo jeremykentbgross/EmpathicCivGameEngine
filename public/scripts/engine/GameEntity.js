@@ -92,14 +92,13 @@ GameEngineLib.GameEntity = GameEngineLib.Class({
 		{
 			if(this._world)
 			{
-				inComponent.onRemovedFromWorld(new GameEngineLib.GameEvent_RemovedFromWorld(this._world));
+				this.removedFromWorld();//TODO actually remove it from the world!!
 			}
-			
-			inComponent.onRemovedFromEntity(new GameEngineLib.GameEvent_RemovedFromEntity(this));
-			
+
 			this._components.forAll(
 				function(inComponent)
 				{
+					inComponent.onRemovedFromEntity(new GameEngineLib.GameEvent_RemovedFromEntity(this));
 					inComponent.destroy();
 				}
 			);
@@ -111,6 +110,6 @@ GameEngineLib.GameEntity = GameEngineLib.Class({
 		{
 			var componentMap = {};
 			//TODO
-		},
+		}
 	}
 });

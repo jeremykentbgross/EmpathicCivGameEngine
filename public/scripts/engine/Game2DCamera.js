@@ -20,14 +20,15 @@
 */
 
 //TODO depricated!
-GameEngineLib.createGame2DCamera = function(instance, PRIVATE)
+GameEngineLib.createGame2DCamera = function(instance)
 {
+	var property;
 	var temp = new GameEngineLib.Game2DCamera();
 	instance = instance || {};
 	
 	for(property in temp)
 	{
-		instance[property] = temp[property]
+		instance[property] = temp[property];
 	}
 	for(property in temp.prototype)
 	{
@@ -35,7 +36,7 @@ GameEngineLib.createGame2DCamera = function(instance, PRIVATE)
 	}
 	
 	return instance;
-}
+};
 
 
 
@@ -63,7 +64,7 @@ GameEngineLib.Game2DCamera = function Game2DCamera()
 			GameSystemVars.Graphics.initHeight
 		);
 	}
-}
+};
 GameEngineLib.Game2DCamera.prototype.constructor = GameEngineLib.Game2DCamera;
 
 
@@ -72,8 +73,10 @@ GameEngineLib.Game2DCamera.prototype.constructor = GameEngineLib.Game2DCamera;
 GameEngineLib.Game2DCamera.prototype.init = function init(inWidth, inHeight)
 {
 	if(inWidth &&inHeight)
+	{
 		this._myRect = GameEngineLib.createGame2DAABB(0, 0, inWidth, inHeight);
-}
+	}
+};
 
 
 
@@ -89,7 +92,7 @@ GameEngineLib.Game2DCamera.prototype.centerOn = function centerOn(inTargetCenter
 	}
 	
 	this._myRect.setLeftTop(camPoint);
-}
+};
 
 
 
@@ -97,7 +100,7 @@ GameEngineLib.Game2DCamera.prototype.centerOn = function centerOn(inTargetCenter
 GameEngineLib.Game2DCamera.prototype.getTargetPosition = function getTargetPosition()
 {
 	return this._myRect.getCenter();
-}
+};
 
 //TODO listen to graphics object for resizes?
 
@@ -106,4 +109,4 @@ GameEngineLib.Game2DCamera.prototype.getTargetPosition = function getTargetPosit
 GameEngineLib.Game2DCamera.prototype.getRect = function getRect()
 {
 	return this._myRect;
-}
+};

@@ -21,14 +21,15 @@
 
 
 //TODO depricated
-GameEngineLib.createGame2DSceneGraph = function(instance, PRIVATE)
+GameEngineLib.createGame2DSceneGraph = function(instance)
 {
+	var property ;
 	var temp = new GameEngineLib.Game2DSceneGraph();
 	instance = instance || {};
 	
 	for(property in temp)
 	{
-		instance[property] = temp[property]
+		instance[property] = temp[property];
 	}
 	for(property in temp.prototype)
 	{
@@ -36,11 +37,11 @@ GameEngineLib.createGame2DSceneGraph = function(instance, PRIVATE)
 	}
 	
 	return instance;
-}
+};
 
 
 //TODO make this class pluggable with other 2d scene graphs?  Or just the sorting part?
-GameEngineLib.Game2DSceneGraph = function Game2DSceneGraph(){}//TODO put init in here?
+GameEngineLib.Game2DSceneGraph = function Game2DSceneGraph(){};//TODO put init in here?
 GameEngineLib.Game2DSceneGraph.prototype.constructor = GameEngineLib.Game2DSceneGraph;
 
 
@@ -67,7 +68,7 @@ GameEngineLib.Game2DSceneGraph.prototype.init = function init(inMapSize, inMinNo
 	*/
 	this._rotMatrixRow1 = GameEngineLib.createGame2DPoint(this._cos, sin);
 	this._rotMatrixRow2 = GameEngineLib.createGame2DPoint(-sin, this._cos);
-}
+};
 
 
 
@@ -78,23 +79,27 @@ GameEngineLib.Game2DSceneGraph.prototype.insertItem = function insertItem(inRend
 	this._mySceneTree.insertToAllBestFitting(inRenderableItem, inRenderableItem.sceneGraphOwningNodes);
 
 	inRenderableItem.lastFrameDrawn = inRenderableItem.lastFrameDrawn || 0;
-}
+};
 
 
 
 GameEngineLib.Game2DSceneGraph.prototype.removeItem = function removeItem(inRenderableItem)
 {
+	var nodeIndex;
 	var nodeArray = inRenderableItem.sceneGraphOwningNodes;
-	for(var nodeIndex in nodeArray)
+	for(nodeIndex in nodeArray)
+	{
 		nodeArray[nodeIndex].deleteItem(inRenderableItem);//todo optimize this to deleteItemFromNode
+	}
 	inRenderableItem.sceneGraphOwningNodes = [];
-}
+};
 
 
 GameEngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DContext, inCameraRect)
 {
 	var renderables = [];
 	var _this_ = this;
+	var i;
 			
 	this._mySceneTree.walk(
 		function(item)
@@ -127,7 +132,7 @@ GameEngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DCont
 		}
 	);
 	
-	for(var i in renderables)
+	for(i in renderables)
 	{
 		renderables[i].render(inCanvas2DContext, inCameraRect);
 	}
@@ -140,13 +145,13 @@ GameEngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DCont
 		GameInstance.Graphics.drawDebugText("Debug Drawing SceneGraph");
 		
 		inCanvas2DContext.font = fontSize + "px Arial";
-		for(var i in renderables)
+		for(i in renderables)
 		{
 			var currentRenderable = renderables[i];
 			var screenPos = currentRenderable.screenPos;
 			
-			var stringDrawOrder = "" + i;
-			var stringDistance = ""
+			var stringDrawOrder = String(i);
+			var stringDistance = String("");
 					//currentRenderable.depthSortingPosition.myX.toFixed(2) + ", " +
 					//currentRenderable.depthSortingPosition.myY.toFixed(2);
 			
@@ -183,9 +188,9 @@ GameEngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DCont
 	
 	//TODO get rid of needing this! Need auto cleaning on delete
 	//this._mySceneTree.cleanTree();//commented for speed in full map, still kind of needed
-}
+};
 
 GameEngineLib.Game2DSceneGraph.prototype.debugDraw = function debugDraw(inCanvas2DContext, inCameraRect)
 {
 	this._mySceneTree.debugDraw(inCanvas2DContext, inCameraRect);//TODO scenegraph colors here
-}
+};

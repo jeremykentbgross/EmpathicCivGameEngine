@@ -63,13 +63,16 @@ GameEngineLib.Game2DTileSet = GameEngineLib.Class(
 	{
 		init : function init(inTiles)
 		{
+			var i;
 			this._myTiles = inTiles || this._myTiles;
 			
-			for(var i = 0; i < this._myTiles.length; ++i)
+			for(i = 0; i < this._myTiles.length; ++i)
 			{
 				var tile = this._myTiles[i];
 				if(!GameSystemVars.Network.isServer)
+				{
 					GameInstance.AssetManager.loadImage(tile.fileName, tile);
+				}
 				this._maxLayers = tile.layer;//TODO is this needed? maybe for map floors vs tileset layer (not used atm I think)
 			}
 		},
@@ -125,7 +128,9 @@ GameEngineLib.Game2DTileSet = GameEngineLib.Class(
 			var physicsRect = this._myTiles[inID].physics;
 			
 			if(!physicsRect)
+			{
 				return null;
+			}
 			
 			return GameEngineLib.createGame2DAABB(
 				inPosition.myX + physicsRect.myX,

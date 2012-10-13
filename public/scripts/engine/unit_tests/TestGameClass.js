@@ -22,7 +22,7 @@ GameUnitTests.registerTest(
 	"GameClass",
 	function()
 	{
-		var ClassNamespace = {}
+		var ClassNamespace = {};
 		
 		ClassNamespace.TestClass1 = GameEngineLib.Class({
 			Constructor : function TestClass1(){},
@@ -58,16 +58,16 @@ GameUnitTests.registerTest(
 		
 		var testClass1 = new ClassNamespace.TestClass1();
 		testClass1.Func1();
-		GameAssert(testClass1.Func1Called, "Function failed from new'ed class instance!");
+		gameAssert(testClass1.Func1Called, "Function failed from new'ed class instance!");
 		
 		
 		
 		var testClass2 = ClassNamespace.TestClass2.create();
-		GameAssert(ClassNamespace.TestClass2.StaticThing === "HaHa!", "Inherited functions failed from created class instance!");
+		gameAssert(ClassNamespace.TestClass2.StaticThing === "HaHa!", "Inherited functions failed from created class instance!");
 		
 		testClass2.Func1();
 		testClass2.Func2();
-		GameAssert(testClass2.Func1Called && testClass2.Func2Called, "Inherited functions failed from created class instance!");
+		gameAssert(testClass2.Func1Called && testClass2.Func2Called, "Inherited functions failed from created class instance!");
 
 		ClassNamespace.TestObjectClass1 = GameEngineLib.Class({
 			Constructor : function TestObjectClass1()
@@ -97,15 +97,15 @@ GameUnitTests.registerTest(
 		
 		var foundClass = GameEngineLib.Class.getInstanceRegistry().findByName("TestObjectClass1");
 		var testObjectClass1 = foundClass.create();
-		GameAssert(testObjectClass1.isA(ClassNamespace.TestObjectClass1), "isA() Failed on found created class!");
+		gameAssert(testObjectClass1.isA(ClassNamespace.TestObjectClass1), "isA() Failed on found created class!");
 		
 		var found = foundClass.getInstanceRegistry().findByName(testObjectClass1.getName());
-		GameAssert(testObjectClass1 === found, "Failed to find class instance!");
+		gameAssert(testObjectClass1 === found, "Failed to find class instance!");
 		
 		var instanceName = testObjectClass1.getName();
 		testObjectClass1.destroy();
 		found = foundClass.getInstanceRegistry().findByName(instanceName);
-		GameAssert(!found, "Found destroyed object in registry!");
+		gameAssert(!found, "Found destroyed object in registry!");
 		
 		
 		ClassNamespace.TestObjectClass2 = GameEngineLib.Class({
@@ -134,7 +134,7 @@ GameUnitTests.registerTest(
 		chainTestObject.chainUp();
 		chainTestObject.chainDown();
 		
-		GameAssert(
+		gameAssert(
 			chainTestObject.up2 === 1 &&
 			chainTestObject.up1 === 2 &&
 			chainTestObject.down1 === 3 &&

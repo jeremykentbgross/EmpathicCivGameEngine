@@ -41,24 +41,28 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 	PRIVATE.input = function(inEvent)
 	{		
 		var eventType = inEvent.type;
+		var key;
 				
 		switch(eventType)
 		{
 			case 'keydown':
 			case 'keyup':
-				var key = String.fromCharCode(inEvent.keyCode);
+				key = String.fromCharCode(inEvent.keyCode);
 				PRIVATE.keys[key] = (eventType === 'keydown');
 				break;
 				
 			case 'keypress':
-				var key = String.fromCharCode(inEvent.keyCode);
+				key = String.fromCharCode(inEvent.keyCode);
 				PRIVATE.keysPressed[key] = true;
 				break;
 				
 			case 'mousedown':
 			case 'mouseup':
 				PRIVATE.buttons[inEvent.button] = (eventType === 'mousedown');
-				//dont break so it falls thru
+				PRIVATE.mouseLoc.myX = inEvent.offsetX;
+				PRIVATE.mouseLoc.myY = inEvent.offsetY;
+				break;
+				
 			case 'mousemove':
 				PRIVATE.mouseLoc.myX = inEvent.offsetX;
 				PRIVATE.mouseLoc.myY = inEvent.offsetY;
@@ -94,12 +98,14 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 			PRIVATE.keysPressed = {};
 			PRIVATE.buttons = {};
 		}
-	}
+	};
 	
 	instance.initClient = function initClient(inCanvas)
 	{
 		if(GameSystemVars.Network.isServer)
+		{
 			return;
+		}
 			
 		require(
 			["dojo/on"],
@@ -130,13 +136,13 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 				//TODO can i turn off middle mouse button native effect
 			}
 		);
-	}
+	};
 	
 	//TODO make update an event so this is not needed
 	instance.isUpdating = function()
 	{
 		return true;
-	}
+	};
 	
 	instance.update = function()
 	{
@@ -152,17 +158,23 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 			for(i in PRIVATE.buttons)
 			{
 				if(PRIVATE.buttons[i])
+				{
 					inputString += "MB" + i + " ";
+				}
 			}
 			for(i in PRIVATE.keys)
 			{
 				if(PRIVATE.keys[i])
+				{
 					inputString += "'" + i + "' (" + i.charCodeAt(0) + ") ";
+				}
 			}
 			for(i in PRIVATE.keysPressed)
 			{
 				if(PRIVATE.keysPressed[i])
+				{
 					inputString += "'" + i + "' (" + i.charCodeAt(0) + ") ";
+				}
 			}
 			//todo clicks and wheel
 			
@@ -189,7 +201,7 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 			keysPressed : {},
 			buttons : {},
 			mouseLoc : GameEngineLib.createGame2DPoint(PRIVATE.mouseLoc.myX, PRIVATE.mouseLoc.myY)
-		}
+		};
 		
 		//copy the values from PRIVATE individually so my internal data cannot be changed by users
 		for(i in PRIVATE.keys)
@@ -209,7 +221,7 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 		this.onEvent(event);
 		
 		PRIVATE.keysPressed = {};
-	}
+	};
 	
 	return instance;
-}
+};
