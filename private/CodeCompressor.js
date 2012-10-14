@@ -1,3 +1,24 @@
+/*
+© Copyright 2012 Jeremy Gross
+	jeremykentbgross@gmail.com
+	Distributed under the terms of the GNU Lesser GPL (LGPL)
+		
+	This file is part of EmpathicCivGameEngine™.
+	
+	EmpathicCivGameEngine™ is free software: you can redistribute it and/or modify
+	it under the terms of the GNU Lesser General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	EmpathicCivGameEngine™ is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Lesser General Public License for more details.
+	
+	You should have received a copy of the GNU Lesser General Public License
+	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
 var fs = require("fs");
 
 /*
@@ -38,7 +59,36 @@ GameEngineServer.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 		gameLoaderSrc = gameLoaderSrc.replace(values[i], '\n' + fileSourceCode);
 	}
 	
-	this._code = new Buffer(gameLoaderSrc);
+	
+	var obfuscator = new GameEngineServer.Obfuscator();
+	obfuscator.addSrc(gameLoaderSrc);
+	
+	obfuscator.addIgnore('init');	//TODO use a different one for GameLoader to start!!
+	obfuscator.addIgnore('name');//TODO make sure nothing uses 'name' that doesn't need to!
+	obfuscator.addIgnore('dom');//TODO this is param, rename it so we dont need this
+	obfuscator.addIgnore('create');//TODO this is used by dojo too
+	obfuscator.addIgnore('id');//TODO remove unneeded, used by dom.create
+	obfuscator.addIgnore('width');//TODO remove unneeded, used by dom.create
+	obfuscator.addIgnore('height');//TODO remove unneeded, used by dom.create
+	obfuscator.addIgnore('innerHTML');//TODO remove unneeded, used by dom.create
+	obfuscator.addIgnore('floor');//TODO remove unneeded
+	obfuscator.addIgnore('on');//TODO remove unneeded, used by dojo
+	obfuscator.addIgnore('max');//TODO remove unneeded
+	obfuscator.addIgnore('min');//TODO remove unneeded
+	obfuscator.addIgnore('sin');//TODO remove unneeded
+	obfuscator.addIgnore('cos');//TODO remove unneeded
+		
+	obfuscator.registerNamespace('GameEngineServer');
+	obfuscator.registerNamespace('GameEngineLib');
+	obfuscator.registerNamespace('GameLib');
+	obfuscator.registerNamespace('GameInstance');
+	obfuscator.registerNamespace('GameClassRegistryMap');
+	obfuscator.registerNamespace('GameUnitTests');
+	
+	obfuscator.run();
+	
+	var obfuscatedSrc = obfuscator.getObfuscatedCode();
+	this._code = new Buffer(obfuscatedSrc);
 }
 
 GameEngineServer.CodeCompressor.prototype.getCompactCode = function getCompactCode()

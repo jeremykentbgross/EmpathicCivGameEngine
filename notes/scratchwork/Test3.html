@@ -390,10 +390,10 @@
 				
 				ObfuscatorNameSpace.Obfuscator.prototype._removeComments = function _removeComments()
 				{
-					var startOfBlock = '\x2f\x2a';
+					/*var startOfBlock = '\x2f\x2a';
 					var endOfBlock = '\x2a\x2f';
 					
-					/*remove block comments:*/
+					/*remove block comments:
 					var startIndex = this._src.indexOf(startOfBlock);
 					var endIndex;
 					while(startIndex >= 0)
@@ -402,7 +402,10 @@
 						this._src = this._src.substr(0, startIndex) + this._src.substr(endIndex);
 						
 						startIndex = this._src.indexOf(startOfBlock);//start of comment block
-					}
+					}*/
+					
+					/*remove block comments:*/
+					this._src = this._src.replace(/\x2f\x2a[\S\s]*?\x2a\x2f/g, '');
 					
 					//remove line comments
 					this._src = this._src.replace(/\x2f\x2f[^\n]*\n/g, '\n');
@@ -861,6 +864,11 @@
 			{
 				console.log(obf._genWordReplacement());
 			}*/
+			
+			
+			var temp = "/*asdfl890****(^%$#$^ /***/".match(/\x2f\x2a[\S\s]*?\x2a\x2f/g);//	[^(\x2a\x2f)]* [\w\d\s\*\/]*
+			
+			//(\/\*[\w\'\s\r\n\*]*\*\/)|(\/\/[\w\s\']*)|(\<![\-\-\s\w\>\/]*\>)
 			
 		</script>
 	</body>

@@ -68,8 +68,8 @@ GameEngineLib.Game2DGraphics.prototype.init = function init()
 					height : GameSystemVars.Graphics.initHeight,
 					//TODO localize this:
 					innerHTML: "Sorry your browser does not support Canvas. Please use different browser:" +
-									"<a href=\"http://www.google.com/chrome\">Get Chrome (**recommended!**) </a> or" +
-									"<a href=\"http://www.mozilla-europe.org/en/firefox/\">Get Firefox</a>"
+									"<a href=\"http:\\x2f\\x2fwww.google.com/chrome\">Get Chrome (**recommended!**) </a> or" +
+									"<a href=\"http:\\x2f\\x2fwww.mozilla-europe.org/en/firefox/\">Get Firefox</a>"
 				},
 				graphics_container
 			);

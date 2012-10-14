@@ -109,15 +109,24 @@ GameSystemVars = //TODO rename as GameSystemSettings
 	
 	Network :
 	{
-		isServer : false,
-		isMultiplayer : true,
-		GamePort : null//1337	//if null then defaults to port 80 and reuses main connection
+		isServer : false
+		,isMultiplayer : true
+		,GamePort : null//1337	//if null then defaults to port 80 and reuses main connection
 		//TODO editorPort : ??
 	},
 	
 	Server :
 	{
 		compressClientCode : true
+		////////////////////////////////////////////
+		//only working when compressing client code:
+		,removeTextForLocalization : false
+		,removeNonNewlineWhiteSpace : false//true
+		,removeNewlines : false//true
+		,obfuscateNames : false//true
+		,useModifiedNamesNotPureObfuscate : false
+		//:only working when compressing client code
+		////////////////////////////////////////////
 	}
 	
 	//TODO make the logger in global or instance space

@@ -293,15 +293,15 @@ GameLib.createGameRules = function(instance, PRIVATE)
 			PRIVATE.drawTile = 0;
 		}
 		
-		if(inInputEvent.keysPressed['o'])
+		if(inInputEvent.keysPressed['\\x6f'])//o
 		{
 			GameSystemVars.Debug.Map_Draw = !GameSystemVars.Debug.Map_Draw;
 		}
-		if(inInputEvent.keysPressed['p'])
+		if(inInputEvent.keysPressed['\\x70'])//p
 		{
 			GameSystemVars.Debug.Physics_Draw= !GameSystemVars.Debug.Physics_Draw;
 		}
-		if(inInputEvent.keysPressed['i'])
+		if(inInputEvent.keysPressed['\\x96'])//i
 		{
 			GameSystemVars.Debug.SceneGraph_Draw= !GameSystemVars.Debug.SceneGraph_Draw;
 		}

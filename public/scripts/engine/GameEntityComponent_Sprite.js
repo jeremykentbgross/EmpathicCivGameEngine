@@ -137,7 +137,6 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
 			this._sceneGraphRenderable.myAnchorPosition = inEvent.boundingRect.getLeftTop();//inEvent.position;
 			this._sceneGraphRenderable.myGame2DAABB.setLeftTop(inEvent.position.add(this._myFrames[this._myCurrentFrame].offset));
 			
-			//*******************************************************
 			//TODO change renderable position everywhere it should change
 			
 			this._world.getSceneGraph().insertItem(this._sceneGraphRenderable);
