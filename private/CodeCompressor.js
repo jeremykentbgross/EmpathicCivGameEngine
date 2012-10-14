@@ -38,10 +38,10 @@ GameEngineServer.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 		gameLoaderSrc = gameLoaderSrc.replace(values[i], '\n' + fileSourceCode);
 	}
 	
-	this._code = gameLoaderSrc;
+	this._code = new Buffer(gameLoaderSrc);
 }
 
 GameEngineServer.CodeCompressor.prototype.getCompactCode = function getCompactCode()
 {
-	return new Buffer(this._code);
+	return this._code;
 }

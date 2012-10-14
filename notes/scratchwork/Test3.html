@@ -513,13 +513,38 @@
 				
 				ObfuscatorNameSpace.Obfuscator.prototype._findVariableNames = function _findVariableNames()
 				{
-					var variables = this._src.match(/var\s+\w+/g);
-					var i;
+					var variableDeclareLines = this._src.match(/var\s+\w+[^\x3b]*\x3b/g);
+					var variables;
+					var i, j;
 					
-					for(i = 0; i < variables.length; ++i)
+					for(i = 0; i < variableDeclareLines.length; ++i)
 					{
-						variables[i] = variables[i].match(/\s\w+/)[0].match(/\w+/)[0];
-						this._addVariableName(variables[i]);
+						//strip out nested {}
+						while(variableDeclareLines[i].match(/\x7b[^\x7b\x7d]*\x7d/g, ''))
+						{
+							variableDeclareLines[i] = variableDeclareLines[i].replace(/\x7b[^\x7b\x7d]*\x7d/g, '');
+						}
+						//strip out nested ()
+						while(variableDeclareLines[i].match(/\x28[^\x28\x29]*\x29/g, ''))
+						{
+							variableDeclareLines[i] = variableDeclareLines[i].replace(/\x28[^\x28\x29]*\x29/g, '');
+						}
+						//strip out nested []
+						while(variableDeclareLines[i].match(/\x5b[^\x5b\x5d]*\x5d/g, ''))
+						{
+							variableDeclareLines[i] = variableDeclareLines[i].replace(/\x5b[^\x5b\x5d]*\x5d/g, '');
+						}
+						//strip out assignments (which should have little or no content now)
+						variableDeclareLines[i] = variableDeclareLines[i].replace(/\s*\x3d[^\x2c\x3b]*[\x2c\x3b]/g, ',');
+						//remove the var at the start
+						variableDeclareLines[i] = variableDeclareLines[i].replace(/var\s+/, '');
+						
+						//What is left should be comman separated variable names
+						variables = variableDeclareLines[i].match(/\w+/g);
+						for(j = 0; j < variables.length; ++j)
+						{
+							this._addVariableName(variables[j]);
+						}
 					}
 				};
 				
@@ -767,6 +792,8 @@
 			
 			var obf = new ObfuscatorNameSpace.Obfuscator();
 			
+			
+			
 			/*var iters;
 			for(iters = 0; iters < 5000; ++iters)
 			{
@@ -783,7 +810,7 @@
 				console.log(testConcatOps);
 			}
 			
-			
+			var v1 = {asdf:['asdf', [{asdf:[1,2,3]}], 'sdf'], qwer:{}}, v2 = String('fudge' + String('fudge2'));
 			
 			
 			
