@@ -183,7 +183,6 @@ OTHER GOALS:
 -GameBitPacker.js
 -GameEngineLogger.js                  
 -GameObjectClassFactory.js
--GameQuadTree.js
 -GameSpriteManager.js
 -GameSystemVars.js
 -GameTimer.js
@@ -211,6 +210,8 @@ OTHER GOALS:
 -GameBinarySerializer.js
 -GameRegistry.js
 -GameEventSystem.js
+
+-GameQuadTree.js
 //////////////////////////////////////////////:Stage 1 (unclosure)
 
 //////////////////////////////////////////////Stage 2 (class'ified + replace xx.create()):

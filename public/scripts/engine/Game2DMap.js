@@ -41,7 +41,7 @@ GameEngineLib.Game2DMap = GameEngineLib.Class(
 			this._myTileSize = inTileSize;
 			this._myMapSize = this._myMapSizeInTiles * this._myTileSize;
 			
-			this._myTileMapTree = GameEngineLib.createGameQuadTree();
+			this._myTileMapTree = GameEngineLib.GameQuadTree.create();
 			this._myTileMapTree.init(
 				GameEngineLib.createGame2DAABB(0, 0, this._myMapSize, this._myMapSize),
 				this._myTileSize

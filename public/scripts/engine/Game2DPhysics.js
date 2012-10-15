@@ -63,7 +63,7 @@ GameEngineLib.createGame2DPhysics = function()
 		myWorldSize = inWorldSize;
 		myMinSize = inMinSize;
 		
-		myDetectionTree = GameEngineLib.createGameQuadTree();
+		myDetectionTree = GameEngineLib.GameQuadTree.create();
 		myDetectionTree.init(
 			GameEngineLib.createGame2DAABB(0, 0, inWorldSize, inWorldSize),
 			inMinSize

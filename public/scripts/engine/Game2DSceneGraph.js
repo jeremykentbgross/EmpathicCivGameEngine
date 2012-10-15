@@ -48,7 +48,7 @@ GameEngineLib.Game2DSceneGraph.prototype.constructor = GameEngineLib.Game2DScene
 
 GameEngineLib.Game2DSceneGraph.prototype.init = function init(inMapSize, inMinNodeSize)
 {
-	this._mySceneTree = GameEngineLib.createGameQuadTree();
+	this._mySceneTree = GameEngineLib.GameQuadTree.create();
 	this._mySceneTree.init(
 		GameEngineLib.createGame2DAABB(0, 0, inMapSize, inMapSize),
 		inMinNodeSize

@@ -33,7 +33,7 @@ GameEngineLib.createGameSpriteManager = function(instance, PRIVATE)
 		PRIVATE.myTileSize = inTileSize;
 		PRIVATE.myMapSize = PRIVATE.myMapSizeInTiles * PRIVATE.myTileSize;
 		
-		PRIVATE.mySceneQuadTree = GameEngineLib.createGameQuadTree();
+		PRIVATE.mySceneQuadTree = GameEngineLib.GameQuadTree.create();
 		PRIVATE.mySceneQuadTree.init(
 			GameEngineLib.createGame2DAABB(0, 0, PRIVATE.myMapSize, PRIVATE.myMapSize),
 			PRIVATE.myTileSize
