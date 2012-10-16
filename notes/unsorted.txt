@@ -1,0 +1,329 @@
+http://expressjs.com/guide.html
+
+package.json
+=>
+{
+  "name": "hello-world",
+  "description": "hello world test app",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "express": "3.x"
+  }
+}
+
+
+
+
+
+
+http://www.youtube.com/watch?v=ur8F1wgJqhQ&feature=BFa&list=SPDC4DE76638F41BA8 
+
+http://en.wikipedia.org/wiki/Balance_(game_design)
+
+http://www.internap.com/2012/08/27/optimizing-online-gaming-performance-with-multiple-cloud-and-hybrid-cloud-strategies/
+
+http://www.internap.com/2012/08/28/optimizing-online-gaming-performance-with-multiple-cloud-and-hybrid-cloud-strategies-part-two/?goback=%2Egde_113121_member_155119025
+
+http://www.godaddy.com/
+
+http://www.indiegames.com/2009/12/opinion_indie_game_design_dos.html
+
+http://www.dustflake.com/
+
+http://blog.jamogames.com/2012/07/marketing-quest-part-1.html
+
+http://www.reddit.com/r/IndieGaming/
+
+http://www.game-connection.com/gameconn/content/marketing-awards
+
+http://www.linkedin.com/groupAnswers?viewQuestionAndAnswers=&discussionID=162279550&gid=113121&trk=eml-anet_dig-b_nd-pst_ttle-cn&ut=2kk6__p2YTHBo1
+
+
+http://thegamingelement.com/
+
+*****
+http://www.codeofhonor.com/blog/tough-times-on-the-road-to-starcraft
+***
+
+http://www.indiegames.com/2009/12/opinion_indie_game_design_dos.html
+
+http://www.pixelprospector.com/the-big-list-of-funding-resources/
+
+http://www.indiegamemag.com/forums/application.php
+
+http://www.pixelprospector.com/job-boards-for-game-developers/
+
+http://www.pixelprospector.com/the-big-list-of-indie-game-sites/
+
+http://www.findgamedevelopers.com/
+
+http://www.game-connection.com/gameconn/content/game-connection-marketing-awards
+
+http://www.game-connection.com/gameconn/content/marketing-awards
+
+http://devmag.org.za/2012/07/29/how-to-choose-colours-procedurally-algorithms/
+
+http://www.linkedin.com/groupItem?view=&type=member&gid=113121&item=172390868&commentID=98120167&trk=eml-anet_dig-b_pd-pmr-cn&ut=12Nux59-fsg5s1#commentID_98120167
+
+http://www.game-connection.com/gameconn/content/marketing-awards
+
+https://npmjs.org/doc/json.html
+
+http://roguejs.com/2011-11-30/console-colors-in-node-js/
+
+pavels:
+http://www.dustflake.com/
+
+
+***
+http://ayogo.com/blog/
+***
+
+http://wiki.apache.org/cassandra/GettingStarted
+
+http://wiki.apache.org/cassandra/CassandraCli
+
+http://cassandra.apache.org/doc/cql/CQL.html
+http://www.datastax.com/docs/0.8/references/cql
+http://www.datastax.com/dev/blog/what%E2%80%99s-new-in-cassandra-0-8-part-1-cql-the-cassandra-query-language
+
+http://www.datastax.com/docs/0.7/configuration/authentication
+
+http://wiki.apache.org/cassandra/ArchitectureInternals
+http://ria101.wordpress.com/2010/02/22/cassandra-randompartitioner-vs-orderpreservingpartitioner/
+http://ayogo.com/blog/2010/04/09/sorting-in-cassandra/
+
+
+http://wiki.apache.org/cassandra/MultinodeCluster
+http://wiki.apache.org/cassandra/Operations
+http://www.datastax.com/docs/1.0/cluster_architecture/replication
+
+
+//package.json
+{
+	"name": "Hello-node.js-Cassandra",
+	"description": "Accessing Cassandra from node.js",
+	"version": "0.0.1",
+	"private": true,
+	"dependencies":
+	{
+		"express": "3.0.0rc4",
+		"helenus": "0.5.7"
+	}
+}
+
+
+
+
+
+///////////////////////////////////////////////////////////////////////////////////////
+var path = require('path');
+var express = require("express");
+var helenus = require('helenus');
+
+
+
+
+
+
+
+////////////////////////////////////////////////////
+var cassandraPool = new helenus.ConnectionPool(
+	{
+		hosts :
+		[
+			'10.48.18.114:9160',
+			'10.48.18.115:9160'
+		],
+		keyspace : "JeremysDemo",
+		user : "nodejsUser",
+		timeout : 3000
+	}
+);
+
+
+////////////////////////////////////////////////////
+
+
+//http://ketanjetty.com/coldfusion/javascript/format-json/
+// formatJson() :: formats and indents JSON string
+function formatJson(val) {
+    var retval = '';
+    var str = val;
+    var pos = 0;
+    var strLen = str.length;
+    var indentStr = '&nbsp;&nbsp;&nbsp;&nbsp;';
+    var newLine = '<br />';
+    var char = '';
+     
+    for (var i=0; i<strLen; i++) {
+        char = str.substring(i,i+1);
+         
+        if (char == '}' || char == ']') {
+            retval = retval + newLine;
+            pos = pos - 1;
+             
+            for (var j=0; j<pos; j++) {
+                retval = retval + indentStr;
+            }
+        }
+         
+        retval = retval + char;
+         
+        if (char == '{' || char == '[' || char == ',') {
+            retval = retval + newLine;
+	             
+            if (char == '{' || char == '[') {
+                pos = pos + 1;
+            }
+             
+            for (var k=0; k<pos; k++) {
+                retval = retval + indentStr;
+            }
+        }
+    }
+     
+    return retval;
+}
+
+
+
+////////////////////////////////////////////////////
+var app = express();
+
+app.set('title', 'Cassandra for the win!');
+
+app.get(
+	'/',
+	function(req, res)
+	{
+		cassandraPool.connect(
+			function(err, keyspace)
+			{
+				if(err)
+				{
+					console.log(err);
+					res.send(err);
+				}
+				else
+				{
+					cassandraPool.cql(
+						//"BEGIN BATCH "+//USING CONSISTENCY QUORUM " +
+						//	"INSERT INTO user2" + 
+						//		"(KEY, 'first', 'last', 'age')" +
+						//		"VALUES ('tamerica', 'team', 'america', '200')" +
+						//	"INSERT INTO user2" +
+						//		"(KEY, 'first', 'last')" +
+						//		"VALUES ('fyeah', 'fuck', 'yeah')" +
+						//		//"USING CONSISTENCY QUORUM;" +
+						//"APPLY BATCH;"
+						"SELECT * FROM user2;"
+						,null//['jgross']	// '?' substitues
+						,function(err, results)
+						{
+							var jsonRes = "";
+							if(results !== null && results !== undefined)
+								jsonRes = formatJson(JSON.stringify(results));
+							console.log(err, jsonRes);
+							res.send("Error: " + err + "<br/>Results: <p>\"" + jsonRes + "\"</p>");
+						}
+					);
+				}
+			}
+		);
+//		res.sendfile(
+//			path.join(__dirname, "server.js")
+//		);
+	}
+);
+
+app.get(
+	'/*.(js|json)',
+	function(req, res)
+	{
+		res.sendfile(
+			path.join(__dirname, req.url)
+		);
+	}
+);
+
+
+app.listen(8080);
+console.log("listening now!");
+
+////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+http://aymanh.com/9-javascript-tips-you-may-not-know#assertion 
+
+http://www.slideshare.net/marinakobayashi/games-user-research-is-for-game-design?goback=%2Egde_1818270_member_165905606 
+
+http://www.nes-snes-sprites.com/ImagesSheet/Zelda3Sheet1.gif 
+
+http://www.nes-snes-sprites.com/LegendofZeldaTheALinktothePastBruiceJuice.html
+
+
+http://gothtml5.com/2011/11/22/appmobi-open-source-mobile-html5-technology/
+
+http://gothtml5.com/2011/12/09/video-tutorial-accessing-camera-html5-appmobi-api/
+
+http://wiki.apache.org/cassandra/GettingStarted
+
+http://www.datastax.com/docs/0.7/configuration/authentication
+
+http://ayogo.com/blog/
+
+http://www.datastax.com/docs/1.0/cluster_architecture/replication
+
+
+
+
+
+indie sound guy:
+http://www.enriquemolanoj.tk/
+emolano@yahoo.com
+
+http://www.indiegameaudio.com/
+
+http://www.pixelprospector.com/the-big-list-of-indie-game-sites/#sitesthatcoverindiegames
+
+http://www.slideshare.net/marinakobayashi/games-user-research-is-for-game-design?goback=%2Egde_1818270_member_165905606
+
+http://blog.betable.com/promoting-your-indie-game-company-with-a-podcast/
+
+
+
+//////not games
+http://yourlogicalfallacyis.com/
+//////not games
+
+http://www.indiegamemag.com/author/awilko/
+
+http://www.syrum-game.com/home
+
+indie awards:
+http://codame.com/play
+
+html5 palette swapping:
+http://www.effectgames.com/demos/canvascycle/
+
+sound guy:
+http://cicadamusicinc.com/
+
+Art house:
+http://en.sheeren.com/?goback=%2Egde_113121_member_174072580
+
+art house:!!!!!
+http://www.stroke-studios.com/
+
+*************************Some good here**********************************:
+http://www.ericyoungillustrations.com/
+
+http://thegamingelement.com/
+
