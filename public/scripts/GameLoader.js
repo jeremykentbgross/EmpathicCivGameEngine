@@ -21,7 +21,7 @@
 
 GameLoader =
 {
-	init : function(inIsServer, inSharedPath, inPrivatePath)//TODO inAppLoaderPath
+	start : function(inIsServer, inSharedPath, inPrivatePath)//TODO inAppLoaderPath
 	{
 		var include;
 		

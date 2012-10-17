@@ -34,19 +34,25 @@ GameEngineServer.CodeCompressor = function CodeCompressor(inRootPath)
 {
 	this._rootPath = inRootPath;
 	this._code = "";
-}
+};
 
 GameEngineServer.CodeCompressor.prototype.makeCompactGameLoader = function makeCompactGameLoader()
 {
-	var path;
-	var i;
+	var path,
+		i,
+		gameLoaderSrc,
+		regEx,
+		values,
+		fileSourceCode,
+		obfuscator,
+		obfuscatedSrc;
 	
 	//get the gameloader source code
-	var gameLoaderSrc = fs.readFileSync('../public/scripts/GameLoader.js', encoding='utf8');
+	gameLoaderSrc = fs.readFileSync('../public/scripts/GameLoader.js', 'utf8');
 	
 	//find all the includes that are not commented out:
-	var regEx = new RegExp('\\n\\s*include\\x28inSharedPath \\x2b \\"\\w+(\\x2f\\w+)*\\x2ejs\\"\\x29\\x3b', 'g');
-	var values = gameLoaderSrc.match(regEx);
+	regEx = new RegExp('\\n\\s*include\\x28inSharedPath \\x2b \\"\\w+(\\x2f\\w+)*\\x2ejs\\"\\x29\\x3b', 'g');
+	values = gameLoaderSrc.match(regEx);
 	
 	regEx.compile('\\"\\w+(\\x2f\\w+)*\\x2ejs\\"');
 	//for all those includes, replace the include with the actual code!
@@ -55,15 +61,26 @@ GameEngineServer.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 		path = values[i].match(regEx)[0];//get just the path
 		path = this._rootPath + path.substring(1, path.length - 1);
 
-		var fileSourceCode = fs.readFileSync(path, encoding='utf8');
+		fileSourceCode = fs.readFileSync(path, 'utf8');
 		gameLoaderSrc = gameLoaderSrc.replace(values[i], '\n' + fileSourceCode);
 	}
 	
 	
-	var obfuscator = new GameEngineServer.Obfuscator();
+	obfuscator = new GameEngineServer.Obfuscator();
 	obfuscator.addSrc(gameLoaderSrc);
 	
-	obfuscator.addIgnore('init');	//TODO use a different one for GameLoader to start!!
+	obfuscator.registerNamespace('GameEngineServer');
+	obfuscator.registerNamespace('GameEngineLib');
+	obfuscator.registerNamespace('GameLib');
+	obfuscator.registerNamespace('GameInstance');
+	obfuscator.registerNamespace('GameClassRegistryMap');
+	obfuscator.registerNamespace('GameUnitTests');
+	obfuscator.registerNamespace('GameLoader');
+	
+	
+	obfuscator.addIgnore('GameLoader');
+	obfuscator.addIgnore('start');
+	//TODO many of these should be in the obfuscator itself!
 	obfuscator.addIgnore('name');//TODO make sure nothing uses 'name' that doesn't need to!
 	obfuscator.addIgnore('dom');//TODO this is param, rename it so we dont need this
 	obfuscator.addIgnore('create');//TODO this is used by dojo too
@@ -77,21 +94,17 @@ GameEngineServer.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 	obfuscator.addIgnore('min');//TODO remove unneeded
 	obfuscator.addIgnore('sin');//TODO remove unneeded
 	obfuscator.addIgnore('cos');//TODO remove unneeded
+	obfuscator.addIgnore('window');//TODO remove unneeded
 		
-	obfuscator.registerNamespace('GameEngineServer');
-	obfuscator.registerNamespace('GameEngineLib');
-	obfuscator.registerNamespace('GameLib');
-	obfuscator.registerNamespace('GameInstance');
-	obfuscator.registerNamespace('GameClassRegistryMap');
-	obfuscator.registerNamespace('GameUnitTests');
+	
 	
 	obfuscator.run();
 	
-	var obfuscatedSrc = obfuscator.getObfuscatedCode();
+	obfuscatedSrc = obfuscator.getObfuscatedCode();
 	this._code = new Buffer(obfuscatedSrc);
-}
+};
 
 GameEngineServer.CodeCompressor.prototype.getCompactCode = function getCompactCode()
 {
 	return this._code;
-}
+};

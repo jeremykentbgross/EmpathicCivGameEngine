@@ -186,8 +186,8 @@ GameEngineServer.Obfuscator.prototype.getObfuscatedCode = function getObfuscated
 
 GameEngineServer.Obfuscator.prototype.run = function run()
 {
-	var name;
-	var i;
+	var name,
+		i;
 	
 	this._removeComments();
 	if(GameSystemVars.Server.removeTextForLocalization)
@@ -300,9 +300,9 @@ GameEngineServer.Obfuscator.prototype.run = function run()
 
 GameEngineServer.Obfuscator.prototype._checkForErrors = function _checkForErrors()
 {
-	var regEx = new RegExp();
-	var values;
-	var i;
+	var regEx = new RegExp(),
+		values,
+		i;
 	
 	regEx.compile('\\w+\\x2b\\x2b\\x2b\\w+', 'g');
 	values = this._src.match(regEx);
@@ -407,12 +407,11 @@ GameEngineServer.Obfuscator.prototype._removeComments = function _removeComments
 
 GameEngineServer.Obfuscator.prototype._removeTextForLocalization = function _removeTextForLocalization()
 {
-	var quoteMark = '\x22';
-	var escapeChar = '\x5c';
-	var i;
-	
-	var startIndex = 0;
-	var endIndex = 0;
+	var quoteMark = '\x22',
+		escapeChar = '\x5c',
+		i,
+		startIndex = 0,
+		endIndex = 0;
 	
 	//find start of comment block
 	do
@@ -460,8 +459,8 @@ GameEngineServer.Obfuscator.prototype._removeTextForLocalization = function _rem
 
 GameEngineServer.Obfuscator.prototype._findAllPotentialWords = function _findAllPotentialWords()
 {
-	var potentialWords = this._src.match(/\w+/g);
-	var i;
+	var potentialWords = this._src.match(/\w+/g),
+		i;
 	
 	for(i = 0; i < potentialWords.length; ++i)
 	{
@@ -476,8 +475,8 @@ GameEngineServer.Obfuscator.prototype._findAllPotentialWords = function _findAll
 
 GameEngineServer.Obfuscator.prototype._findFunctionNames = function _findFunctionNames()
 {
-	var functions = this._src.match(/function\s+\w+/g) || [];
-	var i;
+	var functions = this._src.match(/function\s+\w+/g) || [],
+		i;
 	
 	for(i = 0; i < functions.length; ++i)
 	{
@@ -490,14 +489,15 @@ GameEngineServer.Obfuscator.prototype._findFunctionNames = function _findFunctio
 
 GameEngineServer.Obfuscator.prototype._findParameterNames = function _findParameterNames()
 {
-	var functionSignatures = this._src.match(/function\s*\w*\s*\x28[^\x29]+\x29/g) || [];
-	var parameters = [];
-	var i;
-	var j;
+	var functionSignatures = this._src.match(/function\s*\w*\s*\x28[^\x29]+\x29/g) || [],
+		parameters = [],
+		i,
+		j,
+		params;
 	
 	for(i = 0; i < functionSignatures.length; ++i)
 	{
-		var params = functionSignatures[i].match(/\x28[^\x29]*\x29/)[0].match(/\w+/g) || [];
+		params = functionSignatures[i].match(/\x28[^\x29]*\x29/)[0].match(/\w+/g) || [];
 		for(j = 0; j < params.length; ++j)
 		{
 			parameters.push(params[j]);
@@ -510,9 +510,10 @@ GameEngineServer.Obfuscator.prototype._findParameterNames = function _findParame
 
 GameEngineServer.Obfuscator.prototype._findVariableNames = function _findVariableNames()
 {
-	var variableDeclareLines = this._src.match(/var\s+\w+[^\x3b]*\x3b/g) || [];
-	var variables;
-	var i, j;
+	var variableDeclareLines = this._src.match(/var\s+\w+[^\x3b]*\x3b/g) || [],
+		variables,
+		i,
+		j;
 	
 	for(i = 0; i < variableDeclareLines.length; ++i)
 	{
@@ -549,16 +550,18 @@ GameEngineServer.Obfuscator.prototype._findVariableNames = function _findVariabl
 
 GameEngineServer.Obfuscator.prototype._findValuesInNamespaces = function _findValuesInNamespaces()
 {
-	var valuesInNameSpaces = [];
-	var regEx = new RegExp();
-	var i;
-	var nameSpace;
+	var valuesInNameSpaces = [],
+		regEx = new RegExp(),
+		i,
+		nameSpace,
+		values,
+		loops;
 	
 	for(nameSpace in this._nameSpaces)
 	{
 		regEx.compile(nameSpace + '\\x2e\\w+', 'g');
-		var values = this._src.match(regEx);
-		var loops = values ? values.length : 0;
+		values = this._src.match(regEx);
+		loops = values ? values.length : 0;
 		for(i = 0; i < loops; ++i)
 		{
 			values[i] = values[i].match(/\x2e\w+/)[0].match(/\w+/)[0];
@@ -572,8 +575,8 @@ GameEngineServer.Obfuscator.prototype._findValuesInNamespaces = function _findVa
 
 GameEngineServer.Obfuscator.prototype._findJSONFields = function _findJSONFields()
 {
-	var fields = this._src.match(/[\x2c\x7b]\s*\w+\s*\x3a/g) || [];
-	var i;
+	var fields = this._src.match(/[\x2c\x7b]\s*\w+\s*\x3a/g) || [],
+		i;
 	
 	for(i = 0; i < fields.length; ++i)
 	{
@@ -593,12 +596,13 @@ GameEngineServer.Obfuscator.prototype._clearNewlines = function _clearNewlines()
 
 GameEngineServer.Obfuscator.prototype._clearWhiteSpace = function _clearWhiteSpace()
 {
-	var regEx = new RegExp();
-	var i;
+	var regEx = new RegExp(),
+		i,
+		hex;
 	
 	for(i = 0; i < this._javascriptOperators.length; ++i)
 	{
-		var hex = this._stringToHex(this._javascriptOperators[i]);
+		hex = this._stringToHex(this._javascriptOperators[i]);
 		//regEx.compile('\\s*' + hex + '\\s*', 'g');
 		regEx.compile('[\\x20\\t]*' + hex + '[\\x20\\t]*', 'g');
 		this._src = this._src.replace(regEx, this._javascriptOperators[i]);
@@ -609,12 +613,13 @@ GameEngineServer.Obfuscator.prototype._clearWhiteSpace = function _clearWhiteSpa
 
 GameEngineServer.Obfuscator.prototype._stringToHex = function _stringToHex(inString)
 {
-	var hex = '';
-	var i;
+	var hex = '',
+		i,
+		string;
 	
 	for(i = 0; i < inString.length; ++i)
 	{
-		var string = inString.charCodeAt(i).toString(16);
+		string = inString.charCodeAt(i).toString(16);
 		string = (string.length === 2 ? string : '0' + string);
 		hex += '\\x' + string;
 	}
@@ -626,12 +631,16 @@ GameEngineServer.Obfuscator.prototype._stringToHex = function _stringToHex(inStr
 
 GameEngineServer.Obfuscator.prototype._doWordReplacement = function _doWordReplacement()
 {
-	var wordList = [];
-	var regEx = new RegExp();
-	var wordData;
-	var word;
-	var i;
-	var j;
+	var wordList = [],
+		regEx = new RegExp(),
+		wordData,
+		word,
+		i,
+		j,
+		instances,
+		moreInstances,
+		loops,
+		replacement;
 	
 	for(word in this._wordMap)
 	{
@@ -640,7 +649,7 @@ GameEngineServer.Obfuscator.prototype._doWordReplacement = function _doWordRepla
 		
 		//get the instances of the word in the source code
 		regEx.compile('\\W' + word + '\\W', 'g');
-		var instances = this._src.match(regEx);
+		instances = this._src.match(regEx);
 		
 		//remember the unique instances
 		for(i = 0; i < instances.length; ++i)
@@ -653,9 +662,9 @@ GameEngineServer.Obfuscator.prototype._doWordReplacement = function _doWordRepla
 			and the regular expression would miss the second one
 		*/
 		regEx.compile('\\W' + word + '\\W' + word + '\\W', 'g');
-		var moreInstances = this._src.match(regEx);
+		moreInstances = this._src.match(regEx);
 		
-		var loops = moreInstances ? moreInstances.length : 0;
+		loops = moreInstances ? moreInstances.length : 0;
 		//add the additional unique instances
 		for(i = 0; i < loops; ++i)
 		{
@@ -674,8 +683,8 @@ GameEngineServer.Obfuscator.prototype._doWordReplacement = function _doWordRepla
 	wordList.sort(
 		function(inLHS, inRHS)
 		{
-			var LHV = inLHS.count * inLHS.word.length;
-			var RHV = inRHS.count * inRHS.word.length;
+			var LHV = inLHS.count * inLHS.word.length,
+				RHV = inRHS.count * inRHS.word.length;
 			if(LHV > RHV)
 			{
 				return -1;
@@ -695,7 +704,7 @@ GameEngineServer.Obfuscator.prototype._doWordReplacement = function _doWordRepla
 		
 		for(j in wordData.uniqueInstances)
 		{
-			var replacement = j[0] + wordData.replacement + j[j.length-1];
+			replacement = j[0] + wordData.replacement + j[j.length-1];
 			regEx.compile(
 				this._stringToHex(j[0])
 				+ wordData.word
@@ -732,10 +741,9 @@ GameEngineServer.Obfuscator.prototype._genValidWordReplacement = function _genVa
 
 GameEngineServer.Obfuscator.prototype._genWordReplacement = function _genWordReplacement()
 {
-	var word = '';
-	var currentCount = this._nextWordCount;
-	
-	var charIndex = currentCount % 52;
+	var word = '',
+		currentCount = this._nextWordCount,
+		charIndex = currentCount % 52;
 	
 	//if lower case
 	if(charIndex < 26)

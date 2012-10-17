@@ -48,7 +48,7 @@ GameEngineServer.listenSocket = socketIO.listen(GameEngineServer.httpServer);
 
 
 //Paths looks wrong (because they will run from inside the loader)
-GameLoader.init(true, "../../public/", "../../private/");
+GameLoader.start(true, "../../public/", "../../private/");
 
 
 
