@@ -55,6 +55,8 @@ GameEngineLib.Class = function Class(inParams)
 	var parentIndex;
 	var property;
 	
+	Constructor.prototype = Constructor;
+	
 	for(parentIndex in inParents)
 	{
 		var parent = inParents[parentIndex];

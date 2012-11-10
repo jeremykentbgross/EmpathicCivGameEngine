@@ -41,6 +41,13 @@ GameEngineLib.Game2DAABB.prototype.constructor = GameEngineLib.Game2DAABB;
 
 
 
+GameEngineLib.Game2DAABB.prototype.clone = function clone()
+{
+	return new GameEngineLib.Game2DAABB(this.myX, this.myY, this.myWidth, this.myHeight);
+}
+
+
+
 GameEngineLib.Game2DAABB.prototype.containsRect = function containsRect(inOtherRect)
 {
 	if(inOtherRect.myX < this.myX)//TODO maybe <= for all these??

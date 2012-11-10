@@ -99,12 +99,11 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 				this._physicsObject.setGame2DAABB(this._boundingRect);
 				
 				//set position and let everyone else know
-				this._owner.onEvent(//TODO real event, not temp object
-					{
-						getName : function(){return "UpdatePosition";},
-						position : this._position,//TODO clone
-						boundingRect : this._boundingRect//TODO need to serialize this!, TODO clone
-					}
+				this._owner.onEvent(
+					new GameEngineLib.GameEvent_UpdatePosition(
+						this._position.clone(),
+						this._boundingRect.clone()
+					)
 				);
 			}
 			//else console.log(this._position.myX + " " + this._position.myY);
@@ -142,11 +141,10 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 		{
 			//TODO use GameEvent! Make collection of known game events!
 			this._owner.onEvent(
-				{
-					getName : function(){return "UpdatePosition";},//TODO should be UpdatePositionVelocity
-					position : physicsUpdateInfo.position,
-					boundingRect : physicsUpdateInfo.boundingRect
-				}
+				new GameEngineLib.GameEvent_UpdatePosition(
+					physicsUpdateInfo.position.clone(),
+					physicsUpdateInfo.boundingRect.clone()
+				)
 			);
 			this._position = physicsUpdateInfo.position;
 			this.setNetDirty();

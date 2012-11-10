@@ -28,7 +28,7 @@ GameUnitTests.registerTest(
 		var listener1;
 		var listener2;
 		
-		eventSystem = GameEngineLib.createEventSystem();
+		eventSystem = GameEngineLib.GameEventSystem.create();
 		
 		listener1 =
 		{
@@ -56,6 +56,7 @@ GameUnitTests.registerTest(
 		eventSystem.onEvent(
 			{
 				getName : function(){return "TestEvent";},
+				getCallbackName : function(){return "onTestEvent";},
 				data : 2
 			}
 		);
@@ -75,6 +76,7 @@ GameUnitTests.registerTest(
 		eventSystem.onEvent(
 			{
 				getName : function(){return "TestEvent";},
+				getCallbackName : function(){return "onTestEvent";},
 				data : 0
 			}
 		);

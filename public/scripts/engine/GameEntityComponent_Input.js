@@ -71,12 +71,7 @@ GameEngineLib.EntityComponent_Input = GameEngineLib.Class(
 			
 			if(this._owner)
 			{
-				this._owner.onEvent(
-					{
-						getName : function(){return "RequestVelocity";},
-						direction : this._direction
-					}
-				);
+				this._owner.onEvent(new GameEngineLib.GameEvent_RequestVelocity(this._direction));
 			}
 			else
 			{

@@ -19,18 +19,28 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.GameEvent = function GameEvent(inEventName)
-{
-	this._eventName = inEventName;
-};
-GameEngineLib.GameEvent.prototype.constructor = GameEngineLib.GameEvent;
-
-
-
-GameEngineLib.GameEvent.prototype.getName = function getName()
-{
-	return this._eventName;
-};
+GameEngineLib.GameEvent = GameEngineLib.Class({
+	Constructor : function GameEvent(inCallbackName)
+	{
+		this._callbackName = inCallbackName;
+	},
+	Parents : null,
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition :
+	{
+		//TODO add init function for the event that chains down so that the constructor doesn't have to be used
+		getName : function getName()
+		{
+			return this.name;
+		},
+		getCallbackName : function getCallbackName()
+		{
+			return this._callbackName;
+		}
+	}
+});
 
 
 
@@ -39,7 +49,7 @@ GameEngineLib.GameEvent.prototype.getName = function getName()
 GameEngineLib.GameEvent_AddedToEntity = GameEngineLib.Class({
 	Constructor : function AddedToEntity(inEntity)
 	{
-		this.GameEvent("AddedToEntity");//TOD parent getEventFunctionName
+		this.GameEvent('onAddedToEntity');
 		this.entity = inEntity;
 	},
 	Parents : [GameEngineLib.GameEvent],
@@ -55,7 +65,7 @@ GameEngineLib.GameEvent_AddedToEntity = GameEngineLib.Class({
 GameEngineLib.GameEvent_RemovedFromEntity = GameEngineLib.Class({
 	Constructor : function RemovedFromEntity(inEntity)
 	{
-		this.GameEvent("RemovedFromEntity");
+		this.GameEvent('onRemovedFromEntity');
 		this.entity = inEntity;
 	},
 	Parents : [GameEngineLib.GameEvent],
@@ -71,7 +81,7 @@ GameEngineLib.GameEvent_RemovedFromEntity = GameEngineLib.Class({
 GameEngineLib.GameEvent_AddedToWorld = GameEngineLib.Class({
 	Constructor : function AddedToWorld(inWorld)
 	{
-		this.GameEvent("AddedToWorld");
+		this.GameEvent('onAddedToWorld');
 		this.world = inWorld;
 	},
 	Parents : [GameEngineLib.GameEvent],
@@ -86,8 +96,159 @@ GameEngineLib.GameEvent_AddedToWorld = GameEngineLib.Class({
 GameEngineLib.GameEvent_RemovedFromWorld = GameEngineLib.Class({
 	Constructor : function RemovedFromWorld(inWorld)
 	{
-		this.GameEvent("RemovedFromWorld");
+		this.GameEvent('onRemovedFromWorld');
 		this.world = inWorld;
+	},
+	Parents : [GameEngineLib.GameEvent],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition : {}
+});
+
+
+
+GameEngineLib.GameEvent_Input = GameEngineLib.Class({
+	Constructor : function Input(inMousePosition, inButtons, inKeys, inKeysPressed)
+	{
+		this.GameEvent('onInput');
+		if(inMousePosition)
+		{
+			this.mouseLoc = inMousePosition.clone();//TODO rename mouseLoc to mousePos
+		}
+		else
+		{
+			this.mouseLoc = new GameEngineLib.Game2DPoint();
+		}
+		this.buttons = inButtons || {};
+		this.keys = inKeys || {};
+		this.keysPressed = inKeysPressed || {};
+	},
+	Parents : [GameEngineLib.GameEvent],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition : {}
+});
+
+
+
+
+
+
+GameEngineLib.GameEvent_ConnectedToServer = GameEngineLib.Class({
+	Constructor : function ConnectedToServer()
+	{
+		this.GameEvent('onConnectedToServer');
+	},
+	Parents : [GameEngineLib.GameEvent],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition : {}
+});
+
+
+
+
+
+
+
+
+GameEngineLib.GameEvent_DisconnectedFromServer = GameEngineLib.Class({
+	Constructor : function DisconnectedFromServer()
+	{
+		this.GameEvent('onDisconnectedFromServer');
+	},
+	Parents : [GameEngineLib.GameEvent],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition : {}
+});
+
+
+
+
+
+GameEngineLib.GameEvent_IdentifiedUser = GameEngineLib.Class({
+	Constructor : function IdentifiedUser(inID)
+	{
+		this.GameEvent('onIdentifiedUser');
+		this.user = inID;
+	},
+	Parents : [GameEngineLib.GameEvent],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition : {}
+});
+
+
+
+
+//TODO rename NetMsg
+GameEngineLib.GameEvent_Msg = GameEngineLib.Class({
+	Constructor : function Msg(inMsg)
+	{
+		this.GameEvent('onMsg');
+		this.msg = inMsg;
+	},
+	Parents : [GameEngineLib.GameEvent],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition : {}
+});
+
+
+
+
+//TODO rename NetData
+GameEngineLib.GameEvent_Data = GameEngineLib.Class({
+	Constructor : function Data(inData)
+	{
+		this.GameEvent('onData');
+		this.data = inData;
+	},
+	Parents : [GameEngineLib.GameEvent],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition : {}
+});
+
+
+
+
+
+
+GameEngineLib.GameEvent_RequestVelocity = GameEngineLib.Class({
+	Constructor : function RequestVelocity(inVelocity)
+	{
+		this.GameEvent('onRequestVelocity');
+		this.direction = inVelocity;//TODO rename direction as velocity
+	},
+	Parents : [GameEngineLib.GameEvent],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition : {}
+});
+
+
+
+
+
+
+
+
+GameEngineLib.GameEvent_UpdatePosition = GameEngineLib.Class({
+	Constructor : function UpdatePosition(inPos, inAABB)
+	{
+		this.GameEvent('onUpdatePosition');
+		this.position = inPos,
+		this.boundingRect = inAABB//TODO rename boundingRect => aabb
 	},
 	Parents : [GameEngineLib.GameEvent],
 	flags : {},

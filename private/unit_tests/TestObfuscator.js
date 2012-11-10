@@ -38,11 +38,14 @@ GameUnitTests.registerTest(
 		var obfuscatorObfuscatedSrc = obfuscator.getObfuscatedCode();
 		//console.log('\n\n' + obfuscatorObfuscatedSrc + '\n\n');
 		
-		//define 'a' so eval works
-		b = {};
+		var gameServerObfName = obfuscator.getObfuscatedName('GameEngineServer');
+		if(gameServerObfName !== 'GameEngineServer')
+		{
+			eval(gameServerObfName + ' = {};');
+		}
 		eval(obfuscatorObfuscatedSrc);
 		var callObfuscatedObfuscatorSrc =
-			'var obfuscator2 = new ' + obfuscator.getObfuscatedName('GameEngineServer') + '.' + obfuscator.getObfuscatedName('Obfuscator') + '();\n' +
+			'var obfuscator2 = new ' + gameServerObfName + '.' + obfuscator.getObfuscatedName('Obfuscator') + '();\n' +
 			'obfuscator2.' + obfuscator.getObfuscatedName('addSrc') + '(obfuscatorSrc);\n' +
 			'obfuscator2.' + obfuscator.getObfuscatedName('registerNamespace') + '(\'GameEngineServer\');\n' +
 			'obfuscator2.' + obfuscator.getObfuscatedName('run') + '();\n' +

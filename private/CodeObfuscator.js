@@ -407,6 +407,13 @@ GameEngineServer.Obfuscator.prototype._removeComments = function _removeComments
 
 GameEngineServer.Obfuscator.prototype._removeTextForLocalization = function _removeTextForLocalization()
 {
+	/*
+	//TODO figure out how to do this function with regular expression(s)
+	var regEx = new RegExp(/\x22[\S\s]*?[^\x5c\x22]\x22/g);
+	console.log("Finding all of the following \"Quotes\" from the code.");
+	console.log(this._src.match(regEx));
+	return;//HACK
+   */
 	var quoteMark = '\x22',
 		escapeChar = '\x5c',
 		i,
@@ -700,7 +707,7 @@ GameEngineServer.Obfuscator.prototype._doWordReplacement = function _doWordRepla
 	for(i = 0; i < wordList.length; ++i)
 	{
 		wordData = wordList[i];
-		wordData.replacement = GameSystemVars.Server.useModifiedNamesNotPureObfuscate ? '$' + wordData.word + '$' : this._genValidWordReplacement();
+		wordData.replacement = GameSystemVars.Server.useModifiedNamesNotPureObfuscate ? 'X_' + wordData.word + '_X' : this._genValidWordReplacement();
 		
 		for(j in wordData.uniqueInstances)
 		{

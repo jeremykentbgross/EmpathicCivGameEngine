@@ -20,7 +20,7 @@
 */
 
 //TODO depricated:
-GameEngineLib.createEventSystem = function(instance)
+GameEngineLib.createEventSystem = function(instance)//TODO get rid of once I refactor network and input
 {
 	var property;
 	var temp = new GameEngineLib.GameEventSystem();
@@ -96,20 +96,26 @@ GameEngineLib.GameEventSystem.prototype.deregisterListener = function deregister
 
 GameEngineLib.GameEventSystem.prototype.onEvent = function onEvent(inEvent)
 {
-	var head;
-	var current;
-	var eventName;
-	var callbackName;
+	var head,
+		current,
+		eventName,
+		callbackName;
 	
-	eventName = inEvent.getName();
-	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	callbackName = "on" + eventName;//TODO axe "on" here and have users add it!!!!!!!!!!!!!!!!!!!!
-	//TODO use class name!
-	//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	try
+	{
+		eventName = inEvent.getName();
+		callbackName = inEvent.getCallbackName();
+	}
+	catch(error)
+	{
+		console.log(error.stack);
+		return;
+	}
 	
 	head = this._eventListeners[eventName];
 	if(!head)
 	{
+		//TODO should I print something here?
 		return;
 	}
 	current = head.myNext;

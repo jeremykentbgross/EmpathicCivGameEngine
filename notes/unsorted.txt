@@ -327,3 +327,104 @@ http://www.ericyoungillustrations.com/
 
 http://thegamingelement.com/
 
+http://blog.caustik.com/2012/04/11/escape-the-1-4gb-v8-heap-limit-in-node-js/
+
+http://athile.net/library/blog/?p=208
+
+http://www.pomodorotechnique.com/
+
+http://www.situatedresearch.com/blog/2012/10/game-play-where-science-branding-merge/
+
+http://thegamerinsideportal.appspot.com/
+
+http://www.whatgamesare.com/2011/12/the-four-lenses-of-game-making.html
+
+http://devmag.org.za/2012/07/29/how-to-choose-colours-procedurally-algorithms/
+
+http://www.slideshare.net/iqugroup/the-iqu-experience
+
+http://www.slideshare.net/iqugroup/online-marketing-under-pressure-how-to-work-smarter-not-harder-in-f2p-online-games
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+http://www.ericyoungillustrations.com/gallery/597117#12
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+http://www.slideshare.net/iqugroup/online-marketing-under-pressure-how-to-work-smarter-not-harder-in-f2p-online-games
+
+http://www.slideshare.net/iqugroup/the-iqu-experience
+
+http://techcrunch.com/2012/10/20/is-your-game-crowd-read/?goback=%2Egde_1818270_member_177258480
+
+http://www.ted.com/talks/tom_chatfield_7_ways_games_reward_the_brain.html
+
+
+
+
+paper/rock/sissors:
+-fps range (3)
+-sc armor/air/cloak
+Dota / TD
+t/d/h/cc + b/d
+AT:
+1 Prox/remote/bot/turr/supply => colapse/clear/toggle?
+2 Fast/scan/cams/ports/cloak/hack (consoles/lines) + light/sni
+3 Secur tank/shield(s)/doors/detectors/secur bots/1 way barricade
+or bubbles
+4 Med/bio g/O2 env (supply line: crops?)
+5 Eng/rep/bridge/powerlines/rep bots (supply line: power/data)
+6 Hv/flame/ass/rock/chain
+ST:
+1 Drive / mines / structure?
+2 Sens (targeted)/cloak/hack other?/coms
+3 Def in/out (shlds/doors)
+4 "
+5 Rep/Eng/Pow
+6 Wep
+who: home tiles?
+upgrs:
+-batteries/port power (temp disconnected ports / other)
+BLD:
+AT: (see sc/dk/ns2/td/tf2/bf2142)
+-pow/lines
+-upg
+-doors
+-bridges
+-cams
+-home tiles
+-walls / shlds
+-replicators / spwnpod
+ST: (see FTL)
+-eng
+-wep
+-prop
+-doors
+-
+ST build:
+-quarters
+-eng
+-med
+-etc
+=>mass / rotational ..
+DunKep:
+Libs -> ServerRacks (terminal)
+http://d3js.org/
+
+http://festival.gamecity.org/
+
+http://itag.gamecity.org/
+
+http://jonmaggio.com/portfolio.html 
+
+http://partical0.deviantart.com/art/Ship-Hallway-Concept-302081860?q=gallery%3Apartical0%2F13155548&qo=15
+
+http://partical0.deviantart.com/art/Dispatch-Office-302082448?q=gallery%3Apartical0%2F13155548&qo=14
+
+http://chrishecker.com/Rigid_body_dynamics
+
+http://gamedev.stackexchange.com/questions/20809/non-axis-aligned-bounding-box-collision-and-physics
+
+http://techcrunch.com/2012/10/27/big-data-right-now-five-trendy-open-source-technologies/
+
+http://techcrunch.com/2012/10/20/is-your-game-crowd-read/?goback=%2Egde_1818270_member_177258480
+
+TODO check for more node command line params

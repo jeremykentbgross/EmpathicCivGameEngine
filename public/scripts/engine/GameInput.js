@@ -25,7 +25,7 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 	instance = instance || {};
 	PRIVATE = PRIVATE || {};
 	
-	GameEngineLib.createEventSystem(instance);
+	GameEngineLib.createEventSystem(instance);//TODO make this inheritance when I refactor this file
 	
 	if(GameSystemVars.DEBUG)
 	{
@@ -194,16 +194,13 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 			}
 		}
 				
-		event =
-		{
-			getName : function(){return "Input";},
-			keys : {},
-			keysPressed : {},
-			buttons : {},
-			mouseLoc : GameEngineLib.createGame2DPoint(PRIVATE.mouseLoc.myX, PRIVATE.mouseLoc.myY)
-		};
+		event = new GameEngineLib.GameEvent_Input(PRIVATE.mouseLoc.clone());
 		
 		//copy the values from PRIVATE individually so my internal data cannot be changed by users
+		for(i in PRIVATE.buttons)
+		{
+			event.buttons[i] = PRIVATE.buttons[i];
+		}
 		for(i in PRIVATE.keys)
 		{
 			event.keys[i] = PRIVATE.keys[i];
@@ -211,10 +208,6 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 		for(i in PRIVATE.keysPressed)
 		{
 			event.keysPressed[i] = PRIVATE.keysPressed[i];
-		}
-		for(i in PRIVATE.buttons)
-		{
-			event.buttons[i] = PRIVATE.buttons[i];
 		}
 		
 		//send messages for all the listeners for input

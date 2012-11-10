@@ -76,10 +76,20 @@ GameEngineServer.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 	obfuscator.registerNamespace('GameClassRegistryMap');
 	obfuscator.registerNamespace('GameUnitTests');
 	obfuscator.registerNamespace('GameLoader');
+	obfuscator.registerNamespace('GameSystemVars');
+
+	obfuscator.registerNamespace('requestAnimFrame')//TODO make not private!	
+	obfuscator.addIgnore('requestAnimationFrame');
+	obfuscator.addIgnore('webkitRequestAnimationFrame');
+	obfuscator.addIgnore('mozRequestAnimationFrame');
+	obfuscator.addIgnore('oRequestAnimationFrame');
+	obfuscator.addIgnore('msRequestAnimationFrame');
+	obfuscator.addIgnore('setTimeout');
+	obfuscator.addIgnore('require');
 	
 	
 	obfuscator.addIgnore('GameLoader');
-	obfuscator.addIgnore('start');
+	obfuscator.addIgnore('start');//TODO should rename 'load' (game loader entry function)
 	//TODO many of these should be in the obfuscator itself!
 	obfuscator.addIgnore('name');//TODO make sure nothing uses 'name' that doesn't need to!
 	obfuscator.addIgnore('dom');//TODO this is param, rename it so we dont need this
@@ -95,6 +105,7 @@ GameEngineServer.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 	obfuscator.addIgnore('sin');//TODO remove unneeded
 	obfuscator.addIgnore('cos');//TODO remove unneeded
 	obfuscator.addIgnore('window');//TODO remove unneeded
+	obfuscator.addIgnore('emit');//TODO remove unneeded
 		
 	
 	

@@ -48,7 +48,7 @@ GameEngineLib.User.USER_IDS =
 
 GameEngineLib.GameNetwork = function GameNetwork()
 {
-	GameEngineLib.createEventSystem(this);//TODO inherit
+	GameEngineLib.createEventSystem(this);//TODO inherit //TODO make this inheritance when I refactor this file
 };
 
 GameEngineLib.GameNetwork.prototype.constructor = GameEngineLib.GameNetwork;
@@ -235,7 +235,7 @@ GameEngineLib.GameNetwork.prototype._sendData = function _sendData(inData/*, inS
 GameEngineLib.GameNetwork.prototype._onConnectedToServer = function _onConnectedToServer()
 {
 	var _this_ = GameInstance.Network;
-	var event = new GameEngineLib.GameEvent("ConnectedToServer");
+	var event = new GameEngineLib.GameEvent_ConnectedToServer();
 	
 	if(GameSystemVars.DEBUG /*&& GameSystemVars.Debug.NetworkMessages_Print*/)
 	{
@@ -254,7 +254,7 @@ GameEngineLib.GameNetwork.prototype._onConnectedToServer = function _onConnected
 GameEngineLib.GameNetwork.prototype._onDisconnectedFromServer = function _onDisconnectedFromServer()
 {
 	var _this_ = GameInstance.Network;
-	var event = new GameEngineLib.GameEvent("DisconnectedFromServer");
+	var event = new GameEngineLib.GameEvent_DisconnectedFromServer();
 	
 	if(GameSystemVars.DEBUG /*&& GameSystemVars.Debug.NetworkMessages_Print*/)
 	{
@@ -266,7 +266,7 @@ GameEngineLib.GameNetwork.prototype._onDisconnectedFromServer = function _onDisc
 
 
 
-GameEngineLib.GameNetwork.prototype._onIdRecv = function _onIdRecv(inID)
+GameEngineLib.GameNetwork.prototype._onIdRecv = function _onIdRecv(inID)//TODO rename inUserID
 {
 	var _this_ = GameInstance.Network;
 	
@@ -308,9 +308,7 @@ GameEngineLib.GameNetwork.prototype._onIdRecv = function _onIdRecv(inID)
 			GameEngineLib.logger.info("New userid FROM: " + inID.userName + " : " + this.gameUser.userID);
 		}
 		
-		var event = new GameEngineLib.GameEvent("IdentifiedUser");
-		event.user = inID;
-		_this_.onEvent(event);
+		_this_.onEvent(new GameEngineLib.GameEvent_IdentifiedUser(inID));
 	}
 	else
 	{
@@ -329,15 +327,13 @@ GameEngineLib.GameNetwork.prototype._onMsgRecv = function _onMsgRecv(inMsg)
 {
 	var _this_ = GameInstance.Network;
 	
-	var event = new GameEngineLib.GameEvent("Msg");
-	event.msg = inMsg;
-	
 	if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
 	{
 		GameEngineLib.logger.info("NetRecv: " + inMsg);
 	}
 	
-	_this_.onEvent(event);
+	_this_.onEvent(new GameEngineLib.GameEvent_Msg(inMsg));
+	
 	if(GameSystemVars.Network.isServer)
 	{
 		//TODO cap size?
@@ -351,8 +347,7 @@ GameEngineLib.GameNetwork.prototype._onDataRecv = function _onDataRecv(inData)
 {
 	var _this_ = GameInstance.Network;
 	
-	var event = new GameEngineLib.GameEvent("Data");
-	event.data = inData;
+	var event = new GameEngineLib.GameEvent_Data(inData);
 	
 	if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
 	{
