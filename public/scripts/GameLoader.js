@@ -146,6 +146,7 @@ GameLoader =
 				include(inSharedPath + "/socket.io/socket.io.js");
 			}
 			include(inSharedPath + "scripts/engine/Game2DGraphics.js");
+			include(inSharedPath + "scripts/engine/GameSoundSystem.js");
 			include(inSharedPath + "scripts/engine/GameAssetManager.js");
 		}
 		include(inSharedPath + "scripts/engine/GameNetwork.js");

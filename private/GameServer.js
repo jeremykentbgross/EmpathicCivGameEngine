@@ -78,7 +78,7 @@ if(GameSystemVars.Server.compressClientCode)
 
 
 GameEngineServer.expressApp.get(
-	'/*.(js|css|html|png|jpg)'
+	'/*.(js|css|html|png|jpg|mp3)'//TODO review file types
 	,function(req, res){
 		res.sendfile( path.join(GameEngineServer.webHostRoot, req.url) );
 	}

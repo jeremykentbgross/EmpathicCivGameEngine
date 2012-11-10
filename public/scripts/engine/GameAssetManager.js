@@ -25,6 +25,7 @@ GameEngineLib.createGameAssetManager = function(instance, PRIVATE)
 	PRIVATE = PRIVATE || {};
 	
 	PRIVATE.images = {};
+	PRIVATE.sounds = {};
 	
 	//TODO make pink say: "loading/missing asset"
 	
@@ -80,6 +81,78 @@ GameEngineLib.createGameAssetManager = function(instance, PRIVATE)
 			outLoadTarget.image = document.images[defaultImageName];//TODO query this with dojo
 		}
 	};
+	
+	instance.loadSound = function(inFileName, outLoadTarget)
+	{		
+		var defaultSoundName = "defaultsound";
+		var soundInfo;
+		var i;
+		
+		soundInfo = PRIVATE.sounds[inFileName];
+		
+		if(soundInfo !== undefined)
+		{
+			if(soundInfo.isLoaded)
+			{
+				outLoadTarget.sound = soundInfo.sound;
+			}
+			else
+			{
+				//queue it to get set when it loads
+				soundInfo.listeners.push(outLoadTarget);
+				
+				//set the default sound
+				outLoadTarget.sound = document.sounds[defaultSoundName];//TODO query this with dojo
+			}
+		}
+		else
+		{
+			soundInfo = {};
+			soundInfo.isLoaded = false;
+			soundInfo.listeners = [];
+			
+			soundInfo.listeners[0] = outLoadTarget;
+			
+			soundInfo.sound = null;
+			//soundInfo.sound.src = inFileName;
+			
+			var request = new XMLHttpRequest();
+			request.open('GET', inFileName, true);
+			request.responseType = 'arraybuffer';
+			
+			//Decode asynchronously
+			request.onload = function()
+			{
+				GameInstance.soundSystem.context.decodeAudioData(
+					request.response,
+					function(buffer)
+					{
+						soundInfo.sound = buffer;
+						soundInfo.isLoaded = true;
+						
+						//set targets to have the loaded sound
+						for(i = 0; i < soundInfo.listeners.length; ++i)
+						{
+							soundInfo.listeners[i].sound = soundInfo.sound;
+						}
+						delete soundInfo.listeners;
+					},
+					function onError(inWhatParam)//??
+					{
+						GameEngineLib.logger.error("Failed to load " + inFileName);
+					}
+				);
+				//TODO onFailedLoad? set placeholder, else have a grey or clear sound for streaming
+			}
+			request.send();
+						
+			PRIVATE.sounds[inFileName] = soundInfo;
+			
+			//set the default sound
+			//outLoadTarget.sound = document.sounds[defaultSoundName];//TODO query this with dojo
+			//TODO PUT THIS BACK^^^^^^^^^^^^^^^^^^^^^^^^^!!!
+		}
+	}
 	
 	return instance;
 };

@@ -293,6 +293,10 @@ GameLib.createGameRules = function(instance, PRIVATE)
 			PRIVATE.drawTile = 0;
 		}
 		
+		if(inInputEvent.keysPressed['\x75'])//u
+		{
+			GameInstance.soundSystem.playSound(0);
+		}
 		if(inInputEvent.keysPressed['\x6f'])//o
 		{
 			GameSystemVars.Debug.Map_Draw = !GameSystemVars.Debug.Map_Draw;

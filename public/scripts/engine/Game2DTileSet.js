@@ -69,7 +69,7 @@ GameEngineLib.Game2DTileSet = GameEngineLib.Class(
 			for(i = 0; i < this._myTiles.length; ++i)
 			{
 				var tile = this._myTiles[i];
-				if(!GameSystemVars.Network.isServer)
+				if(!GameSystemVars.Network.isServer)//TODO should the function return strait away?
 				{
 					GameInstance.AssetManager.loadImage(tile.fileName, tile);
 				}

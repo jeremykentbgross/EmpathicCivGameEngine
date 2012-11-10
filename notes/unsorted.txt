@@ -428,3 +428,5 @@ http://techcrunch.com/2012/10/27/big-data-right-now-five-trendy-open-source-tech
 http://techcrunch.com/2012/10/20/is-your-game-crowd-read/?goback=%2Egde_1818270_member_177258480
 
 TODO check for more node command line params
+
+TODO change default sound and webpage icon
