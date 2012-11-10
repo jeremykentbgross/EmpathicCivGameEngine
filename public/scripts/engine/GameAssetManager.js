@@ -123,7 +123,7 @@ GameEngineLib.createGameAssetManager = function(instance, PRIVATE)
 			//Decode asynchronously
 			request.onload = function()
 			{
-				GameInstance.soundSystem.context.decodeAudioData(
+				GameInstance.soundSystem._context.decodeAudioData(
 					request.response,
 					function(buffer)
 					{

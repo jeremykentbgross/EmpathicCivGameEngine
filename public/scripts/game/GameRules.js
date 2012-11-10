@@ -300,14 +300,17 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		if(inInputEvent.keysPressed['\x6f'])//o
 		{
 			GameSystemVars.Debug.Map_Draw = !GameSystemVars.Debug.Map_Draw;
+			GameInstance.soundSystem.setMasterVolume(0.5);
 		}
 		if(inInputEvent.keysPressed['\x70'])//p
 		{
-			GameSystemVars.Debug.Physics_Draw= !GameSystemVars.Debug.Physics_Draw;
+			GameSystemVars.Debug.Physics_Draw = !GameSystemVars.Debug.Physics_Draw;
+			GameInstance.soundSystem.setMasterVolume(0.1);
 		}
 		if(inInputEvent.keysPressed['\x69'])//i
 		{
-			GameSystemVars.Debug.SceneGraph_Draw= !GameSystemVars.Debug.SceneGraph_Draw;
+			GameSystemVars.Debug.SceneGraph_Draw = !GameSystemVars.Debug.SceneGraph_Draw;
+			GameInstance.soundSystem.setMasterVolume(1.0);
 		}
 		if(inInputEvent.keysPressed['0'])
 		{
