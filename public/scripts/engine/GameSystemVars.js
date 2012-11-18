@@ -89,6 +89,12 @@ GameSystemVars = //TODO rename as GameSystemSettings
 		//Object
 		GameObject_Destroy_Print : false,
 		
+		//Sound:
+		Sound_Print : true,
+		Sound_Area_Draw : true,
+		Sound_Area_DrawColor : "rgba(255, 128, 0, 1)",
+		Sound_Listener_Size : 20,
+		
 		//TODO search for "rgba( in all files		
 		
 		//Network
@@ -128,6 +134,13 @@ GameSystemVars = //TODO rename as GameSystemSettings
 		//:only working when compressing client code
 		////////////////////////////////////////////
 	}
+	
+	/*
+	TODO sound
+	masterVolume
+	effectsVolume
+	...
+	*/
 	
 	//TODO make the logger in global or instance space
 };

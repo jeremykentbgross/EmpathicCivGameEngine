@@ -189,6 +189,11 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class(
 				//debug draw it
 				inCanvas2DContext.fillRect(target.myX, target.myY, target.myWidth, target.myHeight);
 			}
+			
+			if(GameSystemVars.Debug.Sound_Area_Draw)
+			{
+				GameInstance.soundSystem.debugDraw(inCanvas2DContext, camera.getRect(), this);
+			}
 		},
 
 		getBoundingBox : function getBoundingBox()

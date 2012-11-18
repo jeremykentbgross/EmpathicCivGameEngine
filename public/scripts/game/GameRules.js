@@ -285,9 +285,13 @@ GameLib.createGameRules = function(instance, PRIVATE)
 	PRIVATE.onInput = function(inInputEvent)
 	{				
 		var map = PRIVATE.GameWorld.getMap();
-		var camPoint = PRIVATE.GameWorld.getCurrentCamera().getRect().getLeftTop();
-		var mouseWorldPosition;
-				
+		var camRect = PRIVATE.GameWorld.getCurrentCamera().getRect();
+		var camPoint = camRect.getLeftTop();		
+		var mouseWorldPosition = inInputEvent.mouseLoc.add(camPoint);
+		
+		//TODO should be in component (and world)
+		GameInstance.soundSystem.setListenerPosition(camRect.getCenter());
+		
 		if(PRIVATE.drawTile === undefined)
 		{
 			PRIVATE.drawTile = 0;
@@ -296,6 +300,17 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		if(inInputEvent.keysPressed['\x75'])//u
 		{
 			GameInstance.soundSystem.playSound(0);
+		}
+		if(inInputEvent.keysPressed['\x79'])//y
+		{
+			GameInstance.soundSystem.playPositionalSoundEffect(
+				0,
+				new GameEngineLib.Game2DPoint(
+					mouseWorldPosition.myX,//2 * mouseWorldPosition.myX / camRect.myWidth - 1 + 10,
+					mouseWorldPosition.myY//2 * mouseWorldPosition.myY / camRect.myHeight - 1
+				)
+				//camRect
+			);
 		}
 		if(inInputEvent.keysPressed['\x6f'])//o
 		{
@@ -335,7 +350,6 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		
 		if(inInputEvent.buttons[2])
 		{
-			mouseWorldPosition = inInputEvent.mouseLoc.add(camPoint);
 			map.clearTile(
 				map.toTileCoordinate(mouseWorldPosition.myX),
 				map.toTileCoordinate(mouseWorldPosition.myY)
@@ -343,7 +357,6 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		}
 		if(inInputEvent.buttons[0])
 		{
-			mouseWorldPosition = inInputEvent.mouseLoc.add(camPoint);
 			map.setTile(
 				map.toTileCoordinate(mouseWorldPosition.myX),
 				map.toTileCoordinate(mouseWorldPosition.myY),

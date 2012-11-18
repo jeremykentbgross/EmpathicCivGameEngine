@@ -30,9 +30,9 @@ http://www.html5rocks.com/en/tutorials/webaudio/fieldrunners/
 http://html5doctor.com/native-audio-in-the-browser/
 */
 
-GameEngineLib.SoundDescription = function SoundDescription(inQuickName, inFileName)
+GameEngineLib.SoundDescription = function SoundDescription(inID, inFileName)
 {
-	this.quickName = inQuickName;
+	this.id = inID;
 	this.fileName = inFileName;
 	//this.sound = null;
 };
@@ -48,11 +48,18 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 		}
 		
 		this._soundLib = [];
+		this._playingSounds = new GameEngineLib.GameCircularDoublyLinkedListNode(null);
+		this._soundRadius = 512;//256;//HACK??
+		this._listenerPosition = new GameEngineLib.Game2DPoint();
 		
 		try
 		{
-			//TODO support non webkit AudioContext's
-			this._context = new webkitAudioContext();
+			window.AudioContext =
+				window.AudioContext ||
+				window.webkitAudioContext ||
+				null;
+			
+			this._context = new AudioContext();
 			
 			//HACK!!
 			this.loadSounds(
@@ -86,6 +93,38 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 	ChainDown : [],
 	Definition :
 	{
+		isUpdating : function isUpdating()
+		{
+			return true;
+		},
+		
+		update : function update()//??params
+		{
+			var finishedSounds = [], i;
+			
+			this._playingSounds.forAll(
+				function(inItem, inNode)
+				{
+					if(!inItem)//head node
+					{
+						return;
+					}
+					if(inItem.src.playbackState === inItem.src.FINISHED_STATE)
+					{
+						finishedSounds.push(inNode);
+					}
+				}
+			);
+			
+			//remove finished sounds
+			for(i = 0; i < finishedSounds.length; ++i)
+			{
+				finishedSounds[i].remove();
+			}
+			
+			//TODO detect out of focus to pause/silence sounds
+		},
+		
 		setMasterVolume : function setMasterVolume(inValue)
 		{
 			this._masterVolume.gain.value = inValue * inValue;//TODO save value for return
@@ -118,7 +157,7 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 			{
 				var soundDesc = inSoundDescriptions[i];
 				
-				this._soundLib[soundDesc.quickName] = soundDesc;
+				this._soundLib[soundDesc.id] = soundDesc;
 				GameInstance.AssetManager.loadSound(soundDesc.fileName, soundDesc);
 			}
 			/*
@@ -133,14 +172,380 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 			*/
 		},
 		
-		playSound : function playSound(inQuickName)//TODO change to playSoundEffect
+		//TODO param 'inWorld' for which world we are in
+		playSound : function playSound(inID)//TODO change to playSoundEffect
 		{
 			var source = this._context.createBufferSource();
-			source.buffer = this._soundLib[inQuickName].sound;
+			source.buffer = this._soundLib[inID].sound;
 			source.connect(this._effectsVolume);
 			//source.loop = true;
+			
 			source.noteOn(0);//TODO this would be delay parameter
+			
+			//TODO add sound to playing list
+		},
+		
+		//TODO function setListenerWorld
+		setListenerPosition : function setListenerPosition(inPosition /*TODO velocity?*/)
+		{
+			this._listenerPosition.copyFrom(inPosition);
+			this._context.listener.setPosition(inPosition.myX, inPosition.myY, 0);//TODO swivel??
+		},
+		
+		//TODO param 'inWorld' for which world we are in
+		//TODO return sound that can be moved and or doppler'ed
+		//TODO param velocity?
+		//TODO param radius
+		playPositionalSoundEffect : function playPositionalSoundEffect(inID, inPosition)//TODO change to playSoundEffect
+		{
+			var panner = this._context.createPanner();
+			panner.connect(this._effectsVolume);
+			panner.setPosition(inPosition.myX, inPosition.myY, 0);
+			panner.maxDistance = this._soundRadius;
+			panner.distanceModel = panner.LINEAR_DISTANCE;
+			
+			var source = this._context.createBufferSource();
+			source.buffer = this._soundLib[inID].sound;
+			source.connect(panner);
+			
+			source.noteOn(0);//TODO this would be delay parameter
+			
+			this._playingSounds.insert(
+				new GameEngineLib.GameCircularDoublyLinkedListNode(
+					{//TODO proper object
+						src : source,
+						pan : panner,
+						started : this._context.currentTime,
+						position : inPosition.clone(),
+						name : this._soundLib[inID].fileName
+						//function stop() this.source.stop(0);
+					}
+				)
+			);
+			
+			if(GameSystemVars.Debug.Sound_Print)
+			{
+				GameEngineLib.logger.info("Played sound " + this._soundLib[inID].fileName + " at (" + inPosition.myX + ", " + inPosition.myY + ")");
+			}
+			
+			//TODO return gameSound that can be stopped, moved, etc
+		},
+		
+		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect, inWorld)
+		{
+			var _this_ = this, i;
+			GameInstance.Graphics.drawDebugText("Debug Drawing Sounds", GameSystemVars.Debug.Sound_Area_DrawColor);
+			
+			inCanvas2DContext.strokeStyle = GameSystemVars.Debug.Sound_Area_DrawColor;
+			inCanvas2DContext.fillStyle = GameSystemVars.Debug.Sound_Area_DrawColor;
+			
+			//draw listener position
+			inCanvas2DContext.fillRect(
+				this._listenerPosition.myX - inCameraRect.myX,
+				this._listenerPosition.myY - inCameraRect.myY,
+				GameSystemVars.Debug.Sound_Listener_Size,
+				GameSystemVars.Debug.Sound_Listener_Size
+			);
+			//TODO draw listener angle
+			
+			//draw sounds
+			this._playingSounds.forAll(
+				function(inItem)
+				{
+					var percentPlayed;
+					
+					//if head node
+					if(!inItem)
+					{
+						return;
+					}
+					
+					//if(inWorld !== sound.world)
+					//	continue;
+					
+					percentPlayed = (_this_._context.currentTime - inItem.started) / inItem.src.buffer.duration;
+					
+					GameInstance.Graphics.drawDebugText(
+						' ' + inItem.name +
+							/*if panner*/'(' + inItem.position.myX + ', ' + inItem.position.myY + ')' +
+							': %' + Math.floor(percentPlayed * 100),
+						GameSystemVars.Debug.Sound_Area_DrawColor
+					);
+					
+					//TODO if no positional info, continue
+					
+					//draw circle of sound
+					inCanvas2DContext.beginPath();
+					inCanvas2DContext.arc(
+						inItem.position.myX - inCameraRect.myX,
+						inItem.position.myY - inCameraRect.myY,
+						_this_._soundRadius,
+						0,
+						2*Math.PI
+					);
+					inCanvas2DContext.stroke();
+					
+					//TODO draw velocity of sound
+					
+					//draw play position
+					inCanvas2DContext.beginPath();
+					inCanvas2DContext.arc(
+						inItem.position.myX - inCameraRect.myX,
+						inItem.position.myY - inCameraRect.myY,
+						Math.floor(_this_._soundRadius * percentPlayed),
+						0,
+						2*Math.PI
+					);
+					inCanvas2DContext.stroke();
+				}
+			);
 		}
-		//stop this.source.noteOff(0);
+		
 	}
 });
+
+
+
+
+
+/*
+
+function Field(canvas)
+{
+	this.ANGLE_STEP=0.2;
+	this.canvas=canvas;
+	this.isMouseInside=false;
+	this.center={x:canvas.width/2,y:canvas.height/2};
+	this.angle=0;
+	this.point=null;
+	var obj=this;
+	canvas.addEventListener(
+		'mouseover',
+		function()
+		{
+			obj.handleMouseOver.apply(obj,arguments)
+		}
+	);
+	canvas.addEventListener(
+		'mouseout',
+		function()
+		{
+			obj.handleMouseOut.apply(obj,arguments)
+		}
+	);
+	canvas.addEventListener('mousemove',function(){obj.handleMouseMove.apply(obj,arguments)});
+	canvas.addEventListener('mousewheel',function(){obj.handleMouseWheel.apply(obj,arguments);});
+	canvas.addEventListener('keydown',function(){obj.handleKeyDown.apply(obj,arguments);});
+	this.manIcon=new Image();
+	this.manIcon.src='res/man.svg';
+	this.speakerIcon=new Image();
+	this.speakerIcon.src='res/speaker.svg';
+	var ctx=this;
+	this.manIcon.onload=function(){ctx.render();}
+}
+
+Field.prototype.render=function()
+{
+	var ctx=this.canvas.getContext('2d');
+	ctx.clearRect(0,0,this.canvas.width,this.canvas.height);
+	ctx.drawImage(this.manIcon,this.center.x-this.manIcon.width/2,this.center.y-this.manIcon.height/2);
+	ctx.fill();
+	if(this.point)
+	{
+		ctx.save();
+		ctx.translate(this.point.x,this.point.y);
+		ctx.rotate(this.angle);
+		ctx.translate(-this.speakerIcon.width/2,-this.speakerIcon.height/2);
+		ctx.drawImage(this.speakerIcon,0,0);
+		ctx.restore();
+	}
+	ctx.fill();
+};
+
+Field.prototype.handleMouseOver=function(e)
+{
+	this.isMouseInside=true;
+};
+Field.prototype.handleMouseOut=function(e)
+{
+	this.isMouseInside=false;
+	if(this.callback){this.callback(null);}
+	this.point=null;
+	this.render();
+};
+
+Field.prototype.handleMouseMove=function(e)
+{
+	if(this.isMouseInside)
+	{
+		this.point={x:e.offsetX,y:e.offsetY};
+		this.render();
+		if(this.callback)
+		{
+			this.callback(
+				{x:this.point.x-this.center.x,y:this.point.y-this.center.y}
+			);
+		}
+	}
+};
+
+Field.prototype.handleKeyDown=function(e)
+{
+	if(e.keyCode==37)
+	{
+		this.changeAngleHelper(-this.ANGLE_STEP);
+	}
+	else if(e.keyCode==39)
+	{this.changeAngleHelper(this.ANGLE_STEP);}
+};
+
+Field.prototype.handleMouseWheel=function(e)
+{
+	e.preventDefault();
+	this.changeAngleHelper(e.wheelDelta/500);
+};
+
+Field.prototype.changeAngleHelper=function(delta)
+{
+	this.angle+=delta;
+	if(this.angleCallback)
+	{
+		this.angleCallback(this.angle);
+	}
+	this.render();
+}
+
+Field.prototype.registerPointChanged=function(callback)
+{
+	this.callback=callback;
+};
+
+Field.prototype.registerAngleChanged=function(callback)
+{
+	this.angleCallback=callback;
+};
+
+function PositionSample(el,context)
+{
+	var urls=['sounds/position.wav'];
+	var sample=this;
+	this.isPlaying=false;
+	this.size={width:400,height:300};
+	var loader=new BufferLoader(
+		context,
+		urls,
+		function(buffers)
+		{
+			sample.buffer=buffers[0];
+		}
+	);
+	loader.load();
+	var canvas=document.createElement('canvas');
+	canvas.setAttribute('width',this.size.width);
+	canvas.setAttribute('height',this.size.height);
+	el.appendChild(canvas);
+	field=new Field(canvas);
+	field.registerPointChanged(
+		function()
+		{
+			sample.changePosition.apply(sample,arguments);
+		}
+	);
+	field.registerAngleChanged(
+		function()
+		{
+			sample.changeAngle.apply(sample,arguments);
+		}
+	);
+}
+
+PositionSample.prototype.play=function()
+{
+	var source=context.createBufferSource();
+	source.buffer=this.buffer;
+	source.loop=true;
+	var panner=context.createPanner();
+	panner.coneOuterGain=0.1;
+	panner.coneOuterAngle=180;
+	panner.coneInnerAngle=0;
+	panner.connect(context.destination);
+	source.connect(panner);
+	source.noteOn(0);
+	context.listener.setPosition(0,0,0);
+	this.source=source;
+	this.panner=panner;
+	this.isPlaying=true;
+}
+
+PositionSample.prototype.stop=function(){this.source.noteOff(0);this.isPlaying=false;}
+
+PositionSample.prototype.changePosition=function(position)
+{
+	if(position)
+	{
+		if(!this.isPlaying){this.play();}
+		var mul=2;
+		var x=position.x/this.size.width;
+		var y=-position.y/this.size.height;
+		this.panner.setPosition(x*mul,y*mul,-0.5);
+	}
+	else
+	{
+		this.stop();
+	}
+};
+
+PositionSample.prototype.changeAngle=function(angle)
+{
+	console.log(angle);
+	this.panner.setOrientation(Math.cos(angle),-Math.sin(angle),1);
+};
+
+
+
+
+
+
+
+function MachineGun(context)
+{
+	var ctx=this;
+	var loader = new BufferLoader(
+		context,
+		['sounds/m4a1.mp3','sounds/m1-garand.mp3']
+		,onLoaded
+	);
+	function onLoaded(buffers)
+	{
+		ctx.buffers=buffers;
+	};
+	loader.load();
+}
+MachineGun.prototype.shootRound = function(type,rounds,interval,random,random2)
+{
+	if(typeof random=='undefined')
+	{
+		random=0;
+	}
+	var time=context.currentTime;
+	for(var i=0;i<rounds;i++)
+	{
+		var source=this.makeSource(this.buffers[type]);
+		source.playbackRate.value=1+Math.random()*random2;
+		source.noteOn(time+i*interval+Math.random()*random);
+	}
+}
+MachineGun.prototype.makeSource = function(buffer)
+{
+	var source = context.createBufferSource();
+	var compressor = context.createDynamicsCompressor();
+	var gain = context.createGainNode();
+	gain.gain.value=0.2;
+	source.buffer = buffer;
+	source.connect(gain);
+	gain.connect(compressor);
+	compressor.connect(context.destination);
+	return source;
+};
+
+*/

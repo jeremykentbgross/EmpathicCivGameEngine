@@ -178,6 +178,12 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 			instance.UpdateOrder.push(instance.Network);
 		}
 		
+		if(!GameSystemVars.Network.isServer)
+		{
+			//TODO should be after physics (where is that added)?
+			instance.UpdateOrder.push(instance.soundSystem);
+		}
+		
 		//return instance.GameRules.init();
 		if(!instance.GameRules.init())
 		{
@@ -198,7 +204,7 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 		for(i = 0; i < instance.UpdateOrder.length; ++i)
 		{
 			var current = instance.UpdateOrder[i];
-			if(current.isUpdating())//TODO they can return if they are not, meaning we can get rid of this
+			if(current.isUpdating())//TODO they can return if they are not, meaning we can/should get rid of this
 			{
 				current.update(aveDt);
 			}
