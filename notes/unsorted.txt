@@ -430,3 +430,336 @@ http://techcrunch.com/2012/10/20/is-your-game-crowd-read/?goback=%2Egde_1818270_
 TODO check for more node command line params
 
 TODO change default sound and webpage icon
+
+http://www.thebrightlines.com/2010/05/06/new-template-for-jsdoctoolkit-codeview/
+
+https://github.com/jsdoc3/jsdoc
+
+http://yui.github.com/yuidoc/
+
+http://code.google.com/p/jsdoc-toolkit/
+
+http://www.yuiblog.com/blog/2008/12/08/yuidoc/
+
+AUDIO GUY:
+http://audiojungle.net/user/matt_film_composer
+
+http://www.wambammusic.com/?goback=%2Egde_81635_member_188990972
+
+
+--------------------------
+Obj.shouldBeClient()??
+
+Scripting lang from ct.//??WTF did that mean?
+
+Post package.json + is lib!:
+Dir:??
+-gitignore node_modules
+-server.js
+-bat/sh run/debug/debuger (generic path vars)
+-public
+--scripts
+--css
+--imgs
+--snds
+-private
+//user node code:
+require (engine);
+engine.init(user Public/Private, debug/release);//debug/release compresses/obfuscates to 1 file!
+//requires user GameLoader, etc.
+engine.run();
+
+User=>netuser
+Name/id/srverid
+Discon timeout (sys var)
+Get rid of ser 'scope'
+Obj.clonedFrom
+
+Arithmetic adaption!
+Sim latency
+Srvr Destroylist
+Clone? (class of preconfigured)
+Srvr create list (clone data)
+
+NEXT TIME:
+Object refactor (ser bool when dummy)
+User id issue
+Bitpack bin/string
+
+Rework logger
+Bkup pixelize/dither proj/demo
+
+Obj name, obj id (from svr only!?!)
+
+Simulated worlds
+(Imagining a better tomorrow).
+
+Econ sim:
+Real money AH %
+Robbery, etc
+How will u organize?
+
+Real estate + transaction fee
+
+GObject destruction listeners
+
+Timer.register system/event (diff)
+
+Dir struct:
+Priv
+-svr
+--keys?
+Pub
+-eng
+--scripts
+--css
+--imgs
+--snds
+-gm
+--same^^
+
+Require(engloader)
+Eng.init(gmpub, gmpriv);
+
+Svr side obfuscation
+
+Class{Warn !Constr.string.find(parentnames);}//dbg suppress warn (chain2)
++static func copies
+
+Game decide reconnct/user policy
+
+Obfuscate.checkerror:
+-Trycatch ';'->';\n' deobf line
+-warn +++, --- etc
+
+Obf svr prep:
+-replace includes(not socket)
+-obf()
+-if(!error) delete unobf(loader);
+
+Obf: tighten whitespace only (\t + ' ' - \n)
+
+Get rid of clients destroying own ownership. + reclaim ownership/destroy when discon
+
+-Physics colors/cleanup +force/velocity vectors
+-Optimze math w/proto
+-Renderable inside scenegraph?->sprite+tile params like phys obj (maybe fix streaming too)->at least object
+-debug.namespace.value
+-GEL/GL.Events.createEventX/commands?
+Official Renderable{}?
+-Editor
+-Input member of graphics?
+-Trycatch update+init->email/socket stack
+-Date.now()
+-Janrain logins
+-cam zoom and wrap
+
+Code design:
+------------------
+-sniper scroll
+-cam move to killer
+-fog of war
+-map component register with map (and debug draw how many are following)
+-cylinder reflectors
+-friendly (no) firing?
+-spacemap design w/asteroids, clouds, sun (no hind sun visibl), etc use asteroids as wepons->netphysics?
+-optic filters, energy levels, shields
+-mass cloak?
+
+
+-list of class not/fixed; 1st "class"ified ones, others as visited!
+
+-ObjRef.setType()//deref  immedietly? Ui consideration=>(metaData:obj type!) {ser obj list}.derefAll
+-ObjectTemplateLibrary/clone (chain) ser
+-chain serializer
+[obj queue] +{obj path "closed list"} use bfs?
+
+-Frame:
+.Src img name/img
+.Src rect (optional?)
+.destRect (size)
+.Origin
+.event (sound, phys, etc)
+.render(pos)
+{
+Draw(img, (pos-origin)+destRect,srcRecs);
+}
+//FrameIns/tile?
+
+-Anim
+.frames[]//shared
+.speed
+.flags (pong, repeat, callback, etc)
+.rect = Forall frames{max rect from origin}
+.render(pos,frame)
+{
+Frames[frame].render(pos)
+}
+
+-AnimInstance
+.anim
+.frameIndex
+.finished callback
+.render()
+{
+anim.render(pos,frame)
+}
+
+-Sprite
+.anims[]
+.animInstance (current)
+.position
+.rect = forall anims {max rect from origin}
+.render()
+{
+anInst.cur.render(pos)
+}
+//tile/sprite? Same render call for graph
+//speed:insert per frame, or per sprite? (draw more clipped or more inserts)
+
+-Obj ser delta, ex:
+World
+.addEnt()
+{
+Add
+If owner added[]
+}
+.remove()
+{remove
+If owner add removed[]}
+.ser()
+{
+added
+Removed
+}
+.update()
+{
+If!owner Forall added && !mapped: addent()
+}
+//same 4 entity components
+
+??
+Obj update: if not recent net ser in: fade/etc
+
+Worlds dif games in same gInst, or linked
+
+Googleio cloud game talks links
+
+Console.log(GElib.error(""));//err+txt+stack
+
+GElib/Glib/Ginst
+
+Nodeserver():Str=file(loader).repl("incl",content).serve()
+
+Stickman code walk, poor mans mocap +rotoscope
+
+'whitebox' w/dither, stickman
+
+
+
+User
+-name (reflect)
+-publicid ("")
+-privateid
+
+Main loop
+-try
+-catch show error
+
+Net err (wrong user, not identifird user)
+
+Socketio use websockets or flash, no polling.
+
+Ws.js
+
+User.netiopolicy =
+{
+connect()
+reconnect()
+update()
+//example: owned objs, world, visible in world, less frequent@distance, etc
+}
+
+---
+All need team abilities:
+
+1:
+Turrets
+Sheilds
+Doors
+Bots gen?(here?)
+
+2:
+Mines (diff areas)
+Destroy+collapse(walls)
+Prox
+Remote
+
+3:
+Power
+Hp
+Supply
+Gas/disease?
+
+4:
+Cams
+Teleporter
+Sniper
+Slinger
+Submachine
+Cloak (team?)
+
+5:
+Rockets
+Grenade launch
+Flames
+Assult
+Bots gen?
+
+?:
+Minions
+Pits
+
+---------
+$€£$€£
+-Virtual real estate (custom map storage)-2/3 tournements
+-Game sponsor title
+-No ads
+-Queue priority
+-persistent profile(?)/stats.
+
+-------
+Backlog
+-chat class w/dojo css
+-tileset class
+-tile class
+-string mode / binary mode serialize/bitpacker
+-_this_, that -> instance
+-get rid of prefix "my"
+-background color editor (hotpink)
+-no server updates when no clients.
+-solid tree: physicalize()+ begin/end physicalChangeBatch()
+-timer centered update (precursor to webworkers)
+-namespace.className.create()
+{
+Var instance = new className();
+Register instance;
+Return instance;
+}
+Class(..)
+{
+Constructor.create = ...();
+}
+
+Distributed eval from approved users only! (editor/admin)
+
+Servernamespace.private=
+{
+Secret keys
+}
+
+Engineloader
+Gameloader (inc engine)
+ServerLoader(inc private secrets + gameloader)
+
+--------------------------

@@ -31,6 +31,11 @@ GameEngineServer.localization = [];//TODO move this elsewhere!!
 
 //TODO search and destroy the console.log
 //console.log("Declaring Obfuscator Code");
+/*
+TODO
+Match(\"\s\S?[^\\]\")
+Replace(localization[i]);
+*/
 
 GameEngineServer.Obfuscator = function Obfuscator()
 {
