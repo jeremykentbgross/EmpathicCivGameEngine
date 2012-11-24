@@ -26,8 +26,8 @@ GameEngineLib.GameEntityComponent = GameEngineLib.Class({
 	},
 	Parents : [GameEngineLib.GameObject],
 	flags : {},
-	ChainUp : ["onRemovedFromEntity"],
-	ChainDown : ["onAddedToEntity"],
+	ChainUp : ['onRemovedFromEntity'],
+	ChainDown : ['onAddedToEntity'],
 	Definition :
 	{
 		onAddedToEntity : function onAddedToEntity(inEvent)

@@ -41,7 +41,7 @@ GameLoader =
 			
 			include = function(filename)
 			{
-				require([filename, "dojo/domReady"]);
+				require([filename, 'dojo/domReady']);
 			};
 		}
 		else
@@ -91,7 +91,7 @@ GameLoader =
 					{
 						var test;
 						var i;
-						console.log("\n************************");
+						console.log('\n************************');
 						console.log("***Running Unit Tests***");
 						for(i = 0; i < this.tests.length; ++i)
 						{
@@ -111,11 +111,11 @@ GameLoader =
 							catch(error)
 							{
 								console.log(error.stack);
-								console.log("Failed Test: " + test.testName + " with exception " + error + "\n");
+								console.log("Failed Test: " + test.testName + " with exception " + error + '\n');
 							}
 						}
 						console.log("\n***Running Unit Tests***");
-						console.log("************************\n\n");
+						console.log('************************\n\n');
 					},
 				registerTest :
 					function(inTestName, inTest)

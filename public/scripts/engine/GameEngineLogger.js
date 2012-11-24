@@ -23,7 +23,7 @@ gameAssert = function gameAssert(expression, message)
 {
 	if(!expression)
 	{
-		throw new Error("Assert failed: '" + message + "'");
+		throw new Error("Assert failed: " + '\'' + message + '\'');
 	}
 };
 
@@ -48,26 +48,26 @@ GameEngineLib.logger.createMsgType = function(inType, inFullPathDefault)
 			stackPath = error.stack;
 			if(!stackPath)
 			{
-				console.log(inType + ": \"" + inMsg + "\"" + " (Path Not supported.)");
+				console.log(inType + ': \'' + inMsg + '\'' + " (Path Not supported.)");
 				return;
 			}
 			//index = stackPath.indexOf("at Object.error") + 1;
-			index = stackPath.indexOf("\n", index) + 1;
-			index = stackPath.indexOf("\n", index);
+			index = stackPath.indexOf('\n', index) + 1;
+			index = stackPath.indexOf('\n', index);
 			if(inFullPath)
 			{
 				stackPath = stackPath.slice(index);
 			}
 			else
 			{
-				index = stackPath.indexOf("at", index);
-				index2 = stackPath.indexOf("\n", index + 1);
-				stackPath = " " + stackPath.slice(index, index2);
+				index = stackPath.indexOf('at', index);
+				index2 = stackPath.indexOf('\n', index + 1);
+				stackPath = ' ' + stackPath.slice(index, index2);
 			}
 			console.log(
-				(GameSystemVars.Network.isServer?"\n":"") +
-				inType + ": \"" + inMsg + "\"" + stackPath
-				+ (GameSystemVars.Network.isServer?"\n":"")
+				(GameSystemVars.Network.isServer?'\n':'') +
+				inType + ': \'' + inMsg + '\'' + stackPath
+				+ (GameSystemVars.Network.isServer?'\n':'')
 			);
 		}
 	};
@@ -83,7 +83,7 @@ GameEngineLib.addDebugInfo = function(className, instance, PRIVATE)
 {
 	var propertyName;
 	
-	propertyName = "super_" + className;
+	propertyName = 'super_' + className;
 	instance[propertyName] = instance[propertyName] || {};
 	instance[propertyName].debug_private = PRIVATE;
 };

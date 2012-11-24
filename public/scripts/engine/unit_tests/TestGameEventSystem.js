@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 GameUnitTests.registerTest(
-	"GameEventSystem",
+	'GameEventSystem',
 	function()
 	{
 		var passedTest = true;
@@ -50,13 +50,13 @@ GameUnitTests.registerTest(
 				}
 		};
 		
-		eventSystem.registerListener("TestEvent", listener1);
-		eventSystem.registerListener("TestEvent", listener2);
+		eventSystem.registerListener('TestEvent', listener1);
+		eventSystem.registerListener('TestEvent', listener2);
 		
 		eventSystem.onEvent(
 			{
-				getName : function(){return "TestEvent";},
-				getCallbackName : function(){return "onTestEvent";},
+				getName : function(){return 'TestEvent';},
+				getCallbackName : function(){return 'onTestEvent';},
 				data : 2
 			}
 		);
@@ -72,11 +72,11 @@ GameUnitTests.registerTest(
 			passedTest = false;
 		}
 		
-		eventSystem.deregisterListener("TestEvent", listener2);
+		eventSystem.deregisterListener('TestEvent', listener2);
 		eventSystem.onEvent(
 			{
-				getName : function(){return "TestEvent";},
-				getCallbackName : function(){return "onTestEvent";},
+				getName : function(){return 'TestEvent';},
+				getCallbackName : function(){return 'onTestEvent';},
 				data : 0
 			}
 		);

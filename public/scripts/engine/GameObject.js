@@ -25,7 +25,7 @@ GameEngineLib.GameObject = GameEngineLib.Class({
 		var registry = this.getClass().getInstanceRegistry();
 		var instanceID = registry.getUnusedID();
 
-		this._name = "Instance_" + instanceID;
+		this._name = 'Instance_' + instanceID;
 		this._ID = instanceID;
 		registry.register(this);
 		
@@ -40,16 +40,16 @@ GameEngineLib.GameObject = GameEngineLib.Class({
 	
 	flags : {},
 	
-	ChainUp : ["destroy"],
-	ChainDown : ["serialize"],
+	ChainUp : ['destroy'],
+	ChainDown : ['serialize'],
 	
 	Definition :
 	{
 		_serializeFormat :
 		[
 			{
-				name : "_netOwner",
-				type : "int",
+				name : '_netOwner',
+				type : 'int',
 				net : true,
 				min : 0,
 				max : GameEngineLib.User.USER_IDS.MAX_EVER
@@ -64,7 +64,7 @@ GameEngineLib.GameObject = GameEngineLib.Class({
 		
 		getTxtPath : function getTxtPath()
 		{
-			return this.getClass().getName() + "\\" + this.getName();
+			return this.getClass().getName() + '\\' + this.getName();
 		},
 		//todo get binpath vs txtpath
 		

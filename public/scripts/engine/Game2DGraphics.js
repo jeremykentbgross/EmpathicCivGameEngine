@@ -57,13 +57,13 @@ GameEngineLib.Game2DGraphics.prototype.init = function init()
 {
 	var _this_ = this;
 	require(
-		["dojo/dom", "dojo/dom-construct"],
+		['dojo/dom', 'dojo/dom-construct'],
 		function(dom, domConstruct){
-			var graphics_container = dom.byId("graphics_container");
+			var graphics_container = dom.byId('graphics_container');
 			_this_._myCanvas = domConstruct.create(
-				"canvas",
+				'canvas',
 				{
-					id : "canvas",//TODO different id here!
+					id : 'canvas',//TODO different id here!
 					width : GameSystemVars.Graphics.initWidth,
 					height : GameSystemVars.Graphics.initHeight,
 					//TODO localize this:
@@ -111,7 +111,7 @@ GameEngineLib.Game2DGraphics.prototype.render = function render(inRenderer)
 	//draw frame counters
 	if(GameSystemVars.DEBUG)
 	{
-		this._myBackBufferCanvas2DContext.font = fontSize + "px Arial";
+		this._myBackBufferCanvas2DContext.font = fontSize + 'px Arial';
 
 		var maxWidth = 0;
 		var i;
@@ -158,7 +158,7 @@ GameEngineLib.Game2DGraphics.prototype.drawDebugText = function drawDebugText(te
 	
 	if(GameSystemVars.DEBUG && GameSystemVars.Debug.TextMessages_Draw)
 	{
-		this._debugText.push(" " + text + " ");
+		this._debugText.push(' ' + text + ' ');
 		this._debugTextColor.push(color);
 	}
 };

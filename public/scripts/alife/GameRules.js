@@ -59,11 +59,11 @@ GameEngineLib.createKMean = function(instance, PRIVATE)
 		clusterInstance.resetPoints();
 		
 		//HACK
-		clusterInstance.color = "rgba(" + 
-				Math.floor(Math.random() * 191 + 64) + "," +
-				Math.floor(Math.random() * 191 + 64) + "," +
-				Math.floor(Math.random() * 191 + 64) + "," +
-				"1)";
+		clusterInstance.color = 'rgba(' + 
+				Math.floor(Math.random() * 191 + 64) + ',' +
+				Math.floor(Math.random() * 191 + 64) + ',' +
+				Math.floor(Math.random() * 191 + 64) + ',' +
+				'1)';
 		//HACK
 		clusterInstance.render = function(inCanvas2DContext, inTargetRect)
 		{
@@ -201,11 +201,11 @@ GameEngineLib.createKMean = function(instance, PRIVATE)
 		for(var i = 0; i < PRIVATE.numClusters; ++i)
 		{
 			/*var colorIndex = (i + 1);
-			PRIVATE.clusters[i].color = "rgba(" + 
-				Math.floor(colorIndex * 255 / PRIVATE.numClusters) + "," +
-				Math.floor(colorIndex * 255 / PRIVATE.numClusters) + "," +
-				Math.floor(colorIndex * 255 / PRIVATE.numClusters) + "," +
-				"1)";*/
+			PRIVATE.clusters[i].color = 'rgba(' + 
+				Math.floor(colorIndex * 255 / PRIVATE.numClusters) + ',' +
+				Math.floor(colorIndex * 255 / PRIVATE.numClusters) + ',' +
+				Math.floor(colorIndex * 255 / PRIVATE.numClusters) + ',' +
+				'1)';*/
 			PRIVATE.clusters[i].render(inCanvas2DContext, inTargetRect);
 		}
 	}
@@ -242,7 +242,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 	instance.init = function()
 	{
 		if(!GameSystemVars.Network.isServer)
-			GameInstance.Input.registerListener("Input", PRIVATE);
+			GameInstance.Input.registerListener('Input', PRIVATE);
 			
 		GameInstance.UpdateOrder.push(this);
 		
@@ -299,11 +299,11 @@ GameLib.createGameRules = function(instance, PRIVATE)
 	//TODO maybe this should be in an editor or something
 	PRIVATE.onInput = function(inInputEvent)
 	{
-		if(inInputEvent.keysPressed["q"])
+		if(inInputEvent.keysPressed['q'])
 		{
 			PRIVATE.kmean.clustersData(PRIVATE.data);
 		}
-		if(inInputEvent.keysPressed["e"])
+		if(inInputEvent.keysPressed['e'])
 		{
 			PRIVATE.data = PRIVATE.data.slice(1, PRIVATE.data.length);
 			var newPoint = []
@@ -312,7 +312,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 				
 			PRIVATE.data.push(newPoint);
 		}
-		if(inInputEvent.keysPressed["r"])
+		if(inInputEvent.keysPressed['r'])
 		{
 			PRIVATE.kmean.resetCenters();
 		}

@@ -26,7 +26,7 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 	
 	if(GameSystemVars.DEBUG)
 	{
-		GameEngineLib.addDebugInfo("GameFrameWork", instance, PRIVATE);
+		GameEngineLib.addDebugInfo('GameFrameWork', instance, PRIVATE);
 	}
 	
 	//////////////////////////////////////////////////
@@ -50,8 +50,8 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 			var x, y;
 			var message;
 			
-			inCanvas2DContext.fillStyle = "rgba(128, 128, 128, 1)";
-			inCanvas2DContext.strokeStyle = "rgba(64, 64, 64, 1)";
+			inCanvas2DContext.fillStyle = 'rgba(128, 128, 128, 1)';
+			inCanvas2DContext.strokeStyle = 'rgba(64, 64, 64, 1)';
 			inCanvas2DContext.fillRect(0, 0,
 				inCanvas2DContext.canvas.width,
 				inCanvas2DContext.canvas.height
@@ -61,9 +61,9 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 				inCanvas2DContext.canvas.height
 			);
 			
-			inCanvas2DContext.fillStyle = "rgba(64, 64, 64, 1)";
+			inCanvas2DContext.fillStyle = 'rgba(64, 64, 64, 1)';
 			
-			inCanvas2DContext.font = "30px Arial";
+			inCanvas2DContext.font = '30px Arial';
 			if(!this.noUserGameRules)
 			{
 				message = "No Game Specific Render Code Is Present!";

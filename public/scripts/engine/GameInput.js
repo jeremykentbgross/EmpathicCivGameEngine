@@ -29,7 +29,7 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 	
 	if(GameSystemVars.DEBUG)
 	{
-		GameEngineLib.addDebugInfo("GameInput", instance, PRIVATE);
+		GameEngineLib.addDebugInfo('GameInput', instance, PRIVATE);
 	}
 	
 	PRIVATE.mouseLoc = GameEngineLib.createGame2DPoint(0, 0);
@@ -108,30 +108,30 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 		}
 			
 		require(
-			["dojo/on"],
+			['dojo/on'],
 			function(on)
 			{
 				//keys:
-				on(document, "keydown", PRIVATE.input);
-				on(document, "keyup", PRIVATE.input);
-				on(document, "keypress", PRIVATE.input);
+				on(document, 'keydown', PRIVATE.input);
+				on(document, 'keyup', PRIVATE.input);
+				on(document, 'keypress', PRIVATE.input);
 								
 				//mouse:
-				on(inCanvas, "mousedown", PRIVATE.input);
-				on(inCanvas, "mouseup", PRIVATE.input);
-				on(inCanvas, "mousemove", PRIVATE.input);
+				on(inCanvas, 'mousedown', PRIVATE.input);
+				on(inCanvas, 'mouseup', PRIVATE.input);
+				on(inCanvas, 'mousemove', PRIVATE.input);
 				
 				/*
 				//currently unused:
-				on(inCanvas, "mousewheel", PRIVATE.input);
-				on(inCanvas, "click", PRIVATE.input);
-				on(inCanvas, "dblclick", PRIVATE.input);*/
+				on(inCanvas, 'mousewheel', PRIVATE.input);
+				on(inCanvas, 'click', PRIVATE.input);
+				on(inCanvas, 'dblclick', PRIVATE.input);*/
 				
-				on(inCanvas, "mouseout", PRIVATE.input);
-				on(inCanvas, "mouseover", PRIVATE.input);
+				on(inCanvas, 'mouseout', PRIVATE.input);
+				on(inCanvas, 'mouseover', PRIVATE.input);
 								
 				//prevent right click menu on the render area
-				on(inCanvas, "contextmenu", function(event){ event.preventDefault(); } );
+				on(inCanvas, 'contextmenu', function(event){ event.preventDefault(); } );
 				
 				//TODO can i turn off middle mouse button native effect
 			}
@@ -154,33 +154,33 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 		{
 			inputString = "Input: " +
 				(PRIVATE.active ? "Active" : "Inactive" ) + 
-				" X:" + PRIVATE.mouseLoc.myX + " Y:" + PRIVATE.mouseLoc.myY + " ";
+				' X:' + PRIVATE.mouseLoc.myX + ' Y:' + PRIVATE.mouseLoc.myY + ' ';
 			for(i in PRIVATE.buttons)
 			{
 				if(PRIVATE.buttons[i])
 				{
-					inputString += "MB" + i + " ";
+					inputString += 'MB' + i + ' ';
 				}
 			}
 			for(i in PRIVATE.keys)
 			{
 				if(PRIVATE.keys[i])
 				{
-					inputString += "'" + i + "' (" + i.charCodeAt(0) + ") ";
+					inputString += '\'' + i + '\' (' + i.charCodeAt(0) + ') ';
 				}
 			}
 			for(i in PRIVATE.keysPressed)
 			{
 				if(PRIVATE.keysPressed[i])
 				{
-					inputString += "'" + i + "' (" + i.charCodeAt(0) + ") ";
+					inputString += '\'' + i + '\' (' + i.charCodeAt(0) + ') ';
 				}
 			}
 			//todo clicks and wheel
 			
 			if(GameSystemVars.Debug.Input_Print)
 			{
-				console.log(inputString + "\n");
+				console.log(inputString + '\n');
 			}
 			if(GameSystemVars.Debug.Input_Draw)
 			{

@@ -41,9 +41,9 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 		_serializeFormat :
 		[
 			{
-				name : "_position",//??TODO Target Position, can set velocity towards this instead of the position
+				name : '_position',//??TODO Target Position, can set velocity towards this instead of the position
 				net : true,
-				type : "position",
+				type : 'position',
 				min : null,	//this._range.getLeftTop(),
 				max : null	//this._range.getRightBottom(),
 			}
@@ -59,9 +59,9 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 			var owner = this._owner;//inEntity.entity;
 		
 			//register for events		
-			owner.registerListener("RequestVelocity", this);
-			owner.registerListener("AddedToWorld", this);
-			owner.registerListener("RemovedFromWorld", this);
+			owner.registerListener('RequestVelocity', this);
+			owner.registerListener('AddedToWorld', this);
+			owner.registerListener('RemovedFromWorld', this);
 			
 			//TODO owner.event(getposition, myPos);??
 		},
@@ -71,9 +71,9 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 			var owner = this._owner;//inEntity.entity;
 			
 			//unregister for events
-			owner.deregisterListener("RequestVelocity", this);
-			owner.deregisterListener("AddedToWorld", this);
-			owner.deregisterListener("RemovedFromWorld", this);
+			owner.deregisterListener('RequestVelocity', this);
+			owner.deregisterListener('AddedToWorld', this);
+			owner.deregisterListener('RemovedFromWorld', this);
 			
 			//this._owner = null;
 		},
@@ -94,7 +94,7 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 			{
 				this._boundingRect.myX = this._position.myX - this._boundingRect.myWidth / 2;
 				this._boundingRect.myY = this._position.myY - this._boundingRect.myHeight / 2;
-				//console.log(this._position.myX + " " + this._position.myY);
+				//console.log(this._position.myX + ' ' + this._position.myY);
 				
 				this._physicsObject.setGame2DAABB(this._boundingRect);
 				
@@ -106,12 +106,12 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 					)
 				);
 			}
-			//else console.log(this._position.myX + " " + this._position.myY);
+			//else console.log(this._position.myX + ' ' + this._position.myY);
 		},
 		
 		onRequestVelocity : function onRequestVelocity(inEvent)
 		{
-			//GameEngineLib.logger.info(inEvent.direction.myX + " " + inEvent.direction.myY);
+			//GameEngineLib.logger.info(inEvent.direction.myX + ' ' + inEvent.direction.myY);
 			this._physicsObject.requestVelocity(inEvent.direction);
 		},
 		
@@ -151,10 +151,10 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 			//TODO event velocity
 			
 			/*console.log(
-				physicsUpdateInfo.position.myX + " " +
-				physicsUpdateInfo.position.myY + " " +
-				physicsUpdateInfo.velocity.myX + " " +
-				physicsUpdateInfo.velocity.myY + " "
+				physicsUpdateInfo.position.myX + ' ' +
+				physicsUpdateInfo.position.myY + ' ' +
+				physicsUpdateInfo.velocity.myX + ' ' +
+				physicsUpdateInfo.velocity.myY + ' '
 			);*/
 		}
 	}

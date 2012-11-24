@@ -52,31 +52,31 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		tileset.init(
 			[
 				{
-					fileName : "images/grass.png"
+					fileName : 'images/grass.png'
 					,anchor : GameEngineLib.createGame2DPoint()
 					,layer : 0
 					,size : GameEngineLib.createGame2DPoint(64,64)
 				},
 				{
-					fileName : "images/water.png"
+					fileName : 'images/water.png'
 					,anchor : GameEngineLib.createGame2DPoint()
 					,layer : 0
 					,size : GameEngineLib.createGame2DPoint(64,64)
 				},
 				{
-					fileName : "images/ground_level01_01.png" //"images/dirt.png",
+					fileName : 'images/ground_level01_01.png' //'images/dirt.png',
 					,anchor : GameEngineLib.createGame2DPoint()
 					,layer : 0
 					,size : GameEngineLib.createGame2DPoint(64,64)
 				},
 				{
-					fileName : "images/dirt.png2"//HACK "images/wall_level01_01__.png"
+					fileName : 'images/dirt.png2'//HACK 'images/wall_level01_01__.png'
 					,anchor : GameEngineLib.createGame2DPoint()
 					,layer : 0
 					,size : GameEngineLib.createGame2DPoint(64,64)
 				},
 				{
-					fileName : "images/wall_level01_01.png"
+					fileName : 'images/wall_level01_01.png'
 					,anchor : GameEngineLib.createGame2DPoint(32, 32)
 					,layer : 1
 					,physics : GameEngineLib.createGame2DAABB(0, 0, 64, 64)
@@ -125,7 +125,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		
 		if(!GameSystemVars.Network.isServer)
 		{
-			GameInstance.Input.registerListener("Input", PRIVATE);
+			GameInstance.Input.registerListener('Input', PRIVATE);
 		}
 		
 		PRIVATE.onIdentifiedUser = function(inEvent)
@@ -137,7 +137,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		if(GameSystemVars.Network.isMultiplayer)
 		{
 			GameInstance.Network.registerListener(
-				"IdentifiedUser",
+				'IdentifiedUser',
 				PRIVATE
 			);
 		}
@@ -146,7 +146,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		//TODO creating chat UI should NOT be here
 		if(!GameSystemVars.Network.isServer && GameSystemVars.Network.isMultiplayer)
 		{
-			require(["dojo/dom", "dojo/dom-construct", "dojo/on"],
+			require(['dojo/dom', 'dojo/dom-construct', 'dojo/on'],
 				function(dom, domConstruct, on)
 				{
 					var chat_container = dom.byId("chat_container");
@@ -157,9 +157,9 @@ GameLib.createGameRules = function(instance, PRIVATE)
 					};
 
 					PRIVATE.state = domConstruct.create(
-						"p",
+						'p',
 						{
-							id : "status",
+							id : 'status',
 							//TODO css class
 							innerHTML : "Not connected"
 						},
@@ -167,9 +167,9 @@ GameLib.createGameRules = function(instance, PRIVATE)
 					);
 
 					PRIVATE.form = domConstruct.create(
-						"form",
+						'form',
 						{
-							id : "chat_form",
+							id : 'chat_form',
 							//TODO css class
 							innerHTML : "Chat"
 						},
@@ -177,20 +177,20 @@ GameLib.createGameRules = function(instance, PRIVATE)
 					);
 					
 					PRIVATE.chat = domConstruct.create(
-						"input",
+						'input',
 						{
-							id : "chat",
+							id : 'chat',
 							//TODO css class
-							type : "text",
+							type : 'text',
 							placeholder : "type and press enter to chat"
 						},
 						PRIVATE.form
 					);
 					
 					PRIVATE.log = domConstruct.create(
-						"ul",
+						'ul',
 						{
-							id : "log"
+							id : 'log'
 							//TODO css class
 						},
 						chat_container
@@ -217,7 +217,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 					{
 						//todo remove the the oldest one
 						var msg = domConstruct.create(
-							"li",
+							'li',
 							{
 								innerHTML : 
 									inMessage.replace(
@@ -227,7 +227,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 								//TODO css class
 							},
 							PRIVATE.log
-							,"first"
+							,'first'
 						);
 					};
 					
@@ -241,7 +241,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 				PRIVATE.state.innerHTML = 'Socket Open';
 			};
 			GameInstance.Network.registerListener(
-				"ConnectedToServer",
+				'ConnectedToServer',
 				PRIVATE
 			);
 			PRIVATE.onDisconnectedFromServer = function(inEvent)
@@ -251,7 +251,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 				PRIVATE.state.innerHTML = 'Socket Closed';
 			};
 			GameInstance.Network.registerListener(
-				"DisconnectedFromServer",
+				'DisconnectedFromServer',
 				PRIVATE
 			);
 			PRIVATE.onMsg = function(inEvent)
@@ -259,7 +259,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 				PRIVATE.sendChatToChatLog(inEvent.msg);
 			};
 			GameInstance.Network.registerListener(
-				"Msg",
+				'Msg',
 				PRIVATE
 			);
 		}
@@ -364,7 +364,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 			);
 		}
 		
-		//GameInstance.Network.sendMessage(inInputEvent.mouseLoc.myX + ", " + inInputEvent.mouseLoc.myY);
+		//GameInstance.Network.sendMessage(inInputEvent.mouseLoc.myX + ', ' + inInputEvent.mouseLoc.myY);
 	};
 		
 	

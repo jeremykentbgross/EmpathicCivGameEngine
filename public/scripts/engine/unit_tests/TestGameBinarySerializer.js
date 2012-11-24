@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 GameUnitTests.registerTest(
-	"GameBinarySerializer",
+	'GameBinarySerializer',
 	function()
 	{
 		var passedTest = true;
@@ -29,33 +29,33 @@ GameUnitTests.registerTest(
 		
 		var format = [
 			{
-				name : "aBool1",
-				type : "bool",
+				name : 'aBool1',
+				type : 'bool',
 				net : false
 			},
 			{
-				name : "aBool2",
-				type : "bool",
+				name : 'aBool2',
+				type : 'bool',
 				net : false
 			},
 			{
-				name : "X",
-				type : "int",
+				name : 'X',
+				type : 'int',
 				min : 0,
 				max : 65535,
 				net : true
 			},
 			{
-				name : "Y",
-				type : "float",
+				name : 'Y',
+				type : 'float',
 				min : 0,
 				max : 65535,
 				precision : 3,
 				net : false
 			},
 			{
-				name : "aString",
-				type : "string",
+				name : 'aString',
+				type : 'string',
 				net : false
 			}
 		];
@@ -78,8 +78,8 @@ GameUnitTests.registerTest(
 					if(outObj[entry.name] === inObj[entry.name])
 					{
 						GameEngineLib.logger.error(
-							entry.scope + "." + entry.name + " miss match: " +
-							outObj[entry.name] + " === " + inObj[entry.name]);
+							entry.scope + '.' + entry.name + " miss match: " +
+							outObj[entry.name] + ' === ' + inObj[entry.name]);
 						passedTest = false;
 					}
 				}
@@ -88,8 +88,8 @@ GameUnitTests.registerTest(
 					if(outObj[entry.name] !== inObj[entry.name])
 					{
 						GameEngineLib.logger.error(
-							entry.scope + "." + entry.name + " miss match: " +
-							outObj[entry.name] + " !== " + inObj[entry.name]);
+							entry.scope + '.' + entry.name + " miss match: " +
+							outObj[entry.name] + ' !== ' + inObj[entry.name]);
 						passedTest = false;
 					}
 				}

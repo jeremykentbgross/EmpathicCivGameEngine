@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 GameUnitTests.registerTest(
-	"GameBitPacker",
+	'GameBitPacker',
 	function()
 	{
 		var packer;
@@ -56,7 +56,7 @@ GameUnitTests.registerTest(
 			value = packer.unpack(bits[i]);
 			if(value !== values[i])
 			{
-				GameEngineLib.logger.error("Loop " + i + " " + value + "!==" + values[i] + " with " + bits[i]);
+				GameEngineLib.logger.error("Loop " + i + ' ' + value + '!==' + values[i] + " with " + bits[i]);
 				passedTest = false;
 			}
 		}

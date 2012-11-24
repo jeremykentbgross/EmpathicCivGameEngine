@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 GameUnitTests.registerTest(
-	"GameClass",
+	'GameClass',
 	function()
 	{
 		var ClassNamespace = {};
@@ -50,7 +50,7 @@ GameUnitTests.registerTest(
 				{
 					this.Func2Called = true;
 				},
-				StaticThing : "HaHa!"
+				StaticThing : 'HaHa!'
 			}
 		});
 		
@@ -63,7 +63,7 @@ GameUnitTests.registerTest(
 		
 		
 		var testClass2 = ClassNamespace.TestClass2.create();
-		gameAssert(ClassNamespace.TestClass2.StaticThing === "HaHa!", "Inherited functions failed from created class instance!");
+		gameAssert(ClassNamespace.TestClass2.StaticThing === 'HaHa!', "Inherited functions failed from created class instance!");
 		
 		testClass2.Func1();
 		testClass2.Func2();
@@ -77,8 +77,8 @@ GameUnitTests.registerTest(
 			},
 			Parents : [GameEngineLib.GameObject],
 			flags : {},
-			ChainUp : ["chainUp"],
-			ChainDown : ["chainDown"],
+			ChainUp : ['chainUp'],
+			ChainDown : ['chainDown'],
 			Definition :
 			{
 				destroy : function destroy(){},
@@ -95,7 +95,7 @@ GameUnitTests.registerTest(
 		});
 		ClassNamespace.TestObjectClass1.registerClass();
 		
-		var foundClass = GameEngineLib.Class.getInstanceRegistry().findByName("TestObjectClass1");
+		var foundClass = GameEngineLib.Class.getInstanceRegistry().findByName('TestObjectClass1');
 		var testObjectClass1 = foundClass.create();
 		gameAssert(testObjectClass1.isA(ClassNamespace.TestObjectClass1), "isA() Failed on found created class!");
 		

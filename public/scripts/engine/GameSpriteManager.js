@@ -61,7 +61,7 @@ GameEngineLib.createGameSpriteManager = function(instance, PRIVATE)
 			myGame2DAABB : GameEngineLib.createGame2DAABB(),//bounding rect
 			myPositionLocator : GameEngineLib.createGame2DPoint(),
 			//animation and other bullshit?
-			//myID : "SpriteID" + (++PRIVATE.myNextID).toString(),
+			//myID : 'SpriteID' + (++PRIVATE.myNextID).toString(),
 		};
 		//TODO linked list instead? why does this and physics have this? (not active?)
 		//PRIVATE.mySprites[sprite.myID] = sprite;

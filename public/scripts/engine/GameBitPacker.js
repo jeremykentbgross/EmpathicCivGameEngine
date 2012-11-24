@@ -51,7 +51,7 @@ GameEngineLib.createGameBitPacker = function()
 	
 	if(GameSystemVars.DEBUG)
 	{
-		GameEngineLib.addDebugInfo("bitPacker", outPacker, PRIVATE);
+		GameEngineLib.addDebugInfo('bitPacker', outPacker, PRIVATE);
 	}
 	
 	outPacker.pack = function(value, bits)
@@ -120,7 +120,7 @@ GameEngineLib.createGameBitPacker = function()
 		var i;
 		
 		length = PRIVATE.data.length;
-		outString = "";
+		outString = '';
 		
 		for(i = 0; i < length; ++i)
 		{
@@ -174,12 +174,12 @@ GameEngineLib.createGameBitPacker = function()
 	//note should probably print in reverse order?
 	outPacker.debugPrint = function()
 	{
-		var output = "";
+		var output = '';
 		var i;
 		
 		for(i = PRIVATE.data.length - 1; i >= 0 ; --i)
 		{
-			output += PRIVATE.data[i].toString(2) + " ";
+			output += PRIVATE.data[i].toString(2) + ' ';
 		}
 		console.log("Bit packer: " + output);
 	};

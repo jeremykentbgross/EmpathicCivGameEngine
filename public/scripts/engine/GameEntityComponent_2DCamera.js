@@ -36,9 +36,9 @@ GameEngineLib.EntityComponent_2DCamera = GameEngineLib.Class({
 			var owner = this._owner;//inEvent.entity;
 			
 			//register for events
-			owner.registerListener("UpdatePosition", this);
-			owner.registerListener("AddedToWorld", this);
-			owner.registerListener("RemovedFromWorld", this);
+			owner.registerListener('UpdatePosition', this);
+			owner.registerListener('AddedToWorld', this);
+			owner.registerListener('RemovedFromWorld', this);
 			
 			//TODO owner.event(getposition, myPos);??
 		},
@@ -47,9 +47,9 @@ GameEngineLib.EntityComponent_2DCamera = GameEngineLib.Class({
 			var owner = this._owner;//inEvent.entity;
 			
 			//unregister for events
-			owner.deregisterListener("UpdatePosition", this);
-			owner.deregisterListener("AddedToWorld", this);
-			owner.deregisterListener("RemovedFromWorld", this);
+			owner.deregisterListener('UpdatePosition', this);
+			owner.deregisterListener('AddedToWorld', this);
+			owner.deregisterListener('RemovedFromWorld', this);
 		},
 		
 		destroy : function destroy(){},

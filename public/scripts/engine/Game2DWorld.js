@@ -68,7 +68,7 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class(
 			tileset.init(
 				[
 					{
-						fileName : "images/placeholder.png"//TODO have this listed in systemvars
+						fileName : 'images/placeholder.png'//TODO have this listed in systemvars
 						,anchor : GameEngineLib.createGame2DPoint()
 						,layer : 0
 					}
@@ -89,7 +89,7 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class(
 			//TODO Only needed to debug draw cursor which should likely be elsewhere?
 			if(!GameSystemVars.Network.isServer)
 			{
-				GameInstance.Input.registerListener("Input", this);
+				GameInstance.Input.registerListener('Input', this);
 			}
 		},
 

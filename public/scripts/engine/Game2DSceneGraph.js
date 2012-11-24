@@ -144,15 +144,15 @@ GameEngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DCont
 		
 		GameInstance.Graphics.drawDebugText("Debug Drawing SceneGraph");
 		
-		inCanvas2DContext.font = fontSize + "px Arial";
+		inCanvas2DContext.font = fontSize + 'px Arial';
 		for(i in renderables)
 		{
 			var currentRenderable = renderables[i];
 			var screenPos = currentRenderable.screenPos;
 			
 			var stringDrawOrder = String(i);
-			var stringDistance = String("");
-					//currentRenderable.depthSortingPosition.myX.toFixed(2) + ", " +
+			var stringDistance = String('');
+					//currentRenderable.depthSortingPosition.myX.toFixed(2) + ', ' +
 					//currentRenderable.depthSortingPosition.myY.toFixed(2);
 			
 			var width = Math.max(
@@ -165,7 +165,7 @@ GameEngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DCont
 				screenPos.myX,
 				screenPos.myY,
 				width,
-				fontSize * (stringDistance !== "" ? 2 : 1)
+				fontSize * (stringDistance !== '' ? 2 : 1)
 			);
 			
 			inCanvas2DContext.fillStyle = GameSystemVars.Debug.TextDefault_DrawColor;
@@ -174,7 +174,7 @@ GameEngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DCont
 				screenPos.myX,
 				screenPos.myY + fontSize
 			);
-			if(stringDistance !== "")
+			if(stringDistance !== '')
 			{
 				inCanvas2DContext.fillText(
 					stringDistance,

@@ -31,11 +31,6 @@ GameEngineServer.localization = [];//TODO move this elsewhere!!
 
 //TODO search and destroy the console.log
 //console.log("Declaring Obfuscator Code");
-/*
-TODO
-Match(\"\s\S?[^\\]\")
-Replace(localization[i]);
-*/
 
 GameEngineServer.Obfuscator = function Obfuscator()
 {
@@ -195,10 +190,12 @@ GameEngineServer.Obfuscator.prototype.run = function run()
 		i;
 	
 	this._removeComments();
+	
 	if(GameSystemVars.Server.removeTextForLocalization)
 	{
 		this._removeTextForLocalization();
 	}
+	
 	this._findAllPotentialWords();
 	
 	if(GameSystemVars.DEBUG)
@@ -276,7 +273,7 @@ GameEngineServer.Obfuscator.prototype.run = function run()
 		console.log("Localized Strings:");
 		for(i = 0; i < GameEngineServer.localization.length; ++i)
 		{
-			console.log('\t\"' + GameEngineServer.localization[i] + '\"');
+			console.log('\t\'' + GameEngineServer.localization[i] + '\'');
 		}
 	}
 	
@@ -309,31 +306,34 @@ GameEngineServer.Obfuscator.prototype._checkForErrors = function _checkForErrors
 		values,
 		i;
 	
+	//detect +++
 	regEx.compile('\\w+\\x2b\\x2b\\x2b\\w+', 'g');
 	values = this._src.match(regEx);
 	if(values)
 	{
-		for(i = 0; i < values.length; ++i)//}a.c.prototype.Z
+		for(i = 0; i < values.length; ++i)
 		{
 			console.log("Likely problem compressing code!: " + values[i]);//TODO change warning/assert?
 		}
 	}
 	
+	//detect ---
 	regEx.compile('\\w+\\x2d\\x2d\\x2d\\w+', 'g');
 	values = this._src.match(regEx);
 	if(values)
 	{
-		for(i = 0; i < values.length; ++i)//}a.c.prototype.Z
+		for(i = 0; i < values.length; ++i)
 		{
 			console.log("Likely problem compressing code!: " + values[i]);//TODO change warning/assert?
 		}
 	}
 	
+	//TODO document
 	regEx.compile('\\x7d\\s*([\\w]+\\x2e)+\\w+\\x3d', 'g');//	}asdf.asdf.prototype =
 	values = this._src.match(regEx);
 	if(values)
 	{
-		for(i = 0; i < values.length; ++i)//}a.c.prototype.Z
+		for(i = 0; i < values.length; ++i)
 		{
 			if(values[i].indexOf('prototype') !== -1)
 			{
@@ -413,12 +413,19 @@ GameEngineServer.Obfuscator.prototype._removeComments = function _removeComments
 GameEngineServer.Obfuscator.prototype._removeTextForLocalization = function _removeTextForLocalization()
 {
 	/*
+	TODO
+	Match(\"\s\S?[^\\]\")
+	Replace(localization[i]);
+	*/
 	//TODO figure out how to do this function with regular expression(s)
-	var regEx = new RegExp(/\x22[\S\s]*?[^\x5c\x22]\x22/g);
-	console.log("Finding all of the following \"Quotes\" from the code.");
+	//var regEx = new RegExp(/\x22[\S\s]*?[^\x5c\x22]\x22/g);
+	var regEx = new RegExp(/\x22[\S\s]*?[^\x5c]\x22/g);
+	console.log("Finding all of the following Quotes from the code.");
 	console.log(this._src.match(regEx));
 	return;//HACK
-   */
+	
+	
+   
 	var quoteMark = '\x22',
 		escapeChar = '\x5c',
 		i,

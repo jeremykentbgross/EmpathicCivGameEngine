@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 GameUnitTests.registerTest(
-	"GameArithmeticCompression",
+	'GameArithmeticCompression',
 	function()
 	{
 		var passedTest = true;
@@ -109,7 +109,7 @@ GameUnitTests.registerTest(
 			value = encoder.decode(models[i]);
 			if(value !== values[i])
 			{
-				GameEngineLib.logger.error("Loop " + i + " " + value + "!==" + values[i] + " with (" + models[i].min + ", " + models[i].max + ")");
+				GameEngineLib.logger.error("Loop " + i + ' ' + value + '!==' + values[i] + " with (" + models[i].min + ', ' + models[i].max + ')');
 				passedTest = false;
 				
 				failedLoops.push(i);

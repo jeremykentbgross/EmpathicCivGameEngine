@@ -81,13 +81,13 @@ GameEngineLib.EntityComponent_Input = GameEngineLib.Class(
 		
 		onAddedToEntity : function onAddedToEntity(inEntity)//TODO chain me
 		{
-			GameInstance.Input.registerListener("Input", this);
+			GameInstance.Input.registerListener('Input', this);
 			//todo register for events
 		},
 
 		onRemovedFromEntity : function onRemovedFromEntity()//TODO chain me
 		{
-			GameInstance.Input.deregisterListener("Input", this);
+			GameInstance.Input.deregisterListener('Input', this);
 			//todo unregister for events
 		},
 		

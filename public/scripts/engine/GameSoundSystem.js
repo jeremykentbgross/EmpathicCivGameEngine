@@ -225,7 +225,7 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 			
 			if(GameSystemVars.Debug.Sound_Print)
 			{
-				GameEngineLib.logger.info("Played sound " + this._soundLib[inID].fileName + " at (" + inPosition.myX + ", " + inPosition.myY + ")");
+				GameEngineLib.logger.info("Played sound " + this._soundLib[inID].fileName + " at (" + inPosition.myX + ', ' + inPosition.myY + ')');
 			}
 			
 			//TODO return gameSound that can be stopped, moved, etc

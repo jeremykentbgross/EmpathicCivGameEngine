@@ -24,8 +24,8 @@
 inParams:{
 	Constructor,
 	Parents : [],
-	ChainUp : ["..",..],
-	ChainDown : ["..",..],
+	ChainUp : ['..',..],
+	ChainDown : ['..',..],
 	Definition,
 }
 
@@ -63,7 +63,7 @@ GameEngineLib.Class = function Class(inParams)
 		
 		if(GameSystemVars.DEBUG)
 		{
-			if(Constructor.toString().indexOf("this."+parent.name) === -1)
+			if(Constructor.toString().indexOf('this.'+parent.name) === -1)
 			{
 				GameEngineLib.logger.warn(
 					Constructor.name + " does not call parent constructor " + parent.name
@@ -131,7 +131,7 @@ GameEngineLib.Class = function Class(inParams)
 	for(property in inDefinition)
 	{
 		//copy functions in the definition
-		if(typeof inDefinition[property] === "function")
+		if(typeof inDefinition[property] === 'function')
 		{
 			if(chainUpMethods[property])
 			{
@@ -166,7 +166,7 @@ GameEngineLib.Class = function Class(inParams)
 	while(current)
 	{
 		parentChain.push(current);
-		if(current.name === "GameObject")
+		if(current.name === 'GameObject')
 		{
 			managed = true;
 			break;

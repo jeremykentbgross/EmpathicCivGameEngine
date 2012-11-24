@@ -156,7 +156,7 @@ GameEngineLib.createGame2DPhysics = function()
 			//myFriction:,??
 			myGame2DAABB : GameEngineLib.createGame2DAABB(),//todo have lots of gamerects relative to a center??
 			myOwningNodes : [],
-			myID : "PhysID" + (++myNextPhysicsID).toString(),//todo become just a number for serialization? (probably not serialized?)
+			myID : 'PhysID' + (++myNextPhysicsID).toString(),//todo become just a number for serialization? (probably not serialized?)
 			myHandle : phyObjHandle,
 			myRegisteredActiveNode : GameEngineLib.createGameCircularDoublyLinkedListNode(),
 			getMass :
@@ -425,19 +425,19 @@ GameEngineLib.createGame2DPhysics = function()
 				switch(item.myStatus)
 				{
 					case STATUS__STATIC ://black
-						inCanvas2DContext.fillStyle = "rgba(0, 0, 0, 1)";
+						inCanvas2DContext.fillStyle = 'rgba(0, 0, 0, 1)';
 						break;
 					case STATUS__SLEEPING://blue
-						inCanvas2DContext.fillStyle = "rgba(0, 0, 255, 1)";
+						inCanvas2DContext.fillStyle = 'rgba(0, 0, 255, 1)';
 						break;
 					case STATUS__ACTIVE://blue green
-						inCanvas2DContext.fillStyle = "rgba(0, 180, 180, 1)";
+						inCanvas2DContext.fillStyle = 'rgba(0, 180, 180, 1)';
 						break;
 					case STATUS__ALWAYS_ACTIVE://green
-						inCanvas2DContext.fillStyle = "rgba(0, 128, 0, 1)";
+						inCanvas2DContext.fillStyle = 'rgba(0, 128, 0, 1)';
 						break;
 					default://WTF?
-						inCanvas2DContext.fillStyle = "rgba(255, 0, 255, 1)";
+						inCanvas2DContext.fillStyle = 'rgba(255, 0, 255, 1)';
 						break;
 				}
 				inCanvas2DContext.fillRect(
@@ -453,7 +453,7 @@ GameEngineLib.createGame2DPhysics = function()
 		myDetectionTree.debugDraw(inCanvas2DContext, inCameraRect);//todo 3 colors here from settings
 		
 		//draw collisions
-		inCanvas2DContext.fillStyle = "rgba(255, 0, 0, 1)";
+		inCanvas2DContext.fillStyle = 'rgba(255, 0, 0, 1)';
 		for(i in myCollisionsRenderList)
 		{
 			collisionRect = myCollisionsRenderList[i].myGame2DAABB;
@@ -469,7 +469,7 @@ GameEngineLib.createGame2DPhysics = function()
 		}
 		
 		//mark the active ones
-		inCanvas2DContext.strokeStyle = "rgba(0, 255, 0, 1)";
+		inCanvas2DContext.strokeStyle = 'rgba(0, 255, 0, 1)';
 		node = myActivePhysicsObjects.myNext;
 		while(node !== myActivePhysicsObjects)
 		{

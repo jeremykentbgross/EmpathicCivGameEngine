@@ -34,7 +34,7 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
 		
 		if(!GameSystemVars.Network.isServer)
 		{
-			GameInstance.AssetManager.loadImage(/*"images/testsprite.png"*/"images/wall_level01_01.png", this._myFrames[0]);
+			GameInstance.AssetManager.loadImage(/*'images/testsprite.png'*/'images/wall_level01_01.png', this._myFrames[0]);
 		}
 		else
 		{
@@ -59,7 +59,7 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
 			//for(i = 0; i < this._myFiles.length; ++i)
 			//{
 			//	this._myTiles[i] = {};
-				//GameInstance.assetManager.loadImage("images/testsprite.png", this._myFrames[i]);
+				//GameInstance.assetManager.loadImage('images/testsprite.png', this._myFrames[i]);
 			//}
 			
 			//this._sceneGraphRenderable.myPosition********
@@ -104,9 +104,9 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
 			var owner = this._owner;//inEvent.entity;
 			
 			//register for events
-			owner.registerListener("UpdatePosition", this);
-			owner.registerListener("AddedToWorld", this);
-			owner.registerListener("RemovedFromWorld", this);
+			owner.registerListener('UpdatePosition', this);
+			owner.registerListener('AddedToWorld', this);
+			owner.registerListener('RemovedFromWorld', this);
 			
 			//TODO owner.event(getposition, myPos);
 			//todo add to scene graph
@@ -117,9 +117,9 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
 			var owner = this._owner;//inEvent.entity;
 			
 			//unregister for events
-			owner.deregisterListener("UpdatePosition", this);
-			owner.deregisterListener("AddedToWorld", this);
-			owner.deregisterListener("RemovedFromWorld", this);
+			owner.deregisterListener('UpdatePosition', this);
+			owner.deregisterListener('AddedToWorld', this);
+			owner.deregisterListener('RemovedFromWorld', this);
 			
 			//todo remove from scenegraph
 			

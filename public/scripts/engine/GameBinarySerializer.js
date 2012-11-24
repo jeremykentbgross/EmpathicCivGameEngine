@@ -106,19 +106,19 @@ GameEngineLib.GameBinarySerializer.prototype.serializeObject = function serializ
 		
 		switch(entry.type)
 		{
-			case "bool":
+			case 'bool':
 				inObject[entry.name] = this.serializeBool(inObject[entry.name]);
 				break;
-			case "int":
+			case 'int':
 				inObject[entry.name] = this.serializeInt(inObject[entry.name], entry.min, entry.max);
 				break;
-			case "float":
+			case 'float':
 				inObject[entry.name] = this.serializeFloat(inObject[entry.name], entry.min, entry.max, entry.precision);
 				break;
-			case "string":
+			case 'string':
 				inObject[entry.name] = this.serializeString(inObject[entry.name]);
 				break;
-			case "position":
+			case 'position':
 				inObject[entry.name] = this.serializePoint2D(inObject[entry.name], entry.min, entry.max/*, entry.precision*/);
 				break;
 		}
@@ -249,7 +249,7 @@ GameEngineLib.GameBinarySerializer.prototype.serializeString = function serializ
 	else
 	{
 		stringLength = this._compressor.decode(this._integerRangeModel);
-		string = "";
+		string = '';
 		for(charIndex = 0; charIndex < stringLength; ++charIndex)
 		{
 			string += String.fromCharCode(

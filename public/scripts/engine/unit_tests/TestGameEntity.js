@@ -20,7 +20,7 @@
 */
 
 GameUnitTests.registerTest(
-	"GameEntity",
+	'GameEntity',
 	function()
 	{
 		var entity = GameEngineLib.GameEntity.create();
@@ -41,8 +41,8 @@ GameUnitTests.registerTest(
 				{
 					this.added = inEvent.entity;
 					
-					this._owner.registerListener("AddedToWorld", this);
-					this._owner.registerListener("RemovedFromWorld", this);
+					this._owner.registerListener('AddedToWorld', this);
+					this._owner.registerListener('RemovedFromWorld', this);
 				},
 				
 				onRemovedFromEntity : function onRemovedFromEntity(inEvent)
@@ -53,8 +53,8 @@ GameUnitTests.registerTest(
 					);
 					this.added = null;
 					
-					this._owner.deregisterListener("AddedToWorld", this);
-					this._owner.deregisterListener("RemovedFromWorld", this);
+					this._owner.deregisterListener('AddedToWorld', this);
+					this._owner.deregisterListener('RemovedFromWorld', this);
 				},
 				
 				onAddedToWorld : function onAddedToWorld(inEvent)

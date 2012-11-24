@@ -26,7 +26,7 @@ GameEngineLib.createGameTimer = function(instance, PRIVATE)
 	
 	if(GameSystemVars.DEBUG)
 	{
-		GameEngineLib.addDebugInfo("GameTimer", instance, PRIVATE);
+		GameEngineLib.addDebugInfo('GameTimer', instance, PRIVATE);
 	}
 	
 	instance.init = function()
@@ -90,10 +90,10 @@ GameEngineLib.createGameTimer = function(instance, PRIVATE)
 			if(GameSystemVars.Debug.FrameStats_Print)
 			{
 				console.log(
-					"\n" + frameStats[0] +
-					"\n" + frameStats[1] +
-					"\n" + frameStats[2] +
-					"\n" + frameStats[3]
+					'\n' + frameStats[0] +
+					'\n' + frameStats[1] +
+					'\n' + frameStats[2] +
+					'\n' + frameStats[3]
 				);
 			}
 		}

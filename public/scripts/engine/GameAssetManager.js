@@ -31,7 +31,7 @@ GameEngineLib.createGameAssetManager = function(instance, PRIVATE)
 	
 	instance.loadImage = function(inFileName, outLoadTarget)
 	{
-		var defaultImageName = "defaultimage";
+		var defaultImageName = 'defaultimage';
 		var imageInfo;
 		var i;
 		
@@ -84,7 +84,7 @@ GameEngineLib.createGameAssetManager = function(instance, PRIVATE)
 	
 	instance.loadSound = function(inFileName, outLoadTarget)
 	{		
-		var defaultSoundName = "defaultsound";
+		var defaultSoundName = 'defaultsound';
 		var soundInfo;
 		var i;
 		

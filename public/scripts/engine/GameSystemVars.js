@@ -42,6 +42,42 @@ GameSystemVars = //TODO rename as GameSystemSettings
 		//use 3d?
 	},
 	
+	Input :
+	{
+		//TODO controls
+	},
+	
+	Network :
+	{
+		isServer : false
+		,isMultiplayer : true
+		,GamePort : null//1337	//if null then defaults to port 80 and reuses main connection
+		//TODO editorPort : ??
+	},
+	
+	Server :
+	{
+		compressClientCode : false//true
+		////////////////////////////////////////////
+		//only working when compressing client code:
+		,removeTextForLocalization : true//true
+		,removeNonNewlineWhiteSpace : false//true
+		,removeNewlines : false//true
+		,obfuscateNames : false//true
+		,useModifiedNamesNotPureObfuscate : true//false
+		//:only working when compressing client code
+		////////////////////////////////////////////
+	},
+	
+	/*
+	TODO sound
+	masterVolume
+	effectsVolume
+	...
+	*/
+	
+	//TODO make the logger in global or instance space
+	
 	Debug :
 	{
 		//Name_Type, Type = <Print (bool), Draw (bool), DrawColor (color), Size (int/float)>
@@ -93,7 +129,7 @@ GameSystemVars = //TODO rename as GameSystemSettings
 		Sound_Print : true,
 		Sound_Area_Draw : true,
 		Sound_Area_DrawColor : "rgba(255, 128, 0, 1)",
-		Sound_Listener_Size : 20,
+		Sound_Listener_Size : 20,//TODO this should be in the regular sound part!
 		
 		//TODO search for "rgba( in all files		
 		
@@ -106,43 +142,7 @@ GameSystemVars = //TODO rename as GameSystemSettings
 		TextDefault_DrawColor : "rgba(255, 255, 255, 1)",
 		TextBackground_DrawColor : "rgba(0, 0, 0, 0.5)",
 		Text_Size : 12
-	},
-	
-	Input :
-	{
-		//TODO controls
-	},
-	
-	Network :
-	{
-		isServer : false
-		,isMultiplayer : true
-		,GamePort : null//1337	//if null then defaults to port 80 and reuses main connection
-		//TODO editorPort : ??
-	},
-	
-	Server :
-	{
-		compressClientCode : false//true
-		////////////////////////////////////////////
-		//only working when compressing client code:
-		,removeTextForLocalization : false//true
-		,removeNonNewlineWhiteSpace : false//true
-		,removeNewlines : false//true
-		,obfuscateNames : false//true
-		,useModifiedNamesNotPureObfuscate : true//false
-		//:only working when compressing client code
-		////////////////////////////////////////////
 	}
-	
-	/*
-	TODO sound
-	masterVolume
-	effectsVolume
-	...
-	*/
-	
-	//TODO make the logger in global or instance space
 };
 
 
