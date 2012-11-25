@@ -247,8 +247,8 @@ GameEngineLib.GameEvent_UpdatePosition = GameEngineLib.Class({
 	Constructor : function UpdatePosition(inPos, inAABB)
 	{
 		this.GameEvent('onUpdatePosition');
-		this.position = inPos,
-		this.boundingRect = inAABB//TODO rename boundingRect => aabb
+		this.position = inPos;
+		this.boundingRect = inAABB;//TODO rename boundingRect => aabb
 	},
 	Parents : [GameEngineLib.GameEvent],
 	flags : {},

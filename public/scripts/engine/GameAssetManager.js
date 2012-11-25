@@ -84,9 +84,10 @@ GameEngineLib.createGameAssetManager = function(instance, PRIVATE)
 	
 	instance.loadSound = function(inFileName, outLoadTarget)
 	{		
-		var defaultSoundName = 'defaultsound';
-		var soundInfo;
-		var i;
+		var defaultSoundName = 'defaultsound',
+			soundInfo,
+			request,
+			i;
 		
 		soundInfo = PRIVATE.sounds[inFileName];
 		
@@ -116,7 +117,7 @@ GameEngineLib.createGameAssetManager = function(instance, PRIVATE)
 			soundInfo.sound = null;
 			//soundInfo.sound.src = inFileName;
 			
-			var request = new XMLHttpRequest();
+			request = new XMLHttpRequest();
 			request.open('GET', inFileName, true);
 			request.responseType = 'arraybuffer';
 			
@@ -143,7 +144,7 @@ GameEngineLib.createGameAssetManager = function(instance, PRIVATE)
 					}
 				);
 				//TODO onFailedLoad? set placeholder, else have a grey or clear sound for streaming
-			}
+			};
 			request.send();
 						
 			PRIVATE.sounds[inFileName] = soundInfo;
@@ -152,7 +153,7 @@ GameEngineLib.createGameAssetManager = function(instance, PRIVATE)
 			//outLoadTarget.sound = document.sounds[defaultSoundName];//TODO query this with dojo
 			//TODO PUT THIS BACK^^^^^^^^^^^^^^^^^^^^^^^^^!!!
 		}
-	}
+	};
 	
 	return instance;
 };

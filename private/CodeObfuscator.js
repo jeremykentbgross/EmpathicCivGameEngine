@@ -130,10 +130,11 @@ GameEngineServer.Obfuscator = function Obfuscator()
 		',',
 		'?',
 		':',
-		'true',
-		'false',
-		'null',
-		'undefined',
+//		'true',
+//		'false',
+//		'null',
+//		'undefined',
+//		'return',
 		'(',
 		')',
 		'[',
@@ -292,7 +293,21 @@ GameEngineServer.Obfuscator.prototype.run = function run()
 		this._clearWhiteSpace();
 	}
 	
-	this._checkForErrors();
+	//Put *some* newlines back because it can't seem to deliver the file otherwise
+	if(GameSystemVars.Server.removeNewlines)
+	{
+		var respacedCode = this._src.match(/[\s\S]{8192}[^\x3b]*\x3b/g);//TODO should size of lines be constant here? Or variable declared?
+		if(respacedCode !== null)
+		{
+			for(i = 0; i < respacedCode.length; ++i)
+			{
+				this._src = this._src.replace(respacedCode[i], respacedCode[i] + '\n');
+			}
+		}
+		//TODO add custom game + engine copyright text
+	}
+	
+	this._checkForErrors();//TODO review this function
 	
 	
 	//TODO cleanup unneeded data
@@ -420,8 +435,8 @@ GameEngineServer.Obfuscator.prototype._removeTextForLocalization = function _rem
 	//TODO figure out how to do this function with regular expression(s)
 	//var regEx = new RegExp(/\x22[\S\s]*?[^\x5c\x22]\x22/g);
 	var regEx = new RegExp(/\x22[\S\s]*?[^\x5c]\x22/g);
-	console.log("Finding all of the following Quotes from the code.");
-	console.log(this._src.match(regEx));
+	//console.log("Finding all of the following Quotes from the code.");
+	//console.log(this._src.match(regEx));
 	return;//HACK
 	
 	
@@ -719,7 +734,7 @@ GameEngineServer.Obfuscator.prototype._doWordReplacement = function _doWordRepla
 	for(i = 0; i < wordList.length; ++i)
 	{
 		wordData = wordList[i];
-		wordData.replacement = GameSystemVars.Server.useModifiedNamesNotPureObfuscate ? 'X_' + wordData.word + '_X' : this._genValidWordReplacement();
+		wordData.replacement = GameSystemVars.Server.useModifiedNamesNotPureObfuscate ? 'o' + wordData.word + 'o' : this._genValidWordReplacement();
 		
 		for(j in wordData.uniqueInstances)
 		{

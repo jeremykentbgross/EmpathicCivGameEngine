@@ -106,6 +106,13 @@ GameEngineServer.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 	obfuscator.addIgnore('cos');//TODO remove unneeded
 	obfuscator.addIgnore('window');//TODO remove unneeded
 	obfuscator.addIgnore('emit');//TODO remove unneeded
+	obfuscator.addIgnore('console');//TODO remove unneeded??
+	obfuscator.addIgnore('document');//TODO remove unneeded??
+	obfuscator.addIgnore('length');
+	
+	/*
+	gameAssert   AudioContext Image XMLHttpRequest io
+	*/
 		
 	
 	

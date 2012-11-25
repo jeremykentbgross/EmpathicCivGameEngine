@@ -62,13 +62,27 @@ GameUnitTests.registerTest(
 			"Obfuscated Obfuscator did not produce same results as the original!"
 		);
 		
+		
+		//backup real obfuscation states and use these for the next two tests
+		var backupObfuscationVars = GameSystemVars.Server;
+		GameSystemVars.Server =
+		{
+			compressClientCode : true
+			,removeTextForLocalization : true
+			,removeNonNewlineWhiteSpace : true
+			,removeNewlines : true
+			,obfuscateNames : true
+			,useModifiedNamesNotPureObfuscate : false
+		};
+		
 		obfuscator = new GameEngineServer.Obfuscator();
 		var src = 'var testMultipleInARow = 1;\ntestMultipleInARow=testMultipleInARow/testMultipleInARow/testMultipleInARow/testMultipleInARow/testMultipleInARow/testMultipleInARow;';
 		obfuscator.addSrc(src);
 		obfuscator.run();
 		src = obfuscator.getObfuscatedCode();
+		var obfWord = obfuscator.getObfuscatedName('testMultipleInARow');
 		gameAssert(
-			src === 'var a=1;a=a/a/a/a/a/a;',
+			src === 'var ' + obfWord + '=1;' + obfWord + '=' + obfWord + '/' + obfWord + '/' + obfWord + '/' + obfWord + '/' + obfWord + '/' + obfWord + ';',
 			"Cannot handle multiple of same var in a row!"
 		);
 				
@@ -80,7 +94,10 @@ GameUnitTests.registerTest(
 		gameAssert(
 			src === 'var c={a:[\'a\',[{a:[1,2,3]}],\'sdf\'],b:{}},d=String(\'fudge\'+String(\'fudge2\'));',
 			"Cannot handle nested brackets on variable declaration!"
-		);		
+		);
+		
+		//restore obfuscation states:
+		GameSystemVars.Server = backupObfuscationVars;
 		
 		//restore debug state:
 		GameSystemVars.DEBUG = rememberDebugState;

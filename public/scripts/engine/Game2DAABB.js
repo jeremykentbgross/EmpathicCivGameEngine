@@ -44,7 +44,7 @@ GameEngineLib.Game2DAABB.prototype.constructor = GameEngineLib.Game2DAABB;
 GameEngineLib.Game2DAABB.prototype.clone = function clone()
 {
 	return new GameEngineLib.Game2DAABB(this.myX, this.myY, this.myWidth, this.myHeight);
-}
+};
 
 
 

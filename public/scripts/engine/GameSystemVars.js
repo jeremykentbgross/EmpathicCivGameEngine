@@ -57,12 +57,12 @@ GameSystemVars = //TODO rename as GameSystemSettings
 	
 	Server :
 	{
-		compressClientCode : false//true
+		compressClientCode : true//true
 		////////////////////////////////////////////
 		//only working when compressing client code:
-		,removeTextForLocalization : true//true
-		,removeNonNewlineWhiteSpace : false//true
-		,removeNewlines : false//true
+		,removeTextForLocalization : true//true	////////NOTE DONE!!!!!
+		,removeNonNewlineWhiteSpace : true//true
+		,removeNewlines : true//true
 		,obfuscateNames : false//true
 		,useModifiedNamesNotPureObfuscate : true//false
 		//:only working when compressing client code
@@ -98,28 +98,28 @@ GameSystemVars = //TODO rename as GameSystemSettings
 		//camera
 		GameWorld_CameraTarget_Draw : false,
 		GameWorld_CameraTarget_Size : 10,
-		GameWorld_CameraTarget_DrawColor : "rgba(255, 255, 0, 1)",
+		GameWorld_CameraTarget_DrawColor : 'rgba(255, 255, 0, 1)',
 		//TODO draw entity position locators
 		
 		//bsp tree
-		SpacialPartitioningTree_Node_DrawColor : "rgba(64, 64, 64, 1)",
-		SpacialPartitioningTree_OccupiedNode_DrawColor : "rgba(255, 255, 255, 1)",
-		SpacialPartitioningTree_Item_DrawColor : "rgba(128, 0, 128, 1)",
+		SpacialPartitioningTree_Node_DrawColor : 'rgba(64, 64, 64, 1)',
+		SpacialPartitioningTree_OccupiedNode_DrawColor : 'rgba(255, 255, 255, 1)',
+		SpacialPartitioningTree_Item_DrawColor : 'rgba(128, 0, 128, 1)',
 		
 		//input
 		Input_Draw : false,
-		Input_Active_DrawColor : "rgba(0, 255, 0, 1)",
-		Input_Inactive_DrawColor : "rgba(0, 0, 255, 1)",
+		Input_Active_DrawColor : 'rgba(0, 255, 0, 1)',
+		Input_Inactive_DrawColor : 'rgba(0, 0, 255, 1)',
 		Input_Print : false,
 		//TODO this goes in input NOT gameworld, how make sure the cursor is rendered?? have renderer listen to input?
 		GameWorld_MouseCursor_Draw : true,
 		GameWorld_MouseCursor_Size : 10,
 		//TODO use active and inactive colors instead?
-		GameWorld_MouseCursor_DrawColor : "rgba(0, 255, 0, 1)",
+		GameWorld_MouseCursor_DrawColor : 'rgba(0, 255, 0, 1)',
 		
 		//frame stats
 		FrameStats_Draw : true,
-		FrameStats_DrawColor : "rgba(255, 255, 0, 1)",
+		FrameStats_DrawColor : 'rgba(255, 255, 0, 1)',
 		FrameStats_Print : false,
 		
 		//Object
@@ -128,19 +128,19 @@ GameSystemVars = //TODO rename as GameSystemSettings
 		//Sound:
 		Sound_Print : true,
 		Sound_Area_Draw : true,
-		Sound_Area_DrawColor : "rgba(255, 128, 0, 1)",
+		Sound_Area_DrawColor : 'rgba(255, 128, 0, 1)',
 		Sound_Listener_Size : 20,//TODO this should be in the regular sound part!
 		
-		//TODO search for "rgba( in all files		
+		//TODO search for rgba in all files		
 		
 		//Network
 		NetworkMessages_Draw : false,
-		NetworkMessages_DrawColor : "rgba(0, 255, 0, 1)",
+		NetworkMessages_DrawColor : 'rgba(0, 255, 0, 1)',
 		NetworkMessages_Print : false,
 		
 		//default debug text color
-		TextDefault_DrawColor : "rgba(255, 255, 255, 1)",
-		TextBackground_DrawColor : "rgba(0, 0, 0, 0.5)",
+		TextDefault_DrawColor : 'rgba(255, 255, 255, 1)',
+		TextBackground_DrawColor : 'rgba(0, 0, 0, 0.5)',
 		Text_Size : 12
 	}
 };
