@@ -150,7 +150,7 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 		var inputString;
 		var event;
 		
-		if(GameSystemVars.DEBUG)
+		if(GameSystemVars.DEBUG && !GameSystemVars.Network.isServer)
 		{
 			inputString = "Input: " +
 				(PRIVATE.active ? "Active" : "Inactive" ) + 

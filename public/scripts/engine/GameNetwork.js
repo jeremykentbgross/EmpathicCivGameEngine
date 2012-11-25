@@ -114,6 +114,9 @@ GameEngineLib.GameNetwork.prototype.init = function init()
 			this._listenSocket = GameEngineServer.listenSocket;
 		}
 		
+		//TODO proper configure:
+		this._listenSocket.set('log level', 0);
+		
 		this._listenSocket.sockets.on('connection', this._onClientConnected);
 		
 		console.log("TCP Server running.");

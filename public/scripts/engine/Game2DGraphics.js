@@ -58,8 +58,9 @@ GameEngineLib.Game2DGraphics.prototype.init = function init()
 	var _this_ = this;
 	require(
 		['dojo/dom', 'dojo/dom-construct'],
-		function(dom, domConstruct){
-			var graphics_container = dom.byId('graphics_container');
+		function(dom, domConstruct)
+		{
+			var graphicsContainer = dom.byId('graphics_container');
 			_this_._myCanvas = domConstruct.create(
 				'canvas',
 				{
@@ -71,7 +72,7 @@ GameEngineLib.Game2DGraphics.prototype.init = function init()
 									"<a href=\"http:\\x2f\\x2fwww.google.com/chrome\">Get Chrome (**recommended!**) </a> or" +
 									"<a href=\"http:\\x2f\\x2fwww.mozilla-europe.org/en/firefox/\">Get Firefox</a>"
 				},
-				graphics_container
+				graphicsContainer
 			);
 		}
 	);

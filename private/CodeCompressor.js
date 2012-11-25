@@ -78,7 +78,7 @@ GameEngineServer.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 	obfuscator.registerNamespace('GameLoader');
 	obfuscator.registerNamespace('GameSystemVars');
 
-	obfuscator.registerNamespace('requestAnimFrame')//TODO make not private!	
+	obfuscator._addFunctionName('requestAnimFrame')//TODO make not private!	
 	obfuscator.addIgnore('requestAnimationFrame');
 	obfuscator.addIgnore('webkitRequestAnimationFrame');
 	obfuscator.addIgnore('mozRequestAnimationFrame');
@@ -87,9 +87,9 @@ GameEngineServer.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 	obfuscator.addIgnore('setTimeout');
 	obfuscator.addIgnore('require');
 	
-	
 	obfuscator.addIgnore('GameLoader');
 	obfuscator.addIgnore('start');//TODO should rename 'load' (game loader entry function)
+
 	//TODO many of these should be in the obfuscator itself!
 	obfuscator.addIgnore('name');//TODO make sure nothing uses 'name' that doesn't need to!
 	obfuscator.addIgnore('dom');//TODO this is param, rename it so we dont need this
@@ -109,6 +109,11 @@ GameEngineServer.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 	obfuscator.addIgnore('console');//TODO remove unneeded??
 	obfuscator.addIgnore('document');//TODO remove unneeded??
 	obfuscator.addIgnore('length');
+	obfuscator.addIgnore('placeholder');//field for the HTML input control
+	obfuscator.addIgnore('src');//the source of a js image
+	obfuscator.addIgnore('type');//HTML user input events
+	obfuscator.addIgnore('buffer');//used by native sound system
+	
 	
 	/*
 	gameAssert   AudioContext Image XMLHttpRequest io
