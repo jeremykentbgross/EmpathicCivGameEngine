@@ -37,21 +37,45 @@ GameEngineLib.Sound = GameEngineLib.Class(
 	{
 		play : function play(inTimeDelay)
 		{
+			inTimeDelay = inTimeDelay || 0;
 			this._source.noteOn(inTimeDelay);
 		},
+		
+		stop : function stop(inTimeDelay)
+		{
+			inTimeDelay = inTimeDelay || 0;
+			this._source.noteOff(inTimeDelay);
+		},
+		
+		/*
+		TODO pause:
+			this.pausedAtOffset = ... //now - sound.source.noteOnAt
+			stop sound
+			isPaused = true //not finished, etc
+		TODO resume:
+			setup new sound isntance
+			play starting at this.pausedAtOffset
+		Example (Sortof): http://www.html5rocks.com/en/tutorials/webaudio/fieldrunners/
+		*/
+		
+		/*
+		TODO getLength:
+			return length of sound
+		*/
 		
 		/*
 		From Web Audio API:
 		UNSCHEDULED_STATE, SCHEDULED_STATE, PLAYING_STATE, FINISHED_STATE
 		*/
+		isPlaying : function isPlaying()
+		{
+			return (this._source.playbackState === this._source.PLAYING_STATE);
+		},
 		isFinished : function isFinished()
 		{
 			return (this._source.playbackState === this._source.FINISHED_STATE);
 		},
 		
-		//TODO
-		//function stop() this.source.stop(0);
-
 		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect, inCurrentTime)
 		{
 			var percentPlayed = (inCurrentTime - this._startedTime) / this._source.buffer.duration;

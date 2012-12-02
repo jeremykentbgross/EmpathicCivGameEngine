@@ -288,6 +288,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		var camRect = PRIVATE.GameWorld.getCurrentCamera().getRect();
 		var camPoint = camRect.getLeftTop();		
 		var mouseWorldPosition = inInputEvent.mouseLoc.add(camPoint);
+		var soundTime = GameInstance.soundSystem.getSoundHardwareTime();//TODO timer.getTime() should work too!
 		
 		//TODO should be in component (and world)
 		GameInstance.soundSystem.setListenerPosition(camRect.getCenter());
@@ -297,13 +298,13 @@ GameLib.createGameRules = function(instance, PRIVATE)
 			PRIVATE.drawTile = 0;
 		}
 		
-		if(inInputEvent.keysPressed['\x75'])//u
+		if(inInputEvent.keysPressed['\x67'])//g
 		{
-			GameInstance.soundSystem.playSoundEffect(0);
+			PRIVATE.lastSoundPlayed = GameInstance.soundSystem.playSoundEffect(0);
 		}
-		if(inInputEvent.keysPressed['\x79'])//y
+		if(inInputEvent.keysPressed['\x68'])//h
 		{
-			GameInstance.soundSystem.playPositionalSoundEffect2D(
+			PRIVATE.lastSoundPlayed = GameInstance.soundSystem.playPositionalSoundEffect2D(
 				0,
 				new GameEngineLib.Game2DPoint(
 					mouseWorldPosition.myX,//2 * mouseWorldPosition.myX / camRect.myWidth - 1 + 10,
@@ -312,21 +313,57 @@ GameLib.createGameRules = function(instance, PRIVATE)
 				//camRect
 			);
 		}
+		if(inInputEvent.keysPressed['\x74'])//t
+		{
+			if(!PRIVATE.lastSoundPlayed.isFinished())
+			{
+				PRIVATE.lastSoundPlayed.stop();
+			}
+		}
+		if(inInputEvent.keysPressed['\x6c'])//l
+		{
+			GameInstance.soundSystem.setMasterVolume(0.1);
+		}
+		if(inInputEvent.keysPressed['\x6b'])//k
+		{
+			GameInstance.soundSystem.setMasterVolume(0.5);
+		}
+		if(inInputEvent.keysPressed['\x6a'])//j
+		{
+			GameInstance.soundSystem.setMasterVolume(1.0);
+		}
+		if(PRIVATE.lastSoundPlayed && PRIVATE.lastSoundPlayed.setPosition)
+		{
+			if(PRIVATE.lastSoundPlayed.isPlaying())
+			{
+				PRIVATE.lastSoundPlayed.setPosition(mouseWorldPosition);
+				PRIVATE.lastSoundPlayed.setVelocity(
+					mouseWorldPosition
+						.sub(PRIVATE.lastMouseWorldPosition)
+						.multiply(/*0.001*/1/(soundTime-PRIVATE.lastSoundTime))
+				);
+			}
+		}
+		
+		
 		if(inInputEvent.keysPressed['\x6f'])//o
 		{
 			GameSystemVars.Debug.Map_Draw = !GameSystemVars.Debug.Map_Draw;
-			GameInstance.soundSystem.setMasterVolume(0.5);
 		}
 		if(inInputEvent.keysPressed['\x70'])//p
 		{
 			GameSystemVars.Debug.Physics_Draw = !GameSystemVars.Debug.Physics_Draw;
-			GameInstance.soundSystem.setMasterVolume(0.1);
 		}
 		if(inInputEvent.keysPressed['\x69'])//i
 		{
 			GameSystemVars.Debug.SceneGraph_Draw = !GameSystemVars.Debug.SceneGraph_Draw;
-			GameInstance.soundSystem.setMasterVolume(1.0);
 		}
+		if(inInputEvent.keysPressed['\x75'])//u
+		{
+			GameSystemVars.Debug.Input_Draw = !GameSystemVars.Debug.Input_Draw;
+		}
+		
+		
 		if(inInputEvent.keysPressed['0'])
 		{
 			PRIVATE.drawTile = 0;
@@ -363,6 +400,9 @@ GameLib.createGameRules = function(instance, PRIVATE)
 				PRIVATE.drawTile
 			);
 		}
+		
+		PRIVATE.lastMouseWorldPosition = mouseWorldPosition;
+		PRIVATE.lastSoundTime = soundTime;
 		
 		//GameInstance.Network.sendMessage(inInputEvent.mouseLoc.myX + ', ' + inInputEvent.mouseLoc.myY);
 	};

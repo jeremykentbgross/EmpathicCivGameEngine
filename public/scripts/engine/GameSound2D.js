@@ -21,11 +21,12 @@
 
 GameEngineLib.Sound2D = GameEngineLib.Class(
 {
-	Constructor : function Sound2D(inSource, inStartedTime, inFileName, inPanner, inPosition, inRadius)
+	Constructor : function Sound2D(inSource, inStartedTime, inFileName, inPanner, inRadius)
 	{
 		this.Sound(inSource, inStartedTime, inFileName);
 		this._panner = inPanner;
-		this._position = inPosition.clone();
+		this._position = new GameEngineLib.Game2DPoint();
+		this._velocity = new GameEngineLib.Game2DPoint();
 		this._radius = inRadius;
 	},
 	Parents : [GameEngineLib.Sound],
@@ -34,7 +35,18 @@ GameEngineLib.Sound2D = GameEngineLib.Class(
 	ChainDown : [],
 	Definition :
 	{
-		//TODO setPosition/velocity/cones/angles
+		//TODO set cones/angles
+		
+		setPosition : function setPosition(inPosition)
+		{
+			this._position.copyFrom(inPosition);
+			this._panner.setPosition(inPosition.myX, inPosition.myY, 0);
+		},
+		setVelocity : function setVelocity(inVelocity)
+		{
+			this._velocity.copyFrom(inVelocity);
+			this._panner.setVelocity(inVelocity.myX, inVelocity.myY, 0);
+		},
 		
 		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect, inCurrentTime)
 		{
@@ -45,14 +57,18 @@ GameEngineLib.Sound2D = GameEngineLib.Class(
 				GameSystemVars.Debug.Sound_Area_DrawColor
 			);
 			GameInstance.Graphics.drawDebugText(
-				'----' + '(' + this._position.myX + ', ' + this._position.myY + '), R:' + this._radius,
+				'----Pos:(' + this._position.myX + ', ' + this._position.myY + '), R:' + this._radius,
+				GameSystemVars.Debug.Sound_Area_DrawColor
+			);
+			GameInstance.Graphics.drawDebugText(
+				'----Vel:(' + this._velocity.myX + ', ' + this._velocity.myY + ')',
 				GameSystemVars.Debug.Sound_Area_DrawColor
 			);
 			
 			//draw source position
 			inCanvas2DContext.fillRect(
-				this._position.myX - inCameraRect.myX,
-				this._position.myY - inCameraRect.myY,
+				this._position.myX - inCameraRect.myX - (GameSystemVars.Debug.Sound_Source_Size / 2),
+				this._position.myY - inCameraRect.myY - (GameSystemVars.Debug.Sound_Source_Size / 2),
 				GameSystemVars.Debug.Sound_Source_Size,
 				GameSystemVars.Debug.Sound_Source_Size
 			);

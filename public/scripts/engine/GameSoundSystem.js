@@ -63,6 +63,8 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 			
 			this._context = new AudioContext();
 			
+			this._context.listener.dopplerFactor = GameSystemVars.Sound.dopplerFactor;
+			
 			//////////////////////////////////////////////////////////
 			//HACK!!//////////////////////////////////////////////////
 			this.loadSounds(
@@ -161,6 +163,12 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 		},
 		
 		
+		getSoundHardwareTime : function getSoundHardwareTime()
+		{
+			return this._context.currentTime;
+		},
+		
+		
 		setMasterVolume : function setMasterVolume(inValue)
 		{
 			this._masterVolumeUserValue = Math.min(inValue, 1);	//TODO clamp(0,1)??
@@ -208,12 +216,27 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 		},
 		
 		
+		/*
+		AudioListener:
+			// same as OpenAL (default 1) 
+			float dopplerFactor;
+			
+			// in meters / second (default 343.3) 
+			float speedOfSound;
+			
+			// Uses a 3D cartesian coordinate system 
+			void setPosition(float x, float y, float z);
+			void setOrientation(float x, float y, float z, float xUp, float yUp, float zUp);
+			void setVelocity(float x, float y, float z);
+		*/
 		setListenerPosition : function setListenerPosition(inPosition /*TODO velocity?*/)
 		{
 			this._listenerPosition2D.copyFrom(inPosition);
 			this._context.listener.setPosition(inPosition.myX, inPosition.myY, 0);
-			//TODO cones
 		},
+		//TODO setListenerVelocity
+		//TODO set listener cones
+		
 		
 		//TODO param velocity?
 		playPositionalSoundEffect2D : function playPositionalSoundEffect2D(inID, inPosition, inRadius)
@@ -239,9 +262,10 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 				this._context.currentTime,
 				this._soundLib[inID].fileName,
 				panner,
-				inPosition,
 				inRadius
 			);
+			sound.setPosition(inPosition);
+			//TODO velocity?
 			
 			sound.play(0);//TODO this would be delay parameter
 			this._playingSounds.insert(new GameEngineLib.GameCircularDoublyLinkedListNode(sound));
@@ -254,6 +278,17 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 		},
 		
 		
+		/*
+		TODO
+		pause:
+			forall playing sounds
+				pause
+		resume:
+			forall playing sounds
+				resume
+		*/
+		
+		
 		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect)
 		{
 			var _this_ = this, i;
@@ -264,8 +299,8 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 			
 			//draw listener position
 			inCanvas2DContext.fillRect(
-				this._listenerPosition2D.myX - inCameraRect.myX,
-				this._listenerPosition2D.myY - inCameraRect.myY,
+				this._listenerPosition2D.myX - inCameraRect.myX - (GameSystemVars.Debug.Sound_Listener_Size / 2),
+				this._listenerPosition2D.myY - inCameraRect.myY - (GameSystemVars.Debug.Sound_Listener_Size / 2),
 				GameSystemVars.Debug.Sound_Listener_Size,
 				GameSystemVars.Debug.Sound_Listener_Size
 			);

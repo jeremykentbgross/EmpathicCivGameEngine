@@ -47,8 +47,15 @@ GameSystemVars = //TODO rename as GameSystemSettings
 		masterVolume : 0.85//TODO save user changes in their local settings
 		,effectsVolume : 1.0//TODO save user changes in their local settings
 		
-		//Note this should be roughly the renderspace radius
+		//Note this should be roughly the renderspace radius (or a bit more to hear off screen)
 		,default2DRadius : 512
+		
+		/*
+		TODO should probably instead convert pixels to meters
+			and use AudioListener.speedOfSound in pix/sec
+			instead of setting AudioListener.dopplerFactor to a trial and error 'magic number'
+		*/
+		,dopplerFactor : 0.001
 	},
 	
 	Input :
@@ -80,6 +87,7 @@ GameSystemVars = //TODO rename as GameSystemSettings
 	
 	//TODO make the logger in global or instance space
 	
+	//TODO move all debug items into their normal specific categories
 	Debug :
 	{
 		//Name_Type, Type = <Print (bool), Draw (bool), DrawColor (color), Size (int/float)>

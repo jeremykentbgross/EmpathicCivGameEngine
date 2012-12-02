@@ -765,3 +765,5 @@ ServerLoader(inc private secrets + gameloader)
 --------------------------
 
 TODO server log piped to debug browser? (luxury feature, not needed per say)
+
+TODO timer.getTime()
