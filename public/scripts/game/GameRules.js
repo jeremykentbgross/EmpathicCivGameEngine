@@ -288,7 +288,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		var camRect = PRIVATE.GameWorld.getCurrentCamera().getRect();
 		var camPoint = camRect.getLeftTop();		
 		var mouseWorldPosition = inInputEvent.mouseLoc.add(camPoint);
-		var soundTime = GameInstance.soundSystem.getSoundHardwareTime();//TODO timer.getTime() should work too!
+		//var soundTime = GameInstance.soundSystem.getSoundHardwareTime();//TODO timer.getTime() should work too!
 		
 		//TODO should be in component (and world)
 		GameInstance.soundSystem.setListenerPosition(camRect.getCenter());
@@ -340,7 +340,8 @@ GameLib.createGameRules = function(instance, PRIVATE)
 				PRIVATE.lastSoundPlayed.setVelocity(
 					mouseWorldPosition
 						.sub(PRIVATE.lastMouseWorldPosition)
-						.multiply(/*0.001*/1/(soundTime-PRIVATE.lastSoundTime))
+						//.multiply(/*0.001*/1/(soundTime-PRIVATE.lastSoundTime))
+						.multiply(1/GameInstance.soundSystem.getSoundHardwareTimeUpdateDelta())
 				);
 			}
 		}
@@ -402,7 +403,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		}
 		
 		PRIVATE.lastMouseWorldPosition = mouseWorldPosition;
-		PRIVATE.lastSoundTime = soundTime;
+		//PRIVATE.lastSoundTime = soundTime;
 		
 		//GameInstance.Network.sendMessage(inInputEvent.mouseLoc.myX + ', ' + inInputEvent.mouseLoc.myY);
 	};

@@ -51,11 +51,14 @@ GameSystemVars = //TODO rename as GameSystemSettings
 		,default2DRadius : 512
 		
 		/*
-		TODO should probably instead convert pixels to meters
-			and use AudioListener.speedOfSound in pix/sec
+		Note: should instead probably convert pixels to meters,
+			have AudioListener.speedOfSound set in pix/sec (instead of meters/sec)
 			instead of setting AudioListener.dopplerFactor to a trial and error 'magic number'
+			BUT for some reason this works better than doing it the theoretically 'correct' way
+		Note: default AudioListener.speedOfSound === 343.3 (meters / sec)
 		*/
 		,dopplerFactor : 0.001
+		,speedOfSound : 343.3/*meters/sec*/ // * 128/*pixels in a meter*/
 	},
 	
 	Input :
@@ -122,7 +125,7 @@ GameSystemVars = //TODO rename as GameSystemSettings
 		Input_Inactive_DrawColor : 'rgba(0, 0, 255, 1)',
 		Input_Print : false,
 		//TODO this goes in input NOT gameworld, how make sure the cursor is rendered?? have renderer listen to input?
-		GameWorld_MouseCursor_Draw : true,
+		GameWorld_MouseCursor_Draw : true,//TODO merge this with Input_Draw
 		GameWorld_MouseCursor_Size : 10,
 		//TODO use active and inactive colors instead?
 		GameWorld_MouseCursor_DrawColor : 'rgba(0, 255, 0, 1)',

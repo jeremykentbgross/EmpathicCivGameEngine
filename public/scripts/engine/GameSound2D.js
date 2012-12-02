@@ -35,8 +35,6 @@ GameEngineLib.Sound2D = GameEngineLib.Class(
 	ChainDown : [],
 	Definition :
 	{
-		//TODO set cones/angles
-		
 		setPosition : function setPosition(inPosition)
 		{
 			this._position.copyFrom(inPosition);
@@ -47,10 +45,15 @@ GameEngineLib.Sound2D = GameEngineLib.Class(
 			this._velocity.copyFrom(inVelocity);
 			this._panner.setVelocity(inVelocity.myX, inVelocity.myY, 0);
 		},
+		//TODO set cones/angles
+		
 		
 		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect, inCurrentTime)
 		{
-			var percentPlayed = (inCurrentTime - this._startedTime) / this._source.buffer.duration;
+			var percentPlayed, soundScreenLoc;
+			
+			percentPlayed = (inCurrentTime - this._startedTime) / this._source.buffer.duration;
+			soundScreenLoc = this._position.sub(inCameraRect);
 							
 			GameInstance.Graphics.drawDebugText(
 				'-' + this._fileName + ': %' + Math.floor(percentPlayed * 100),
@@ -67,30 +70,42 @@ GameEngineLib.Sound2D = GameEngineLib.Class(
 			
 			//draw source position
 			inCanvas2DContext.fillRect(
-				this._position.myX - inCameraRect.myX - (GameSystemVars.Debug.Sound_Source_Size / 2),
-				this._position.myY - inCameraRect.myY - (GameSystemVars.Debug.Sound_Source_Size / 2),
+				soundScreenLoc.myX - (GameSystemVars.Debug.Sound_Source_Size / 2),
+				soundScreenLoc.myY - (GameSystemVars.Debug.Sound_Source_Size / 2),
 				GameSystemVars.Debug.Sound_Source_Size,
 				GameSystemVars.Debug.Sound_Source_Size
 			);
+			//TODO draw facing cone
 				
 			//draw circle of sound
 			inCanvas2DContext.beginPath();
 			inCanvas2DContext.arc(
-				this._position.myX - inCameraRect.myX,
-				this._position.myY - inCameraRect.myY,
+				soundScreenLoc.myX,
+				soundScreenLoc.myY,
 				this._radius,
 				0,
 				2*Math.PI
 			);
 			inCanvas2DContext.stroke();
 			
-			//TODO draw velocity of sound
+			//draw velocity of sound
+			inCanvas2DContext.beginPath();
+			inCanvas2DContext.moveTo(
+				soundScreenLoc.myX,
+				soundScreenLoc.myY
+			);
+			inCanvas2DContext.lineTo(
+				soundScreenLoc.myX + (this._velocity.myX * GameInstance.soundSystem.getSoundHardwareTimeUpdateDelta()),
+				soundScreenLoc.myY + (this._velocity.myY * GameInstance.soundSystem.getSoundHardwareTimeUpdateDelta())
+			);
+			inCanvas2DContext.closePath();
+			inCanvas2DContext.stroke();
 			
 			//draw playback percent as expanding circle
 			inCanvas2DContext.beginPath();
 			inCanvas2DContext.arc(
-				this._position.myX - inCameraRect.myX,
-				this._position.myY - inCameraRect.myY,
+				soundScreenLoc.myX,
+				soundScreenLoc.myY,
 				Math.floor(this._radius * percentPlayed),
 				0,
 				2*Math.PI

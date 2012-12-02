@@ -28,6 +28,7 @@ http://www.html5rocks.com/en/tutorials/webaudio/games/
 http://www.html5rocks.com/en/tutorials/webaudio/positional_audio/
 http://www.html5rocks.com/en/tutorials/webaudio/fieldrunners/
 http://html5doctor.com/native-audio-in-the-browser/
+https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html
 */
 
 
@@ -63,7 +64,11 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 			
 			this._context = new AudioContext();
 			
+			this._soundHardwareUpdateTime = this.getSoundHardwareTime();
+			this._lastSoundHardwareUpdateTime = this.getSoundHardwareTime();
+			
 			this._context.listener.dopplerFactor = GameSystemVars.Sound.dopplerFactor;
+			this._context.listener.speedOfSound = GameSystemVars.Sound.speedOfSound;
 			
 			//////////////////////////////////////////////////////////
 			//HACK!!//////////////////////////////////////////////////
@@ -90,6 +95,10 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 			//TODO setup UI effects volume
 						
 			//TODO setup music volume (including cross fading tracks)
+			
+			//TODO compressor node(s) (looks like after mastergain??=>http://www.html5rocks.com/en/tutorials/webaudio/games/)
+			//TODO Convolver node(s) for environment(s)
+			//TODO detect/prevent clipping
 		}
 		catch(error)
 		{
@@ -160,12 +169,19 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 			
 			//TODO detect out of focus to pause/silence sounds
 			//http://www.w3.org/TR/2011/WD-page-visibility-20110602/
+			
+			this._lastSoundHardwareUpdateTime = this._soundHardwareUpdateTime;
+			this._soundHardwareUpdateTime = this.getSoundHardwareTime();
 		},
 		
 		
 		getSoundHardwareTime : function getSoundHardwareTime()
 		{
 			return this._context.currentTime;
+		},
+		getSoundHardwareTimeUpdateDelta : function getSoundHardwareTimeUpdateDelta()
+		{
+			return this._soundHardwareUpdateTime - this._lastSoundHardwareUpdateTime;
 		},
 		
 		
@@ -197,7 +213,8 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 			source = this._context.createBufferSource();
 			source.buffer = this._soundLib[inID].sound;
 			source.connect(this._effectsVolume);
-			//source.loop = true;//TODO param about looping
+			//source.loop = true;//TODO param about looping (+loopStart, loopEnd)
+			//source.playbackRate = ??//TODO vary sound effect slightly
 			
 			sound = new GameEngineLib.Sound(
 				source,
@@ -255,7 +272,8 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 			source = this._context.createBufferSource();
 			source.buffer = this._soundLib[inID].sound;
 			source.connect(panner);
-			//source.loop = true;//TODO param about looping
+			//source.loop = true;//TODO param about looping (+loopStart, loopEnd)
+			//source.playbackRate = ??//TODO vary sound effect slightly
 			
 			sound = new GameEngineLib.Sound2D(
 				source,
