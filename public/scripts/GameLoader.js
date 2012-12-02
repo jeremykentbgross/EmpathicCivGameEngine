@@ -147,6 +147,8 @@ GameLoader =
 			}
 			include(inSharedPath + "scripts/engine/Game2DGraphics.js");
 			include(inSharedPath + "scripts/engine/GameSoundSystem.js");
+			include(inSharedPath + "scripts/engine/GameSound.js");
+			include(inSharedPath + "scripts/engine/GameSound2D.js");
 			include(inSharedPath + "scripts/engine/GameAssetManager.js");
 		}
 		include(inSharedPath + "scripts/engine/GameNetwork.js");
