@@ -299,11 +299,11 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		
 		if(inInputEvent.keysPressed['\x75'])//u
 		{
-			GameInstance.soundSystem.playSound(0);
+			GameInstance.soundSystem.playSoundEffect(0);
 		}
 		if(inInputEvent.keysPressed['\x79'])//y
 		{
-			GameInstance.soundSystem.playPositionalSoundEffect(
+			GameInstance.soundSystem.playPositionalSoundEffect2D(
 				0,
 				new GameEngineLib.Game2DPoint(
 					mouseWorldPosition.myX,//2 * mouseWorldPosition.myX / camRect.myWidth - 1 + 10,

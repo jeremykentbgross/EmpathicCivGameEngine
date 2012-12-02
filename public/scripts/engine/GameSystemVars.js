@@ -42,6 +42,15 @@ GameSystemVars = //TODO rename as GameSystemSettings
 		//use 3d?
 	},
 	
+	Sound :
+	{
+		masterVolume : 0.85//TODO save user changes in their local settings
+		,effectsVolume : 1.0//TODO save user changes in their local settings
+		
+		//Note this should be roughly the renderspace radius
+		,default2DRadius : 512
+	},
+	
 	Input :
 	{
 		//TODO controls
@@ -57,7 +66,7 @@ GameSystemVars = //TODO rename as GameSystemSettings
 	
 	Server :
 	{
-		compressClientCode : true//true
+		compressClientCode : false//true
 		////////////////////////////////////////////
 		//only working when compressing client code:
 		,removeTextForLocalization : true//true	////////NOTE DONE!!!!!
@@ -68,13 +77,6 @@ GameSystemVars = //TODO rename as GameSystemSettings
 		//:only working when compressing client code
 		////////////////////////////////////////////
 	},
-	
-	/*
-	TODO sound
-	masterVolume
-	effectsVolume
-	...
-	*/
 	
 	//TODO make the logger in global or instance space
 	

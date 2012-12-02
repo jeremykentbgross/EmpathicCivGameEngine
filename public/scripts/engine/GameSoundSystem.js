@@ -30,12 +30,121 @@ http://www.html5rocks.com/en/tutorials/webaudio/fieldrunners/
 http://html5doctor.com/native-audio-in-the-browser/
 */
 
+
+
 GameEngineLib.SoundDescription = function SoundDescription(inID, inFileName)
 {
 	this.id = inID;
 	this.fileName = inFileName;
-	//this.sound = null;
+	//this.sound = null;	//TODO rename _soundBuffer
+	//TODO default sound specific volume??
 };
+
+
+
+GameEngineLib.Sound = GameEngineLib.Class(
+{
+	Constructor : function Sound(inSource, inStartedTime, inFileName)
+	{
+		this._source = inSource;
+		this._startedTime = inStartedTime;
+		this._fileName = inFileName;
+	},
+	
+	Parents : null,
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	
+	Definition :
+	{
+		play : function play(inTimeDelay)
+		{
+			this._source.noteOn(inTimeDelay);
+		},
+		
+		/*
+		From Web Audio API:
+		UNSCHEDULED_STATE, SCHEDULED_STATE, PLAYING_STATE, FINISHED_STATE
+		*/
+		isFinished : function isFinished()
+		{
+			return (this._source.playbackState === this._source.FINISHED_STATE);
+		},
+		
+		//TODO
+		//function stop() this.source.stop(0);
+
+		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect, inCurrentTime)
+		{
+			var percentPlayed = (inCurrentTime - this._startedTime) / this._source.buffer.duration;
+							
+			GameInstance.Graphics.drawDebugText(
+				'-' + this._fileName + ': %' + Math.floor(percentPlayed * 100),
+				GameSystemVars.Debug.Sound_Area_DrawColor
+			);
+		}
+	}
+});
+
+
+
+GameEngineLib.Sound2D = GameEngineLib.Class(
+{
+	Constructor : function Sound2D(inSource, inStartedTime, inFileName, inPanner, inPosition, inRadius)
+	{
+		this.Sound(inSource, inStartedTime, inFileName);
+		this._panner = inPanner;
+		this._position = inPosition.clone();
+		this._radius = inRadius;
+	},
+	Parents : [GameEngineLib.Sound],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition :
+	{
+		//TODO setPosition/velocity/cones/angles
+		
+		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect, inCurrentTime)
+		{
+			var percentPlayed = (inCurrentTime - this._startedTime) / this._source.buffer.duration;
+							
+			GameInstance.Graphics.drawDebugText(
+				'-' + this._fileName + ': %' + Math.floor(percentPlayed * 100),
+				GameSystemVars.Debug.Sound_Area_DrawColor
+			);
+			GameInstance.Graphics.drawDebugText(
+				'----' + '(' + this._position.myX + ', ' + this._position.myY + ')',
+				GameSystemVars.Debug.Sound_Area_DrawColor
+			);
+				
+			//draw circle of sound
+			inCanvas2DContext.beginPath();
+			inCanvas2DContext.arc(
+				this._position.myX - inCameraRect.myX,
+				this._position.myY - inCameraRect.myY,
+				this._radius,
+				0,
+				2*Math.PI
+			);
+			inCanvas2DContext.stroke();
+			
+			//TODO draw velocity of sound
+			
+			//draw playback percent as expanding circle
+			inCanvas2DContext.beginPath();
+			inCanvas2DContext.arc(
+				this._position.myX - inCameraRect.myX,
+				this._position.myY - inCameraRect.myY,
+				Math.floor(this._radius * percentPlayed),
+				0,
+				2*Math.PI
+			);
+			inCanvas2DContext.stroke();
+		}
+	}
+});
 
 
 
@@ -49,8 +158,7 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 		
 		this._soundLib = [];
 		this._playingSounds = new GameEngineLib.GameCircularDoublyLinkedListNode(null);
-		this._soundRadius = 512;//256;//HACK??
-		this._listenerPosition = new GameEngineLib.Game2DPoint();
+		this._listenerPosition2D = new GameEngineLib.Game2DPoint();
 		
 		try
 		{
@@ -61,25 +169,31 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 			
 			this._context = new AudioContext();
 			
-			//HACK!!
+			//////////////////////////////////////////////////////////
+			//HACK!!//////////////////////////////////////////////////
 			this.loadSounds(
 				[
 					new GameEngineLib.SoundDescription(0, 'sounds/placeholder.mp3')
 				]
 			);
+			//HACK!!//////////////////////////////////////////////////
+			//////////////////////////////////////////////////////////
 			
 			//setup master volume
 			this._masterVolume = this._context.createGainNode();
 			this._masterVolume.connect(this._context.destination);
+			this._masterVolumeUserValue = 0;
+			this.setMasterVolume(GameSystemVars.Sound.masterVolume);
 			
 			//setup effects volume
 			this._effectsVolume = this._context.createGainNode();
 			this._effectsVolume.connect(this._masterVolume);
+			this._effectsVolumeUserValue = 0;
+			this.setEffectsVolume(GameSystemVars.Sound.effectsVolume);
 			
-			//TODO setup positional effects volume (linked to effects volume)
-			
-			//TODO setup music volume (including cross fading tracks)
 			//TODO setup UI effects volume
+						
+			//TODO setup music volume (including cross fading tracks)
 		}
 		catch(error)
 		{
@@ -93,61 +207,10 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 	ChainDown : [],
 	Definition :
 	{
-		isUpdating : function isUpdating()
-		{
-			return true;
-		},
-		
-		update : function update()//??params
-		{
-			var finishedSounds = [], i;
-			
-			this._playingSounds.forAll(
-				function(inItem, inNode)
-				{
-					if(!inItem)//head node
-					{
-						return;
-					}
-					if(inItem.src.playbackState === inItem.src.FINISHED_STATE)
-					{
-						finishedSounds.push(inNode);
-					}
-				}
-			);
-			
-			//remove finished sounds
-			for(i = 0; i < finishedSounds.length; ++i)
-			{
-				finishedSounds[i].remove();
-			}
-			
-			//TODO detect out of focus to pause/silence sounds
-		},
-		
-		setMasterVolume : function setMasterVolume(inValue)
-		{
-			this._masterVolume.gain.value = inValue * inValue;//TODO save value for return
-		},
-		getMasterVolume : function getMasterVolume()
-		{
-			return this._masterVolume.gain.value;
-		},
-		
-		
-		setEffectsVolume : function setEffectsVolume(inValue)
-		{
-			this._effectsVolume.gain.value = inValue * inValue;//TODO save value for return
-		},
-		getEffectsVolume : function getEffectsVolume()
-		{
-			return this._effectsVolume.gain.value;
-		},
-		
-		
 		loadSounds : function loadSounds(inSoundDescriptions)
 		{
-			var i;
+			var i, soundDesc;
+			
 			if(GameSystemVars.Network.isServer)
 			{
 				return;
@@ -155,8 +218,7 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 			
 			for(i = 0; i < inSoundDescriptions.length; ++i)
 			{
-				var soundDesc = inSoundDescriptions[i];
-				
+				soundDesc = inSoundDescriptions[i];
 				this._soundLib[soundDesc.id] = soundDesc;
 				GameInstance.AssetManager.loadSound(soundDesc.fileName, soundDesc);
 			}
@@ -172,66 +234,133 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 			*/
 		},
 		
-		//TODO param 'inWorld' for which world we are in
-		playSound : function playSound(inID)//TODO change to playSoundEffect
+		isUpdating : function isUpdating()
 		{
-			var source = this._context.createBufferSource();
-			source.buffer = this._soundLib[inID].sound;
-			source.connect(this._effectsVolume);
-			//source.loop = true;
-			
-			source.noteOn(0);//TODO this would be delay parameter
-			
-			//TODO add sound to playing list
+			return true;
 		},
-		
-		//TODO function setListenerWorld
-		setListenerPosition : function setListenerPosition(inPosition /*TODO velocity?*/)
+		update : function update(/*??params??*/)
 		{
-			this._listenerPosition.copyFrom(inPosition);
-			this._context.listener.setPosition(inPosition.myX, inPosition.myY, 0);//TODO swivel??
-		},
-		
-		//TODO param 'inWorld' for which world we are in
-		//TODO return sound that can be moved and or doppler'ed
-		//TODO param velocity?
-		//TODO param radius
-		playPositionalSoundEffect : function playPositionalSoundEffect(inID, inPosition)//TODO change to playSoundEffect
-		{
-			var panner = this._context.createPanner();
-			panner.connect(this._effectsVolume);
-			panner.setPosition(inPosition.myX, inPosition.myY, 0);
-			panner.maxDistance = this._soundRadius;
-			panner.distanceModel = panner.LINEAR_DISTANCE;
+			var finishedSounds = [], i;
 			
-			var source = this._context.createBufferSource();
-			source.buffer = this._soundLib[inID].sound;
-			source.connect(panner);
-			
-			source.noteOn(0);//TODO this would be delay parameter
-			
-			this._playingSounds.insert(
-				new GameEngineLib.GameCircularDoublyLinkedListNode(
-					{//TODO proper object
-						src : source,
-						pan : panner,
-						started : this._context.currentTime,
-						position : inPosition.clone(),
-						name : this._soundLib[inID].fileName
-						//function stop() this.source.stop(0);
+			this._playingSounds.forAll(
+				function(inItem, inNode)
+				{
+					//head node has no sound
+					if(inItem)
+					{
+						if(inItem.isFinished())
+						{
+							finishedSounds.push(inNode);
+						}
 					}
-				)
+				}
 			);
 			
+			//remove finished sounds from this._playingSounds
+			for(i = 0; i < finishedSounds.length; ++i)
+			{
+				finishedSounds[i].remove();
+			}
+			
+			//TODO detect out of focus to pause/silence sounds
+			//http://www.w3.org/TR/2011/WD-page-visibility-20110602/
+		},
+		
+		
+		setMasterVolume : function setMasterVolume(inValue)
+		{
+			this._masterVolumeUserValue = Math.min(inValue, 1);	//TODO clamp(0,1)??
+			this._masterVolume.gain.value = this._masterVolumeUserValue * this._masterVolumeUserValue;
+		},
+		getMasterVolume : function getMasterVolume()
+		{
+			return this._masterVolumeUserValue;
+		},
+		
+		setEffectsVolume : function setEffectsVolume(inValue)
+		{
+			this._effectsVolumeUserValue = Math.min(inValue, 1);	//TODO clamp(0,1)??
+			this._effectsVolume.gain.value = this._effectsVolumeUserValue * this._effectsVolumeUserValue;
+		},
+		getEffectsVolume : function getEffectsVolume()
+		{
+			return this._effectsVolumeUserValue;
+		},
+		
+		
+		playSoundEffect: function playSoundEffect(inID)
+		{
+			var sound, source;
+			
+			source = this._context.createBufferSource();
+			source.buffer = this._soundLib[inID].sound;
+			source.connect(this._effectsVolume);
+			//source.loop = true;//TODO param about looping
+			
+			sound = new GameEngineLib.Sound(
+				source,
+				this._context.currentTime,
+				this._soundLib[inID].fileName
+			);
+			
+			sound.play(0);//TODO this would be delay parameter
+			this._playingSounds.insert(new GameEngineLib.GameCircularDoublyLinkedListNode(sound));
+			if(GameSystemVars.Debug.Sound_Print)
+			{
+				GameEngineLib.logger.info("Played sound " + this._soundLib[inID].fileName);
+			}
+			
+			return sound;
+		},
+		
+		
+		setListenerPosition : function setListenerPosition(inPosition /*TODO velocity?*/)
+		{
+			this._listenerPosition2D.copyFrom(inPosition);
+			this._context.listener.setPosition(inPosition.myX, inPosition.myY, 0);
+			//TODO cones
+		},
+		
+		//TODO param velocity?
+		playPositionalSoundEffect2D : function playPositionalSoundEffect2D(inID, inPosition, inRadius)
+		{
+			var sound, source, panner;
+			
+			inRadius = inRadius || GameSystemVars.Sound.default2DRadius;
+			
+			panner = this._context.createPanner();
+			panner.connect(this._effectsVolume);
+			panner.setPosition(inPosition.myX, inPosition.myY, 0);
+			panner.maxDistance = inRadius;
+			panner.distanceModel = panner.LINEAR_DISTANCE;
+			//TODO cones
+			
+			source = this._context.createBufferSource();
+			source.buffer = this._soundLib[inID].sound;
+			source.connect(panner);
+			//source.loop = true;//TODO param about looping
+			
+			sound = new GameEngineLib.Sound2D(
+				source,
+				this._context.currentTime,
+				this._soundLib[inID].fileName,
+				panner,
+				inPosition,
+				inRadius
+			);
+			
+			sound.play(0);//TODO this would be delay parameter
+			this._playingSounds.insert(new GameEngineLib.GameCircularDoublyLinkedListNode(sound));
 			if(GameSystemVars.Debug.Sound_Print)
 			{
 				GameEngineLib.logger.info("Played sound " + this._soundLib[inID].fileName + " at (" + inPosition.myX + ', ' + inPosition.myY + ')');
 			}
 			
-			//TODO return gameSound that can be stopped, moved, etc
+			return sound;
 		},
 		
-		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect, inWorld)
+		
+		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect)
 		{
 			var _this_ = this, i;
 			GameInstance.Graphics.drawDebugText("Debug Drawing Sounds", GameSystemVars.Debug.Sound_Area_DrawColor);
@@ -241,8 +370,8 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 			
 			//draw listener position
 			inCanvas2DContext.fillRect(
-				this._listenerPosition.myX - inCameraRect.myX,
-				this._listenerPosition.myY - inCameraRect.myY,
+				this._listenerPosition2D.myX - inCameraRect.myX,
+				this._listenerPosition2D.myY - inCameraRect.myY,
 				GameSystemVars.Debug.Sound_Listener_Size,
 				GameSystemVars.Debug.Sound_Listener_Size
 			);
@@ -251,56 +380,15 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class({
 			//draw sounds
 			this._playingSounds.forAll(
 				function(inItem)
-				{
-					var percentPlayed;
-					
-					//if head node
-					if(!inItem)
+				{					
+					//head node has no sound
+					if(inItem)
 					{
-						return;
+						inItem.debugDraw(inCanvas2DContext, inCameraRect, _this_._context.currentTime);
 					}
-					
-					//if(inWorld !== sound.world)
-					//	continue;
-					
-					percentPlayed = (_this_._context.currentTime - inItem.started) / inItem.src.buffer.duration;
-					
-					GameInstance.Graphics.drawDebugText(
-						' ' + inItem.name +
-							/*if panner*/'(' + inItem.position.myX + ', ' + inItem.position.myY + ')' +
-							': %' + Math.floor(percentPlayed * 100),
-						GameSystemVars.Debug.Sound_Area_DrawColor
-					);
-					
-					//TODO if no positional info, continue
-					
-					//draw circle of sound
-					inCanvas2DContext.beginPath();
-					inCanvas2DContext.arc(
-						inItem.position.myX - inCameraRect.myX,
-						inItem.position.myY - inCameraRect.myY,
-						_this_._soundRadius,
-						0,
-						2*Math.PI
-					);
-					inCanvas2DContext.stroke();
-					
-					//TODO draw velocity of sound
-					
-					//draw play position
-					inCanvas2DContext.beginPath();
-					inCanvas2DContext.arc(
-						inItem.position.myX - inCameraRect.myX,
-						inItem.position.myY - inCameraRect.myY,
-						Math.floor(_this_._soundRadius * percentPlayed),
-						0,
-						2*Math.PI
-					);
-					inCanvas2DContext.stroke();
 				}
 			);
 		}
-		
 	}
 });
 
