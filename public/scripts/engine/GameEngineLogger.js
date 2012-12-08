@@ -19,6 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+//TODO rename this?
 gameAssert = function gameAssert(expression, message)
 {
 	if(!expression)

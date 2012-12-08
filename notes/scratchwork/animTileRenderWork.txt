@@ -31,6 +31,7 @@ Renderable:
 tile:	//goes into map
 -myTileValue
 -myGame2DAABB
+-??mapnodes?
 //tile.sceneGraphRenderable =	//goes into scene graph
 	-myLayer
 	-myAnchorPosition//inherited
