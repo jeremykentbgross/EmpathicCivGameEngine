@@ -70,6 +70,7 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
 				myLayer : 1,//TODO this should always be odd
 				myAnchorPosition : GameEngineLib.createGame2DPoint(),//TODO rename as sort position
 				AABB : GameEngineLib.createGame2DAABB(0, 0, /*64*/96,/*HACK*/ 96/*HACK*/),
+				getAABB : function getAABB(){return this.AABB;},//TODO inherit GameEngineLib.GameQuadTreeItem
 				render : function(inCanvas2DContext, inCameraPoint)
 				{
 					var renderPoint = _this_._myFrames[_this_._myCurrentFrame].offset.

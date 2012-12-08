@@ -155,6 +155,7 @@ GameEngineLib.createGame2DPhysics = function()
 			myVelocity : GameEngineLib.createGame2DPoint(),//todo requested/actual velocity?
 			//myFriction:,??
 			AABB : GameEngineLib.createGame2DAABB(),//todo have lots of gamerects relative to a center??
+			getAABB : function getAABB(){return this.AABB;},//TODO inherit GameEngineLib.GameQuadTreeItem
 			myOwningNodes : [],
 			myID : 'PhysID' + (++myNextPhysicsID).toString(),//todo become just a number for serialization? (probably not serialized?)
 			myHandle : phyObjHandle,

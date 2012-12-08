@@ -19,7 +19,22 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+GameEngineLib.GameQuadTreeItem = function GameQuadTreeItem(inAABB)
+{
+	this._AABB = inAABB;
+};
+GameEngineLib.GameQuadTreeItem.prototype.constructor = GameEngineLib.GameQuadTreeItem;
+
+GameEngineLib.GameQuadTreeItem.prototype.getAABB = function getAABB()
+{
+	return this._AABB;
+}
+
+
+
+
 GameEngineLib.GameQuadTree = function GameQuadTree(){};
+GameEngineLib.GameQuadTree.prototype.constructor = GameEngineLib.GameQuadTree;
 GameEngineLib.GameQuadTree.create = function create()
 {
 	return new GameEngineLib.GameQuadTree();
@@ -95,7 +110,7 @@ GameEngineLib.GameQuadTree.prototype.insertToSmallestContaining = function inser
 {
 	var i, loops;
 	
-	if(this._AABB.containsRect(inItem.AABB))
+	if(this._AABB.containsRect(inItem.getAABB()))
 	{
 		if(this._myChildren === null)
 		{
@@ -144,14 +159,14 @@ GameEngineLib.GameQuadTree.prototype.insertToAllBestFitting = function insertToA
 		thisNodeSize,//todo make this faster by not doing it every level??
 		minTargetNodesSize;
 	
-	minTargetNodesSize = Math.max(inItem.AABB.myWidth, inItem.AABB.myHeight);
+	minTargetNodesSize = Math.max(inItem.getAABB().myWidth, inItem.getAABB().myHeight);
 	thisNodeSize = Math.max(this._AABB.myWidth, this._AABB.myHeight);
 	if(thisNodeSize < minTargetNodesSize)
 	{
 		return false;
 	}
 	
-	if(this._AABB.intersectsRect(inItem.AABB))
+	if(this._AABB.intersectsRect(inItem.getAABB()))
 	{
 		if(this._myChildren === null && !(thisNodeSize / 2 < minTargetNodesSize))
 		{
@@ -203,10 +218,10 @@ GameEngineLib.GameQuadTree.prototype.deleteItem = function deleteItem(inItem)
 		minTargetNodesSize,
 		item;
 	
-	if(this._AABB.intersectsRect(inItem.AABB))
+	if(this._AABB.intersectsRect(inItem.getAABB()))
 	{
 		//if there are children and the children are not to small to contain the item:
-		minTargetNodesSize = Math.max(inItem.AABB.myWidth, inItem.AABB.myHeight);
+		minTargetNodesSize = Math.max(inItem.getAABB().myWidth, inItem.getAABB().myHeight);
 		thisNodeSize = Math.max(this._AABB.myWidth, this._AABB.myHeight);
 		if(this._myChildren !== null && !(thisNodeSize / 2 < minTargetNodesSize))
 		{
@@ -278,7 +293,7 @@ GameEngineLib.GameQuadTree.prototype.deleteIntersecting = function deleteInterse
 		loops = this._myItems.length;
 		for(i = 0; i < loops; ++i)
 		{
-			if(inGame2DAABB.intersectsRect(this._myItems[i].AABB))
+			if(inGame2DAABB.intersectsRect(this._myItems[i].getAABB()))
 			{
 				//delete it
 				this._myItems.splice(i,1);
@@ -339,7 +354,7 @@ GameEngineLib.GameQuadTree.prototype.deleteContained = function deleteContained(
 		loops = this._myItems.length;
 		for(i = 0; i < loops; ++i)
 		{
-			if(inGame2DAABB.containsRect(this._myItems[i].AABB))
+			if(inGame2DAABB.containsRect(this._myItems[i].getAABB()))
 			{
 				//delete it
 				outDeletedItems.push(this._myItems[i]);
@@ -370,7 +385,7 @@ GameEngineLib.GameQuadTree.prototype.walk = function walk(inFunction, inGame2DAA
 		for(i = 0; i < loops; ++i)
 		{
 			item = this._myItems[i];
-			if(item.AABB.intersectsRect(inGame2DAABB))
+			if(item.getAABB().intersectsRect(inGame2DAABB))
 			{
 				inFunction(item);
 			}
@@ -410,10 +425,10 @@ GameEngineLib.GameQuadTree.prototype.debugDraw = function debugDraw(inCanvas2DCo
 		for(i in this._myItems)
 		{
 			inCanvas2DContext.strokeRect(
-				this._myItems[i].AABB.myX - inCameraRect.myX,
-				this._myItems[i].AABB.myY - inCameraRect.myY,
-				this._myItems[i].AABB.myWidth,
-				this._myItems[i].AABB.myHeight
+				this._myItems[i].getAABB().myX - inCameraRect.myX,
+				this._myItems[i].getAABB().myY - inCameraRect.myY,
+				this._myItems[i].getAABB().myWidth,
+				this._myItems[i].getAABB().myHeight
 			);
 		}
 		

@@ -88,6 +88,7 @@ GameEngineLib.Game2DMap = GameEngineLib.Class(
 			);
 			
 			var tile = {};
+			tile.getAABB = function getAABB(){return this.AABB;};//TODO inherit GameEngineLib.GameQuadTreeItem
 			
 			//setup for the tilemap tree
 			//TODO rename tree rects as such
@@ -125,6 +126,7 @@ GameEngineLib.Game2DMap = GameEngineLib.Class(
 				myLayer : /*0 + ??*/ _this_._myTileSet.getTileLayer(inTileValue),
 				myAnchorPosition : position,//TODO rename anchorPosition?
 				AABB : _this_._myTileSet.getTileRect(inTileValue, position),
+				getAABB : function getAABB(){return this.AABB;},//TODO inherit GameEngineLib.GameQuadTreeItem
 				render : function(inCanvas2DContext, inCameraRect)
 				{
 					if(GameSystemVars.DEBUG && GameSystemVars.Debug.Map_Draw)
