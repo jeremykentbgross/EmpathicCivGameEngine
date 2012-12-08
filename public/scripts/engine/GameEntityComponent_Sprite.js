@@ -69,7 +69,7 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
 			{
 				myLayer : 1,//TODO this should always be odd
 				myAnchorPosition : GameEngineLib.createGame2DPoint(),//TODO rename as sort position
-				myGame2DAABB : GameEngineLib.createGame2DAABB(0, 0, /*64*/96,/*HACK*/ 96/*HACK*/),
+				AABB : GameEngineLib.createGame2DAABB(0, 0, /*64*/96,/*HACK*/ 96/*HACK*/),
 				render : function(inCanvas2DContext, inCameraPoint)
 				{
 					var renderPoint = _this_._myFrames[_this_._myCurrentFrame].offset.
@@ -131,11 +131,11 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
 			this._world.getSceneGraph().removeItem(this._sceneGraphRenderable);
 			
 			//this._position = this._sceneGraphRenderable.myPosition = inEvent.position;
-			//this._sceneGraphRenderable.myGame2DAABB.setLeftTop(this._position.add(this._myFrames[this._myCurrentFrame].offset));
+			//this._sceneGraphRenderable.AABB.setLeftTop(this._position.add(this._myFrames[this._myCurrentFrame].offset));
 			
 			this._position = inEvent.position;
 			this._sceneGraphRenderable.myAnchorPosition = inEvent.boundingRect.getLeftTop();//inEvent.position;
-			this._sceneGraphRenderable.myGame2DAABB.setLeftTop(inEvent.position.add(this._myFrames[this._myCurrentFrame].offset));
+			this._sceneGraphRenderable.AABB.setLeftTop(inEvent.position.add(this._myFrames[this._myCurrentFrame].offset));
 			
 			//TODO change renderable position everywhere it should change
 			

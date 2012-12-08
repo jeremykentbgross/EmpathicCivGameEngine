@@ -93,18 +93,18 @@ GameEngineLib.createGame2DPhysics = function()
 					return;
 				}
 			
-				var rect = physicsObject.myGame2DAABB.getIntersection(item.myGame2DAABB);
+				var rect = physicsObject.AABB.getIntersection(item.AABB);
 				if(rect.getArea() > 0)
 				{
 					myCollisions[myCollisions.length] =
 					{
 						myObj1:physicsObject,
 						myObj2:item,
-						myGame2DAABB:rect
+						AABB:rect
 					};
 				}
 			},
-			physicsObject.myGame2DAABB
+			physicsObject.AABB
 		);
 		
 		myDetectionTree.insertToAllBestFitting(physicsObject, physicsObject.myOwningNodes);
@@ -132,7 +132,7 @@ GameEngineLib.createGame2DPhysics = function()
 					return;
 				}
 			}
-			//,physicsObject.myGame2DAABB
+			//,physicsObject.AABB
 		);////////////////////TODO TEMP DEBUG CHECK?? or keep?
 		*/
 			
@@ -154,7 +154,7 @@ GameEngineLib.createGame2DPhysics = function()
 			myDensity : 1,
 			myVelocity : GameEngineLib.createGame2DPoint(),//todo requested/actual velocity?
 			//myFriction:,??
-			myGame2DAABB : GameEngineLib.createGame2DAABB(),//todo have lots of gamerects relative to a center??
+			AABB : GameEngineLib.createGame2DAABB(),//todo have lots of gamerects relative to a center??
 			myOwningNodes : [],
 			myID : 'PhysID' + (++myNextPhysicsID).toString(),//todo become just a number for serialization? (probably not serialized?)
 			myHandle : phyObjHandle,
@@ -162,7 +162,7 @@ GameEngineLib.createGame2DPhysics = function()
 			getMass :
 						function()
 						{
-							return this.myDensity * this.myGame2DAABB.getArea();
+							return this.myDensity * this.AABB.getArea();
 						},
 			myOwner : null
 		};
@@ -220,7 +220,7 @@ GameEngineLib.createGame2DPhysics = function()
 		phyObjHandle.setGame2DAABB = function(inGame2DAABB)
 		{
 			removePhysicsObjectFromTree(physicsObject);
-			physicsObject.myGame2DAABB.copyFrom(inGame2DAABB);
+			physicsObject.AABB.copyFrom(inGame2DAABB);
 			insertPhysicsObjectToTree(physicsObject);
 		};
 		
@@ -282,7 +282,7 @@ GameEngineLib.createGame2DPhysics = function()
 				
 				if(!movedThisFrame[physicsObject.myID])
 				{
-					movedThisFrame[physicsObject.myID] = physicsObject.myGame2DAABB.getLeftTop();
+					movedThisFrame[physicsObject.myID] = physicsObject.AABB.getLeftTop();
 				}
 				
 				node = node.myNext;
@@ -294,7 +294,7 @@ GameEngineLib.createGame2DPhysics = function()
 				physicsObject = node.item;
 				
 				//move:
-				rect = physicsObject.myGame2DAABB;
+				rect = physicsObject.AABB;
 				rect.setLeftTop(
 					rect.getLeftTop().add(physicsObject.myVelocity.multiply(timeStepDeltaTime))
 				);
@@ -327,13 +327,13 @@ GameEngineLib.createGame2DPhysics = function()
 				var obj1, obj2, objCenter, colCenter, direction, force, acceleration;
 				obj1 = collision.myObj1;
 				obj2 = collision.myObj2;
-				colCenter = collision.myGame2DAABB.getCenter();
+				colCenter = collision.AABB.getCenter();
 				//TODO proper force PER direction??
-				force = collision.myGame2DAABB.getArea() / timeStepDeltaTime;//f = -kx
+				force = collision.AABB.getArea() / timeStepDeltaTime;//f = -kx
 				
 				if(obj1.myStatus !== STATUS__STATIC)
 				{
-					objCenter = obj1.myGame2DAABB.getCenter();
+					objCenter = obj1.AABB.getCenter();
 					direction = objCenter.subtract(colCenter).unit();					
 					acceleration = force / obj1.getMass();	//f=ma => a = f/m
 					
@@ -341,7 +341,7 @@ GameEngineLib.createGame2DPhysics = function()
 				}
 				if(obj2.myStatus !== STATUS__STATIC)
 				{
-					objCenter = obj2.myGame2DAABB.getCenter();
+					objCenter = obj2.AABB.getCenter();
 					direction = objCenter.subtract(colCenter).unit();					
 					acceleration = force / obj2.getMass();	//f=ma => a = f/m
 					
@@ -379,15 +379,15 @@ GameEngineLib.createGame2DPhysics = function()
 			//TODO if !hasownedproperty, etc continue
 			physicsObject = myPhysicsObjects[i];
 			physicsObject.myVelocity =	//TODO isnt this one proper??
-				physicsObject.myGame2DAABB.getLeftTop().subtract(movedThisFrame[i]).multiply(1000 / deltaTime);
+				physicsObject.AABB.getLeftTop().subtract(movedThisFrame[i]).multiply(1000 / deltaTime);
 			owner = physicsObject.myOwner;
 			if(owner && owner.onPhysObjectUpdate)
 			{
 				owner.onPhysObjectUpdate(
 					{
-						position : physicsObject.myGame2DAABB.getCenter(),
+						position : physicsObject.AABB.getCenter(),
 						velocity : physicsObject.myVelocity,//TODO send clones? these maybe messed up by users
-						boundingRect : physicsObject.myGame2DAABB//TODO send clones? these maybe messed up by users
+						boundingRect : physicsObject.AABB//TODO send clones? these maybe messed up by users
 					}
 				);
 			}
@@ -441,10 +441,10 @@ GameEngineLib.createGame2DPhysics = function()
 						break;
 				}
 				inCanvas2DContext.fillRect(
-					item.myGame2DAABB.myX - inCameraRect.myX,
-					item.myGame2DAABB.myY - inCameraRect.myY,
-					item.myGame2DAABB.myWidth,
-					item.myGame2DAABB.myHeight
+					item.AABB.myX - inCameraRect.myX,
+					item.AABB.myY - inCameraRect.myY,
+					item.AABB.myWidth,
+					item.AABB.myHeight
 				);
 			},
 			inCameraRect
@@ -456,7 +456,7 @@ GameEngineLib.createGame2DPhysics = function()
 		inCanvas2DContext.fillStyle = 'rgba(255, 0, 0, 1)';
 		for(i in myCollisionsRenderList)
 		{
-			collisionRect = myCollisionsRenderList[i].myGame2DAABB;
+			collisionRect = myCollisionsRenderList[i].AABB;
 			if(collisionRect.intersectsRect(inCameraRect))
 			{
 				inCanvas2DContext.fillRect(
@@ -475,10 +475,10 @@ GameEngineLib.createGame2DPhysics = function()
 		{
 			physicsObject = node.item;
 			inCanvas2DContext.strokeRect(
-				physicsObject.myGame2DAABB.myX - inCameraRect.myX,
-				physicsObject.myGame2DAABB.myY - inCameraRect.myY,
-				physicsObject.myGame2DAABB.myWidth,
-				physicsObject.myGame2DAABB.myHeight
+				physicsObject.AABB.myX - inCameraRect.myX,
+				physicsObject.AABB.myY - inCameraRect.myY,
+				physicsObject.AABB.myWidth,
+				physicsObject.AABB.myHeight
 			);
 			node = node.myNext;
 		}

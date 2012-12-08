@@ -91,7 +91,7 @@ GameEngineLib.Game2DMap = GameEngineLib.Class(
 			
 			//setup for the tilemap tree
 			//TODO rename tree rects as such
-			tile.myGame2DAABB = GameEngineLib.createGame2DAABB(
+			tile.AABB = GameEngineLib.createGame2DAABB(
 				position.myX,
 				position.myY,
 				this._myTileSize,
@@ -109,7 +109,7 @@ GameEngineLib.Game2DMap = GameEngineLib.Class(
 						duplicate = true;
 					}
 				},
-				tile.myGame2DAABB
+				tile.AABB
 			);
 			if(duplicate)
 			{
@@ -124,7 +124,7 @@ GameEngineLib.Game2DMap = GameEngineLib.Class(
 			{
 				myLayer : /*0 + ??*/ _this_._myTileSet.getTileLayer(inTileValue),
 				myAnchorPosition : position,//TODO rename anchorPosition?
-				myGame2DAABB : _this_._myTileSet.getTileRect(inTileValue, position),
+				AABB : _this_._myTileSet.getTileRect(inTileValue, position),
 				render : function(inCanvas2DContext, inCameraRect)
 				{
 					if(GameSystemVars.DEBUG && GameSystemVars.Debug.Map_Draw)
@@ -164,7 +164,7 @@ GameEngineLib.Game2DMap = GameEngineLib.Class(
 			var i;
 			
 			//delete from the tilemap tree
-			this._myTileMapTree.deleteContained(tile.myGame2DAABB, deletedTiles);
+			this._myTileMapTree.deleteContained(tile.AABB, deletedTiles);
 			if(GameSystemVars.DEBUG)
 			{
 				if(deletedTiles.length > 1)
@@ -196,7 +196,7 @@ GameEngineLib.Game2DMap = GameEngineLib.Class(
 			}
 				
 			var tile = {};
-			tile.myGame2DAABB = GameEngineLib.createGame2DAABB(
+			tile.AABB = GameEngineLib.createGame2DAABB(
 				inX * this._myTileSize,
 				inY * this._myTileSize,
 				this._myTileSize,
@@ -219,7 +219,7 @@ GameEngineLib.Game2DMap = GameEngineLib.Class(
 			this._myTileMapTree.walk(
 				function(item)
 				{
-					var itemRect = item.myGame2DAABB;
+					var itemRect = item.AABB;
 					_this_._myTileSet.renderTileInRect(
 						inCanvas2DContext,
 						item.myTileValue,

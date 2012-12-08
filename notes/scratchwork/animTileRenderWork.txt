@@ -10,6 +10,8 @@ Renderer work:
 5) //BUG: Scene graph tree doesn't seem to cleanup empty nodes!!! (map does tho)
 scene graph custom sorting object(s)
 6) custom scenegraph depth sorting funcs
+7) flag to update sprite/tile anims when not on screen?
+8) I have a sprite manager?? Is it doing anything?  Seems its not even loaded, should delete!
 
 
 CURRENT:
