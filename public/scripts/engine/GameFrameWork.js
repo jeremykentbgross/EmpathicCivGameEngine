@@ -198,29 +198,38 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 	PRIVATE.update = function(time)
 	{
 		var i;
-		var aveDt = instance.GameTimer.update(time);
+		var aveDt;
 		
-		//TODO make update list an event system for onUpdate
-		for(i = 0; i < instance.UpdateOrder.length; ++i)
+		try
 		{
-			var current = instance.UpdateOrder[i];
-			if(current.isUpdating())//TODO they can return if they are not, meaning we can/should get rid of this
+			aveDt = instance.GameTimer.update(time);
+			
+			//TODO make update list an event system for onUpdate
+			for(i = 0; i < instance.UpdateOrder.length; ++i)
 			{
-				current.update(aveDt);
+				var current = instance.UpdateOrder[i];
+				if(current.isUpdating())//TODO they can return if they are not, meaning we can/should get rid of this
+				{
+					current.update(aveDt);
+				}
 			}
+			
+			if(!GameSystemVars.Network.isServer)
+			{
+				instance.Graphics.render(instance.GameRules);
+			}
+			
+			//loop by sending browser event to queue a call to this function again
+			if(PRIVATE.running)
+			{
+				requestAnimFrame(PRIVATE.update);
+			}
+			//else shut down?
 		}
-		
-		if(!GameSystemVars.Network.isServer)
+		catch(error)
 		{
-			instance.Graphics.render(instance.GameRules);
+			console.log(error.stack);
 		}
-		
-		//loop by sending browser event to queue a call to this function again
-		if(PRIVATE.running)
-		{
-			requestAnimFrame(PRIVATE.update);
-		}
-		//else shut down?
 	};
 	///////////////////////////////////////////////////
 	
