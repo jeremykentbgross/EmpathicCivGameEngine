@@ -56,7 +56,7 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class(
 			this._mouseLoc = GameEngineLib.createGame2DPoint();
 			
 			this._mapsize = inMapSizeInTiles * inTileSize;
-			this._sceneGraph = GameEngineLib.createGame2DSceneGraph();
+			this._sceneGraph = new GameEngineLib.Game2DSceneGraph();
 			this._sceneGraph.init(this._mapsize, inTileSize);
 			
 			this._physics = GameEngineLib.createGame2DPhysics();

@@ -1,0 +1,159 @@
+Renderer work:
+
+0) Scene graph:
+	insert to tree may need work?
+	=>	this._mySceneTree.insertToAllBestFitting(inRenderableItem, inRenderableItem.sceneGraphOwningNodes);
+1) Look at creating renderable class
+2) Look at adding 'abstract' to class for render (and remove chainup/down flags on actual methods)
+3) Design impl anim structure (consider serialization)
+4) tree item class 
+5) //BUG: Scene graph tree doesn't seem to cleanup empty nodes!!! (map does tho)
+scene graph custom sorting object(s)
+6) custom scenegraph depth sorting funcs
+
+
+CURRENT:
+
+//TODO debug and check all of these
+Renderable:
+	-g/setOwningSceneGraphNodes()
+	--currently sceneGraphOwningNodes
+	-lastFrameDrawn
+	-myGame2DAABB
+	-myLayer
+	-myAnchorPosition
+	-screenPos
+	-depthSortingPosition //draw order helper?
+	-render(inCanvas2DContext, inCameraRect)
+
+tile:	//goes into map
+-myTileValue
+-myGame2DAABB
+//tile.sceneGraphRenderable =	//goes into scene graph
+	-myLayer
+	-myAnchorPosition//inherited
+	-myGame2DAABB//probably inherited for tree
+	-render(inCanvas2DContext, inCameraRect)
+	//	currently asks tileset to render it
+
+EntityComponent_Sprite:
+_position
+_myFrames
+_myCurrentFrame
+_sceneGraphRenderable:
+	-myLayer
+	-myAnchorPosition
+	-myGame2DAABB
+	-render(inCanvas2DContext, inCameraPoint)
+	
+Tileset:
+-renderTile(id,..)
+-get layer
+-get physics rect
+init([{
+	fileName : 'images/wall_level01_01.png'
+	,anchor : GameEngineLib.createGame2DPoint(32, 32)
+	,layer : 1
+	,physics : GameEngineLib.createGame2DAABB(0, 0, 64, 64)
+	,size : GameEngineLib.createGame2DPoint(96,96)
+}]);
+
+
+////////////////////////////////////////////////////////////////////
+
+SHOULD BE:
+
+QuadTreeItem:
+-getAABB()
+
+Renderable (QuadTreeItem):
+-g/setOwningSceneGraphNodes()
+-lastFrameDrawn
+-s/getLayer
+-AnchorPosition
+-screenPos
+-render(inCanvas2DContext, inCameraRect)//abstract!!
+-???depthSortingPosition //draw order helper?
+
+Tile (Renderable):
+-tileValue
+-render(inCanvas2DContext, inCameraRect)
+
+ImageSheet (Object) //animation/tile
+-fileName //image
+
+TileDescription:
+-tileSheet : ...
+-src rect
+-anchor : GameEngineLib.createGame2DPoint(32, 32)
+-layer : 1
+-physics : GameEngineLib.createGame2DAABB(0, 0, 64, 64)
+//-size : GameEngineLib.createGame2DPoint(96,96)
+
+AnimatedTileDescription:
+...
+
+AnimInstance (Renderable):
+//see anim notes file
+
+
+
+2dbase: //inherit by tiledesc and animframe
+-sourceSheet
+-src rect
+-anchor/origin
+-layer
+-render(pos)
+{
+	Draw(img, (pos-origin)+destRect,srcRecs);
+}
+
+
+
+
+Frame:
+-Src img name/img/sheet
+-Src rect (optional?)
+//-destRect (size)
+-Origin/anchor
+-layer
+-events (sound, phys, etc)
+-render(pos)
+{
+	Draw(img, (pos-origin)+destRect,srcRecs);
+}
+//FrameIns/tile?
+
+Anim:
+-frames[]//shared
+-speed
+-flags (pong, repeat, callback, etc)
+-rect = Forall frames{max rect from origin}
+-render(pos,frame)
+{
+	Frames[frame].render(pos)
+}
+
+AnimInstance (Renderable):
+-anim
+-frameIndex
+-finished callback(s)
+-render()
+{
+	anim.render(pos,frame)
+}
+
+Sprite
+-anims[]
+-animInstance (current)
+-position
+-rect = forall anims {max rect from origin}
+-render()
+{
+	anInst.cur.render(pos)
+}
+-insert per frame, or per sprite?
+//	(draw more clipped or more inserts) => flag to decide!!
+
+
+//tile/sprite? Same render call for graph

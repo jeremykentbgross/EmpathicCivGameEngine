@@ -67,7 +67,7 @@ GameEngineLib.Game2DMap = GameEngineLib.Class(
 		//TODO removed from world? and add remove physics stuff from world?
 
 		getMapLowerRight : function getMapLowerRight()
-		{
+		{//TODO this function should be better done with a member func from aabb/rect I think
 			return GameEngineLib.createGame2DPoint(this._myMapSize, this._myMapSize);
 		},
 

@@ -761,3 +761,4 @@ http://twitter.github.com/bootstrap/index.html
 
 http://backbonejs.org/
 
+TODO: cleanup quad tree, especially for proper cleanup of nodes, with parent/children etc on deletes

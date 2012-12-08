@@ -20,26 +20,6 @@
 */
 
 
-//TODO depricated
-GameEngineLib.createGame2DSceneGraph = function(instance)
-{
-	var property ;
-	var temp = new GameEngineLib.Game2DSceneGraph();
-	instance = instance || {};
-	
-	for(property in temp)
-	{
-		instance[property] = temp[property];
-	}
-	for(property in temp.prototype)
-	{
-		instance[property] = temp.prototype[property];
-	}
-	
-	return instance;
-};
-
-
 //TODO make this class pluggable with other 2d scene graphs?  Or just the sorting part?
 GameEngineLib.Game2DSceneGraph = function Game2DSceneGraph(){};//TODO put init in here?
 GameEngineLib.Game2DSceneGraph.prototype.constructor = GameEngineLib.Game2DSceneGraph;
@@ -64,7 +44,7 @@ GameEngineLib.Game2DSceneGraph.prototype.init = function init(inMapSize, inMinNo
 	/*
 	Change of basis (rotation) transposed because Y axis is down.
 		|cos -sin| Transose	=>	| cos sin|
-		|sin  cos|				=>	|-sin cos|
+		|sin  cos|			=>	|-sin cos|
 	*/
 	this._rotMatrixRow1 = GameEngineLib.createGame2DPoint(this._cos, sin);
 	this._rotMatrixRow2 = GameEngineLib.createGame2DPoint(-sin, this._cos);
@@ -152,9 +132,12 @@ GameEngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DCont
 			
 			var stringDrawOrder = String(i);
 			var stringDistance = String('');
-					//currentRenderable.depthSortingPosition.myX.toFixed(2) + ', ' +
-					//currentRenderable.depthSortingPosition.myY.toFixed(2);
-			
+			/*
+			TODO?? include this or not with a flag??
+			stringDistance =
+				currentRenderable.depthSortingPosition.myX.toFixed(2) + ', ' +
+				currentRenderable.depthSortingPosition.myY.toFixed(2);
+			*/
 			var width = Math.max(
 				inCanvas2DContext.measureText(stringDrawOrder).width,
 				inCanvas2DContext.measureText(stringDistance).width
