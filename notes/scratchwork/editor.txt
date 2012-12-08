@@ -1,0 +1,145 @@
+sprite/tile gen => img, json (ads)
+fb->security (editor)
+upload->userlib (db)
+
+
+
+
+http://www.w3schools.com/jsref/obj_window.asp
+ 
+http://www.w3schools.com/jsref/prop_win_opener.asp
+*edit*:
+myWindow=window.open('',''/*,'width=200,height=100'*/);//in my chrome creates new tab
+
+/////////////////////////
+http://draeton.github.com/stitches/
+https://github.com/draeton/stitches/tree/master/src
+ 
+http://www.html5rocks.com/en/tutorials/file/dndfiles/
+http://www.matlus.com/html5-file-upload-with-progress/
+http://html5doctor.com/drag-and-drop-to-server/
+ 
+ 
+http://jsfiddle.net/pimvdb/eD2Ez/2/
+=>
+$('input').change(function() {
+   
+    var fr = new FileReader;
+   
+    fr.onload = function() {
+        var img = new Image;
+       
+        img.onload = function() {
+            alert(img.width);
+        };
+       
+        img.src = fr.result;
+    };
+   
+    fr.readAsDataURL(this.files[0]);
+   
+});​
+ 
+ 
+ 
+
+ 
+ 
+http://updates.html5rocks.com/2011/08/Saving-generated-files-on-the-client-side
+http://stackoverflow.com/questions/2897619/using-html5-javascript-to-generate-and-save-a-file
+http://www.html5rocks.com/en/tutorials/file/filesystem/
+http://dev.w3.org/2009/dap/file-system/file-writer.html
+http://robnyman.github.com/html5demos/localstorage/
+ 
+ 
+string input: (content)
+uriContent = "data:application/octet-stream," + encodeURIComponent(content);
+newWindow=window.open(uriContent, 'neuesDokument');
+ 
+createObjectURL: function (file) {
+                if (window.URL && window.URL.createObjectURL) {
+                    return window.URL.createObjectURL(file);
+                }
+ 
+                if (window.webkitURL && window.webkitURL.createObjectURL) {
+                    return window.webkitURL.createObjectURL(file);
+                }
+ 
+                /* if we reached here, it's unsupported */
+                throw new Error("createObjectURL is unsupported.")
+            }
+ 
+ 
+http://weblog.bocoup.com/javascript-augmented-reality/
+http://www.libspark.org/svn/js/JSARToolKit/trunk/
+/////////////////////////
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+
+QUESTIONS:
+1) Should anims be just json?
+Pros: public tool w/adds
+2) What about reflection generation?
+Pros: less code in the long run
+
+Sheet img(s):	Anims:	Anim:	FrameFiles:		AnimPreview:
+-------------	-----	-----	-------------	-------------
+|			|	|	|	|	|	|			|	|			|
+|			|	|	|	|	|<=	|			|	|			|
+|			|	|	|	|	|del|			|	|			|
+|			|	|	|	|	|	|			|	|			|
+|			|	|	|	|	|	|			|	|			|
+-------------	-----	-----	-------------	-------------
+
+Anims JSON:		Messages (ie duplicate frame detected, etc)
+-------------	---------
+|			|	|		|
+|			|	|		|
+|			|	|		|
+-------------	---------
+
+
+Change /Game loc:
+-Engine
+--Public
+---EngineLoader.js
+---Scripts
+----Editor //OR it's own directory probably
+----...
+---Images
+---Sounds
+--Private
+---...
+-Game
+--Public
+---GameLoader.js
+---Scripts
+----GameRules.js
+----...
+---Images
+---Sounds
+--Private
+---social network id's, etc
+---obfuscation hints
+---System Settings
+=>
+1) commandline param?: node server.js gamepath
+2) EngineLoader(gamepath) //then replace includes again
+
+---------------------------------------------------------------------------------------------------------------
+---------------------------------------------------------------------------------------------------------------
+
+
+
+-see ht5 sprite sheet gen;
+-editor net locker

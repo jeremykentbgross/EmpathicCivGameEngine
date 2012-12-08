@@ -574,48 +574,6 @@ Code design:
 -chain serializer
 [obj queue] +{obj path "closed list"} use bfs?
 
--Frame:
-.Src img name/img
-.Src rect (optional?)
-.destRect (size)
-.Origin
-.event (sound, phys, etc)
-.render(pos)
-{
-Draw(img, (pos-origin)+destRect,srcRecs);
-}
-//FrameIns/tile?
-
--Anim
-.frames[]//shared
-.speed
-.flags (pong, repeat, callback, etc)
-.rect = Forall frames{max rect from origin}
-.render(pos,frame)
-{
-Frames[frame].render(pos)
-}
-
--AnimInstance
-.anim
-.frameIndex
-.finished callback
-.render()
-{
-anim.render(pos,frame)
-}
-
--Sprite
-.anims[]
-.animInstance (current)
-.position
-.rect = forall anims {max rect from origin}
-.render()
-{
-anInst.cur.render(pos)
-}
-//tile/sprite? Same render call for graph
-//speed:insert per frame, or per sprite? (draw more clipped or more inserts)
 
 -Obj ser delta, ex:
 World
@@ -775,63 +733,31 @@ TODO math.clamp(in,min,max);
 
 
 
----------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------
-
-QUESTIONS:
-1) Should anims be just json?
-Pros: public tool w/adds
-2) What about reflection generation?
-Pros: less code in the long run
-
-Sheet img(s):	Anims:	Anim:	FrameFiles:		AnimPreview:
--------------	-----	-----	-------------	-------------
-|			|	|	|	|	|	|			|	|			|
-|			|	|	|	|	|<=	|			|	|			|
-|			|	|	|	|	|del|			|	|			|
-|			|	|	|	|	|	|			|	|			|
-|			|	|	|	|	|	|			|	|			|
--------------	-----	-----	-------------	-------------
-
-Anims JSON:		Messages (ie duplicate frame detected, etc)
--------------	---------
-|			|	|		|
-|			|	|		|
-|			|	|		|
--------------	---------
-
-
-Change /Game loc:
--Engine
---Public
----EngineLoader.js
----Scripts
-----Editor
-----...
----Images
----Sounds
---Private
----...
--Game
---Public
----GameLoader.js
----Scripts
-----GameRules.js
-----...
----Images
----Sounds
---Private
----social network id's, etc
----obfuscation hints
----System Settings
-=>
-1) commandline param?: node server.js gamepath
-2) EngineLoader(gamepath) //then replace includes again
-
----------------------------------------------------------------------------------------------------------------
----------------------------------------------------------------------------------------------------------------
 
 
 
 
+TODO Exception stacktrace around main ud
+
+
+
+http://everyauth.com/
+http://stackoverflow.com/questions/5765063/node-js-connect-auth-vs-everyauth
+
+(Slightly) Updated test2.html: (graph api) => <img src="https://graph.facebook.com/arzu.czotscher/picture" />
+
+-Replace logs with console print/stack etc for client
+-clean logger
+
+
+
+AssMan.loaded()//%
+Framework.ud()
+-if!loaded&&!streaming
+--loading%
+-else ud()
+
+http://twitter.github.com/bootstrap/index.html
+
+http://backbonejs.org/
 
