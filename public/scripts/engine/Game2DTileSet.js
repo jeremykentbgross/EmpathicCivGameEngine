@@ -19,6 +19,8 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
+//TODO should be merged with Map class
 GameEngineLib.Game2DTileSet = GameEngineLib.Class(
 {
 	Constructor : function Game2DTileSet()

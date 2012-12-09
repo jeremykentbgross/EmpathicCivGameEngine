@@ -41,7 +41,7 @@ GameEngineLib.GameQuadTree.create = function create()
 };
 
 
-
+//TODO get rid of init and create and just new this mother fucker
 //TODO rename gameRect treeItemBoundRect or something like that
 GameEngineLib.GameQuadTree.prototype.init = function init(inGame2DAABB, inMinSize)
 {

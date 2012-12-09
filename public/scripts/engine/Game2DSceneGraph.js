@@ -89,8 +89,8 @@ GameEngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DCont
 			if(frameCount > item.lastFrameDrawn)
 			{
 				//calculate depth sorting position for this frame
-				item.screenPos = item.myAnchorPosition.subtract(inCameraRect.getLeftTop());
-				item.depthSortingPosition = GameEngineLib.createGame2DPoint(
+				item.screenPos = item.anchorPosition.subtract(inCameraRect.getLeftTop());
+				item.drawOrderHelper = GameEngineLib.createGame2DPoint(
 					item.screenPos.dot(_this_._rotMatrixRow1),
 					item.screenPos.dot(_this_._rotMatrixRow2)
 				);
@@ -105,10 +105,10 @@ GameEngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DCont
 	renderables.sort(
 		function(inLeft, inRight)
 		{				
-			var vec = inLeft.depthSortingPosition.subtract(inRight.depthSortingPosition);
+			var vec = inLeft.drawOrderHelper.subtract(inRight.drawOrderHelper);
 			
 			return (vec.myY * _this_._myMapSize * _this_._cos + vec.myX) +
-				(_this_._myMapSize * _this_._myMapSize) * (inLeft.myLayer - inRight.myLayer);
+				(_this_._myMapSize * _this_._myMapSize) * (inLeft.layer - inRight.layer);
 		}
 	);
 	
@@ -135,8 +135,8 @@ GameEngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DCont
 			/*
 			TODO?? include this or not with a flag??
 			stringDistance =
-				currentRenderable.depthSortingPosition.myX.toFixed(2) + ', ' +
-				currentRenderable.depthSortingPosition.myY.toFixed(2);
+				currentRenderable.drawOrderHelper.myX.toFixed(2) + ', ' +
+				currentRenderable.drawOrderHelper.myY.toFixed(2);
 			*/
 			var width = Math.max(
 				inCanvas2DContext.measureText(stringDrawOrder).width,

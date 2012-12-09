@@ -21,16 +21,17 @@
 
 
 //This is actually almost more of an interface!
-GameEngineLib.Class({
-	Constructor : GameRenderable2D()
+GameEngineLib.GameRenderable2D = GameEngineLib.Class({
+	Constructor : function GameRenderable2D()
 	{
-		//this.GameQuadTreeItem(...);
-		this._sceneGraphOwningNodes = null;	//currently sceneGraphOwningNodes
+		this.GameQuadTreeItem(/*aabb*/);
+		//TODO maybe should have get functions for all these instead?
+		this.sceneGraphOwningNodes = null;	//array of nodes containing this renderable in the scene graph
 		this.lastFrameDrawn = -1;
-		this. = ;	//currently myLayer
-		this. = ;	//current myAnchorPosition
-		this. = ;	//current screenPos
-		this. = ;	//currently depthSortingPosition, should be drawOrderHelper?
+		this.layer = 0;
+		this.anchorPosition = new GameEngineLib.Game2DPoint();
+		this.screenPos = new GameEngineLib.Game2DPoint();
+		this.drawOrderHelper = null;
 	},
 	Parents : [GameEngineLib.GameQuadTreeItem],
 	flags : {},
@@ -38,20 +39,9 @@ GameEngineLib.Class({
 	ChainDown : [],
 	Definition :
 	{
-		render function render(inCanvas2DContext, inCameraRect)//abstract!!
+		render : function render(inCanvas2DContext, inCameraRect)//abstract!!
 		{
 			gameAssert(false, "This method must be overridden");
-		},
-		
-		getOwningSceneGraphNodes : function getOwningSceneGraphNodes()
-		{
-			return this._sceneGraphOwningNodes;
-		},
-		setOwningSceneGraphNodes : function setOwningSceneGraphNodes(inSceneGraphOwningNodes)
-		{
-			this._sceneGraphOwningNodes = inSceneGraphOwningNodes;
 		}
-		
-		//get/set stuff?
 	}
 });

@@ -59,6 +59,7 @@ GameEngineLib.Game2DPoint.prototype.subtract = function subtract(inOther)
 	return new GameEngineLib.Game2DPoint(this.myX - inOther.myX, this.myY - inOther.myY);
 };
 
+//TODO rename scale
 GameEngineLib.Game2DPoint.prototype.multiply = function multiply(inScalar)
 {
 	return new GameEngineLib.Game2DPoint(this.myX * inScalar, this.myY * inScalar);

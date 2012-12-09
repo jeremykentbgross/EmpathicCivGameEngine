@@ -80,6 +80,7 @@ Renderable (QuadTreeItem):
 
 Tile (Renderable):
 -tileValue
+-physicsObj
 -render(inCanvas2DContext, inCameraRect)
 
 ImageSheet (Object) //animation/tile

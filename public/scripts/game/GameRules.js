@@ -97,7 +97,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		{
 			for(j = 0; j < mapSizeInTiles; ++j)
 			{
-				map.setTile(i, j, (i+j)%5);
+				map.setTile(new GameEngineLib.Game2DPoint(i, j), (i+j)%5);
 			}
 		}
 		
@@ -388,18 +388,11 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		
 		if(inInputEvent.buttons[2])
 		{
-			map.clearTile(
-				map.toTileCoordinate(mouseWorldPosition.myX),
-				map.toTileCoordinate(mouseWorldPosition.myY)
-			);
+			map.clearTile(map.toTileCoordinate(mouseWorldPosition));
 		}
 		if(inInputEvent.buttons[0])
 		{
-			map.setTile(
-				map.toTileCoordinate(mouseWorldPosition.myX),
-				map.toTileCoordinate(mouseWorldPosition.myY),
-				PRIVATE.drawTile
-			);
+			map.setTile(map.toTileCoordinate(mouseWorldPosition), PRIVATE.drawTile);
 		}
 		
 		PRIVATE.lastMouseWorldPosition = mouseWorldPosition;

@@ -176,6 +176,8 @@ GameLoader =
 		include(inSharedPath + "scripts/engine/Game2DAABB.js");
 		include(inSharedPath + "scripts/engine/Game2DPoint.js");
 		include(inSharedPath + "scripts/engine/GameQuadTree.js");
+		include(inSharedPath + "scripts/engine/GameRenderable2D.js");
+		include(inSharedPath + "scripts/engine/GameRenderableTile2D.js");
 		include(inSharedPath + "scripts/engine/Game2DSceneGraph.js");
 		include(inSharedPath + "scripts/engine/Game2DMap.js");
 		include(inSharedPath + "scripts/engine/Game2DPhysics.js");

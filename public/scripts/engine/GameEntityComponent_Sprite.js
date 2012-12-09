@@ -67,8 +67,8 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
 			var _this_ = this;
 			this._sceneGraphRenderable =//TODO need a better class for thie renderable thing
 			{
-				myLayer : 1,//TODO this should always be odd
-				myAnchorPosition : GameEngineLib.createGame2DPoint(),//TODO rename as sort position
+				layer : 1,//TODO this should always be odd
+				anchorPosition : GameEngineLib.createGame2DPoint(),//TODO rename as sort position
 				AABB : GameEngineLib.createGame2DAABB(0, 0, /*64*/96,/*HACK*/ 96/*HACK*/),
 				getAABB : function getAABB(){return this.AABB;},//TODO inherit GameEngineLib.GameQuadTreeItem
 				render : function(inCanvas2DContext, inCameraPoint)
@@ -135,7 +135,7 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
 			//this._sceneGraphRenderable.AABB.setLeftTop(this._position.add(this._myFrames[this._myCurrentFrame].offset));
 			
 			this._position = inEvent.position;
-			this._sceneGraphRenderable.myAnchorPosition = inEvent.boundingRect.getLeftTop();//inEvent.position;
+			this._sceneGraphRenderable.anchorPosition = inEvent.boundingRect.getLeftTop();//inEvent.position;
 			this._sceneGraphRenderable.AABB.setLeftTop(inEvent.position.add(this._myFrames[this._myCurrentFrame].offset));
 			
 			//TODO change renderable position everywhere it should change
