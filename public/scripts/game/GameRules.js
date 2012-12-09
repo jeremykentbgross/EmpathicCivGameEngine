@@ -265,18 +265,56 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		}
 		
 		
-		
-		
-		
+		//HACK!!!!!!!!!!!!!!!//HACK!!!!!!!!!!!!!!!//HACK!!!!!!!!!!!!!!!
+		if(!GameSystemVars.Network.isServer)
+		{
+			//HACK!!!!!!!!!!!!!!!
+			var i, frames = [];
+			for(i = 0; i < 8; ++i)
+			{
+				frames.push(
+					GameEngineLib.Animation2DFrame.create().init(
+						new GameEngineLib.Game2DAABB(96 * (i + 1), 0, 96/* +(i*10)*/, 96/* +(i*10)*/),
+						new GameEngineLib.Game2DPoint(64/* + (i % 4)*/, 64/* + (i % 4)*/)
+					)
+				);
+			}
+			instance.anim = new GameEngineLib.Animation2D();
+			instance.anim.init('images/test_anims_run/jogSheet.png', 10, frames);
+			instance.pos = new GameEngineLib.Game2DPoint(128,128);
+			//instance.frame = 0;
+			instance.animInst = new GameEngineLib.Animation2DInstance();
+			instance.animInst.animation = instance.anim;
+			GameInstance.UpdateOrder.push(instance.animInst);
+		}//HACK!!!!!!!!!!!!!!!//HACK!!!!!!!!!!!!!!!//HACK!!!!!!!!!!!!!!!
 		
 		return true;
 	};
 	
+
 	
 	instance.render = function(inCanvas2DContext)
 	{
 		//choose items to render
 		PRIVATE.GameWorld.render(inCanvas2DContext);
+		
+		//HACK		
+		/*instance.anim*/instance.animInst.render(
+			inCanvas2DContext,
+			PRIVATE.GameWorld.getCurrentCamera().getRect(),
+			instance.frame % instance.anim.getFrameCount(),
+			instance.pos
+		);
+		/*instance.anim*/instance.animInst.debugDraw(
+			inCanvas2DContext,
+			PRIVATE.GameWorld.getCurrentCamera().getRect(),
+			instance.frame % instance.anim.getFrameCount(),
+			instance.pos
+		);
+		instance.animInst.anchorPosition = instance.pos;
+		//instance.pos.myX += 1;
+		//instance.pos.myY += 1;
+		//instance.frame++;
 	};
 	
 	

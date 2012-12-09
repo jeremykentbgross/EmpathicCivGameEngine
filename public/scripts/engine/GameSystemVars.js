@@ -145,6 +145,10 @@ GameSystemVars = //TODO rename as GameSystemSettings
 		Sound_Listener_Size : 20,//TODO this should be in the regular sound part!??
 		Sound_Source_Size : 10,
 		
+		Sprite_AABB_DrawColor : 'rgba(128, 0, 0, 1)',
+		Sprite_Origin_DrawColor : 'rgba(0, 128, 0, 1)',
+		Sprite_Origin_Size : 10,
+		
 		//TODO search for rgba in all files		
 		
 		//Network

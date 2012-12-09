@@ -119,6 +119,26 @@ GameEngineLib.Game2DAABB.prototype.getIntersection = function getIntersection(in
 
 
 
+GameEngineLib.Game2DAABB.prototype.getUnion = function getUnion(inOtherRect)
+{
+	var returnRect = new GameEngineLib.Game2DAABB();
+	returnRect.setLeftTop(
+		new GameEngineLib.Game2DPoint(
+			Math.min(this.myX, inOtherRect.myX),
+			Math.min(this.myY, inOtherRect.myY)
+		)
+	);
+	returnRect.setRightBottom(
+		new GameEngineLib.Game2DPoint(
+			Math.max(this.myX + this.myWidth, inOtherRect.myX + inOtherRect.myWidth),
+			Math.max(this.myY + this.myHeight, inOtherRect.myY + inOtherRect.myHeight)
+		)
+	);
+	return returnRect;
+};
+
+
+
 GameEngineLib.Game2DAABB.prototype.getArea = function getArea()
 {
 	return this.myWidth * this.myHeight;
@@ -168,6 +188,14 @@ GameEngineLib.Game2DAABB.prototype.getBottom = function getBottom()
 GameEngineLib.Game2DAABB.prototype.getRightBottom = function getRightBottom()
 {
 	return GameEngineLib.createGame2DPoint(this.myX + this.myWidth, this.myY + this.myHeight);
+};
+
+
+
+GameEngineLib.Game2DAABB.prototype.setRightBottom = function getRightBottom(inPoint)
+{
+	this.myWidth = Math.max(inPoint.myX - this.myX, 0);
+	this.myHeight = Math.max(inPoint.myY - this.myY, 0);
 };
 
 

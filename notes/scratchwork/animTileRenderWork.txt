@@ -83,6 +83,9 @@ Tile (Renderable):
 -physicsObj
 -render(inCanvas2DContext, inCameraRect)
 
+
+
+
 ImageSheet (Object) //animation/tile
 -fileName //image
 
@@ -102,7 +105,7 @@ AnimInstance (Renderable):
 
 
 
-2dbase: //inherit by tiledesc and animframe
+2dbase: //inherit by tiledesc and animframe??
 -sourceSheet
 -src rect
 -anchor/origin
@@ -117,10 +120,9 @@ AnimInstance (Renderable):
 
 Frame:
 -Src img name/img/sheet
--Src rect (optional?)
+-Src rect
 //-destRect (size)
 -Origin/anchor
--layer
 -events (sound, phys, etc)
 -render(pos)
 {
@@ -131,7 +133,6 @@ Frame:
 Anim:
 -frames[]//shared
 -speed
--flags (pong, repeat, callback, etc)
 -rect = Forall frames{max rect from origin}
 -render(pos,frame)
 {
@@ -141,6 +142,7 @@ Anim:
 AnimInstance (Renderable):
 -anim
 -frameIndex
+-flags (pong, repeat, callback, etc)
 -finished callback(s)
 -render()
 {
