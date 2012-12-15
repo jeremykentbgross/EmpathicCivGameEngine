@@ -244,10 +244,11 @@ GameEngineLib.GameEvent_RequestVelocity = GameEngineLib.Class({
 
 
 GameEngineLib.GameEvent_UpdatePosition = GameEngineLib.Class({
-	Constructor : function UpdatePosition(inPos, inAABB)
+	Constructor : function UpdatePosition(inPos, inVel, inAABB)
 	{
 		this.GameEvent('onUpdatePosition');
 		this.position = inPos;
+		this.velocity = inVel;
 		this.boundingRect = inAABB;//TODO rename boundingRect => aabb
 	},
 	Parents : [GameEngineLib.GameEvent],

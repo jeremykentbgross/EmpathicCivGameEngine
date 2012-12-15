@@ -97,9 +97,61 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		{
 			for(j = 0; j < mapSizeInTiles; ++j)
 			{
-				map.setTile(new GameEngineLib.Game2DPoint(i, j), (i+j)%5);
+				if(i === 0 || j === 0 || i === mapSizeInTiles - 1 || j === mapSizeInTiles - 1)
+					map.setTile(new GameEngineLib.Game2DPoint(i, j), /*(i+j)%5*/4);
+				else
+					map.setTile(new GameEngineLib.Game2DPoint(i, j), /*(i+j)%5*/2);
 			}
 		}
+		
+		//HACK!!!!!!!!!!!!!!!//HACK!!!!!!!!!!!!!!!//HACK!!!!!!!!!!!!!!!
+		var animations = [];
+		if(!GameSystemVars.Network.isServer)
+		{
+			
+			var frames = [], animation;
+			for(j = 0; j < 8; ++j)
+			{
+				frames = [];
+				for(i = 0; i < 8; ++i)
+				{
+					frames.push(
+						GameEngineLib.Animation2DFrame.create().init(
+							new GameEngineLib.Game2DAABB(96 * (i + 1), 96 * j, 96, 96),
+							new GameEngineLib.Game2DPoint(32, 32)
+						)
+					);
+				}
+				animation = new GameEngineLib.Animation2D();
+				animation.init('images/test_anims_run/jogSheet.png', 10, frames);
+				
+				animations.push(animation);
+			}
+			
+			for(j = 0; j < 8; ++j)
+			{
+				frames = [];
+				frames.push(
+					GameEngineLib.Animation2DFrame.create().init(
+						new GameEngineLib.Game2DAABB(0, 96 * j, 96, 96),
+						new GameEngineLib.Game2DPoint(32, 32)
+					)
+				);
+				animation = new GameEngineLib.Animation2D();
+				animation.init('images/test_anims_run/jogSheet.png', 10, frames);
+				
+				animations.push(animation);
+			}
+			
+			instance.anim = animations[15];
+			instance.pos = new GameEngineLib.Game2DPoint(128,128);
+			instance.animInst = new GameEngineLib.Animation2DInstance();
+			instance.animInst.setAnimation(instance.anim);
+			GameInstance.UpdateOrder.push(instance.animInst);
+			//instance.frame = 0;
+		}//HACK!!!!!!!!!!!!!!!//HACK!!!!!!!!!!!!!!!//HACK!!!!!!!!!!!!!!!
+		
+		
 		
 		//todo add entities to world
 		
@@ -107,7 +159,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		//TODO test adding components and world in different orders
 		PRIVATE.entity1 = GameEngineLib.GameEntity.create();
 		PRIVATE.entity1Sprite = GameEngineLib.EntityComponent_Sprite.create();
-		PRIVATE.entity1Sprite.init();
+		PRIVATE.entity1Sprite.init(animations);
 		PRIVATE.entity1.addComponent(PRIVATE.entity1Sprite);
 		PRIVATE.entity1Input = GameEngineLib.EntityComponent_Input.create();
 		PRIVATE.entity1.addComponent(PRIVATE.entity1Input);
@@ -263,31 +315,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 				PRIVATE
 			);
 		}
-		
-		
-		//HACK!!!!!!!!!!!!!!!//HACK!!!!!!!!!!!!!!!//HACK!!!!!!!!!!!!!!!
-		if(!GameSystemVars.Network.isServer)
-		{
-			//HACK!!!!!!!!!!!!!!!
-			var i, frames = [];
-			for(i = 0; i < 8; ++i)
-			{
-				frames.push(
-					GameEngineLib.Animation2DFrame.create().init(
-						new GameEngineLib.Game2DAABB(96 * (i + 1), 0, 96/* +(i*10)*/, 96/* +(i*10)*/),
-						new GameEngineLib.Game2DPoint(64/* + (i % 4)*/, 64/* + (i % 4)*/)
-					)
-				);
-			}
-			instance.anim = new GameEngineLib.Animation2D();
-			instance.anim.init('images/test_anims_run/jogSheet.png', 10, frames);
-			instance.pos = new GameEngineLib.Game2DPoint(128,128);
-			//instance.frame = 0;
-			instance.animInst = new GameEngineLib.Animation2DInstance();
-			instance.animInst.animation = instance.anim;
-			GameInstance.UpdateOrder.push(instance.animInst);
-		}//HACK!!!!!!!!!!!!!!!//HACK!!!!!!!!!!!!!!!//HACK!!!!!!!!!!!!!!!
-		
+				
 		return true;
 	};
 	
@@ -299,19 +327,15 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		PRIVATE.GameWorld.render(inCanvas2DContext);
 		
 		//HACK		
-		/*instance.anim*/instance.animInst.render(
+//		instance.animInst.render(
+//			inCanvas2DContext,
+//			PRIVATE.GameWorld.getCurrentCamera().getRect()
+//		);
+		/*instance.animInst.debugDraw(
 			inCanvas2DContext,
-			PRIVATE.GameWorld.getCurrentCamera().getRect(),
-			instance.frame % instance.anim.getFrameCount(),
-			instance.pos
-		);
-		/*instance.anim*/instance.animInst.debugDraw(
-			inCanvas2DContext,
-			PRIVATE.GameWorld.getCurrentCamera().getRect(),
-			instance.frame % instance.anim.getFrameCount(),
-			instance.pos
-		);
-		instance.animInst.anchorPosition = instance.pos;
+			PRIVATE.GameWorld.getCurrentCamera().getRect()
+		);*/
+//		instance.animInst.anchorPosition = instance.pos;
 		//instance.pos.myX += 1;
 		//instance.pos.myY += 1;
 		//instance.frame++;
@@ -401,6 +425,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		{
 			GameSystemVars.Debug.Input_Draw = !GameSystemVars.Debug.Input_Draw;
 		}
+		//TODO drawing debug sprite, debug audio
 		
 		
 		if(inInputEvent.keysPressed['0'])

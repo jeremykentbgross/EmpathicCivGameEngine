@@ -137,12 +137,13 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 			//TODO clear position?
 		},
 		
-		onPhysObjectUpdate : function onPhysObjectUpdate(physicsUpdateInfo)
+		onPhysObjectUpdate : function onPhysObjectUpdate(physicsUpdateInfo)//TODO maybe this should be the event!
 		{
 			//TODO use GameEvent! Make collection of known game events!
 			this._owner.onEvent(
 				new GameEngineLib.GameEvent_UpdatePosition(
 					physicsUpdateInfo.position.clone(),
+					physicsUpdateInfo.velocity.clone(),
 					physicsUpdateInfo.boundingRect.clone()
 				)
 			);

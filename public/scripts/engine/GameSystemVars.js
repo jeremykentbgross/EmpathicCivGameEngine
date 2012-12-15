@@ -140,13 +140,14 @@ GameSystemVars = //TODO rename as GameSystemSettings
 		
 		//Sound:
 		Sound_Print : true,
-		Sound_Area_Draw : true,
+		Sound_Area_Draw : false,
 		Sound_Area_DrawColor : 'rgba(255, 128, 0, 1)',
 		Sound_Listener_Size : 20,//TODO this should be in the regular sound part!??
 		Sound_Source_Size : 10,
 		
-		Sprite_AABB_DrawColor : 'rgba(128, 0, 0, 1)',
-		Sprite_Origin_DrawColor : 'rgba(0, 128, 0, 1)',
+		Sprite_Draw : false,
+		Sprite_AABB_DrawColor : 'rgba(256, 128, 128, 1)',
+		Sprite_Origin_DrawColor : 'rgba(256, 128, 128, 1)',
 		Sprite_Origin_Size : 10,
 		
 		//TODO search for rgba in all files		

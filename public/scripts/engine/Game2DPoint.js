@@ -85,7 +85,8 @@ GameEngineLib.Game2DPoint.prototype.lenSq = function lenSq()
 	return this.myX * this.myX + this.myY * this.myY;
 };
 
-GameEngineLib.Game2DPoint.prototype.len = function len()
+GameEngineLib.Game2DPoint.prototype.len =
+GameEngineLib.Game2DPoint.prototype.length = function length()
 {
 	return Math.sqrt(this.myX * this.myX + this.myY * this.myY);
 };

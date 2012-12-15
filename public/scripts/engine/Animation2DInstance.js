@@ -23,7 +23,7 @@ GameEngineLib.Animation2DInstance = GameEngineLib.Class({
 	Constructor : function Animation2DInstance()
 	{
 		this.GameRenderable2D();
-		this.animation = null;
+		this._animation = null;
 		this._currentFrame = 0;
 		this._timeAccumulator = 0;
 		//TODO flags (pong, repeat, callback, etc)
@@ -40,20 +40,43 @@ GameEngineLib.Animation2DInstance = GameEngineLib.Class({
 		update : function update(inDT)
 		{
 			this._timeAccumulator += inDT;
-			//accum / 1000 (== seconds) * frameRate (==frames)
-			this._currentFrame = Math.floor((this._timeAccumulator / 1000) * this.animation.getFrameRate());
-			this._currentFrame = this._currentFrame % this.animation.getFrameCount();
+			//Note: accum / 1000 => seconds; seconds * frameRate => frames
+			this._currentFrame = Math.floor((this._timeAccumulator / 1000) * this._animation.getFrameRate());
+			this._currentFrame = this._currentFrame % this._animation.getFrameCount();
+			//TODO handle pinglong, loop or not, etc with callback(s)
+		},
+		
+		getAABB : function getAABB()
+		{
+			//TODO make set function for anchorPosition so this can be updated ONLY when it is needed!
+			//OPT: This is SUPER inoptimal
+			return new GameEngineLib.Game2DAABB(
+				this._AABB.myX + this.anchorPosition.myX,
+				this._AABB.myY + this.anchorPosition.myY,
+				this._AABB.myWidth,
+				this._AABB.myHeight
+			);
+		},
+		
+		setAnimation : function setAnimation(inAnimation)
+		{
+			this._animation = inAnimation;
+			this._AABB = inAnimation.getAABB();
 		},
 		
 		//TODO getFrameEvents(frameNum)
 		
 		render : function render(inCanvas2DContext, inCameraRect)
 		{
-			this.animation.render(inCanvas2DContext, inCameraRect, this._currentFrame, this.anchorPosition);
+			this._animation.render(inCanvas2DContext, inCameraRect, this._currentFrame, this.anchorPosition);
+			if(GameSystemVars.Debug.Sprite_Draw)
+			{
+				this.debugDraw(inCanvas2DContext, inCameraRect);
+			}
 		},
 		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect)
 		{
-			this.animation.debugDraw(inCanvas2DContext, inCameraRect, this._currentFrame, this.anchorPosition);
+			this._animation.debugDraw(inCanvas2DContext, inCameraRect, this._currentFrame, this.anchorPosition);
 		}
 	}
 });

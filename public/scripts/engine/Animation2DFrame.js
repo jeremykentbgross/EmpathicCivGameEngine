@@ -40,6 +40,7 @@ GameEngineLib.Animation2DFrame = GameEngineLib.Class({
 	{
 		//TODO update()//fires frame events OR getEvents()
 		
+		//TODO rename origin anchor? have anchor and origin?
 		init : function init(inSrcRect, inOrigin /*TODO flags, other?*/)
 		{
 			this._sourceRect.copyFrom(inSrcRect);
@@ -84,7 +85,7 @@ GameEngineLib.Animation2DFrame = GameEngineLib.Class({
 			halfSize = GameSystemVars.Debug.Sprite_Origin_Size / 2;
 			
 			//draw AABB
-			inCanvas2DContext.fillStyle = GameSystemVars.Debug.Sprite_AABB_DrawColor;
+			inCanvas2DContext.strokeStyle = GameSystemVars.Debug.Sprite_AABB_DrawColor;
 			inCanvas2DContext.strokeRect(
 				dest.myX,
 				dest.myY,

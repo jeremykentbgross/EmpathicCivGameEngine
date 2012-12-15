@@ -53,7 +53,7 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
 	
 	Definition :
 	{
-		init : function()
+		init : function(inAnimations)
 		{
 			//var i = 0;
 			//for(i = 0; i < this._myFiles.length; ++i)
@@ -63,27 +63,35 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
 			//}
 			
 			//this._sceneGraphRenderable.myPosition********
+			this._animations = inAnimations;
+			this._currentAnimation = 8;
+			
+			this._sceneGraphRenderable = new GameEngineLib.Animation2DInstance();
+			this._sceneGraphRenderable.setAnimation(inAnimations[0]);
+			GameInstance.UpdateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
+			this._sceneGraphRenderable.layer = 1;
+			
 			
 			var _this_ = this;
-			this._sceneGraphRenderable =//TODO need a better class for thie renderable thing
-			{
-				layer : 1,//TODO this should always be odd
-				anchorPosition : GameEngineLib.createGame2DPoint(),//TODO rename as sort position
-				AABB : GameEngineLib.createGame2DAABB(0, 0, /*64*/96,/*HACK*/ 96/*HACK*/),
-				getAABB : function getAABB(){return this.AABB;},//TODO inherit GameEngineLib.GameQuadTreeItem
-				render : function(inCanvas2DContext, inCameraPoint)
-				{
-					var renderPoint = _this_._myFrames[_this_._myCurrentFrame].offset.
-						add(_this_._position/*this.myPosition*/).
-						subtract(inCameraPoint);
-					//TODO debug print that this is not clipped (global debug vars)
-					inCanvas2DContext.drawImage(
-						_this_._myFrames[_this_._myCurrentFrame].image,
-						renderPoint.myX,
-						renderPoint.myY
-					);
-				}
-			};
+			// this._sceneGraphRenderable =//TODO need a better class for thie renderable thing
+			// {
+				// layer : 1,//TODO this should always be odd
+				// anchorPosition : GameEngineLib.createGame2DPoint(),//TODO rename as sort position
+				// AABB : GameEngineLib.createGame2DAABB(0, 0, /*64*/96,/*HACK*/ 96/*HACK*/),
+				// getAABB : function getAABB(){return this.AABB;},//TODO inherit GameEngineLib.GameQuadTreeItem
+				// render : function(inCanvas2DContext, inCameraPoint)
+				// {
+					// var renderPoint = _this_._myFrames[_this_._myCurrentFrame].offset.
+						// add(_this_._position/*this.myPosition*/).
+						// subtract(inCameraPoint);
+					// //TODO debug print that this is not clipped (global debug vars)
+					// inCanvas2DContext.drawImage(
+						// _this_._myFrames[_this_._myCurrentFrame].image,
+						// renderPoint.myX,
+						// renderPoint.myY
+					// );
+				// }
+			// };
 		},
 		//TODO update!!!!!!!!!!!!!!!!!!!!!!!!!!!!??
 		
@@ -136,7 +144,44 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
 			
 			this._position = inEvent.position;
 			this._sceneGraphRenderable.anchorPosition = inEvent.boundingRect.getLeftTop();//inEvent.position;
-			this._sceneGraphRenderable.AABB.setLeftTop(inEvent.position.add(this._myFrames[this._myCurrentFrame].offset));
+		//	this._sceneGraphRenderable.anchorPosition.copyFrom(inEvent.position/*.add(this._myFrames[this._myCurrentFrame].offset)*/);
+			
+			if(inEvent.velocity.length() < 0.9)
+			{
+				if(this._currentAnimation < 8)
+				{
+					this._currentAnimation += 8;
+				}
+				this._sceneGraphRenderable.setAnimation(this._animations[this._currentAnimation]);
+			}
+			else
+			{
+				var direction = inEvent.velocity.unit();
+				var angle = 0;
+				var directions =
+				[
+					new GameEngineLib.Game2DPoint(Math.cos(angle), Math.sin(angle)),
+					new GameEngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new GameEngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new GameEngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new GameEngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new GameEngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new GameEngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new GameEngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+				];
+				var animProb = 0;
+				var bestAnimProb = 0;
+				for(var i = 0; i < 8; ++i)
+				{
+					animProb = directions[i].dot(direction);
+					if(animProb > bestAnimProb)
+					{
+						bestAnimProb = animProb;
+						this._currentAnimation = i;
+					}
+				}
+				this._sceneGraphRenderable.setAnimation(this._animations[this._currentAnimation]);
+			}
 			
 			//TODO change renderable position everywhere it should change
 			

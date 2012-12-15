@@ -51,7 +51,12 @@ GameEngineLib.Animation2D = GameEngineLib.Class({
 			{
 				this._AABB = this._AABB.getUnion(inFrames[i].getAABB());
 			}
-		},		
+		},
+		
+		getAABB : function getAABB()
+		{
+			return this._AABB;
+		},
 		
 		//TODO getFrameEvents(frameNum)
 		
