@@ -70,3 +70,102 @@ Minions
 Pits
 
 ---------
+
+
+
+
+
+Feeling:
+Nastalgia; unidentifiable dreamlike famiarity!
+
+Background effect on players: 
+positive optimistic constructive team work, creativity, exploration, and individual+group problem solving
+
+Gameplay:
+"Link to the past" as a class based team e-sport with elements of tower defense, dota, and dungeon keeper; with a sprinkling of team fortress 2, starcraft and battlefield.
+
+Visual style:
+Fat Princess meets Star Wars with a tiny bit of Startrek Voyager
+
+Setting:
+You are the core members of a cutting edge team of space explorers charged with crewing starships and serving as away team members.
+(see also Ns2; Ftl)
+
+Classes (away):
+-Demolitions
+-Shield master
+-Recon
+-Biologist / Nano eng
+-Weapon master
+
+Demolitions:
+-Bomber man
+-Remote mines
+-Proximity mines
+-Grenade launcher
+-Tunneler
+
+Shield master:
+-Link shield
+-Force field (doors, bridges)
+-AoE force field bubble
+-Force field wall
+-Strong melee
+
+Recon/Intel:
+-Fast, swimmer, climber, grapplehook (?)
+-Cams
+-Portals?
+-Pistols/klob
+-Scanners
+-Cloak (single, AoE)
+-Sniper?
+-Infiltrator/Assasin?
+
+Biologist / Nano eng:
+-Spawners
+-Heal AoE
+-Heal Target
+-Bio Grenades AoE DoT
+(black/white damage?)
+-Resource lines
+-MC's
+
+Weapons master:
+-Rockets
+-Flame
+-Heavy chain
+-Power Reactors
+
+//servers?? Split nano/bio?? Hunger? O2?
+
+Resources:
+-Energy
+-Cloud computing
+-Raw Matter (types? Fuel, light, heavy)
+
+Access terminals:
+(controls)
+-doors
+-turrets
+-research
+-etc
+
+Classes (aboard):
+-...
+
+Todo consider player type matrix:
+Killer, explorer, collector, socializer
+
+Commander!!!!
+
+Rift soul upgrades (summoners)
+Ex: Demo miner bots
+
+Diablo augments
+
+Starwars begining css + alert level
+
+Tractor beams! (shield grapple)
+
+High debris large orbits! BSG style Jumps!

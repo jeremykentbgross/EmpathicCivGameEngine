@@ -762,3 +762,44 @@ http://twitter.github.com/bootstrap/index.html
 http://backbonejs.org/
 
 TODO: cleanup quad tree, especially for proper cleanup of nodes, with parent/children etc on deletes
+
+
+QA: http://www.gamecloud-ltd.com/?goback=%2Egde_81635_member_188492208
+
+artist: https://pathbrite.com/portfolio/PPsMfPBX9
+
+artist: http://www.thequarantinestudio.com/
+
+research: http://www.hopelab.org/our-research/
+
+
+Class(object).registerDecendantClasses();
+Class.registerChild()
+
+Ubuntu on usb?
+
+Context2d wrapper? (need to round draw coords)
+
+Game.EngineLib
+Game.Settings
+Game.UnitTests
+Game.Logger
+Game.RulesLib
+Game.Instance
+Game.Server
+Game.ClassReg??
+Game.assert
+Game.localization
+
+Updater Objects
+
+RulesBase
+
+Chat class
+
+WalkDecendantHeirarchy (registers unit tests and objects, etc)
+
+Settings.isDebugxxx(){return settings.debug && this.xxxflag;}
+
+
+
