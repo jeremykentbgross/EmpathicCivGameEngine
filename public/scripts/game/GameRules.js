@@ -106,7 +106,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		
 		//HACK!!!!!!!!!!!!!!!//HACK!!!!!!!!!!!!!!!//HACK!!!!!!!!!!!!!!!
 		var animations = [];
-		if(!GameSystemVars.Network.isServer)
+		//if(!GameSystemVars.Network.isServer)
 		{
 			
 			var frames = [], animation;

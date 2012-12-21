@@ -42,7 +42,10 @@ GameEngineLib.Animation2D = GameEngineLib.Class({
 		{
 			var i;
 			
-			GameInstance.AssetManager.loadImage(inImageName, this);
+			if(!GameSystemVars.Network.isServer)
+			{
+				GameInstance.AssetManager.loadImage(inImageName, this);
+			}
 			
 			this._frameRate = inFrameRate;
 			this._animFrames = inFrames;

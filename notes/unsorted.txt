@@ -801,5 +801,7 @@ WalkDecendantHeirarchy (registers unit tests and objects, etc)
 
 Settings.isDebugxxx(){return settings.debug && this.xxxflag;}
 
+http://package.json.jit.su/
+
 
 

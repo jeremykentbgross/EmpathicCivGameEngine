@@ -1,0 +1,19 @@
+{
+	"name" : "EmpathicCivGameEngine",
+	"description": "EmpathicCivilGameEngine is an HTML5 / CSS3 / Nodejs Game Engine.",
+	"version" : "0.0.1",
+	"author" : "Jeremy Gross <jeremykentbgross@gmail.com>",
+	"private" : true,
+	"contributors" :
+	[{
+		"name" : "Jeremy Gross",
+		"email" : "jeremykentbgross@gmail.com"
+	}],
+	"dependencies" :
+	{
+		"express": "3.0.5",
+		"socket.io" : "0.8.7",
+		"node-inspector" : "0.1.10"
+	}
+}
+
