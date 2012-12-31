@@ -58,16 +58,16 @@ GameLib.createGameRules = function(instance, PRIVATE)
 					,size : GameEngineLib.createGame2DPoint(64,64)
 				},
 				{
-					fileName : 'images/water.png'
+					fileName : 'images/test/waterSub.png' //'images/water.png'
 					,anchor : GameEngineLib.createGame2DPoint()
 					,layer : 0
-					,size : GameEngineLib.createGame2DPoint(64,64)
+					,size : GameEngineLib.createGame2DPoint(/*64,64*/96,96)
 				},
 				{
-					fileName : 'images/ground_level01_01.png' //'images/dirt.png',
+					fileName : 'images/test/groundSub5.png' // 'images/ground_level01_01.png' //'images/dirt.png',
 					,anchor : GameEngineLib.createGame2DPoint()
 					,layer : 0
-					,size : GameEngineLib.createGame2DPoint(64,64)
+					,size : GameEngineLib.createGame2DPoint(96,96)//64,64)
 				},
 				{
 					fileName : 'images/dirt.png2'//HACK 'images/wall_level01_01__.png'
@@ -76,7 +76,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 					,size : GameEngineLib.createGame2DPoint(64,64)
 				},
 				{
-					fileName : 'images/wall_level01_01.png'
+					fileName : 'images/test/wall.png' //'images/wall_level01_01.png'
 					,anchor : GameEngineLib.createGame2DPoint(32, 32)
 					,layer : 1
 					,physics : GameEngineLib.createGame2DAABB(0, 0, 64, 64)
