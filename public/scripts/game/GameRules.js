@@ -189,7 +189,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		if(GameSystemVars.Network.isMultiplayer)
 		{
 			GameInstance.Network.registerListener(
-				'IdentifiedUser',
+				'IdentifiedUser',//TODO use actual event class to de/register listener(s)
 				PRIVATE
 			);
 		}
