@@ -21,13 +21,7 @@
 
 
 /*
-inParams:{
-	Constructor,
-	Parents : [],
-	ChainUp : ['..',..],
-	ChainDown : ['..',..],
-	Definition,
-}
+Use case template:
 
 GameEngineLib.Class({
 	Constructor : ,
@@ -40,37 +34,55 @@ GameEngineLib.Class({
 		
 	}
 });
-
 */
 
 GameEngineLib.Class = function Class(inParams)
 {
-	var Constructor = inParams.Constructor;
-	var inParents = inParams.Parents;
-	var inDefinition = inParams.Definition;
+	var
+		//breaking up params:
+		Constructor,
+		inParents,
+		inDefinition,
+		//parsing helpers
+		parentIndex,
+		parent,
+		propertyName,
+		property,
+		methodName,
+		methods,
+		methodIndex,
+		current,
+		managed,
+		//source text for constuctor
+		constructorSrc;
 	
-	var chainUpMethods = {};//these are maps to prevent them being duplicated
-	var chainDownMethods = {};
-	
-	var parentIndex;
-	var property;
-	
+	//params:
+	Constructor = inParams.Constructor,
+	inParents = inParams.Parents,
+	inDefinition = inParams.Definition,
+		
 	Constructor.prototype = Constructor;
+	Constructor._chainUpMethods = {};
+	Constructor._chainDownMethods = {};
+	
+	if(GameSystemVars.DEBUG)
+	{
+		constructorSrc =
+			Constructor.toString()
+			/*remove block comments:*/
+			.replace(/\x2f\x2a[\S\s]*?\x2a\x2f/g, '')
+			//remove line comments
+			.replace(/\x2f\x2f[^\n]*\n/g, '\n');
+	}
 	
 	for(parentIndex in inParents)
 	{
-		var parent = inParents[parentIndex];
+		parent = inParents[parentIndex];
 		
 		if(GameSystemVars.DEBUG)
 		{
-			//if has call to parent constructor (not commented out)
-			if(Constructor.toString()
-				/*remove block comments:*/
-				.replace(/\x2f\x2a[\S\s]*?\x2a\x2f/g, '')
-				//remove line comments
-				.replace(/\x2f\x2f[^\n]*\n/g, '\n')
-				//has call to parent constructor
-				.indexOf('this.'+parent.name) === -1)
+			//make sure the contructor has call to this parent constructor that is not commented out
+			if(constructorSrc.indexOf('this.' + parent.name) === -1)
 			{
 				GameEngineLib.logger.warn(
 					Constructor.name + " does not call parent constructor " + parent.name
@@ -78,86 +90,132 @@ GameEngineLib.Class = function Class(inParams)
 			}
 		}
 		
-		//copy static properties
-		for(property in parent)
-		{
-			if(parent[property].chainup === true)
-			{
-				chainUpMethods[property] = property;
-			}
-			else if(parent[property].chaindown === true)
-			{
-				chainDownMethods[property] = property;
-			}
-			else
-			{
-				Constructor[property] = parent[property];
-			}
-		}
-		
 		//copy prototypes
-		for(property in parent.prototype)
+		for(propertyName in parent.prototype)
 		{
-			if(parent.prototype[property].chainup === true)//TODO these might not be needed after all is switched over
+			property = parent.prototype[propertyName];
+			
+			if(propertyName === '_chainUpMethods')
 			{
-				chainUpMethods[property] = property;
+				for(methodName in property)
+				{
+					if(Constructor._chainUpMethods[methodName])
+					{
+						GameEngineLib.logger.warn(Constructor.name + " trying to inherit chain function " + methodName + " from an additional parent: " + parent.name);
+						continue;
+					}
+					
+					Constructor._chainUpMethods[methodName] = [];
+					methods = property[methodName];
+					for(methodIndex = 0; methodIndex < methods.length; ++methodIndex)
+					{
+						Constructor._chainUpMethods[methodName].push(methods[methodIndex]);
+					}
+					
+					if(!inDefinition[methodName])
+					{
+						GameEngineLib.logger.warn(Constructor.name + " does not implement chain function " + methodName);
+					}
+					else
+					{
+						Constructor._chainUpMethods[methodName].unshift(inDefinition[methodName]);
+					}
+				}
 			}
-			else if(parent.prototype[property].chaindown === true)//TODO these might not be needed after all is switched over
+			else if(propertyName === '_chainDownMethods')
 			{
-				chainDownMethods[property] = property;
+				for(methodName in property)
+				{
+					if(Constructor._chainDownMethods[methodName])
+					{
+						GameEngineLib.logger.warn(Constructor.name + " trying to inherit chain function " + methodName + " from an additional parent: " + parent.name);
+						continue;
+					}
+					
+					Constructor._chainDownMethods[methodName] = [];
+					methods = property[methodName];
+					for(methodIndex = 0; methodIndex < methods.length; ++methodIndex)
+					{
+						Constructor._chainDownMethods[methodName].push(methods[methodIndex]);
+					}
+					
+					if(!inDefinition[methodName])
+					{
+						GameEngineLib.logger.warn(Constructor.name + " does not implement chain function " + methodName);
+					}
+					else
+					{
+						Constructor._chainDownMethods[methodName].push(inDefinition[methodName]);
+					}
+				}
+			}
+			else if(Constructor[propertyName])
+			{
+				GameEngineLib.logger.warn(Constructor.name + " trying to inherit function " + methodName + " from an additional parent: " + parent.name);
 			}
 			else
 			{
-				Constructor.prototype[property] = parent.prototype[property];
+				Constructor[propertyName] = property;
 			}
 		}
 		
-		Constructor.prototype[parent.name] = parent;
+		Constructor[parent.name] = parent;
+		if(parent._childClasses)
+		{
+			parent._childClasses.push(Constructor);
+		}
 	}
 	
-	Constructor.prototype[Constructor.name] = Constructor;
+	Constructor[Constructor.name] = Constructor;
+	Constructor._childClasses = [];
 	
 	if(inParents)
 	{
-		Constructor._parent = inParents[0];
+		Constructor._parent = inParents[0];//TODO is this needed? or just parents?
 		Constructor._parents = inParents;
 	}
 	
-	//remember chain up and down functions
-	var index;
-	for(index in inParams.ChainUp)
+	for(propertyName in inDefinition)
 	{
-		chainUpMethods[inParams.ChainUp[index]] = inParams.ChainUp[index];
-	}
-	var methodName;
-	for(methodName in inParams.ChainDown)
-	{
-		chainDownMethods[inParams.ChainDown[index]] = inParams.ChainDown[index];
-	}
-	
-	for(property in inDefinition)
-	{
-		//copy functions in the definition
-		if(typeof inDefinition[property] === 'function')
+		//don't copy over chain functions directly
+		if(Constructor._chainUpMethods[propertyName] || Constructor._chainDownMethods[propertyName])
 		{
-			if(chainUpMethods[property])
-			{
-				inDefinition[property].chainup = true;
-			}
-			if(chainDownMethods[property])
-			{
-				inDefinition[property].chaindown = true;
-			}
-				
-			Constructor.prototype[property] = inDefinition[property];
+			continue;
 		}
-		
+				
 		//make functions static so they can be called by children from parent namespace
 		//	and copy static stuff into the class too
-		Constructor[property] = inDefinition[property];
+		Constructor[propertyName] = inDefinition[propertyName];
 	}
 	
-	//TODO should do this better.  Like maybe inherit parent flags?
+	for(methodIndex in inParams.ChainUp)
+	{
+		methodName = inParams.ChainUp[methodIndex];
+		if(Constructor._chainUpMethods[methodName])
+		{
+			GameEngineLib.logger.warn(Constructor.name + " redeclares " + methodName + " as a chain function.");
+			continue;
+		}
+		Constructor._chainUpMethods[methodName] = [];
+		Constructor._chainUpMethods[methodName].unshift(Constructor[methodName]);
+		
+		Constructor[methodName] = GameEngineLib.Class.createChainUpFunction(methodName);
+	}
+	for(methodIndex in inParams.ChainDown)
+	{
+		methodName = inParams.ChainDown[methodIndex];
+		if(Constructor._chainDownMethods[methodName])
+		{
+			GameEngineLib.logger.warn(Constructor.name + " redeclares " + methodName + " as a chain function.");
+			continue;
+		}
+		Constructor._chainDownMethods[methodName] = [];
+		Constructor._chainDownMethods[methodName].push(Constructor[methodName]);
+		
+		Constructor[methodName] = GameEngineLib.Class.createChainDownFunction(methodName);
+	}
+	
+	//TODO should do this better.  Like maybe inherit parent flags? should also be private!
 	Constructor.flags = inParams.flags;
 
 	Constructor.create = function create()
@@ -165,14 +223,11 @@ GameEngineLib.Class = function Class(inParams)
 		return new Constructor();
 	};
 
-	//build a parent chain for the chain up and down calls
-	//and figure if this is a managed object (derived from GameObject)
-	var managed = false;
-	var parentChain = [];
-	var current = Constructor;
+	//figure if this is a managed object (derived from GameObject)
+	managed = false;
+	current = Constructor;
 	while(current)
 	{
-		parentChain.push(current);
 		if(current.name === 'GameObject')
 		{
 			managed = true;
@@ -203,7 +258,7 @@ GameEngineLib.Class = function Class(inParams)
 			return GameClassRegistryMap[Constructor];
 		};
 		
-		Constructor.getClass = Constructor.prototype.getClass = function getClass()
+		Constructor.getClass = function getClass()
 		{
 			return Constructor;
 		};
@@ -219,7 +274,7 @@ GameEngineLib.Class = function Class(inParams)
 		};
 		
 		//TODO could be in Object with getClass()?
-		Constructor.isA = Constructor.prototype.isA = function isA(inClass)
+		Constructor.isA = function isA(inClass)
 		{
 			var current = Constructor;
 			while(current)
@@ -232,20 +287,6 @@ GameEngineLib.Class = function Class(inParams)
 			}
 			return false;
 		};
-	}
-	
-	var i;
-	var funcName;
-	parentChain.reverse();
-	for(i in chainDownMethods)
-	{
-		funcName = chainDownMethods[i];
-		Constructor.prototype[funcName] = GameEngineLib.Class.createChainDownCall(parentChain, funcName);
-	}
-	for(i in chainUpMethods)
-	{
-		funcName = chainUpMethods[i];
-		Constructor.prototype[funcName] = GameEngineLib.Class.createChainUpCall(parentChain, funcName);
 	}
 	
 	return Constructor;
@@ -269,77 +310,32 @@ GameEngineLib.Class.createInstanceRegistry = function createInstanceRegistry()
 
 
 
-GameEngineLib.Class.createChainDownCall = function createChainDownCall(parentChain, funcName)
+GameEngineLib.Class.createChainUpFunction = function createChainUpFunction(inMethodName)
 {
-	var warn = false;
-	var funcPtr;
-	var funcArray = [];
-	var i;
-	
-	for(i in parentChain)
+	return function()
 	{
-		funcPtr = parentChain[i][funcName];
-		if(!funcPtr && warn)
-		{
-			if(GameSystemVars.DEBUG)
-			{
-				GameEngineLib.logger.warn(parentChain[i].getName() + " does not implement " + funcName);
-			}
-		}
-		else if(funcPtr)
-		{
-			warn = true;
-			funcArray.push(funcPtr);
-		}
-	}
-	
-	var func = function()
-	{
-		var funcIndex;
+		var funcIndex,
+			funcArray;
+		funcArray = this._chainUpMethods[inMethodName];
 		for(funcIndex in funcArray)
 		{
 			funcArray[funcIndex].apply(this, arguments);
 		}
 	};
-	func.chaindown = true;
-	return func;
 };
 
 
 
-GameEngineLib.Class.createChainUpCall = function createChainUpCall(parentChain, funcName)
+GameEngineLib.Class.createChainDownFunction = function createChainDownFunction(inMethodName)
 {
-	var warn = false;
-	var funcPtr;
-	var funcArray = [];
-	var i;
-	
-	for(i in parentChain)
+	return function()
 	{
-		funcPtr = parentChain[i][funcName];
-		if(!funcPtr && warn)
-		{
-			if(GameSystemVars.DEBUG)
-			{
-				GameEngineLib.logger.warn(parentChain[i].getName() + " does not implement " + funcName);
-			}
-		}
-		else if(funcPtr)
-		{
-			warn = true;
-			funcArray.push(funcPtr);
-		}
-	}
-	funcArray.reverse();
-	
-	var func = function()
-	{
-		var funcIndex;
+		var funcIndex,
+			funcArray;
+		funcArray = this._chainDownMethods[inMethodName];
 		for(funcIndex in funcArray)
 		{
 			funcArray[funcIndex].apply(this, arguments);
 		}
 	};
-	func.chainup = true;
-	return func;
 };

@@ -135,6 +135,8 @@ GameLoader =
 		//////////////////////////////// ENGINE SCRIPTS //////////////////////////////
 		
 		//TODO order these better:
+		include(inSharedPath + "scripts/engine/Game2DAABB.js");
+		include(inSharedPath + "scripts/engine/Game2DPoint.js");
 		include(inSharedPath + "scripts/engine/GameEngineLogger.js");
 		include(inSharedPath + "scripts/engine/GameRegistry.js");
 		include(inSharedPath + "scripts/engine/GameClass.js");
@@ -173,8 +175,6 @@ GameLoader =
 		
 		include(inSharedPath + "scripts/engine/GameTimer.js");
 		include(inSharedPath + "scripts/engine/GameFrameWork.js");
-		include(inSharedPath + "scripts/engine/Game2DAABB.js");
-		include(inSharedPath + "scripts/engine/Game2DPoint.js");
 		include(inSharedPath + "scripts/engine/GameQuadTree.js");
 		include(inSharedPath + "scripts/engine/GameRenderable2D.js");
 		include(inSharedPath + "scripts/engine/GameRenderableTile2D.js");
@@ -231,6 +231,7 @@ GameLoader =
 		///////////////////////////////////// RUN! ///////////////////////////////////
 		if(!inIsServer)//TODO when node inspector loads all scripts correctly remove the if, and run code from server code
 		{
+			//TODO remove this, have a separate function to run loaded code that can be called from page or node
 			include(inSharedPath + "scripts/GameRunner.js");
 		}
 		///////////////////////////////////// RUN! ///////////////////////////////////

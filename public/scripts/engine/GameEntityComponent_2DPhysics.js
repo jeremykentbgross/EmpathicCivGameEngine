@@ -52,8 +52,8 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 				name : '_velocity',
 				net : true,
 				type : 'position',//TODO type should be vector2 instead
-				min : 512,	//TODO replace hack number
-				max : 512	//TODO replace hack number
+				min : GameEngineLib.createGame2DPoint(-512,-512),	//TODO replace hack numbers
+				max : GameEngineLib.createGame2DPoint(512,512)	//TODO replace hack numbers
 			}
 			//TODO rect NOT net!
 		],
