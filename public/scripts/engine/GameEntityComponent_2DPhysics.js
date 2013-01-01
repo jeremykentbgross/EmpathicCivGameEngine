@@ -24,7 +24,8 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 	{
 		this.GameEntityComponent();
 		
-		this._position = GameEngineLib.createGame2DPoint(32, 32);//??needed? use mid instead?
+		this._position = GameEngineLib.createGame2DPoint(256, 256);//??needed? use mid instead?
+		this._velocity = GameEngineLib.createGame2DPoint();
 		this._boundingRect = GameEngineLib.createGame2DAABB(0, 0, 64, 64);
 		this._range = GameEngineLib.createGame2DAABB(0, 0, 256, 256);//TODO used? Set when added to world?
 	},
@@ -46,6 +47,13 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 				type : 'position',
 				min : null,	//this._range.getLeftTop(),
 				max : null	//this._range.getRightBottom(),
+			},
+			{
+				name : '_velocity',
+				net : true,
+				type : 'position',//TODO type should be vector2 instead
+				min : 512,	//TODO replace hack number
+				max : 512	//TODO replace hack number
 			}
 			//TODO rect NOT net!
 		],
@@ -102,6 +110,7 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 				this._owner.onEvent(
 					new GameEngineLib.GameEvent_UpdatePosition(
 						this._position.clone(),
+						this._velocity.clone(),
 						this._boundingRect.clone()
 					)
 				);
@@ -148,6 +157,7 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 				)
 			);
 			this._position = physicsUpdateInfo.position;
+			this._velocity = physicsUpdateInfo.velocity;
 			this.setNetDirty();
 			//TODO event velocity
 			

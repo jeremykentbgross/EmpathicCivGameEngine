@@ -63,7 +63,14 @@ GameEngineLib.Class = function Class(inParams)
 		
 		if(GameSystemVars.DEBUG)
 		{
-			if(Constructor.toString().indexOf('this.'+parent.name) === -1)
+			//if has call to parent constructor (not commented out)
+			if(Constructor.toString()
+				/*remove block comments:*/
+				.replace(/\x2f\x2a[\S\s]*?\x2a\x2f/g, '')
+				//remove line comments
+				.replace(/\x2f\x2f[^\n]*\n/g, '\n')
+				//has call to parent constructor
+				.indexOf('this.'+parent.name) === -1)
 			{
 				GameEngineLib.logger.warn(
 					Constructor.name + " does not call parent constructor " + parent.name
