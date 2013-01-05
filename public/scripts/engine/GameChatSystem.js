@@ -26,6 +26,7 @@ GameEngineLib.ChatSystem = GameEngineLib.Class({
 		this._jojoDom = null;
 		this._jojoDomConstruct = null;
 		this._jojoOn = null;
+		this._jojoStyle = null;
 		
 		this._domChatContainer = null;
 		this._domNetworkStatus = null;
@@ -57,18 +58,20 @@ GameEngineLib.ChatSystem = GameEngineLib.Class({
 			//Get dom manipulation objects from dojo
 			
 			that = this;
-			require(['dojo/dom', 'dojo/dom-construct', 'dojo/on'],
-				function(dom, domConstruct, on)
+			require(['dojo/dom', 'dojo/dom-construct', 'dojo/on', 'dojo/dom-style'],
+				function(dom, domConstruct, on, style)
 				{
 					that._jojoDom = dom;
 					that._jojoDomConstruct = domConstruct;
 					that._jojoOn = on;
+					that._jojoStyle = style;
 				}
 			);
 			
 			//get the chat container from the dom:
-			this._domChatContainer = this._jojoDom.byId("chatContainer");//TODO fix this tag!!
-			
+			this._domChatContainer = this._jojoDom.byId('chatContainer');//TODO fix this tag!!
+			this._jojoStyle.set(this._domChatContainer, 'pointer-events', 'none');
+//			this._jojoStyle.set(this._domChatContainer, 'pointer-events', '');
 			//Get dom manipulation objects from dojo
 			/////////////////////////////////////////////////////////
 			
@@ -164,13 +167,13 @@ GameEngineLib.ChatSystem = GameEngineLib.Class({
 		onConnectedToServer : function onConnectedToServer(inEvent)
 		{
 			this._domNetworkStatus.className = 'netConnected';
-			this._domNetworkStatus.innerHTML = 'Connected to Server';
+			this._domNetworkStatus.innerHTML = "Connected to Server";
 		},
 		
 		onDisconnectedFromServer : function onDisconnectedFromServer(inEvent)
 		{
 			this._domNetworkStatus.className = 'netDisconnected';
-			this._domNetworkStatus.innerHTML = 'Not connected to Server';
+			this._domNetworkStatus.innerHTML = "Not connected to Server";
 		},
 		
 		onMsg : function onMsg(inEvent)
