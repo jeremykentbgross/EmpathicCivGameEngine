@@ -806,3 +806,94 @@ http://package.json.jit.su/
 
 
 https://soundcloud.com/chris-pollard-music/darkwood-forest
+
+
+
+Some good links:
+
+http://www.google.com/events/io/2011/sessions/super-browser-2-turbo-hd-remix-introduction-to-html5-game-development.html
+
+https://github.com/racker/node-cassandra-client/
+
+Convert html5 to native mobile
+http://phonegap.com/
+
+
+HTML5 camera and sound capture
+http://www.html5rocks.com/en/tutorials/getusermedia/intro/
+
+http://www.html5rocks.com/en/tutorials/webrtc/basics/
+
+http://updates.html5rocks.com/2012/12/WebRTC-hits-Firefox-Android-and-iOS
+
+
+
+Cassy:
+http://wiki.apache.org/cassandra/GettingStarted
+
+http://www.datastax.com/docs/1.0/cluster_architecture/replication
+
+http://www.datastax.com/docs/0.7/configuration/authentication
+
+
+
+
+JS gettter/setter: (Note, this would changes inherit)
+http://ejohn.org/blog/javascript-getters-and-setters/
+
+http://ajaxian.com/archives/getters-and-setters-in-javascript
+
+**********!!!!!!!!!!!!!!!!!!!!!=>
+http://kangax.github.com/es5-compat-table/
+<=**********!!!!!!!!!!!!!!!!!!!!!
+
+https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object/defineProperty
+
+https://developer.mozilla.org/en-US/docs/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor
+
+
+
+
+AR:
+
+http://blogs.valvesoftware.com/abrash/latency-the-sine-qua-non-of-ar-and-vr/
+
+http://www.youtube.com/watch?v=C7JQ7Rpwn2k
+
+http://blogs.valvesoftware.com/abrash/why-you-wont-see-hard-ar-anytime-soon/
+
+http://newscenter.berkeley.edu/2011/09/22/brain-movies/
+
+http://pinktentacle.com/2008/12/scientists-extract-images-directly-from-brain/
+
+http://www.ted.com/talks/sheila_nirenberg_a_prosthetic_eye_to_treat_blindness.html
+
+http://www.amazon.com/Ready-Player-One-Ernest-Cline/dp/0307887448
+
+
+
+
+
+-Physics collisions from multiple tree nodes??
+-Physics print all collision per frame
+-phys broad, narrow, resolution (triggers)
+-game/private/secrets:
+SysVars.xxx=fb/db/as pass
+-game sysvars appname
+-Try new art (crystals/other dirt colors)
+-npm current local vs current versions (ud all)
+-GameRules refactor (css/chat)
+-sound tree/priority/max channels/pause
+-interpret component
+(example: input => request / command; own char class stats like speed etc)
+-obj ref get/set getpath
+-Obj set !net; ex: master vs team map
+-event listener priorities
+-traitor/judas/spy (faction depends on observer)
+-class empathy (penalties/rewards for your own class?)
+-karma burnoff mechanic
+-Render/graphics obj rapper.
+-custom array funcs: push/pop_front/back
+
+Newest jsdoc3
+Everyoauth
