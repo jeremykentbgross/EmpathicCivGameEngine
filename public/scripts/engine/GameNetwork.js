@@ -192,9 +192,9 @@ GameEngineLib.GameNetwork.prototype.sendMessage = function sendMessage(inMsg, in
 	else if(this._socket.socket.connected === true)
 	{
 		this._socket.emit('msg', inMsg);
-		if(inSentListener && inSentListener.onSent)
+		if(inSentListener && inSentListener.onSentMessage)
 		{
-			inSentListener.onSent(inMsg);
+			inSentListener.onSentMessage(GameInstance.localUser.userName + ': ' + inMsg);
 		}
 	}
 	else
@@ -219,8 +219,8 @@ GameEngineLib.GameNetwork.prototype._sendData = function _sendData(inData/*, inS
 	else if(this._socket.socket.connected === true)
 	{
 		this._socket.emit('data', inData);
-		/*if(inSentListener && inSentListener.onSent)
-			inSentListener.onSent(inData);*/
+		/*if(inSentListener && inSentListener.onSentData)
+			inSentListener.onSentData(inData);*/
 	}
 	else
 	{

@@ -31,7 +31,7 @@ GameEngineLib.createGameAssetManager = function(instance, PRIVATE)
 	
 	instance.loadImage = function(inFileName, outLoadTarget)
 	{
-		var defaultImageName = 'defaultimage';
+		var defaultImageName = 'defaultImage';
 		var imageInfo;
 		var i;
 		

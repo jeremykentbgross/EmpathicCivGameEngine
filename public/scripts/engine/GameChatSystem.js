@@ -21,116 +21,121 @@
 
 
 GameEngineLib.ChatSystem = GameEngineLib.Class({
-	Constructor : function ChatSystem(){this.init();},
+	Constructor : function ChatSystem()
+	{
+		this._jojoDom = null;
+		this._jojoDomConstruct = null;
+		this._jojoOn = null;
+		
+		this._domChatContainer = null;
+		this._domNetworkStatus = null;
+		this._domChatForm = null;
+		this._domChatInput = null;
+		this._domChatLog = null;
+		
+		this._specialChars = {
+			'<' : '&lt;',
+			'>' : '&gt;',
+			'&' : '&amp;'
+		};
+		
+		this.init();
+	},
+	
 	Parents : [],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
+	
 	Definition :
 	{
 		init : function init()
 		{
-			var that = this;
+			var that;
 			
+			/////////////////////////////////////////////////////////
+			//Get dom manipulation objects from dojo
+			
+			that = this;
 			require(['dojo/dom', 'dojo/dom-construct', 'dojo/on'],
 				function(dom, domConstruct, on)
 				{
-					var chat_container, specialChars;
-					
-					//get the chat container from the dom:
-					chat_container = dom.byId("chat_container");
-					
-					specialChars = {
-						'<' : '&lt;',
-						'>' : '&gt;',
-						'&' : '&amp;'
-					};
-
-					//create a paragraph to contain the connection status
-					that._state = domConstruct.create(
-						'p',
-						{
-							id : 'status',
-							//TODO css class
-							innerHTML : "Not connected"
-						},
-						chat_container
-					);
-
-					//create a form in the chat container
-					that._form = domConstruct.create(
-						'form',
-						{
-							id : 'chat_form',
-							//TODO css class
-							innerHTML : "Chat"
-						},
-						chat_container
-					);
-					
-					//create an unput object in the chat form
-					//TODO limit it to a certain number of characters!!
-					that._chat = domConstruct.create(
-						'input',
-						{
-							id : 'chat',
-							//TODO css class
-							type : 'text',
-							placeholder : "type and press enter to chat"
-						},
-						that._form
-					);
-					
-					//create a chat log to contain the output!
-					that._log = domConstruct.create(
-						'ul',
-						{
-							id : 'log'
-							//TODO css class
-						},
-						chat_container
-					);
-					
-					//TODO move this function out of init!!
-					that.onChatSubmit = function onChatSubmit(event)
-					{
-						event.preventDefault();
-						
-						GameInstance.Network.sendMessage(
-							that._chat.value,
-							//sentListener:
-							{//TODO move this function out of init!! (AND SEND 'this')
-								onSent : function(inData)
-								{
-									that.sendChatToChatLog(that._chat.value);
-									that._chat.value = '';
-								}
-							}
-						);
-					};
-					
-					//TODO move this function out of init!!
-					that.sendChatToChatLog = function sendChatToChatLog(inMessage)
-					{
-						//todo remove the the oldest one
-						var msg = domConstruct.create(
-							'li',
-							{
-								innerHTML : 
-									inMessage.replace(
-										/[<>&]/g,
-										function(m){ return specialChars[m]; }
-									)
-								//TODO css class
-							},
-							that._log
-							,'first'
-						);
-					};
-					
-					on(that._form, 'submit', that.onChatSubmit);
+					that._jojoDom = dom;
+					that._jojoDomConstruct = domConstruct;
+					that._jojoOn = on;
 				}
-			);//End Dom
+			);
+			
+			//get the chat container from the dom:
+			this._domChatContainer = this._jojoDom.byId("chatContainer");//TODO fix this tag!!
+			
+			//Get dom manipulation objects from dojo
+			/////////////////////////////////////////////////////////
+			
+			
+						
+			/////////////////////////////////////////////////////////
+			//Create the dom chat objects
+			
+			//create a paragraph to contain the connection status
+			this._domNetworkStatus = this._jojoDomConstruct.create(
+				'p',
+				{
+					id : 'chatNetworkStatus',
+					//TODO css class
+					class : 'netDisconnected',
+					innerHTML : "Not connected"
+				},
+				this._domChatContainer
+			);
+			
+			//create a chat log to contain the output!
+			this._domChatLog = this._jojoDomConstruct.create(
+				'div',
+				{
+					id : 'chatLog'
+				},
+				this._domChatContainer
+			);
+			
+			//create a form in the chat container
+			this._domChatForm = this._jojoDomConstruct.create(
+				'form',
+				{
+					id : 'chatForm',
+					innerHTML : "Chat: "
+				},
+				this._domChatContainer
+			);
+			//create an unput object in the chat form
+			this._domChatInput = this._jojoDomConstruct.create(
+				'input',
+				{
+					id : 'chatInput',
+					type : 'text',
+					maxlength : "140",//TODO enforce this on the server side!
+					placeholder : "type and press enter to chat"
+				},
+				that._domChatForm
+			);
+			
+			//Create the dom chat objects
+			/////////////////////////////////////////////////////////
+			
+			
+			
+			/////////////////////////////////////////////////////////
+			//Capture form submits (is the user sending chat info)
+			this._jojoOn(
+				this._domChatForm
+				,'submit'
+				,function(inEvent)
+				{
+					that._onChatSubmit(inEvent);
+				}
+			);
+			//Capture form submits (is the user sending chat info)
+			/////////////////////////////////////////////////////////
 			
 			
 			
@@ -150,34 +155,78 @@ GameEngineLib.ChatSystem = GameEngineLib.Class({
 			);
 			//Register to listen to messages from the server
 			/////////////////////////////////////////////////////////
-			
 		},//End init
 		
+		
+		
+		/////////////////////////////////////////////////////////
+		//network event listeners
 		onConnectedToServer : function onConnectedToServer(inEvent)
 		{
-			//TODO remove the UI stuff from this class?
-			this._state.className = 'success';//TODO classname css!! (more in this file)
-			this._state.innerHTML = 'Socket Open';
+			this._domNetworkStatus.className = 'netConnected';
+			this._domNetworkStatus.innerHTML = 'Connected to Server';
 		},
 		
 		onDisconnectedFromServer : function onDisconnectedFromServer(inEvent)
 		{
-			//TODO remove the UI stuff from this class?
-			this._state.className = 'fail';//TODO classname css!! (more in this file)
-			this._state.innerHTML = 'Socket Closed';
+			this._domNetworkStatus.className = 'netDisconnected';
+			this._domNetworkStatus.innerHTML = 'Not connected to Server';
 		},
 		
 		onMsg : function onMsg(inEvent)
 		{
-			this.sendChatToChatLog(inEvent.msg);
+			this._sendChatToChatLog(inEvent.msg);
+		},
+		
+		onSentMessage : function onSentMessage(inMsg)//TODO proper event instead!!
+		{
+			this._sendChatToChatLog(inMsg);
+		},
+		//network event listeners
+		/////////////////////////////////////////////////////////
+		
+		
+		
+		/////////////////////////////////////////////////////////
+		//internal chat events
+		
+		//dom form submit:
+		_onChatSubmit : function _onChatSubmit(event)
+		{
+			event.preventDefault();
+			GameInstance.Network.sendMessage(
+				this._domChatInput.value,
+				this//sentListener
+			);
+			this._domChatInput.value = '';
+		},		
+		
+		//append to chat log
+		_sendChatToChatLog : function _sendChatToChatLog(inMessage)
+		{
+			var that, msg;
+			that = this;
+			msg = this._jojoDomConstruct.create(
+				'p',
+				{
+					innerHTML : 
+						inMessage.replace(
+							/[<>&]/g,
+							function(m){ return that._specialChars[m]; }
+						)
+					//TODO css class (team, enemy, general, etc..)
+				},
+				this._domChatLog
+				//,'first'
+			);
+			msg.scrollIntoView();
 		}
+		//internal chat events
+		/////////////////////////////////////////////////////////
+		
 		
 	}//End body
 });
 
 
 
-
-				
-				
-				
