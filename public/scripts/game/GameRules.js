@@ -19,97 +19,153 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//todo make this a GameObject also!!
-//todo rename game rules
-GameLib.createGameRules = function(instance, PRIVATE)
-{
-	instance = instance || {};
-	PRIVATE = PRIVATE || {};
-	
-	//todo add debug info
-		
-	instance.init = function()
+
+GameLib.GameRules = GameEngineLib.Class({
+	Constructor : function GameRules()
 	{
-		//GameEngineLib.logger.info("Setting up Game Rules");
+		this.GameRulesBase();
 		
-		//todo register GameLib GameObject classes
+		//constants:
+		this._mapSizeInTiles = 16;
+		this._tileSize = 64;
+		this._minPhysicsPartitionSize = 8;
 		
-		//todo setup updaters
+		//game world
+		this._gameWorld = null;
+		this._map = null;
+		this._tileset = null;
 		
-		//todo create default objects
-		var mapSizeInTiles = 16;
-		var tileSize = 64;
-		var minPhysicsPartitionSize = 8;
-		PRIVATE.GameWorld = GameEngineLib.Game2DWorld.create();
-		PRIVATE.GameWorld.init(
-			mapSizeInTiles
-			,tileSize
-			,minPhysicsPartitionSize
-		);
+		//entity stuff:
+		this._animations = [];
+		this._referenceEntity = null;
+		this._referenceEntityInputComponent = null;
+		this._referenceEntitySpriteComponent = null;
+		this._referenceEntityPhysicsComponent = null;
+		this._referenceEntityCameraComponent = null;
 		
-		//todo should be created with factory?
-		var tileset = GameEngineLib.Game2DTileSet.create();
-		tileset.init(
-			[
-				{
-					fileName : 'images/grass.png'
-					,anchor : GameEngineLib.createGame2DPoint()
-					,layer : 0
-					,size : GameEngineLib.createGame2DPoint(64,64)
-				},
-				{
-					fileName : 'images/test/waterSub.png' //'images/water.png'
-					,anchor : GameEngineLib.createGame2DPoint()
-					,layer : 0
-					,size : GameEngineLib.createGame2DPoint(/*64,64*/96,96)
-				},
-				{
-					fileName : 'images/test/groundSub5.png' // 'images/ground_level01_01.png' //'images/dirt.png',
-					,anchor : GameEngineLib.createGame2DPoint()
-					,layer : 0
-					,size : GameEngineLib.createGame2DPoint(96,96)//64,64)
-				},
-				{
-					fileName : 'images/dirt.png2'//HACK 'images/wall_level01_01__.png'
-					,anchor : GameEngineLib.createGame2DPoint()
-					,layer : 0
-					,size : GameEngineLib.createGame2DPoint(64,64)
-				},
-				{
-					fileName : 'images/test/wall.png' //'images/wall_level01_01.png'
-					,anchor : GameEngineLib.createGame2DPoint(32, 32)
-					,layer : 1
-					,physics : GameEngineLib.createGame2DAABB(0, 0, 64, 64)
-					,size : GameEngineLib.createGame2DPoint(96,96)
-				}
-				//,
-			]
-		);
-		//TODO wait until it is loaded to set somehow? or make streaming work properly with scene graph
+		//editor stuff:
+		this._drawTile = 0;
 		
-		var map = PRIVATE.GameWorld.getMap();
-		map.setTileSet(tileset);
-		
-		//hack put something in the map to start with
-		var i;
-		var j;
-		for(i = 0; i < mapSizeInTiles; ++i)
+		//sound test stuff
+		this._lastSoundPlayed = null;
+		this._lastMouseWorldPosition = null;
+	},
+	
+	Parents : [GameEngineLib.GameRulesBase],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition :
+	{
+		init : function init()
 		{
-			for(j = 0; j < mapSizeInTiles; ++j)
-			{
-				if(i === 0 || j === 0 || i === mapSizeInTiles - 1 || j === mapSizeInTiles - 1)
-					map.setTile(new GameEngineLib.Game2DPoint(i, j), /*(i+j)%5*/4);
-				else
-					map.setTile(new GameEngineLib.Game2DPoint(i, j), /*(i+j)%5*/2);
-			}
-		}
-		
-		//HACK!!!!!!!!!!!!!!!//HACK!!!!!!!!!!!!!!!//HACK!!!!!!!!!!!!!!!
-		var animations = [];
-		//if(!GameSystemVars.Network.isServer)
-		{
+			var
+				animation
+				,frames
+				,i
+				,j
+			;
 			
-			var frames = [], animation;
+			/////////////////////////////////////////////////////////
+			//todo register GameLib GameObject classes
+			
+			//todo setup updaters
+			
+			//todo create default objects
+			/////////////////////////////////////////////////////////
+			
+			
+			
+			/////////////////////////////////////////////////////////
+			//setup event listeners
+			if(!GameSystemVars.Network.isServer)
+			{
+				GameInstance.Input.registerListener('Input', this);
+			}
+			if(GameSystemVars.Network.isMultiplayer)
+			{
+				GameInstance.Network.registerListener(
+					'IdentifiedUser',//TODO use actual event class to de/register listener(s)
+					this
+				);
+			}
+			//setup event listeners
+			/////////////////////////////////////////////////////////
+			
+			
+			
+			/////////////////////////////////////////////////////////
+			//create and initialize a game world
+			this._gameWorld = GameEngineLib.Game2DWorld.create(
+				this._mapSizeInTiles
+				,this._tileSize
+				,this._minPhysicsPartitionSize
+			);
+			this._tileset = GameEngineLib.Game2DTileSet.create(
+				[
+					{
+						fileName : 'images/grass.png'
+						,anchor : GameEngineLib.createGame2DPoint()
+						,layer : 0
+						,size : GameEngineLib.createGame2DPoint(64,64)
+					},
+					{
+						fileName : 'images/test/waterSub.png' //'images/water.png'
+						,anchor : GameEngineLib.createGame2DPoint()
+						,layer : 0
+						,size : GameEngineLib.createGame2DPoint(/*64,64*/96,96)
+					},
+					{
+						fileName : 'images/test/groundSub5.png' // 'images/ground_level01_01.png' //'images/dirt.png',
+						,anchor : GameEngineLib.createGame2DPoint()
+						,layer : 0
+						,size : GameEngineLib.createGame2DPoint(96,96)//64,64)
+					},
+					{
+						fileName : 'images/dirt.png2'//HACK 'images/wall_level01_01__.png'
+						,anchor : GameEngineLib.createGame2DPoint()
+						,layer : 0
+						,size : GameEngineLib.createGame2DPoint(64,64)
+					},
+					{
+						fileName : 'images/test/wall.png' //'images/wall_level01_01.png'
+						,anchor : GameEngineLib.createGame2DPoint(32, 32)
+						,layer : 1
+						,physics : GameEngineLib.createGame2DAABB(0, 0, 64, 64)
+						,size : GameEngineLib.createGame2DPoint(96,96)
+					}
+					//,
+				]
+			);
+			this._map = this._gameWorld.getMap();
+			this._map.setTileSet(this._tileset);
+			
+			/////////////////////////////////////////////
+			//HACK put something in the map to start with
+			for(i = 0; i < this._mapSizeInTiles; ++i)
+			{
+				for(j = 0; j < this._mapSizeInTiles; ++j)
+				{
+					if(i === 0 || j === 0 || i === this._mapSizeInTiles - 1 || j === this._mapSizeInTiles - 1)
+						this._map.setTile(new GameEngineLib.Game2DPoint(i, j), /*(i+j)%5*/4);
+					else
+						this._map.setTile(new GameEngineLib.Game2DPoint(i, j), /*(i+j)%5*/2);
+				}
+			}
+			//HACK put something in the map to start with
+			/////////////////////////////////////////////
+			
+			//create and initialize a game world
+			/////////////////////////////////////////////////////////
+			
+			
+			
+			/////////////////////////////////////////////////////////
+			//create reference entity
+			
+			//////////////////////////////////
+			//create and initialize animations
+			frames = [];
 			for(j = 0; j < 8; ++j)
 			{
 				frames = [];
@@ -124,10 +180,8 @@ GameLib.createGameRules = function(instance, PRIVATE)
 				}
 				animation = new GameEngineLib.Animation2D();
 				animation.init('images/test_anims_run/jogSheet.png', 10, frames);
-				
-				animations.push(animation);
+				this._animations.push(animation);
 			}
-			
 			for(j = 0; j < 8; ++j)
 			{
 				frames = [];
@@ -139,331 +193,167 @@ GameLib.createGameRules = function(instance, PRIVATE)
 				);
 				animation = new GameEngineLib.Animation2D();
 				animation.init('images/test_anims_run/jogSheet.png', 10, frames);
-				
-				animations.push(animation);
+				this._animations.push(animation);
 			}
+			//create and initialize animations
+			//////////////////////////////////
 			
-			instance.anim = animations[15];
-			instance.pos = new GameEngineLib.Game2DPoint(128,128);
-			instance.animInst = new GameEngineLib.Animation2DInstance();
-			instance.animInst.setAnimation(instance.anim);
-			GameInstance.UpdateOrder.push(instance.animInst);
-			//instance.frame = 0;
-		}//HACK!!!!!!!!!!!!!!!//HACK!!!!!!!!!!!!!!!//HACK!!!!!!!!!!!!!!!
+			this._referenceEntity = GameEngineLib.GameEntity.create();
+			
+			this._referenceEntityInputComponent = GameEngineLib.EntityComponent_Input.create();
+			this._referenceEntity.addComponent(this._referenceEntityInputComponent);
+			
+			this._referenceEntitySpriteComponent = GameEngineLib.EntityComponent_Sprite.create(this._animations);
+			this._referenceEntity.addComponent(this._referenceEntitySpriteComponent);
+			
+			this._referenceEntityPhysicsComponent = GameEngineLib.EntityComponent_2DPhysics.create();
+			this._referenceEntity.addComponent(this._referenceEntityPhysicsComponent);
+			
+			//TODO this vv should have params if it is going to call init.  Where does it get init'ed from atm?
+			this._referenceEntityCameraComponent = GameEngineLib.EntityComponent_2DCamera.create(/*TODO params??*/);
+			this._referenceEntity.addComponent(this._referenceEntityCameraComponent);
+			
+			this._gameWorld.addEntity(this._referenceEntity);
+			//TODO comment out and fix default camera vv
+			this._gameWorld.setCamera(this._referenceEntityCameraComponent);
+			//create reference entity
+			/////////////////////////////////////////////////////////
+					
+			return true;
+		},
 		
 		
-		
-		//todo add entities to world
-		
-		//TODO test removing components on button preass??
-		//TODO test adding components and world in different orders
-		PRIVATE.entity1 = GameEngineLib.GameEntity.create();
-		PRIVATE.entity1Sprite = GameEngineLib.EntityComponent_Sprite.create();
-		PRIVATE.entity1Sprite.init(animations);
-		PRIVATE.entity1.addComponent(PRIVATE.entity1Sprite);
-		PRIVATE.entity1Input = GameEngineLib.EntityComponent_Input.create();
-		PRIVATE.entity1.addComponent(PRIVATE.entity1Input);
-		PRIVATE.entity1Physics = GameEngineLib.EntityComponent_2DPhysics.create();
-		PRIVATE.entity1.addComponent(PRIVATE.entity1Physics);
-		PRIVATE.entity1Camera = GameEngineLib.EntityComponent_2DCamera.create();
-		PRIVATE.entity1Camera.init(
-			//GameInstance.Graphics.getWidth(),
-			//GameInstance.Graphics.getHeight()
-		);//TODO get the size from somewhere and not hardcode it
-		PRIVATE.entity1.addComponent(PRIVATE.entity1Camera);
-		
-		PRIVATE.GameWorld.addEntity(PRIVATE.entity1);
-		PRIVATE.GameWorld.setCamera(PRIVATE.entity1Camera);//TODO comment out and fix default camera
-		
-		if(!GameSystemVars.Network.isServer)
-		{
-			GameInstance.Input.registerListener('Input', PRIVATE);
-		}
-		
-		PRIVATE.onIdentifiedUser = function(inEvent)
+		//TODO should rename this onIdentified>Net<User
+		onIdentifiedUser : function onIdentifiedUser(inEvent)
 		{
 			GameEngineLib.logger.info("setting owner for physics component: " + inEvent.user.userName );
-			PRIVATE.entity1Physics.setNetOwner(inEvent.user.userID);
-		};
+			this._referenceEntityPhysicsComponent.setNetOwner(inEvent.user.userID);
+		},
 		
-		if(GameSystemVars.Network.isMultiplayer)
+		
+		render : function render(inCanvas2DContext)
 		{
-			GameInstance.Network.registerListener(
-				'IdentifiedUser',//TODO use actual event class to de/register listener(s)
-				PRIVATE
-			);
-		}
+			this._gameWorld.render(inCanvas2DContext);
+		},
 		
 		
-		//TODO creating chat UI should NOT be here
-		if(!GameSystemVars.Network.isServer && GameSystemVars.Network.isMultiplayer)
+		onInput : function onInput(inInputEvent)
 		{
-			require(['dojo/dom', 'dojo/dom-construct', 'dojo/on'],
-				function(dom, domConstruct, on)
-				{
-					var chat_container = dom.byId("chat_container");
-					var specialChars = {
-						'<' : '&lt;',
-						'>' : '&gt;',
-						'&' : '&amp;'
-					};
-
-					PRIVATE.state = domConstruct.create(
-						'p',
-						{
-							id : 'status',
-							//TODO css class
-							innerHTML : "Not connected"
-						},
-						chat_container
-					);
-
-					PRIVATE.form = domConstruct.create(
-						'form',
-						{
-							id : 'chat_form',
-							//TODO css class
-							innerHTML : "Chat"
-						},
-						chat_container
-					);
-					
-					PRIVATE.chat = domConstruct.create(
-						'input',
-						{
-							id : 'chat',
-							//TODO css class
-							type : 'text',
-							placeholder : "type and press enter to chat"
-						},
-						PRIVATE.form
-					);
-					
-					PRIVATE.log = domConstruct.create(
-						'ul',
-						{
-							id : 'log'
-							//TODO css class
-						},
-						chat_container
-					);
-					
-					PRIVATE.onChatSubmit = function(event)
-					{
-						event.preventDefault();
+			var cameraAABB, cameraLeftTop, mouseWorldPosition;
+			
+			cameraAABB = this._gameWorld.getCurrentCamera().getRect();//TODO rename getAABB
+			cameraLeftTop = cameraAABB.getLeftTop();
+			mouseWorldPosition = inInputEvent.mouseLoc.add(cameraLeftTop);
+			
+			//TODO should be in component (and/or world)
+			GameInstance.soundSystem.setListenerPosition(cameraAABB.getCenter());
 						
-						GameInstance.Network.sendMessage(
-							PRIVATE.chat.value,
-							//sentListener:
-							{
-								onSent : function(inData)
-								{
-									PRIVATE.sendChatToChatLog(PRIVATE.chat.value);
-									PRIVATE.chat.value = '';
-								}
-							}
-						);
-					};
-					
-					PRIVATE.sendChatToChatLog = function(inMessage)
-					{
-						//todo remove the the oldest one
-						var msg = domConstruct.create(
-							'li',
-							{
-								innerHTML : 
-									inMessage.replace(
-										/[<>&]/g,
-										function(m){ return specialChars[m]; }
-									)
-								//TODO css class
-							},
-							PRIVATE.log
-							,'first'
-						);
-					};
-					
-					on(PRIVATE.form, 'submit', PRIVATE.onChatSubmit);
-				}
-			);
-			PRIVATE.onConnectedToServer = function(inEvent)
+			
+			
+			/////////////////////////////////////////////////////////
+			//Handle input:
+			
+			if(inInputEvent.keysPressed['\x67'])//g
 			{
-				//TODO remove the UI stuff from this class?
-				PRIVATE.state.className = 'success';//TODO classname css!! (more in this file)
-				PRIVATE.state.innerHTML = 'Socket Open';
-			};
-			GameInstance.Network.registerListener(
-				'ConnectedToServer',
-				PRIVATE
-			);
-			PRIVATE.onDisconnectedFromServer = function(inEvent)
-			{
-				//TODO remove the UI stuff from this class?
-				PRIVATE.state.className = 'fail';//TODO classname css!! (more in this file)
-				PRIVATE.state.innerHTML = 'Socket Closed';
-			};
-			GameInstance.Network.registerListener(
-				'DisconnectedFromServer',
-				PRIVATE
-			);
-			PRIVATE.onMsg = function(inEvent)
-			{
-				PRIVATE.sendChatToChatLog(inEvent.msg);
-			};
-			GameInstance.Network.registerListener(
-				'Msg',
-				PRIVATE
-			);
-		}
-				
-		return true;
-	};
-	
-
-	
-	instance.render = function(inCanvas2DContext)
-	{
-		//choose items to render
-		PRIVATE.GameWorld.render(inCanvas2DContext);
-		
-		//HACK		
-//		instance.animInst.render(
-//			inCanvas2DContext,
-//			PRIVATE.GameWorld.getCurrentCamera().getRect()
-//		);
-		/*instance.animInst.debugDraw(
-			inCanvas2DContext,
-			PRIVATE.GameWorld.getCurrentCamera().getRect()
-		);*/
-//		instance.animInst.anchorPosition = instance.pos;
-		//instance.pos.myX += 1;
-		//instance.pos.myY += 1;
-		//instance.frame++;
-	};
-	
-	
-	
-	//TODO maybe this should be in an editor or something
-	PRIVATE.onInput = function(inInputEvent)
-	{				
-		var map = PRIVATE.GameWorld.getMap();
-		var camRect = PRIVATE.GameWorld.getCurrentCamera().getRect();
-		var camPoint = camRect.getLeftTop();		
-		var mouseWorldPosition = inInputEvent.mouseLoc.add(camPoint);
-		//var soundTime = GameInstance.soundSystem.getSoundHardwareTime();//TODO timer.getTime() should work too!
-		
-		//TODO should be in component (and world)
-		GameInstance.soundSystem.setListenerPosition(camRect.getCenter());
-		
-		if(PRIVATE.drawTile === undefined)
-		{
-			PRIVATE.drawTile = 0;
-		}
-		
-		if(inInputEvent.keysPressed['\x67'])//g
-		{
-			PRIVATE.lastSoundPlayed = GameInstance.soundSystem.playSoundEffect(0);
-		}
-		if(inInputEvent.keysPressed['\x68'])//h
-		{
-			PRIVATE.lastSoundPlayed = GameInstance.soundSystem.playPositionalSoundEffect2D(
-				0,
-				new GameEngineLib.Game2DPoint(
-					mouseWorldPosition.myX,//2 * mouseWorldPosition.myX / camRect.myWidth - 1 + 10,
-					mouseWorldPosition.myY//2 * mouseWorldPosition.myY / camRect.myHeight - 1
-				)
-				//camRect
-			);
-		}
-		if(inInputEvent.keysPressed['\x74'])//t
-		{
-			if(!PRIVATE.lastSoundPlayed.isFinished())
-			{
-				PRIVATE.lastSoundPlayed.stop();
+				this._lastSoundPlayed = GameInstance.soundSystem.playSoundEffect(0);
 			}
-		}
-		if(inInputEvent.keysPressed['\x6c'])//l
-		{
-			GameInstance.soundSystem.setMasterVolume(0.1);
-		}
-		if(inInputEvent.keysPressed['\x6b'])//k
-		{
-			GameInstance.soundSystem.setMasterVolume(0.5);
-		}
-		if(inInputEvent.keysPressed['\x6a'])//j
-		{
-			GameInstance.soundSystem.setMasterVolume(1.0);
-		}
-		if(PRIVATE.lastSoundPlayed && PRIVATE.lastSoundPlayed.setPosition)
-		{
-			if(PRIVATE.lastSoundPlayed.isPlaying())
+			if(inInputEvent.keysPressed['\x68'])//h
 			{
-				PRIVATE.lastSoundPlayed.setPosition(mouseWorldPosition);
-				PRIVATE.lastSoundPlayed.setVelocity(
-					mouseWorldPosition
-						.sub(PRIVATE.lastMouseWorldPosition)
-						//.multiply(/*0.001*/1/(soundTime-PRIVATE.lastSoundTime))
-						.multiply(1/GameInstance.soundSystem.getSoundHardwareTimeUpdateDelta())
+				this._lastSoundPlayed = GameInstance.soundSystem.playPositionalSoundEffect2D(
+					0,
+					new GameEngineLib.Game2DPoint(
+						mouseWorldPosition.myX,
+						mouseWorldPosition.myY
+					)
 				);
 			}
+			if(inInputEvent.keysPressed['\x74'])//t
+			{
+				if(!this._lastSoundPlayed.isFinished())
+				{
+					this._lastSoundPlayed.stop();
+				}
+			}
+			if(inInputEvent.keysPressed['\x6c'])//l
+			{
+				GameInstance.soundSystem.setMasterVolume(0.1);
+			}
+			if(inInputEvent.keysPressed['\x6b'])//k
+			{
+				GameInstance.soundSystem.setMasterVolume(0.5);
+			}
+			if(inInputEvent.keysPressed['\x6a'])//j
+			{
+				GameInstance.soundSystem.setMasterVolume(1.0);
+			}
+			if(this._lastSoundPlayed && this._lastSoundPlayed.setPosition)
+			{
+				if(this._lastSoundPlayed.isPlaying())
+				{
+					this._lastSoundPlayed.setPosition(mouseWorldPosition);
+					this._lastSoundPlayed.setVelocity(
+						mouseWorldPosition
+							.sub(this._lastMouseWorldPosition)
+							.multiply( 1 / GameInstance.soundSystem.getSoundHardwareTimeUpdateDelta() )
+					);
+				}
+			}
+			
+			
+			if(inInputEvent.keysPressed['\x6f'])//o
+			{
+				GameSystemVars.Debug.Map_Draw = !GameSystemVars.Debug.Map_Draw;
+			}
+			if(inInputEvent.keysPressed['\x70'])//p
+			{
+				GameSystemVars.Debug.Physics_Draw = !GameSystemVars.Debug.Physics_Draw;
+			}
+			if(inInputEvent.keysPressed['\x69'])//i
+			{
+				GameSystemVars.Debug.SceneGraph_Draw = !GameSystemVars.Debug.SceneGraph_Draw;
+			}
+			if(inInputEvent.keysPressed['\x75'])//u
+			{
+				GameSystemVars.Debug.Input_Draw = !GameSystemVars.Debug.Input_Draw;
+			}
+			//TODO drawing debug sprite, debug audio
+			
+			
+			if(inInputEvent.keysPressed['0'])
+			{
+				this._drawTile = 0;
+			}
+			if(inInputEvent.keysPressed['1'])
+			{
+				this._drawTile = 1;
+			}
+			if(inInputEvent.keysPressed['2'])
+			{
+				this._drawTile = 2;
+			}
+			if(inInputEvent.keysPressed['3'])
+			{
+				this._drawTile = 3;
+			}
+			if(inInputEvent.keysPressed['4'])
+			{
+				this._drawTile = 4;
+			}
+			
+			
+			if(inInputEvent.buttons[0])
+			{
+				this._map.setTile(this._map.toTileCoordinate(mouseWorldPosition), this._drawTile);
+			}
+			if(inInputEvent.buttons[2])
+			{
+				this._map.clearTile(this._map.toTileCoordinate(mouseWorldPosition));
+			}
+			
+			
+			this._lastMouseWorldPosition = mouseWorldPosition;
+			//Handle input:
+			/////////////////////////////////////////////////////////
 		}
-		
-		
-		if(inInputEvent.keysPressed['\x6f'])//o
-		{
-			GameSystemVars.Debug.Map_Draw = !GameSystemVars.Debug.Map_Draw;
-		}
-		if(inInputEvent.keysPressed['\x70'])//p
-		{
-			GameSystemVars.Debug.Physics_Draw = !GameSystemVars.Debug.Physics_Draw;
-		}
-		if(inInputEvent.keysPressed['\x69'])//i
-		{
-			GameSystemVars.Debug.SceneGraph_Draw = !GameSystemVars.Debug.SceneGraph_Draw;
-		}
-		if(inInputEvent.keysPressed['\x75'])//u
-		{
-			GameSystemVars.Debug.Input_Draw = !GameSystemVars.Debug.Input_Draw;
-		}
-		//TODO drawing debug sprite, debug audio
-		
-		
-		if(inInputEvent.keysPressed['0'])
-		{
-			PRIVATE.drawTile = 0;
-		}
-		if(inInputEvent.keysPressed['1'])
-		{
-			PRIVATE.drawTile = 1;
-		}
-		if(inInputEvent.keysPressed['2'])
-		{
-			PRIVATE.drawTile = 2;
-		}
-		if(inInputEvent.keysPressed['3'])
-		{
-			PRIVATE.drawTile = 3;
-		}
-		if(inInputEvent.keysPressed['4'])
-		{
-			PRIVATE.drawTile = 4;
-		}
-		
-		if(inInputEvent.buttons[2])
-		{
-			map.clearTile(map.toTileCoordinate(mouseWorldPosition));
-		}
-		if(inInputEvent.buttons[0])
-		{
-			map.setTile(map.toTileCoordinate(mouseWorldPosition), PRIVATE.drawTile);
-		}
-		
-		PRIVATE.lastMouseWorldPosition = mouseWorldPosition;
-		//PRIVATE.lastSoundTime = soundTime;
-		
-		//GameInstance.Network.sendMessage(inInputEvent.mouseLoc.myX + ', ' + inInputEvent.mouseLoc.myY);
-	};
-		
-	
-	return instance;
-};
+	}
+});

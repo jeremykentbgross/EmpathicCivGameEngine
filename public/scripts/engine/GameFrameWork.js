@@ -31,51 +31,15 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 	
 	//////////////////////////////////////////////////
 	//Create gamerules instance///////////////////////
-	// todo move default setup code elsewhere?
-	if(GameLib.createGameRules !== undefined)
+	// TODO move default setup code elsewhere?
+	if(GameLib.GameRules !== undefined)
 	{
-		instance.GameRules = GameLib.createGameRules();//TODO make this an GameObject?
+		instance.GameRules = GameLib.GameRules.create();
 	}
-	
-	instance.GameRules = 
-		instance.GameRules || { noUserGameRules : true };
-	
-	instance.GameRules.init =
-		instance.GameRules.init || function(){ return true; };
-	
-	instance.GameRules.render =
-		instance.GameRules.render ||
-		function(inCanvas2DContext)
-		{
-			var x, y;
-			var message;
-			
-			inCanvas2DContext.fillStyle = 'rgba(128, 128, 128, 1)';
-			inCanvas2DContext.strokeStyle = 'rgba(64, 64, 64, 1)';
-			inCanvas2DContext.fillRect(0, 0,
-				inCanvas2DContext.canvas.width,
-				inCanvas2DContext.canvas.height
-			);
-			inCanvas2DContext.strokeRect(0, 0,
-				inCanvas2DContext.canvas.width,
-				inCanvas2DContext.canvas.height
-			);
-			
-			inCanvas2DContext.fillStyle = 'rgba(64, 64, 64, 1)';
-			
-			inCanvas2DContext.font = '30px Arial';
-			if(!this.noUserGameRules)
-			{
-				message = "No Game Specific Render Code Is Present!";
-			}
-			else
-			{
-				message = "No Game Specific GameRule Code Is Present!";
-			}
-			x = (inCanvas2DContext.canvas.width - inCanvas2DContext.measureText(message).width) / 2;
-			y = (inCanvas2DContext.canvas.height - 30) / 2;
-			inCanvas2DContext.fillText(message, x, y);
-		};
+	else
+	{
+		instance.GameRules = GameEngineLib.GameRulesBase.create();
+	}
 	//Create gamerules instance///////////////////////
 	//////////////////////////////////////////////////
 	
@@ -176,6 +140,10 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 			instance.Network = GameEngineLib.GameNetwork.create();
 			instance.Network.init();
 			instance.UpdateOrder.push(instance.Network);
+		}
+		if(!GameSystemVars.Network.isServer && GameSystemVars.Network.isMultiplayer)
+		{
+			instance.chatSystem = GameEngineLib.ChatSystem.create();
 		}
 		
 		if(!GameSystemVars.Network.isServer)

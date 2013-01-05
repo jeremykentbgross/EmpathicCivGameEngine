@@ -147,6 +147,7 @@ GameLoader =
 			{
 				include(inSharedPath + "/socket.io/socket.io.js");
 			}
+			include(inSharedPath + "scripts/engine/GameChatSystem.js");
 			include(inSharedPath + "scripts/engine/Game2DGraphics.js");
 			include(inSharedPath + "scripts/engine/GameSoundSystem.js");
 			include(inSharedPath + "scripts/engine/GameSound.js");
@@ -186,6 +187,7 @@ GameLoader =
 		include(inSharedPath + "scripts/engine/Game2DPhysics.js");
 		include(inSharedPath + "scripts/engine/Game2DTileSet.js");
 		include(inSharedPath + "scripts/engine/Game2DWorld.js");
+		include(inSharedPath + "scripts/engine/GameRulesBase.js");
 		//////////////////////////////// ENGINE SCRIPTS //////////////////////////////
 		//////////////////////////////////////////////////////////////////////////////
 		

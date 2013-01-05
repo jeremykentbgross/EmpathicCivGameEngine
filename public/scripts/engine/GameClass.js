@@ -220,7 +220,27 @@ GameEngineLib.Class = function Class(inParams)
 
 	Constructor.create = function create()
 	{
-		return new Constructor();
+		var newItem = new Constructor();
+		if(Constructor.init && arguments.length)
+		{
+			Constructor.init.apply(newItem, arguments);
+		}
+		return newItem;
+	};
+	
+	Constructor.getClass = function getClass()
+	{
+		return Constructor;
+	};
+	
+	Constructor.getName = function getName()//TODO change to getClassName
+	{
+		return Constructor.name;
+	};
+	
+	Constructor.getID = function getID()//TODO change to getClassID
+	{
+		return Constructor._classID;
 	};
 
 	//figure if this is a managed object (derived from GameObject)
@@ -258,20 +278,7 @@ GameEngineLib.Class = function Class(inParams)
 			return GameClassRegistryMap[Constructor];
 		};
 		
-		Constructor.getClass = function getClass()
-		{
-			return Constructor;
-		};
 		
-		Constructor.getName = function getName()
-		{
-			return Constructor.name;
-		};
-		
-		Constructor.getID = function getID()
-		{
-			return Constructor._classID;
-		};
 		
 		//TODO could be in Object with getClass()?
 		Constructor.isA = function isA(inClass)
