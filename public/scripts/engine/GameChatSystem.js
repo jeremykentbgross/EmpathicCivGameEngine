@@ -228,12 +228,14 @@ GameEngineLib.ChatSystem = GameEngineLib.Class({
 			if(this._activeInput)
 			{
 				this._jojoStyle.set(this._domChatContainer, 'pointer-events', '');
+				this._jojoStyle.set(this._domChatContainer, 'border-color', '#00ff00');
 				this._domChatInput.focus();
 				GameInstance.Input.setSupressKeyboardEvents(true);
 			}
 			else
 			{
 				this._jojoStyle.set(this._domChatContainer, 'pointer-events', 'none');
+				this._jojoStyle.set(this._domChatContainer, 'border-color', '#0000ff');
 				this._domChatInput.blur();
 				GameInstance.Input.setSupressKeyboardEvents(false);
 			}
