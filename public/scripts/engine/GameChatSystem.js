@@ -19,7 +19,9 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
+//TODO fade chat container in/out on activity or inactivity
+//http://dojotoolkit.org/documentation/tutorials/1.7/animation/
+//http://dojotoolkit.org/documentation/tutorials/1.7/effects/
 GameEngineLib.ChatSystem = GameEngineLib.Class({
 	Constructor : function ChatSystem()
 	{
