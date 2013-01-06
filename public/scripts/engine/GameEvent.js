@@ -123,6 +123,7 @@ GameEngineLib.GameEvent_Input = GameEngineLib.Class({
 		this.buttons = inButtons || {};
 		this.keys = inKeys || {};
 		this.keysPressed = inKeysPressed || {};
+		this.clicked = {};//TODO param?
 	},
 	Parents : [GameEngineLib.GameEvent],
 	flags : {},

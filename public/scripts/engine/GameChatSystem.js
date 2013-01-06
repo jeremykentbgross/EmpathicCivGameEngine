@@ -34,6 +34,8 @@ GameEngineLib.ChatSystem = GameEngineLib.Class({
 		this._domChatInput = null;
 		this._domChatLog = null;
 		
+		this._activeInput = false;
+		
 		this._specialChars = {
 			'<' : '&lt;',
 			'>' : '&gt;',
@@ -158,6 +160,15 @@ GameEngineLib.ChatSystem = GameEngineLib.Class({
 			);
 			//Register to listen to messages from the server
 			/////////////////////////////////////////////////////////
+			
+			
+			
+			/////////////////////////////////////////////////////////
+			//Listen to main input
+			GameInstance.Input.registerListener('Input', this);
+			//Listen to main input
+			/////////////////////////////////////////////////////////
+			
 		},//End init
 		
 		
@@ -187,11 +198,46 @@ GameEngineLib.ChatSystem = GameEngineLib.Class({
 		},
 		//network event listeners
 		/////////////////////////////////////////////////////////
+			
+			
+			
+		/////////////////////////////////////////////////////////
+		//Listen to main input
+		onInput : function onInput(inInputEvent)
+		{
+			if(inInputEvent.keysPressed['\x0d'])//return
+			{
+				this.toggleActiveInput();
+			}
+			if(inInputEvent.clicked[0] && this._activeInput)
+			{
+				this.toggleActiveInput();
+			}
+		},
+		//Listen to main input
+		/////////////////////////////////////////////////////////
 		
 		
 		
 		/////////////////////////////////////////////////////////
 		//internal chat events
+		
+		toggleActiveInput : function toggleActiveInput()
+		{
+			this._activeInput = !this._activeInput;
+			if(this._activeInput)
+			{
+				this._jojoStyle.set(this._domChatContainer, 'pointer-events', '');
+				this._domChatInput.focus();
+				GameInstance.Input.setSupressKeyboardEvents(true);
+			}
+			else
+			{
+				this._jojoStyle.set(this._domChatContainer, 'pointer-events', 'none');
+				this._domChatInput.blur();
+				GameInstance.Input.setSupressKeyboardEvents(false);
+			}
+		},
 		
 		//dom form submit:
 		_onChatSubmit : function _onChatSubmit(event)
@@ -202,7 +248,7 @@ GameEngineLib.ChatSystem = GameEngineLib.Class({
 				this//sentListener
 			);
 			this._domChatInput.value = '';
-		},		
+		},
 		
 		//append to chat log
 		_sendChatToChatLog : function _sendChatToChatLog(inMessage)

@@ -28,6 +28,7 @@ body
 #graphicsContainer
 {
 	position : relative;
+	cursor : none;
 }
 
 #chatContainer

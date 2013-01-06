@@ -36,6 +36,7 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 	PRIVATE.keys = {};
 	PRIVATE.keysPressed = {};
 	PRIVATE.buttons = {};
+	PRIVATE.clicked = {};
 	PRIVATE.active = false;
 	
 	PRIVATE.input = function(inEvent)
@@ -71,11 +72,13 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 			case 'mousewheel':
 				//TODO?
 				break;
-			
+			*/
 			case 'click':
-				//TODO
+				PRIVATE.clicked[inEvent.button] = true;
+				PRIVATE.mouseLoc.myX = inEvent.offsetX;
+				PRIVATE.mouseLoc.myY = inEvent.offsetY;
 				break;
-				
+			/*
 			case 'dblclick':
 				//TODO
 				break;
@@ -97,7 +100,13 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 			PRIVATE.keys = {};
 			PRIVATE.keysPressed = {};
 			PRIVATE.buttons = {};
+			PRIVATE.clicked = {};
 		}
+	};
+	
+	instance.setSupressKeyboardEvents = function setSupressKeyboardEvents(inSupress)
+	{
+		PRIVATE._supressKeyboardEvents = inSupress;
 	};
 	
 	instance.initClient = function initClient(inCanvas)
@@ -120,13 +129,9 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 				on(inCanvas, 'mousedown', PRIVATE.input);
 				on(inCanvas, 'mouseup', PRIVATE.input);
 				on(inCanvas, 'mousemove', PRIVATE.input);
-				
-				/*
-				//currently unused:
-				on(inCanvas, 'mousewheel', PRIVATE.input);
+				//on(inCanvas, 'mousewheel', PRIVATE.input);
 				on(inCanvas, 'click', PRIVATE.input);
-				on(inCanvas, 'dblclick', PRIVATE.input);*/
-				
+				//on(inCanvas, 'dblclick', PRIVATE.input);
 				on(inCanvas, 'mouseout', PRIVATE.input);
 				on(inCanvas, 'mouseover', PRIVATE.input);
 								
@@ -201,19 +206,28 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 		{
 			event.buttons[i] = PRIVATE.buttons[i];
 		}
-		for(i in PRIVATE.keys)
+		for(i in PRIVATE.clicked)
 		{
-			event.keys[i] = PRIVATE.keys[i];
+			event.clicked[i] = PRIVATE.clicked[i];
 		}
-		for(i in PRIVATE.keysPressed)
+		
+		if(!PRIVATE._supressKeyboardEvents)
 		{
-			event.keysPressed[i] = PRIVATE.keysPressed[i];
+			for(i in PRIVATE.keys)
+			{
+				event.keys[i] = PRIVATE.keys[i];
+			}
+			for(i in PRIVATE.keysPressed)
+			{
+				event.keysPressed[i] = PRIVATE.keysPressed[i];
+			}
 		}
 		
 		//send messages for all the listeners for input
 		this.onEvent(event);
 		
 		PRIVATE.keysPressed = {};
+		PRIVATE.clicked = {};
 	};
 	
 	return instance;
