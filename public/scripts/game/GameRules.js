@@ -116,7 +116,7 @@ GameLib.GameRules = GameEngineLib.Class({
 						,size : GameEngineLib.createGame2DPoint(/*64,64*/96,96)
 					},
 					{
-						fileName : 'images/test/groundSub5.png' // 'images/ground_level01_01.png' //'images/dirt.png',
+						fileName : 'images/ground_256.png'//'images/test/groundSub5.png' // 'images/ground_level01_01.png' //'images/dirt.png',
 						,anchor : GameEngineLib.createGame2DPoint()
 						,layer : 0
 						,size : GameEngineLib.createGame2DPoint(96,96)//64,64)
@@ -128,7 +128,7 @@ GameLib.GameRules = GameEngineLib.Class({
 						,size : GameEngineLib.createGame2DPoint(64,64)
 					},
 					{
-						fileName : 'images/test/wall.png' //'images/wall_level01_01.png'
+						fileName : 'images/wall_256.png'//'images/test/wall.png' //'images/wall_level01_01.png'
 						,anchor : GameEngineLib.createGame2DPoint(32, 32)
 						,layer : 1
 						,physics : GameEngineLib.createGame2DAABB(0, 0, 64, 64)

@@ -1,0 +1,203 @@
+//how to TODO on namespaces and functions? just list the namespace?
+/**$
+{
+	type : "namespace"
+	,name : "MyNamespace"
+	,description : "A namespace that has awesome stuff in it."
+	,members : {}//??
+	,tags : ["sometag", "someotherTag"]
+	,TODOs :	//??????
+	[
+		{
+			type : "TODO"
+			,description : need to do blah blah blah
+		}
+	]
+	
+	//inserted for all somehow:
+	,file : ""
+	,line : 
+}
+*/
+MyNamespace = {};
+
+/**$
+{
+	type : "namespace"
+	,name : "MyChildNamespace"
+	,namespace : "MyNamespace"
+	,description : "A namespace that has awesome stuff in it."
+}
+*/
+MyNamespace.MyChildNamespace = {};
+
+/**$
+{
+	type : "event"
+	,name : "SomeEvent"
+	,namespace : "MyNamespace"
+	,description : "An event"
+	,eventParam : "MyNamespace.MyEventParams"
+}
+*/
+
+/**$
+{
+	type : "class"
+	,name : "MyClass"
+	,namespace : "MyNamespace.MyChildNamespace"
+	,parent : ""
+	,description : "Some Class that does.. blah blah blah"
+	,listensTo : ["MyNamespace.SomeEvent"]
+	,members : [
+*/
+MyNamespace.MyChildNamespace.MyClass = Class({
+	Constructor : MyClass()
+	{
+		/**$
+		{
+			type : "variable"
+			,name : "someMember"
+			,description : "someMember.. blah blah blah"
+			,types : ["string", "MyNamespace.MyChildNamespace.MyClass"]
+			,default : "blah"
+		}
+		*/
+		this.someMember = "blah";
+	
+		//OR??
+	
+		/**$
+		someOtherMember : {
+			type : "variable"
+			,description : "blah blah blah"
+			,types : ["string", "MyNamespace.MyChildNamespace.MyClass"]
+			,default : 1.01
+		}
+		*/
+		this.someOtherMember = 1.01;
+	},
+	Parents : [],
+	description :
+	{
+		/**$
+		{
+			type : "method"
+			,name : "MyMethod"
+			,description : "Some function that does.. blah blah blah"
+			,params : [
+				{
+					name : "inParam1"
+					,types : ["MyNamespace.MyChildNamespace.MyClass"]
+					,description : "Some param for blah blah blah"
+				}
+				,{
+					name : "inParam2"
+					,types : ["MyNamespace.MyChildNamespace.MyClass"]
+					,description : "Some param for blah blah blah"
+				}
+				,{
+					name : "inParam3"
+					,types : ["MyNamespace.MyChildNamespace.MyClass"]
+					,description : "Some param for blah blah blah"
+				}
+			]
+			,fires : ["MyNamespace.SomeEvent"]
+			,internals : [
+		*/
+		MyMethod : function MyMethod(inParam1, inParam2, inParam3)
+		{
+			...
+			/**$
+			{
+				type : "TODO"
+				,description : need to do blah blah blah
+			}
+			*/
+			...
+			/**${type:"TODO", description:"need to do blah blah blah"}*/
+			...
+		}
+		/**$
+			]//end internals
+		}//end MyMethod
+		*/
+		
+		//??
+		getSchema : function getSchema()
+		{
+			return docs.getSchema("MyNamespace.MyChildNamespace.MyClass");
+		}
+	}
+});
+/**$
+	]//end members
+}//end MyClass
+*/
+
+/*
+loadFile(file)
+{
+	regex find comments
+	for all found
+	get start line number
+	find all { lines
+	get line offset
+	insert file/line
+	concat to master
+}
+for all files
+	loadFile(file)
+	//OR JSON parsing!!
+	eval("docsElements = [" master "];");
+
+for all docElements
+	add to parent namespace if appropriate, else GlobalNamespace
+	// => namespace.members
+	if namespace
+		{}
+	if class
+		{}
+	if event
+		add to events
+	if function
+		{}
+	if TODO
+		item.name = nextToken?? //no duplicates
+		add to todos
+...
+
+walk GlobalNamespace
+	track nested namespace
+	verify item matches template
+	//do stuff from "for all docElements" above^^^
+	recurse
+*/
+
+/*
+http://www.w3schools.com/tags/tag_iframe.asp
+http://www.w3schools.com/tags/att_a_target.asp
+http://www.w3schools.com/cssref/css3_pr_resize.asp
+http://www.css3.info/preview/resize/
+http://jade-lang.com/
+
+<a href="address#domId" target="framename"></a>
+<? id="line">line</><p>...</p>
+
+http://www.w3schools.com/tags/tryit.asp?filename=tryhtml_table_test
+<table border="1">
+	<tr>
+		<td>
+			<table border="1">
+				<tr><td>one</td></tr>
+				<tr><td>two</td></tr>
+			</table>
+		</td>
+		<td>
+			three
+		</td>
+	</tr>
+</table>
+
+http://www.html5rocks.com/en/tutorials/casestudies/gopherwoord-studios-resizing-html5-games/
+*/
