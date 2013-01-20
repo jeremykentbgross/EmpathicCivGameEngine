@@ -19,14 +19,14 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.GameObject = GameEngineLib.Class({
+GameEngineLib.GameObject = GameEngineLib.Class.create({
 	Constructor : function GameObject()
 	{
 		var registry = this.getClass().getInstanceRegistry();
 		var instanceID = registry.getUnusedID();
 
 		this._name = 'Instance_' + instanceID;
-		this._ID = instanceID;
+		this._ID = instanceID;//TODO rename _ID as _instanceID
 		registry.register(this);
 		
 		this._netOwner = GameEngineLib.User.USER_IDS.SERVER;
@@ -41,7 +41,7 @@ GameEngineLib.GameObject = GameEngineLib.Class({
 	flags : {},
 	
 	ChainUp : ['destroy'],
-	ChainDown : ['serialize'],
+	ChainDown : ['serialize', 'copyFrom'],
 	
 	Definition :
 	{
@@ -53,9 +53,24 @@ GameEngineLib.GameObject = GameEngineLib.Class({
 				net : true,
 				min : 0,
 				max : GameEngineLib.User.USER_IDS.MAX_EVER
+				//TODO condition: renamed this._objectBaseNetDirty
 			}
 			//TODO name/id (NOT net)
 		],
+		
+		registerClass : function registerClass()
+		{
+			var classRegistry,
+				thisClass;
+
+			thisClass = this.getClass();
+			classRegistry = GameEngineLib.Class.getInstanceRegistry();
+			if(classRegistry.findByName(thisClass.getName()) !== thisClass)
+			{
+				thisClass._classID = classRegistry.getUnusedID();
+				classRegistry.register(thisClass);
+			}
+		},
 		
 		getName : function getName()
 		{
@@ -148,6 +163,24 @@ GameEngineLib.GameObject = GameEngineLib.Class({
 			return new GameEngineLib.GameObjectRef(this);
 		},
 		
+		isA : function isA(inClass)//TODO note that this only checks first/primary parents!
+		{
+			var current = this.getClass()._constructor;
+			while(current)
+			{
+				if(current === inClass || current.name === inClass)
+				{
+					return true;
+				}
+				if(!current.getClass)
+				{
+					return false;
+				}
+				current = current.getClass()._parent;
+			}
+			return false;
+		},
+		
 		serialize : function serialize(serializer)
 		{
 			if(!serializer)//TODO needed still? Try to remove.
@@ -174,8 +207,19 @@ GameEngineLib.GameObject = GameEngineLib.Class({
 			}
 			
 			this._objectBaseNetDirty = false;
+		},
+		
+		clone : function clone()
+		{
+			var newInstance = this.getClass().create();
+			newInstance.copyFrom(this);
+			return newInstance;
+		},
+		
+		copyFrom : function copyFrom(inOther)
+		{
+			this.setName('Copy_' + inOther.getName());
 		}
-		//TODO clone/copyfrom
 		
 	}
 });

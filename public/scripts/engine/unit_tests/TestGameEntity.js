@@ -26,7 +26,7 @@ GameUnitTests.registerTest(
 		var entity = GameEngineLib.GameEntity.create();
 		entity.addedToWorld(6);
 		
-		var TestComponent = GameEngineLib.Class({
+		var TestComponent = GameEngineLib.Class.create({
 			Constructor : function TestComponent()
 			{
 				this.GameEntityComponent();
@@ -70,7 +70,8 @@ GameUnitTests.registerTest(
 				},
 				
 				serialize : function serialize(){},
-				destroy : function destroy(){}
+				destroy : function destroy(){},
+				copyFrom : function copyFrom(inOther){}
 			}
 		});
 		

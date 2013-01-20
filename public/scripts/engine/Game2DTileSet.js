@@ -21,7 +21,7 @@
 
 
 //TODO should be merged with Map class
-GameEngineLib.Game2DTileSet = GameEngineLib.Class(
+GameEngineLib.Game2DTileSet = GameEngineLib.Class.create(
 {
 	Constructor : function Game2DTileSet()
 	{
@@ -143,6 +143,7 @@ GameEngineLib.Game2DTileSet = GameEngineLib.Class(
 		},
 		
 		destroy : function destroy(){},//TODO
-		serialize : function serialize(){}//TODO
+		serialize : function serialize(){},//TODO
+		copyFrom : function copyFrom(inOther){}//TODO
 	}
 });

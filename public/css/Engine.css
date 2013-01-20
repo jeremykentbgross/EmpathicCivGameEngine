@@ -31,6 +31,12 @@ body
 	cursor : none;
 }
 
+/*
+TODO either:
+1) Make chatContainerClass that is assigned by the chat system!
+2) Add the chatContainer with the chat system.
+ATM chat container is visible when it is not multiplayer!
+*/
 #chatContainer
 {
 	position : absolute;

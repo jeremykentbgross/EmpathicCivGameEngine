@@ -77,7 +77,6 @@ GameLoader =
 		GameEngineLib = {};
 		GameLib = {};
 		GameInstance = null;
-		GameClassRegistryMap = {};
 		
 		//GameEngineLib.include = include;//TODO needed?
 				

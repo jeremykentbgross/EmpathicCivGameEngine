@@ -20,7 +20,7 @@
 */
 
 //TODO rename CharacterInput??
-GameEngineLib.EntityComponent_Input = GameEngineLib.Class(
+GameEngineLib.EntityComponent_Input = GameEngineLib.Class.create(
 {
 	Constructor : function EntityComponent_Input()
 	{
@@ -30,6 +30,7 @@ GameEngineLib.EntityComponent_Input = GameEngineLib.Class(
 		//TODO put this elsewhere??
 		this._speed = 128;
 		
+		//TODO these should go in a child class, like CharacterInput or something
 		this._up		= GameEngineLib.createGame2DPoint( 0,-1);
 		this._down	= GameEngineLib.createGame2DPoint( 0, 1);
 		this._left	= GameEngineLib.createGame2DPoint(-1, 0);
@@ -79,16 +80,37 @@ GameEngineLib.EntityComponent_Input = GameEngineLib.Class(
 			}
 		},
 		
-		onAddedToEntity : function onAddedToEntity(inEntity)//TODO chain me
+		onAddedToEntity : function onAddedToEntity(inEvent)
 		{
-			GameInstance.Input.registerListener('Input', this);
-			//todo register for events
+			var owner = this._owner;//inEntity.entity;
+		
+			//register for events
+			owner.registerListener('AddedToWorld', this);
+			owner.registerListener('RemovedFromWorld', this);
+			if(inEvent.entity.getWorld())
+			{
+				GameInstance.Input.registerListener('Input', this);
+			}
 		},
 
-		onRemovedFromEntity : function onRemovedFromEntity()//TODO chain me
+		onRemovedFromEntity : function onRemovedFromEntity(inEvent)
+		{
+			var owner = this._owner;//inEntity.entity;
+			
+			//unregister for events
+			owner.deregisterListener('AddedToWorld', this);
+			owner.deregisterListener('RemovedFromWorld', this);
+			GameInstance.Input.deregisterListener('Input', this);
+		},
+		
+		onAddedToWorld : function onAddedToWorld(inEvent)
+		{
+			GameInstance.Input.registerListener('Input', this);
+		},
+		
+		onRemovedFromWorld : function onRemovedFromWorld(inEvent)
 		{
 			GameInstance.Input.deregisterListener('Input', this);
-			//todo unregister for events
 		},
 		
 		destroy : function destroy()
@@ -96,6 +118,16 @@ GameEngineLib.EntityComponent_Input = GameEngineLib.Class(
 			this.onRemovedFromEntity();
 		},
 
-		serialize : function serialize(){}//TODO
+		serialize : function serialize(){},//TODO
+		
+		copyFrom : function copyFrom(inOther)
+		{
+			this._speed = inOther._speed;
+		
+			/*this._up.copyFrom(inOther._up);
+			this._down.copyFrom(inOther._down);
+			this._left.copyFrom(inOther._left);
+			this._right.copyFrom(inOther._right);*/
+		}
 	}
 });

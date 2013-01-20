@@ -23,7 +23,7 @@
 /*
 Use case template:
 
-GameEngineLib.Class({
+GameEngineLib.Class.create({
 	Constructor : ,
 	Parents : [],
 	flags : {},
@@ -36,34 +36,68 @@ GameEngineLib.Class({
 });
 */
 
-GameEngineLib.Class = function Class(inParams)
+
+GameEngineLib.Class = function Class(inConstructor, inParents)
 {
-	var
+	this._constructor = inConstructor;
+	
+	if(inParents)
+	{
+		this._parent = inParents[0];//TODO is this needed? or just parents?
+		this._parents = inParents;
+	}
+	
+	this._childClasses = [];//TODO flag for not track a child class
+	
+	this._flags = {};
+	
+	this._classID = -1;
+	
+	this._instanceRegistry = null;
+	
+	/*
+	TODOs:
+	newInstances,
+	netDirtyInstances,
+	*/
+};
+GameEngineLib.Class.prototype = GameEngineLib.Class;
+
+
+
+GameEngineLib.Class.create = function create(inParams)
+{
+	var theClass,
 		//breaking up params:
 		Constructor,
 		inParents,
 		inDefinition,
+		inFlags,
 		//parsing helpers
 		parentIndex,
 		parent,
+		parentClass,
 		propertyName,
 		property,
 		methodName,
 		methods,
 		methodIndex,
-		current,
+		flagIndex,
 		managed,
 		//source text for constuctor
 		constructorSrc;
 	
 	//params:
-	Constructor = inParams.Constructor,
-	inParents = inParams.Parents,
-	inDefinition = inParams.Definition,
+	Constructor = inParams.Constructor;
+	inParents = inParams.Parents;
+	inDefinition = inParams.Definition;
+	inFlags = inParams.flags;
 		
 	Constructor.prototype = Constructor;
 	Constructor._chainUpMethods = {};
 	Constructor._chainDownMethods = {};
+	
+	theClass = new GameEngineLib.Class(Constructor, inParents);
 	
 	if(GameSystemVars.DEBUG)
 	{
@@ -160,21 +194,23 @@ GameEngineLib.Class = function Class(inParams)
 		}
 		
 		Constructor[parent.name] = parent;
-		if(parent._childClasses)
+		if(parent.getClass && parent.getClass())
 		{
-			parent._childClasses.push(Constructor);
+			parentClass = parent.getClass();
+			parentClass._childClasses.push(Constructor);
+			for(flagIndex in parentClass._flags)
+			{
+				theClass._flags[flagIndex] = parentClass._flags[flagIndex];
+			}
 		}
 	}
 	
 	Constructor[Constructor.name] = Constructor;
-	Constructor._childClasses = [];
-	
-	if(inParents)
+	for(flagIndex in inFlags)
 	{
-		Constructor._parent = inParents[0];//TODO is this needed? or just parents?
-		Constructor._parents = inParents;
+		theClass._flags[flagIndex] = inFlags[flagIndex];
 	}
-	
+		
 	for(propertyName in inDefinition)
 	{
 		//don't copy over chain functions directly
@@ -182,9 +218,7 @@ GameEngineLib.Class = function Class(inParams)
 		{
 			continue;
 		}
-				
-		//make functions static so they can be called by children from parent namespace
-		//	and copy static stuff into the class too
+		
 		Constructor[propertyName] = inDefinition[propertyName];
 	}
 	
@@ -199,7 +233,7 @@ GameEngineLib.Class = function Class(inParams)
 		Constructor._chainUpMethods[methodName] = [];
 		Constructor._chainUpMethods[methodName].unshift(Constructor[methodName]);
 		
-		Constructor[methodName] = GameEngineLib.Class.createChainUpFunction(methodName);
+		Constructor[methodName] = GameEngineLib.Class._createChainUpFunction(methodName);
 	}
 	for(methodIndex in inParams.ChainDown)
 	{
@@ -212,13 +246,10 @@ GameEngineLib.Class = function Class(inParams)
 		Constructor._chainDownMethods[methodName] = [];
 		Constructor._chainDownMethods[methodName].push(Constructor[methodName]);
 		
-		Constructor[methodName] = GameEngineLib.Class.createChainDownFunction(methodName);
+		Constructor[methodName] = GameEngineLib.Class._createChainDownFunction(methodName);
 	}
 	
-	//TODO should do this better.  Like maybe inherit parent flags? should also be private!
-	Constructor.flags = inParams.flags;
-
-	Constructor.create = function create()
+	theClass.create = Constructor.create = function create()
 	{
 		var newItem = new Constructor();
 		if(Constructor.init && arguments.length)
@@ -230,70 +261,17 @@ GameEngineLib.Class = function Class(inParams)
 	
 	Constructor.getClass = function getClass()
 	{
-		return Constructor;
+		return theClass;
 	};
 	
-	Constructor.getName = function getName()//TODO change to getClassName
-	{
-		return Constructor.name;
-	};
-	
-	Constructor.getID = function getID()//TODO change to getClassID
-	{
-		return Constructor._classID;
-	};
-
-	//figure if this is a managed object (derived from GameObject)
-	managed = false;
-	current = Constructor;
-	while(current)
-	{
-		if(current.name === 'GameObject')
-		{
-			managed = true;
-			break;
-		}
-		current = current._parent;
-	}
-	
+	managed = Constructor.isA && Constructor.isA('GameObject');
 	if(managed)
 	{
-		Constructor.registerClass = function registerClass()
-		{
-			var classRegistry = GameEngineLib.Class.getInstanceRegistry();
-			if(classRegistry.findByName(Constructor.name) === Constructor)
-			{
-				return;
-			}
-			Constructor._classID = classRegistry.getUnusedID();
-			classRegistry.register(Constructor);
-		};
-						
-		Constructor.getInstanceRegistry = function getInstanceRegistry()
-		{
-			if(!GameClassRegistryMap[Constructor])
-			{
-				GameClassRegistryMap[Constructor] = new GameEngineLib.GameRegistry();
-			}
-			return GameClassRegistryMap[Constructor];
-		};
-		
-		
-		
-		//TODO could be in Object with getClass()?
-		Constructor.isA = function isA(inClass)
-		{
-			var current = Constructor;
-			while(current)
-			{
-				if(current === inClass)
-				{
-					return true;
-				}
-				current = current._parent;
-			}
-			return false;
-		};
+		theClass.createInstanceRegistry();
+	}
+	else
+	{
+		delete Constructor['getClass'];
 	}
 	
 	return Constructor;
@@ -301,23 +279,35 @@ GameEngineLib.Class = function Class(inParams)
 
 
 
+GameEngineLib.Class.getName = function getName()
+{
+	return this._constructor.name;
+};
+
+
+
+GameEngineLib.Class.getID = function getID()
+{
+	return this._classID;
+};
+
+
+
+GameEngineLib.Class.createInstanceRegistry = function createInstanceRegistry()//TODO rename reset?
+{
+	this._instanceRegistry = new GameEngineLib.GameRegistry();
+};
+
+
+
 GameEngineLib.Class.getInstanceRegistry = function getInstanceRegistry()
 {
-	if(!GameClassRegistryMap.Class)
-	{
-		GameClassRegistryMap.Class = new GameEngineLib.GameRegistry();
-	}
-	return GameClassRegistryMap.Class;
-};
-
-GameEngineLib.Class.createInstanceRegistry = function createInstanceRegistry()
-{
-	GameClassRegistryMap = {};
+	return this._instanceRegistry;
 };
 
 
 
-GameEngineLib.Class.createChainUpFunction = function createChainUpFunction(inMethodName)
+GameEngineLib.Class._createChainUpFunction = function _createChainUpFunction(inMethodName)
 {
 	return function()
 	{
@@ -333,7 +323,7 @@ GameEngineLib.Class.createChainUpFunction = function createChainUpFunction(inMet
 
 
 
-GameEngineLib.Class.createChainDownFunction = function createChainDownFunction(inMethodName)
+GameEngineLib.Class._createChainDownFunction = function _createChainDownFunction(inMethodName)
 {
 	return function()
 	{

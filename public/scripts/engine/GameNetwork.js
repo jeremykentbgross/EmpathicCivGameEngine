@@ -397,7 +397,7 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 		function(inClass)
 		{
 			//TODO get rid of this when we have class dirty list instead of looping thru all classes.
-			if(!inClass.flags.net)
+			if(!inClass._flags.net)
 			{
 				return;
 			}
@@ -416,7 +416,7 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 				function(inObject)
 				{
 					//TODO skip objects we do not own (but queue owner changes in netserialize queue from object?)
-					if(inClass.flags.net && inObject.netDirty() /*&& inObject.getNetOwner() === GameInstance.localUser.userName*/)
+					if(inClass._flags.net && inObject.netDirty() /*&& inObject.getNetOwner() === GameInstance.localUser.userName*/)
 					{
 						if(!GameSystemVars.Network.isServer
 							&& GameSystemVars.DEBUG

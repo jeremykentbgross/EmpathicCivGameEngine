@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.Sound = GameEngineLib.Class(
+GameEngineLib.Sound = GameEngineLib.Class.create(
 {
 	Constructor : function Sound(inSource, inStartedTime, inFileName)
 	{

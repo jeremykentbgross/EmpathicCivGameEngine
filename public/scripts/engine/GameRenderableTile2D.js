@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.RenderableTile2D = GameEngineLib.Class({
+GameEngineLib.RenderableTile2D = GameEngineLib.Class.create({
 	Constructor : function RenderableTile2D()
 	{
 		this.GameRenderable2D();

@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.Animation2DFrame = GameEngineLib.Class({
+GameEngineLib.Animation2DFrame = GameEngineLib.Class.create({
 	Constructor : function Animation2DFrame()
 	{
 		this._sourceRect = new GameEngineLib.Game2DAABB();

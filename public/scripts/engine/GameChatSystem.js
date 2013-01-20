@@ -22,7 +22,7 @@
 //TODO fade chat container in/out on activity or inactivity
 //http://dojotoolkit.org/documentation/tutorials/1.7/animation/
 //http://dojotoolkit.org/documentation/tutorials/1.7/effects/
-GameEngineLib.ChatSystem = GameEngineLib.Class({
+GameEngineLib.ChatSystem = GameEngineLib.Class.create({
 	Constructor : function ChatSystem()
 	{
 		this._jojoDom = null;
@@ -120,7 +120,7 @@ GameEngineLib.ChatSystem = GameEngineLib.Class({
 				{
 					id : 'chatInput',
 					type : 'text',
-					maxlength : "140",//TODO enforce this on the server side!
+					maxlength : 140,//TODO enforce this on the server side!
 					placeholder : "type and press enter to chat"
 				},
 				that._domChatForm

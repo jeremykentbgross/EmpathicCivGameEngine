@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.Game2DMap = GameEngineLib.Class(
+GameEngineLib.Game2DMap = GameEngineLib.Class.create(
 {
 	Constructor : function Game2DMap()
 	{
@@ -211,7 +211,7 @@ GameEngineLib.Game2DMap = GameEngineLib.Class(
 		
 		destroy : function destroy(){},//TODO
 		serialize : function serialize(){},//TODO
-
+		copyFrom : function copyFrom(inOther){},//TODO
 		
 		
 		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect)

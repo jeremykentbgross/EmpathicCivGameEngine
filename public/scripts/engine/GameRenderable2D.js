@@ -21,7 +21,7 @@
 
 
 //This is actually almost more of an interface!
-GameEngineLib.GameRenderable2D = GameEngineLib.Class({
+GameEngineLib.GameRenderable2D = GameEngineLib.Class.create({
 	Constructor : function GameRenderable2D()
 	{
 		this.GameQuadTreeItem(/*aabb*/);

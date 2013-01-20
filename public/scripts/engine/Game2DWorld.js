@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.Game2DWorld = GameEngineLib.Class(
+GameEngineLib.Game2DWorld = GameEngineLib.Class.create(
 {
 	Constructor : function Game2DWorld()
 	{
@@ -203,6 +203,7 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class(
 
 		destroy : function destroy(){},//TODO
 		serialize : function serialize(){},//TODO
+		copyFrom : function copyFrom(inOther){},//TODO
 		
 		//TODO should cursor drawing be here? probably not, maybe move to GameFrameWork (instance)
 		//if(!GameSystemVars.Network.isServer)//TODO axe if?

@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.Sound2D = GameEngineLib.Class(
+GameEngineLib.Sound2D = GameEngineLib.Class.create(
 {
 	Constructor : function Sound2D(inSource, inStartedTime, inFileName, inPanner, inRadius)
 	{

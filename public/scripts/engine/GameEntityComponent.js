@@ -19,10 +19,12 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.GameEntityComponent = GameEngineLib.Class({
+GameEngineLib.GameEntityComponent = GameEngineLib.Class.create({
 	Constructor : function GameEntityComponent()
 	{
 		this.GameObject();
+		
+		this._owner = null;//TODO rename owningEntity
 	},
 	Parents : [GameEngineLib.GameObject],
 	flags : {},
@@ -44,6 +46,8 @@ GameEngineLib.GameEntityComponent = GameEngineLib.Class({
 		},
 		
 		destroy : function destroy(){},
-		serialize : function serialize(){}
+		serialize : function serialize(){},
+		
+		copyFrom : function copyFrom(){}
 	}
 });

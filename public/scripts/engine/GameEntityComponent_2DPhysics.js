@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
+GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class.create({
 	Constructor : function EntityComponent_2DPhysics()
 	{
 		this.GameEntityComponent();
@@ -167,6 +167,14 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class({
 				physicsUpdateInfo.velocity.myX + ' ' +
 				physicsUpdateInfo.velocity.myY + ' '
 			);*/
+		},
+		
+		copyFrom : function copyFrom(inOther)
+		{
+			this._position.copyFrom(inOther._position);
+			this._velocity.copyFrom(inOther._velocity);
+			this._boundingRect.copyFrom(inOther._boundingRect);
+			this._range.copyFrom(inOther._range);//TODO used? Set when added to world?
 		}
 	}
 });

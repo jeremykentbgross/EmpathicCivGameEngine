@@ -24,7 +24,9 @@ GameUnitTests.registerTest(
 	{
 		var ClassNamespace = {};
 		
-		ClassNamespace.TestClass1 = GameEngineLib.Class({
+		GameEngineLib.Class.createInstanceRegistry();
+		
+		ClassNamespace.TestClass1 = GameEngineLib.Class.create({
 			Constructor : function TestClass1(){},
 			Parents : null,
 			flags : {},
@@ -37,7 +39,7 @@ GameUnitTests.registerTest(
 			}
 		});
 		
-		ClassNamespace.TestClass2 = GameEngineLib.Class({
+		ClassNamespace.TestClass2 = GameEngineLib.Class.create({
 			Constructor : function TestClass2()
 			{
 				this.TestClass1();
@@ -69,7 +71,7 @@ GameUnitTests.registerTest(
 		testClass2.Func2();
 		gameAssert(testClass2.Func1Called && testClass2.Func2Called, "Inherited functions failed from created class instance!");
 
-		ClassNamespace.TestObjectClass1 = GameEngineLib.Class({
+		ClassNamespace.TestObjectClass1 = GameEngineLib.Class.create({
 			Constructor : function TestObjectClass1()
 			{
 				this.GameObject();
@@ -83,6 +85,7 @@ GameUnitTests.registerTest(
 			{
 				destroy : function destroy(){},
 				serialize : function serialize(){},
+				copyFrom : function copyFrom(inOther){},
 				chainUp : function chainUp()
 				{
 					this.up1 = ++this.counter;
@@ -108,7 +111,7 @@ GameUnitTests.registerTest(
 		gameAssert(!found, "Found destroyed object in registry!");
 		
 		
-		ClassNamespace.TestObjectClass2 = GameEngineLib.Class({
+		ClassNamespace.TestObjectClass2 = GameEngineLib.Class.create({
 			Constructor : function TestObjectClass2()
 			{
 				this.TestObjectClass1();
@@ -119,6 +122,7 @@ GameUnitTests.registerTest(
 			{
 				destroy : function destroy(){},
 				serialize : function serialize(){},
+				copyFrom : function copyFrom(inOther){},
 				chainUp : function chainUp()
 				{
 					this.up2 = ++this.counter;

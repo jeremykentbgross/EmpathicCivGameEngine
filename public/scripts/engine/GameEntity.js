@@ -19,12 +19,13 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.GameEntity = GameEngineLib.Class({
+GameEngineLib.GameEntity = GameEngineLib.Class.create({
 	Constructor : function GameEntity()
 	{
 		this.GameObject();
 		this.GameEventSystem();//
 		
+		this._world = null;
 		this._components = GameEngineLib.createGameCircularDoublyLinkedListNode();
 	},
 	
@@ -110,6 +111,23 @@ GameEngineLib.GameEntity = GameEngineLib.Class({
 		{
 			var componentMap = {};
 			//TODO
+		},
+		
+		copyFrom : function copyFrom(inOther)
+		{
+			//TODO properly remove all existing components
+			var that = this;
+			
+			inOther._components.forAll(
+				function copyComponent(inComponent)
+				{
+					//skip head node
+					if(inComponent)
+					{
+						that.addComponent(inComponent.clone());
+					}
+				}
+			);
 		}
 	}
 });

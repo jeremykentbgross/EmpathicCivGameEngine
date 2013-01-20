@@ -948,3 +948,6 @@ ST build:
 DunKep:
 Libs -> ServerRacks (terminal)
 http://d3js.org/
+
+FPS opts:
+copy/scroll last frame + rerender lvl changes + before/after sprite intersections

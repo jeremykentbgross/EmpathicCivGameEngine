@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.Animation2D = GameEngineLib.Class({
+GameEngineLib.Animation2D = GameEngineLib.Class.create({
 	Constructor : function Animation2D()
 	{
 		this.image = null;

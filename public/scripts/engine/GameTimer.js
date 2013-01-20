@@ -56,7 +56,7 @@ GameEngineLib.createGameTimer = function(instance, PRIVATE)
 			time = (new Date()).getTime();//TODO use .now
 		}
 		
-		PRIVATE.dt = time - PRIVATE.lastFrameTimeStamp;
+		PRIVATE.dt = Math.max(0, time - PRIVATE.lastFrameTimeStamp);
 		PRIVATE.lastFrameTimeStamp = time;
 		++PRIVATE.frameCount;
 		

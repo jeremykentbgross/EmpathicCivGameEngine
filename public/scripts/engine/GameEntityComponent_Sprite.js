@@ -19,29 +19,15 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
+GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class.create(
 {
 	Constructor : function EntityComponent_Sprite()
 	{
 		this.GameEntityComponent();
 		this._position = GameEngineLib.createGame2DPoint();
-		this._myFrames = [{}];
-		this._myCurrentFrame = 0;
-		//todo myFrames[currentAnimation, currentFrame]
 		
-		//TODO frame knows filename, offset, collision rects, (sound?) events, etc
+		//TODO frame knows filename, offset, collision rects, (sound?) events, etc //TODO move this note to the frame class?
 		//TODO ^^^ same kind of thing for map tiles?
-		
-		if(!GameSystemVars.Network.isServer)
-		{
-			GameInstance.AssetManager.loadImage(/*'images/testsprite.png'*/'images/wall_level01_01.png', this._myFrames[0]);
-		}
-		else
-		{
-			this._myFrames[0] = {};
-		}
-		
-		this._myFrames[0].offset = GameEngineLib.createGame2DPoint(-64, -64);//(-32, -64-16);//hack
 	},
 	
 	Parents : [GameEngineLib.GameEntityComponent],
@@ -55,57 +41,13 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
 	{
 		init : function(inAnimations)
 		{
-			//var i = 0;
-			//for(i = 0; i < this._myFiles.length; ++i)
-			//{
-			//	this._myTiles[i] = {};
-				//GameInstance.assetManager.loadImage('images/testsprite.png', this._myFrames[i]);
-			//}
-			
-			//this._sceneGraphRenderable.myPosition********
 			this._animations = inAnimations;
 			this._currentAnimation = 8;
 			
 			this._sceneGraphRenderable = new GameEngineLib.Animation2DInstance();
-			this._sceneGraphRenderable.setAnimation(inAnimations[0]);
+			this._sceneGraphRenderable.setAnimation(this._animations[0]);
 			GameInstance.UpdateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
 			this._sceneGraphRenderable.layer = 1;
-			
-			
-			var _this_ = this;
-			// this._sceneGraphRenderable =//TODO need a better class for thie renderable thing
-			// {
-				// layer : 1,//TODO this should always be odd
-				// anchorPosition : GameEngineLib.createGame2DPoint(),//TODO rename as sort position
-				// AABB : GameEngineLib.createGame2DAABB(0, 0, /*64*/96,/*HACK*/ 96/*HACK*/),
-				// getAABB : function getAABB(){return this.AABB;},//TODO inherit GameEngineLib.GameQuadTreeItem
-				// render : function(inCanvas2DContext, inCameraPoint)
-				// {
-					// var renderPoint = _this_._myFrames[_this_._myCurrentFrame].offset.
-						// add(_this_._position/*this.myPosition*/).
-						// subtract(inCameraPoint);
-					// //TODO debug print that this is not clipped (global debug vars)
-					// inCanvas2DContext.drawImage(
-						// _this_._myFrames[_this_._myCurrentFrame].image,
-						// renderPoint.myX,
-						// renderPoint.myY
-					// );
-				// }
-			// };
-		},
-		//TODO update!!!!!!!!!!!!!!!!!!!!!!!!!!!!??
-		
-		render : function(inCanvasContext, inCameraPoint)
-		{
-			/*var renderPoint = this._myFrames[this._myCurrentFrame].offset.
-				add(this._position).
-				subtract(inCameraPoint);
-			//TODO debug print that this is not clipped (global debug vars)
-			inCanvasContext.drawImage(
-				this._myFrames[this._myCurrentFrame].image,
-				renderPoint.myX,
-				renderPoint.myY
-			);*/
 		},
 
 		onAddedToEntity : function(inEvent)
@@ -139,12 +81,8 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
 		{
 			this._world.getSceneGraph().removeItem(this._sceneGraphRenderable);
 			
-			//this._position = this._sceneGraphRenderable.myPosition = inEvent.position;
-			//this._sceneGraphRenderable.AABB.setLeftTop(this._position.add(this._myFrames[this._myCurrentFrame].offset));
-			
 			this._position = inEvent.position;
 			this._sceneGraphRenderable.anchorPosition = inEvent.boundingRect.getLeftTop();//inEvent.position;
-		//	this._sceneGraphRenderable.anchorPosition.copyFrom(inEvent.position/*.add(this._myFrames[this._myCurrentFrame].offset)*/);
 			
 			if(inEvent.velocity.length() < 0.9)
 			{
@@ -201,6 +139,17 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class(
 		},
 
 		destroy : function(){},//TODO
-		serialize : function(){}//TODO
+		serialize : function(){},//TODO
+		
+		copyFrom : function copyFrom(inOther)
+		{
+			this._animations = inOther._animations;
+			this._currentAnimation = inOther._currentAnimation;
+			
+			this._sceneGraphRenderable = new GameEngineLib.Animation2DInstance();
+			this._sceneGraphRenderable.setAnimation(this._animations[0]);
+			GameInstance.UpdateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
+			this._sceneGraphRenderable.layer = inOther._sceneGraphRenderable.layer;
+		}
 	}
 });

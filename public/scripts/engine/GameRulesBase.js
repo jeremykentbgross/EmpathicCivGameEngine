@@ -20,7 +20,7 @@
 */
 
 
-GameEngineLib.GameRulesBase = GameEngineLib.Class({
+GameEngineLib.GameRulesBase = GameEngineLib.Class.create({
 	Constructor : function GameRulesBase(){},
 	Parents : [],
 	flags : {},

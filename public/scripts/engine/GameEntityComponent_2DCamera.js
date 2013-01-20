@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.EntityComponent_2DCamera = GameEngineLib.Class({
+GameEngineLib.EntityComponent_2DCamera = GameEngineLib.Class.create({
 	Constructor : function EntityComponent_2DCamera()
 	{
 		this.GameEntityComponent();
@@ -77,6 +77,11 @@ GameEngineLib.EntityComponent_2DCamera = GameEngineLib.Class({
 			//TODO look into bug why camera lags behind entity (maybe due to event listener order?)
 			this._position = inEvent.position;
 			this.centerOn(this._position, this._myMap);
+		},
+		
+		copyFrom : function copyFrom(inOther)
+		{
+			//TODO copy parent classes rect?
 		}
 	}
 });

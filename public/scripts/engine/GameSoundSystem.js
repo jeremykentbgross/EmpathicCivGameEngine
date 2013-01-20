@@ -43,7 +43,7 @@ GameEngineLib.SoundDescription = function SoundDescription(inID, inFileName)
 
 //TODO soundListenerComponent, soundPlayerComponent
 
-GameEngineLib.GameSoundSystem = GameEngineLib.Class({
+GameEngineLib.GameSoundSystem = GameEngineLib.Class.create({
 	Constructor : function GameSoundSystem()
 	{
 		if(GameSystemVars.Network.isServer)

@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.GameEvent = GameEngineLib.Class({
+GameEngineLib.GameEvent = GameEngineLib.Class.create({
 	Constructor : function GameEvent(inCallbackName)
 	{
 		this._callbackName = inCallbackName;
@@ -46,7 +46,7 @@ GameEngineLib.GameEvent = GameEngineLib.Class({
 
 
 
-GameEngineLib.GameEvent_AddedToEntity = GameEngineLib.Class({
+GameEngineLib.GameEvent_AddedToEntity = GameEngineLib.Class.create({
 	Constructor : function AddedToEntity(inEntity)
 	{
 		this.GameEvent('onAddedToEntity');
@@ -62,7 +62,7 @@ GameEngineLib.GameEvent_AddedToEntity = GameEngineLib.Class({
 
 
 //TODO move to own file
-GameEngineLib.GameEvent_RemovedFromEntity = GameEngineLib.Class({
+GameEngineLib.GameEvent_RemovedFromEntity = GameEngineLib.Class.create({
 	Constructor : function RemovedFromEntity(inEntity)
 	{
 		this.GameEvent('onRemovedFromEntity');
@@ -78,7 +78,7 @@ GameEngineLib.GameEvent_RemovedFromEntity = GameEngineLib.Class({
 
 
 //TODO move to own file
-GameEngineLib.GameEvent_AddedToWorld = GameEngineLib.Class({
+GameEngineLib.GameEvent_AddedToWorld = GameEngineLib.Class.create({
 	Constructor : function AddedToWorld(inWorld)
 	{
 		this.GameEvent('onAddedToWorld');
@@ -93,7 +93,7 @@ GameEngineLib.GameEvent_AddedToWorld = GameEngineLib.Class({
 
 
 
-GameEngineLib.GameEvent_RemovedFromWorld = GameEngineLib.Class({
+GameEngineLib.GameEvent_RemovedFromWorld = GameEngineLib.Class.create({
 	Constructor : function RemovedFromWorld(inWorld)
 	{
 		this.GameEvent('onRemovedFromWorld');
@@ -108,7 +108,7 @@ GameEngineLib.GameEvent_RemovedFromWorld = GameEngineLib.Class({
 
 
 
-GameEngineLib.GameEvent_Input = GameEngineLib.Class({
+GameEngineLib.GameEvent_Input = GameEngineLib.Class.create({
 	Constructor : function Input(inMousePosition, inButtons, inKeys, inKeysPressed)
 	{
 		this.GameEvent('onInput');
@@ -137,7 +137,7 @@ GameEngineLib.GameEvent_Input = GameEngineLib.Class({
 
 
 
-GameEngineLib.GameEvent_ConnectedToServer = GameEngineLib.Class({
+GameEngineLib.GameEvent_ConnectedToServer = GameEngineLib.Class.create({
 	Constructor : function ConnectedToServer()
 	{
 		this.GameEvent('onConnectedToServer');
@@ -156,7 +156,7 @@ GameEngineLib.GameEvent_ConnectedToServer = GameEngineLib.Class({
 
 
 
-GameEngineLib.GameEvent_DisconnectedFromServer = GameEngineLib.Class({
+GameEngineLib.GameEvent_DisconnectedFromServer = GameEngineLib.Class.create({
 	Constructor : function DisconnectedFromServer()
 	{
 		this.GameEvent('onDisconnectedFromServer');
@@ -172,7 +172,7 @@ GameEngineLib.GameEvent_DisconnectedFromServer = GameEngineLib.Class({
 
 
 
-GameEngineLib.GameEvent_IdentifiedUser = GameEngineLib.Class({
+GameEngineLib.GameEvent_IdentifiedUser = GameEngineLib.Class.create({
 	Constructor : function IdentifiedUser(inID)
 	{
 		this.GameEvent('onIdentifiedUser');
@@ -189,7 +189,7 @@ GameEngineLib.GameEvent_IdentifiedUser = GameEngineLib.Class({
 
 
 //TODO rename NetMsg
-GameEngineLib.GameEvent_Msg = GameEngineLib.Class({
+GameEngineLib.GameEvent_Msg = GameEngineLib.Class.create({
 	Constructor : function Msg(inMsg)
 	{
 		this.GameEvent('onMsg');
@@ -206,7 +206,7 @@ GameEngineLib.GameEvent_Msg = GameEngineLib.Class({
 
 
 //TODO rename NetData
-GameEngineLib.GameEvent_Data = GameEngineLib.Class({
+GameEngineLib.GameEvent_Data = GameEngineLib.Class.create({
 	Constructor : function Data(inData)
 	{
 		this.GameEvent('onData');
@@ -224,7 +224,7 @@ GameEngineLib.GameEvent_Data = GameEngineLib.Class({
 
 
 
-GameEngineLib.GameEvent_RequestVelocity = GameEngineLib.Class({
+GameEngineLib.GameEvent_RequestVelocity = GameEngineLib.Class.create({
 	Constructor : function RequestVelocity(inVelocity)
 	{
 		this.GameEvent('onRequestVelocity');
@@ -244,7 +244,7 @@ GameEngineLib.GameEvent_RequestVelocity = GameEngineLib.Class({
 
 
 
-GameEngineLib.GameEvent_UpdatePosition = GameEngineLib.Class({
+GameEngineLib.GameEvent_UpdatePosition = GameEngineLib.Class.create({
 	Constructor : function UpdatePosition(inPos, inVel, inAABB)
 	{
 		this.GameEvent('onUpdatePosition');

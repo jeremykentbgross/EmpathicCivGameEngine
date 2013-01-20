@@ -20,7 +20,7 @@
 */
 
 
-GameLib.GameRules = GameEngineLib.Class({
+GameLib.GameRules = GameEngineLib.Class.create({
 	Constructor : function GameRules()
 	{
 		this.GameRulesBase();
@@ -42,6 +42,8 @@ GameLib.GameRules = GameEngineLib.Class({
 		this._referenceEntitySpriteComponent = null;
 		this._referenceEntityPhysicsComponent = null;
 		this._referenceEntityCameraComponent = null;
+		
+		this._entities = [];
 		
 		//editor stuff:
 		this._drawTile = 0;
@@ -213,6 +215,8 @@ GameLib.GameRules = GameEngineLib.Class({
 			this._referenceEntityCameraComponent = GameEngineLib.EntityComponent_2DCamera.create(/*TODO params??*/);
 			this._referenceEntity.addComponent(this._referenceEntityCameraComponent);
 			
+			this._entities.push(this._referenceEntity.clone());
+			
 			this._gameWorld.addEntity(this._referenceEntity);
 			//TODO comment out and fix default camera vv
 			this._gameWorld.setCamera(this._referenceEntityCameraComponent);
@@ -226,7 +230,7 @@ GameLib.GameRules = GameEngineLib.Class({
 		//TODO should rename this onIdentified>Net<User
 		onIdentifiedUser : function onIdentifiedUser(inEvent)
 		{
-			GameEngineLib.logger.info("setting owner for physics component: " + inEvent.user.userName );
+			GameEngineLib.logger.info("Setting owner for physics component => Name: " + inEvent.user.userName + " ID: " + inEvent.user.userID);
 			this._referenceEntityPhysicsComponent.setNetOwner(inEvent.user.userID);
 		},
 		
