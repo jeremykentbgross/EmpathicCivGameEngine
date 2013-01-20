@@ -55,13 +55,16 @@ GameEngineLib.Class = function Class(inConstructor, inParents)
 	
 	this._instanceRegistry = null;
 	
+	this._newInstances = [];
+	
 	/*
 	TODOs:
 	newInstances,
 	netDirtyInstances,
+	destroyedInstances
 	*/
 };
-GameEngineLib.Class.prototype = GameEngineLib.Class;
+GameEngineLib.Class.prototype.constructor = GameEngineLib.Class;
 
 
 
@@ -93,9 +96,9 @@ GameEngineLib.Class.create = function create(inParams)
 	inDefinition = inParams.Definition;
 	inFlags = inParams.flags;
 		
-	Constructor.prototype = Constructor;
-	Constructor._chainUpMethods = {};
-	Constructor._chainDownMethods = {};
+	Constructor.prototype.constructor = Constructor;
+	Constructor.prototype._chainUpMethods = {};
+	Constructor.prototype._chainDownMethods = {};
 	
 	theClass = new GameEngineLib.Class(Constructor, inParents);
 	
@@ -133,17 +136,17 @@ GameEngineLib.Class.create = function create(inParams)
 			{
 				for(methodName in property)
 				{
-					if(Constructor._chainUpMethods[methodName])
+					if(Constructor.prototype._chainUpMethods[methodName])
 					{
 						GameEngineLib.logger.warn(Constructor.name + " trying to inherit chain function " + methodName + " from an additional parent: " + parent.name);
 						continue;
 					}
 					
-					Constructor._chainUpMethods[methodName] = [];
+					Constructor.prototype._chainUpMethods[methodName] = [];
 					methods = property[methodName];
 					for(methodIndex = 0; methodIndex < methods.length; ++methodIndex)
 					{
-						Constructor._chainUpMethods[methodName].push(methods[methodIndex]);
+						Constructor.prototype._chainUpMethods[methodName].push(methods[methodIndex]);
 					}
 					
 					if(!inDefinition[methodName])
@@ -152,7 +155,7 @@ GameEngineLib.Class.create = function create(inParams)
 					}
 					else
 					{
-						Constructor._chainUpMethods[methodName].unshift(inDefinition[methodName]);
+						Constructor.prototype._chainUpMethods[methodName].unshift(inDefinition[methodName]);
 					}
 				}
 			}
@@ -160,17 +163,17 @@ GameEngineLib.Class.create = function create(inParams)
 			{
 				for(methodName in property)
 				{
-					if(Constructor._chainDownMethods[methodName])
+					if(Constructor.prototype._chainDownMethods[methodName])
 					{
 						GameEngineLib.logger.warn(Constructor.name + " trying to inherit chain function " + methodName + " from an additional parent: " + parent.name);
 						continue;
 					}
 					
-					Constructor._chainDownMethods[methodName] = [];
+					Constructor.prototype._chainDownMethods[methodName] = [];
 					methods = property[methodName];
 					for(methodIndex = 0; methodIndex < methods.length; ++methodIndex)
 					{
-						Constructor._chainDownMethods[methodName].push(methods[methodIndex]);
+						Constructor.prototype._chainDownMethods[methodName].push(methods[methodIndex]);
 					}
 					
 					if(!inDefinition[methodName])
@@ -179,24 +182,30 @@ GameEngineLib.Class.create = function create(inParams)
 					}
 					else
 					{
-						Constructor._chainDownMethods[methodName].push(inDefinition[methodName]);
+						Constructor.prototype._chainDownMethods[methodName].push(inDefinition[methodName]);
 					}
 				}
 			}
-			else if(Constructor[propertyName])
+			else if(Constructor.prototype[propertyName])
 			{
 				GameEngineLib.logger.warn(Constructor.name + " trying to inherit function " + methodName + " from an additional parent: " + parent.name);
 			}
 			else
 			{
-				Constructor[propertyName] = property;
+				Constructor.prototype[propertyName] = property;
 			}
 		}
 		
-		Constructor[parent.name] = parent;
+		for(propertyName in parent)
+		{
+			Constructor[propertyName] = property;
+		}
+		
+		Constructor.prototype[parent.name] = parent;
 		if(parent.getClass && parent.getClass())
 		{
 			parentClass = parent.getClass();
+			//TODO IFF track this class
 			parentClass._childClasses.push(Constructor);
 			for(flagIndex in parentClass._flags)
 			{
@@ -205,7 +214,7 @@ GameEngineLib.Class.create = function create(inParams)
 		}
 	}
 	
-	Constructor[Constructor.name] = Constructor;
+	Constructor.prototype[Constructor.name] = Constructor;
 	for(flagIndex in inFlags)
 	{
 		theClass._flags[flagIndex] = inFlags[flagIndex];
@@ -214,64 +223,82 @@ GameEngineLib.Class.create = function create(inParams)
 	for(propertyName in inDefinition)
 	{
 		//don't copy over chain functions directly
-		if(Constructor._chainUpMethods[propertyName] || Constructor._chainDownMethods[propertyName])
+		if(Constructor.prototype._chainUpMethods[propertyName] || Constructor.prototype._chainDownMethods[propertyName])
 		{
 			continue;
 		}
 		
-		Constructor[propertyName] = inDefinition[propertyName];
+		if(typeof inDefinition[propertyName] === 'function')
+		{
+			Constructor.prototype[propertyName] = inDefinition[propertyName];
+		}
+		else
+		{
+			Constructor[propertyName] = inDefinition[propertyName];
+		}
 	}
 	
 	for(methodIndex in inParams.ChainUp)
 	{
 		methodName = inParams.ChainUp[methodIndex];
-		if(Constructor._chainUpMethods[methodName])
+		if(Constructor.prototype._chainUpMethods[methodName])
 		{
 			GameEngineLib.logger.warn(Constructor.name + " redeclares " + methodName + " as a chain function.");
 			continue;
 		}
-		Constructor._chainUpMethods[methodName] = [];
-		Constructor._chainUpMethods[methodName].unshift(Constructor[methodName]);
+		Constructor.prototype._chainUpMethods[methodName] = [];
+		Constructor.prototype._chainUpMethods[methodName].unshift(Constructor.prototype[methodName]);
 		
-		Constructor[methodName] = GameEngineLib.Class._createChainUpFunction(methodName);
+		Constructor.prototype[methodName] = GameEngineLib.Class._createChainUpFunction(methodName);
 	}
 	for(methodIndex in inParams.ChainDown)
 	{
 		methodName = inParams.ChainDown[methodIndex];
-		if(Constructor._chainDownMethods[methodName])
+		if(Constructor.prototype._chainDownMethods[methodName])
 		{
 			GameEngineLib.logger.warn(Constructor.name + " redeclares " + methodName + " as a chain function.");
 			continue;
 		}
-		Constructor._chainDownMethods[methodName] = [];
-		Constructor._chainDownMethods[methodName].push(Constructor[methodName]);
+		Constructor.prototype._chainDownMethods[methodName] = [];
+		Constructor.prototype._chainDownMethods[methodName].push(Constructor.prototype[methodName]);
 		
-		Constructor[methodName] = GameEngineLib.Class._createChainDownFunction(methodName);
+		Constructor.prototype[methodName] = GameEngineLib.Class._createChainDownFunction(methodName);
 	}
 	
 	theClass.create = Constructor.create = function create()
 	{
 		var newItem = new Constructor();
-		if(Constructor.init && arguments.length)
+		if(Constructor.prototype.init && arguments.length)
 		{
-			Constructor.init.apply(newItem, arguments);
+			Constructor.prototype.init.apply(newItem, arguments);
 		}
 		return newItem;
 	};
 	
-	Constructor.getClass = function getClass()
+	Constructor.getClass = Constructor.prototype.getClass = function getClass()
 	{
 		return theClass;
 	};
 	
-	managed = Constructor.isA && Constructor.isA('GameObject');
+	managed = Constructor.prototype.isA && Constructor.prototype.isA('GameObject');
 	if(managed)
 	{
 		theClass.createInstanceRegistry();
+		
+		Constructor.registerClass = function registerClass()
+		{
+			var classRegistry = GameEngineLib.Class.getInstanceRegistry();
+			if(classRegistry.findByName(theClass.getName()) !== theClass)
+			{
+				theClass._classID = classRegistry.getUnusedID();
+				classRegistry.register(theClass);
+			}
+		};
 	}
 	else
 	{
 		delete Constructor['getClass'];
+		delete Constructor.prototype['getClass'];
 	}
 	
 	return Constructor;
@@ -279,28 +306,28 @@ GameEngineLib.Class.create = function create(inParams)
 
 
 
-GameEngineLib.Class.getName = function getName()
+GameEngineLib.Class.prototype.getName = function getName()
 {
 	return this._constructor.name;
 };
 
 
 
-GameEngineLib.Class.getID = function getID()
+GameEngineLib.Class.prototype.getID = function getID()
 {
 	return this._classID;
 };
 
 
 
-GameEngineLib.Class.createInstanceRegistry = function createInstanceRegistry()//TODO rename reset?
+GameEngineLib.Class.prototype.createInstanceRegistry = GameEngineLib.Class.createInstanceRegistry = function createInstanceRegistry()//TODO rename reset?
 {
 	this._instanceRegistry = new GameEngineLib.GameRegistry();
 };
 
 
 
-GameEngineLib.Class.getInstanceRegistry = function getInstanceRegistry()
+GameEngineLib.Class.prototype.getInstanceRegistry = GameEngineLib.Class.getInstanceRegistry = function getInstanceRegistry()
 {
 	return this._instanceRegistry;
 };

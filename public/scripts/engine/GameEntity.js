@@ -66,6 +66,22 @@ GameEngineLib.GameEntity = GameEngineLib.Class.create({
 				inComponent.onRemovedFromEntity(new GameEngineLib.GameEvent_RemovedFromEntity(this));
 			}
 		},
+		getComponentByType : function getComponentByType(inType, inoutReturnValues)
+		{
+			inoutReturnValues = inoutReturnValues || [];
+			
+			this._components.forAll(
+				function(inComponent)
+				{
+					if(inComponent && inComponent.isA(inType))//TODO change forall to not pass nulls and get rid of gaurds all over the place
+					{
+						inoutReturnValues.push(inComponent);
+					}
+				}
+			);
+			
+			return inoutReturnValues;
+		},
 		
 		//TODO maybe make added/removed+Entity/World NOT events (to save 'new' events that may not be needed)?
 		//TODO make onAddedTo/onRemovedFromWorld events so entity can set the world along with its components???

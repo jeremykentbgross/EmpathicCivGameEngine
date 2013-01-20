@@ -65,6 +65,15 @@ GameEngineLib.GameRegistry.prototype.register = function register(inObject)
 	
 	this._maxID = Math.max(this._maxID, id);
 	
+	if(this._instancesByName[name])
+	{
+		GameEngineLib.logger.warn("Trying to reregister '" + name + "' : '" + id + "' but '" + name + "' is in use.");
+	}
+	if(this._instancesByID[id])
+	{
+		GameEngineLib.logger.warn("Trying to reregister '" + name + "' : '" + id + "' but '" + id + "' is in use.");
+	}
+	
 	this._instancesByName[name] = inObject;
 	this._instancesByID[id] = inObject;	
 	

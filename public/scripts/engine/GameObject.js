@@ -22,8 +22,13 @@
 GameEngineLib.GameObject = GameEngineLib.Class.create({
 	Constructor : function GameObject()
 	{
-		var registry = this.getClass().getInstanceRegistry();
-		var instanceID = registry.getUnusedID();
+		var thisClass,
+			registry,
+			instanceID;
+			
+		thisClass = this.getClass();
+		registry = thisClass.getInstanceRegistry();
+		instanceID = registry.getUnusedID();
 
 		this._name = 'Instance_' + instanceID;
 		this._ID = instanceID;//TODO rename _ID as _instanceID
@@ -33,7 +38,8 @@ GameEngineLib.GameObject = GameEngineLib.Class.create({
 		this._netDirty = false;
 		this._objectBaseNetDirty = false;
 		
-		//TODO register for net create
+		//TODO if((server || thisClass._flags.clientCreatable) && netReplicated??)
+		thisClass._newInstances.push(this);
 	},
 	
 	//Parents : [],//TODO eventsystem??
@@ -57,21 +63,7 @@ GameEngineLib.GameObject = GameEngineLib.Class.create({
 			}
 			//TODO name/id (NOT net)
 		],
-		
-		registerClass : function registerClass()
-		{
-			var classRegistry,
-				thisClass;
-
-			thisClass = this.getClass();
-			classRegistry = GameEngineLib.Class.getInstanceRegistry();
-			if(classRegistry.findByName(thisClass.getName()) !== thisClass)
-			{
-				thisClass._classID = classRegistry.getUnusedID();
-				classRegistry.register(thisClass);
-			}
-		},
-		
+				
 		getName : function getName()
 		{
 			return this._name;

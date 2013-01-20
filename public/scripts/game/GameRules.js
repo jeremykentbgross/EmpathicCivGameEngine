@@ -217,9 +217,9 @@ GameLib.GameRules = GameEngineLib.Class.create({
 			
 			this._entities.push(this._referenceEntity.clone());
 			
-			this._gameWorld.addEntity(this._referenceEntity);
+			this._gameWorld.addEntity(this._entities[0]/*this._referenceEntity*/);
 			//TODO comment out and fix default camera vv
-			this._gameWorld.setCamera(this._referenceEntityCameraComponent);
+			this._gameWorld.setCamera(/*this._referenceEntityCameraComponent*/this._entities[0].getComponentByType(GameEngineLib.EntityComponent_2DCamera)[0]);
 			//create reference entity
 			/////////////////////////////////////////////////////////
 					
@@ -231,7 +231,8 @@ GameLib.GameRules = GameEngineLib.Class.create({
 		onIdentifiedUser : function onIdentifiedUser(inEvent)
 		{
 			GameEngineLib.logger.info("Setting owner for physics component => Name: " + inEvent.user.userName + " ID: " + inEvent.user.userID);
-			this._referenceEntityPhysicsComponent.setNetOwner(inEvent.user.userID);
+			//this._referenceEntityPhysicsComponent.setNetOwner(inEvent.user.userID);
+			this._entities[0].getComponentByType(GameEngineLib.EntityComponent_2DPhysics)[0].setNetOwner(inEvent.user.userID);
 		},
 		
 		

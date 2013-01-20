@@ -33,7 +33,7 @@ GameEngineLib.GameEvent = GameEngineLib.Class.create({
 		//TODO add init function for the event that chains down so that the constructor doesn't have to be used
 		getName : function getName()
 		{
-			return this.name;
+			return this.constructor.name;
 		},
 		getCallbackName : function getCallbackName()
 		{
