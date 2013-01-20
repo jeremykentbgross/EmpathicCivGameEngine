@@ -1,4 +1,5 @@
 //how to TODO on namespaces and functions? just list the namespace?
+
 /**$
 {
 	type : "namespace"
@@ -21,6 +22,8 @@
 */
 MyNamespace = {};
 
+
+
 /**$
 {
 	type : "namespace"
@@ -31,6 +34,7 @@ MyNamespace = {};
 */
 MyNamespace.MyChildNamespace = {};
 
+
 /**$
 {
 	type : "event"
@@ -40,6 +44,7 @@ MyNamespace.MyChildNamespace = {};
 	,eventParam : "MyNamespace.MyEventParams"
 }
 */
+
 
 /**$
 {
@@ -64,9 +69,9 @@ MyNamespace.MyChildNamespace.MyClass = Class({
 		}
 		*/
 		this.someMember = "blah";
-	
+		
 		//OR??
-	
+		
 		/**$
 		someOtherMember : {
 			type : "variable"
@@ -112,10 +117,11 @@ MyNamespace.MyChildNamespace.MyClass = Class({
 			{
 				type : "TODO"
 				,description : need to do blah blah blah
+				,priority : 10
 			}
 			*/
 			...
-			/**${type:"TODO", description:"need to do blah blah blah"}*/
+			/**${type:"TODO", description:"need to do blah blah blah", priority : 2}*/
 			...
 		}
 		/**$
@@ -126,6 +132,7 @@ MyNamespace.MyChildNamespace.MyClass = Class({
 		//??
 		getSchema : function getSchema()
 		{
+			//TODO how to make this work with obfuscation?
 			return docs.getSchema("MyNamespace.MyChildNamespace.MyClass");
 		}
 	}
@@ -135,21 +142,28 @@ MyNamespace.MyChildNamespace.MyClass = Class({
 }//end MyClass
 */
 
+
+
 /*
+
+https://github.com/visionmedia/dox
+
 loadFile(file)
 {
 	regex find comments
 	for all found
-	get start line number
-	find all { lines
-	get line offset
-	insert file/line
+		get start line number
+		find all { lines
+			get line offset
+			insert file/line
 	concat to master
 }
+
 for all files
 	loadFile(file)
-	//OR JSON parsing!!
-	eval("docsElements = [" master "];");
+
+//OR JSON parsing!!
+eval("docsElements = [" master "];");
 
 for all docElements
 	add to parent namespace if appropriate, else GlobalNamespace
@@ -165,8 +179,8 @@ for all docElements
 	if TODO
 		item.name = nextToken?? //no duplicates
 		add to todos
-...
-
+	...
+	
 walk GlobalNamespace
 	track nested namespace
 	verify item matches template
@@ -179,25 +193,24 @@ http://www.w3schools.com/tags/tag_iframe.asp
 http://www.w3schools.com/tags/att_a_target.asp
 http://www.w3schools.com/cssref/css3_pr_resize.asp
 http://www.css3.info/preview/resize/
+
 http://jade-lang.com/
 
 <a href="address#domId" target="framename"></a>
 <? id="line">line</><p>...</p>
 
+
 http://www.w3schools.com/tags/tryit.asp?filename=tryhtml_table_test
 <table border="1">
-	<tr>
-		<td>
-			<table border="1">
-				<tr><td>one</td></tr>
-				<tr><td>two</td></tr>
-			</table>
-		</td>
-		<td>
-			three
-		</td>
-	</tr>
+  <tr>
+    <td>
+      <table border="1">
+        <tr><td>one</td></tr>
+        <tr><td>two</td></tr>
+      </table>
+    </td>
+    <td>
+      three
+    </td>
+  </tr>
 </table>
-
-http://www.html5rocks.com/en/tutorials/casestudies/gopherwoord-studios-resizing-html5-games/
-*/

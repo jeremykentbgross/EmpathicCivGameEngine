@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<style type="text/css">
+		.textBox
+		{
+			position:absolute;
+			margin:5%;
+			padding:10px;
+			bottom:0px;
+			left:0px;
+			width:80%;
+			border-color:yellow;
+			border-style:ridge;
+			background-color:transparent;
+			color: white;
+			text-shadow:
+				-1px 0 black,
+				0 1px black,
+				1px 0 black,
+				0 -1px black;
+			font-family:sans-serif;
+		}
+		.textBoxOptions
+		{
+			margin:0%;
+			padding:0px;
+			list-style: none;
+		}
+		/*
+		http://stackoverflow.com/questions/2701192/ascii-character-for-up-down-triangle-arrow-to-display-in-html
+		http://en.wikipedia.org/wiki/Geometric_Shapes
+		*/
+		ul li:before {
+			content: "\25CF \0020";
+		}
+		ul li:hover {
+			//text-decoration:underline;
+			//font-weight:bold;
+		}
+		ul li:hover:before {
+			content: "\25BA";
+		}
+		/*.chosen:before {
+			content: "\25BA";
+		}*/
+	</style>
+	<body>
+		<span style="position:absolute; top:0px; left:0px;"><!-- container	-->
+			<img src="me.jpg" width="300px"/>
+			<span class="textBox">
+				Once there was an awesome dude named Jeremy who ruled supreme in his own domain of awesomeness!
+				<ul class="textBoxOptions">
+					<li>Yes</li>
+					<li>No</li>
+					<li>Try</li>
+					<li>Oh yeah? Well you fight like a cow!</li>
+				</ul>
+			</span>
+		<span>
+	</body>
+</html>

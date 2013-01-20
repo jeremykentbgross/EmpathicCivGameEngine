@@ -951,3 +951,142 @@ http://d3js.org/
 
 FPS opts:
 copy/scroll last frame + rerender lvl changes + before/after sprite intersections
+
+
+http://www.html5rocks.com/en/tutorials/casestudies/gopherwoord-studios-resizing-html5-games/
+
+
+pointer lock and some other cool toys:
+http://voxeljs.com/
+
+
+
+
+Linux DNS
+
+App:
+bind
+
+DNS server location (bottom most has priority)
+/etc/resolv.conf
+
+DNS names go in:
+/etc/hosts
+
+Name of my machine is in:
+/etc/sysconfig/network
+
+Version of linux:
+cat /proc/version
+
+rcnamed start
+
+/sbin/dhclient-script
+
+
+
+http://en.wikipedia.org/wiki/StarTropics
+
+
+
+http://www.gamasutra.com/view/feature/1733/rock_paper_scissors__a_method_for_.php
+
+A->F->B->A
+
+  A F B
+ -----
+A|T W L
+F|L T W
+B|W L T
+
+Kil, Soc, Exp, Ach
+
+5:
+Know, Def, Att, Build, Heal/Rep/**ctrl**?
+
+Dmg: SinTar/AoE, Rng/Loc, DoT/burst
+
+Standard 5: Ft, Ran, Cler, Rog, Wiz
+
+*/
+
+
+
+
+-Serializable Command (pattern?)
+-Json conversation trees
+-flow graph?
+-editor page (com)
+-oauth/db
+-ui lib
+-dojo dom mgr
+-reflect ui (default tab)
+-Jsdoc3
+-net send groups (in GameObj?), ex: fog via map / team + master + sprite frames base (with timeout timer after being seen)
+
+Replication:
+GObj:
+-copyfrom()//chain
+-clone(){ret create().copyfrom(this)}
+-setdirty(){listadd,noflag?}
+-netgroups
+Class ser schema //static
+//schema var condition
+Class (reg?):
+-instances{}
+-netDirty{}
+-new{}
+NetUd:
+-Forall netgroups?
+-Forall classes
+--forall new
+---ser complete
+--forall dirty
+---ser dirty
+-clear dirty/new
+NetNewCon:
+-forall classes
+--forall inst
+---ser complete
+
+Gamify: points for games completed, financial supporter badge; meaning, goals, freedom!
+
+@type (ns, class, func, memb);
+@name;
+@param type(s) name;
+@owner/scope
+@pub/priv/pro
+@parent
+Namespaces.Nsn.Classes.classname.methods. =
+{
+};
+
+-Zelda letters White w/black/trans/yellow
+-placeholdr ref sounds: SW blaster, ST scanner/beeps, rom sounds?:steps, letters? Etc..
+
+SpriteCom->animplayerComp
+{play(animname)}
++animSelectorComp
+
+QT: Sound listeners/sounds/events (ie triggers), aabb->spheres
+
+PhysicsObj:
+-center
+-solids[]/triggers[]
+-owner
+-req vel
+-mass
+-impulse
+-material (snd)
+Solid/trigger
+-aabb ref
+-current[[wrap inst],]
+-colWith{otherobj:frame#}??
+-trigCallback
+-mass?/density?
+
+Solidspace opt!
+**Solid vs trig separation** phy sys with diff collision resolver
+Phys base class->sound/triggers/physics
+=>
+Collision system
