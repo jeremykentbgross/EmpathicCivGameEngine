@@ -55,8 +55,8 @@ GameEngineLib.Class = function Class(inConstructor, inParents)
 	
 	this._instanceRegistry = null;
 	
-	this._newInstances = [];
-	
+//	this._newInstances = [];
+//	this._netDirtyInstances = [];
 	/*
 	TODOs:
 	newInstances,
@@ -363,3 +363,119 @@ GameEngineLib.Class._createChainDownFunction = function _createChainDownFunction
 		}
 	};
 };
+
+
+/*
+GameEngineLib.Class.serializeAll = function serializeAll(inSerializer)
+{
+	var dirtyObjects,
+		maxItemsPerMessage,
+		serializeHeaderFormat,
+		objectHeaderFormat,
+		serializeHeader,
+		objectHeader,
+		i,
+		objectClass,
+		object;
+	
+	dirtyObjects = [];
+	maxItemsPerMessage = 65535;//TODO make this a constant elsewhere (globals)
+	
+	serializeHeaderFormat =
+	[
+		{
+			name : 'userID',
+			type : 'int',
+			net : true,
+			min : 0,
+			max : GameEngineLib.User.USER_IDS.MAX_EVER
+		},
+		{
+			name : 'numObjects',
+			type : 'int',
+			net : true,
+			min : 1,
+			max : maxItemsPerMessage
+		}
+	];
+	objectHeaderFormat =
+	[
+		{
+			name : 'classID',
+			type : 'int',
+			net : true,
+			min : 0,
+			max : GameEngineLib.Class.getInstanceRegistry().getMaxID()
+		},
+		{
+			name : 'instanceID',
+			type : 'int',
+			net : true,
+			min : 0,
+			max : 4096	//note: this assumes a max of 4096 objects of any given type.  may want max items per type in the future
+		}
+	];
+	
+	serializeHeader = {};
+	objectHeader = {};
+	
+	if()//writing
+	{
+		GameEngineLib.Class.getInstanceRegistry().forAll(
+			function(inClass)
+			{
+				inClass.getInstanceRegistry().forAll(
+					function(inObject)
+					{
+						dirtyObjects.push(inObject);
+					}
+				);
+			}
+		);
+		
+		gameAssert(dirtyObjects.length < maxItemsPerMessage, "Cannot currently serialize so many objects!");
+		
+		serializeHeader.numObjects = Math.min(maxItemsPerMessage, dirtyObjects.length);
+		inSerializer.serializeObject(serializeHeader, serializeHeaderFormat);
+		
+		for(i = 0; i < serializeHeader.numObjects; ++i)
+		{
+			var object = dirtyObjects[i];
+			objectHeader.classID = object.getClass().getID();
+			objectHeader.instanceID = object.getID();
+			inSerializer.serializeObject(objectHeader, objectHeaderFormat);
+			object.serialize(inSerializer);
+		}
+	}
+	else
+	{
+		try
+		{
+			inSerializer.serializeObject(serializeHeader, serializeHeaderFormat);
+			
+			for(i = 0; i < serializeHeader.numObjects; ++i)
+			{
+				inSerializer.serializeObject(objectHeader, objectHeaderFormat);
+				objectClass = GameEngineLib.Class.getInstanceRegistry().findByID(objectHeader.classID);
+				object = objectClass.getInstanceRegistry().findByID(objectHeader.instanceID);
+				
+				//if not found, and not server, create it
+				if(!object)
+				{
+					//TODO and this user can create it! (HOW to tell??)
+					{
+						object = objectClass.create();
+						object.setID(objectHeader.instanceID);
+					}
+					//TODO else throw error
+				}
+
+				object.serialize(inSerializer);
+			}
+		}
+		catch(error)
+		{
+			console.log(error.stack);
+		}
+	}
+};*/

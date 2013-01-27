@@ -34,7 +34,8 @@ GameEngineLib.GameBinarySerializer.create = function create()
 Flags =
 {
 	NET,
-	CLONE
+	CLONE	//TODO not needed anymore I think
+	ALL/NEW??
 	DUMMY_MODE
 	//BINARY?, UI_GEN, NO_REFS??
 }

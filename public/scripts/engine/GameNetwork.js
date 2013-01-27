@@ -98,6 +98,9 @@ GameEngineLib.GameNetwork.prototype.init = function init()
 		}
 	];
 	
+	this._newInstances = {};
+	this._netDirtyInstances = {};
+	
 	this._messageHeader = {};
 	this._objectHeader = {};
 	
@@ -377,7 +380,7 @@ GameEngineLib.GameNetwork.prototype.isUpdating = function isUpdating()
 };
 
 
-
+/*
 GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 {
 	var dirtyObjects = [];
@@ -416,7 +419,9 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 				function(inObject)
 				{
 					//TODO skip objects we do not own (but queue owner changes in netserialize queue from object?)
-					if(inClass._flags.net && inObject.netDirty() /*&& inObject.getNetOwner() === GameInstance.localUser.userName*/)
+					if(inClass._flags.net && inObject.isNetDirty()
+					//	&& inObject.getNetOwner() === GameInstance.localUser.userName
+					)
 					{
 						if(!GameSystemVars.Network.isServer
 							&& GameSystemVars.DEBUG
@@ -428,6 +433,7 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 							);
 						}
 						dirtyObjects.push(inObject);
+						inObject._netDirty = false;
 					}
 				}
 			);
@@ -462,7 +468,7 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 		
 		dirtyObjects = dirtyObjects.slice(this._messageHeader.numObjects);
 	}
-};
+};*/
 
 
 
@@ -546,3 +552,114 @@ GameEngineLib.GameNetwork.prototype._onData = function _onData(inEvent, inSocket
 	
 	return true;
 };
+
+
+
+
+
+
+GameEngineLib.GameNetwork.prototype.addNetDirtyObject = function addNetDirtyObject(inObject)
+{
+	var className = inObject.getClass().getName();
+	this._netDirtyInstances[className] = this._netDirtyInstances[className] || [];
+	this._netDirtyInstances[className].push(inObject);
+};
+GameEngineLib.GameNetwork.prototype.addNewObject = function addNewObject(inObject)
+{
+	var className = inObject.getClass().getName();
+	this._newInstances[className] = this._newInstances[className] || [];
+	this._newInstances[className].push(inObject);
+};
+//TODO removeObject??
+
+
+
+
+GameEngineLib.GameNetwork.prototype.update = function update(inDt)
+{
+	var className,
+		classDirtyList,
+		instanceObject,
+		i,
+		allDirtyObjects,
+		drawNetObjects;
+		
+	allDirtyObjects = [];
+	
+	drawNetObjects = !GameSystemVars.Network.isServer
+		&& GameSystemVars.DEBUG
+		&& GameSystemVars.Debug.NetworkMessages_Draw;
+		
+	if(drawNetObjects)
+	{
+		GameInstance.Graphics.drawDebugText(
+			"Network out:",
+			GameSystemVars.Debug.NetworkMessages_DrawColor
+		);
+	}
+	
+	for(className in this._netDirtyInstances)
+	{
+		classDirtyList = this._netDirtyInstances[className];
+		if(drawNetObjects)
+		{
+			GameInstance.Graphics.drawDebugText(
+				'    ' + className,
+				GameSystemVars.Debug.NetworkMessages_DrawColor
+			);
+		}
+		
+		for(i = 0; i < classDirtyList.length; ++i)
+		{
+			instanceObject = classDirtyList[i];
+			allDirtyObjects.push(instanceObject);
+			instanceObject._netDirty = false;
+			
+			if(drawNetObjects)
+			{
+				GameInstance.Graphics.drawDebugText(
+					'        -' + instanceObject.getName()
+					,GameSystemVars.Debug.NetworkMessages_DrawColor
+				);
+			}
+		}
+	}
+	this._netDirtyInstances = {};
+	
+	//this._serializeObjectsOut(, {NET : false});//TODO flag FULL instead??
+	this._serializeObjectsOut(allDirtyObjects, {NET : true});
+};
+
+GameEngineLib.GameNetwork.prototype._serializeObjectsOut = function _serializeObjectsOut(inList, inSerializerFlags)
+{
+	while(inList.length !== 0)
+	{
+		this._serializer.initWrite(inSerializerFlags);
+		
+		this._messageHeader.numObjects = Math.min(this._maxItemsPerMessage, inList.length);
+		this._messageHeader.userID = GameInstance.localUser.userID;
+		this._serializer.serializeObject(this._messageHeader, this._messageHeaderFormat);
+		
+		var i;
+		for(i = 0; i < this._messageHeader.numObjects; ++i)
+		{
+			var object = inList[i];
+			this._objectHeader.classID = object.getClass().getID();
+			this._objectHeader.instanceID = object.getID();
+			this._serializer.serializeObject(this._objectHeader, this._objectHeaderFormat);
+			object.serialize(this._serializer);
+		}
+		
+		var sendData = this._serializer.getString();
+		if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+		{
+			GameEngineLib.logger.info("NetSend: " + sendData);
+		}
+		
+		this._sendData(sendData);
+		
+		inList = inList.slice(this._messageHeader.numObjects);
+	}
+};
+
+

@@ -36,10 +36,18 @@ GameEngineLib.GameObject = GameEngineLib.Class.create({
 		
 		this._netOwner = GameEngineLib.User.USER_IDS.SERVER;
 		this._netDirty = false;
-		this._objectBaseNetDirty = false;
+		this._objectBaseNetDirty = false;//TODO should be true?
 		
-		//TODO if((server || thisClass._flags.clientCreatable) && netReplicated??)
-		thisClass._newInstances.push(this);
+		//TODO or add manually when netRep is added to instances? (including during clone)
+/*		if(GameSystemVars.Network.isMultiplayer
+			&& GameInstance
+			&& GameInstance.Network
+			&& GameSystemVars.Network.isServer//TODO ((server || thisClass._flags.clientCreatable) && netReplicated??)
+			)
+		{
+			GameInstance.Network.addNewObject(this);
+			this._netDirty = true;
+		}*/
 	},
 	
 	//Parents : [],//TODO eventsystem??
@@ -113,35 +121,48 @@ GameEngineLib.GameObject = GameEngineLib.Class.create({
 			this.getClass().getInstanceRegistry().deregister(this);
 		},
 		
-		netDirty : function netDirty()//TODO change to isNetDirty
+		canUserModifyNet : function canUserModifyNet()
 		{
-			if(this._netDirty)
+			if(!GameSystemVars.Network.isMultiplayer || !this.getClass()._flags.net)
 			{
-				this._netDirty = false;
+				return false;
+			}
+			if(this._netOwner !== GameInstance.localUser.userID
+				&& GameInstance.localUser.userID !== GameEngineLib.User.USER_IDS.SERVER)
+			{
+				return false;
+			}
+			return true;
+		},
+		
+		isNetDirty : function isNetDirty()
+		{
+			return this._netDirty;
+		},
+		
+		setNetDirty : function setNetDirty()
+		{
+			if(this.canUserModifyNet())
+			{
+				if(!this._netDirty)
+				{
+					GameInstance.Network.addNetDirtyObject(this);
+					this._netDirty = true;
+				}
+				
 				return true;
 			}
 			return false;
 		},
 		
-		setNetDirty : function setNetDirty()
-		{
-			//only the owner can write to this
-			if(this._netOwner === GameInstance.localUser.userID)
-			{
-				this._netDirty = true;
-			}
-		},
-		
 		setNetOwner : function setNetOwner(inOwner)
 		{
 			//only the owner or the server can change the ownership
-			if(this._netOwner !== GameInstance.localUser.userID
-				&& GameInstance.localUser.userID !== GameEngineLib.User.USER_IDS.SERVER)
+			if(!this.setNetDirty())
 			{
 				return;
 			}
 			this._netOwner = inOwner;
-			this._netDirty = true;//this.setNetDirty();
 			this._objectBaseNetDirty = true;
 		},
 
@@ -210,7 +231,7 @@ GameEngineLib.GameObject = GameEngineLib.Class.create({
 		
 		copyFrom : function copyFrom(inOther)
 		{
-			this.setName('Copy_' + inOther.getName());
+			this.setName(this.getName() + '_(Copy_of_' + inOther.getName()+')');
 		}
 		
 	}
