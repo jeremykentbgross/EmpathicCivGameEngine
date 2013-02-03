@@ -63,7 +63,7 @@ GameEngineLib.GameNetwork.create = function create()
 GameEngineLib.GameNetwork.prototype.init = function init()
 {
 	this._maxItemsPerMessage = 255;
-	this._objectHeaderFormat =
+	this._objectHeaderFormat =	//TODO put in shared place (like the GameObjectRef)
 	[
 		{
 			name : 'classID',
@@ -148,6 +148,8 @@ GameEngineLib.GameNetwork.prototype.init = function init()
 		this._socket.on('msg', this._onMsgRecv);
 		//data channel
 		this._socket.on('data', this._onDataRecv);
+		//new objects channel
+		this._socket.on('obj', this._onObjectsRecv);
 	}
 };
 
@@ -164,10 +166,34 @@ GameEngineLib.GameNetwork.prototype._onClientConnected = function _onClientConne
 	inConnectedSocket.on('id', _this_._onIdRecv);
 	inConnectedSocket.on('msg', _this_._onMsgRecv);
 	inConnectedSocket.on('data', _this_._onDataRecv);
+	inConnectedSocket.on('obj', _this_._onObjectsRecv);
 	inConnectedSocket.on('disconnect', _this_._onClientDisconnected);
 	
 	//tell everone they have connected:
 	inConnectedSocket.broadcast.emit('msg', "User Connected: " + inConnectedSocket.gameUser.userName);
+	
+	
+	
+	//let new connection know about all the existing objects!!
+	var allRelevantObjects;
+	allRelevantObjects = [];
+	GameEngineLib.Class.getInstanceRegistry().forAll(
+		function(inClass)
+		{
+			inClass.getInstanceRegistry().forAll(
+				function(inObject)
+				{
+					if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+					{
+						GameEngineLib.logger.info("Queueing Network Create for New Connection: " + inClass.getName() + ' : ' + inObject.getID());
+					}
+					allRelevantObjects.push(inObject);
+				}
+			);
+		}
+	);
+	
+	_this_._serializeObjectsOut(allRelevantObjects, {NET : false}, inConnectedSocket);//TODO flag FULL instead??
 };
 
 
@@ -188,6 +214,11 @@ GameEngineLib.GameNetwork.prototype._onClientDisconnected = function _onClientDi
 
 GameEngineLib.GameNetwork.prototype.sendMessage = function sendMessage(inMsg, inSentListener)
 {
+	if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+	{
+		GameEngineLib.logger.info("Net Send Msg: " + inMsg);
+	}
+	
 	if(GameSystemVars.Network.isServer)
 	{
 		this._listenSocket.sockets.emit('msg', inMsg);
@@ -213,17 +244,66 @@ GameEngineLib.GameNetwork.prototype.sendMessage = function sendMessage(inMsg, in
 
 
 
-GameEngineLib.GameNetwork.prototype._sendData = function _sendData(inData/*, inSentListener*/)
+GameEngineLib.GameNetwork.prototype._sendData = function _sendData(inData, inSocket/*, inSentListener*/)
 {
+	if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+	{
+		GameEngineLib.logger.info("Net Send Data: " + inData);
+	}
+
 	if(GameSystemVars.Network.isServer)
 	{
-		this._listenSocket.sockets.emit('data', inData);
+		if(inSocket)
+		{
+			inSocket.emit('data', inData);
+		}
+		else
+		{
+			this._listenSocket.sockets.emit('data', inData);
+		}
 	}
 	else if(this._socket.socket.connected === true)
 	{
 		this._socket.emit('data', inData);
 		/*if(inSentListener && inSentListener.onSentData)
 			inSentListener.onSentData(inData);*/
+	}
+	else
+	{
+		//TODO queue this for resend when we are connected again
+		
+		if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+		{
+			GameEngineLib.logger.info("Can't send data when disconnected.");
+		}
+	}
+};
+
+
+
+GameEngineLib.GameNetwork.prototype._sendObj = function _sendObj(inObjData, inSocket/*, inSentListener*/)
+{
+	if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+	{
+		GameEngineLib.logger.info("Net Send Obj: " + inObjData);
+	}
+
+	if(GameSystemVars.Network.isServer)
+	{
+		if(inSocket)
+		{
+			inSocket.emit('obj', inObjData);
+		}
+		else
+		{
+			this._listenSocket.sockets.emit('obj', inObjData);
+		}
+	}
+	else if(this._socket.socket.connected === true)
+	{
+		this._socket.emit('obj', inObjData);
+		/*if(inSentListener && inSentListener.onSentData)
+			inSentListener.onSentData(inObjData);*/
 	}
 	else
 	{
@@ -335,7 +415,7 @@ GameEngineLib.GameNetwork.prototype._onMsgRecv = function _onMsgRecv(inMsg)
 	
 	if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
 	{
-		GameEngineLib.logger.info("NetRecv: " + inMsg);
+		GameEngineLib.logger.info("Net Recv Msg: " + inMsg);
 	}
 	
 	_this_.onEvent(new GameEngineLib.GameEvent_Msg(inMsg));
@@ -357,13 +437,39 @@ GameEngineLib.GameNetwork.prototype._onDataRecv = function _onDataRecv(inData)
 	
 	if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
 	{
-		GameEngineLib.logger.info("NetRecv: " + inData);
+		GameEngineLib.logger.info("Net Recv Data: " + inData);
 	}
 
-	if(_this_._onData(event, this))//TODO if this errors, don't do the rest, ESP not resend!
+	//if this errors, don't do the rest, ESP not resend!
+	if(_this_._serializeObjectsIn(event, this, {NET : true}))
 	{
 		_this_.onEvent(event);
-		if(GameSystemVars.Network.isServer)//TODO move this into function in 'if'?
+		if(GameSystemVars.Network.isServer)
+		{
+			//Note: 'this' is the recieving socket here
+			this.broadcast.emit('data', inData);
+		}
+	}
+};
+
+
+
+GameEngineLib.GameNetwork.prototype._onObjectsRecv = function _onObjectsRecv(inData)
+{
+	var _this_ = GameInstance.Network;
+	
+	var event = new GameEngineLib.GameEvent_NetObjects(inData);
+	
+	if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+	{
+		GameEngineLib.logger.info("Net Recv Obj: " + inData);
+	}
+
+	//if this errors, don't do the rest, ESP not resend!
+	if(_this_._serializeObjectsIn(event, this, {NET : false}))//TODO instead of !NET, maybe should be FULL or something
+	{
+		_this_.onEvent(event);
+		if(GameSystemVars.Network.isServer)
 		{
 			//Note: 'this' is the recieving socket here
 			this.broadcast.emit('data', inData);
@@ -472,15 +578,16 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 
 
 
-GameEngineLib.GameNetwork.prototype._onData = function _onData(inEvent, inSocket)
+/*
+TODO in called from here:
+unpack()
+	throw	//from logerror!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+*/
+GameEngineLib.GameNetwork.prototype._serializeObjectsIn = function _serializeObjectsIn(inEvent, inSocket, inSerializerFlags)
 {
-	/*
-	TODO
-	unpack
-		throw	//from logerror!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	*/
+	var i, readObjects;
 	
-	this._serializer.initRead({NET : true}, inEvent.data);
+	this._serializer.initRead(inSerializerFlags, inEvent.data);
 	
 	if(!GameSystemVars.Network.isServer
 		&& GameSystemVars.DEBUG
@@ -503,12 +610,46 @@ GameEngineLib.GameNetwork.prototype._onData = function _onData(inEvent, inSocket
 			,"Net user not identifying self correctly: " + (this._messageHeader.userID + ' != ' + inSocket.gameUser.userID)
 		);
 		
-		var i;
+		readObjects = [];
+		
 		for(i = 0; i < this._messageHeader.numObjects; ++i)
 		{
 			this._serializer.serializeObject(this._objectHeader, this._objectHeaderFormat);
 			var objectClass = GameEngineLib.Class.getInstanceRegistry().findByID(this._objectHeader.classID);
 			var object = objectClass.getInstanceRegistry().findByID(this._objectHeader.instanceID);
+			
+			//if not found, and not server, create it
+			if(!object)//TODO if user can create this object && not net?
+			{
+				if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+				{
+					GameEngineLib.logger.info("Network Creating: " + objectClass.getName() + ' : ' + this._objectHeader.instanceID);
+				}
+				object = objectClass.create();
+				object.setID(this._objectHeader.instanceID);
+			}
+			else if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+			{
+				GameEngineLib.logger.info("Network Changing: " + objectClass.getName() + ' : ' + this._objectHeader.instanceID);
+			}
+			
+			//if not from server && not from owner dummy serialize
+			if(object.getNetOwner() !== this._messageHeader.userID
+				&& this._messageHeader.userID !== GameEngineLib.User.USER_IDS.SERVER)
+			{
+				//Note: could also maybe throw owner if !server && !owner && !recentOwnerQueue
+				//TODO info/warn?
+				console.log("Not the owner!: " + this._messageHeader.userID + ' != ' + object.getNetOwner());
+				this._serializer.setDummyMode(true);
+				object.serialize(this._serializer);
+				this._serializer.setDummyMode(false);
+			}
+			else
+			{
+				object.serialize(this._serializer);
+			}
+			
+			readObjects.push(object);
 			
 			if(!GameSystemVars.Network.isServer
 				&& GameSystemVars.DEBUG
@@ -524,23 +665,14 @@ GameEngineLib.GameNetwork.prototype._onData = function _onData(inEvent, inSocket
 					,GameSystemVars.Debug.NetworkMessages_DrawColor
 				);
 			}
-			//TODO if not found, and not server, create it
-			//TODO if !server && !owner && !recentOwnerQueue throw error
-			if(object.getNetOwner() !== this._messageHeader.userID
-				&& this._messageHeader.userID !== GameEngineLib.User.USER_IDS.SERVER)
+		}
+		
+		for(i = 0; i < readObjects.length; ++i)
+		{
+			if(readObjects[i]['postSerialize'])//TODO make this chain function so we don't have to check for it???
 			{
-				//TODO info/warn?
-				console.log("Not the owner!: " + this._messageHeader.userID + ' != ' + object.getNetOwner());
-				this._serializer.setDummyMode(true);
+				readObjects[i].postSerialize();
 			}
-			//TODO if !server && !owner && lenient serializer.dummyRead
-			//else
-			object.serialize(this._serializer);
-			
-			//TODO if server, dirty object (so it will send down to other clients)? or just resend if packet contains no detected problems
-			
-			//clear dummy mode in case we didn't read this object
-			this._serializer.setDummyMode(false);
 		}
 	}
 	catch(error)
@@ -578,13 +710,11 @@ GameEngineLib.GameNetwork.prototype.addNewObject = function addNewObject(inObjec
 GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 {
 	var className,
-		classDirtyList,
+		classInstanceList,
 		instanceObject,
 		i,
-		allDirtyObjects,
+		allRelevantObjects,
 		drawNetObjects;
-		
-	allDirtyObjects = [];
 	
 	drawNetObjects = !GameSystemVars.Network.isServer
 		&& GameSystemVars.DEBUG
@@ -598,9 +728,11 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 		);
 	}
 	
-	for(className in this._netDirtyInstances)
+	allRelevantObjects = [];
+	//sending the new objects
+	for(className in this._newInstances)
 	{
-		classDirtyList = this._netDirtyInstances[className];
+		classInstanceList = this._newInstances[className];
 		if(drawNetObjects)
 		{
 			GameInstance.Graphics.drawDebugText(
@@ -609,12 +741,54 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 			);
 		}
 		
-		for(i = 0; i < classDirtyList.length; ++i)
+		//TODO continue of this user cannot create the object!
+		
+		for(i = 0; i < classInstanceList.length; ++i)
 		{
-			instanceObject = classDirtyList[i];
-			allDirtyObjects.push(instanceObject);
-			instanceObject._netDirty = false;
+			instanceObject = classInstanceList[i];
+			allRelevantObjects.push(instanceObject);
+			//instanceObject.clearNetDirty();//TODO should these be net dirty at all?
 			
+			if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+			{
+				GameEngineLib.logger.info("Queueing Distributed Network Create: " + className + ' : ' + instanceObject.getID());
+			}
+			if(drawNetObjects)
+			{
+				GameInstance.Graphics.drawDebugText(
+					'        -' + instanceObject.getName()
+					,GameSystemVars.Debug.NetworkMessages_DrawColor
+				);
+			}
+		}
+	}
+	this._newInstances = {};
+	this._serializeObjectsOut(allRelevantObjects, {NET : false});//TODO flag FULL instead??
+	
+	allRelevantObjects = [];
+	//sending the dirty objects
+	for(className in this._netDirtyInstances)
+	{
+		classInstanceList = this._netDirtyInstances[className];
+		if(drawNetObjects)
+		{
+			GameInstance.Graphics.drawDebugText(
+				'    ' + className,
+				GameSystemVars.Debug.NetworkMessages_DrawColor
+			);
+		}
+		
+		for(i = 0; i < classInstanceList.length; ++i)
+		{
+			instanceObject = classInstanceList[i];
+			allRelevantObjects.push(instanceObject);
+			//instanceObject.clearNetDirty();
+			//instanceObject._netDirty = false;//HACK!!
+			
+			if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+			{
+				GameEngineLib.logger.info("Queueing Distributed Object Changes: " + className + ' : ' + instanceObject.getID());
+			}
 			if(drawNetObjects)
 			{
 				GameInstance.Graphics.drawDebugText(
@@ -625,14 +799,19 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 		}
 	}
 	this._netDirtyInstances = {};
-	
-	//this._serializeObjectsOut(, {NET : false});//TODO flag FULL instead??
-	this._serializeObjectsOut(allDirtyObjects, {NET : true});
+	this._serializeObjectsOut(allRelevantObjects, {NET : true});
 };
 
-GameEngineLib.GameNetwork.prototype._serializeObjectsOut = function _serializeObjectsOut(inList, inSerializerFlags)
+
+
+GameEngineLib.GameNetwork.prototype._serializeObjectsOut = function _serializeObjectsOut(inList, inSerializerFlags, inSocket)
 {
-	while(inList.length !== 0)
+	var sendData,
+		i;
+	
+	gameAssert(inList.length < this._maxItemsPerMessage, "Cannot currently serialize so many objects!");
+	
+	while(inList.length !== 0)//TODO limit these? I think there will be other bugs with postload if not all are present!
 	{
 		this._serializer.initWrite(inSerializerFlags);
 		
@@ -640,7 +819,6 @@ GameEngineLib.GameNetwork.prototype._serializeObjectsOut = function _serializeOb
 		this._messageHeader.userID = GameInstance.localUser.userID;
 		this._serializer.serializeObject(this._messageHeader, this._messageHeaderFormat);
 		
-		var i;
 		for(i = 0; i < this._messageHeader.numObjects; ++i)
 		{
 			var object = inList[i];
@@ -648,15 +826,19 @@ GameEngineLib.GameNetwork.prototype._serializeObjectsOut = function _serializeOb
 			this._objectHeader.instanceID = object.getID();
 			this._serializer.serializeObject(this._objectHeader, this._objectHeaderFormat);
 			object.serialize(this._serializer);
+			object.clearNetDirty();
 		}
 		
-		var sendData = this._serializer.getString();
-		if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+		sendData = this._serializer.getString();
+		
+		if(inSerializerFlags.NET)//TODO should be !FULL or something?
 		{
-			GameEngineLib.logger.info("NetSend: " + sendData);
+			this._sendData(sendData, inSocket);
 		}
-		
-		this._sendData(sendData);
+		else
+		{
+			this._sendObj(sendData, inSocket);
+		}
 		
 		inList = inList.slice(this._messageHeader.numObjects);
 	}

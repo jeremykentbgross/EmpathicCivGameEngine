@@ -221,6 +221,18 @@ GameEngineLib.GameEvent_Data = GameEngineLib.Class.create({
 
 
 
+GameEngineLib.GameEvent_NetObjects = GameEngineLib.Class.create({
+	Constructor : function NetObjects(inData)
+	{
+		this.GameEvent('onNetObjects');
+		this.data = inData;
+	},
+	Parents : [GameEngineLib.GameEvent],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition : {}
+});
 
 
 

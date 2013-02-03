@@ -64,6 +64,11 @@ GameEngineLib.GameBinarySerializer.prototype._init = function _init(inFlags)
 		createEvenProbabilityIntegerRangeModel();
 };
 
+
+GameEngineLib.GameBinarySerializer.prototype.isNet = function isNet()
+{
+	return this._net;
+}
 /*
 dataDesc = [
 	{
@@ -79,12 +84,13 @@ dataDesc = [
 				//X - bool
 				//X - string
 				//O - filename
-				//O - classRef
+				//X - objRef
 				//O - position
 				//O - array? map/object?
 				//O - color?
 				//O - image?
 				//O - vector?
+		maxArrayLength : //undefined OR max length if this is an array
 		//classRefType : //class type for references?
 		//file extention(s)?
 		//tooltip : //string for the UI
@@ -95,8 +101,12 @@ dataDesc = [
 */
 GameEngineLib.GameBinarySerializer.prototype.serializeObject = function serializeObject(inObject, inDataFormat)
 {
-	var i;
-	for(i = 0; i < inDataFormat.length; ++i)
+	var i, j, 
+		arrayLength,
+		value,
+		path;
+	
+	for(i = 0; i < inDataFormat.length; ++i)//TODO unit tests to see if dummy reads work right, including arrays!
 	{
 		var entry = inDataFormat[i];
 		
@@ -105,26 +115,115 @@ GameEngineLib.GameBinarySerializer.prototype.serializeObject = function serializ
 			continue;
 		}
 		
-		switch(entry.type)
+		if(entry.maxArrayLength)
 		{
-			case 'bool':
-				inObject[entry.name] = this.serializeBool(inObject[entry.name]);
-				break;
-			case 'int':
-				inObject[entry.name] = this.serializeInt(inObject[entry.name], entry.min, entry.max);
-				break;
-			case 'float':
-				inObject[entry.name] = this.serializeFloat(inObject[entry.name], entry.min, entry.max, entry.precision);
-				break;
-			case 'string':
-				inObject[entry.name] = this.serializeString(inObject[entry.name]);
-				break;
-			case 'position':
-				inObject[entry.name] = this.serializePoint2D(inObject[entry.name], entry.min, entry.max/*, entry.precision*/);
-				break;
+			arrayLength = inObject[entry.name].length;
+			arrayLength = this.serializeInt(arrayLength, 0, entry.maxArrayLength);
+			if(this.isReading() && !this._dummyMode)
+			{
+				inObject[entry.name] = [];
+			}
+		}
+		else
+		{
+			arrayLength = 1;
+		}
+		
+		for(j = 0; j < arrayLength; ++j)
+		{
+			if(entry.maxArrayLength)
+			{
+				value = inObject[entry.name][j];
+			}
+			else
+			{
+				value = inObject[entry.name];
+			}
+			
+			switch(entry.type)
+			{
+				case 'bool':
+					value = this.serializeBool(value);
+					break;
+				case 'int':
+					value = this.serializeInt(value, entry.min, entry.max);
+					break;
+				case 'float':
+					value = this.serializeFloat(value, entry.min, entry.max, entry.precision);
+					break;
+				case 'string':
+					value = this.serializeString(value);
+					break;
+				case 'position':
+					value = this.serializePoint2D(value, entry.min, entry.max/*, entry.precision*/);
+					break;
+				case 'objRef':
+					value = this.serializeGameObjectRef(value);
+					break;
+			}
+			if(!this._dummyMode)
+			{
+				if(entry.maxArrayLength)
+				{
+					inObject[entry.name][j] = value;
+				}
+				else
+				{
+					inObject[entry.name] = value;
+				}
+			}
 		}
 	}
 };
+
+
+GameEngineLib.GameBinarySerializer.prototype.serializeGameObjectRef = function serializeGameObjectRef(value)
+{
+	var readResult,
+		objectHeaderFormat,
+		object;
+	
+	readResult = value;
+	
+	if(!readResult)
+	{
+		readResult = new GameEngineLib.GameObjectRef();
+	}
+	
+	objectHeaderFormat =	//TODO put in shared place (like the GameObjectRef) as it is also used in Network system code!
+	[
+		{
+			name : 'classID',
+			type : 'int',
+			net : true,
+			min : 0,
+			max : GameEngineLib.Class.getInstanceRegistry().getMaxID()
+		},
+		{
+			name : 'instanceID',
+			type : 'int',
+			net : true,
+			min : 0,
+			max : 4096	//note: this assumes a max of 4096 objects of any given type.  may want max items per type in the future
+		}
+	];
+	
+	readResult.toBinary();
+	this.serializeObject(readResult, objectHeaderFormat);
+	
+	/*if(!this._isWriting)//Should be covered in convert to binary
+	{
+		readResult._value = null;
+	}*/
+	
+	if(!this._dummyMode)
+	{
+		value = readResult;
+	}
+	
+	return value;
+};
+
 
 GameEngineLib.GameBinarySerializer.prototype.serializeBool = function serializeBool(value)
 {

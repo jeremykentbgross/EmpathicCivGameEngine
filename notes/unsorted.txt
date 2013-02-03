@@ -1048,9 +1048,20 @@ NetNewCon:
 -forall classes
 --forall inst
 ---ser complete
+*********
+ud
+x	dirty->
+x	new->
+connect
+x	all->
+disconnect
+o	server delete->
+******
+
+TODO remove net flag from class, I don't think it is needed anymore?? eh, maybe??
 
 Gamify: points for games completed, financial supporter badge; meaning, goals, freedom!
-
+@depricated?? (depricated index?)
 @type (ns, class, func, memb);
 @name;
 @param type(s) name;

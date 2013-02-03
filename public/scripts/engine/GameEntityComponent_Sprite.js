@@ -24,7 +24,15 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class.create(
 	Constructor : function EntityComponent_Sprite()
 	{
 		this.GameEntityComponent();
-		this._position = GameEngineLib.createGame2DPoint();
+		
+		this._position = GameEngineLib.createGame2DPoint();//TODO this isn't used, but shouldn't use topleft of aabb either
+		
+		this._animations = GameInstance.GameRules._animations;//HACK!!!!!//TODO 'null'/default object!! (object ref?)
+		this._currentAnimation = 8;//TODO why 8?
+		this._sceneGraphRenderable = new GameEngineLib.Animation2DInstance();
+/*TODO should be commented out?*/this._sceneGraphRenderable.setAnimation(this._animations[0]);//TODO should be a null/default object
+		GameInstance.UpdateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
+		this._sceneGraphRenderable.layer = 1;		
 		
 		//TODO frame knows filename, offset, collision rects, (sound?) events, etc //TODO move this note to the frame class?
 		//TODO ^^^ same kind of thing for map tiles?
@@ -42,12 +50,11 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class.create(
 		init : function(inAnimations)
 		{
 			this._animations = inAnimations;
-			this._currentAnimation = 8;
-			
-			this._sceneGraphRenderable = new GameEngineLib.Animation2DInstance();
+			//this._currentAnimation = 8;//TODO why 8?
+			//this._sceneGraphRenderable = new GameEngineLib.Animation2DInstance();
 			this._sceneGraphRenderable.setAnimation(this._animations[0]);
-			GameInstance.UpdateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
-			this._sceneGraphRenderable.layer = 1;
+			//GameInstance.UpdateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
+			//this._sceneGraphRenderable.layer = 1;
 		},
 
 		onAddedToEntity : function(inEvent)
@@ -79,7 +86,10 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class.create(
 
 		onUpdatePosition : function(inEvent)
 		{
-			this._world.getSceneGraph().removeItem(this._sceneGraphRenderable);
+			if(this._world)
+			{
+				this._world.getSceneGraph().removeItem(this._sceneGraphRenderable);
+			}
 			
 			this._position = inEvent.position;
 			this._sceneGraphRenderable.anchorPosition = inEvent.boundingRect.getLeftTop();//inEvent.position;
@@ -122,8 +132,10 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class.create(
 			}
 			
 			//TODO change renderable position everywhere it should change
-			
-			this._world.getSceneGraph().insertItem(this._sceneGraphRenderable);
+			if(this._world)
+			{
+				this._world.getSceneGraph().insertItem(this._sceneGraphRenderable);
+			}
 		},
 
 		onAddedToWorld : function(inEvent)

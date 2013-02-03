@@ -28,6 +28,18 @@ gameAssert = function gameAssert(expression, message)
 	}
 };
 
+/*
+TODO:
+filter and print system name:
+Game.Log.Flags =//SystemNames
+{
+	
+};
+Game.Log.info(FLAG, msg);
+Game.Log.warn(FLAG, msg);
+Game.Log.error(FLAG, msg);
+*/
+
 
 GameEngineLib.logger = {};
 GameEngineLib.logger.createMsgType = function(inType, inFullPathDefault)
@@ -66,9 +78,9 @@ GameEngineLib.logger.createMsgType = function(inType, inFullPathDefault)
 				stackPath = ' ' + stackPath.slice(index, index2);
 			}
 			console.log(
-				(GameSystemVars.Network.isServer?'\n':'') +
+		//		(GameSystemVars.Network.isServer?'\n':'') +
 				inType + ': \'' + inMsg + '\'' + stackPath
-				+ (GameSystemVars.Network.isServer?'\n':'')
+		//		+ (GameSystemVars.Network.isServer?'\n':'')
 			);
 		}
 	};

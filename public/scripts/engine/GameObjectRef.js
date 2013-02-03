@@ -24,15 +24,16 @@ GameEngineLib.GameObjectRef = function GameObjectRef(inPathOrValue)
 {
 	this._path = null;
 	this._value = null;
-	//todo id {classid,instanceid}
+	
+	this.classID = -1;//TODO private
+	this.instanceID = -1;//TODO private
 	
 	if(inPathOrValue)
 	{
-		if(typeof inPathOrValue === 'string')
+		if(typeof inPathOrValue === 'string'/* || typeof inPathOrValue === 'number'*/)
 		{
 			this.setPath(inPathOrValue);
 		}
-		//TODO else if(typeof inPathOrValue === 'number') handle binary path
 		else
 		{
 			this.setValue(inPathOrValue);
@@ -53,27 +54,36 @@ GameEngineLib.GameObjectRef.prototype.deref = function deref()
 		return this._value;
 	}
 	
-	//TODO id
-	
-	if(this._path === null)
+	if(this._path !== null)
 	{
-		return null;
+		pathTokens = this._path.split('\\');
+	
+		//if !valid path
+		if(pathTokens.length !== 2)
+		{
+			return null;
+		}
+		//todo error/warn otherwise
+		
+		objectClass = GameEngineLib.Class.getInstanceRegistry().findByName(pathTokens[0]);
+		if(objectClass)
+		{
+			this._value = objectClass.getInstanceRegistry().findByName(pathTokens[1]);
+			this._path = null;
+		}
 	}
 	
-	pathTokens = this._path.split('\\');
-	//if valid path
-	if(pathTokens.length !== 2)
+	if(this.classID !== -1 && this.instanceID !== -1)
 	{
-		return null;
+		objectClass = GameEngineLib.Class.getInstanceRegistry().findByID(this.classID);
+		if(objectClass)
+		{
+			this._value = objectClass.getInstanceRegistry().findByID(this.instanceID);
+			this.classID = -1;
+			this.instanceID = -1;
+		}
 	}
-	//todo error/warn otherwise
 	
-	objectClass = GameEngineLib.Class.getInstanceRegistry().findByName(pathTokens[0]);
-	if(objectClass)
-	{
-		this._value = objectClass.getInstanceRegistry().findByName(pathTokens[1]);
-		this._path = null;
-	}
 		
 	return this._value;
 };
@@ -84,6 +94,8 @@ GameEngineLib.GameObjectRef.prototype.setValue = function setValue(inValue)
 {
 	this._path = null;
 	this._value = inValue;
+	this.classID = -1;
+	this.instanceID = -1;
 };
 
 
@@ -92,6 +104,28 @@ GameEngineLib.GameObjectRef.prototype.setPath = function setPath(inPath)
 {
 	this._path = inPath;
 	this._value = null;
+	this.classID = -1;
+	this.instanceID = -1;
+};
+
+
+
+GameEngineLib.GameObjectRef.prototype.toBinary = function toBinary()
+{
+	if(this.classID === -1 && this.instanceID === -1)
+	{
+		if(!this._value)
+		{
+			this.deref();
+		}
+		
+		if(this._value)
+		{
+			this.classID = this._value.getClass().getID();
+			this.instanceID = this._value.getID();
+			this._value = null;
+		}
+	}
 };
 
 
@@ -100,6 +134,7 @@ GameEngineLib.GameObjectRef.prototype.getPath = function getPath()//TODO txt pat
 {
 	if(this._path === null)
 	{
+		this.deref();
 		if(this._value !== null)
 		{
 			this._path = this._value.getTxtPath();

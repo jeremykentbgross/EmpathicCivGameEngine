@@ -27,6 +27,8 @@ GameEngineLib.EntityComponent_Input = GameEngineLib.Class.create(
 		this.GameEntityComponent();
 		//this._keysEventMapper = [];//TODO make keys changable??
 		
+		this._direction = GameEngineLib.createGame2DPoint(0, 0);
+		
 		//TODO put this elsewhere??
 		this._speed = 128;
 		
@@ -39,36 +41,56 @@ GameEngineLib.EntityComponent_Input = GameEngineLib.Class.create(
 	
 	Parents : [GameEngineLib.GameEntityComponent],
 	
-	flags : {},
+	flags : { net : true },
 	
 	ChainUp : [],
 	ChainDown : [],
 	
 	Definition :
 	{
+		_serializeFormat :
+		[
+			{
+				name : '_direction',
+				net : true,
+				type : 'position',
+				min : null,	//this._speed
+				max : null	//this._speed
+			}
+		],
+		
+		
 		onInput : function onInput(inInputEvent)
 		{
-			this._direction = GameEngineLib.createGame2DPoint(0, 0);
-			
-			if(inInputEvent.keys['W'])
+			//if multiplayer and not locally owned
+			if(GameSystemVars.Network.isMultiplayer && this.getNetOwner() !== GameInstance.localUser.userID)
 			{
-				this._direction = this._direction.add(this._up);
+				//don't update using the local input data!
 			}
-			if(inInputEvent.keys['S'])
+			else
 			{
-				this._direction = this._direction.add(this._down);
+				this._direction = GameEngineLib.createGame2DPoint(0, 0);//TODO just set the fields, don't create a new one
+				
+				if(inInputEvent.keys['W'])
+				{
+					this._direction = this._direction.add(this._up);
+				}
+				if(inInputEvent.keys['S'])
+				{
+					this._direction = this._direction.add(this._down);
+				}
+				if(inInputEvent.keys['A'])
+				{
+					this._direction = this._direction.add(this._left);
+				}
+				if(inInputEvent.keys['D'])
+				{
+					this._direction = this._direction.add(this._right);
+				}
+				
+				//unitize it, then multiply by speed
+				this._direction = this._direction.unit().multiply(this._speed);
 			}
-			if(inInputEvent.keys['A'])
-			{
-				this._direction = this._direction.add(this._left);
-			}
-			if(inInputEvent.keys['D'])
-			{
-				this._direction = this._direction.add(this._right);
-			}
-			
-			//unitize it, then multiply by speed
-			this._direction = this._direction.unit().multiply(this._speed);
 			
 			if(this._owner)
 			{
@@ -118,7 +140,13 @@ GameEngineLib.EntityComponent_Input = GameEngineLib.Class.create(
 			this.onRemovedFromEntity();
 		},
 
-		serialize : function serialize(){},//TODO
+		serialize : function serialize(inSerializer)
+		{
+			var format = this.EntityComponent_Input._serializeFormat;
+			format[0].min = GameEngineLib.createGame2DPoint(-this._speed,-this._speed);
+			format[0].max = GameEngineLib.createGame2DPoint(this._speed,this._speed);
+			inSerializer.serializeObject(this, format);
+		},
 		
 		copyFrom : function copyFrom(inOther)
 		{

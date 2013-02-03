@@ -186,18 +186,18 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 			{
 				instance.Graphics.render(instance.GameRules);
 			}
-			
-			//loop by sending browser event to queue a call to this function again
-			if(PRIVATE.running)
-			{
-				requestAnimFrame(PRIVATE.update);
-			}
-			//else shut down?
 		}
 		catch(error)
 		{
 			console.log(error.stack);
 		}
+		
+		//loop by sending browser event to queue a call to this function again
+		if(PRIVATE.running)
+		{
+			requestAnimFrame(PRIVATE.update);
+		}
+		//else shut down?
 	};
 	///////////////////////////////////////////////////
 	

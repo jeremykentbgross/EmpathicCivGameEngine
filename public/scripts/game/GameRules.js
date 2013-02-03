@@ -213,13 +213,15 @@ GameLib.GameRules = GameEngineLib.Class.create({
 			
 			//TODO this vv should have params if it is going to call init.  Where does it get init'ed from atm?
 			this._referenceEntityCameraComponent = GameEngineLib.EntityComponent_2DCamera.create(/*TODO params??*/);
-			this._referenceEntity.addComponent(this._referenceEntityCameraComponent);
+			this._referenceEntity.addComponent(this._referenceEntityCameraComponent);//TODO have locally owned camera become the one for the world?
 			
-			this._entities.push(this._referenceEntity.clone());
-			
-			this._gameWorld.addEntity(this._entities[0]/*this._referenceEntity*/);
-			//TODO comment out and fix default camera vv
-			this._gameWorld.setCamera(/*this._referenceEntityCameraComponent*/this._entities[0].getComponentByType(GameEngineLib.EntityComponent_2DCamera)[0]);
+			if(!GameSystemVars.Network.isMultiplayer)
+			{
+				this._entities.push(this._referenceEntity.clone());
+				this._gameWorld.addEntity(this._entities[0]/*this._referenceEntity*/);
+				//TODO comment out and fix default camera vv
+				this._gameWorld.setCamera(/*this._referenceEntityCameraComponent*/this._entities[0].getComponentByType(GameEngineLib.EntityComponent_2DCamera)[0]);
+			}
 			//create reference entity
 			/////////////////////////////////////////////////////////
 					
@@ -230,9 +232,18 @@ GameLib.GameRules = GameEngineLib.Class.create({
 		//TODO should rename this onIdentified>Net<User
 		onIdentifiedUser : function onIdentifiedUser(inEvent)
 		{
-			GameEngineLib.logger.info("Setting owner for physics component => Name: " + inEvent.user.userName + " ID: " + inEvent.user.userID);
+			var newEntity;
+			//GameEngineLib.logger.info("Setting owner for physics component => Name: " + inEvent.user.userName + " ID: " + inEvent.user.userID);
 			//this._referenceEntityPhysicsComponent.setNetOwner(inEvent.user.userID);
-			this._entities[0].getComponentByType(GameEngineLib.EntityComponent_2DPhysics)[0].setNetOwner(inEvent.user.userID);
+		//	this._entities[0].getComponentByType(GameEngineLib.EntityComponent_2DPhysics)[0].setNetOwner(inEvent.user.userID);
+			
+			newEntity = this._referenceEntity.clone();
+			this._entities.push(newEntity);
+			GameEngineLib.logger.info("Setting owner for physics and input component(s) => Name: " + inEvent.user.userName + " ID: " + inEvent.user.userID);
+			newEntity.getComponentByType(GameEngineLib.EntityComponent_2DPhysics)[0].setNetOwner(inEvent.user.userID);
+			newEntity.getComponentByType(GameEngineLib.EntityComponent_Input)[0].setNetOwner(inEvent.user.userID);
+			//TODO camera component to control local camera??
+			this._gameWorld.addEntity(newEntity);
 		},
 		
 		

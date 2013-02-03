@@ -23,11 +23,11 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class.create({
 	Constructor : function EntityComponent_2DPhysics()
 	{
 		this.GameEntityComponent();
-		
+
 		this._position = GameEngineLib.createGame2DPoint(256, 256);//??needed? use mid instead?
 		this._velocity = GameEngineLib.createGame2DPoint();
-		this._boundingRect = GameEngineLib.createGame2DAABB(0, 0, 64, 64);
-		this._range = GameEngineLib.createGame2DAABB(0, 0, 256, 256);//TODO used? Set when added to world?
+		this._boundingRect = GameEngineLib.createGame2DAABB(this._position.myX, this._position.myY, 64, 64);//TODO separate position from AABB in PhysicsSim2D
+		this._range = GameEngineLib.createGame2DAABB(0, 0, 65535, 65535);//TODO used? Set when added to world?
 	},
 	
 	Parents : [GameEngineLib.GameEntityComponent],
@@ -70,8 +70,15 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class.create({
 			owner.registerListener('RequestVelocity', this);
 			owner.registerListener('AddedToWorld', this);
 			owner.registerListener('RemovedFromWorld', this);
-			
 			//TODO owner.event(getposition, myPos);??
+			
+			this._owner.onEvent(
+				new GameEngineLib.GameEvent_UpdatePosition(
+					this._position.clone(),
+					this._velocity.clone(),
+					this._boundingRect.clone()
+				)
+			);
 		},
 		
 		onRemovedFromEntity : function onRemovedFromEntity(inEvent)
@@ -96,7 +103,7 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class.create({
 			var format = this.EntityComponent_2DPhysics._serializeFormat;
 			format[0].min = this._range.getLeftTop();
 			format[0].max = this._range.getRightBottom();
-			inSerializer.serializeObject(this, this.EntityComponent_2DPhysics._serializeFormat);
+			inSerializer.serializeObject(this, format);
 			
 			if(inSerializer.isReading())
 			{
@@ -104,18 +111,35 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class.create({
 				this._boundingRect.myY = this._position.myY - this._boundingRect.myHeight / 2;
 				//console.log(this._position.myX + ' ' + this._position.myY);
 				
-				this._physicsObject.setGame2DAABB(this._boundingRect);
+				if(this._physicsObject)
+				{
+					this._physicsObject.setGame2DAABB(this._boundingRect);
+				}
 				
 				//set position and let everyone else know
-				this._owner.onEvent(
-					new GameEngineLib.GameEvent_UpdatePosition(
-						this._position.clone(),
-						this._velocity.clone(),
-						this._boundingRect.clone()
-					)
-				);
+				if(this._owner)
+				{
+					this._owner.onEvent(
+						new GameEngineLib.GameEvent_UpdatePosition(
+							this._position.clone(),
+							this._velocity.clone(),
+							this._boundingRect.clone()
+						)
+					);
+				}
 			}
 			//else console.log(this._position.myX + ' ' + this._position.myY);
+			
+			/*
+			HACK!!!!! TODO find better solution!
+			Note: this is here because we need to use the bounding box for compression,
+				BUT when added to a world we need to keep the OLD range until the other
+				client(s) know about the change of world.  Otherwise the compression min/max will be wrong
+			*/
+		/*	if(this._world)
+			{
+				this._range = this._world.getBoundingBox();
+			}*/
 		},
 		
 		onRequestVelocity : function onRequestVelocity(inEvent)
@@ -126,6 +150,7 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class.create({
 		
 		onAddedToWorld : function onAddedToWorld(inEvent)
 		{
+			this._world = inEvent.world;//TODO I dont think this is used..
 			this._physicsSystem = inEvent.world.getPhysics();
 			this._physicsObject = this._physicsSystem.createNewPhysicsObject();
 			this._physicsObject.setGame2DAABB(this._boundingRect);
@@ -135,7 +160,8 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class.create({
 			//TODO somehow event the position when it changes
 			
 			//TODO should have a position as part of the event?
-			this._range = inEvent.world.getBoundingBox();
+			//TODO can the range still be set by the world bounding box?? Atm it screws up compression and thus net serializes
+//			this._range = inEvent.world.getBoundingBox();
 		},
 		
 		onRemovedFromWorld : function onRemovedFromWorld(inEvent)

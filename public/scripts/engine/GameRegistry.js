@@ -124,11 +124,14 @@ GameEngineLib.GameRegistry.prototype.numItems = function numItems()
 	return this._itemCount;
 };
 
+
 GameEngineLib.GameRegistry.prototype.getUnusedID = function getUnusedID()
 {
-	if(this._unusedInstanceIDs.length)
+	//TODO unused ids is currently broken because of the commented out code below
+	//vvvvvvvvvvvv
+	/*if(this._unusedInstanceIDs.length)
 	{
-		return this._unusedInstanceIDs[0];
-	}
+		return this._unusedInstanceIDs[this._unusedInstanceIDs.length - 1];
+	}*/ /////////////////TODO unused id's NOT working out ok atm due to names!
 	return this._maxID + 1;
 };

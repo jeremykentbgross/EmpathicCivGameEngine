@@ -28,7 +28,7 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class.create(
 	
 	Parents : [GameEngineLib.GameObject],
 	
-	flags : {},
+	flags : {net:true},
 	
 	ChainUp : [],
 	ChainDown : [],
@@ -98,8 +98,14 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class.create(
 			//TODO beware bug created by adding an entity by a name which could change, add this to namechange listener
 			this._entityMap[inEntity.getTxtPath()] = inEntity;
 			inEntity.addedToWorld(this);
+			this.setNetDirty();
 		},
-		//TODO remove entity
+		removeEntity : function removeEntity(inEntity)
+		{
+			delete this._entityMap[inEntity.getTxtPath()];
+			inEntity.removedFromWorld(this);
+			this.setNetDirty();
+		},
 
 		setCamera : function setCamera(in2DCamera)
 		{
@@ -202,7 +208,79 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class.create(
 		},
 
 		destroy : function destroy(){},//TODO
-		serialize : function serialize(){},//TODO
+		
+		serialize : function serialize(inSerializer)//TODO serialize maps somehow GameEntity has identical post/serialize for components!
+		{
+			var entity, ref;
+			
+			//HACKS
+			this.entityArray = [];
+			this.entityArrayBefore = [];
+				
+			var format =	//TODO format should be static!
+			[
+				{
+					name : 'entityArray',
+					type : 'objRef',
+					net : true,
+					maxArrayLength : 32	//TODO global setting: maxPlayersPerWorld
+				}
+			];
+			
+			for(entity in this._entityMap)
+			{
+				ref = this._entityMap[entity].getRef();
+				this.entityArray.push(ref);
+				this.entityArrayBefore.push(ref);
+			}
+			
+			inSerializer.serializeObject(this, format);
+		},
+		
+		/*
+		TODO postSerialize chain from GameObject!
+		*/
+		postSerialize : function postSerialize()
+		{
+			var i,
+				entityRef,
+				newEntityMap,
+				entityPath,
+				entityObject;
+				
+			newEntityMap = {};
+			
+			//if now && !before => add
+			for(i = 0; i < this.entityArray.length; ++i)
+			{
+				entityRef = this.entityArray[i];
+				
+				entityObject = entityRef.deref();
+				entityPath = entityRef.getPath();
+				
+				newEntityMap[entityPath] = entityObject;
+				
+				if(!this._entityMap[entityPath])
+				{
+					this.addEntity(entityObject);
+				}
+			}
+			
+			//if before && !now => remove
+			for(i = 0; i < this.entityArrayBefore.length; ++i)
+			{
+				entityRef = this.entityArrayBefore[i];
+				
+				entityObject = entityRef.deref();
+				entityPath = entityRef.getPath();
+				
+				if(!newEntityMap[entityPath])
+				{
+					this.removeEntity(entityObject);
+				}
+			}
+		},
+		
 		copyFrom : function copyFrom(inOther){},//TODO
 		
 		//TODO should cursor drawing be here? probably not, maybe move to GameFrameWork (instance)

@@ -26,12 +26,12 @@ GameEngineLib.GameEntity = GameEngineLib.Class.create({
 		this.GameEventSystem();//
 		
 		this._world = null;
-		this._components = GameEngineLib.createGameCircularDoublyLinkedListNode();
+		this._componentMap = {};//TODO listen to name changes from GameObject!!
 	},
 	
 	Parents : [
 		GameEngineLib.GameObject,
-		GameEngineLib.GameEventSystem//
+		GameEngineLib.GameEventSystem
 	],
 	
 	flags : {},
@@ -43,8 +43,7 @@ GameEngineLib.GameEntity = GameEngineLib.Class.create({
 	{
 		addComponent : function addComponent(inComponent)
 		{
-			this._components.myPrev.insert(new GameEngineLib.GameCircularDoublyLinkedListNode(inComponent));
-			
+			this._componentMap[inComponent.getTxtPath()] = inComponent;
 			inComponent.onAddedToEntity(new GameEngineLib.GameEvent_AddedToEntity(this));
 			
 			if(this._world)
@@ -54,11 +53,17 @@ GameEngineLib.GameEntity = GameEngineLib.Class.create({
 		},
 		removeComponent : function removeComponent(inComponent)
 		{
-			var containingNode = this._components.findNodeContaining(inComponent);
+			var component,
+				path;
 			
-			if(containingNode)
+			path = inComponent.getTxtPath();
+			
+			component = this._componentMap[path];
+			delete this._componentMap[path];
+			
+			if(component)
 			{
-				containingNode.remove();
+				gameAssert(component === inComponent, "WTF!!!");
 				if(this._world)
 				{
 					inComponent.onRemovedFromWorld(new GameEngineLib.GameEvent_RemovedFromWorld(this._world));
@@ -68,17 +73,19 @@ GameEngineLib.GameEntity = GameEngineLib.Class.create({
 		},
 		getComponentByType : function getComponentByType(inType, inoutReturnValues)
 		{
+			var componentName,
+				component;
+			
 			inoutReturnValues = inoutReturnValues || [];
 			
-			this._components.forAll(
-				function(inComponent)
+			for(componentName in this._componentMap)
+			{
+				component = this._componentMap[componentName];
+				if(component && component.isA(inType))//TODO change forall to not pass nulls and get rid of gaurds all over the place
 				{
-					if(inComponent && inComponent.isA(inType))//TODO change forall to not pass nulls and get rid of gaurds all over the place
-					{
-						inoutReturnValues.push(inComponent);
-					}
+					inoutReturnValues.push(component);
 				}
-			);
+			}
 			
 			return inoutReturnValues;
 		},
@@ -89,15 +96,18 @@ GameEngineLib.GameEntity = GameEngineLib.Class.create({
 		{
 			if(this._world)
 			{
-				this.removedFromWorld();
+				this.removedFromWorld(this._world);//TODO should actually call the world object remove!!
 			}
 			this._world = inWorld;
 			this.onEvent(new GameEngineLib.GameEvent_AddedToWorld(this._world));
 		},
-		removedFromWorld : function removedFromWorld()//TODO rename onRemovedFromWorld
+		removedFromWorld : function removedFromWorld(inWorld)//TODO rename onRemovedFromWorld
 		{
-			this.onEvent(new GameEngineLib.GameEvent_RemovedFromWorld(this._world));
-			this._world = null;
+			if(inWorld === this._world)
+			{
+				this.onEvent(new GameEngineLib.GameEvent_RemovedFromWorld(this._world));
+				this._world = null;
+			}
 		},
 		
 		getWorld : function getWorld()
@@ -107,43 +117,110 @@ GameEngineLib.GameEntity = GameEngineLib.Class.create({
 		
 		destroy : function destroy()
 		{
+			var componentName,
+				component;
+				
 			if(this._world)
 			{
 				this.removedFromWorld();//TODO actually remove it from the world!!
 			}
 
-			this._components.forAll(
-				function(inComponent)
-				{
-					inComponent.onRemovedFromEntity(new GameEngineLib.GameEvent_RemovedFromEntity(this));
-					inComponent.destroy();
-				}
-			);
-			
-			this._components = null;//Does this leak? Could do if loose circular references are not released
+			for(componentName in this._componentMap)
+			{
+				component = this._componentMap[componentName];
+				//TODO remove from world also; instead make array of them and then removeComponent for each and then destroy them
+				component.onRemovedFromEntity(new GameEngineLib.GameEvent_RemovedFromEntity(this));
+				component.destroy();
+			}
+			this._componentMap = null;
 		},
 		
+		
+		/*
+		TODO serialize and postserialize are exactly the same in Game2DWorld and GameEntity, abstract!
+			TODO should be done as map I think (like the array)??
+		*/
 		serialize : function serialize(inSerializer)
 		{
-			var componentMap = {};
-			//TODO
+			var component, ref;
+			
+			//HACKS
+			this.componentArray = [];
+			this.componentArrayBefore = [];
+				
+			var format =	//TODO format should be static!
+			[
+				{
+					name : 'componentArray',
+					type : 'objRef',
+					net : true,
+					maxArrayLength : 32	//TODO global setting: maxPlayersPerWorld
+				}
+			];
+			
+			for(component in this._componentMap)
+			{
+				ref = this._componentMap[component].getRef();
+				this.componentArray.push(ref);
+				this.componentArrayBefore.push(ref);
+			}
+			
+			inSerializer.serializeObject(this, format);
+		},
+		
+		postSerialize : function postSerialize()
+		{
+			var i,
+				componentRef,
+				newComponentMap,
+				componentPath,
+				componentObject;
+				
+			newComponentMap = {};
+			
+			//if now && !before => add
+			for(i = 0; i < this.componentArray.length; ++i)
+			{
+				componentRef = this.componentArray[i];
+				
+				componentObject = componentRef.deref();
+				componentPath = componentRef.getPath();
+				
+				newComponentMap[componentPath] = componentObject;
+				
+				if(!this._componentMap[componentPath])
+				{
+					this.addComponent(componentObject);
+				}
+			}
+			
+			//if before && !now => remove
+			for(i = 0; i < this.componentArrayBefore.length; ++i)
+			{
+				componentRef = this.componentArrayBefore[i];
+				
+				componentObject = componentRef.deref();
+				componentPath = componentRef.getPath();
+				
+				if(!newComponentMap[componentPath])
+				{
+					this.removeComponent(componentObject);
+				}
+			}
 		},
 		
 		copyFrom : function copyFrom(inOther)
 		{
-			//TODO properly remove all existing components
-			var that = this;
+			var componentName,
+				component;
 			
-			inOther._components.forAll(
-				function copyComponent(inComponent)
-				{
-					//skip head node
-					if(inComponent)
-					{
-						that.addComponent(inComponent.clone());
-					}
-				}
-			);
+			//TODO properly remove all existing components
+			
+			for(componentName in inOther._componentMap)
+			{
+				component = inOther._componentMap[componentName];
+				this.addComponent(component.clone());
+			}
 		}
 	}
 });

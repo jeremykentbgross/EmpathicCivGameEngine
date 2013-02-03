@@ -30,16 +30,19 @@ GameEngineLib.GameObject = GameEngineLib.Class.create({
 		registry = thisClass.getInstanceRegistry();
 		instanceID = registry.getUnusedID();
 
-		this._name = 'Instance_' + instanceID;
+		this._name = 'Inst_' + instanceID;
 		this._ID = instanceID;//TODO rename _ID as _instanceID
 		registry.register(this);
+		
+		//TODO if FLAG
+		GameEngineLib.logger.info("New Object: " + this.getClass().getName() + ' : ' + this._name + ' : ' + this._ID);
 		
 		this._netOwner = GameEngineLib.User.USER_IDS.SERVER;
 		this._netDirty = false;
 		this._objectBaseNetDirty = false;//TODO should be true?
 		
 		//TODO or add manually when netRep is added to instances? (including during clone)
-/*		if(GameSystemVars.Network.isMultiplayer
+		if(GameSystemVars.Network.isMultiplayer
 			&& GameInstance
 			&& GameInstance.Network
 			&& GameSystemVars.Network.isServer//TODO ((server || thisClass._flags.clientCreatable) && netReplicated??)
@@ -47,7 +50,7 @@ GameEngineLib.GameObject = GameEngineLib.Class.create({
 		{
 			GameInstance.Network.addNewObject(this);
 			this._netDirty = true;
-		}*/
+		}
 	},
 	
 	//Parents : [],//TODO eventsystem??
@@ -155,6 +158,12 @@ GameEngineLib.GameObject = GameEngineLib.Class.create({
 			return false;
 		},
 		
+		clearNetDirty : function clearNetDirty()//TODO make chain down!!!
+		{
+			this._netDirty = false;
+			this._objectBaseNetDirty = false;
+		},
+		
 		setNetOwner : function setNetOwner(inOwner)
 		{
 			//only the owner or the server can change the ownership
@@ -201,6 +210,11 @@ GameEngineLib.GameObject = GameEngineLib.Class.create({
 				return;
 			}
 			
+			//TODO if net!! (and else)
+			
+			//HACK TODO this should not be done like this!!
+			this._objectBaseNetDirty = this._objectBaseNetDirty || !serializer.isNet();
+			
 			this._objectBaseNetDirty =
 				serializer.serializeBool(this._objectBaseNetDirty);
 			
@@ -219,7 +233,10 @@ GameEngineLib.GameObject = GameEngineLib.Class.create({
 				}
 			}
 			
-			this._objectBaseNetDirty = false;
+			/*if(serializer.isNet())//TODO maybe should be ALL flag or something (want to minimize transfers)
+			{
+				this._objectBaseNetDirty = false;
+			}*/
 		},
 		
 		clone : function clone()
