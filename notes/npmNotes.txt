@@ -1,0 +1,21 @@
+Show local packages:
+	npm list
+	npm list -g
+
+Find Local version:
+	npm -v <package>
+
+Show newest available version:
+	npm view <package-name> version
+	npm view [package-name] dist-tags
+
+Un/Install:
+	npm install <package name>
+	npm install <package name> -g
+	npm uninstall <package name>
+
+
+http://dreamerslab.com/blog/en/npm-basic-commands/
+http://stackoverflow.com/questions/10972176/find-the-version-of-an-installed-npm-package
+http://blog.nodejitsu.com/npm-cheatsheet
+http://blog.izs.me/post/1675072029/10-cool-things-you-probably-didnt-realize-npm-could-do

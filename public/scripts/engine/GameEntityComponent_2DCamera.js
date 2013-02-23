@@ -26,7 +26,7 @@ GameEngineLib.EntityComponent_2DCamera = GameEngineLib.Class.create({
 		this.Game2DCamera();
 	},
 	Parents : [GameEngineLib.GameEntityComponent, GameEngineLib.Game2DCamera],
-	flags : {},
+	flags : { net : true },
 	ChainUp : null,
 	ChainDown : null,
 	Definition :
@@ -59,6 +59,11 @@ GameEngineLib.EntityComponent_2DCamera = GameEngineLib.Class.create({
 		{
 			this._myMap = inEvent.world.getMap();
 			//TODO register as a camera entity with the world
+			
+			if(this.getNetOwner() === GameInstance.localUser.userID)//TODO maybe make search from game rules to find cams that are local owned?
+			{
+				inEvent.world.setCamera(this);
+			}
 		},
 		
 		onRemovedFromWorld : function onRemovedFromWorld(inEvent)

@@ -34,8 +34,10 @@ GameEngineLib.GameObject = GameEngineLib.Class.create({
 		this._ID = instanceID;//TODO rename _ID as _instanceID
 		registry.register(this);
 		
-		//TODO if FLAG
-		GameEngineLib.logger.info("New Object: " + this.getClass().getName() + ' : ' + this._name + ' : ' + this._ID);
+		if(GameSystemVars.DEBUG && GameSystemVars.Debug.GameObject_Print)
+		{
+			GameEngineLib.logger.info("New Object: " + this.getClass().getName() + ' : ' + this._name + ' : ' + this._ID);
+		}
 		
 		this._netOwner = GameEngineLib.User.USER_IDS.SERVER;
 		this._netDirty = false;
@@ -113,7 +115,7 @@ GameEngineLib.GameObject = GameEngineLib.Class.create({
 		destroy : function destroy()
 		{
 			//TODO have this?
-			if(GameSystemVars.DEBUG && GameSystemVars.Debug.GameObject_Destroy_Print)
+			if(GameSystemVars.DEBUG && GameSystemVars.Debug.GameObject_Print)
 			{
 				GameEngineLib.logger.info("Destroying GameObject " + GameEngineLib.createGameObjectRef(this).getTxtPath(), true);
 			}
@@ -175,9 +177,9 @@ GameEngineLib.GameObject = GameEngineLib.Class.create({
 			this._objectBaseNetDirty = true;
 		},
 
-		getNetOwner : function getNetOwner()
+		getNetOwner : function getNetOwner()//rename getNetOwnerID
 		{
-			return this._netOwner;
+			return this._netOwner;//TODO rename _netOwnerID because it is really the id, not a whole object
 		},
 		
 		getRef : function getRef()

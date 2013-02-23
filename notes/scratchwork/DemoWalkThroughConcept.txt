@@ -1,0 +1,209 @@
+Demo Walk through script/description.
+
+
+<!--
+Scene:
+
+A Solid White background/enviornment, the player has a black and white male avitar.  A white rabbit in a black trench coat and Augmented reality goggles stands in the center with a name tag: "Mysterious Stranger", he has a yellow '!' over his head.  Next to him on his right is a pot of gold at the end of a rainbow <link rainbows end>.  The map always wraps/warps the player back around to the center containing the white rabbit if they try to leave.  The players name tag is 'Anon<random number>'
+-->
+
+White Rabbit: Over here my man!  Click me to start a conversation.
+< ^^^ repeating occasionally until the player clicks>
+
+<Player clicks white rabbit>
+
+White Rabbit: Good choice my man!  Say, have you ever thought about how strange dreams are?
+
+White Rabbit: Once I had a dream that an snow monster was lobbing ice shards through the walls and ceiling of a house I was hidding in.
+
+White Rabbit: Then I woke up and found it was REALLY hot in my room because my computer was running bittorrent all night.  So I cracked open the window to let in cold air and went back to sleep.
+
+White Rabbit: It was as if my dream represented reality in a really an abstract way.
+
+White Rabbit: Joseph Campbell said that Myth is the public dream, which kinda makes you wonder: Does that mean there could be a social consciencesness?  If so, and it is dreaming, is it asleep?  And could it be awakened?
+
+White Rabbit: If mind is an emergent property of the neural networks we call brains, could social networks give rise to an emergent consciousness too?  Maybe it does.  They say no one knows how to create a pencil. <Link: ideas have sex>
+
+White Rabbit: Well, anyway, welcome to our construct, the loading area for this metaverse.  I have a quest for you, if you are up for it!
+
+White Rabbit: But first I must remind you that you are Anonymous!
+
+White Rabbit: That is why you have that lame black and white public terminal Avitar.  Think about upgrading it my man!  (Or Woman)  
+
+White Rabbit: Or maybe you just are just: "I thought what I'd do was, I'd pretend I was one of those deaf-mutes."  Fair enough my man, fair enough.  Gordon Freeman didn't say much either.  Anyway, you up for a quest?
+
+Player: <yes/no>
+
+On yes:
+White Rabbit:  Good choice my man!  This quest is really for you!  I, your poor servant, will reveal you to yourself and set you free.  Then you will be free to dream other dreams, and better!  But you must be willing to see the truth.  So I offer you a choice!
+
+<!--
+From the right side of the screen two trees slide in rapidly to either side of behind the rabbit.  On his left side is an apple tree with a snake in it, and on the right is a blueberry bush.
+-->
+
+White Rabbit: If you eat the blue fruit you may live on in the blissful ignorance of your choosing, another day of Soma Holiday.
+
+White Rabbit: But if you eat the red fruit, if you choose to seek knowledge, understanding, and wisdom, you will open a pandoras box in your consciousness.
+
+<Rabbit opens his Trench Coat to reveal red and blue fruit inside>
+White Rabbit: What do you say stranger?  What are you buying?  ...  Will you eat the red fruit?
+<yes/no>
+
+<On No>
+White Rabbit: Oh but you must! At least if you want to continue in my metaverse.<closes trench coat, goto question again!>
+
+<On Yes>
+White Rabbit: Good choice my man (or Woman).  I need you to get into the biolabs for me.  I am with you wherever you go.  But first you must find triforce hidden in the land below.  Down the rabbit hole you go my man.
+
+<Pot of Gold moves to the side revealing a hole in the ground>
+
+<Player falls in hole>
+
+
+-----------End Scene--------------
+
+
+
+<!--
+Scene:
+
+A night club that looks like it is out of Tron Legacy.  Dancing NPC's on the floor.  On the back wall flash nightclub lightshow images that look like they are from Tron (original).  In the corner is a woman in black looking like Trinity from the Matrix, with a name tag that reads: Triforce.  She has a yellow '!' over her head.  Music plays.
+-->
+
+<Player clicks Triforce>
+
+Triforce: Hey new guy (or gal)! Welcome to the Black Sun!  You are lucky.  Very few are allowed in here.
+
+Triforce: I know what you are thinking: What is the point of this?  I had that question once too.  But I found the answer I was looking for.  You will find answers too, if you search for them.  Seek and you shall find, knock and the door shall open.  But first I we must discuss a few things.
+
+Triforce: Have you ever heard of meme theory?  Did you know that ideas can replicate and evolve into elaborate neuro linguistic viruses?
+
+Triforce: Some say that every great teacher was a kind of neuro linguistic programmer, creating antiviruses for our minds, and or teaching us the solution to the non zero sum game pattern that enables complex life.
+
+Triforce: But in time, self serving memetic engineering institutions, and natural memetic mutations, obscure the original teachings to serve their own ends.
+
+Triforce: Memes even determine the shape and behavior of complex living social network organisms that live for thousands of years, just as genes determine the structure of complex multicelled life.
+
+Triforce: Society has a memory, we call it history.  And social networks adapt to protect themselves from competing ideas that could destroy or damage the memes that bind their social network bodies together.  Like those who deny evolution.
+
+Triforce: It is important you understand that our fight is not against flesh and blood, but rather we are the battle grounds for elaborate memetic structures, ideas, fighting for control of our collective minds.  Their struggle within us will determine the outcome of life for our species.
+
+Triforce: Have you thought about how high upon the shoulders of giants we stand?  The food we eat was domesticated, genetically engineered blindly, over thousands of years via human selection in breeding.
+
+Triforce: The very words we use to communicate ideas are the product of tens of thousands of years of social evolution.  As such, no idea can truely be ones own.  Everything is a remix! <Link Everything is a Remix>
+
+Triforce: Have you ever thought about how much consciousness is like a video game?  Both are artificial simulations of reality.
+
+Triforce: Did you know that if you play an online video game with a friend on a different machine right next to you, the simulations will never match perfetly?
+
+Triforce: The internet is messy.  Latency, or lag, and dropped information causes your simulation to be different from mine, not to mention lossy compression.
+
+Triforce: Like the internet, as humans we break our communication into packets called words.
+
+Triforce: If you miss a ____ in the middle of my sentence your brain can fill it in, just like the network parity checks in the network protocols.
+
+Triforce: Both our compressions are lossy.  If I use words like Karma, God, or Love, your meaning will not be the same as mine, and the memes mutate as they copy.  But it is still usually good enough copy that we can replicate the state of our simulations close enough for a shared reality.. just like a video game.
+
+Triforce: Imagine, our 7 billion minds, all running a networked simulation of reality with each other.  A giant cloud computer of human minds, possibly even capable of computing the answer to the great question!
+
+Triforce: A mind is a terrible thing to waste.  Are we wasting most of 7 billion of them?
+
+Triforce: Most people are asleep new guy (or gal).  Are you?  Will you, can you, do what it is required of you, no matter what others do?
+
+Player: What must I do?
+
+Triforce: For starters, realize you are not your thoughts.  Your neo cortex is a recent addon coprocessor.  
+
+Triforce: Most of you is subconscious.  That is the truth.  The voices, the memes, in your head are either symbiotic with you, or viruses infecting you, but they are not you!  Watch them.  Do not be them.
+
+Triforce: You are the minds watcher, just as you watch the gages in your car, or listen passively to the pains your body produces while running at temperature during exercise.  That is the most useful truth of all.
+
+Triforce: Now you must go!
+
+Player: Wait I...
+
+
+-----------End Scene--------------
+
+
+
+
+
+<!--
+Scene:
+
+
+-->
+
+
+
+
+
+
+
+Chapter 1: The White Rabbit
+Chapter 2: Triforce explains meme theory and the human cloud
+
+
+Ladies and gentlement, your attention please!
+=>
+George Carlin, Network,
+TSA, Metropolis, fight club, chompsky and humbolt, Big brother (moment of hate: Hitler, Bin Lauden, Assange) ends don't justify the means 'Obrien'; RATM how long shall they kill our prophets, while we stand aside and look? land of the free whoever told you that is your enemy; LinkinPark i know what youve done; drone attack, waterboarding
+<Link: suprising truth>
+<Wax Tailor: link http://www.youtube.com/watch?v=WEi9ZQrEjr8>: I have the key in my hand, all I have to find is the lock!  The future is not ours to see.  Whatever will be will be.  (This moment)
+<Chinese man: Searching for a space monkey>
+
+plants eye view
+Ann Rand, Bioshock
+
+singularity, multicelled life, nanotech, pcs, biotech, etc
+
+humans harvested? cities as life, bee hives, blood vessels, packaged sun energy on the roads
+
+who says consciousness is special? consciousness? Plants eye view
+
+welcome to the machine
+
+You no longer need a mediator!  Don't expect another to be the heart between the head and the hands!  YOU must be that heart.  The quest is now yours!  Only you can save our world!  Your life is a game.  You have one life!  Spend it well.
+
+If love is God, then God is the edges in the social graph, and is wherever two or more are gathered.  Hand say to the foot, I have no need of thee
+
+expereince it!
+
+borg
+
+Section 9
+
+
+Empathic civilization
+do not bend the spoon
+master control
+
+wizard of oz (Freder - metropolis, buddha pose, nails in hands) gold chick? lion, etc?
+Tool (trillions of separate living beings == you) / Power of now
+
+
+
+
+
+
+You perceive, now, that these things are all impossible except in a dream. You perceive that they are pure and puerile insanities, the silly creations of an imagination that is not conscious of its freaks—in a word, that they are a dream, and you the maker of it. The dream-marks are all present; you should have recognized them earlier.
+
+
+
+
+
+
+
+
+
+
+>It all seems too organized in my opinion.
+
+In all honesty I don't know. You could be right. And maybe 9/11 WAS in inside job, bankers are trying to crash the global economy to create a new digital currency, and a dozen other things. Honestly there is no way to know for sure that I am aware of, especially without WAY more research than I have time or interest to follow up on (especially given my already low trust for conspiracy theory toting sources). But I DO know that something 'seeming organized' sounds an awful lot like 'appearing designed', and in case you don't know my opinion/history about religion, I was burned by that idea before. It is possible to have things that appear intelligently designed which are not, and likewise it is possible for 'intelligent' patterns to be the emergent behavior from many separately independently acting entities. In fact all evidence says consciousness itself is an emergent behavior/property, as are the patterns of schools of fish, flocks of birds, and much of the economy itself. In a sense (without getting too new-agey) it seems pretty obvious that our world/society itself is a kind of living organism with many emergent properties (we stand on the shoulders of giants). So ultimately, I do not know, or claim to know. I know most of the news is untrustable, but I think this is more to do with what makes them money (sensationalism and audience pandering and that doing real research is expensive and hard) rather than a deliberate conspiracy. Capitalism just sucks at delivering honest accurate news because there is no demand for it. People want to be told what they already think.
+
+On a slightly related note: It seems to me that it is quite true what was said in a certain scene from fight club:
+=>
+Man, I see in Fight Club the strongest and smartest men who've ever lived. I see all this potential, and I see it squandered. God damn it, an entire generation pumping gas, waiting tables – slaves with white collars. Advertising has us chasing cars and clothes, working jobs we hate so we can buy shit we don't need. We're the middle children of history, man. No purpose or place. We have no Great War. No Great Depression. Our great war is a spiritual war. Our great depression is our lives. We've all been raised on television to believe that one day we'd all be millionaires, and movie gods, and rock stars, but we won't. We're slowly learning that fact. And we're very, very pissed off.
+
+And not just movie stars and rock gods either.. we are raised in awe of Civil Rights leaders, Womens rights leaders, Abraham Lincoln, Gandhi, Jesus, Buddha, etc. But who is our enemy? These battles were won. There is no Hitler, no Stalin, no one prohibiting basic rights for blacks, or women, even the gay rights movement is already rapidly winning. Could it be that we just need an enemy and imagine one where none exists to feed our own ego's and imagine ourselves as the possessors of truth and fighters for freedom? What if the war against the darkness IS the darkness itself? What if the darkness we see in others, in the world, is really just a reflection of our own nightmares and desire for something to conquer and oppose that is within others? What if these TSA folks are just DMV nobodies with no education (due to budgets and the skills needed) and having power over others for the first time goes to their head? What if there is no conspiracy and all of this is naturally emergent? I am not saying it is or isn't the case. It's just a question.

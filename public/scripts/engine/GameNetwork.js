@@ -203,11 +203,15 @@ GameEngineLib.GameNetwork.prototype._onClientDisconnected = function _onClientDi
 	//this == socket disconnecting!
 	var _this_ = GameInstance.Network;
 	
-	//TODO store their gameUser for reconnect until later
+	//TODO store their gameUser for reconnect until later (if supported)
 	
 	_this_._listenSocket.sockets.emit('msg', "User Disconnected: " + this.gameUser.userName);
 	
-	//TODO event to remove them (tell everyone they are gone)
+	//event to remove them (tell everyone they are gone) IFF it was an identified user.
+	if(GameEngineLib.User.USER_IDS.GUEST !== this.gameUser.userID)
+	{
+		_this_.onEvent(new GameEngineLib.GameEvent_ClientDisconnected(this.gameUser));
+	}
 };
 
 
@@ -352,7 +356,7 @@ GameEngineLib.GameNetwork.prototype._onDisconnectedFromServer = function _onDisc
 
 
 
-GameEngineLib.GameNetwork.prototype._onIdRecv = function _onIdRecv(inID)//TODO rename inUserID
+GameEngineLib.GameNetwork.prototype._onIdRecv = function _onIdRecv(inUser)//TODO rename inUserID
 {
 	var _this_ = GameInstance.Network;
 	
@@ -362,47 +366,47 @@ GameEngineLib.GameNetwork.prototype._onIdRecv = function _onIdRecv(inID)//TODO r
 			//user is already renamed from guest
 			this.gameUser.userID !== GameEngineLib.User.USER_IDS.GUEST	//TODO handle reconnects!
 			//they claim to be the server
-			|| inID.userID === GameEngineLib.User.USER_IDS.SERVER
+			|| inUser.userID === GameEngineLib.User.USER_IDS.SERVER
 			//|| //that user is already connected 
 			//|| //this user not expected
 		)
 		{
-			GameEngineLib.logger.info("Hacker ID ignored: " + inID.userName);
+			GameEngineLib.logger.info("Hacker ID ignored: " + inUser.userName);
 			//TODO HACKER DISCONNECT THEM!
 			return;
 		}
 		
 		if(GameSystemVars.DEBUG /*&& GameSystemVars.Debug.NetworkMessages_Print*/)
 		{
-			GameEngineLib.logger.info("Identified User: " + inID.userName);
+			GameEngineLib.logger.info("Identified User: " + inUser.userName);
 		}
-		this.broadcast.emit('msg', this.gameUser.userName + " identified as " + inID.userName);
+		this.broadcast.emit('msg', this.gameUser.userName + " identified as " + inUser.userName);
 		
-		this.gameUser.userName = inID.userName;
-		if(inID.userID === GameEngineLib.User.USER_IDS.NEW_USER)
+		this.gameUser.userName = inUser.userName;
+		if(inUser.userID === GameEngineLib.User.USER_IDS.NEW_USER)
 		{
 			//TODO MAX_EVER! Reuse some of these with 'secret keys'
-			this.gameUser.userID = inID.userID = ++(GameEngineLib.User.USER_IDS.CURRENT_MAX);
+			this.gameUser.userID = inUser.userID = ++(GameEngineLib.User.USER_IDS.CURRENT_MAX);
 			this.emit('id', this.gameUser);
 			
-			GameEngineLib.logger.info("New UserID FOR: " + inID.userName + ' : ' + this.gameUser.userID);
+			GameEngineLib.logger.info("New UserID FOR: " + inUser.userName + ' : ' + this.gameUser.userID);
 		}
 		else
 		{
 			//TODO see if this user was really here before!
-			this.gameUser.userID = inID.userID;
-			GameEngineLib.logger.info("New userid FROM: " + inID.userName + ' : ' + this.gameUser.userID);
+			this.gameUser.userID = inUser.userID;
+			GameEngineLib.logger.info("New userid FROM: " + inUser.userName + ' : ' + this.gameUser.userID);
 		}
 		
-		_this_.onEvent(new GameEngineLib.GameEvent_IdentifiedUser(inID));
+		_this_.onEvent(new GameEngineLib.GameEvent_IdentifiedUser(inUser));
 	}
 	else
 	{
-		GameInstance.localUser.userName = inID.userName;
-		GameInstance.localUser.userID = inID.userID;
+		GameInstance.localUser.userName = inUser.userName;
+		GameInstance.localUser.userID = inUser.userID;
 		if(GameSystemVars.DEBUG /*&& GameSystemVars.Debug.NetworkMessages_Print*/)
 		{
-			GameEngineLib.logger.info("Server Re-ID's me as: " + inID.userName + ' : ' + inID.userID);
+			GameEngineLib.logger.info("Server Re-ID's me as: " + inUser.userName + ' : ' + inUser.userID);
 		}
 	}
 };
@@ -616,6 +620,13 @@ GameEngineLib.GameNetwork.prototype._serializeObjectsIn = function _serializeObj
 		{
 			this._serializer.serializeObject(this._objectHeader, this._objectHeaderFormat);
 			var objectClass = GameEngineLib.Class.getInstanceRegistry().findByID(this._objectHeader.classID);
+			if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+			{
+				if(!objectClass)
+				{
+					GameEngineLib.logger.warn("Unknown classID " + this._objectHeader.classID);
+				}
+			}
 			var object = objectClass.getInstanceRegistry().findByID(this._objectHeader.instanceID);
 			
 			//if not found, and not server, create it

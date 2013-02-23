@@ -136,7 +136,7 @@ GameSystemVars = //TODO rename as GameSystemSettings
 		FrameStats_Print : false,
 		
 		//Object
-		GameObject_Destroy_Print : false,
+		GameObject_Print : false,
 		
 		//Sound:
 		Sound_Print : true,

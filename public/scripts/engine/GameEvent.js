@@ -173,10 +173,10 @@ GameEngineLib.GameEvent_DisconnectedFromServer = GameEngineLib.Class.create({
 
 
 GameEngineLib.GameEvent_IdentifiedUser = GameEngineLib.Class.create({
-	Constructor : function IdentifiedUser(inID)
+	Constructor : function IdentifiedUser(inUser)
 	{
 		this.GameEvent('onIdentifiedUser');
-		this.user = inID;
+		this.user = inUser;
 	},
 	Parents : [GameEngineLib.GameEvent],
 	flags : {},
@@ -184,6 +184,23 @@ GameEngineLib.GameEvent_IdentifiedUser = GameEngineLib.Class.create({
 	ChainDown : [],
 	Definition : {}
 });
+
+
+
+//Note: This is actually only fired if the user is identified TODO rename as such??
+GameEngineLib.GameEvent_ClientDisconnected = GameEngineLib.Class.create({
+	Constructor : function ClientDisconnected(inUser)
+	{
+		this.GameEvent('onClientDisconnected');
+		this.user = inUser;
+	},
+	Parents : [GameEngineLib.GameEvent],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition : {}
+});
+
 
 
 

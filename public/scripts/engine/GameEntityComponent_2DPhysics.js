@@ -32,7 +32,7 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class.create({
 	
 	Parents : [GameEngineLib.GameEntityComponent],
 	
-	flags : { net : true },
+	flags : { net : true },//TODO should I get rid of this class flag?  Is it really needed?
 	
 	ChainUp : [],
 	ChainDown : [],
@@ -105,6 +105,8 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class.create({
 			format[0].max = this._range.getRightBottom();
 			inSerializer.serializeObject(this, format);
 			
+			//TODO bool to serialize range (just like obj owner) so it can change to ideal size for its containing map
+			
 			if(inSerializer.isReading())
 			{
 				this._boundingRect.myX = this._position.myX - this._boundingRect.myWidth / 2;
@@ -166,9 +168,9 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class.create({
 		
 		onRemovedFromWorld : function onRemovedFromWorld(inEvent)
 		{
-			//TODO remove physics objects
+			this._physicsObject.release();
 			this._physicsSystem = null;
-			this._range = GameEngineLib.createGame2DAABB(0, 0, 256, 256);//TODO clamp values in range (in serializer?)
+			//this._range = GameEngineLib.createGame2DAABB(0, 0, 256, 256);//TODO clamp values in range (in serializer?)
 			//TODO clear position?
 		},
 		
