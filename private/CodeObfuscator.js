@@ -27,8 +27,6 @@ Notes:
 2) ALL assignments (including multiline functions) need to be ended with a ';'
 */
 
-GameEngineServer.localization = [];//TODO move this elsewhere!!
-
 //TODO search and destroy the console.log
 //console.log("Declaring Obfuscator Code");
 
@@ -39,6 +37,8 @@ GameEngineServer.Obfuscator = function Obfuscator()
 	this._parameterNames = {};
 	this._variableNames = {};
 	this._memberNames = {};
+	this._localizationStringMap = {};
+	this._localizationStrings = [];
 	
 	this._unmappedWordsMap = {};
 	this._wordMap = {};
@@ -174,6 +174,10 @@ GameEngineServer.Obfuscator.prototype.addIgnore = function addIgnore(inWord)
 
 GameEngineServer.Obfuscator.prototype.getObfuscatedName = function getObfuscatedName(inWord)
 {
+	if(!this._wordMap[inWord])
+	{
+		GameEngineLib.logger.warn("WTF no word replacement? " + inWord);
+	}
 	return this._wordMap[inWord].replacement;
 };
 
@@ -195,6 +199,8 @@ GameEngineServer.Obfuscator.prototype.run = function run()
 	
 	if(GameSystemVars.Server.removeTextForLocalization)
 	{
+		this.registerNamespace('\x47ameLocalization');//TODO rename registerNamespace to addNamespace??
+		this._src += '\n\x47ameLocalization=';
 		this._removeTextForLocalization();
 	}
 	
@@ -273,9 +279,10 @@ GameEngineServer.Obfuscator.prototype.run = function run()
 		}
 		
 		console.log("Localized Strings:");
-		for(i = 0; i < GameEngineServer.localization.length; ++i)
+		for(i = 0; i < this._localizationStrings.length; ++i)
 		{
-			console.log('\t\'' + GameEngineServer.localization[i] + '\'');
+			//console.log('\t\'' + this._localizationStrings[i] + '\'');
+			console.log('\t' + this._localizationStrings[i]);
 		}
 	}
 	
@@ -308,6 +315,12 @@ GameEngineServer.Obfuscator.prototype.run = function run()
 		//TODO add custom game + engine copyright text
 	}
 	
+	if(GameSystemVars.Server.removeTextForLocalization)
+	{
+		//this._src += this.getObfuscatedName('GameInstance') + '.' + this.getObfuscatedName('localization') + '=' + this._localizationStrings + ';';
+		this._src += /*this.getObfuscatedName('\x47ameLocalization') +*/ '[' + this._localizationStrings + '];';
+	}
+	
 	this._checkForErrors();//TODO review this function
 	
 	
@@ -329,7 +342,7 @@ GameEngineServer.Obfuscator.prototype._checkForErrors = function _checkForErrors
 	{
 		for(i = 0; i < values.length; ++i)
 		{
-			console.log("Likely problem compressing code!: " + values[i]);//TODO change warning/assert?
+			GameEngineLib.logger.warn("Likely problem compressing code!: " + values[i]);//TODO change warning/assert?
 		}
 	}
 	
@@ -340,7 +353,7 @@ GameEngineServer.Obfuscator.prototype._checkForErrors = function _checkForErrors
 	{
 		for(i = 0; i < values.length; ++i)
 		{
-			console.log("Likely problem compressing code!: " + values[i]);//TODO change warning/assert?
+			GameEngineLib.logger.warn("Likely problem compressing code!: " + values[i]);//TODO change warning/assert?
 		}
 	}
 	
@@ -353,7 +366,7 @@ GameEngineServer.Obfuscator.prototype._checkForErrors = function _checkForErrors
 		{
 			if(values[i].indexOf('prototype') !== -1)
 			{
-				console.log("Missing ';' before member function definition: " + values[i]);//TODO change warning/assert?
+				GameEngineLib.logger.warn("Missing ';' before member function definition: " + values[i]);//TODO change warning/assert?
 			}
 		}
 	}
@@ -365,7 +378,7 @@ GameEngineServer.Obfuscator.prototype._addWord = function _addWord(inWord)
 {
 	if(GameSystemVars.DEBUG && typeof inWord !== 'string')
 	{
-		console.log("Error input is not a word!");//TODO this should be an exception!
+		GameEngineLib.logger.warn("Error input is not a word!");//TODO this should be an exception!
 	}
 	if(!this._wordMap[inWord])
 	{
@@ -428,65 +441,34 @@ GameEngineServer.Obfuscator.prototype._removeComments = function _removeComments
 
 GameEngineServer.Obfuscator.prototype._removeTextForLocalization = function _removeTextForLocalization()
 {
-	/*
-	TODO
-	Match(\"\s\S?[^\\]\")
-	Replace(localization[i]);
-	*/
-	//TODO figure out how to do this function with regular expression(s)
-	//var regEx = new RegExp(/\x22[\S\s]*?[^\x5c\x22]\x22/g);
-	var regEx = new RegExp(/\x22[\S\s]*?[^\x5c]\x22/g);
-	//console.log("Finding all of the following Quotes from the code.");
-	//console.log(this._src.match(regEx));
-	return;//HACK
-	
-	
-   
-	var quoteMark = '\x22',
-		escapeChar = '\x5c',
-		i,
-		startIndex = 0,
-		endIndex = 0;
-	
-	//find start of comment block
-	do
+	var regEx, i, stringsToRemove, currentString;
+
+	//Find text strings that we should remove from the code:
+	//Match(\"\s\S?[^\\]\")
+	regEx = new RegExp(/\x22[\S\s]*?[^\x5c]\x22/g);
+	stringsToRemove = this._src.match(regEx);
+	if(!stringsToRemove)
 	{
-		startIndex = this._src.indexOf(quoteMark, startIndex + 1);
-	} while(this._src[startIndex - 1] === escapeChar);
-	
-	while(startIndex >= 0)
-	{
-		do
-		{
-			//get the end quote
-			endIndex = this._src.indexOf(quoteMark, Math.max(startIndex + 1, endIndex));
-			//while this end quote is not an internal escape character (ie printable text quote, not code quote)
-		} while(this._src[endIndex - 1] === escapeChar);
-		endIndex += quoteMark.length;
-		
-		//add this to the localization array
-		GameEngineServer.localization.push(this._src.substring(startIndex + 1, endIndex - 1));
-		//replace the code string with the new array value
-		this._src =
-			this._src.substring(0, startIndex) + 
-			//'ObfuscatorNameSpace.localization[' +	//TODO change this to the proper namespace and variable (in hex):
-			//'\x4f\x62\x66\x75\x73\x63\x61\x74\x6f\x72\x4e\x61\x6d\x65\x53\x70\x61\x63\x65\x2e\x6c\x6f\x63\x61\x6c\x69\x7a\x61\x74\x69\x6f\x6e\x5b' +
-			//'GameEngineServer.localization[' +
-			'\x47\x61\x6d\x65\x45\x6e\x67\x69\x6e\x65\x53\x65\x72\x76\x65\x72\x2e\x6c\x6f\x63\x61\x6c\x69\x7a\x61\x74\x69\x6f\x6e\x5b' +
-			(GameEngineServer.localization.length - 1) + ']' +
-			this._src.substring(endIndex);
-		
-		//start of next comment block
-		startIndex = 0;
-		do
-		{
-			startIndex = this._src.indexOf(quoteMark, startIndex + 1);
-		} while(this._src[startIndex - 1] === escapeChar);
+		return;
 	}
-	//correct values in the strings removed:
-	for(i = 0; i < GameEngineServer.localization.length; ++i)
+	
+	//create a map so we don't have duplicates
+	for(i = 0; i < stringsToRemove.length; ++i)
 	{
-		GameEngineServer.localization[i] = GameEngineServer.localization[i].replace(/\\n/g, '\n');
+		currentString = stringsToRemove[i];
+		this._localizationStringMap[currentString] = currentString;
+	}
+	
+	//go through the map and find all unique strings!
+	for(currentString in this._localizationStringMap)
+	{
+		i = this._localizationStrings.length;
+		this._localizationStrings.push(currentString);
+		while(this._src.indexOf(currentString) !== -1)
+		{
+			//this._src = this._src.replace(currentString, 'GameInstance.localization[' + i + ']');
+			this._src = this._src.replace(currentString, '\x47ameLocalization[' + i + ']');
+		}
 	}
 };
 
@@ -639,6 +621,7 @@ GameEngineServer.Obfuscator.prototype._clearWhiteSpace = function _clearWhiteSpa
 	{
 		hex = this._stringToHex(this._javascriptOperators[i]);
 		//regEx.compile('\\s*' + hex + '\\s*', 'g');
+		//'[ \t]*' + hex + '[ \t]*'
 		regEx.compile('[\\x20\\t]*' + hex + '[\\x20\\t]*', 'g');
 		this._src = this._src.replace(regEx, this._javascriptOperators[i]);
 	}
@@ -689,6 +672,7 @@ GameEngineServer.Obfuscator.prototype._doWordReplacement = function _doWordRepla
 		if(!instances)
 		{
 			GameEngineLib.logger.warn("No instances of " + word);
+			continue;
 		}
 		
 		//remember the unique instances

@@ -55,8 +55,15 @@ GameUnitTests.registerTest(
 		eval(callObfuscatedObfuscatorSrc);
 		//console.log('\n\n' + obfuscatorObfuscatedSrc2 + '\n\n');
 		
-		delete a;
+		delete a;//??TODO What is this? I hope it is the gameServerObfName
 		
+		if(obfuscatorObfuscatedSrc !== obfuscatorObfuscatedSrc2)
+		{
+			console.log(
+				"\n\nORIGINAL GENERATED CODE:\n\n" + obfuscatorObfuscatedSrc +
+				"\n\nSECONDARY GENERATED CODE:\n\n" + obfuscatorObfuscatedSrc2
+			);
+		}
 		gameAssert(
 			obfuscatorObfuscatedSrc === obfuscatorObfuscatedSrc2,
 			"Obfuscated Obfuscator did not produce same results as the original!"
@@ -82,7 +89,7 @@ GameUnitTests.registerTest(
 		src = obfuscator.getObfuscatedCode();
 		var obfWord = obfuscator.getObfuscatedName('testMultipleInARow');
 		gameAssert(
-			src === 'var ' + obfWord + '=1;' + obfWord + '=' + obfWord + '/' + obfWord + '/' + obfWord + '/' + obfWord + '/' + obfWord + '/' + obfWord + ';',
+			src === 'var ' + obfWord + '=1;' + obfWord + '=' + obfWord + '/' + obfWord + '/' + obfWord + '/' + obfWord + '/' + obfWord + '/' + obfWord + ';' + obfuscator.getObfuscatedName('GameLocalization') + '=[];',
 			"Cannot handle multiple of same var in a row!"
 		);
 				
@@ -91,8 +98,16 @@ GameUnitTests.registerTest(
 		obfuscator.addSrc(src);
 		obfuscator.run();
 		src = obfuscator.getObfuscatedCode();
+		var n = //nested stuff
+		{
+			v1 : obfuscator.getObfuscatedName('v1'),
+			v2 : obfuscator.getObfuscatedName('v2'),
+			asdf : obfuscator.getObfuscatedName('asdf'),
+			qwer : obfuscator.getObfuscatedName('qwer'),
+			GameLocalization : obfuscator.getObfuscatedName('GameLocalization')
+		};
 		gameAssert(
-			src === 'var c={a:[\'a\',[{a:[1,2,3]}],\'sdf\'],b:{}},d=String(\'fudge\'+String(\'fudge2\'));',
+			src === 'var ' + n.v1 + '={' + n.asdf + ':[\'' + n.asdf + '\',[{' + n.asdf + ':[1,2,3]}],\'sdf\'],' + n.qwer + ':{}},' + n.v2 + '=String(\'fudge\'+String(\'fudge2\'));' + n.GameLocalization + '=[];',
 			"Cannot handle nested brackets on variable declaration!"
 		);
 		
