@@ -88,6 +88,7 @@ GameEngineServer.Obfuscator = function Obfuscator()
 	this.addIgnore('string');
 	this.addIgnore('boolean');
 	this.addIgnore('object');
+	this.addIgnore('apply');//TODO maybe add ignore for all core prototype members?
 	
 	this._javascriptOperators = 
 	[
@@ -684,6 +685,11 @@ GameEngineServer.Obfuscator.prototype._doWordReplacement = function _doWordRepla
 		//get the instances of the word in the source code
 		regEx.compile('\\W' + word + '\\W', 'g');
 		instances = this._src.match(regEx);
+		
+		if(!instances)
+		{
+			GameEngineLib.logger.warn("No instances of " + word);
+		}
 		
 		//remember the unique instances
 		for(i = 0; i < instances.length; ++i)

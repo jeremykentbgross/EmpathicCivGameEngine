@@ -76,14 +76,14 @@ GameSystemVars = //TODO rename as GameSystemSettings
 	
 	Server :
 	{
-		compressClientCode : false//true
+		compressClientCode : true//true
 		////////////////////////////////////////////
 		//only working when compressing client code:
 		,removeTextForLocalization : true//true	////////NOTE DONE!!!!!
-		,removeNonNewlineWhiteSpace : false//true
-		,removeNewlines : false//true
-		,obfuscateNames : false//true
-		,useModifiedNamesNotPureObfuscate : true//false
+		,removeNonNewlineWhiteSpace : true//true
+		,removeNewlines : true//true
+		,obfuscateNames : true//true
+		,useModifiedNamesNotPureObfuscate : false//false
 		//:only working when compressing client code
 		////////////////////////////////////////////
 	},

@@ -297,8 +297,8 @@ GameEngineLib.Class.create = function create(inParams)
 	}
 	else
 	{
-		delete Constructor['getClass'];
-		delete Constructor.prototype['getClass'];
+		delete Constructor.getClass;
+		delete Constructor.prototype.getClass;
 	}
 	
 	return Constructor;

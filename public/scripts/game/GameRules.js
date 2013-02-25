@@ -153,9 +153,13 @@ GameLib.GameRules = GameEngineLib.Class.create({
 				for(j = 0; j < this._mapSizeInTiles; ++j)
 				{
 					if(i === 0 || j === 0 || i === this._mapSizeInTiles - 1 || j === this._mapSizeInTiles - 1)
+					{
 						this._map.setTile(new GameEngineLib.Game2DPoint(i, j), /*(i+j)%5*/4);
+					}
 					else
+					{
 						this._map.setTile(new GameEngineLib.Game2DPoint(i, j), /*(i+j)%5*/2);
+					}
 				}
 			}
 			//HACK put something in the map to start with

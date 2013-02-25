@@ -680,7 +680,7 @@ GameEngineLib.GameNetwork.prototype._serializeObjectsIn = function _serializeObj
 		
 		for(i = 0; i < readObjects.length; ++i)
 		{
-			if(readObjects[i]['postSerialize'])//TODO make this chain function so we don't have to check for it???
+			if(readObjects[i].postSerialize)//TODO make this chain function so we don't have to check for it???
 			{
 				readObjects[i].postSerialize();
 			}

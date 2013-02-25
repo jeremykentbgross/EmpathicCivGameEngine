@@ -154,7 +154,9 @@ GameEngineLib.createKMean = function(instance, PRIVATE)
 		
 		//clear points
 		for(var i = 0; i < PRIVATE.numClusters; ++i)
+		{
 			PRIVATE.clusters[i].resetPoints();
+		}
 		
 		//find best fit for data points
 		for(var i = 0; i < inDataPoints.length; ++i)
@@ -242,7 +244,9 @@ GameLib.createGameRules = function(instance, PRIVATE)
 	instance.init = function()
 	{
 		if(!GameSystemVars.Network.isServer)
+		{
 			GameInstance.Input.registerListener('Input', PRIVATE);
+		}
 			
 		GameInstance.UpdateOrder.push(this);
 		
@@ -254,7 +258,9 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		{
 			PRIVATE.data[i] = [];
 			for(var j = 0; j < PRIVATE.vectorDimensions; ++j)
+			{
 				PRIVATE.data[i][j] = Math.random();
+			}
 		}
 			
 		PRIVATE.kmean = GameEngineLib.createKMean();
@@ -273,7 +279,9 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		PRIVATE.data = PRIVATE.data.slice(1, PRIVATE.data.length);
 		var newPoint = []
 		for(var j = 0; j < PRIVATE.vectorDimensions; ++j)
+		{
 			newPoint[j] = Math.random();
+		}
 			
 		PRIVATE.data.push(newPoint);
 		
@@ -308,7 +316,9 @@ GameLib.createGameRules = function(instance, PRIVATE)
 			PRIVATE.data = PRIVATE.data.slice(1, PRIVATE.data.length);
 			var newPoint = []
 			for(var j = 0; j < PRIVATE.vectorDimensions; ++j)
+			{
 				newPoint[j] = Math.random();
+			}
 				
 			PRIVATE.data.push(newPoint);
 		}

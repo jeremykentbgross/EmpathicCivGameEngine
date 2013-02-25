@@ -86,6 +86,7 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class.create(
 
 		onUpdatePosition : function(inEvent)
 		{
+			var i;
 			if(this._world)
 			{
 				this._world.getSceneGraph().removeItem(this._sceneGraphRenderable);
@@ -115,11 +116,11 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class.create(
 					new GameEngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
 					new GameEngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
 					new GameEngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new GameEngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new GameEngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle))//,
 				];
 				var animProb = 0;
 				var bestAnimProb = 0;
-				for(var i = 0; i < 8; ++i)
+				for(i = 0; i < 8; ++i)
 				{
 					animProb = directions[i].dot(direction);
 					if(animProb > bestAnimProb)

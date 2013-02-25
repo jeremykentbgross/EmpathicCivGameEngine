@@ -53,7 +53,7 @@ GameEngineLib.GameRulesBase = GameEngineLib.Class.create({
 			inCanvas2DContext.font = '30px Arial';
 			if(this.getClass() === GameEngineLib.GameRulesBase)
 			{
-				message = "No GameRule.js found!";
+				message = "No GameRules.js found!";
 			}
 			else
 			{

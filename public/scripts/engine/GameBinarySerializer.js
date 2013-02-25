@@ -68,7 +68,7 @@ GameEngineLib.GameBinarySerializer.prototype._init = function _init(inFlags)
 GameEngineLib.GameBinarySerializer.prototype.isNet = function isNet()
 {
 	return this._net;
-}
+};
 /*
 dataDesc = [
 	{

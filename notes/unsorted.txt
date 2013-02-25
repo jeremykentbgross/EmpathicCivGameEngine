@@ -1101,3 +1101,7 @@ Solidspace opt!
 Phys base class->sound/triggers/physics
 =>
 Collision system
+
+
+New versions of libs! (maybe report bugs with node inspector)
+Network CHECK ID RECIEVED FROM USER IS VALID OBJECT!!!!!!

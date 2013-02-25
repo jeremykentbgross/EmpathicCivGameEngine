@@ -153,14 +153,14 @@ GameEngineLib.Game2DGraphics.prototype.getDomTarget = function getDomTarget()
 
 
 
-GameEngineLib.Game2DGraphics.prototype.drawDebugText = function drawDebugText(text, color)
+GameEngineLib.Game2DGraphics.prototype.drawDebugText = function drawDebugText(inText, inColor)
 {
-	color = color || GameSystemVars.Debug.TextDefault_DrawColor;
+	inColor = inColor || GameSystemVars.Debug.TextDefault_DrawColor;
 	
 	if(GameSystemVars.DEBUG && GameSystemVars.Debug.TextMessages_Draw)
 	{
-		this._debugText.push(' ' + text + ' ');
-		this._debugTextColor.push(color);
+		this._debugText.push(' ' + inText + ' ');
+		this._debugTextColor.push(inColor);
 	}
 };
 

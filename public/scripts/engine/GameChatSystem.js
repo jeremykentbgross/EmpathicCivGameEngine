@@ -63,12 +63,12 @@ GameEngineLib.ChatSystem = GameEngineLib.Class.create({
 			
 			that = this;
 			require(['dojo/dom', 'dojo/dom-construct', 'dojo/on', 'dojo/dom-style'],
-				function(dom, domConstruct, on, style)
+				function(inDom, inDomConstruct, inDojoOn, inDojoStyle)
 				{
-					that._jojoDom = dom;
-					that._jojoDomConstruct = domConstruct;
-					that._jojoOn = on;
-					that._jojoStyle = style;
+					that._jojoDom = inDom;
+					that._jojoDomConstruct = inDomConstruct;
+					that._jojoOn = inDojoOn;
+					that._jojoStyle = inDojoStyle;
 				}
 			);
 			

@@ -13,8 +13,7 @@
 	{
 		"express": "3.0.5",
 		"socket.io" : "0.8.7",
-		"node-inspector" : "0.1.10",
-		"v8-profiler" : "3.6.2-1"
+		"node-inspector" : "0.1.10"
 	}
 }
 

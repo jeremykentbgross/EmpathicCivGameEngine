@@ -28,7 +28,7 @@ GameEngineLib.GameQuadTreeItem.prototype.constructor = GameEngineLib.GameQuadTre
 GameEngineLib.GameQuadTreeItem.prototype.getAABB = function getAABB()
 {
 	return this._AABB;
-}
+};
 
 
 

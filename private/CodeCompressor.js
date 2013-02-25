@@ -27,7 +27,8 @@ Should also run jslint: http://www.jslint.com/
 
 Known globals:
 
-GameLoader window require requestAnimFrame setTimeout GameSystemVars GameEngineLib GameLib GameInstance GameClassRegistryMap GameUnitTests console gameAssert document Image GameEngineServer io
+GameLoader window require requestAnimFrame setTimeout GameSystemVars GameEngineLib GameLib GameInstance GameClassRegistryMap GameUnitTests console gameAssert document Image GameEngineServer io AudioContext XMLHttpRequest
+orequestAnimFrameo oGameSystemVarso oGameEngineLibo oGameLibo oGameInstanceo oGameUnitTestso ogameAsserto oGameEngineServero
 */
 
 GameEngineServer.CodeCompressor = function CodeCompressor(inRootPath)
@@ -73,7 +74,7 @@ GameEngineServer.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 	obfuscator.registerNamespace('GameEngineLib');
 	obfuscator.registerNamespace('GameLib');
 	obfuscator.registerNamespace('GameInstance');
-	obfuscator.registerNamespace('GameClassRegistryMap');
+	//obfuscator.registerNamespace('GameClassRegistryMap');
 	obfuscator.registerNamespace('GameUnitTests');
 	obfuscator.registerNamespace('GameLoader');
 	obfuscator.registerNamespace('GameSystemVars');
@@ -113,6 +114,23 @@ GameEngineServer.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 	obfuscator.addIgnore('src');//the source of a js image
 	obfuscator.addIgnore('type');//HTML user input events
 	obfuscator.addIgnore('buffer');//used by native sound system
+	obfuscator.addIgnore('class');//used as css class in html elements
+	obfuscator.addIgnore('js');//TEMP HACK until strings removed correctly
+	obfuscator.addIgnore('setOrientation');//Native Audio
+	obfuscator.addIgnore('setPosition');//Native Audio
+	obfuscator.addIgnore('setVelocity');//Native Audio
+	obfuscator.addIgnore('dopplerFactor');//Native Audio
+	obfuscator.addIgnore('speedOfSound');//Native Audio
+	obfuscator.addIgnore('userName');//network user object field
+	obfuscator.addIgnore('userID');//network user object field
+	obfuscator.addIgnore('msg');//network msg type
+	obfuscator.addIgnore('data');//network msg type
+	obfuscator.addIgnore('className');//dom modify element for css
+	obfuscator.addIgnore('focus');//dom UI function
+	obfuscator.addIgnore('color');//for dom border-color
+//	obfuscator.addIgnore('setSupressKeyboardEvents');//used in chat system
+	obfuscator.addIgnore('blur');//The blur() method is used to remove focus from a dom element.
+	obfuscator.addIgnore('value');//html input.value TODO value is used for TONS of other stuff!!
 	
 	
 	/*
