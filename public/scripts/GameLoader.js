@@ -78,6 +78,12 @@ GameLoader =
 		GameLib = {};
 		GameInstance = null;
 		
+		//TEMP HACK!! Should go somewhere else!!
+		GameEngineLib.isNumber = function isNumber(inString)
+		{
+			return !isNaN(parseFloat(inString)) && isFinite(inString);
+		};
+		
 		//GameEngineLib.include = include;//TODO needed?
 				
 		if(GameSystemVars.RUN_UNIT_TESTS)

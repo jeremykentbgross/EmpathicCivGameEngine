@@ -526,7 +526,10 @@ GameEngineServer.Obfuscator.prototype._findAllPotentialWords = function _findAll
 	
 	for(i = 0; i < potentialWords.length; ++i)
 	{
-		if(!this._wordMap[potentialWords[i]])
+		if(!this._wordMap[potentialWords[i]]
+			&& !GameEngineLib.isNumber('0' + potentialWords[i])
+			//&& !GameEngineLib.isNumber('0x' + potentialWords[i])
+		)
 		{
 			this._unmappedWordsMap[potentialWords[i]] = true;
 		}

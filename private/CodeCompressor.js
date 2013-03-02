@@ -46,7 +46,11 @@ GameEngineServer.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 		values,
 		fileSourceCode,
 		obfuscator,
-		obfuscatedSrc;
+		obfuscatedSrc,
+		systemGlobalObjects,
+		currentObject,
+		nextObject,
+		systemIgnoreIndex;
 	
 	//get the gameloader source code
 	gameLoaderSrc = fs.readFileSync('../public/scripts/GameLoader.js', 'utf8');
@@ -91,25 +95,46 @@ GameEngineServer.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 	obfuscator.addIgnore('GameLoader');
 	obfuscator.addIgnore('start');//TODO should rename 'load' (game loader entry function)
 
+	
+	//TODO probably should be in the obfuscator itself!
+	//TODO have switch to turn off auto adding globals so I can find items in my code that are named the same as globals
+	//TODO figure out how to add: window, document, and browser controls, etc
+	systemGlobalObjects = [Array, Boolean, Date, Math, Number, String, RegExp, /*Global,*/ Object, console];
+	for(i = 0; i < systemGlobalObjects.length; ++i)
+	{
+		currentObject = systemGlobalObjects[i];
+		while(currentObject)
+		{
+			if(currentObject.name)
+			{
+				obfuscator.addIgnore(currentObject.name);
+			}
+			
+			nextObject = currentObject.prototype;
+			
+			currentObject = Object.getOwnPropertyNames(currentObject);
+			for(systemIgnoreIndex in currentObject)
+			{
+				obfuscator.addIgnore(currentObject[systemIgnoreIndex]);
+			}
+			
+			currentObject = nextObject;
+		}
+	}
+	
 	//TODO many of these should be in the obfuscator itself!
-	obfuscator.addIgnore('name');//TODO make sure nothing uses 'name' that doesn't need to!
+	obfuscator.addIgnore('Math');//because for some reason doesn't have it's name property
+	obfuscator.addIgnore('console');//because for some reason doesn't have it's name property
 	obfuscator.addIgnore('dom');//TODO this is param, rename it so we dont need this
-	obfuscator.addIgnore('create');//TODO this is used by dojo too
 	obfuscator.addIgnore('id');//TODO remove unneeded, used by dom.create
 	obfuscator.addIgnore('width');//TODO remove unneeded, used by dom.create
 	obfuscator.addIgnore('height');//TODO remove unneeded, used by dom.create
 	obfuscator.addIgnore('innerHTML');//TODO remove unneeded, used by dom.create
-	obfuscator.addIgnore('floor');//TODO remove unneeded
 	obfuscator.addIgnore('on');//TODO remove unneeded, used by dojo
-	obfuscator.addIgnore('max');//TODO remove unneeded
-	obfuscator.addIgnore('min');//TODO remove unneeded
-	obfuscator.addIgnore('sin');//TODO remove unneeded
-	obfuscator.addIgnore('cos');//TODO remove unneeded
 	obfuscator.addIgnore('window');//TODO remove unneeded
 	obfuscator.addIgnore('emit');//TODO remove unneeded
-	obfuscator.addIgnore('console');//TODO remove unneeded??
+//	obfuscator.addIgnore('console');//TODO remove unneeded??
 	obfuscator.addIgnore('document');//TODO remove unneeded??
-	obfuscator.addIgnore('length');
 	obfuscator.addIgnore('placeholder');//field for the HTML input control
 	obfuscator.addIgnore('src');//the source of a js image
 	obfuscator.addIgnore('type');//HTML user input events
