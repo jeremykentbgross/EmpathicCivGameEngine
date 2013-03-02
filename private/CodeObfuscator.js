@@ -30,6 +30,8 @@ Notes:
 //TODO search and destroy the console.log
 //console.log("Declaring Obfuscator Code");
 
+var fileSystem = require('fs');
+
 GameEngineServer.Obfuscator = function Obfuscator()
 {
 	this._nameSpaces = {};
@@ -193,7 +195,8 @@ GameEngineServer.Obfuscator.prototype.getObfuscatedCode = function getObfuscated
 GameEngineServer.Obfuscator.prototype.run = function run()
 {
 	var name,
-		i;
+		i,
+		logData = '';
 	
 	this._removeComments();
 	
@@ -206,12 +209,14 @@ GameEngineServer.Obfuscator.prototype.run = function run()
 	
 	this._findAllPotentialWords();
 	
-	if(GameSystemVars.DEBUG)
+	//if(GameSystemVars.DEBUG)
 	{
-		console.log("Base NameSpaces:");
+		//console.log("Base NameSpaces:");
+		logData += "Base NameSpaces:" + '\n';
 		for(name in this._nameSpaces)
 		{
-			console.log('\t' + name);
+			//console.log('\t' + name);
+			logData += '\t' + name + '\n';
 		}
 	}
 	
@@ -228,61 +233,84 @@ GameEngineServer.Obfuscator.prototype.run = function run()
 		delete this._unmappedWordsMap[name];
 	}
 	
-	if(GameSystemVars.DEBUG)
+	//if(GameSystemVars.DEBUG/* && GameSystemVars.Debug.Obfuscation_Print*/)
 	{
-		console.log("Final NameSpaces:");
+		//console.log("Final NameSpaces:");
+		logData += "Final NameSpaces:" + '\n';
 		for(name in this._nameSpaces)
 		{
-			console.log('\t' + name);
+			//console.log('\t' + name);
+			logData += '\t' + name + '\n';
 		}
 		
-		console.log("Function Names:");
+		//console.log("Function Names:");
+		logData += "Function Names:" + '\n';
 		for(name in this._functionNames)
 		{
-			console.log('\t' + name);
+			//console.log('\t' + name);
+			logData += '\t' + name + '\n';
 		}
 		
-		console.log("Parameter Variables:");
+		//console.log("Parameter Variables:");
+		logData += "Parameter Variables:" + '\n';
 		for(name in this._parameterNames)
 		{
-			console.log('\t' + name);
+			//console.log('\t' + name);
+			logData += '\t' + name + '\n';
 		}
 		
-		console.log("Local Variable Names:");
+		//console.log("Local Variable Names:");
+		logData += "Local Variable Names:" + '\n';
 		for(name in this._variableNames)
 		{
-			console.log('\t' + name);
+			//console.log('\t' + name);
+			logData += '\t' + name + '\n';
 		}
 		
-		console.log("Member Variables:");
+		//console.log("Member Variables:");
+		logData += "Member Variables:" + '\n';
 		for(name in this._memberNames)
 		{
-			console.log('\t' + name);
+			//console.log('\t' + name);
+			logData += '\t' + name + '\n';
 		}
 		
-		console.log("\n\n\nIncluded Words:");
+		//console.log("\n\n\nIncluded Words:");
+		logData += "\n\n\nIncluded Words:" + '\n';
 		for(name in this._wordMap)
 		{
-			console.log('\t' + name);
+			//console.log('\t' + name);
+			logData += '\t' + name + '\n';
 		}
 		
-		console.log("Ignored Words:");
+		//console.log("Ignored Words:");
+		logData += "Ignored Words:" + '\n';
 		for(name in this._ignoreMap)
 		{
-			console.log('\t' + name);
+			//console.log('\t' + name);
+			logData += '\t' + name + '\n';
 		}
 		
-		console.log("Unmapped Words:");
+		//console.log("Unmapped Words:");
+		logData += "Unmapped Words:" + '\n';
 		for(name in this._unmappedWordsMap)
 		{
-			console.log('\t' + name);
+			//console.log('\t' + name);
+			logData += '\t' + name + '\n';
 		}
 		
-		console.log("Localized Strings:");
+		//console.log("Localized Strings:");
+		logData += "Localized Strings:" + '\n';
 		for(i = 0; i < this._localizationStrings.length; ++i)
 		{
 			//console.log('\t\'' + this._localizationStrings[i] + '\'');
-			console.log('\t' + this._localizationStrings[i]);
+			//console.log('\t' + this._localizationStrings[i]);
+			logData += '\t' + this._localizationStrings[i] + '\n';
+		}
+		
+		if(GameSystemVars.DEBUG && GameSystemVars.Debug.Obfuscation_Print)
+		{
+			console.log(logData);
 		}
 	}
 	
@@ -323,6 +351,23 @@ GameEngineServer.Obfuscator.prototype.run = function run()
 	
 	this._checkForErrors();//TODO review this function
 	
+	if(GameSystemVars.Server.saveResultsNotesToFile)
+	{
+		//is really: logData = '/*\n' + logData + '*/\n\n\n' + this._src;
+		logData = '/\x2a\n' + logData + '\x2a/\n\n\n' + this._src;
+		fileSystem.writeFileSync(//TODO make writeFileSync when I update my nodejs version
+			'ObfuscationResults.txt',
+			logData/*,
+			function(inError)
+			{
+				if(inError)
+				{
+					throw inError;
+				}
+				GameEngineLib.logger.info('Saved ObfuscationResults.txt');
+			}*/
+		);
+	}
 	
 	//TODO cleanup unneeded data
 };

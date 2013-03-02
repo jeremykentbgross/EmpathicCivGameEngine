@@ -79,11 +79,12 @@ GameSystemVars = //TODO rename as GameSystemSettings
 		compressClientCode : true//true
 		////////////////////////////////////////////
 		//only working when compressing client code:
-		,removeTextForLocalization : true//true	////////NOTE DONE!!!!!
+		,removeTextForLocalization : true//true
 		,removeNonNewlineWhiteSpace : true//true
 		,removeNewlines : true//true
 		,obfuscateNames : true//true
 		,useModifiedNamesNotPureObfuscate : false//false
+		,saveResultsNotesToFile : true//true
 		//:only working when compressing client code
 		////////////////////////////////////////////
 	},
@@ -160,7 +161,9 @@ GameSystemVars = //TODO rename as GameSystemSettings
 		//default debug text color
 		TextDefault_DrawColor : 'rgba(255, 255, 255, 1)',
 		TextBackground_DrawColor : 'rgba(0, 0, 0, 0.5)',
-		Text_Size : 12
+		Text_Size : 12,
+		
+		Obfuscation_Print : false
 	}
 };
 

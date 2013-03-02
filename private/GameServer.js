@@ -50,6 +50,14 @@ GameEngineServer.listenSocket = socketIO.listen(GameEngineServer.httpServer);
 //Paths looks wrong (because they will run from inside the loader)
 GameLoader.start(true, "../../public/", "../../private/");
 
+if(GameSystemVars.Network.isMultiplayer)
+{
+	//RUN UNIT TEST scripts
+	if(GameSystemVars.RUN_UNIT_TESTS)
+	{
+		GameUnitTests.runTests();
+	}
+}
 
 
 if(GameSystemVars.Server.compressClientCode)
@@ -122,8 +130,8 @@ GameEngineServer.expressApp.configure(
 if(GameSystemVars.Network.isMultiplayer)
 {
 	//RUN UNIT TEST scripts
-	if(GameSystemVars.RUN_UNIT_TESTS)
-		GameUnitTests.runTests();
+//	if(GameSystemVars.RUN_UNIT_TESTS)
+//		GameUnitTests.runTests();
 	//RUN GAME scripts
 	GameInstance = GameEngineLib.createGameFrameWork();
 	GameInstance.run();
