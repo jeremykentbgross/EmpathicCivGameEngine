@@ -236,3 +236,20 @@ O-GameObject.js
 
 
 For package.json:	"v8-profiler" : "3.6.2-1"
+
+
+
+REPLICATE OBJECT DESTRUCTION!!!!!!!!
+
+naming:
+	in/out
+	returnXXX
+	a/an
+	my
+	thisXXX/thisInstance //not _this_!
+	Game.EngineLib
+	Game.Lib
+	Game.instance
+	Game.settings
+	Game.logger
+	...

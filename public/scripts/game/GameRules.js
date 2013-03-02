@@ -120,6 +120,7 @@ GameLib.GameRules = GameEngineLib.Class.create({
 						,anchor : GameEngineLib.createGame2DPoint()
 						,layer : 0
 						,size : GameEngineLib.createGame2DPoint(/*64,64*/96,96)
+						,physics : GameEngineLib.createGame2DAABB(0, 0, 64, 64)
 					},
 					{
 						fileName : 'images/ground_256.png'//'images/test/groundSub5.png' // 'images/ground_level01_01.png' //'images/dirt.png',

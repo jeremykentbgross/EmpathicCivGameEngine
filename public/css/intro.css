@@ -2,6 +2,8 @@ body
 {
 	background-color : #FFFFFF;
 	font-family : Sans-serif;
+	font-weight:bold;
+	font-size : 150%;
 }
 
 #portrait
@@ -12,8 +14,10 @@ body
 h1
 {
 	text-align: center;
-	background : #C0C0C0;
-	color : #000000;
+	background : #775653;
+	color : #FFFFFF;
+	margin : 10px;
+	border : 2px solid black;
 }
 
 #warn
@@ -43,6 +47,8 @@ h1
 #controls, #controls th, #controls td
 {
 	border : 1px solid black;
+	background : #775653;
+	color : #FFFFFF;
 }
 
 #faq p
