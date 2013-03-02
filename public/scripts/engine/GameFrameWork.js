@@ -228,6 +228,11 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 	{
 		PRIVATE.running = false;
 		//TODO clean everything?
+		if(GameSystemVars.Network.isServer)
+		{
+			//TODO send reset/quit message to clients
+			process.exit(0);
+		}
 	};
 	
 	return instance;

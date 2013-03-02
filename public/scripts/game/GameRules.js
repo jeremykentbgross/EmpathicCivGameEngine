@@ -232,8 +232,54 @@ GameLib.GameRules = GameEngineLib.Class.create({
 			}
 			//create reference entity
 			/////////////////////////////////////////////////////////
-					
+			
+			//HACK TODO subscribe to timer updates!!!
+			GameInstance.UpdateOrder.push(this);
+			this._gameRunning = true;//HACK TODO should get this from GameInstance
+
+			
 			return true;
+		},
+		
+		isUpdating : function isUpdating(){return true;},
+		//TODO subscribe to timer updates!!!
+		update : function update()//TODO timer should send data and many things in param object
+		{
+			var serverRebootTime = 60;//TODO make this some special settings variable
+			if(GameSystemVars.Network.isMultiplayer)
+			{
+				var currentDateTime = new Date();
+				var minute = currentDateTime.getMinutes();
+				var second = currentDateTime.getSeconds();
+				if(minute % serverRebootTime === 0)
+				{
+					this._gameRunning = false;//HACK TODO should get this from GameInstance
+					GameInstance.exit();
+				}
+				
+				if(serverRebootTime - minute === 1 && second !== this._lastUpdateSec)
+				{
+					if(GameSystemVars.Network.isServer)
+					{
+						GameInstance.Network.sendMessage(
+							"Server Reboot in " + (60 - second) + " seconds."
+							//,this//sentListener
+						);
+					}
+				}
+				else if(minute !== this._lastUpdateMin)
+				{
+					if(GameSystemVars.Network.isServer)
+					{
+						GameInstance.Network.sendMessage(
+							"Server Reboot in " + (serverRebootTime - minute) + " minutes."
+							//,this//sentListener
+						);
+					}
+				}
+				this._lastUpdateMin = minute;//TODO get rid of HACK!!!
+				this._lastUpdateSec = second;//TODO get rid of HACK!!!
+			}
 		},
 		
 		
@@ -263,7 +309,37 @@ GameLib.GameRules = GameEngineLib.Class.create({
 		
 		render : function render(inCanvas2DContext)
 		{
-			this._gameWorld.render(inCanvas2DContext);
+			if(this._gameRunning)//HACK TODO should get this from GameInstance
+			{
+				this._gameWorld.render(inCanvas2DContext);
+			}
+			else
+			{
+				////////////////////////////////////////////////////////////////////////////
+				//TODO HACK this should probably be an alternate render in the base class!!!
+				var x, y, message;
+			
+				inCanvas2DContext.fillStyle = 'rgba(128, 128, 128, 1)';
+				inCanvas2DContext.strokeStyle = 'rgba(64, 64, 64, 1)';
+				inCanvas2DContext.fillRect(0, 0,
+					inCanvas2DContext.canvas.width,
+					inCanvas2DContext.canvas.height
+				);
+				inCanvas2DContext.strokeRect(0, 0,
+					inCanvas2DContext.canvas.width,
+					inCanvas2DContext.canvas.height
+				);
+				
+				inCanvas2DContext.fillStyle = 'rgba(64, 64, 64, 1)';
+				
+				inCanvas2DContext.font = '30px Arial';
+				message = "Game Over! Server Restarting!!!";
+				x = (inCanvas2DContext.canvas.width - inCanvas2DContext.measureText(message).width) / 2;
+				y = (inCanvas2DContext.canvas.height - 30) / 2;
+				inCanvas2DContext.fillText(message, x, y);
+				//TODO HACK this should probably be an alternate render in the base class!!!
+				////////////////////////////////////////////////////////////////////////////
+			}
 		},
 		
 		
