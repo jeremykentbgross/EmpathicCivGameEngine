@@ -141,7 +141,7 @@ GameUnitTests.registerTest(
 			{
 				if(failedLoops[0] === i)
 				{
-					var BS = 1;
+					var aTestValue = 1;
 				}
 				encoder.encode(values[i], models[i]);
 			}

@@ -71,19 +71,19 @@ GameEngineLib.EntityComponent_Input = GameEngineLib.Class.create(
 			{
 				this._direction = GameEngineLib.createGame2DPoint(0, 0);//TODO just set the fields, don't create a new one
 				
-				if(inInputEvent.keys.W/*['W']*/)
+				if(inInputEvent.myKeys.W/*['W']*/)
 				{
 					this._direction = this._direction.add(this._up);
 				}
-				if(inInputEvent.keys.S/*['S']*/)
+				if(inInputEvent.myKeys.S/*['S']*/)
 				{
 					this._direction = this._direction.add(this._down);
 				}
-				if(inInputEvent.keys.A/*['A']*/)
+				if(inInputEvent.myKeys.A/*['A']*/)
 				{
 					this._direction = this._direction.add(this._left);
 				}
-				if(inInputEvent.keys.D/*['D']*/)
+				if(inInputEvent.myKeys.D/*['D']*/)
 				{
 					this._direction = this._direction.add(this._right);
 				}

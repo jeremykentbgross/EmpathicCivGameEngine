@@ -346,6 +346,10 @@ GameLib.GameRules = GameEngineLib.Class.create({
 			{
 				GameSystemVars.Debug.Input_Draw = !GameSystemVars.Debug.Input_Draw;
 			}
+			if(inInputEvent.keysPressed['\x79'])//y
+			{
+				GameSystemVars.Debug.Sound_Area_Draw = !GameSystemVars.Debug.Sound_Area_Draw;
+			}
 			//TODO drawing debug sprite, debug audio
 			
 			

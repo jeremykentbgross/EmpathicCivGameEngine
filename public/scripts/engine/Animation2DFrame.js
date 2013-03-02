@@ -40,7 +40,7 @@ GameEngineLib.Animation2DFrame = GameEngineLib.Class.create({
 	{
 		//TODO update()//fires frame events OR getEvents()
 		
-		//TODO rename origin anchor? have anchor and origin?
+		//TODO rename origin anchor? have anchor and origin?	//rename anchor because it is the same as a js global
 		init : function init(inSrcRect, inOrigin /*TODO flags, other?*/)
 		{
 			this._sourceRect.copyFrom(inSrcRect);

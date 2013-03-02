@@ -163,14 +163,14 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 	
 	
 	
-	PRIVATE.update = function(time)
+	PRIVATE.update = function(inTime)
 	{
 		var i;
 		var aveDt;
 		
 		try
 		{
-			aveDt = instance.GameTimer.update(time);
+			aveDt = instance.GameTimer.update(inTime);
 			
 			//TODO make update list an event system for onUpdate
 			for(i = 0; i < instance.UpdateOrder.length; ++i)

@@ -33,13 +33,13 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 	}
 	
 	PRIVATE.mouseLoc = GameEngineLib.createGame2DPoint(0, 0);
-	PRIVATE.keys = {};
+	PRIVATE.myKeys = {};
 	PRIVATE.keysPressed = {};
 	PRIVATE.buttons = {};
 	PRIVATE.clicked = {};
 	PRIVATE.active = false;
 	
-	PRIVATE.input = function(inEvent)
+	PRIVATE.onInput = function(inEvent)
 	{		
 		var eventType = inEvent.type;
 		var key;
@@ -49,7 +49,7 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 			case 'keydown':
 			case 'keyup':
 				key = String.fromCharCode(inEvent.keyCode);
-				PRIVATE.keys[key] = (eventType === 'keydown');
+				PRIVATE.myKeys[key] = (eventType === 'keydown');
 				break;
 				
 			case 'keypress':
@@ -97,7 +97,7 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 		
 		if(PRIVATE.active === false)
 		{
-			PRIVATE.keys = {};
+			PRIVATE.myKeys = {};
 			PRIVATE.keysPressed = {};
 			PRIVATE.buttons = {};
 			PRIVATE.clicked = {};
@@ -121,19 +121,19 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 			function(on)
 			{
 				//keys:
-				on(document, 'keydown', PRIVATE.input);
-				on(document, 'keyup', PRIVATE.input);
-				on(document, 'keypress', PRIVATE.input);
+				on(document, 'keydown', PRIVATE.onInput);
+				on(document, 'keyup', PRIVATE.onInput);
+				on(document, 'keypress', PRIVATE.onInput);
 								
 				//mouse:
-				on(inCanvas, 'mousedown', PRIVATE.input);
-				on(inCanvas, 'mouseup', PRIVATE.input);
-				on(inCanvas, 'mousemove', PRIVATE.input);
-				//on(inCanvas, 'mousewheel', PRIVATE.input);
-				on(inCanvas, 'click', PRIVATE.input);
-				//on(inCanvas, 'dblclick', PRIVATE.input);
-				on(inCanvas, 'mouseout', PRIVATE.input);
-				on(inCanvas, 'mouseover', PRIVATE.input);
+				on(inCanvas, 'mousedown', PRIVATE.onInput);
+				on(inCanvas, 'mouseup', PRIVATE.onInput);
+				on(inCanvas, 'mousemove', PRIVATE.onInput);
+				//on(inCanvas, 'mousewheel', PRIVATE.onInput);
+				on(inCanvas, 'click', PRIVATE.onInput);
+				//on(inCanvas, 'dblclick', PRIVATE.onInput);
+				on(inCanvas, 'mouseout', PRIVATE.onInput);
+				on(inCanvas, 'mouseover', PRIVATE.onInput);
 								
 				//prevent right click menu on the render area
 				on(inCanvas, 'contextmenu', function(event){ event.preventDefault(); } );
@@ -167,9 +167,9 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 					inputString += 'MB' + i + ' ';
 				}
 			}
-			for(i in PRIVATE.keys)
+			for(i in PRIVATE.myKeys)
 			{
-				if(PRIVATE.keys[i])
+				if(PRIVATE.myKeys[i])
 				{
 					inputString += '\'' + i + '\' (' + i.charCodeAt(0) + ') ';
 				}
@@ -213,9 +213,9 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 		
 		if(!PRIVATE._supressKeyboardEvents)
 		{
-			for(i in PRIVATE.keys)
+			for(i in PRIVATE.myKeys)
 			{
-				event.keys[i] = PRIVATE.keys[i];
+				event.myKeys[i] = PRIVATE.myKeys[i];
 			}
 			for(i in PRIVATE.keysPressed)
 			{

@@ -45,19 +45,19 @@ GameEngineLib.createGameTimer = function(instance, PRIVATE)
 		PRIVATE.lastFrameTimeStamp = (new Date()).getTime();
 	};
 	
-	instance.update = function(time)
+	instance.update = function(inTime)
 	{
 		var i;
 		
-		//prefer the browser presented time if it is availible, but fall back to getting it if its not there
-		if(time === undefined)
+		//prefer the browser presented inTime if it is availible, but fall back to getting it if its not there
+		if(inTime === undefined)
 		{
-			//note must new it as it keeps the time it was created
-			time = (new Date()).getTime();//TODO use .now
+			//note must new it as it keeps the inTime it was created
+			inTime = (new Date()).getTime();//TODO use .now
 		}
 		
-		PRIVATE.dt = Math.max(0, time - PRIVATE.lastFrameTimeStamp);
-		PRIVATE.lastFrameTimeStamp = time;
+		PRIVATE.dt = Math.max(0, inTime - PRIVATE.lastFrameTimeStamp);
+		PRIVATE.lastFrameTimeStamp = inTime;
 		++PRIVATE.frameCount;
 		
 		//TODO handle HUGE dt's (by pausing?)

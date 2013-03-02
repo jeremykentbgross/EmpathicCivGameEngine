@@ -60,11 +60,11 @@ GameEngineLib.Sound2D = GameEngineLib.Class.create(
 				GameSystemVars.Debug.Sound_Area_DrawColor
 			);
 			GameInstance.Graphics.drawDebugText(
-				'----Pos:(' + this._position.myX + ', ' + this._position.myY + '), R:' + this._radius,
+				"----Pos:(" + this._position.myX + ', ' + this._position.myY + "), Radius:" + this._radius,
 				GameSystemVars.Debug.Sound_Area_DrawColor
 			);
 			GameInstance.Graphics.drawDebugText(
-				'----Vel:(' + this._velocity.myX + ', ' + this._velocity.myY + ')',
+				"----Vel:(" + this._velocity.myX + ', ' + this._velocity.myY + ')',
 				GameSystemVars.Debug.Sound_Area_DrawColor
 			);
 			

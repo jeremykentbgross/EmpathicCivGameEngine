@@ -121,7 +121,7 @@ GameEngineLib.GameEvent_Input = GameEngineLib.Class.create({
 			this.mouseLoc = new GameEngineLib.Game2DPoint();
 		}
 		this.buttons = inButtons || {};
-		this.keys = inKeys || {};
+		this.myKeys = inKeys || {};
 		this.keysPressed = inKeysPressed || {};
 		this.clicked = {};//TODO param?
 	},

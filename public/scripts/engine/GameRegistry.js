@@ -119,7 +119,7 @@ GameEngineLib.GameRegistry.prototype.forAll = function forAll(inFunction)
 	}
 };
 
-GameEngineLib.GameRegistry.prototype.numItems = function numItems()
+GameEngineLib.GameRegistry.prototype.numItems = function numItems()//TODO rename this!!
 {
 	return this._itemCount;
 };

@@ -94,29 +94,29 @@ GameLoader =
 				runTests :
 					function()
 					{
-						var test;
+						var aTest;
 						var i;
 						console.log('\n************************');
 						console.log("***Running Unit Tests***");
 						for(i = 0; i < this.tests.length; ++i)
 						{
-							test = this.tests[i];
-							console.log("\nRunning Test: " + test.testName);
+							aTest = this.tests[i];
+							console.log("\nRunning Test: " + aTest.testName);
 							try
 							{
-								if(!test())
+								if(!aTest())
 								{
-									GameEngineLib.logger.error("Failed Test: " + test.testName);
+									GameEngineLib.logger.error("Failed Test: " + aTest.testName);
 								}
 								else
 								{
-									console.log("Passed Test: " + test.testName);
+									console.log("Passed Test: " + aTest.testName);
 								}
 							}
 							catch(error)
 							{
 								console.log(error.stack);
-								console.log("Failed Test: " + test.testName + " with exception " + error + '\n');
+								console.log("Failed Test: " + aTest.testName + " with exception " + error + '\n');
 							}
 						}
 						console.log("\n***Running Unit Tests***");

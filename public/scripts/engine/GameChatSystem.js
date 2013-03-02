@@ -116,7 +116,7 @@ GameEngineLib.ChatSystem = GameEngineLib.Class.create({
 			);
 			//create an unput object in the chat form
 			this._domChatInput = this._jojoDomConstruct.create(
-				'input',
+				'input',//TODO may need to ignore this in obfuscation when it isn't auto added from js native globals
 				{
 					id : 'chatInput',
 					type : 'text',
@@ -265,7 +265,7 @@ GameEngineLib.ChatSystem = GameEngineLib.Class.create({
 					innerHTML : 
 						inMessage.replace(
 							/[<>&]/g,
-							function(m){ return that._specialChars[m]; }
+							function(inIndex){ return that._specialChars[inIndex]; }//TODO debug this sometime to figure out how it works
 						)
 					//TODO css class (team, enemy, general, etc..)
 				},
