@@ -81,16 +81,28 @@ if(GameSystemVars.Server.compressClientCode)
 			res.end();
 		}
 	);
+	GameEngineServer.expressApp.get(
+		'/3rdParty/*.(js|css|html|png|jpg|mp3)'//TODO review file types
+		,function(req, res){
+			res.sendfile( path.join(GameEngineServer.webHostRoot, req.url) );
+		}
+	);
+	GameEngineServer.expressApp.get(
+		'/*.(css|html|png|jpg|mp3)'//TODO review file types
+		,function(req, res){
+			res.sendfile( path.join(GameEngineServer.webHostRoot, req.url) );
+		}
+	);
 }
-
-
-
-GameEngineServer.expressApp.get(
-	'/*.(js|css|html|png|jpg|mp3)'//TODO review file types
-	,function(req, res){
-		res.sendfile( path.join(GameEngineServer.webHostRoot, req.url) );
-	}
-);
+else
+{
+	GameEngineServer.expressApp.get(
+		'/*.(js|css|html|png|jpg|mp3)'//TODO review file types
+		,function(req, res){
+			res.sendfile( path.join(GameEngineServer.webHostRoot, req.url) );
+		}
+	);
+}
 
 
 
@@ -98,7 +110,7 @@ GameEngineServer.expressApp.get(
 	'/'
 	,function(req, res)
 	{
-		res.sendfile( path.join(GameEngineServer.webHostRoot, 'index.html') );	
+		res.sendfile( path.join(GameEngineServer.webHostRoot, 'intro.html') );//TODO rename the index.html
 	}
 );
 
