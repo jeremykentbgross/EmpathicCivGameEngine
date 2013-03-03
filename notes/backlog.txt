@@ -640,3 +640,10 @@ Command &>file //stdout+error!! (or other!!)
 D3->no lvl/class apropriate drops, TorchLt->to much to sort
 =>
 No gold!->Raws! Player crafting selects stats, custom/+mass produced; aura vs personal; lvl cap item/stats?
+
+Linux loop script and redirect stderr to file also!
+Linux add git setup stuff
+
+PAGE LAUNCH:
+Like https://developers.facebook.com/docs/reference/plugins/like/
+tweet: ??
