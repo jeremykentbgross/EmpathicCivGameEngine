@@ -647,3 +647,31 @@ Linux add git setup stuff
 PAGE LAUNCH:
 Like https://developers.facebook.com/docs/reference/plugins/like/
 tweet: ??
+
+
+Change /Game loc:
+-Engine
+--Public
+---EngineLoader.js
+---Scripts
+----Editor //OR it's own directory probably
+----...
+---Images
+---Sounds
+--Private
+---...
+-Game
+--Public
+---GameLoader.js
+---Scripts
+----GameRules.js
+----...
+---Images
+---Sounds
+--Private
+---social network id's, etc
+---obfuscation hints
+---System Settings
+=>
+1) commandline param?: node server.js gamepath
+2) EngineLoader(gamepath) //then replace includes again
