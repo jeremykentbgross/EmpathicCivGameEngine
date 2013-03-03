@@ -253,3 +253,390 @@ naming:
 	Game.settings
 	Game.logger
 	...
+	
+Dave: http://www.kidwithkeyboard.com/Kid-With-Keyboard/Home.html
+
+Cyberpunk has influenced many anime and manga including the ground-breaking Akira, Ghost in the Shell, Battle Angel Alita, Megazone 23, Neo Tokyo, Goku Midnight Eye, Cyber City Oedo 808, Bubblegum Crisis, A.D. Police: Dead End City, Angel Cop, Extra, Blame! and Armitage III.
+ 
+http://en.wikipedia.org/wiki/Burst_City
+http://en.wikipedia.org/wiki/Hardware_(film)
+http://en.wikipedia.org/wiki/Strange_Days_(film)
+ 
+************
+http://en.wikipedia.org/wiki/List_of_cyberpunk_works#Video_games
+************
+ 
+http://en.wikipedia.org/wiki/Biopunk
+ 
+ 
+ 
+https://www.dropbox.com/sh/qpa3y9r13nak0dk/W7aEbljuAA
+ 
+ 
+ 
+SECURE NO-PASSWORD LOGINS:
+ssh-copy-id
+/etc/ssh/sshd_config PasswordAuthentication no
+ 
+ 
+ 
+To
+set it up to e-mail me, all I would
+have had to do is install the postfix
+package and during install time,
+configure it to be a standalone
+Internet mail server. Then I could
+install the mailutils package and
+add a mail command near the end
+of my /etc/rc.local file:
+echo "I'm alive!" | mail -s "I'm alive!" me@mydomain.com
+ 
+http://stackoverflow.com/questions/731233/activemq-or-rabbitmq-or-zeromq-or
+http://wiki.secondlife.com/wiki/Message_Queue_Evaluation_Notes
+http://www.anchor.com.au/blog/2012/11/hacking-your-way-to-enlightenment-with-kafka-zookeeper-and-nodejs/
+More than just this one:
+https://npmjs.org/package/juggernaut-kafka
+
+
+http://backbonejs.org/
+ 
+http://angularjs.org/
+ 
+http://creately.com/
+ 
+http://www.gliffy.com/uses/uml-software/
+ 
+http://www.websequencediagrams.com/
+ 
+http://www.asciiflow.com/#Draw
+ 
+http://yuml.me/wildthing
+ 
+http://stackoverflow.com/questions/6877121/is-there-any-free-online-uml-modelling-tool
+ 
+http://www.gamasutra.com/view/feature/130150/rock_paper_scissors__a_method_for_.php?page=4
+
+https://github.com/nodejitsu
+
+https://github.com/nodejitsu/pkgcloud
+
+https://github.com/nodejitsu/haibu
+
+https://github.com/bnoguchi/everyauth
+
+=>
+http://stackoverflow.com/questions/5574440/how-to-access-facebook-user-data-from-node-js
+=>
+some other stackoverflow with html get/post to query fb.
+
+http://stackoverflow.com/questions/13108995/how-to-get-facebook-friends-from-facebook-api-with-node-js
+
+More than name implies?
+http://www.hongkiat.com/blog/display-facebook-like-with-node-js/
+
+http://www.youtube.com/watch?v=dEaecUuEqfc
+
+http://www.youtube.com/watch?v=AyzOUbkUf3M
+
+http://www.youtube.com/watch?v=_RRnyChxijA
+
+http://www.google.com/events/io/2011/sessions/super-browser-2-turbo-hd-remix-introduction-to-html5-game-development.html
+
+http://phylo.cs.mcgill.ca/
+
+http://www.slideshare.net/dings/meaningful-play-getting-gamification-right
+
+
+http://www.slideshare.net/dings/meaningful-play-getting-gamification-right
+
+http://phylo.cs.mcgill.ca/
+
+http://www.codinghorror.com/blog/2011/10/the-gamification.html
+
+http://www.youtube.com/watch?v=C7JQ7Rpwn2k
+
+http://www.ted.com/talks/sheila_nirenberg_a_prosthetic_eye_to_treat_blindness.html
+
+http://everyauth.com/
+
+http://www.codinghorror.com/blog/2011/10/the-gamification.html
+
+http://blogs.valvesoftware.com/abrash/latency-the-sine-qua-non-of-ar-and-vr/
+
+http://www.codinghorror.com/blog/2011/10/the-gamification.html
+
+http://www.golem.de/news/prozedurale-schoepfung-kuenstliche-welten-auf-knopfdruck-1212-96323.html
+
+http://www.ign.com/blogs/grozznuy/2012/12/12/op-ed-natural-selection-2s-exceptional-community
+
+http://www.html5rocks.com/en/tutorials/getusermedia/intro/
+
+http://everyauth.com/#password-authentication/password-recipe-1-extra-registration-data
+
+http://gamebalanceconcepts.wordpress.com/
+
+http://gamedesignconcepts.wordpress.com/
+
+http://www.html5rocks.com/en/tutorials/webrtc/basics/
+
+http://updates.html5rocks.com/2012/12/WebRTC-hits-Firefox-Android-and-iOS
+
+http://www.google.com/events/io/2011/sessions/super-browser-2-turbo-hd-remix-introduction-to-html5-game-development.html
+
+http://stackoverflow.com/questions/1420965/redirect-stdout-and-stderr-to-a-single-file-in-dos
+
+http://stackoverflow.com/questions/6101673/what-are-the-use-cases-of-jsdom
+ 
+https://github.com/tmpvar/jsdom
+ 
+http://htmlui.com/blog/2011-08-01-site-templates-with-static-html-nodejs.html
+
+http://www.anchor.com.au/blog/2012/11/hacking-your-way-to-enlightenment-with-kafka-zookeeper-and-nodejs/
+
+http://www.gametrailers.com/videos/0mkpn0/high-flyer-death-defyer-charisma-trailer
+
+http://dragonfishgames.com/games/poidin
+
+http://www.youtube.com/watch?v=2jpDTWHS5eU
+
+http://www.catapultforhire.com/
+
+http://www.perfectaffinitygames.com/how-to-make-video-games-make-more-money-using-emotion/
+
+cool art reference at the end: https://www.youtube.com/watch?v=Qku3vJ-PzWM&feature=youtube_gdata_player
+
+http://stackoverflow.com/questions/731233/activemq-or-rabbitmq-or-zeromq-or
+ 
+http://wiki.secondlife.com/wiki/Message_Queue_Evaluation_Notes
+ 
+http://stackoverflow.com/questions/1919472/low-latency-large-scale-message-queuing
+
+http://stackoverflow.com/questions/731233/activemq-or-rabbitmq-or-zeromq-or
+ 
+http://wiki.secondlife.com/wiki/Message_Queue_Evaluation_Notes
+
+
+music/sounds
+
+http://www.linkedin.com/groupItem?view=&srchtype=discussedNews&gid=1818270&item=212627534&type=member&trk=eml-anet_dig-b_pd-ttl-cn&ut=0oezX7RM9L85E1
+
+http://www.linkedin.com/groupItem?view=&srchtype=discussedNews&gid=3268&item=212627844&type=member&trk=eml-anet_dig-b_pd-ttl-cn&ut=08KkXmFjRN85E1
+
+http://www.linkedin.com/groupItem?view=&srchtype=discussedNews&gid=3268&item=212627844&type=member&trk=eml-anet_dig-b_pd-ttl-cn&ut=3FxEXHOY5P85E1
+
+http://www.linkedin.com/groupItem?view=&srchtype=discussedNews&gid=113121&item=209345042&type=member&trk=eml-anet_dig-b_pd-ttl-cn&ut=0TjlsCDVBU85E1
+
+
+/*!
+@function
+@param
+@namespace
+*/
+MyNamespace = function asdf(){}
+ 
+/*!
+@class: MyClass
+@namespace: MyNamespace
+*/
+MyNamespace.MyClass = Class(
+{
+            /*!
+            @constructor: MyClass
+            @param: asdf
+            */
+            Constuctor: function MyClass(asdf)
+            {
+            },
+           
+            //! @bodyBegin: MyNamespace.MyClass
+            Description:
+            {
+                        /*!
+                        @function: asdf
+                        */
+                        //! @methodBegin: MyNamespace.MyClass.asdf
+                        asdf : function asdf()
+                        {
+                        }
+                        //! @methodEnd: MyNamespace.MyClass.asdf
+            }
+            //! @bodyEnd: MyClass
+});
+ 
+ 
+http://www.stack.nl/~dimitri/doxygen/manual/commands.html#cmd_intro
+http://www.oracle.com/technetwork/java/javase/documentation/index-137868.html#tag
+http://en.wikipedia.org/wiki/Javadoc
+http://code.google.com/p/jsdoc-toolkit/w/list
+http://usejsdoc.org/#JSDoc3_Tag_Dictionary
+
+https://hacks.mozilla.org/2012/08/remote-debugging-on-firefox-for-android/
+
+
+Code:
+-Serializable Command (pattern?)
+-Json conversation trees
+-flow graph?
+-editor page (com)
+-oauth/db
+-ui lib
+-dojo dom mgr
+-reflect ui (default tab)
+-Jsdoc3
+-net send groups (in GameObj?), ex: fog via map / team + master + sprite frames base (with timeout timer after being seen)
+
+Replication:
+GObj:
+-copyfrom()//chain
+-clone(){ret create().copyfrom(this)}
+-setdirty(){listadd,noflag?}
+-netgroups
+Class ser schema //static
+//schema var condition
+Class (reg?):
+-instances{}
+-netDirty{}
+-new{}
+NetUd:
+-Forall netgroups?
+-Forall classes
+--forall new
+---ser complete
+--forall dirty
+---ser dirty
+-clear dirty/new
+NetNewCon:
+-forall classes
+--forall inst
+---ser complete
+
+Gamify: points for games completed, financial supporter badge; meaning, goals, freedom!
+
+@type (ns, class, func, memb);
+@name;
+@param type(s) name;
+@owner/scope
+@pub/priv/pro
+@parent
+Namespaces.Nsn.Classes.classname.methods. =
+{
+};
+
+-Zelda letters White w/black/trans/yellow
+-placeholdr ref sounds: SW blaster, ST scanner/beeps, rom sounds?:steps, letters? Etc..
+
+SpriteCom->animplayerComp
+{play(animname)}
++animSelectorComp
+
+QT: Sound listeners/sounds/events (ie triggers), aabb->spheres
+
+PhysicsObj:
+-center
+-solids[]/triggers[]
+-owner
+-req vel
+-mass
+-impulse
+-material (snd)
+Solid/trigger
+-aabb ref
+-current[[wrap inst],]
+-colWith{otherobj:frame#}??
+-trigCallback
+-mass?/density?
+
+Solidspace opt!
+**Solid vs trig separation** phy sys with diff collision resolver
+Phys base class->sound/triggers/physics
+=>
+Collision system
+
+
+-Test clients write to server (array) + create obj!
+
+Very words u speak represent 1ks of years of memetic evo..
+You are a meme processing neuron in the mind of god!
+Stranger navi
+Os won
+U have no great enemies, only shadows/fantoms and disenters of your foriegn and domestic opression
+White vans fight club style, a bank and the head of the military industrial complex
+Deus ex; 
+Watch?who makes the world.
+Consantine: neural reality programmer, only belief matters. God allah, ancestor spirits, non zero.. Christians, jews, muslims.. Biosphere
+=>Wisdom of crowds, anon,bottom up,emergent,network,direct democ. Borg coming,democ or top down focused mind slaves?
+Obscured, hard to find modern truth in..
+Link silva
+Nothing new under sun;body of new born remix!
+Internet nervous system
+Shirkly
+Illusion of I;micro/macro cells;93% of human history we knew we were one+animals
+
+-neuromancer
+-rainbows end (stranger)
+-tron
+-matrix (blu/red tree, loading prog)
+-Nexus??
+-diamond age (primer)
+-snowcrash (metaverse? Meme virus, black sun club, black/white anon)
+-lawnmowerman
+-bladerunner
+-do androids dream of electric sheep
+-johnny mnemonic??eh
+-ghost in the shell
+-(overmind)
+-borg?? Vs plants eye
+-t2? (skynet-master control-666)?
+
+Cyber novels/films/games?
+
+-footsteps
+-despawn
+-reconnect
+-facebook
+-triggers?
+-obfuscate
+-private git
+-favicon
+-server
+-content
+
+Win/lin git setup
+Auto mail
+Msg queue chat? 2nd life
+Business doc git
+
+Be sure only new connect gets 'all'
+
+Server own physics
+
+Bottom up emergent self directed direct democracy (by relevant issues) control flow of resources
+
+Intelligence predictive simulation and planning
+
+Human cloud: What if everyone on earth given tools for top quality edu, 10k hrs mastery.. World class virtuosos.
+
+Pigs painting additions to ammendments
+
+Marie Antwinette knows the cake is a lie!
+
+Mr pulitzer.. Tells this city how to think.. Not often a conspiricy
+
+Hot coals in your mouth, radical honesty; would rather go along; wish it never passed to me; so do all who see such times;must choose what to do with the time given us;dont take my word for it, could be lying or mistaken. Im just one neuron. But sometimes all it takes is a voice..
+
+Open src education? Open source law, blame buttons, stackoverflow patch votes?
+Many names (ford?) Fredor 'the heart' of metropolis: you no longer need a mediator, or a representative, its time for direct democratic control of public resources.
+
+Everything is a remix, thats how evolution works.
+
+U must find triforce hidden in this metaverse.
+
+Server check valid user id object!!
+
+Dont need to keep localizationmap
+
+Command &>file //stdout+error!! (or other!!)
+
+D3->no lvl/class apropriate drops, TorchLt->to much to sort
+=>
+No gold!->Raws! Player crafting selects stats, custom/+mass produced; aura vs personal; lvl cap item/stats?
