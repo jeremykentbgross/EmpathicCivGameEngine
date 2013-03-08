@@ -78,7 +78,7 @@ GameLoader =
 		//////////////////////////////////////////////////////////////////////////////
 		///////////////////////////////// GAME GLOBALS ///////////////////////////////
 		//		Load the settings flags first:
-		include(inSharedPath + "scripts/engine/GameSystemVars.js");//TODO include one from engine and game folder	//TODO rename this file!!
+		include(inSharedPath + "scripts/engine/GameSettings.js");//TODO include one from engine and game folder	//TODO rename this file!!
 		//		Set the server flag in the global system
 		ECGame.Settings.Network.isServer = inIsServer;
 		
@@ -189,7 +189,7 @@ GameLoader =
 		include(inSharedPath + "scripts/engine/GameEntityComponent_2DPhysics.js");
 		
 		include(inSharedPath + "scripts/engine/GameTimer.js");
-		include(inSharedPath + "scripts/engine/GameFrameWork.js");
+		include(inSharedPath + "scripts/engine/GameInstance.js");
 		include(inSharedPath + "scripts/engine/GameQuadTree.js");
 		include(inSharedPath + "scripts/engine/GameRenderable2D.js");
 		include(inSharedPath + "scripts/engine/GameRenderableTile2D.js");
