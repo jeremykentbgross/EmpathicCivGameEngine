@@ -125,7 +125,7 @@ ECGame.EngineLib.GameSoundSystem = ECGame.EngineLib.Class.create({
 			{
 				soundDesc = inSoundDescriptions[i];
 				this._soundLib[soundDesc.id] = soundDesc;
-				ECGame.instance.AssetManager.loadSound(soundDesc.fileName, soundDesc);
+				ECGame.instance.assetManager.loadSound(soundDesc.fileName, soundDesc);
 			}
 			/*
 			TODO default sound in assentmanager:
@@ -310,7 +310,7 @@ ECGame.EngineLib.GameSoundSystem = ECGame.EngineLib.Class.create({
 		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect)
 		{
 			var _this_ = this, i;
-			ECGame.instance.Graphics.drawDebugText("Debug Drawing Sounds", ECGame.Settings.Debug.Sound_Area_DrawColor);
+			ECGame.instance.graphics.drawDebugText("Debug Drawing Sounds", ECGame.Settings.Debug.Sound_Area_DrawColor);
 			
 			inCanvas2DContext.strokeStyle = ECGame.Settings.Debug.Sound_Area_DrawColor;
 			inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Sound_Area_DrawColor;

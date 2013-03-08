@@ -51,8 +51,8 @@ ECGame.EngineLib.Game2DCamera = function Game2DCamera()
 		this._myRect = ECGame.EngineLib.createGame2DAABB(
 			0,
 			0,
-			ECGame.instance.Graphics.getWidth(),
-			ECGame.instance.Graphics.getHeight()
+			ECGame.instance.graphics.getWidth(),
+			ECGame.instance.graphics.getHeight()
 		);
 	}
 	else

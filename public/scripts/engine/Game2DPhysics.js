@@ -409,8 +409,8 @@ ECGame.EngineLib.createGame2DPhysics = function()
 		var physicsObject;
 		var node;
 		
-		ECGame.instance.Graphics.drawDebugText("Debug Drawing Physics");
-		ECGame.instance.Graphics.drawDebugText("Frame Update Count:" + PRIVATE.frameUpdateCount);
+		ECGame.instance.graphics.drawDebugText("Debug Drawing Physics");
+		ECGame.instance.graphics.drawDebugText("Frame Update Count:" + PRIVATE.frameUpdateCount);
 		//todo print (and notify) collisions this frame
 		
 		//walk:

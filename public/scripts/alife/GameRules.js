@@ -245,10 +245,10 @@ ECGame.Lib.createGameRules = function(instance, PRIVATE)
 	{
 		if(!ECGame.Settings.Network.isServer)
 		{
-			ECGame.instance.Input.registerListener('Input', PRIVATE);
+			ECGame.instance.input.registerListener('Input', PRIVATE);
 		}
 			
-		ECGame.instance.UpdateOrder.push(this);
+		ECGame.instance.updateOrder.push(this);
 		
 		PRIVATE.clustersCount = 16;
 		PRIVATE.vectorDimensions = 2;
@@ -296,8 +296,8 @@ ECGame.Lib.createGameRules = function(instance, PRIVATE)
 			,ECGame.EngineLib.createGame2DAABB(
 				0,
 				0,
-				ECGame.instance.Graphics.getWidth(),
-				ECGame.instance.Graphics.getHeight()
+				ECGame.instance.graphics.getWidth(),
+				ECGame.instance.graphics.getHeight()
 			)
 		);
 	};

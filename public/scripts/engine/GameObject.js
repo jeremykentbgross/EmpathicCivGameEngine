@@ -46,11 +46,11 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		//TODO or add manually when netRep is added to instances? (including during clone)
 		if(ECGame.Settings.Network.isMultiplayer
 			&& ECGame.instance
-			&& ECGame.instance.Network
+			&& ECGame.instance.network
 			&& ECGame.Settings.Network.isServer//TODO ((server || thisClass._flags.clientCreatable) && netReplicated??)
 			)
 		{
-			ECGame.instance.Network.addNewObject(this);
+			ECGame.instance.network.addNewObject(this);
 			this._netDirty = true;
 		}
 	},
@@ -151,7 +151,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			{
 				if(!this._netDirty)
 				{
-					ECGame.instance.Network.addNetDirtyObject(this);
+					ECGame.instance.network.addNetDirtyObject(this);
 					this._netDirty = true;
 				}
 				

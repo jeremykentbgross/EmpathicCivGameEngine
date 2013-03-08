@@ -82,15 +82,15 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			//setup event listeners
 			if(!ECGame.Settings.Network.isServer)
 			{
-				ECGame.instance.Input.registerListener('Input', this);
+				ECGame.instance.input.registerListener('Input', this);
 			}
 			if(ECGame.Settings.Network.isMultiplayer)
 			{
-				ECGame.instance.Network.registerListener(
+				ECGame.instance.network.registerListener(
 					'IdentifiedUser',//TODO use actual event class to de/register listener(s)
 					this
 				);
-				ECGame.instance.Network.registerListener(
+				ECGame.instance.network.registerListener(
 					'ClientDisconnected',//TODO use actual event class to de/register listener(s)
 					this
 				);
@@ -235,7 +235,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			/////////////////////////////////////////////////////////
 			
 			//HACK TODO subscribe to timer updates!!!
-			ECGame.instance.UpdateOrder.push(this);
+			ECGame.instance.updateOrder.push(this);
 			this._gameRunning = true;//HACK TODO should get this from ECGame.instance
 
 			
@@ -262,7 +262,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				{
 					if(ECGame.Settings.Network.isServer)
 					{
-						ECGame.instance.Network.sendMessage(
+						ECGame.instance.network.sendMessage(
 							"Server Reboot in " + (60 - second) + " seconds."
 							//,this//sentListener
 						);
@@ -272,7 +272,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				{
 					if(ECGame.Settings.Network.isServer)
 					{
-						ECGame.instance.Network.sendMessage(
+						ECGame.instance.network.sendMessage(
 							"Server Reboot in " + (serverRebootTime - minute) + " minutes."
 							//,this//sentListener
 						);

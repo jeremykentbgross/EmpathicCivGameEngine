@@ -157,7 +157,7 @@ ECGame.EngineLib.GameNetwork.prototype.init = function init()
 
 ECGame.EngineLib.GameNetwork.prototype._onClientConnected = function _onClientConnected(inConnectedSocket)
 {
-	var _this_ = ECGame.instance.Network;
+	var _this_ = ECGame.instance.network;
 	
 	//TODO unique guest name?
 	inConnectedSocket.gameUser = new ECGame.EngineLib.User("Guest", ECGame.EngineLib.User.USER_IDS.GUEST);
@@ -201,7 +201,7 @@ ECGame.EngineLib.GameNetwork.prototype._onClientConnected = function _onClientCo
 ECGame.EngineLib.GameNetwork.prototype._onClientDisconnected = function _onClientDisconnected()
 {
 	//this == socket disconnecting!
-	var _this_ = ECGame.instance.Network;
+	var _this_ = ECGame.instance.network;
 	
 	//TODO store their gameUser for reconnect until later (if supported)
 	
@@ -324,7 +324,7 @@ ECGame.EngineLib.GameNetwork.prototype._sendObj = function _sendObj(inObjData, i
 
 ECGame.EngineLib.GameNetwork.prototype._onConnectedToServer = function _onConnectedToServer()
 {
-	var _this_ = ECGame.instance.Network;
+	var _this_ = ECGame.instance.network;
 	var event = new ECGame.EngineLib.GameEvent_ConnectedToServer();
 	
 	if(ECGame.Settings.DEBUG /*&& ECGame.Settings.Debug.NetworkMessages_Print*/)
@@ -343,7 +343,7 @@ ECGame.EngineLib.GameNetwork.prototype._onConnectedToServer = function _onConnec
 
 ECGame.EngineLib.GameNetwork.prototype._onDisconnectedFromServer = function _onDisconnectedFromServer()
 {
-	var _this_ = ECGame.instance.Network;
+	var _this_ = ECGame.instance.network;
 	var event = new ECGame.EngineLib.GameEvent_DisconnectedFromServer();
 	
 	if(ECGame.Settings.DEBUG /*&& ECGame.Settings.Debug.NetworkMessages_Print*/)
@@ -358,7 +358,7 @@ ECGame.EngineLib.GameNetwork.prototype._onDisconnectedFromServer = function _onD
 
 ECGame.EngineLib.GameNetwork.prototype._onIdRecv = function _onIdRecv(inUser)//TODO rename inUserID
 {
-	var _this_ = ECGame.instance.Network;
+	var _this_ = ECGame.instance.network;
 	
 	if(ECGame.Settings.Network.isServer)
 	{
@@ -415,7 +415,7 @@ ECGame.EngineLib.GameNetwork.prototype._onIdRecv = function _onIdRecv(inUser)//T
 
 ECGame.EngineLib.GameNetwork.prototype._onMsgRecv = function _onMsgRecv(inMsg)
 {
-	var _this_ = ECGame.instance.Network;
+	var _this_ = ECGame.instance.network;
 	
 	if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 	{
@@ -435,7 +435,7 @@ ECGame.EngineLib.GameNetwork.prototype._onMsgRecv = function _onMsgRecv(inMsg)
 
 ECGame.EngineLib.GameNetwork.prototype._onDataRecv = function _onDataRecv(inData)
 {
-	var _this_ = ECGame.instance.Network;
+	var _this_ = ECGame.instance.network;
 	
 	var event = new ECGame.EngineLib.GameEvent_Data(inData);
 	
@@ -460,7 +460,7 @@ ECGame.EngineLib.GameNetwork.prototype._onDataRecv = function _onDataRecv(inData
 
 ECGame.EngineLib.GameNetwork.prototype._onObjectsRecv = function _onObjectsRecv(inData)
 {
-	var _this_ = ECGame.instance.Network;
+	var _this_ = ECGame.instance.network;
 	
 	var event = new ECGame.EngineLib.GameEvent_NetObjects(inData);
 	
@@ -499,7 +499,7 @@ ECGame.EngineLib.GameNetwork.prototype.update = function update(inDt)
 		&& ECGame.Settings.DEBUG
 		&& ECGame.Settings.Debug.NetworkMessages_Draw)
 	{
-		ECGame.instance.Graphics.drawDebugText(
+		ECGame.instance.graphics.drawDebugText(
 			"Network out:",
 			ECGame.Settings.Debug.NetworkMessages_DrawColor
 		);
@@ -519,7 +519,7 @@ ECGame.EngineLib.GameNetwork.prototype.update = function update(inDt)
 				&& ECGame.Settings.DEBUG
 				&& ECGame.Settings.Debug.NetworkMessages_Draw)
 			{
-				ECGame.instance.Graphics.drawDebugText(
+				ECGame.instance.graphics.drawDebugText(
 					'    ' + inClass.getName(),
 					ECGame.Settings.Debug.NetworkMessages_DrawColor
 				);
@@ -537,7 +537,7 @@ ECGame.EngineLib.GameNetwork.prototype.update = function update(inDt)
 							&& ECGame.Settings.DEBUG
 							&& ECGame.Settings.Debug.NetworkMessages_Draw)
 						{
-							ECGame.instance.Graphics.drawDebugText(
+							ECGame.instance.graphics.drawDebugText(
 								'        -' + inObject.getName()
 								,ECGame.Settings.Debug.NetworkMessages_DrawColor
 							);
@@ -597,7 +597,7 @@ ECGame.EngineLib.GameNetwork.prototype._serializeObjectsIn = function _serialize
 		&& ECGame.Settings.DEBUG
 		&& ECGame.Settings.Debug.NetworkMessages_Draw)
 	{
-		ECGame.instance.Graphics.drawDebugText(
+		ECGame.instance.graphics.drawDebugText(
 			"Network in:",
 			ECGame.Settings.Debug.NetworkMessages_DrawColor
 		);
@@ -667,11 +667,11 @@ ECGame.EngineLib.GameNetwork.prototype._serializeObjectsIn = function _serialize
 				&& ECGame.Settings.Debug.NetworkMessages_Draw)
 			{
 				//TODO not show same class name more than once, just instance (ie make print list for the end!)
-				ECGame.instance.Graphics.drawDebugText(
+				ECGame.instance.graphics.drawDebugText(
 					'    ' + objectClass.getName(),
 					ECGame.Settings.Debug.NetworkMessages_DrawColor
 				);
-				ECGame.instance.Graphics.drawDebugText(
+				ECGame.instance.graphics.drawDebugText(
 					'        -' + object.getName()
 					,ECGame.Settings.Debug.NetworkMessages_DrawColor
 				);
@@ -733,7 +733,7 @@ ECGame.EngineLib.GameNetwork.prototype.update = function update(inDt)
 		
 	if(drawNetObjects)
 	{
-		ECGame.instance.Graphics.drawDebugText(
+		ECGame.instance.graphics.drawDebugText(
 			"Network out:",
 			ECGame.Settings.Debug.NetworkMessages_DrawColor
 		);
@@ -746,7 +746,7 @@ ECGame.EngineLib.GameNetwork.prototype.update = function update(inDt)
 		classInstanceList = this._newInstances[className];
 		if(drawNetObjects)
 		{
-			ECGame.instance.Graphics.drawDebugText(
+			ECGame.instance.graphics.drawDebugText(
 				'    ' + className,
 				ECGame.Settings.Debug.NetworkMessages_DrawColor
 			);
@@ -766,7 +766,7 @@ ECGame.EngineLib.GameNetwork.prototype.update = function update(inDt)
 			}
 			if(drawNetObjects)
 			{
-				ECGame.instance.Graphics.drawDebugText(
+				ECGame.instance.graphics.drawDebugText(
 					'        -' + instanceObject.getName()
 					,ECGame.Settings.Debug.NetworkMessages_DrawColor
 				);
@@ -783,7 +783,7 @@ ECGame.EngineLib.GameNetwork.prototype.update = function update(inDt)
 		classInstanceList = this._netDirtyInstances[className];
 		if(drawNetObjects)
 		{
-			ECGame.instance.Graphics.drawDebugText(
+			ECGame.instance.graphics.drawDebugText(
 				'    ' + className,
 				ECGame.Settings.Debug.NetworkMessages_DrawColor
 			);
@@ -802,7 +802,7 @@ ECGame.EngineLib.GameNetwork.prototype.update = function update(inDt)
 			}
 			if(drawNetObjects)
 			{
-				ECGame.instance.Graphics.drawDebugText(
+				ECGame.instance.graphics.drawDebugText(
 					'        -' + instanceObject.getName()
 					,ECGame.Settings.Debug.NetworkMessages_DrawColor
 				);

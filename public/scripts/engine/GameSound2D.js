@@ -55,15 +55,15 @@ ECGame.EngineLib.Sound2D = ECGame.EngineLib.Class.create(
 			percentPlayed = (inCurrentTime - this._startedTime) / this._source.buffer.duration;
 			soundScreenLoc = this._position.sub(inCameraRect);
 							
-			ECGame.instance.Graphics.drawDebugText(
+			ECGame.instance.graphics.drawDebugText(
 				'-' + this._fileName + ': %' + Math.floor(percentPlayed * 100),
 				ECGame.Settings.Debug.Sound_Area_DrawColor
 			);
-			ECGame.instance.Graphics.drawDebugText(
+			ECGame.instance.graphics.drawDebugText(
 				"----Pos:(" + this._position.myX + ', ' + this._position.myY + "), Radius:" + this._radius,
 				ECGame.Settings.Debug.Sound_Area_DrawColor
 			);
-			ECGame.instance.Graphics.drawDebugText(
+			ECGame.instance.graphics.drawDebugText(
 				"----Vel:(" + this._velocity.myX + ', ' + this._velocity.myY + ')',
 				ECGame.Settings.Debug.Sound_Area_DrawColor
 			);

@@ -189,7 +189,7 @@ ECGame.EngineLib.createInput = function(instance, PRIVATE)
 			}
 			if(ECGame.Settings.Debug.Input_Draw)
 			{
-				ECGame.instance.Graphics.drawDebugText(
+				ECGame.instance.graphics.drawDebugText(
 					inputString,
 					(PRIVATE.active ?
 						ECGame.Settings.Debug.Input_Active_DrawColor :

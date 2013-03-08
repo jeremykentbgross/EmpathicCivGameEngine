@@ -44,7 +44,7 @@ ECGame.EngineLib.Animation2D = ECGame.EngineLib.Class.create({
 			
 			if(!ECGame.Settings.Network.isServer)
 			{
-				ECGame.instance.AssetManager.loadImage(inImageName, this);
+				ECGame.instance.assetManager.loadImage(inImageName, this);
 			}
 			
 			this._frameRate = inFrameRate;

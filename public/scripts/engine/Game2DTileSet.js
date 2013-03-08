@@ -73,7 +73,7 @@ ECGame.EngineLib.Game2DTileSet = ECGame.EngineLib.Class.create(
 				var tile = this._myTiles[i];
 				if(!ECGame.Settings.Network.isServer)//TODO should the function return strait away?
 				{
-					ECGame.instance.AssetManager.loadImage(tile.fileName, tile);
+					ECGame.instance.assetManager.loadImage(tile.fileName, tile);
 				}
 				this._maxLayers = tile.layer;//TODO is this needed? maybe for map floors vs tileset layer (not used atm I think)
 			}

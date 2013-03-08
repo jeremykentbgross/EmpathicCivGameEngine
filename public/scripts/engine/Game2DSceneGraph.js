@@ -84,7 +84,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DC
 	this._mySceneTree.walk(
 		function(item)
 		{
-			var frameCount = ECGame.instance.GameTimer.getFrameCount();
+			var frameCount = ECGame.instance.gameTimer.getFrameCount();
 			
 			if(frameCount > item.lastFrameDrawn)
 			{
@@ -122,7 +122,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DC
 	{
 		var fontSize = ECGame.Settings.Debug.Text_Size;
 		
-		ECGame.instance.Graphics.drawDebugText("Debug Drawing SceneGraph");
+		ECGame.instance.graphics.drawDebugText("Debug Drawing SceneGraph");
 		
 		inCanvas2DContext.font = fontSize + 'px Arial';
 		for(i in renderables)
@@ -166,7 +166,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DC
 				);
 			}
 		}
-		ECGame.instance.Graphics.drawDebugText("SceneGraph Draw calls:" + renderables.length);
+		ECGame.instance.graphics.drawDebugText("SceneGraph Draw calls:" + renderables.length);
 	}
 	
 	//TODO get rid of needing this! Need auto cleaning on delete

@@ -82,10 +82,10 @@ ECGame.EngineLib.createGameTimer = function(instance, PRIVATE)
 			];
 			if(ECGame.Settings.Debug.FrameStats_Draw && !ECGame.Settings.Network.isServer)
 			{
-				ECGame.instance.Graphics.drawDebugText(frameStats[0], ECGame.Settings.Debug.FrameStats_DrawColor);
-				ECGame.instance.Graphics.drawDebugText(frameStats[1], ECGame.Settings.Debug.FrameStats_DrawColor);
-				ECGame.instance.Graphics.drawDebugText(frameStats[2], ECGame.Settings.Debug.FrameStats_DrawColor);
-				ECGame.instance.Graphics.drawDebugText(frameStats[3], ECGame.Settings.Debug.FrameStats_DrawColor);
+				ECGame.instance.graphics.drawDebugText(frameStats[0], ECGame.Settings.Debug.FrameStats_DrawColor);
+				ECGame.instance.graphics.drawDebugText(frameStats[1], ECGame.Settings.Debug.FrameStats_DrawColor);
+				ECGame.instance.graphics.drawDebugText(frameStats[2], ECGame.Settings.Debug.FrameStats_DrawColor);
+				ECGame.instance.graphics.drawDebugText(frameStats[3], ECGame.Settings.Debug.FrameStats_DrawColor);
 			}
 			if(ECGame.Settings.Debug.FrameStats_Print)
 			{

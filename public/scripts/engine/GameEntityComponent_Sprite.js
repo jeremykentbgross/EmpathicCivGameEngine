@@ -27,11 +27,11 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 		
 		this._position = ECGame.EngineLib.createGame2DPoint();//TODO this isn't used, but shouldn't use topleft of aabb either
 		
-		this._animations = ECGame.instance.GameRules._animations;//HACK!!!!!//TODO 'null'/default object!! (object ref?)
+		this._animations = ECGame.instance.gameRules._animations;//HACK!!!!!//TODO 'null'/default object!! (object ref?)
 		this._currentAnimation = 8;//TODO why 8?
 		this._sceneGraphRenderable = new ECGame.EngineLib.Animation2DInstance();
 /*TODO should be commented out?*/this._sceneGraphRenderable.setAnimation(this._animations[0]);//TODO should be a null/default object
-		ECGame.instance.UpdateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
+		ECGame.instance.updateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
 		this._sceneGraphRenderable.layer = 1;		
 		
 		//TODO frame knows filename, offset, collision rects, (sound?) events, etc //TODO move this note to the frame class?
@@ -53,7 +53,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			//this._currentAnimation = 8;//TODO why 8?
 			//this._sceneGraphRenderable = new ECGame.EngineLib.Animation2DInstance();
 			this._sceneGraphRenderable.setAnimation(this._animations[0]);
-			//ECGame.instance.UpdateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
+			//ECGame.instance.updateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
 			//this._sceneGraphRenderable.layer = 1;
 		},
 
@@ -161,7 +161,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			
 			this._sceneGraphRenderable = new ECGame.EngineLib.Animation2DInstance();
 			this._sceneGraphRenderable.setAnimation(this._animations[0]);
-			ECGame.instance.UpdateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
+			ECGame.instance.updateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
 			this._sceneGraphRenderable.layer = inOther._sceneGraphRenderable.layer;
 		}
 	}

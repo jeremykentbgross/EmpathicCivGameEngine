@@ -80,7 +80,7 @@ ECGame.EngineLib.Sound = ECGame.EngineLib.Class.create(
 		{
 			var percentPlayed = (inCurrentTime - this._startedTime) / this._source.buffer.duration;
 							
-			ECGame.instance.Graphics.drawDebugText(
+			ECGame.instance.graphics.drawDebugText(
 				'-' + this._fileName + ': %' + Math.floor(percentPlayed * 100),
 				ECGame.Settings.Debug.Sound_Area_DrawColor
 			);

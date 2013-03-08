@@ -52,60 +52,40 @@ ECGame.EngineLib.GameInstance.prototype.run = function run()
 
 ECGame.EngineLib.GameInstance.prototype._init = function _init()
 {
-	//////////////////////////////////////////////////
-	//Create gamerules this///////////////////////
-	// TODO move default setup code elsewhere?
-	if(ECGame.Lib.GameRules !== undefined)
-	{
-		this.GameRules = ECGame.Lib.GameRules.create();
-	}
-	else
-	{
-		this.GameRules = ECGame.EngineLib.GameRulesBase.create();
-	}
-	//Create gamerules this///////////////////////
-	//////////////////////////////////////////////////
-	
-	//TODO make this ordered event listeners?
-	this.UpdateOrder = [];
-	
 	//the app is running or not
 	this._running = true;
 	
+	//Init Timer
+	this.gameTimer = ECGame.EngineLib.createGameTimer();	//////////////////////////////////////////////
+	this.gameTimer.init(this);
 	
-	//////////////////////////////////////////////////
-	//Init frame times////////////////////////////////
-	this.GameTimer = ECGame.EngineLib.createGameTimer();
-	this.GameTimer.init(this);
-	//Init frame times////////////////////////////////
-	//////////////////////////////////////////////////
+	//TODO make this ordered event listeners?
+	this.updateOrder = [];
 	
-	if(!ECGame.Settings.Network.isServer)
+	//Init Native GameObject Classes
+	ECGame.EngineLib.Class.createInstanceRegistry();
+	ECGame.EngineLib.GameObject.registerClass();
+	ECGame.EngineLib.GameEntity.registerClass();
+	ECGame.EngineLib.GameEntityComponent.registerClass();
+	ECGame.EngineLib.EntityComponent_2DCamera.registerClass();
+	ECGame.EngineLib.EntityComponent_2DPhysics.registerClass();
+	ECGame.EngineLib.EntityComponent_Input.registerClass();
+	ECGame.EngineLib.EntityComponent_Sprite.registerClass();
+	ECGame.EngineLib.Game2DMap.registerClass();
+	ECGame.EngineLib.Game2DTileSet.registerClass();
+	ECGame.EngineLib.Game2DWorld.registerClass();
+	//TODO thinnking EventSystem maybe should not be a gameobject ??? WTF is this??
+	
+	//TODO also needs to manage prefabs?
+	
+	//Create gamerules
+	if(ECGame.Lib.GameRules !== undefined)
 	{
-		//////////////////////////////////////////////////
-		//Init graphics///////////////////////////////////
-		this.Graphics = ECGame.EngineLib.createGame2DGraphics();
-		if(!this.Graphics.init())
-		{
-			return false;
-		}
-		//Init graphics///////////////////////////////////
-		//////////////////////////////////////////////////
-		
-		
-		
-		//////////////////////////////////////////////////
-		//Init Asset Manager//////////////////////////////
-		this.AssetManager = ECGame.EngineLib.createGameAssetManager();
-		//Init Asset Manager//////////////////////////////
-		//////////////////////////////////////////////////
-		
-		
-		//////////////////////////////////////////////////
-		//Init Sound//////////////////////////////////////
-		this.soundSystem = ECGame.EngineLib.GameSoundSystem.create();
-		//Init Sound//////////////////////////////////////
-		//////////////////////////////////////////////////
+		this.gameRules = ECGame.Lib.GameRules.create();
+	}
+	else
+	{
+		this.gameRules = ECGame.EngineLib.GameRulesBase.create();
 	}
 	
 	if(ECGame.Settings.Network.isServer)
@@ -119,62 +99,50 @@ ECGame.EngineLib.GameInstance.prototype._init = function _init()
 			"NewUser" + Math.floor(Math.random()*65536)
 			,ECGame.EngineLib.User.USER_IDS.NEW_USER
 		);
+		
+		//Init graphics
+		this.graphics = ECGame.EngineLib.createGame2DGraphics();
+		if(!this.graphics.init())
+		{
+			return false;
+		}
+	
+		//Init Asset Manager
+		this.assetManager = ECGame.EngineLib.createGameAssetManager();
+		
+		//Init Sound
+		this.soundSystem = ECGame.EngineLib.GameSoundSystem.create();
 	}
 	
-	
-	
-	//////////////////////////////////////////////////
-	//Init Input//////////////////////////////////////
-	this.Input = ECGame.EngineLib.createInput();
+	//Init Input
+	this.input = ECGame.EngineLib.createInput();
 	if(!ECGame.Settings.Network.isServer)
 	{
-		this.Input.initClient(this.Graphics.getDomTarget());
+		this.input.initClient(this.graphics.getDomTarget());
 	}
-	this.UpdateOrder.push(this.Input);
-	//Init Input//////////////////////////////////////
-	//////////////////////////////////////////////////
+	this.updateOrder.push(this.input);
 	
-	
-	
-	//////////////////////////////////////////////////
-	//Init Native GameObject Classes//////////////////
-	ECGame.EngineLib.Class.createInstanceRegistry();
-	ECGame.EngineLib.GameObject.registerClass();
-	ECGame.EngineLib.GameEntity.registerClass();
-	ECGame.EngineLib.GameEntityComponent.registerClass();
-	ECGame.EngineLib.EntityComponent_2DCamera.registerClass();
-	ECGame.EngineLib.EntityComponent_2DPhysics.registerClass();
-	ECGame.EngineLib.EntityComponent_Input.registerClass();
-	ECGame.EngineLib.EntityComponent_Sprite.registerClass();
-	ECGame.EngineLib.Game2DMap.registerClass();
-	ECGame.EngineLib.Game2DTileSet.registerClass();
-	ECGame.EngineLib.Game2DWorld.registerClass();
-	//TODO thinnking EventSystem maybe should not be a gameobject
-	
-	//TODO also needs to manage prefabs?
-	
-	//Init Native GameObject Classes//////////////////
-	//////////////////////////////////////////////////
-	
+	//setup network and chat
 	if(ECGame.Settings.Network.isMultiplayer)
 	{
-		this.Network = ECGame.EngineLib.GameNetwork.create();
-		this.Network.init();
-		this.UpdateOrder.push(this.Network);
+		this.network = ECGame.EngineLib.GameNetwork.create();
+		this.network.init();
+		this.updateOrder.push(this.network);
+		
+		if(!ECGame.Settings.Network.isServer)
+		{
+			this.chatSystem = ECGame.EngineLib.ChatSystem.create();
+		}
 	}
-	if(!ECGame.Settings.Network.isServer && ECGame.Settings.Network.isMultiplayer)
-	{
-		this.chatSystem = ECGame.EngineLib.ChatSystem.create();
-	}
-	
+		
 	if(!ECGame.Settings.Network.isServer)
 	{
 		//TODO should be after physics (where is that added)?
-		this.UpdateOrder.push(this.soundSystem);
+		this.updateOrder.push(this.soundSystem);
 	}
 	
-	//return this.GameRules.init();
-	if(!this.GameRules.init())
+	//return this.gameRules.init();
+	if(!this.gameRules.init())
 	{
 		return false;
 	}
@@ -194,12 +162,12 @@ ECGame.EngineLib.GameInstance.prototype._update = function _update(inTime)
 	
 	try
 	{
-		aveDt = _this_.GameTimer.update(inTime);
+		aveDt = _this_.gameTimer.update(inTime);
 		
 		//TODO make update list an event system for onUpdate
-		for(i = 0; i < _this_.UpdateOrder.length; ++i)
+		for(i = 0; i < _this_.updateOrder.length; ++i)
 		{
-			var current = _this_.UpdateOrder[i];
+			var current = _this_.updateOrder[i];
 			if(current.isUpdating())//TODO they can return if they are not, meaning we can/should get rid of this
 			{
 				current.update(aveDt);
@@ -208,7 +176,7 @@ ECGame.EngineLib.GameInstance.prototype._update = function _update(inTime)
 		
 		if(!ECGame.Settings.Network.isServer)
 		{
-			_this_.Graphics.render(_this_.GameRules);
+			_this_.graphics.render(_this_.gameRules);
 		}
 	}
 	catch(error)
@@ -221,7 +189,16 @@ ECGame.EngineLib.GameInstance.prototype._update = function _update(inTime)
 	{
 		requestAnimFrame(_this_._update);
 	}
-	//else shut down?
+	else //shut down
+	{
+		//TODO clean everything?
+		
+		if(ECGame.Settings.Network.isServer)
+		{
+			//TODO send reset/quit message to clients
+			process.exit(0);
+		}
+	}
 };
 
 
@@ -229,10 +206,4 @@ ECGame.EngineLib.GameInstance.prototype._update = function _update(inTime)
 ECGame.EngineLib.GameInstance.prototype.exit = function exit()
 {
 	this._running = false;
-	//TODO clean everything?
-	if(ECGame.Settings.Network.isServer)
-	{
-		//TODO send reset/quit message to clients
-		process.exit(0);
-	}
 };

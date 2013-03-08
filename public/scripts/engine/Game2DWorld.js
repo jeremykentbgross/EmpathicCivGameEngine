@@ -61,7 +61,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 			
 			this._physics = ECGame.EngineLib.createGame2DPhysics();
 			this._physics.init(this._mapsize, inMinPhysicsPartitionSize);
-			ECGame.instance.UpdateOrder.push(this._physics);//TODO make it join a physics updater, not this
+			ECGame.instance.updateOrder.push(this._physics);//TODO make it join a physics updater, not this
 			
 			//setup default tileset consisting of nothing but the placeholder
 			var tileset = ECGame.EngineLib.Game2DTileSet.create();
@@ -89,7 +89,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 			//TODO Only needed to debug draw cursor which should likely be elsewhere?
 			if(!ECGame.Settings.Network.isServer)
 			{
-				ECGame.instance.Input.registerListener('Input', this);
+				ECGame.instance.input.registerListener('Input', this);
 			}
 		},
 

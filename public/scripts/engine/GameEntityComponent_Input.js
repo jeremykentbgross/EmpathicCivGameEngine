@@ -111,7 +111,7 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 			owner.registerListener('RemovedFromWorld', this);
 			if(inEvent.entity.getWorld())
 			{
-				ECGame.instance.Input.registerListener('Input', this);
+				ECGame.instance.input.registerListener('Input', this);
 			}
 		},
 
@@ -122,17 +122,17 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 			//unregister for events
 			owner.deregisterListener('AddedToWorld', this);
 			owner.deregisterListener('RemovedFromWorld', this);
-			ECGame.instance.Input.deregisterListener('Input', this);
+			ECGame.instance.input.deregisterListener('Input', this);
 		},
 		
 		onAddedToWorld : function onAddedToWorld(inEvent)
 		{
-			ECGame.instance.Input.registerListener('Input', this);
+			ECGame.instance.input.registerListener('Input', this);
 		},
 		
 		onRemovedFromWorld : function onRemovedFromWorld(inEvent)
 		{
-			ECGame.instance.Input.deregisterListener('Input', this);
+			ECGame.instance.input.deregisterListener('Input', this);
 		},
 		
 		destroy : function destroy()
