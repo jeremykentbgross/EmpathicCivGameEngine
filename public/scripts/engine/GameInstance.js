@@ -35,7 +35,7 @@ ECGame.EngineLib.GameInstance.prototype.run = function run()
 	{
 		if(this._init())
 		{
-			this.gameTimer.start();
+			this.timer.start();
 		}
 		else
 		{
@@ -56,7 +56,7 @@ ECGame.EngineLib.GameInstance.prototype._init = function _init()
 	this._running = true;
 	
 	//Init Timer
-	this.gameTimer = ECGame.EngineLib.Timer.create();
+	this.timer = ECGame.EngineLib.Timer.create();
 	
 	//TODO make this ordered event listeners?
 	this.updateOrder = [];
@@ -80,11 +80,11 @@ ECGame.EngineLib.GameInstance.prototype._init = function _init()
 	//Create gamerules
 	if(ECGame.Lib.GameRules !== undefined)
 	{
-		this.gameRules = ECGame.Lib.GameRules.create();
+		this.rules = ECGame.Lib.GameRules.create();
 	}
 	else
 	{
-		this.gameRules = ECGame.EngineLib.GameRulesBase.create();
+		this.rules = ECGame.EngineLib.GameRulesBase.create();
 	}
 	
 	if(ECGame.Settings.Network.isServer)
@@ -140,8 +140,8 @@ ECGame.EngineLib.GameInstance.prototype._init = function _init()
 		this.updateOrder.push(this.soundSystem);
 	}
 	
-	//return this.gameRules.init();
-	if(!this.gameRules.init())
+	//return this.rules.init();
+	if(!this.rules.init())
 	{
 		return false;
 	}
@@ -169,7 +169,7 @@ ECGame.EngineLib.GameInstance.prototype.update = function update(inDt)
 		
 		if(!ECGame.Settings.Network.isServer)
 		{
-			this.graphics.render(this.gameRules);
+			this.graphics.render(this.rules);
 		}
 	}
 	catch(error)

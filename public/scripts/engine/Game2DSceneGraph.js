@@ -84,7 +84,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DC
 	this._mySceneTree.walk(
 		function(item)
 		{
-			var frameCount = ECGame.instance.gameTimer.getFrameCount();
+			var frameCount = ECGame.instance.timer.getFrameCount();
 			
 			if(frameCount > item.lastFrameDrawn)
 			{

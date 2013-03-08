@@ -20,7 +20,7 @@
 */
 
 
-ECGame.EngineLib.Timer = function GameTimer(){};
+ECGame.EngineLib.Timer = function Timer(){};
 ECGame.EngineLib.Timer.prototype.constructor = ECGame.EngineLib.Timer;
 ECGame.EngineLib.Timer.create = function create()
 {
@@ -78,7 +78,7 @@ ECGame.EngineLib.Timer.prototype.start = function start()
 
 ECGame.EngineLib.Timer.prototype._onAnimFrame = function _onAnimFrame(inTime)
 {
-	ECGame.instance.gameTimer.update(inTime);
+	ECGame.instance.timer.update(inTime);
 };
 
 
