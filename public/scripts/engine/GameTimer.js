@@ -19,94 +19,93 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-ECGame.EngineLib.createGameTimer = function(instance, PRIVATE)
+
+ECGame.EngineLib.Timer = function GameTimer(){};
+ECGame.EngineLib.Timer.prototype.constructor = ECGame.EngineLib.Timer;
+ECGame.EngineLib.Timer.create = function create()
 {
-	instance = instance || {};
-	PRIVATE = PRIVATE || {};
+	return new ECGame.EngineLib.Timer();
+};
+
+
+
+ECGame.EngineLib.Timer.prototype.init = function init()
+{
+	var i;
+		
+	this._lastFrameTimeStamp = 0;
+	this._frameCount = 0;
+	this._frameTimes = [];
+	
+	for(i = 0; i < 64; ++i)
+	{
+		this._frameTimes[i] = 16;
+	}
+		
+	this._lastFrameTimeStamp = (new Date()).getTime();
+};
+
+
+
+ECGame.EngineLib.Timer.prototype.update = function update(inTime)
+{
+	var i;
+	
+	//prefer the browser presented inTime if it is availible, but fall back to getting it if its not there
+	if(inTime === undefined)
+	{
+		//note must new it as it keeps the inTime it was created
+		inTime = (new Date()).getTime();//TODO use .now
+	}
+	
+	this._dt = Math.max(0, inTime - this._lastFrameTimeStamp);
+	this._lastFrameTimeStamp = inTime;
+	++this._frameCount;
+	
+	//TODO handle HUGE dt's (by pausing?)
+	
+	this._frameTimes[this._frameCount % this._frameTimes.length] = this._dt;
+	this._aveDt = 0;
+	for(i = 0; i < this._frameTimes.length; ++i)
+	{
+		this._aveDt += this._frameTimes[i];
+	}
+	this._aveDt /= this._frameTimes.length;
+	
+	//TODO update accumulators and fire timer events
 	
 	if(ECGame.Settings.DEBUG)
 	{
-		ECGame.EngineLib.addDebugInfo('GameTimer', instance, PRIVATE);
+		var frameStats = [
+			"Average FPS: " + (1000 / this._aveDt).toFixed(3),
+			"Average MS/F: " + this._aveDt.toFixed(3),
+			"Last Frame Time: " + this._dt,
+			"Frame Count: " + this._frameCount
+		];
+		if(ECGame.Settings.Debug.FrameStats_Draw && !ECGame.Settings.Network.isServer)
+		{
+			ECGame.instance.graphics.drawDebugText(frameStats[0], ECGame.Settings.Debug.FrameStats_DrawColor);
+			ECGame.instance.graphics.drawDebugText(frameStats[1], ECGame.Settings.Debug.FrameStats_DrawColor);
+			ECGame.instance.graphics.drawDebugText(frameStats[2], ECGame.Settings.Debug.FrameStats_DrawColor);
+			ECGame.instance.graphics.drawDebugText(frameStats[3], ECGame.Settings.Debug.FrameStats_DrawColor);
+		}
+		if(ECGame.Settings.Debug.FrameStats_Print)
+		{
+			console.log(
+				'\n' + frameStats[0] +
+				'\n' + frameStats[1] +
+				'\n' + frameStats[2] +
+				'\n' + frameStats[3]
+			);
+		}
 	}
 	
-	instance.init = function()
-	{
-		var i;
-		
-		PRIVATE.lastFrameTimeStamp = 0;
-		PRIVATE.frameCount = 0;
-		PRIVATE.frameTimes = [];
-		
-		for(i = 0; i < 64; ++i)
-		{
-			PRIVATE.frameTimes[i] = 16;
-		}
-			
-		PRIVATE.lastFrameTimeStamp = (new Date()).getTime();
-	};
-	
-	instance.update = function(inTime)
-	{
-		var i;
-		
-		//prefer the browser presented inTime if it is availible, but fall back to getting it if its not there
-		if(inTime === undefined)
-		{
-			//note must new it as it keeps the inTime it was created
-			inTime = (new Date()).getTime();//TODO use .now
-		}
-		
-		PRIVATE.dt = Math.max(0, inTime - PRIVATE.lastFrameTimeStamp);
-		PRIVATE.lastFrameTimeStamp = inTime;
-		++PRIVATE.frameCount;
-		
-		//TODO handle HUGE dt's (by pausing?)
-		
-		PRIVATE.frameTimes[PRIVATE.frameCount % PRIVATE.frameTimes.length] = PRIVATE.dt;
-		PRIVATE.aveDt = 0;
-		for(i = 0; i < PRIVATE.frameTimes.length; ++i)
-		{
-			PRIVATE.aveDt += PRIVATE.frameTimes[i];
-		}
-		PRIVATE.aveDt /= PRIVATE.frameTimes.length;
-		
-		//TODO update accumulators and fire timer events
-		
-		if(ECGame.Settings.DEBUG)
-		{
-			var frameStats = [
-				"Average FPS: " + (1000 / PRIVATE.aveDt).toFixed(3),
-				"Average MS/F: " + PRIVATE.aveDt.toFixed(3),
-				"Last Frame Time: " + PRIVATE.dt,
-				"Frame Count: " + PRIVATE.frameCount
-			];
-			if(ECGame.Settings.Debug.FrameStats_Draw && !ECGame.Settings.Network.isServer)
-			{
-				ECGame.instance.graphics.drawDebugText(frameStats[0], ECGame.Settings.Debug.FrameStats_DrawColor);
-				ECGame.instance.graphics.drawDebugText(frameStats[1], ECGame.Settings.Debug.FrameStats_DrawColor);
-				ECGame.instance.graphics.drawDebugText(frameStats[2], ECGame.Settings.Debug.FrameStats_DrawColor);
-				ECGame.instance.graphics.drawDebugText(frameStats[3], ECGame.Settings.Debug.FrameStats_DrawColor);
-			}
-			if(ECGame.Settings.Debug.FrameStats_Print)
-			{
-				console.log(
-					'\n' + frameStats[0] +
-					'\n' + frameStats[1] +
-					'\n' + frameStats[2] +
-					'\n' + frameStats[3]
-				);
-			}
-		}
-		
-		return PRIVATE.aveDt;
-	};
-	
-	instance.getFrameCount = function()
-	{
-		return PRIVATE.frameCount;
-	};
-	
-	//TODO register timer events / accumulators
-	
-	return instance;
+	return this._aveDt;
+};
+
+
+
+ECGame.EngineLib.Timer.prototype.getFrameCount = function getFrameCount()
+{
+	return this._frameCount;
 };

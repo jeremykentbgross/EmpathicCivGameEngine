@@ -56,7 +56,7 @@ ECGame.EngineLib.GameInstance.prototype._init = function _init()
 	this._running = true;
 	
 	//Init Timer
-	this.gameTimer = ECGame.EngineLib.createGameTimer();	//////////////////////////////////////////////
+	this.gameTimer = ECGame.EngineLib.Timer.create();
 	this.gameTimer.init(this);
 	
 	//TODO make this ordered event listeners?
