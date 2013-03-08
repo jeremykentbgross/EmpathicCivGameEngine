@@ -146,7 +146,7 @@ if(ECGame.Settings.Network.isMultiplayer)
 //	if(ECGame.Settings.RUN_UNIT_TESTS)
 //		ECGame.unitTests.runTests();
 	//RUN GAME scripts
-	ECGame.instance = ECGame.EngineLib.createGameFrameWork();
+	ECGame.instance = ECGame.EngineLib.GameInstance.create();
 	ECGame.instance.run();
 }
 //Web Server////////////////////////////////////////////////////////

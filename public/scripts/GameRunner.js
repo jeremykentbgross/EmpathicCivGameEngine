@@ -24,5 +24,5 @@ if(ECGame.Settings.RUN_UNIT_TESTS)
 	ECGame.unitTests.runTests();
 }
 	
-ECGame.instance = ECGame.EngineLib.createGameFrameWork();
+ECGame.instance = ECGame.EngineLib.GameInstance.create();
 ECGame.instance.run();
