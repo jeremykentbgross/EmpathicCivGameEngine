@@ -19,12 +19,12 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.Animation2DFrame = GameEngineLib.Class.create({
+ECGame.EngineLib.Animation2DFrame = ECGame.EngineLib.Class.create({
 	Constructor : function Animation2DFrame()
 	{
-		this._sourceRect = new GameEngineLib.Game2DAABB();
-		this._origin = new GameEngineLib.Game2DPoint();
-		this._AABB = new GameEngineLib.Game2DAABB(
+		this._sourceRect = new ECGame.EngineLib.Game2DAABB();
+		this._origin = new ECGame.EngineLib.Game2DPoint();
+		this._AABB = new ECGame.EngineLib.Game2DAABB(
 			-this._origin.myX,
 			-this._origin.myY,
 			this._sourceRect.myWidth,
@@ -45,7 +45,7 @@ GameEngineLib.Animation2DFrame = GameEngineLib.Class.create({
 		{
 			this._sourceRect.copyFrom(inSrcRect);
 			this._origin.copyFrom(inOrigin);
-			this._AABB = new GameEngineLib.Game2DAABB(
+			this._AABB = new ECGame.EngineLib.Game2DAABB(
 				-this._origin.myX,
 				-this._origin.myY,
 				this._sourceRect.myWidth,
@@ -81,11 +81,11 @@ GameEngineLib.Animation2DFrame = GameEngineLib.Class.create({
 			var dest, size, halfSize;
 			
 			dest = inPosition.sub(this._origin).sub(inCameraRect.getLeftTop());
-			size = GameSystemVars.Debug.Sprite_Origin_Size;
-			halfSize = GameSystemVars.Debug.Sprite_Origin_Size / 2;
+			size = ECGame.Settings.Debug.Sprite_Origin_Size;
+			halfSize = ECGame.Settings.Debug.Sprite_Origin_Size / 2;
 			
 			//draw AABB
-			inCanvas2DContext.strokeStyle = GameSystemVars.Debug.Sprite_AABB_DrawColor;
+			inCanvas2DContext.strokeStyle = ECGame.Settings.Debug.Sprite_AABB_DrawColor;
 			inCanvas2DContext.strokeRect(
 				dest.myX,
 				dest.myY,
@@ -94,7 +94,7 @@ GameEngineLib.Animation2DFrame = GameEngineLib.Class.create({
 			);
 			
 			//draw Origin
-			inCanvas2DContext.fillStyle = GameSystemVars.Debug.Sprite_Origin_DrawColor;
+			inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Sprite_Origin_DrawColor;
 			dest = dest.add(this._origin);
 			inCanvas2DContext.fillRect(
 				dest.myX - halfSize,

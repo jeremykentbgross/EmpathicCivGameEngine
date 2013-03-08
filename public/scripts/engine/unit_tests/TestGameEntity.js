@@ -19,19 +19,19 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameUnitTests.registerTest(
+ECGame.unitTests.registerTest(
 	'GameEntity',
 	function()
 	{
-		var entity = GameEngineLib.GameEntity.create();
+		var entity = ECGame.EngineLib.GameEntity.create();
 		entity.addedToWorld(6);
 		
-		var TestComponent = GameEngineLib.Class.create({
+		var TestComponent = ECGame.EngineLib.Class.create({
 			Constructor : function TestComponent()
 			{
 				this.GameEntityComponent();
 			},
-			Parents : [GameEngineLib.GameEntityComponent],
+			Parents : [ECGame.EngineLib.GameEntityComponent],
 			flags : {},
 			ChainUp : [],
 			ChainDown : [],
@@ -47,7 +47,7 @@ GameUnitTests.registerTest(
 				
 				onRemovedFromEntity : function onRemovedFromEntity(inEvent)
 				{
-					gameAssert(
+					ECGame.log.assert(
 						inEvent.entity === this._owner
 						,"Didn't belong to this entity!"
 					);
@@ -64,7 +64,7 @@ GameUnitTests.registerTest(
 				
 				onRemovedFromWorld : function onRemovedFromWorld(inEvent)
 				{
-					gameAssert(this._containingWorld === inEvent.world, "Removing from wrong world");
+					ECGame.log.assert(this._containingWorld === inEvent.world, "Removing from wrong world");
 					this._removedWorld = true;
 					this._containingWorld = null;
 				},
@@ -78,7 +78,7 @@ GameUnitTests.registerTest(
 		var component1 = TestComponent.create();
 		entity.addComponent(component1);
 		
-		gameAssert(
+		ECGame.log.assert(
 			component1.added === entity
 			&& entity === component1._owner
 			&& component1._containingWorld === 6
@@ -86,14 +86,14 @@ GameUnitTests.registerTest(
 		);
 		
 		entity.addedToWorld(7);
-		gameAssert(
+		ECGame.log.assert(
 			component1._removedWorld
 			&& component1._containingWorld === 7,
 			"World not set correctly."
 		);
 		
 		entity.removeComponent(component1);
-		gameAssert(
+		ECGame.log.assert(
 			component1.added === null
 			&& null === component1._owner 
 			&& component1._containingWorld === null,

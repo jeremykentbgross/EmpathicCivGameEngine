@@ -23,11 +23,11 @@
 //TODO try to increase the precision of the coder and model(s)
 //TODO rename GameSerializer_Binary? actually make it not just binary in the same ser!
 
-GameEngineLib.GameBinarySerializer = function GameBinarySerializer(){};
-GameEngineLib.GameBinarySerializer.prototype.constructor = GameEngineLib.GameBinarySerializer;
-GameEngineLib.GameBinarySerializer.create = function create()
+ECGame.EngineLib.GameBinarySerializer = function GameBinarySerializer(){};
+ECGame.EngineLib.GameBinarySerializer.prototype.constructor = ECGame.EngineLib.GameBinarySerializer;
+ECGame.EngineLib.GameBinarySerializer.create = function create()
 {
-	return new GameEngineLib.GameBinarySerializer();
+	return new ECGame.EngineLib.GameBinarySerializer();
 };
 
 /*
@@ -40,32 +40,32 @@ Flags =
 	//BINARY?, UI_GEN, NO_REFS??
 }
 */
-GameEngineLib.GameBinarySerializer.prototype.initWrite = function initWrite(inFlags)
+ECGame.EngineLib.GameBinarySerializer.prototype.initWrite = function initWrite(inFlags)
 {
 	this._isWriting = true;
 	this._init(inFlags);
 };
 
-GameEngineLib.GameBinarySerializer.prototype.initRead = function initRead(inFlags, inData)
+ECGame.EngineLib.GameBinarySerializer.prototype.initRead = function initRead(inFlags, inData)
 {
 	this._isWriting = false;
 	this._init(inFlags);
 	this._compressor.setString(inData);
 };
 
-GameEngineLib.GameBinarySerializer.prototype._init = function _init(inFlags)
+ECGame.EngineLib.GameBinarySerializer.prototype._init = function _init(inFlags)
 {
 	this._net = inFlags.NET;
 	this._dummyMode = inFlags.DUMMY_MODE;
 	//TODO should this really be created every time?? !!likely not!!! It is being created all the time!!
-	this._compressor = GameEngineLib.createGameArithmeticCompression();
-	this._integerRangeModel = GameEngineLib.
+	this._compressor = ECGame.EngineLib.createGameArithmeticCompression();
+	this._integerRangeModel = ECGame.EngineLib.
 		GameArithmeticCompressionModels.
 		createEvenProbabilityIntegerRangeModel();
 };
 
 
-GameEngineLib.GameBinarySerializer.prototype.isNet = function isNet()
+ECGame.EngineLib.GameBinarySerializer.prototype.isNet = function isNet()
 {
 	return this._net;
 };
@@ -99,7 +99,7 @@ dataDesc = [
 	},
 ]
 */
-GameEngineLib.GameBinarySerializer.prototype.serializeObject = function serializeObject(inObject, inDataFormat)
+ECGame.EngineLib.GameBinarySerializer.prototype.serializeObject = function serializeObject(inObject, inDataFormat)
 {
 	var i, j, 
 		arrayLength,
@@ -177,7 +177,7 @@ GameEngineLib.GameBinarySerializer.prototype.serializeObject = function serializ
 };
 
 
-GameEngineLib.GameBinarySerializer.prototype.serializeGameObjectRef = function serializeGameObjectRef(value)
+ECGame.EngineLib.GameBinarySerializer.prototype.serializeGameObjectRef = function serializeGameObjectRef(value)
 {
 	var readResult,
 		objectHeaderFormat,
@@ -187,7 +187,7 @@ GameEngineLib.GameBinarySerializer.prototype.serializeGameObjectRef = function s
 	
 	if(!readResult)
 	{
-		readResult = new GameEngineLib.GameObjectRef();
+		readResult = new ECGame.EngineLib.GameObjectRef();
 	}
 	
 	objectHeaderFormat =	//TODO put in shared place (like the GameObjectRef) as it is also used in Network system code!
@@ -197,7 +197,7 @@ GameEngineLib.GameBinarySerializer.prototype.serializeGameObjectRef = function s
 			type : 'int',
 			net : true,
 			min : 0,
-			max : GameEngineLib.Class.getInstanceRegistry().getMaxID()
+			max : ECGame.EngineLib.Class.getInstanceRegistry().getMaxID()
 		},
 		{
 			name : 'instanceID',
@@ -225,7 +225,7 @@ GameEngineLib.GameBinarySerializer.prototype.serializeGameObjectRef = function s
 };
 
 
-GameEngineLib.GameBinarySerializer.prototype.serializeBool = function serializeBool(value)
+ECGame.EngineLib.GameBinarySerializer.prototype.serializeBool = function serializeBool(value)
 {
 	var readResult = value;
 	
@@ -247,7 +247,7 @@ GameEngineLib.GameBinarySerializer.prototype.serializeBool = function serializeB
 	return value;
 };
 
-GameEngineLib.GameBinarySerializer.prototype.serializeInt = function serializeInt(value, min, max)
+ECGame.EngineLib.GameBinarySerializer.prototype.serializeInt = function serializeInt(value, min, max)
 {
 	var readResult = value;
 	
@@ -269,7 +269,7 @@ GameEngineLib.GameBinarySerializer.prototype.serializeInt = function serializeIn
 	return value;
 };
 
-GameEngineLib.GameBinarySerializer.prototype.serializeFloat = function serializeFloat(value, min, max, precision)
+ECGame.EngineLib.GameBinarySerializer.prototype.serializeFloat = function serializeFloat(value, min, max, precision)
 {
 	precision = Math.pow(10, precision);
 	
@@ -327,7 +327,7 @@ GameEngineLib.GameBinarySerializer.prototype.serializeFloat = function serialize
 };
 
 
-GameEngineLib.GameBinarySerializer.prototype.serializeString = function serializeString(value)
+ECGame.EngineLib.GameBinarySerializer.prototype.serializeString = function serializeString(value)
 {
 	var readResult = value;
 	var charIndex;
@@ -369,7 +369,7 @@ GameEngineLib.GameBinarySerializer.prototype.serializeString = function serializ
 	return value;
 };
 
-GameEngineLib.GameBinarySerializer.prototype.serializePoint2D = function serializePoint2D(value, min, max)
+ECGame.EngineLib.GameBinarySerializer.prototype.serializePoint2D = function serializePoint2D(value, min, max)
 {
 	var readResult = value.clone();
 	
@@ -384,22 +384,22 @@ GameEngineLib.GameBinarySerializer.prototype.serializePoint2D = function seriali
 	return value;
 };
 
-GameEngineLib.GameBinarySerializer.prototype.getString = function getString()
+ECGame.EngineLib.GameBinarySerializer.prototype.getString = function getString()
 {
 	return this._compressor.getString();
 };
 
-GameEngineLib.GameBinarySerializer.prototype.isReading = function isReading()
+ECGame.EngineLib.GameBinarySerializer.prototype.isReading = function isReading()
 {
 	return !this._isWriting;
 };
 
-GameEngineLib.GameBinarySerializer.prototype.setDummyMode = function setDummyMode(inIsDummyMode)
+ECGame.EngineLib.GameBinarySerializer.prototype.setDummyMode = function setDummyMode(inIsDummyMode)
 {
 	this._dummyMode = inIsDummyMode;
 };
 
-GameEngineLib.GameBinarySerializer.prototype.getDummyMode = function getDummyMode()
+ECGame.EngineLib.GameBinarySerializer.prototype.getDummyMode = function getDummyMode()
 {
 	return this._dummyMode;
 };

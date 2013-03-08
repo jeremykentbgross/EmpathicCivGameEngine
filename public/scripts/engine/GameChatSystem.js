@@ -22,7 +22,7 @@
 //TODO fade chat container in/out on activity or inactivity
 //http://dojotoolkit.org/documentation/tutorials/1.7/animation/
 //http://dojotoolkit.org/documentation/tutorials/1.7/effects/
-GameEngineLib.ChatSystem = GameEngineLib.Class.create({
+ECGame.EngineLib.ChatSystem = ECGame.EngineLib.Class.create({
 	Constructor : function ChatSystem()
 	{
 		this._jojoDom = null;
@@ -148,15 +148,15 @@ GameEngineLib.ChatSystem = GameEngineLib.Class.create({
 			
 			/////////////////////////////////////////////////////////
 			//Register to listen to messages from the server
-			GameInstance.Network.registerListener(
+			ECGame.instance.Network.registerListener(
 				'ConnectedToServer',
 				this
 			);
-			GameInstance.Network.registerListener(
+			ECGame.instance.Network.registerListener(
 				'DisconnectedFromServer',
 				this
 			);
-			GameInstance.Network.registerListener(
+			ECGame.instance.Network.registerListener(
 				'Msg',
 				this
 			);
@@ -167,7 +167,7 @@ GameEngineLib.ChatSystem = GameEngineLib.Class.create({
 			
 			/////////////////////////////////////////////////////////
 			//Listen to main input
-			GameInstance.Input.registerListener('Input', this);
+			ECGame.instance.Input.registerListener('Input', this);
 			//Listen to main input
 			/////////////////////////////////////////////////////////
 			
@@ -232,14 +232,14 @@ GameEngineLib.ChatSystem = GameEngineLib.Class.create({
 				this._jojoStyle.set(this._domChatContainer, 'pointer-events', '');
 				this._jojoStyle.set(this._domChatContainer, 'border-color', '#00ff00');
 				this._domChatInput.focus();
-				GameInstance.Input.setSupressKeyboardEvents(true);
+				ECGame.instance.Input.setSupressKeyboardEvents(true);
 			}
 			else
 			{
 				this._jojoStyle.set(this._domChatContainer, 'pointer-events', 'none');
 				this._jojoStyle.set(this._domChatContainer, 'border-color', '#0000ff');
 				this._domChatInput.blur();
-				GameInstance.Input.setSupressKeyboardEvents(false);
+				ECGame.instance.Input.setSupressKeyboardEvents(false);
 			}
 		},
 		
@@ -247,7 +247,7 @@ GameEngineLib.ChatSystem = GameEngineLib.Class.create({
 		_onChatSubmit : function _onChatSubmit(event)
 		{
 			event.preventDefault();
-			GameInstance.Network.sendMessage(
+			ECGame.instance.Network.sendMessage(
 				this._domChatInput.value,
 				this//sentListener
 			);

@@ -21,15 +21,15 @@
 
 
 //TODO make server id for smaller messages!!
-GameEngineLib.User = function User(inName, inID)
+ECGame.EngineLib.User = function User(inName, inID)
 {
 	this.userName = inName || "Guest";
-	this.userID = inID || GameEngineLib.User.USER_IDS.GUEST;
+	this.userID = inID || ECGame.EngineLib.User.USER_IDS.GUEST;
 	//TODO use FB id or something in the future
 };
-GameEngineLib.User.prototype.constructor = GameEngineLib.User;
+ECGame.EngineLib.User.prototype.constructor = ECGame.EngineLib.User;
 
-GameEngineLib.User.USER_IDS =
+ECGame.EngineLib.User.USER_IDS =
 {
 	UNUSED : 0
 	,SERVER : 1
@@ -46,21 +46,21 @@ GameEngineLib.User.USER_IDS =
 
 
 
-GameEngineLib.GameNetwork = function GameNetwork()
+ECGame.EngineLib.GameNetwork = function GameNetwork()
 {
-	GameEngineLib.createEventSystem(this);//TODO inherit //TODO make this inheritance when I refactor this file
+	ECGame.EngineLib.createEventSystem(this);//TODO inherit //TODO make this inheritance when I refactor this file
 };
 
-GameEngineLib.GameNetwork.prototype.constructor = GameEngineLib.GameNetwork;
+ECGame.EngineLib.GameNetwork.prototype.constructor = ECGame.EngineLib.GameNetwork;
 
-GameEngineLib.GameNetwork.create = function create()
+ECGame.EngineLib.GameNetwork.create = function create()
 {
-	return new GameEngineLib.GameNetwork();
+	return new ECGame.EngineLib.GameNetwork();
 };
 
 
 		
-GameEngineLib.GameNetwork.prototype.init = function init()
+ECGame.EngineLib.GameNetwork.prototype.init = function init()
 {
 	this._maxItemsPerMessage = 255;
 	this._objectHeaderFormat =	//TODO put in shared place (like the GameObjectRef)
@@ -70,7 +70,7 @@ GameEngineLib.GameNetwork.prototype.init = function init()
 			type : 'int',
 			net : true,
 			min : 0,
-			max : GameEngineLib.Class.getInstanceRegistry().getMaxID()
+			max : ECGame.EngineLib.Class.getInstanceRegistry().getMaxID()
 		},
 		{
 			name : 'instanceID',
@@ -87,7 +87,7 @@ GameEngineLib.GameNetwork.prototype.init = function init()
 			type : 'int',
 			net : true,
 			min : 0,
-			max : GameEngineLib.User.USER_IDS.MAX_EVER
+			max : ECGame.EngineLib.User.USER_IDS.MAX_EVER
 		},
 		{
 			name : 'numObjects',
@@ -104,17 +104,17 @@ GameEngineLib.GameNetwork.prototype.init = function init()
 	this._messageHeader = {};
 	this._objectHeader = {};
 	
-	this._serializer = GameEngineLib.GameBinarySerializer.create();
+	this._serializer = ECGame.EngineLib.GameBinarySerializer.create();
 	
-	if(GameSystemVars.Network.isServer)
+	if(ECGame.Settings.Network.isServer)
 	{
-		if(GameSystemVars.Network.GamePort !== null)
+		if(ECGame.Settings.Network.GamePort !== null)
 		{
-			this._listenSocket = GameEngineServer.socketio.listen(GameSystemVars.Network.GamePort);
+			this._listenSocket = ECGame.Webserver.socketio.listen(ECGame.Settings.Network.GamePort);
 		}
 		else
 		{
-			this._listenSocket = GameEngineServer.listenSocket;
+			this._listenSocket = ECGame.Webserver.listenSocket;
 		}
 		
 		//TODO proper configure:
@@ -126,10 +126,10 @@ GameEngineLib.GameNetwork.prototype.init = function init()
 	}
 	else
 	{
-		if(GameSystemVars.Network.GamePort !== null)
+		if(ECGame.Settings.Network.GamePort !== null)
 		{
 			//Note may need to be sliced to last '/' in the future
-			var address = document.URL.slice(0, -1) +  ':' + GameSystemVars.Network.GamePort;
+			var address = document.URL.slice(0, -1) +  ':' + ECGame.Settings.Network.GamePort;
 			this._socket = io.connect(address);
 		}
 		else
@@ -155,12 +155,12 @@ GameEngineLib.GameNetwork.prototype.init = function init()
 
 
 
-GameEngineLib.GameNetwork.prototype._onClientConnected = function _onClientConnected(inConnectedSocket)
+ECGame.EngineLib.GameNetwork.prototype._onClientConnected = function _onClientConnected(inConnectedSocket)
 {
-	var _this_ = GameInstance.Network;
+	var _this_ = ECGame.instance.Network;
 	
 	//TODO unique guest name?
-	inConnectedSocket.gameUser = new GameEngineLib.User("Guest", GameEngineLib.User.USER_IDS.GUEST);
+	inConnectedSocket.gameUser = new ECGame.EngineLib.User("Guest", ECGame.EngineLib.User.USER_IDS.GUEST);
 	
 	//TODO event
 	inConnectedSocket.on('id', _this_._onIdRecv);
@@ -177,15 +177,15 @@ GameEngineLib.GameNetwork.prototype._onClientConnected = function _onClientConne
 	//let new connection know about all the existing objects!!
 	var allRelevantObjects;
 	allRelevantObjects = [];
-	GameEngineLib.Class.getInstanceRegistry().forAll(
+	ECGame.EngineLib.Class.getInstanceRegistry().forAll(
 		function(inClass)
 		{
 			inClass.getInstanceRegistry().forAll(
 				function(inObject)
 				{
-					if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+					if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 					{
-						GameEngineLib.logger.info("Queueing Network Create for New Connection: " + inClass.getName() + ' : ' + inObject.getID());
+						ECGame.log.info("Queueing Network Create for New Connection: " + inClass.getName() + ' : ' + inObject.getID());
 					}
 					allRelevantObjects.push(inObject);
 				}
@@ -198,32 +198,32 @@ GameEngineLib.GameNetwork.prototype._onClientConnected = function _onClientConne
 
 
 
-GameEngineLib.GameNetwork.prototype._onClientDisconnected = function _onClientDisconnected()
+ECGame.EngineLib.GameNetwork.prototype._onClientDisconnected = function _onClientDisconnected()
 {
 	//this == socket disconnecting!
-	var _this_ = GameInstance.Network;
+	var _this_ = ECGame.instance.Network;
 	
 	//TODO store their gameUser for reconnect until later (if supported)
 	
 	_this_._listenSocket.sockets.emit('msg', "User Disconnected: " + this.gameUser.userName);
 	
 	//event to remove them (tell everyone they are gone) IFF it was an identified user.
-	if(GameEngineLib.User.USER_IDS.GUEST !== this.gameUser.userID)
+	if(ECGame.EngineLib.User.USER_IDS.GUEST !== this.gameUser.userID)
 	{
-		_this_.onEvent(new GameEngineLib.GameEvent_ClientDisconnected(this.gameUser));
+		_this_.onEvent(new ECGame.EngineLib.GameEvent_ClientDisconnected(this.gameUser));
 	}
 };
 
 
 
-GameEngineLib.GameNetwork.prototype.sendMessage = function sendMessage(inMsg, inSentListener)
+ECGame.EngineLib.GameNetwork.prototype.sendMessage = function sendMessage(inMsg, inSentListener)
 {
-	if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+	if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 	{
-		GameEngineLib.logger.info("Net Send Msg: " + inMsg);
+		ECGame.log.info("Net Send Msg: " + inMsg);
 	}
 	
-	if(GameSystemVars.Network.isServer)
+	if(ECGame.Settings.Network.isServer)
 	{
 		this._listenSocket.sockets.emit('msg', inMsg);
 	}
@@ -232,30 +232,30 @@ GameEngineLib.GameNetwork.prototype.sendMessage = function sendMessage(inMsg, in
 		this._socket.emit('msg', inMsg);
 		if(inSentListener && inSentListener.onSentMessage)
 		{
-			inSentListener.onSentMessage(GameInstance.localUser.userName + ': ' + inMsg);
+			inSentListener.onSentMessage(ECGame.instance.localUser.userName + ': ' + inMsg);
 		}
 	}
 	else
 	{
 		//TODO queue this for resend when we are connected again?
 		
-		if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+		if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 		{
-			GameEngineLib.logger.info("Can't send message when disconnected.");
+			ECGame.log.info("Can't send message when disconnected.");
 		}
 	}
 };
 
 
 
-GameEngineLib.GameNetwork.prototype._sendData = function _sendData(inData, inSocket/*, inSentListener*/)
+ECGame.EngineLib.GameNetwork.prototype._sendData = function _sendData(inData, inSocket/*, inSentListener*/)
 {
-	if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+	if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 	{
-		GameEngineLib.logger.info("Net Send Data: " + inData);
+		ECGame.log.info("Net Send Data: " + inData);
 	}
 
-	if(GameSystemVars.Network.isServer)
+	if(ECGame.Settings.Network.isServer)
 	{
 		if(inSocket)
 		{
@@ -276,23 +276,23 @@ GameEngineLib.GameNetwork.prototype._sendData = function _sendData(inData, inSoc
 	{
 		//TODO queue this for resend when we are connected again
 		
-		if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+		if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 		{
-			GameEngineLib.logger.info("Can't send data when disconnected.");
+			ECGame.log.info("Can't send data when disconnected.");
 		}
 	}
 };
 
 
 
-GameEngineLib.GameNetwork.prototype._sendObj = function _sendObj(inObjData, inSocket/*, inSentListener*/)
+ECGame.EngineLib.GameNetwork.prototype._sendObj = function _sendObj(inObjData, inSocket/*, inSentListener*/)
 {
-	if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+	if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 	{
-		GameEngineLib.logger.info("Net Send Obj: " + inObjData);
+		ECGame.log.info("Net Send Obj: " + inObjData);
 	}
 
-	if(GameSystemVars.Network.isServer)
+	if(ECGame.Settings.Network.isServer)
 	{
 		if(inSocket)
 		{
@@ -313,26 +313,26 @@ GameEngineLib.GameNetwork.prototype._sendObj = function _sendObj(inObjData, inSo
 	{
 		//TODO queue this for resend when we are connected again
 		
-		if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+		if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 		{
-			GameEngineLib.logger.info("Can't send data when disconnected.");
+			ECGame.log.info("Can't send data when disconnected.");
 		}
 	}
 };
 
 
 
-GameEngineLib.GameNetwork.prototype._onConnectedToServer = function _onConnectedToServer()
+ECGame.EngineLib.GameNetwork.prototype._onConnectedToServer = function _onConnectedToServer()
 {
-	var _this_ = GameInstance.Network;
-	var event = new GameEngineLib.GameEvent_ConnectedToServer();
+	var _this_ = ECGame.instance.Network;
+	var event = new ECGame.EngineLib.GameEvent_ConnectedToServer();
 	
-	if(GameSystemVars.DEBUG /*&& GameSystemVars.Debug.NetworkMessages_Print*/)
+	if(ECGame.Settings.DEBUG /*&& ECGame.Settings.Debug.NetworkMessages_Print*/)
 	{
-		GameEngineLib.logger.info("Connected to Server!");
+		ECGame.log.info("Connected to Server!");
 	}
-	_this_._socket.gameUser = new GameEngineLib.User("Server", GameEngineLib.User.USER_IDS.SERVER);
-	_this_._socket.emit('id', GameInstance.localUser);
+	_this_._socket.gameUser = new ECGame.EngineLib.User("Server", ECGame.EngineLib.User.USER_IDS.SERVER);
+	_this_._socket.emit('id', ECGame.instance.localUser);
 	
 	//TODO change this to be some kind of hand shake or login or **user verification**?
 	
@@ -341,14 +341,14 @@ GameEngineLib.GameNetwork.prototype._onConnectedToServer = function _onConnected
 
 
 
-GameEngineLib.GameNetwork.prototype._onDisconnectedFromServer = function _onDisconnectedFromServer()
+ECGame.EngineLib.GameNetwork.prototype._onDisconnectedFromServer = function _onDisconnectedFromServer()
 {
-	var _this_ = GameInstance.Network;
-	var event = new GameEngineLib.GameEvent_DisconnectedFromServer();
+	var _this_ = ECGame.instance.Network;
+	var event = new ECGame.EngineLib.GameEvent_DisconnectedFromServer();
 	
-	if(GameSystemVars.DEBUG /*&& GameSystemVars.Debug.NetworkMessages_Print*/)
+	if(ECGame.Settings.DEBUG /*&& ECGame.Settings.Debug.NetworkMessages_Print*/)
 	{
-		GameEngineLib.logger.info("Lost Server!");
+		ECGame.log.info("Lost Server!");
 	}
 	
 	_this_.onEvent(event);
@@ -356,75 +356,75 @@ GameEngineLib.GameNetwork.prototype._onDisconnectedFromServer = function _onDisc
 
 
 
-GameEngineLib.GameNetwork.prototype._onIdRecv = function _onIdRecv(inUser)//TODO rename inUserID
+ECGame.EngineLib.GameNetwork.prototype._onIdRecv = function _onIdRecv(inUser)//TODO rename inUserID
 {
-	var _this_ = GameInstance.Network;
+	var _this_ = ECGame.instance.Network;
 	
-	if(GameSystemVars.Network.isServer)
+	if(ECGame.Settings.Network.isServer)
 	{
 		if(
 			//user is already renamed from guest
-			this.gameUser.userID !== GameEngineLib.User.USER_IDS.GUEST	//TODO handle reconnects!
+			this.gameUser.userID !== ECGame.EngineLib.User.USER_IDS.GUEST	//TODO handle reconnects!
 			//they claim to be the server
-			|| inUser.userID === GameEngineLib.User.USER_IDS.SERVER
+			|| inUser.userID === ECGame.EngineLib.User.USER_IDS.SERVER
 			//|| //that user is already connected 
 			//|| //this user not expected
 		)
 		{
-			GameEngineLib.logger.info("Hacker ID ignored: " + inUser.userName);
+			ECGame.log.info("Hacker ID ignored: " + inUser.userName);
 			//TODO HACKER DISCONNECT THEM!
 			return;
 		}
 		
-		if(GameSystemVars.DEBUG /*&& GameSystemVars.Debug.NetworkMessages_Print*/)
+		if(ECGame.Settings.DEBUG /*&& ECGame.Settings.Debug.NetworkMessages_Print*/)
 		{
-			GameEngineLib.logger.info("Identified User: " + inUser.userName);
+			ECGame.log.info("Identified User: " + inUser.userName);
 		}
 		this.broadcast.emit('msg', this.gameUser.userName + " identified as " + inUser.userName);
 		
 		this.gameUser.userName = inUser.userName;
-		if(inUser.userID === GameEngineLib.User.USER_IDS.NEW_USER)
+		if(inUser.userID === ECGame.EngineLib.User.USER_IDS.NEW_USER)
 		{
 			//TODO MAX_EVER! Reuse some of these with 'secret keys'
-			this.gameUser.userID = inUser.userID = ++(GameEngineLib.User.USER_IDS.CURRENT_MAX);
+			this.gameUser.userID = inUser.userID = ++(ECGame.EngineLib.User.USER_IDS.CURRENT_MAX);
 			this.emit('id', this.gameUser);
 			
-			GameEngineLib.logger.info("New UserID FOR: " + inUser.userName + ' : ' + this.gameUser.userID);
+			ECGame.log.info("New UserID FOR: " + inUser.userName + ' : ' + this.gameUser.userID);
 		}
 		else
 		{
 			//TODO see if this user was really here before!
 			this.gameUser.userID = inUser.userID;
-			GameEngineLib.logger.info("New userid FROM: " + inUser.userName + ' : ' + this.gameUser.userID);
+			ECGame.log.info("New userid FROM: " + inUser.userName + ' : ' + this.gameUser.userID);
 		}
 		
-		_this_.onEvent(new GameEngineLib.GameEvent_IdentifiedUser(inUser));
+		_this_.onEvent(new ECGame.EngineLib.GameEvent_IdentifiedUser(inUser));
 	}
 	else
 	{
-		GameInstance.localUser.userName = inUser.userName;
-		GameInstance.localUser.userID = inUser.userID;
-		if(GameSystemVars.DEBUG /*&& GameSystemVars.Debug.NetworkMessages_Print*/)
+		ECGame.instance.localUser.userName = inUser.userName;
+		ECGame.instance.localUser.userID = inUser.userID;
+		if(ECGame.Settings.DEBUG /*&& ECGame.Settings.Debug.NetworkMessages_Print*/)
 		{
-			GameEngineLib.logger.info("Server Re-ID's me as: " + inUser.userName + ' : ' + inUser.userID);
+			ECGame.log.info("Server Re-ID's me as: " + inUser.userName + ' : ' + inUser.userID);
 		}
 	}
 };
 
 
 
-GameEngineLib.GameNetwork.prototype._onMsgRecv = function _onMsgRecv(inMsg)
+ECGame.EngineLib.GameNetwork.prototype._onMsgRecv = function _onMsgRecv(inMsg)
 {
-	var _this_ = GameInstance.Network;
+	var _this_ = ECGame.instance.Network;
 	
-	if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+	if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 	{
-		GameEngineLib.logger.info("Net Recv Msg: " + inMsg);
+		ECGame.log.info("Net Recv Msg: " + inMsg);
 	}
 	
-	_this_.onEvent(new GameEngineLib.GameEvent_Msg(inMsg));
+	_this_.onEvent(new ECGame.EngineLib.GameEvent_Msg(inMsg));
 	
-	if(GameSystemVars.Network.isServer)
+	if(ECGame.Settings.Network.isServer)
 	{
 		//TODO cap size?
 		this.broadcast.emit('msg', this.gameUser.userName + ': ' + inMsg);
@@ -433,22 +433,22 @@ GameEngineLib.GameNetwork.prototype._onMsgRecv = function _onMsgRecv(inMsg)
 
 
 
-GameEngineLib.GameNetwork.prototype._onDataRecv = function _onDataRecv(inData)
+ECGame.EngineLib.GameNetwork.prototype._onDataRecv = function _onDataRecv(inData)
 {
-	var _this_ = GameInstance.Network;
+	var _this_ = ECGame.instance.Network;
 	
-	var event = new GameEngineLib.GameEvent_Data(inData);
+	var event = new ECGame.EngineLib.GameEvent_Data(inData);
 	
-	if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+	if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 	{
-		GameEngineLib.logger.info("Net Recv Data: " + inData);
+		ECGame.log.info("Net Recv Data: " + inData);
 	}
 
 	//if this errors, don't do the rest, ESP not resend!
 	if(_this_._serializeObjectsIn(event, this, {NET : true}))
 	{
 		_this_.onEvent(event);
-		if(GameSystemVars.Network.isServer)
+		if(ECGame.Settings.Network.isServer)
 		{
 			//Note: 'this' is the recieving socket here
 			this.broadcast.emit('data', inData);
@@ -458,22 +458,22 @@ GameEngineLib.GameNetwork.prototype._onDataRecv = function _onDataRecv(inData)
 
 
 
-GameEngineLib.GameNetwork.prototype._onObjectsRecv = function _onObjectsRecv(inData)
+ECGame.EngineLib.GameNetwork.prototype._onObjectsRecv = function _onObjectsRecv(inData)
 {
-	var _this_ = GameInstance.Network;
+	var _this_ = ECGame.instance.Network;
 	
-	var event = new GameEngineLib.GameEvent_NetObjects(inData);
+	var event = new ECGame.EngineLib.GameEvent_NetObjects(inData);
 	
-	if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+	if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 	{
-		GameEngineLib.logger.info("Net Recv Obj: " + inData);
+		ECGame.log.info("Net Recv Obj: " + inData);
 	}
 
 	//if this errors, don't do the rest, ESP not resend!
 	if(_this_._serializeObjectsIn(event, this, {NET : false}))//TODO instead of !NET, maybe should be FULL or something
 	{
 		_this_.onEvent(event);
-		if(GameSystemVars.Network.isServer)
+		if(ECGame.Settings.Network.isServer)
 		{
 			//Note: 'this' is the recieving socket here
 			this.broadcast.emit('data', inData);
@@ -484,29 +484,29 @@ GameEngineLib.GameNetwork.prototype._onObjectsRecv = function _onObjectsRecv(inD
 
 
 //TODO probably on BOTH sides
-GameEngineLib.GameNetwork.prototype.isUpdating = function isUpdating()
+ECGame.EngineLib.GameNetwork.prototype.isUpdating = function isUpdating()
 {
-	return true;//!GameSystemVars.Network.isServer;//true;//isMultiplayer?? isConnected?
+	return true;//!ECGame.Settings.Network.isServer;//true;//isMultiplayer?? isConnected?
 };
 
 
 /*
-GameEngineLib.GameNetwork.prototype.update = function update(inDt)
+ECGame.EngineLib.GameNetwork.prototype.update = function update(inDt)
 {
 	var dirtyObjects = [];
 	
-	if(!GameSystemVars.Network.isServer
-		&& GameSystemVars.DEBUG
-		&& GameSystemVars.Debug.NetworkMessages_Draw)
+	if(!ECGame.Settings.Network.isServer
+		&& ECGame.Settings.DEBUG
+		&& ECGame.Settings.Debug.NetworkMessages_Draw)
 	{
-		GameInstance.Graphics.drawDebugText(
+		ECGame.instance.Graphics.drawDebugText(
 			"Network out:",
-			GameSystemVars.Debug.NetworkMessages_DrawColor
+			ECGame.Settings.Debug.NetworkMessages_DrawColor
 		);
 	}
 	
 	//TODO have a net dirty class list instead of iterating over everything!
-	GameEngineLib.Class.getInstanceRegistry().forAll(
+	ECGame.EngineLib.Class.getInstanceRegistry().forAll(
 		function(inClass)
 		{
 			//TODO get rid of this when we have class dirty list instead of looping thru all classes.
@@ -515,13 +515,13 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 				return;
 			}
 				
-			if(!GameSystemVars.Network.isServer
-				&& GameSystemVars.DEBUG
-				&& GameSystemVars.Debug.NetworkMessages_Draw)
+			if(!ECGame.Settings.Network.isServer
+				&& ECGame.Settings.DEBUG
+				&& ECGame.Settings.Debug.NetworkMessages_Draw)
 			{
-				GameInstance.Graphics.drawDebugText(
+				ECGame.instance.Graphics.drawDebugText(
 					'    ' + inClass.getName(),
-					GameSystemVars.Debug.NetworkMessages_DrawColor
+					ECGame.Settings.Debug.NetworkMessages_DrawColor
 				);
 			}
 			
@@ -530,16 +530,16 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 				{
 					//TODO skip objects we do not own (but queue owner changes in netserialize queue from object?)
 					if(inClass._flags.net && inObject.isNetDirty()
-					//	&& inObject.getNetOwner() === GameInstance.localUser.userName
+					//	&& inObject.getNetOwner() === ECGame.instance.localUser.userName
 					)
 					{
-						if(!GameSystemVars.Network.isServer
-							&& GameSystemVars.DEBUG
-							&& GameSystemVars.Debug.NetworkMessages_Draw)
+						if(!ECGame.Settings.Network.isServer
+							&& ECGame.Settings.DEBUG
+							&& ECGame.Settings.Debug.NetworkMessages_Draw)
 						{
-							GameInstance.Graphics.drawDebugText(
+							ECGame.instance.Graphics.drawDebugText(
 								'        -' + inObject.getName()
-								,GameSystemVars.Debug.NetworkMessages_DrawColor
+								,ECGame.Settings.Debug.NetworkMessages_DrawColor
 							);
 						}
 						dirtyObjects.push(inObject);
@@ -555,7 +555,7 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 		this._serializer.initWrite({NET : true});
 		
 		this._messageHeader.numObjects = Math.min(this._maxItemsPerMessage, dirtyObjects.length);
-		this._messageHeader.userID = GameInstance.localUser.userID;
+		this._messageHeader.userID = ECGame.instance.localUser.userID;
 		this._serializer.serializeObject(this._messageHeader, this._messageHeaderFormat);
 		
 		var i;
@@ -569,9 +569,9 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 		}
 		
 		var sendData = this._serializer.getString();
-		if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+		if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 		{
-			GameEngineLib.logger.info("NetSend: " + sendData);
+			ECGame.log.info("NetSend: " + sendData);
 		}
 		
 		this._sendData(sendData);
@@ -587,19 +587,19 @@ TODO in called from here:
 unpack()
 	throw	//from logerror!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 */
-GameEngineLib.GameNetwork.prototype._serializeObjectsIn = function _serializeObjectsIn(inEvent, inSocket, inSerializerFlags)
+ECGame.EngineLib.GameNetwork.prototype._serializeObjectsIn = function _serializeObjectsIn(inEvent, inSocket, inSerializerFlags)
 {
 	var i, readObjects;
 	
 	this._serializer.initRead(inSerializerFlags, inEvent.data);
 	
-	if(!GameSystemVars.Network.isServer
-		&& GameSystemVars.DEBUG
-		&& GameSystemVars.Debug.NetworkMessages_Draw)
+	if(!ECGame.Settings.Network.isServer
+		&& ECGame.Settings.DEBUG
+		&& ECGame.Settings.Debug.NetworkMessages_Draw)
 	{
-		GameInstance.Graphics.drawDebugText(
+		ECGame.instance.Graphics.drawDebugText(
 			"Network in:",
-			GameSystemVars.Debug.NetworkMessages_DrawColor
+			ECGame.Settings.Debug.NetworkMessages_DrawColor
 		);
 	}
 	
@@ -608,9 +608,9 @@ GameEngineLib.GameNetwork.prototype._serializeObjectsIn = function _serializeObj
 		this._serializer.serializeObject(this._messageHeader, this._messageHeaderFormat);
 		
 		//check that the username matches the socket user
-		gameAssert(
+		ECGame.log.assert(
 			(this._messageHeader.userID === inSocket.gameUser.userID
-			|| inSocket.gameUser.userID === GameEngineLib.User.USER_IDS.SERVER)
+			|| inSocket.gameUser.userID === ECGame.EngineLib.User.USER_IDS.SERVER)
 			,"Net user not identifying self correctly: " + (this._messageHeader.userID + ' != ' + inSocket.gameUser.userID)
 		);
 		
@@ -619,12 +619,12 @@ GameEngineLib.GameNetwork.prototype._serializeObjectsIn = function _serializeObj
 		for(i = 0; i < this._messageHeader.numObjects; ++i)
 		{
 			this._serializer.serializeObject(this._objectHeader, this._objectHeaderFormat);
-			var objectClass = GameEngineLib.Class.getInstanceRegistry().findByID(this._objectHeader.classID);
-			if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+			var objectClass = ECGame.EngineLib.Class.getInstanceRegistry().findByID(this._objectHeader.classID);
+			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 			{
 				if(!objectClass)
 				{
-					GameEngineLib.logger.warn("Unknown classID " + this._objectHeader.classID);
+					ECGame.log.warn("Unknown classID " + this._objectHeader.classID);
 				}
 			}
 			var object = objectClass.getInstanceRegistry().findByID(this._objectHeader.instanceID);
@@ -632,21 +632,21 @@ GameEngineLib.GameNetwork.prototype._serializeObjectsIn = function _serializeObj
 			//if not found, and not server, create it
 			if(!object)//TODO if user can create this object && not net?
 			{
-				if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+				if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 				{
-					GameEngineLib.logger.info("Network Creating: " + objectClass.getName() + ' : ' + this._objectHeader.instanceID);
+					ECGame.log.info("Network Creating: " + objectClass.getName() + ' : ' + this._objectHeader.instanceID);
 				}
 				object = objectClass.create();
 				object.setID(this._objectHeader.instanceID);
 			}
-			else if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+			else if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 			{
-				GameEngineLib.logger.info("Network Changing: " + objectClass.getName() + ' : ' + this._objectHeader.instanceID);
+				ECGame.log.info("Network Changing: " + objectClass.getName() + ' : ' + this._objectHeader.instanceID);
 			}
 			
 			//if not from server && not from owner dummy serialize
 			if(object.getNetOwner() !== this._messageHeader.userID
-				&& this._messageHeader.userID !== GameEngineLib.User.USER_IDS.SERVER)
+				&& this._messageHeader.userID !== ECGame.EngineLib.User.USER_IDS.SERVER)
 			{
 				//Note: could also maybe throw owner if !server && !owner && !recentOwnerQueue
 				//TODO info/warn?
@@ -662,18 +662,18 @@ GameEngineLib.GameNetwork.prototype._serializeObjectsIn = function _serializeObj
 			
 			readObjects.push(object);
 			
-			if(!GameSystemVars.Network.isServer
-				&& GameSystemVars.DEBUG
-				&& GameSystemVars.Debug.NetworkMessages_Draw)
+			if(!ECGame.Settings.Network.isServer
+				&& ECGame.Settings.DEBUG
+				&& ECGame.Settings.Debug.NetworkMessages_Draw)
 			{
 				//TODO not show same class name more than once, just instance (ie make print list for the end!)
-				GameInstance.Graphics.drawDebugText(
+				ECGame.instance.Graphics.drawDebugText(
 					'    ' + objectClass.getName(),
-					GameSystemVars.Debug.NetworkMessages_DrawColor
+					ECGame.Settings.Debug.NetworkMessages_DrawColor
 				);
-				GameInstance.Graphics.drawDebugText(
+				ECGame.instance.Graphics.drawDebugText(
 					'        -' + object.getName()
-					,GameSystemVars.Debug.NetworkMessages_DrawColor
+					,ECGame.Settings.Debug.NetworkMessages_DrawColor
 				);
 			}
 		}
@@ -701,13 +701,13 @@ GameEngineLib.GameNetwork.prototype._serializeObjectsIn = function _serializeObj
 
 
 
-GameEngineLib.GameNetwork.prototype.addNetDirtyObject = function addNetDirtyObject(inObject)
+ECGame.EngineLib.GameNetwork.prototype.addNetDirtyObject = function addNetDirtyObject(inObject)
 {
 	var className = inObject.getClass().getName();
 	this._netDirtyInstances[className] = this._netDirtyInstances[className] || [];
 	this._netDirtyInstances[className].push(inObject);
 };
-GameEngineLib.GameNetwork.prototype.addNewObject = function addNewObject(inObject)
+ECGame.EngineLib.GameNetwork.prototype.addNewObject = function addNewObject(inObject)
 {
 	var className = inObject.getClass().getName();
 	this._newInstances[className] = this._newInstances[className] || [];
@@ -718,7 +718,7 @@ GameEngineLib.GameNetwork.prototype.addNewObject = function addNewObject(inObjec
 
 
 
-GameEngineLib.GameNetwork.prototype.update = function update(inDt)
+ECGame.EngineLib.GameNetwork.prototype.update = function update(inDt)
 {
 	var className,
 		classInstanceList,
@@ -727,15 +727,15 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 		allRelevantObjects,
 		drawNetObjects;
 	
-	drawNetObjects = !GameSystemVars.Network.isServer
-		&& GameSystemVars.DEBUG
-		&& GameSystemVars.Debug.NetworkMessages_Draw;
+	drawNetObjects = !ECGame.Settings.Network.isServer
+		&& ECGame.Settings.DEBUG
+		&& ECGame.Settings.Debug.NetworkMessages_Draw;
 		
 	if(drawNetObjects)
 	{
-		GameInstance.Graphics.drawDebugText(
+		ECGame.instance.Graphics.drawDebugText(
 			"Network out:",
-			GameSystemVars.Debug.NetworkMessages_DrawColor
+			ECGame.Settings.Debug.NetworkMessages_DrawColor
 		);
 	}
 	
@@ -746,9 +746,9 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 		classInstanceList = this._newInstances[className];
 		if(drawNetObjects)
 		{
-			GameInstance.Graphics.drawDebugText(
+			ECGame.instance.Graphics.drawDebugText(
 				'    ' + className,
-				GameSystemVars.Debug.NetworkMessages_DrawColor
+				ECGame.Settings.Debug.NetworkMessages_DrawColor
 			);
 		}
 		
@@ -760,15 +760,15 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 			allRelevantObjects.push(instanceObject);
 			//instanceObject.clearNetDirty();//TODO should these be net dirty at all?
 			
-			if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 			{
-				GameEngineLib.logger.info("Queueing Distributed Network Create: " + className + ' : ' + instanceObject.getID());
+				ECGame.log.info("Queueing Distributed Network Create: " + className + ' : ' + instanceObject.getID());
 			}
 			if(drawNetObjects)
 			{
-				GameInstance.Graphics.drawDebugText(
+				ECGame.instance.Graphics.drawDebugText(
 					'        -' + instanceObject.getName()
-					,GameSystemVars.Debug.NetworkMessages_DrawColor
+					,ECGame.Settings.Debug.NetworkMessages_DrawColor
 				);
 			}
 		}
@@ -783,9 +783,9 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 		classInstanceList = this._netDirtyInstances[className];
 		if(drawNetObjects)
 		{
-			GameInstance.Graphics.drawDebugText(
+			ECGame.instance.Graphics.drawDebugText(
 				'    ' + className,
-				GameSystemVars.Debug.NetworkMessages_DrawColor
+				ECGame.Settings.Debug.NetworkMessages_DrawColor
 			);
 		}
 		
@@ -796,15 +796,15 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 			//instanceObject.clearNetDirty();
 			//instanceObject._netDirty = false;//HACK!!
 			
-			if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 			{
-				GameEngineLib.logger.info("Queueing Distributed Object Changes: " + className + ' : ' + instanceObject.getID());
+				ECGame.log.info("Queueing Distributed Object Changes: " + className + ' : ' + instanceObject.getID());
 			}
 			if(drawNetObjects)
 			{
-				GameInstance.Graphics.drawDebugText(
+				ECGame.instance.Graphics.drawDebugText(
 					'        -' + instanceObject.getName()
-					,GameSystemVars.Debug.NetworkMessages_DrawColor
+					,ECGame.Settings.Debug.NetworkMessages_DrawColor
 				);
 			}
 		}
@@ -815,19 +815,19 @@ GameEngineLib.GameNetwork.prototype.update = function update(inDt)
 
 
 
-GameEngineLib.GameNetwork.prototype._serializeObjectsOut = function _serializeObjectsOut(inList, inSerializerFlags, inSocket)
+ECGame.EngineLib.GameNetwork.prototype._serializeObjectsOut = function _serializeObjectsOut(inList, inSerializerFlags, inSocket)
 {
 	var sendData,
 		i;
 	
-	gameAssert(inList.length < this._maxItemsPerMessage, "Cannot currently serialize so many objects!");
+	ECGame.log.assert(inList.length < this._maxItemsPerMessage, "Cannot currently serialize so many objects!");
 	
 	while(inList.length !== 0)//TODO limit these? I think there will be other bugs with postload if not all are present!
 	{
 		this._serializer.initWrite(inSerializerFlags);
 		
 		this._messageHeader.numObjects = Math.min(this._maxItemsPerMessage, inList.length);
-		this._messageHeader.userID = GameInstance.localUser.userID;
+		this._messageHeader.userID = ECGame.instance.localUser.userID;
 		this._serializer.serializeObject(this._messageHeader, this._messageHeaderFormat);
 		
 		for(i = 0; i < this._messageHeader.numObjects; ++i)

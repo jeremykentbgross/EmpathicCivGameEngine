@@ -18,7 +18,7 @@
 	You should have received a copy of the GNU Lesser General Public License
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
-GameUnitTests.registerTest(
+ECGame.unitTests.registerTest(
 	'GameBitPacker',
 	function()
 	{
@@ -41,7 +41,7 @@ GameUnitTests.registerTest(
 		bits[11] = 32;
 		values[11] = 0;
 		
-		packer = GameEngineLib.createGameBitPacker();
+		packer = ECGame.EngineLib.createGameBitPacker();
 		for(i = 0; i < numValues; ++i)
 		{
 			packer.pack(values[i], bits[i]);
@@ -49,14 +49,14 @@ GameUnitTests.registerTest(
 		string = packer.getString();
 		//console.log(string);
 		
-		packer = GameEngineLib.createGameBitPacker();
+		packer = ECGame.EngineLib.createGameBitPacker();
 		packer.setString(string);
 		for(i = 0; i < numValues; ++i)
 		{
 			value = packer.unpack(bits[i]);
 			if(value !== values[i])
 			{
-				GameEngineLib.logger.error("Loop " + i + ' ' + value + '!==' + values[i] + " with " + bits[i]);
+				ECGame.log.error("Loop " + i + ' ' + value + '!==' + values[i] + " with " + bits[i]);
 				passedTest = false;
 			}
 		}

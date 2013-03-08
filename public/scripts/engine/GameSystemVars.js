@@ -25,13 +25,13 @@
 //Example:
 //	Add the following to the bottom of the page to turn on the drawing of physics
 // =>
-//	GameSystemVars.Debug.Physics_Draw = true;
+//	ECGame.Settings.Debug.Physics_Draw = true;
 //
 ////////////////////////////////////////////////////////////////////
-GameSystemVars = //TODO rename as GameSystemSettings
+ECGame.Settings = //TODO rename as GameSystemSettings
 {
-	DEBUG : true,//TODO replace GameSystemVars.DEBUG
-	RUN_UNIT_TESTS : true,//TODO replace GameSystemVars.RUN_UNIT_TESTS
+	DEBUG : true,//TODO replace ECGame.Settings.DEBUG
+	RUN_UNIT_TESTS : true,//TODO replace ECGame.Settings.RUN_UNIT_TESTS
 	
 	//TODO appname
 	
@@ -173,10 +173,10 @@ GameSystemVars = //TODO rename as GameSystemSettings
 //NOTE: CUSTOM LOCAL CHANGES GO BELOW HERE
 //
 //example:
-//	GameSystemVars.Debug.Physics_Draw = true;
+//	ECGame.Settings.Debug.Physics_Draw = true;
 //
 ///////////////////////////////////////////////////////////////////
 
-//GameSystemVars.Debug.Text_Size = 10;
-//GameSystemVars.Graphics.initWidth = 1024;
-//GameSystemVars.Graphics.initHeight = 512;
+//ECGame.Settings.Debug.Text_Size = 10;
+//ECGame.Settings.Graphics.initWidth = 1024;
+//ECGame.Settings.Graphics.initHeight = 512;

@@ -26,7 +26,7 @@ Need to have 2 Optionals on flag or something:
 2) 16 bits in Typed Array with Binary net serialization (BEST OPTION) (No binary net sockets yet)
 */
 
-GameEngineLib.createGameBitPacker = function()
+ECGame.EngineLib.createGameBitPacker = function()
 {
 	var outPacker = {};
 	var PRIVATE =
@@ -49,9 +49,9 @@ GameEngineLib.createGameBitPacker = function()
 		PRIVATE.POWERS[i] = Math.pow(2, i);
 	}
 	
-	if(GameSystemVars.DEBUG)
+	if(ECGame.Settings.DEBUG)
 	{
-		GameEngineLib.addDebugInfo('bitPacker', outPacker, PRIVATE);
+		ECGame.EngineLib.addDebugInfo('bitPacker', outPacker, PRIVATE);
 	}
 	
 	outPacker.pack = function(value, bits)
@@ -59,7 +59,7 @@ GameEngineLib.createGameBitPacker = function()
 		var power;
 		var length = PRIVATE.data.length;
 		
-		if(GameSystemVars.DEBUG)
+		if(ECGame.Settings.DEBUG)
 		{
 			//TODO print warnings if out of bounds
 			bits = Math.floor(bits);
@@ -70,7 +70,7 @@ GameEngineLib.createGameBitPacker = function()
 		//power = Math.pow(2, bits);
 		power = PRIVATE.POWERS[bits];
 		
-		if(GameSystemVars.DEBUG)
+		if(ECGame.Settings.DEBUG)
 		{
 			//TODO print warnings if out of bounds
 			value = Math.floor(value);
@@ -137,7 +137,7 @@ GameEngineLib.createGameBitPacker = function()
 		
 		var power;
 		
-		if(GameSystemVars.DEBUG)
+		if(ECGame.Settings.DEBUG)
 		{
 			bits = Math.floor(bits);
 			bits = Math.max(bits, 1);

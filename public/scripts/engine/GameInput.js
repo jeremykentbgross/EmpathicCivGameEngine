@@ -20,19 +20,19 @@
 */
 
 
-GameEngineLib.createInput = function(instance, PRIVATE)
+ECGame.EngineLib.createInput = function(instance, PRIVATE)
 {
 	instance = instance || {};
 	PRIVATE = PRIVATE || {};
 	
-	GameEngineLib.createEventSystem(instance);//TODO make this inheritance when I refactor this file
+	ECGame.EngineLib.createEventSystem(instance);//TODO make this inheritance when I refactor this file
 	
-	if(GameSystemVars.DEBUG)
+	if(ECGame.Settings.DEBUG)
 	{
-		GameEngineLib.addDebugInfo('GameInput', instance, PRIVATE);
+		ECGame.EngineLib.addDebugInfo('GameInput', instance, PRIVATE);
 	}
 	
-	PRIVATE.mouseLoc = GameEngineLib.createGame2DPoint(0, 0);
+	PRIVATE.mouseLoc = ECGame.EngineLib.createGame2DPoint(0, 0);
 	PRIVATE.myKeys = {};
 	PRIVATE.keysPressed = {};
 	PRIVATE.buttons = {};
@@ -111,7 +111,7 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 	
 	instance.initClient = function initClient(inCanvas)
 	{
-		if(GameSystemVars.Network.isServer)
+		if(ECGame.Settings.Network.isServer)
 		{
 			return;
 		}
@@ -155,7 +155,7 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 		var inputString;
 		var event;
 		
-		if(GameSystemVars.DEBUG && !GameSystemVars.Network.isServer)
+		if(ECGame.Settings.DEBUG && !ECGame.Settings.Network.isServer)
 		{
 			inputString = "Input: " +
 				(PRIVATE.active ? "Active" : "Inactive" ) + 
@@ -183,23 +183,23 @@ GameEngineLib.createInput = function(instance, PRIVATE)
 			}
 			//todo clicks and wheel
 			
-			if(GameSystemVars.Debug.Input_Print)
+			if(ECGame.Settings.Debug.Input_Print)
 			{
 				console.log(inputString + '\n');
 			}
-			if(GameSystemVars.Debug.Input_Draw)
+			if(ECGame.Settings.Debug.Input_Draw)
 			{
-				GameInstance.Graphics.drawDebugText(
+				ECGame.instance.Graphics.drawDebugText(
 					inputString,
 					(PRIVATE.active ?
-						GameSystemVars.Debug.Input_Active_DrawColor :
-						GameSystemVars.Debug.Input_Inactive_DrawColor
+						ECGame.Settings.Debug.Input_Active_DrawColor :
+						ECGame.Settings.Debug.Input_Inactive_DrawColor
 					)
 				);
 			}
 		}
 				
-		event = new GameEngineLib.GameEvent_Input(PRIVATE.mouseLoc.clone());
+		event = new ECGame.EngineLib.GameEvent_Input(PRIVATE.mouseLoc.clone());
 		
 		//copy the values from PRIVATE individually so my internal data cannot be changed by users
 		for(i in PRIVATE.buttons)

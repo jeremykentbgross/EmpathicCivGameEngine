@@ -23,7 +23,7 @@
 /*
 Use case template:
 
-GameEngineLib.Class.create({
+ECGame.EngineLib.Class.create({
 	Constructor : ,
 	Parents : [],
 	flags : {},
@@ -37,7 +37,7 @@ GameEngineLib.Class.create({
 */
 
 
-GameEngineLib.Class = function Class(inConstructor, inParents)
+ECGame.EngineLib.Class = function Class(inConstructor, inParents)
 {
 	this._constructor = inConstructor;
 	
@@ -64,11 +64,11 @@ GameEngineLib.Class = function Class(inConstructor, inParents)
 	destroyedInstances
 	*/
 };
-GameEngineLib.Class.prototype.constructor = GameEngineLib.Class;
+ECGame.EngineLib.Class.prototype.constructor = ECGame.EngineLib.Class;
 
 
 
-GameEngineLib.Class.create = function create(inParams)
+ECGame.EngineLib.Class.create = function create(inParams)
 {
 	var theClass,
 		//breaking up params:
@@ -100,9 +100,9 @@ GameEngineLib.Class.create = function create(inParams)
 	Constructor.prototype._chainUpMethods = {};
 	Constructor.prototype._chainDownMethods = {};
 	
-	theClass = new GameEngineLib.Class(Constructor, inParents);
+	theClass = new ECGame.EngineLib.Class(Constructor, inParents);
 	
-	if(GameSystemVars.DEBUG)
+	if(ECGame.Settings.DEBUG)
 	{
 		constructorSrc =
 			Constructor.toString()
@@ -116,12 +116,12 @@ GameEngineLib.Class.create = function create(inParams)
 	{
 		parent = inParents[parentIndex];
 		
-		if(GameSystemVars.DEBUG)
+		if(ECGame.Settings.DEBUG)
 		{
 			//make sure the contructor has call to this parent constructor that is not commented out
 			if(constructorSrc.indexOf('this.' + parent.name) === -1)
 			{
-				GameEngineLib.logger.warn(
+				ECGame.log.warn(
 					Constructor.name + " does not call parent constructor " + parent.name
 				);
 			}
@@ -138,7 +138,7 @@ GameEngineLib.Class.create = function create(inParams)
 				{
 					if(Constructor.prototype._chainUpMethods[methodName])
 					{
-						GameEngineLib.logger.warn(Constructor.name + " trying to inherit chain function " + methodName + " from an additional parent: " + parent.name);
+						ECGame.log.warn(Constructor.name + " trying to inherit chain function " + methodName + " from an additional parent: " + parent.name);
 						continue;
 					}
 					
@@ -151,7 +151,7 @@ GameEngineLib.Class.create = function create(inParams)
 					
 					if(!inDefinition[methodName])
 					{
-						GameEngineLib.logger.warn(Constructor.name + " does not implement chain function " + methodName);
+						ECGame.log.warn(Constructor.name + " does not implement chain function " + methodName);
 					}
 					else
 					{
@@ -165,7 +165,7 @@ GameEngineLib.Class.create = function create(inParams)
 				{
 					if(Constructor.prototype._chainDownMethods[methodName])
 					{
-						GameEngineLib.logger.warn(Constructor.name + " trying to inherit chain function " + methodName + " from an additional parent: " + parent.name);
+						ECGame.log.warn(Constructor.name + " trying to inherit chain function " + methodName + " from an additional parent: " + parent.name);
 						continue;
 					}
 					
@@ -178,7 +178,7 @@ GameEngineLib.Class.create = function create(inParams)
 					
 					if(!inDefinition[methodName])
 					{
-						GameEngineLib.logger.warn(Constructor.name + " does not implement chain function " + methodName);
+						ECGame.log.warn(Constructor.name + " does not implement chain function " + methodName);
 					}
 					else
 					{
@@ -188,7 +188,7 @@ GameEngineLib.Class.create = function create(inParams)
 			}
 			else if(Constructor.prototype[propertyName])
 			{
-				GameEngineLib.logger.warn(Constructor.name + " trying to inherit function " + methodName + " from an additional parent: " + parent.name);
+				ECGame.log.warn(Constructor.name + " trying to inherit function " + methodName + " from an additional parent: " + parent.name);
 			}
 			else
 			{
@@ -243,26 +243,26 @@ GameEngineLib.Class.create = function create(inParams)
 		methodName = inParams.ChainUp[methodIndex];
 		if(Constructor.prototype._chainUpMethods[methodName])
 		{
-			GameEngineLib.logger.warn(Constructor.name + " redeclares " + methodName + " as a chain function.");
+			ECGame.log.warn(Constructor.name + " redeclares " + methodName + " as a chain function.");
 			continue;
 		}
 		Constructor.prototype._chainUpMethods[methodName] = [];
 		Constructor.prototype._chainUpMethods[methodName].unshift(Constructor.prototype[methodName]);
 		
-		Constructor.prototype[methodName] = GameEngineLib.Class._createChainUpFunction(methodName);
+		Constructor.prototype[methodName] = ECGame.EngineLib.Class._createChainUpFunction(methodName);
 	}
 	for(methodIndex in inParams.ChainDown)
 	{
 		methodName = inParams.ChainDown[methodIndex];
 		if(Constructor.prototype._chainDownMethods[methodName])
 		{
-			GameEngineLib.logger.warn(Constructor.name + " redeclares " + methodName + " as a chain function.");
+			ECGame.log.warn(Constructor.name + " redeclares " + methodName + " as a chain function.");
 			continue;
 		}
 		Constructor.prototype._chainDownMethods[methodName] = [];
 		Constructor.prototype._chainDownMethods[methodName].push(Constructor.prototype[methodName]);
 		
-		Constructor.prototype[methodName] = GameEngineLib.Class._createChainDownFunction(methodName);
+		Constructor.prototype[methodName] = ECGame.EngineLib.Class._createChainDownFunction(methodName);
 	}
 	
 	theClass.create = Constructor.create = function create()
@@ -287,7 +287,7 @@ GameEngineLib.Class.create = function create(inParams)
 		
 		Constructor.registerClass = function registerClass()
 		{
-			var classRegistry = GameEngineLib.Class.getInstanceRegistry();
+			var classRegistry = ECGame.EngineLib.Class.getInstanceRegistry();
 			if(classRegistry.findByName(theClass.getName()) !== theClass)
 			{
 				theClass._classID = classRegistry.getUnusedID();
@@ -306,35 +306,35 @@ GameEngineLib.Class.create = function create(inParams)
 
 
 
-GameEngineLib.Class.prototype.getName = function getName()
+ECGame.EngineLib.Class.prototype.getName = function getName()
 {
 	return this._constructor.name;
 };
 
 
 
-GameEngineLib.Class.prototype.getID = function getID()
+ECGame.EngineLib.Class.prototype.getID = function getID()
 {
 	return this._classID;
 };
 
 
 
-GameEngineLib.Class.prototype.createInstanceRegistry = GameEngineLib.Class.createInstanceRegistry = function createInstanceRegistry()//TODO rename reset?
+ECGame.EngineLib.Class.prototype.createInstanceRegistry = ECGame.EngineLib.Class.createInstanceRegistry = function createInstanceRegistry()//TODO rename reset?
 {
-	this._instanceRegistry = new GameEngineLib.GameRegistry();
+	this._instanceRegistry = new ECGame.EngineLib.GameRegistry();
 };
 
 
 
-GameEngineLib.Class.prototype.getInstanceRegistry = GameEngineLib.Class.getInstanceRegistry = function getInstanceRegistry()
+ECGame.EngineLib.Class.prototype.getInstanceRegistry = ECGame.EngineLib.Class.getInstanceRegistry = function getInstanceRegistry()
 {
 	return this._instanceRegistry;
 };
 
 
 
-GameEngineLib.Class._createChainUpFunction = function _createChainUpFunction(inMethodName)
+ECGame.EngineLib.Class._createChainUpFunction = function _createChainUpFunction(inMethodName)
 {
 	return function()
 	{
@@ -350,7 +350,7 @@ GameEngineLib.Class._createChainUpFunction = function _createChainUpFunction(inM
 
 
 
-GameEngineLib.Class._createChainDownFunction = function _createChainDownFunction(inMethodName)
+ECGame.EngineLib.Class._createChainDownFunction = function _createChainDownFunction(inMethodName)
 {
 	return function()
 	{
@@ -366,7 +366,7 @@ GameEngineLib.Class._createChainDownFunction = function _createChainDownFunction
 
 
 /*
-GameEngineLib.Class.serializeAll = function serializeAll(inSerializer)
+ECGame.EngineLib.Class.serializeAll = function serializeAll(inSerializer)
 {
 	var dirtyObjects,
 		maxItemsPerMessage,
@@ -388,7 +388,7 @@ GameEngineLib.Class.serializeAll = function serializeAll(inSerializer)
 			type : 'int',
 			net : true,
 			min : 0,
-			max : GameEngineLib.User.USER_IDS.MAX_EVER
+			max : ECGame.EngineLib.User.USER_IDS.MAX_EVER
 		},
 		{
 			name : 'numObjects',
@@ -405,7 +405,7 @@ GameEngineLib.Class.serializeAll = function serializeAll(inSerializer)
 			type : 'int',
 			net : true,
 			min : 0,
-			max : GameEngineLib.Class.getInstanceRegistry().getMaxID()
+			max : ECGame.EngineLib.Class.getInstanceRegistry().getMaxID()
 		},
 		{
 			name : 'instanceID',
@@ -421,7 +421,7 @@ GameEngineLib.Class.serializeAll = function serializeAll(inSerializer)
 	
 	if()//writing
 	{
-		GameEngineLib.Class.getInstanceRegistry().forAll(
+		ECGame.EngineLib.Class.getInstanceRegistry().forAll(
 			function(inClass)
 			{
 				inClass.getInstanceRegistry().forAll(
@@ -433,7 +433,7 @@ GameEngineLib.Class.serializeAll = function serializeAll(inSerializer)
 			}
 		);
 		
-		gameAssert(dirtyObjects.length < maxItemsPerMessage, "Cannot currently serialize so many objects!");
+		ECGame.log.assert(dirtyObjects.length < maxItemsPerMessage, "Cannot currently serialize so many objects!");
 		
 		serializeHeader.numObjects = Math.min(maxItemsPerMessage, dirtyObjects.length);
 		inSerializer.serializeObject(serializeHeader, serializeHeaderFormat);
@@ -456,7 +456,7 @@ GameEngineLib.Class.serializeAll = function serializeAll(inSerializer)
 			for(i = 0; i < serializeHeader.numObjects; ++i)
 			{
 				inSerializer.serializeObject(objectHeader, objectHeaderFormat);
-				objectClass = GameEngineLib.Class.getInstanceRegistry().findByID(objectHeader.classID);
+				objectClass = ECGame.EngineLib.Class.getInstanceRegistry().findByID(objectHeader.classID);
 				object = objectClass.getInstanceRegistry().findByID(objectHeader.instanceID);
 				
 				//if not found, and not server, create it

@@ -20,14 +20,14 @@
 */
 
 //TODO Vector
-GameEngineLib.createVector = function(inVectorDimensions)
+ECGame.EngineLib.createVector = function(inVectorDimensions)
 {
 	var instance = {};
 }
 
 
 
-GameEngineLib.createKMean = function(instance, PRIVATE)
+ECGame.EngineLib.createKMean = function(instance, PRIVATE)
 {
 	instance = instance || {};
 	PRIVATE = PRIVATE || {};
@@ -53,7 +53,7 @@ GameEngineLib.createKMean = function(instance, PRIVATE)
 		
 		clusterInstance.resetPoints = function()
 		{
-			this.points = GameEngineLib.createGameCircularDoublyLinkedListNode();
+			this.points = ECGame.EngineLib.createGameCircularDoublyLinkedListNode();
 			this.numPoints = 0;
 		}
 		clusterInstance.resetPoints();
@@ -164,7 +164,7 @@ GameEngineLib.createKMean = function(instance, PRIVATE)
 			var bestClusterIndex = this.findBestCluster(inDataPoints[i]);
 			var bestCluster = PRIVATE.clusters[bestClusterIndex];
 			bestCluster.points.insert(
-				GameEngineLib.createGameCircularDoublyLinkedListNode(inDataPoints[i])
+				ECGame.EngineLib.createGameCircularDoublyLinkedListNode(inDataPoints[i])
 			);
 			++bestCluster.numPoints;
 		}
@@ -234,7 +234,7 @@ GameEngineLib.createKMean = function(instance, PRIVATE)
 
 //todo make this a GameObject also!!
 //todo rename game rules
-GameLib.createGameRules = function(instance, PRIVATE)
+ECGame.Lib.createGameRules = function(instance, PRIVATE)
 {
 	instance = instance || {};
 	PRIVATE = PRIVATE || {};
@@ -243,12 +243,12 @@ GameLib.createGameRules = function(instance, PRIVATE)
 		
 	instance.init = function()
 	{
-		if(!GameSystemVars.Network.isServer)
+		if(!ECGame.Settings.Network.isServer)
 		{
-			GameInstance.Input.registerListener('Input', PRIVATE);
+			ECGame.instance.Input.registerListener('Input', PRIVATE);
 		}
 			
-		GameInstance.UpdateOrder.push(this);
+		ECGame.instance.UpdateOrder.push(this);
 		
 		PRIVATE.clustersCount = 16;
 		PRIVATE.vectorDimensions = 2;
@@ -263,7 +263,7 @@ GameLib.createGameRules = function(instance, PRIVATE)
 			}
 		}
 			
-		PRIVATE.kmean = GameEngineLib.createKMean();
+		PRIVATE.kmean = ECGame.EngineLib.createKMean();
 		PRIVATE.kmean.init(
 			PRIVATE.clustersCount,
 			PRIVATE.vectorDimensions
@@ -293,11 +293,11 @@ GameLib.createGameRules = function(instance, PRIVATE)
 	{
 		PRIVATE.kmean.render(
 			inCanvas2DContext
-			,GameEngineLib.createGame2DAABB(
+			,ECGame.EngineLib.createGame2DAABB(
 				0,
 				0,
-				GameInstance.Graphics.getWidth(),
-				GameInstance.Graphics.getHeight()
+				ECGame.instance.Graphics.getWidth(),
+				ECGame.instance.Graphics.getHeight()
 			)
 		);
 	};

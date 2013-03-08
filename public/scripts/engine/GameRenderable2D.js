@@ -21,7 +21,7 @@
 
 
 //This is actually almost more of an interface!
-GameEngineLib.GameRenderable2D = GameEngineLib.Class.create({
+ECGame.EngineLib.GameRenderable2D = ECGame.EngineLib.Class.create({
 	Constructor : function GameRenderable2D()
 	{
 		this.GameQuadTreeItem(/*aabb*/);
@@ -29,11 +29,11 @@ GameEngineLib.GameRenderable2D = GameEngineLib.Class.create({
 		this.sceneGraphOwningNodes = null;	//array of nodes containing this renderable in the scene graph
 		this.lastFrameDrawn = -1;
 		this.layer = 0;
-		this.anchorPosition = new GameEngineLib.Game2DPoint();
-		this.screenPos = new GameEngineLib.Game2DPoint();
+		this.anchorPosition = new ECGame.EngineLib.Game2DPoint();
+		this.screenPos = new ECGame.EngineLib.Game2DPoint();
 		this.drawOrderHelper = null;
 	},
-	Parents : [GameEngineLib.GameQuadTreeItem],
+	Parents : [ECGame.EngineLib.GameQuadTreeItem],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
@@ -41,7 +41,7 @@ GameEngineLib.GameRenderable2D = GameEngineLib.Class.create({
 	{
 		render : function render(inCanvas2DContext, inCameraRect)//abstract!!
 		{
-			gameAssert(false, "This method must be overridden");
+			ECGame.log.assert(false, "This method must be overridden");
 		}
 	}
 });

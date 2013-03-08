@@ -20,26 +20,26 @@
 */
 
 //TODO rename CharacterInput??
-GameEngineLib.EntityComponent_Input = GameEngineLib.Class.create(
+ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 {
 	Constructor : function EntityComponent_Input()
 	{
 		this.GameEntityComponent();
 		//this._keysEventMapper = [];//TODO make keys changable??
 		
-		this._direction = GameEngineLib.createGame2DPoint(0, 0);
+		this._direction = ECGame.EngineLib.createGame2DPoint(0, 0);
 		
 		//TODO put this elsewhere??
 		this._speed = 128;
 		
 		//TODO these should go in a child class, like CharacterInput or something
-		this._up		= GameEngineLib.createGame2DPoint( 0,-1);
-		this._down	= GameEngineLib.createGame2DPoint( 0, 1);
-		this._left	= GameEngineLib.createGame2DPoint(-1, 0);
-		this._right	= GameEngineLib.createGame2DPoint( 1, 0);
+		this._up		= ECGame.EngineLib.createGame2DPoint( 0,-1);
+		this._down	= ECGame.EngineLib.createGame2DPoint( 0, 1);
+		this._left	= ECGame.EngineLib.createGame2DPoint(-1, 0);
+		this._right	= ECGame.EngineLib.createGame2DPoint( 1, 0);
 	},
 	
-	Parents : [GameEngineLib.GameEntityComponent],
+	Parents : [ECGame.EngineLib.GameEntityComponent],
 	
 	flags : { net : true },
 	
@@ -63,13 +63,13 @@ GameEngineLib.EntityComponent_Input = GameEngineLib.Class.create(
 		onInput : function onInput(inInputEvent)
 		{
 			//if multiplayer and not locally owned
-			if(GameSystemVars.Network.isMultiplayer && this.getNetOwner() !== GameInstance.localUser.userID)
+			if(ECGame.Settings.Network.isMultiplayer && this.getNetOwner() !== ECGame.instance.localUser.userID)
 			{
 				//don't update using the local input data!
 			}
 			else
 			{
-				this._direction = GameEngineLib.createGame2DPoint(0, 0);//TODO just set the fields, don't create a new one
+				this._direction = ECGame.EngineLib.createGame2DPoint(0, 0);//TODO just set the fields, don't create a new one
 				
 				if(inInputEvent.myKeys.W/*['W']*/)
 				{
@@ -94,11 +94,11 @@ GameEngineLib.EntityComponent_Input = GameEngineLib.Class.create(
 			
 			if(this._owner)
 			{
-				this._owner.onEvent(new GameEngineLib.GameEvent_RequestVelocity(this._direction));
+				this._owner.onEvent(new ECGame.EngineLib.GameEvent_RequestVelocity(this._direction));
 			}
 			else
 			{
-				GameEngineLib.logger.warn("Should not be getting input updates right now.");
+				ECGame.log.warn("Should not be getting input updates right now.");
 			}
 		},
 		
@@ -111,7 +111,7 @@ GameEngineLib.EntityComponent_Input = GameEngineLib.Class.create(
 			owner.registerListener('RemovedFromWorld', this);
 			if(inEvent.entity.getWorld())
 			{
-				GameInstance.Input.registerListener('Input', this);
+				ECGame.instance.Input.registerListener('Input', this);
 			}
 		},
 
@@ -122,17 +122,17 @@ GameEngineLib.EntityComponent_Input = GameEngineLib.Class.create(
 			//unregister for events
 			owner.deregisterListener('AddedToWorld', this);
 			owner.deregisterListener('RemovedFromWorld', this);
-			GameInstance.Input.deregisterListener('Input', this);
+			ECGame.instance.Input.deregisterListener('Input', this);
 		},
 		
 		onAddedToWorld : function onAddedToWorld(inEvent)
 		{
-			GameInstance.Input.registerListener('Input', this);
+			ECGame.instance.Input.registerListener('Input', this);
 		},
 		
 		onRemovedFromWorld : function onRemovedFromWorld(inEvent)
 		{
-			GameInstance.Input.deregisterListener('Input', this);
+			ECGame.instance.Input.deregisterListener('Input', this);
 		},
 		
 		destroy : function destroy()
@@ -143,8 +143,8 @@ GameEngineLib.EntityComponent_Input = GameEngineLib.Class.create(
 		serialize : function serialize(inSerializer)
 		{
 			var format = this.EntityComponent_Input._serializeFormat;
-			format[0].min = GameEngineLib.createGame2DPoint(-this._speed,-this._speed);
-			format[0].max = GameEngineLib.createGame2DPoint(this._speed,this._speed);
+			format[0].min = ECGame.EngineLib.createGame2DPoint(-this._speed,-this._speed);
+			format[0].max = ECGame.EngineLib.createGame2DPoint(this._speed,this._speed);
 			inSerializer.serializeObject(this, format);
 		},
 		

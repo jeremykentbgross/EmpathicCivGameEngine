@@ -20,9 +20,9 @@
 */
 
 //TODO deprecated
-GameEngineLib.createGame2DAABB = function(inX, inY, inWidth, inHeight)
+ECGame.EngineLib.createGame2DAABB = function(inX, inY, inWidth, inHeight)
 {
-	return new GameEngineLib.Game2DAABB(inX, inY, inWidth, inHeight);
+	return new ECGame.EngineLib.Game2DAABB(inX, inY, inWidth, inHeight);
 };
 
 
@@ -30,25 +30,25 @@ GameEngineLib.createGame2DAABB = function(inX, inY, inWidth, inHeight)
 
 
 
-GameEngineLib.Game2DAABB = function Game2DAABB(inX, inY, inWidth, inHeight)
+ECGame.EngineLib.Game2DAABB = function Game2DAABB(inX, inY, inWidth, inHeight)
 {
 	this.myX = inX || 0;
 	this.myY = inY || 0;
 	this.myWidth = inWidth || 0;
 	this.myHeight = inHeight || 0;
 };
-GameEngineLib.Game2DAABB.prototype.constructor = GameEngineLib.Game2DAABB;
+ECGame.EngineLib.Game2DAABB.prototype.constructor = ECGame.EngineLib.Game2DAABB;
 
 
 
-GameEngineLib.Game2DAABB.prototype.clone = function clone()
+ECGame.EngineLib.Game2DAABB.prototype.clone = function clone()
 {
-	return new GameEngineLib.Game2DAABB(this.myX, this.myY, this.myWidth, this.myHeight);
+	return new ECGame.EngineLib.Game2DAABB(this.myX, this.myY, this.myWidth, this.myHeight);
 };
 
 
 
-GameEngineLib.Game2DAABB.prototype.containsRect = function containsRect(inOtherRect)
+ECGame.EngineLib.Game2DAABB.prototype.containsRect = function containsRect(inOtherRect)
 {
 	if(inOtherRect.myX < this.myX)//TODO maybe <= for all these??
 	{
@@ -72,7 +72,7 @@ GameEngineLib.Game2DAABB.prototype.containsRect = function containsRect(inOtherR
 
 
 
-GameEngineLib.Game2DAABB.prototype.intersectsRect = function intersectsRect(inOtherRect)
+ECGame.EngineLib.Game2DAABB.prototype.intersectsRect = function intersectsRect(inOtherRect)
 {
 	if(inOtherRect.myX + inOtherRect.myWidth <= this.myX)
 	{
@@ -96,12 +96,12 @@ GameEngineLib.Game2DAABB.prototype.intersectsRect = function intersectsRect(inOt
 
 
 
-GameEngineLib.Game2DAABB.prototype.getIntersection = function getIntersection(inOtherRect)
+ECGame.EngineLib.Game2DAABB.prototype.getIntersection = function getIntersection(inOtherRect)
 {
 	var x = Math.max(this.myX, inOtherRect.myX);
 	var y = Math.max(this.myY, inOtherRect.myY);
 	
-	var outIntersection = GameEngineLib.createGame2DAABB(
+	var outIntersection = ECGame.EngineLib.createGame2DAABB(
 		x,
 		y,
 		Math.max(
@@ -119,17 +119,17 @@ GameEngineLib.Game2DAABB.prototype.getIntersection = function getIntersection(in
 
 
 
-GameEngineLib.Game2DAABB.prototype.getUnion = function getUnion(inOtherRect)
+ECGame.EngineLib.Game2DAABB.prototype.getUnion = function getUnion(inOtherRect)
 {
-	var returnRect = new GameEngineLib.Game2DAABB();
+	var returnRect = new ECGame.EngineLib.Game2DAABB();
 	returnRect.setLeftTop(
-		new GameEngineLib.Game2DPoint(
+		new ECGame.EngineLib.Game2DPoint(
 			Math.min(this.myX, inOtherRect.myX),
 			Math.min(this.myY, inOtherRect.myY)
 		)
 	);
 	returnRect.setRightBottom(
-		new GameEngineLib.Game2DPoint(
+		new ECGame.EngineLib.Game2DPoint(
 			Math.max(this.myX + this.myWidth, inOtherRect.myX + inOtherRect.myWidth),
 			Math.max(this.myY + this.myHeight, inOtherRect.myY + inOtherRect.myHeight)
 		)
@@ -139,16 +139,16 @@ GameEngineLib.Game2DAABB.prototype.getUnion = function getUnion(inOtherRect)
 
 
 
-GameEngineLib.Game2DAABB.prototype.getArea = function getArea()
+ECGame.EngineLib.Game2DAABB.prototype.getArea = function getArea()
 {
 	return this.myWidth * this.myHeight;
 };
 
 
 
-GameEngineLib.Game2DAABB.prototype.getCenter = function getCenter()
+ECGame.EngineLib.Game2DAABB.prototype.getCenter = function getCenter()
 {
-	return GameEngineLib.createGame2DPoint(
+	return ECGame.EngineLib.createGame2DPoint(
 		this.myX + this.myWidth / 2,
 		this.myY + this.myHeight / 2
 	);
@@ -156,14 +156,14 @@ GameEngineLib.Game2DAABB.prototype.getCenter = function getCenter()
 
 
 
-GameEngineLib.Game2DAABB.prototype.getLeftTop = function getLeftTop()
+ECGame.EngineLib.Game2DAABB.prototype.getLeftTop = function getLeftTop()
 {
-	return GameEngineLib.createGame2DPoint(this.myX, this.myY);
+	return ECGame.EngineLib.createGame2DPoint(this.myX, this.myY);
 };
 
 
 
-GameEngineLib.Game2DAABB.prototype.setLeftTop = function setLeftTop(inPoint)
+ECGame.EngineLib.Game2DAABB.prototype.setLeftTop = function setLeftTop(inPoint)
 {
 	this.myX = inPoint.myX;
 	this.myY = inPoint.myY;
@@ -171,28 +171,28 @@ GameEngineLib.Game2DAABB.prototype.setLeftTop = function setLeftTop(inPoint)
 
 
 
-GameEngineLib.Game2DAABB.prototype.getRight = function getRight()
+ECGame.EngineLib.Game2DAABB.prototype.getRight = function getRight()
 {
 	return this.myX + this.myWidth;
 };
 
 
 
-GameEngineLib.Game2DAABB.prototype.getBottom = function getBottom()
+ECGame.EngineLib.Game2DAABB.prototype.getBottom = function getBottom()
 {
 	return this.myY + this.myHeight;
 };
 
 
 
-GameEngineLib.Game2DAABB.prototype.getRightBottom = function getRightBottom()
+ECGame.EngineLib.Game2DAABB.prototype.getRightBottom = function getRightBottom()
 {
-	return GameEngineLib.createGame2DPoint(this.myX + this.myWidth, this.myY + this.myHeight);
+	return ECGame.EngineLib.createGame2DPoint(this.myX + this.myWidth, this.myY + this.myHeight);
 };
 
 
 
-GameEngineLib.Game2DAABB.prototype.setRightBottom = function getRightBottom(inPoint)
+ECGame.EngineLib.Game2DAABB.prototype.setRightBottom = function getRightBottom(inPoint)
 {
 	this.myWidth = Math.max(inPoint.myX - this.myX, 0);
 	this.myHeight = Math.max(inPoint.myY - this.myY, 0);
@@ -200,21 +200,21 @@ GameEngineLib.Game2DAABB.prototype.setRightBottom = function getRightBottom(inPo
 
 
 
-GameEngineLib.Game2DAABB.prototype.getLeftBottom = function getLeftBottom()
+ECGame.EngineLib.Game2DAABB.prototype.getLeftBottom = function getLeftBottom()
 {
-	return GameEngineLib.createGame2DPoint(this.myX, this.myY + this.myHeight);
+	return ECGame.EngineLib.createGame2DPoint(this.myX, this.myY + this.myHeight);
 };
 
 
 
-GameEngineLib.Game2DAABB.prototype.getWidthHeight = function getWidthHeight()
+ECGame.EngineLib.Game2DAABB.prototype.getWidthHeight = function getWidthHeight()
 {
-	return GameEngineLib.createGame2DPoint(this.myWidth, this.myHeight);
+	return ECGame.EngineLib.createGame2DPoint(this.myWidth, this.myHeight);
 };
 
 
 
-GameEngineLib.Game2DAABB.prototype.copyFrom = function copyFrom(inOther)
+ECGame.EngineLib.Game2DAABB.prototype.copyFrom = function copyFrom(inOther)
 {
 	this.myX = inOther.myX;
 	this.myY = inOther.myY;

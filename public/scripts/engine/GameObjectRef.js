@@ -20,7 +20,7 @@
 */
 
 //todo type checking version so ref is of a type known to class?
-GameEngineLib.GameObjectRef = function GameObjectRef(inPathOrValue)
+ECGame.EngineLib.GameObjectRef = function GameObjectRef(inPathOrValue)
 {
 	this._path = null;
 	this._value = null;
@@ -40,11 +40,11 @@ GameEngineLib.GameObjectRef = function GameObjectRef(inPathOrValue)
 		}
 	}
 };
-GameEngineLib.GameObjectRef.prototype.constructor = GameEngineLib.GameObjectRef;
+ECGame.EngineLib.GameObjectRef.prototype.constructor = ECGame.EngineLib.GameObjectRef;
 	
 
 
-GameEngineLib.GameObjectRef.prototype.deref = function deref()
+ECGame.EngineLib.GameObjectRef.prototype.deref = function deref()
 {
 	var objectClass;
 	var pathTokens;
@@ -65,7 +65,7 @@ GameEngineLib.GameObjectRef.prototype.deref = function deref()
 		}
 		//todo error/warn otherwise
 		
-		objectClass = GameEngineLib.Class.getInstanceRegistry().findByName(pathTokens[0]);
+		objectClass = ECGame.EngineLib.Class.getInstanceRegistry().findByName(pathTokens[0]);
 		if(objectClass)
 		{
 			this._value = objectClass.getInstanceRegistry().findByName(pathTokens[1]);
@@ -75,7 +75,7 @@ GameEngineLib.GameObjectRef.prototype.deref = function deref()
 	
 	if(this.classID !== -1 && this.instanceID !== -1)
 	{
-		objectClass = GameEngineLib.Class.getInstanceRegistry().findByID(this.classID);
+		objectClass = ECGame.EngineLib.Class.getInstanceRegistry().findByID(this.classID);
 		if(objectClass)
 		{
 			this._value = objectClass.getInstanceRegistry().findByID(this.instanceID);
@@ -90,7 +90,7 @@ GameEngineLib.GameObjectRef.prototype.deref = function deref()
 
 
 
-GameEngineLib.GameObjectRef.prototype.setValue = function setValue(inValue)
+ECGame.EngineLib.GameObjectRef.prototype.setValue = function setValue(inValue)
 {
 	this._path = null;
 	this._value = inValue;
@@ -100,7 +100,7 @@ GameEngineLib.GameObjectRef.prototype.setValue = function setValue(inValue)
 
 
 
-GameEngineLib.GameObjectRef.prototype.setPath = function setPath(inPath)
+ECGame.EngineLib.GameObjectRef.prototype.setPath = function setPath(inPath)
 {
 	this._path = inPath;
 	this._value = null;
@@ -110,7 +110,7 @@ GameEngineLib.GameObjectRef.prototype.setPath = function setPath(inPath)
 
 
 
-GameEngineLib.GameObjectRef.prototype.toBinary = function toBinary()
+ECGame.EngineLib.GameObjectRef.prototype.toBinary = function toBinary()
 {
 	if(this.classID === -1 && this.instanceID === -1)
 	{
@@ -130,7 +130,7 @@ GameEngineLib.GameObjectRef.prototype.toBinary = function toBinary()
 
 
 
-GameEngineLib.GameObjectRef.prototype.getPath = function getPath()//TODO txt path vs bin path
+ECGame.EngineLib.GameObjectRef.prototype.getPath = function getPath()//TODO txt path vs bin path
 {
 	if(this._path === null)
 	{

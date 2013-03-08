@@ -19,13 +19,13 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.EntityComponent_2DCamera = GameEngineLib.Class.create({
+ECGame.EngineLib.EntityComponent_2DCamera = ECGame.EngineLib.Class.create({
 	Constructor : function EntityComponent_2DCamera()
 	{
 		this.GameEntityComponent();
 		this.Game2DCamera();
 	},
-	Parents : [GameEngineLib.GameEntityComponent, GameEngineLib.Game2DCamera],
+	Parents : [ECGame.EngineLib.GameEntityComponent, ECGame.EngineLib.Game2DCamera],
 	flags : { net : true },
 	ChainUp : null,
 	ChainDown : null,
@@ -60,7 +60,7 @@ GameEngineLib.EntityComponent_2DCamera = GameEngineLib.Class.create({
 			this._myMap = inEvent.world.getMap();
 			//TODO register as a camera entity with the world
 			
-			if(this.getNetOwner() === GameInstance.localUser.userID)//TODO maybe make search from game rules to find cams that are local owned?
+			if(this.getNetOwner() === ECGame.instance.localUser.userID)//TODO maybe make search from game rules to find cams that are local owned?
 			{
 				inEvent.world.setCamera(this);
 			}

@@ -20,10 +20,10 @@
 */
 
 //TODO depricated
-GameEngineLib.createGameRegistry = function(instance)
+ECGame.EngineLib.createGameRegistry = function(instance)
 {
 	var property;
-	var temp = new GameEngineLib.GameRegistry();
+	var temp = new ECGame.EngineLib.GameRegistry();
 	instance = instance || {};
 	
 	for(property in temp)
@@ -40,7 +40,7 @@ GameEngineLib.createGameRegistry = function(instance)
 
 
 
-GameEngineLib.GameRegistry = function GameRegistry()
+ECGame.EngineLib.GameRegistry = function GameRegistry()
 {
 	this._itemCount = 0;
 	this._instancesByName = {};
@@ -48,17 +48,17 @@ GameEngineLib.GameRegistry = function GameRegistry()
 	this._unusedInstanceIDs = [];	//TODO magic/check number for handles
 	this._maxID = 0;
 };
-GameEngineLib.GameRegistry.prototype.constructor = GameEngineLib.GameRegistry;
+ECGame.EngineLib.GameRegistry.prototype.constructor = ECGame.EngineLib.GameRegistry;
 
 
 	
-GameEngineLib.GameRegistry.prototype.getMaxID = function getMaxID()
+ECGame.EngineLib.GameRegistry.prototype.getMaxID = function getMaxID()
 {
 	return this._maxID;
 };
 
 //todo take name parameter as well so it is not always assuming the object is named?
-GameEngineLib.GameRegistry.prototype.register = function register(inObject)
+ECGame.EngineLib.GameRegistry.prototype.register = function register(inObject)
 {
 	var id = inObject.getID();
 	var name = inObject.getName();
@@ -67,11 +67,11 @@ GameEngineLib.GameRegistry.prototype.register = function register(inObject)
 	
 	if(this._instancesByName[name])
 	{
-		GameEngineLib.logger.warn("Trying to reregister '" + name + "' : '" + id + "' but '" + name + "' is in use.");
+		ECGame.log.warn("Trying to reregister '" + name + "' : '" + id + "' but '" + name + "' is in use.");
 	}
 	if(this._instancesByID[id])
 	{
-		GameEngineLib.logger.warn("Trying to reregister '" + name + "' : '" + id + "' but '" + id + "' is in use.");
+		ECGame.log.warn("Trying to reregister '" + name + "' : '" + id + "' but '" + id + "' is in use.");
 	}
 	
 	this._instancesByName[name] = inObject;
@@ -83,7 +83,7 @@ GameEngineLib.GameRegistry.prototype.register = function register(inObject)
 };
 
 //todo take name parameter as well so it is not always assuming the object is named?
-GameEngineLib.GameRegistry.prototype.deregister = function deregister(inObject)
+ECGame.EngineLib.GameRegistry.prototype.deregister = function deregister(inObject)
 {
 	var id = inObject.getID();
 	var name = inObject.getName();
@@ -97,17 +97,17 @@ GameEngineLib.GameRegistry.prototype.deregister = function deregister(inObject)
 };
 
 //todo change this to just find() and check they type (index vs name)
-GameEngineLib.GameRegistry.prototype.findByName = function findByName(inName)
+ECGame.EngineLib.GameRegistry.prototype.findByName = function findByName(inName)
 {
 	return this._instancesByName[inName];
 };
 
-GameEngineLib.GameRegistry.prototype.findByID = function findByID(inID)
+ECGame.EngineLib.GameRegistry.prototype.findByID = function findByID(inID)
 {
 	return this._instancesByID[inID];
 };
 
-GameEngineLib.GameRegistry.prototype.forAll = function forAll(inFunction)
+ECGame.EngineLib.GameRegistry.prototype.forAll = function forAll(inFunction)
 {
 	var i;
 	for(i in this._instancesByName)
@@ -119,13 +119,13 @@ GameEngineLib.GameRegistry.prototype.forAll = function forAll(inFunction)
 	}
 };
 
-GameEngineLib.GameRegistry.prototype.numItems = function numItems()//TODO rename this!!
+ECGame.EngineLib.GameRegistry.prototype.numItems = function numItems()//TODO rename this!!
 {
 	return this._itemCount;
 };
 
 
-GameEngineLib.GameRegistry.prototype.getUnusedID = function getUnusedID()
+ECGame.EngineLib.GameRegistry.prototype.getUnusedID = function getUnusedID()
 {
 	//TODO unused ids is currently broken because of the commented out code below
 	//vvvvvvvvvvvv

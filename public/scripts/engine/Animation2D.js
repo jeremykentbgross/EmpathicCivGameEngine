@@ -19,13 +19,13 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.Animation2D = GameEngineLib.Class.create({
+ECGame.EngineLib.Animation2D = ECGame.EngineLib.Class.create({
 	Constructor : function Animation2D()
 	{
 		this.image = null;
 		this._animFrames = [];
 		this._frameRate = 30;
-		this._AABB = new GameEngineLib.Game2DAABB(
+		this._AABB = new ECGame.EngineLib.Game2DAABB(
 			Number.MAX_VALUE,
 			Number.MAX_VALUE,
 			-Number.MAX_VALUE,
@@ -42,9 +42,9 @@ GameEngineLib.Animation2D = GameEngineLib.Class.create({
 		{
 			var i;
 			
-			if(!GameSystemVars.Network.isServer)
+			if(!ECGame.Settings.Network.isServer)
 			{
-				GameInstance.AssetManager.loadImage(inImageName, this);
+				ECGame.instance.AssetManager.loadImage(inImageName, this);
 			}
 			
 			this._frameRate = inFrameRate;
@@ -82,7 +82,7 @@ GameEngineLib.Animation2D = GameEngineLib.Class.create({
 			var dest = this._AABB.getLeftTop().add(inPosition).sub(inCameraRect.getLeftTop());
 			
 			//draw AABB
-			inCanvas2DContext.fillStyle = GameSystemVars.Debug.Sprite_AABB_DrawColor;
+			inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Sprite_AABB_DrawColor;
 			inCanvas2DContext.strokeRect(
 				dest.myX,
 				dest.myY,

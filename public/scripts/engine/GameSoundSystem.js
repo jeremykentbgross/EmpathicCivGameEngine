@@ -33,7 +33,7 @@ https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html
 
 
 
-GameEngineLib.SoundDescription = function SoundDescription(inID, inFileName)
+ECGame.EngineLib.SoundDescription = function SoundDescription(inID, inFileName)
 {
 	this.id = inID;
 	this.fileName = inFileName;
@@ -43,17 +43,17 @@ GameEngineLib.SoundDescription = function SoundDescription(inID, inFileName)
 
 //TODO soundListenerComponent, soundPlayerComponent
 
-GameEngineLib.GameSoundSystem = GameEngineLib.Class.create({
+ECGame.EngineLib.GameSoundSystem = ECGame.EngineLib.Class.create({
 	Constructor : function GameSoundSystem()
 	{
-		if(GameSystemVars.Network.isServer)
+		if(ECGame.Settings.Network.isServer)
 		{
 			return;
 		}
 		
 		this._soundLib = [];
-		this._playingSounds = new GameEngineLib.GameCircularDoublyLinkedListNode(null);
-		this._listenerPosition2D = new GameEngineLib.Game2DPoint();
+		this._playingSounds = new ECGame.EngineLib.GameCircularDoublyLinkedListNode(null);
+		this._listenerPosition2D = new ECGame.EngineLib.Game2DPoint();
 		
 		try
 		{
@@ -67,14 +67,14 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class.create({
 			this._soundHardwareUpdateTime = this.getSoundHardwareTime();
 			this._lastSoundHardwareUpdateTime = this.getSoundHardwareTime();
 			
-			this._context.listener.dopplerFactor = GameSystemVars.Sound.dopplerFactor;
-			this._context.listener.speedOfSound = GameSystemVars.Sound.speedOfSound;
+			this._context.listener.dopplerFactor = ECGame.Settings.Sound.dopplerFactor;
+			this._context.listener.speedOfSound = ECGame.Settings.Sound.speedOfSound;
 			
 			//////////////////////////////////////////////////////////
 			//HACK!!//////////////////////////////////////////////////
 			this.loadSounds(
 				[
-					new GameEngineLib.SoundDescription(0, 'sounds/placeholder.mp3')
+					new ECGame.EngineLib.SoundDescription(0, 'sounds/placeholder.mp3')
 				]
 			);
 			//HACK!!//////////////////////////////////////////////////
@@ -84,13 +84,13 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class.create({
 			this._masterVolume = this._context.createGainNode();
 			this._masterVolume.connect(this._context.destination);
 			this._masterVolumeUserValue = 0;
-			this.setMasterVolume(GameSystemVars.Sound.masterVolume);
+			this.setMasterVolume(ECGame.Settings.Sound.masterVolume);
 			
 			//setup effects volume
 			this._effectsVolume = this._context.createGainNode();
 			this._effectsVolume.connect(this._masterVolume);
 			this._effectsVolumeUserValue = 0;
-			this.setEffectsVolume(GameSystemVars.Sound.effectsVolume);
+			this.setEffectsVolume(ECGame.Settings.Sound.effectsVolume);
 			
 			//TODO setup UI effects volume
 						
@@ -103,7 +103,7 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class.create({
 		catch(error)
 		{
 			console.log(error.stack);
-			GameEngineLib.logger.warn("Audio System failed to start in your browser!");
+			ECGame.log.warn("Audio System failed to start in your browser!");
 		}
 	},
 	Parents : null,
@@ -116,7 +116,7 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class.create({
 		{
 			var i, soundDesc;
 			
-			if(GameSystemVars.Network.isServer)
+			if(ECGame.Settings.Network.isServer)
 			{
 				return;
 			}
@@ -125,7 +125,7 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class.create({
 			{
 				soundDesc = inSoundDescriptions[i];
 				this._soundLib[soundDesc.id] = soundDesc;
-				GameInstance.AssetManager.loadSound(soundDesc.fileName, soundDesc);
+				ECGame.instance.AssetManager.loadSound(soundDesc.fileName, soundDesc);
 			}
 			/*
 			TODO default sound in assentmanager:
@@ -216,17 +216,17 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class.create({
 			//source.loop = true;//TODO param about looping (+loopStart, loopEnd)
 			//source.playbackRate = ??//TODO vary sound effect slightly
 			
-			sound = new GameEngineLib.Sound(
+			sound = new ECGame.EngineLib.Sound(
 				source,
 				this._context.currentTime,
 				this._soundLib[inID].fileName
 			);
 			
 			sound.play(0);//TODO this would be delay parameter
-			this._playingSounds.insert(new GameEngineLib.GameCircularDoublyLinkedListNode(sound));
-			if(GameSystemVars.Debug.Sound_Print)
+			this._playingSounds.insert(new ECGame.EngineLib.GameCircularDoublyLinkedListNode(sound));
+			if(ECGame.Settings.Debug.Sound_Print)
 			{
-				GameEngineLib.logger.info("Played sound " + this._soundLib[inID].fileName);
+				ECGame.log.info("Played sound " + this._soundLib[inID].fileName);
 			}
 			
 			return sound;
@@ -260,7 +260,7 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class.create({
 		{
 			var sound, source, panner;
 			
-			inRadius = inRadius || GameSystemVars.Sound.default2DRadius;
+			inRadius = inRadius || ECGame.Settings.Sound.default2DRadius;
 			
 			panner = this._context.createPanner();
 			panner.connect(this._effectsVolume);
@@ -275,7 +275,7 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class.create({
 			//source.loop = true;//TODO param about looping (+loopStart, loopEnd)
 			//source.playbackRate = ??//TODO vary sound effect slightly
 			
-			sound = new GameEngineLib.Sound2D(
+			sound = new ECGame.EngineLib.Sound2D(
 				source,
 				this._context.currentTime,
 				this._soundLib[inID].fileName,
@@ -286,10 +286,10 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class.create({
 			//TODO velocity?
 			
 			sound.play(0);//TODO this would be delay parameter
-			this._playingSounds.insert(new GameEngineLib.GameCircularDoublyLinkedListNode(sound));
-			if(GameSystemVars.Debug.Sound_Print)
+			this._playingSounds.insert(new ECGame.EngineLib.GameCircularDoublyLinkedListNode(sound));
+			if(ECGame.Settings.Debug.Sound_Print)
 			{
-				GameEngineLib.logger.info("Played sound " + this._soundLib[inID].fileName + " at (" + inPosition.myX + ', ' + inPosition.myY + ')');
+				ECGame.log.info("Played sound " + this._soundLib[inID].fileName + " at (" + inPosition.myX + ', ' + inPosition.myY + ')');
 			}
 			
 			return sound;
@@ -310,17 +310,17 @@ GameEngineLib.GameSoundSystem = GameEngineLib.Class.create({
 		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect)
 		{
 			var _this_ = this, i;
-			GameInstance.Graphics.drawDebugText("Debug Drawing Sounds", GameSystemVars.Debug.Sound_Area_DrawColor);
+			ECGame.instance.Graphics.drawDebugText("Debug Drawing Sounds", ECGame.Settings.Debug.Sound_Area_DrawColor);
 			
-			inCanvas2DContext.strokeStyle = GameSystemVars.Debug.Sound_Area_DrawColor;
-			inCanvas2DContext.fillStyle = GameSystemVars.Debug.Sound_Area_DrawColor;
+			inCanvas2DContext.strokeStyle = ECGame.Settings.Debug.Sound_Area_DrawColor;
+			inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Sound_Area_DrawColor;
 			
 			//draw listener position
 			inCanvas2DContext.fillRect(
-				this._listenerPosition2D.myX - inCameraRect.myX - (GameSystemVars.Debug.Sound_Listener_Size / 2),
-				this._listenerPosition2D.myY - inCameraRect.myY - (GameSystemVars.Debug.Sound_Listener_Size / 2),
-				GameSystemVars.Debug.Sound_Listener_Size,
-				GameSystemVars.Debug.Sound_Listener_Size
+				this._listenerPosition2D.myX - inCameraRect.myX - (ECGame.Settings.Debug.Sound_Listener_Size / 2),
+				this._listenerPosition2D.myY - inCameraRect.myY - (ECGame.Settings.Debug.Sound_Listener_Size / 2),
+				ECGame.Settings.Debug.Sound_Listener_Size,
+				ECGame.Settings.Debug.Sound_Listener_Size
 			);
 			//TODO draw listener angle
 			

@@ -20,10 +20,10 @@
 */
 
 //TODO depricated:
-GameEngineLib.createEventSystem = function(instance)//TODO get rid of once I refactor network and input
+ECGame.EngineLib.createEventSystem = function(instance)//TODO get rid of once I refactor network and input
 {
 	var property;
-	var temp = new GameEngineLib.GameEventSystem();
+	var temp = new ECGame.EngineLib.GameEventSystem();
 	instance = instance || {};
 	
 	for(property in temp)
@@ -41,34 +41,34 @@ GameEngineLib.createEventSystem = function(instance)//TODO get rid of once I ref
 
 
 //TODO consider making GameObject inherit this as many things might want to listen to its state!
-GameEngineLib.GameEventSystem = function GameEventSystem()
+ECGame.EngineLib.GameEventSystem = function GameEventSystem()
 {
 	this._eventListeners = {};
 };
-GameEngineLib.GameEventSystem.prototype.constructor = GameEngineLib.GameEventSystem;
-GameEngineLib.GameEventSystem.create = function create()
+ECGame.EngineLib.GameEventSystem.prototype.constructor = ECGame.EngineLib.GameEventSystem;
+ECGame.EngineLib.GameEventSystem.create = function create()
 {
-	return new GameEngineLib.GameEventSystem();
+	return new ECGame.EngineLib.GameEventSystem();
 };
 
 
 
 //TODO add listener sorting (may need to be an array then and use custom sorting?)!
-GameEngineLib.GameEventSystem.prototype.registerListener = function registerListener(inEventName, inListener)
+ECGame.EngineLib.GameEventSystem.prototype.registerListener = function registerListener(inEventName, inListener)
 {
-	var listenerNode = GameEngineLib.createGameCircularDoublyLinkedListNode();
+	var listenerNode = ECGame.EngineLib.createGameCircularDoublyLinkedListNode();
 	listenerNode.item = inListener;
 	
 	this._eventListeners[inEventName] = 
 		this._eventListeners[inEventName] ||
-		GameEngineLib.createGameCircularDoublyLinkedListNode();
+		ECGame.EngineLib.createGameCircularDoublyLinkedListNode();
 		
 	this._eventListeners[inEventName].myPrev.insert(listenerNode);
 };
 
 
 
-GameEngineLib.GameEventSystem.prototype.deregisterListener = function deregisterListener(inEventName, inListener)
+ECGame.EngineLib.GameEventSystem.prototype.deregisterListener = function deregisterListener(inEventName, inListener)
 {
 	var head;
 	var current;
@@ -94,7 +94,7 @@ GameEngineLib.GameEventSystem.prototype.deregisterListener = function deregister
 
 
 
-GameEngineLib.GameEventSystem.prototype.onEvent = function onEvent(inEvent)
+ECGame.EngineLib.GameEventSystem.prototype.onEvent = function onEvent(inEvent)
 {
 	var head,
 		current,
@@ -139,11 +139,11 @@ GameEngineLib.GameEventSystem.prototype.onEvent = function onEvent(inEvent)
 
 
 //TODO WTF???
-//GameEngineLib.GameEventSystem.prototype.serialize = function serialize(serializer)
+//ECGame.EngineLib.GameEventSystem.prototype.serialize = function serialize(serializer)
 //{		
-//	if(GameSystemVars.DEBUG)
+//	if(ECGame.Settings.DEBUG)
 //	{
-//		GameEngineLib.logger.info("Serializing EventSystem " + GameEngineLib.GameObjectRef(this).getPath());
+//		ECGame.log.info("Serializing EventSystem " + ECGame.EngineLib.GameObjectRef(this).getPath());
 //	}
 ////	if(serializer.isReading())
 ////	{
@@ -152,15 +152,15 @@ GameEngineLib.GameEventSystem.prototype.onEvent = function onEvent(inEvent)
 ////	{
 ////	}
 //};
-////GameEngineLib.GameEventSystem.prototype.clone = function(cloneInstance, clonePrivate)
+////ECGame.EngineLib.GameEventSystem.prototype.clone = function(cloneInstance, clonePrivate)
 ////{
 ////	cloneInstance.bIsEntity = this.bIsEntity;
 ////}
-//GameEngineLib.GameEventSystem.prototype.destroy = function destroy(serializer)//WTF??
+//ECGame.EngineLib.GameEventSystem.prototype.destroy = function destroy(serializer)//WTF??
 //{		
-//	if(GameSystemVars.DEBUG)
+//	if(ECGame.Settings.DEBUG)
 //	{
-//		GameEngineLib.logger.info("Destroying EventSystem " + GameEngineLib.GameObjectRef(this).getPath());
+//		ECGame.log.info("Destroying EventSystem " + ECGame.EngineLib.GameObjectRef(this).getPath());
 //	}
 //};
 /////////////////////////////////////////////////////////

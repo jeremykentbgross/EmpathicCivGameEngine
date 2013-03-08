@@ -27,17 +27,15 @@ Should also run jslint: http://www.jslint.com/
 
 Known globals:
 
-GameLoader window require requestAnimFrame setTimeout GameSystemVars GameEngineLib GameLib GameInstance GameClassRegistryMap GameUnitTests console gameAssert document Image GameEngineServer io AudioContext XMLHttpRequest
-orequestAnimFrameo oGameSystemVarso oGameEngineLibo oGameLibo oGameInstanceo oGameUnitTestso ogameAsserto oGameEngineServero
 */
 
-GameEngineServer.CodeCompressor = function CodeCompressor(inRootPath)
+ECGame.Webserver.CodeCompressor = function CodeCompressor(inRootPath)
 {
 	this._rootPath = inRootPath;
 	this._code = "";
 };
 
-GameEngineServer.CodeCompressor.prototype.makeCompactGameLoader = function makeCompactGameLoader()
+ECGame.Webserver.CodeCompressor.prototype.makeCompactGameLoader = function makeCompactGameLoader()
 {
 	var path,
 		i,
@@ -71,17 +69,21 @@ GameEngineServer.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 	}
 	
 	
-	obfuscator = new GameEngineServer.Obfuscator();
+	obfuscator = new ECGame.Webserver.Obfuscator();
 	obfuscator.addSrc(gameLoaderSrc);
 	
-	obfuscator.registerNamespace('GameEngineServer');
-	obfuscator.registerNamespace('GameEngineLib');
-	obfuscator.registerNamespace('GameLib');
-	obfuscator.registerNamespace('GameInstance');
+	obfuscator.registerNamespace('ECGame');
+	obfuscator.registerNamespace('Webserver');//ECGame.Webserver
+	obfuscator.registerNamespace('EngineLib');//ECGame.EngineLib
+	obfuscator.registerNamespace('Lib');//ECGame.Lib
+	obfuscator.registerNamespace('instance');//ECGame.instance
 	//obfuscator.registerNamespace('GameClassRegistryMap');
-	obfuscator.registerNamespace('GameUnitTests');
-	obfuscator.registerNamespace('GameLoader');
-	obfuscator.registerNamespace('GameSystemVars');
+	obfuscator.registerNamespace('unitTests');//ECGame.unitTests
+//	obfuscator.registerNamespace('GameLoader');
+	obfuscator.registerNamespace('Settings');//ECGame.Settings
+	//TODO locailization
+	//TODO logger?
+	//BIG Crashes: obfuscator.registerNamespace('PRIVATE');//TEMP HACK!!!!!
 
 	obfuscator._addFunctionName('requestAnimFrame')//TODO make not private!	
 	obfuscator.addIgnore('requestAnimationFrame');
@@ -159,7 +161,7 @@ GameEngineServer.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 	
 	
 	/*
-	gameAssert   AudioContext Image XMLHttpRequest io
+	ECGame.log.assert   AudioContext Image XMLHttpRequest io
 	*/
 		
 	
@@ -170,7 +172,7 @@ GameEngineServer.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 	this._code = new Buffer(obfuscatedSrc);
 };
 
-GameEngineServer.CodeCompressor.prototype.getCompactCode = function getCompactCode()
+ECGame.Webserver.CodeCompressor.prototype.getCompactCode = function getCompactCode()
 {
 	return this._code;
 };

@@ -19,13 +19,13 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.Game2DMap = GameEngineLib.Class.create(
+ECGame.EngineLib.Game2DMap = ECGame.EngineLib.Class.create(
 {
 	Constructor : function Game2DMap()
 	{
 		this.GameObject();
 	},
-	Parents : [GameEngineLib.GameObject],
+	Parents : [ECGame.EngineLib.GameObject],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
@@ -39,9 +39,9 @@ GameEngineLib.Game2DMap = GameEngineLib.Class.create(
 			this._tileSize = inTileSize;
 			this._mapSize = this._mapSizeInTiles * this._tileSize;
 			
-			this._mapAABB = new GameEngineLib.Game2DAABB(0, 0, this._mapSize, this._mapSize);
+			this._mapAABB = new ECGame.EngineLib.Game2DAABB(0, 0, this._mapSize, this._mapSize);
 			
-			this._tileMapTree = new GameEngineLib.GameQuadTree();
+			this._tileMapTree = new ECGame.EngineLib.GameQuadTree();
 			this._tileMapTree.init(this._mapAABB, this._tileSize);
 			
 			this._myTileSet = inTileSet;
@@ -80,7 +80,7 @@ GameEngineLib.Game2DMap = GameEngineLib.Class.create(
 				return;
 			}
 			
-			tileAABB = new GameEngineLib.Game2DAABB(
+			tileAABB = new ECGame.EngineLib.Game2DAABB(
 				inTilePosition.myX * this._tileSize,
 				inTilePosition.myY * this._tileSize,
 				this._tileSize,
@@ -111,7 +111,7 @@ GameEngineLib.Game2DMap = GameEngineLib.Class.create(
 			physicsRect = this._myTileSet.getPhysicsRect(inTileValue, position);
 			
 			//create a map time
-			tile = new GameEngineLib.GameQuadTreeItem(tileAABB);
+			tile = new ECGame.EngineLib.GameQuadTreeItem(tileAABB);
 			tile.tileValue = inTileValue;
 			if(physicsRect)
 			{
@@ -121,7 +121,7 @@ GameEngineLib.Game2DMap = GameEngineLib.Class.create(
 			}	
 			
 			//setup for scenegraph
-			tile.sceneGraphRenderable = new GameEngineLib.RenderableTile2D();
+			tile.sceneGraphRenderable = new ECGame.EngineLib.RenderableTile2D();
 			tile.sceneGraphRenderable.layer = this._myTileSet.getTileLayer(inTileValue);
 			tile.sceneGraphRenderable.anchorPosition = position;
 			tile.sceneGraphRenderable._AABB = this._myTileSet.getTileRect(inTileValue, position);
@@ -142,11 +142,11 @@ GameEngineLib.Game2DMap = GameEngineLib.Class.create(
 			
 			//delete from the tilemap tree
 			this._tileMapTree.deleteContained(inRect, deletedTiles);
-			if(GameSystemVars.DEBUG)
+			if(ECGame.Settings.DEBUG)
 			{
 				if(deletedTiles.length > 1)
 				{
-					GameEngineLib.logger.error("Deleted too many tiles " + deletedTiles.length);
+					ECGame.log.error("Deleted too many tiles " + deletedTiles.length);
 				}
 			}
 			
@@ -174,7 +174,7 @@ GameEngineLib.Game2DMap = GameEngineLib.Class.create(
 			}
 			
 			this.clearTilesInRect(
-				new GameEngineLib.Game2DAABB(
+				new ECGame.EngineLib.Game2DAABB(
 					inTilePosition.myX * this._tileSize,
 					inTilePosition.myY * this._tileSize,
 					this._tileSize,
@@ -194,7 +194,7 @@ GameEngineLib.Game2DMap = GameEngineLib.Class.create(
 		
 		toTileCoordinate : function toTileCoordinate(inWorldCoordinate)
 		{
-			return new GameEngineLib.Game2DPoint(
+			return new ECGame.EngineLib.Game2DPoint(
 				Math.floor(inWorldCoordinate.myX / this._tileSize),
 				Math.floor(inWorldCoordinate.myY / this._tileSize)
 			);
@@ -217,7 +217,7 @@ GameEngineLib.Game2DMap = GameEngineLib.Class.create(
 		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect)
 		{
 			var _this_ = this;
-			GameInstance.Graphics.drawDebugText("Debug Drawing Tile Map");
+			ECGame.instance.Graphics.drawDebugText("Debug Drawing Tile Map");
 			
 			this._tileMapTree.walk(
 				function(item)
@@ -226,7 +226,7 @@ GameEngineLib.Game2DMap = GameEngineLib.Class.create(
 					_this_._myTileSet.renderTileInRect(
 						inCanvas2DContext,
 						item.tileValue,
-						GameEngineLib.createGame2DAABB(
+						ECGame.EngineLib.createGame2DAABB(
 							itemRect.myX - inCameraRect.myX,
 							itemRect.myY - inCameraRect.myY,
 							_this_._tileSize,

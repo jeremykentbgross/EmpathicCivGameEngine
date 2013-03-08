@@ -19,26 +19,26 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class.create(
+ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 {
 	Constructor : function EntityComponent_Sprite()
 	{
 		this.GameEntityComponent();
 		
-		this._position = GameEngineLib.createGame2DPoint();//TODO this isn't used, but shouldn't use topleft of aabb either
+		this._position = ECGame.EngineLib.createGame2DPoint();//TODO this isn't used, but shouldn't use topleft of aabb either
 		
-		this._animations = GameInstance.GameRules._animations;//HACK!!!!!//TODO 'null'/default object!! (object ref?)
+		this._animations = ECGame.instance.GameRules._animations;//HACK!!!!!//TODO 'null'/default object!! (object ref?)
 		this._currentAnimation = 8;//TODO why 8?
-		this._sceneGraphRenderable = new GameEngineLib.Animation2DInstance();
+		this._sceneGraphRenderable = new ECGame.EngineLib.Animation2DInstance();
 /*TODO should be commented out?*/this._sceneGraphRenderable.setAnimation(this._animations[0]);//TODO should be a null/default object
-		GameInstance.UpdateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
+		ECGame.instance.UpdateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
 		this._sceneGraphRenderable.layer = 1;		
 		
 		//TODO frame knows filename, offset, collision rects, (sound?) events, etc //TODO move this note to the frame class?
 		//TODO ^^^ same kind of thing for map tiles?
 	},
 	
-	Parents : [GameEngineLib.GameEntityComponent],
+	Parents : [ECGame.EngineLib.GameEntityComponent],
 	
 	flags : {},
 	
@@ -51,9 +51,9 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class.create(
 		{
 			this._animations = inAnimations;
 			//this._currentAnimation = 8;//TODO why 8?
-			//this._sceneGraphRenderable = new GameEngineLib.Animation2DInstance();
+			//this._sceneGraphRenderable = new ECGame.EngineLib.Animation2DInstance();
 			this._sceneGraphRenderable.setAnimation(this._animations[0]);
-			//GameInstance.UpdateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
+			//ECGame.instance.UpdateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
 			//this._sceneGraphRenderable.layer = 1;
 		},
 
@@ -109,14 +109,14 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class.create(
 				var angle = 0;
 				var directions =
 				[
-					new GameEngineLib.Game2DPoint(Math.cos(angle), Math.sin(angle)),
-					new GameEngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new GameEngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new GameEngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new GameEngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new GameEngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new GameEngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new GameEngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle))//,
+					new ECGame.EngineLib.Game2DPoint(Math.cos(angle), Math.sin(angle)),
+					new ECGame.EngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new ECGame.EngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new ECGame.EngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new ECGame.EngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new ECGame.EngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new ECGame.EngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new ECGame.EngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle))//,
 				];
 				var animProb = 0;
 				var bestAnimProb = 0;
@@ -159,9 +159,9 @@ GameEngineLib.EntityComponent_Sprite = GameEngineLib.Class.create(
 			this._animations = inOther._animations;
 			this._currentAnimation = inOther._currentAnimation;
 			
-			this._sceneGraphRenderable = new GameEngineLib.Animation2DInstance();
+			this._sceneGraphRenderable = new ECGame.EngineLib.Animation2DInstance();
 			this._sceneGraphRenderable.setAnimation(this._animations[0]);
-			GameInstance.UpdateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
+			ECGame.instance.UpdateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
 			this._sceneGraphRenderable.layer = inOther._sceneGraphRenderable.layer;
 		}
 	}

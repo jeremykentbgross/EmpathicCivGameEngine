@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.createGame2DPhysics = function()
+ECGame.EngineLib.createGame2DPhysics = function()
 {
 	/////////////////////////////////////////////////////
 	//return value///////////////////////////////////////
@@ -63,15 +63,15 @@ GameEngineLib.createGame2DPhysics = function()
 		myWorldSize = inWorldSize;
 		myMinSize = inMinSize;
 		
-		myDetectionTree = GameEngineLib.GameQuadTree.create();
+		myDetectionTree = ECGame.EngineLib.GameQuadTree.create();
 		myDetectionTree.init(
-			GameEngineLib.createGame2DAABB(0, 0, inWorldSize, inWorldSize),
+			ECGame.EngineLib.createGame2DAABB(0, 0, inWorldSize, inWorldSize),
 			inMinSize
 		);
 		
 		myPhysicsObjects = {};//todo is this needed? should be linked list instead!!
 		
-		myActivePhysicsObjects = GameEngineLib.createGameCircularDoublyLinkedListNode();
+		myActivePhysicsObjects = ECGame.EngineLib.createGameCircularDoublyLinkedListNode();
 		
 		myCollisions = [];
 		myCollisionsRenderList = [];
@@ -87,9 +87,9 @@ GameEngineLib.createGame2DPhysics = function()
 		myDetectionTree.walk(
 			function(item)
 			{
-				if(GameSystemVars.DEBUG && physicsObject === item)////////////////////TODO TEMP DEBUG CHECK?? or keep?
+				if(ECGame.Settings.DEBUG && physicsObject === item)////////////////////TODO TEMP DEBUG CHECK?? or keep?
 				{
-					GameEngineLib.logger.error("Object collided with itself??");
+					ECGame.log.error("Object collided with itself??");
 					return;
 				}
 			
@@ -124,7 +124,7 @@ GameEngineLib.createGame2DPhysics = function()
 			{
 				if(physicsObject === item)
 				{
-					GameEngineLib.logger.error("Object collided with itself??");
+					ECGame.log.error("Object collided with itself??");
 					
 					for(nodeIndex in nodeArray)///////////////////////////////////
 						nodeArray[nodeIndex].deleteItem(physicsObject);
@@ -152,14 +152,14 @@ GameEngineLib.createGame2DPhysics = function()
 		{
 			myStatus : STATUS__STATIC,
 			myDensity : 1,
-			myVelocity : GameEngineLib.createGame2DPoint(),//todo requested/actual velocity?
+			myVelocity : ECGame.EngineLib.createGame2DPoint(),//todo requested/actual velocity?
 			//myFriction:,??
-			AABB : GameEngineLib.createGame2DAABB(),//todo have lots of gamerects relative to a center??
-			getAABB : function getAABB(){return this.AABB;},//TODO inherit GameEngineLib.GameQuadTreeItem
+			AABB : ECGame.EngineLib.createGame2DAABB(),//todo have lots of gamerects relative to a center??
+			getAABB : function getAABB(){return this.AABB;},//TODO inherit ECGame.EngineLib.GameQuadTreeItem
 			myOwningNodes : [],
 			myID : 'PhysID' + (++myNextPhysicsID).toString(),//todo become just a number for serialization? (probably not serialized?)
 			myHandle : phyObjHandle,
-			myRegisteredActiveNode : GameEngineLib.createGameCircularDoublyLinkedListNode(),
+			myRegisteredActiveNode : ECGame.EngineLib.createGameCircularDoublyLinkedListNode(),
 			getMass :
 						function()
 						{
@@ -368,7 +368,7 @@ GameEngineLib.createGame2DPhysics = function()
 					&& Math.abs(physicsObject.myVelocity.myY) < 0.1)
 				{
 					//set sleeping:
-					physicsObject.myVelocity = GameEngineLib.createGame2DPoint();					
+					physicsObject.myVelocity = ECGame.EngineLib.createGame2DPoint();					
 					physicsObject.myStatus = STATUS__SLEEPING;
 					physicsObject.myRegisteredActiveNode.remove();
 				}
@@ -409,8 +409,8 @@ GameEngineLib.createGame2DPhysics = function()
 		var physicsObject;
 		var node;
 		
-		GameInstance.Graphics.drawDebugText("Debug Drawing Physics");
-		GameInstance.Graphics.drawDebugText("Frame Update Count:" + PRIVATE.frameUpdateCount);
+		ECGame.instance.Graphics.drawDebugText("Debug Drawing Physics");
+		ECGame.instance.Graphics.drawDebugText("Frame Update Count:" + PRIVATE.frameUpdateCount);
 		//todo print (and notify) collisions this frame
 		
 		//walk:

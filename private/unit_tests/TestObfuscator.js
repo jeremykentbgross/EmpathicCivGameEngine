@@ -20,42 +20,71 @@
 */
 var fs = require("fs");
 
-GameUnitTests.registerTest(
+ECGame.unitTests.registerTest(
 	"GameObfuscator",
 	function()
 	{
-		//line to generated the new location of the localization data:
-		//console.log(obfuscator._stringToHex('GameEngineServer.localization['));//\x47\x61\x6d\x65\x45\x6e\x67\x69\x6e\x65\x53\x65\x72\x76\x65\x72\x2e\x6c\x6f\x63\x61\x6c\x69\x7a\x61\x74\x69\x6f\x6e\x5b
-		var rememberDebugState = GameSystemVars.DEBUG;
-		GameSystemVars.DEBUG = false;
+		var backupDebugState,
+			obfuscator,
+			obfuscatorSrc,
+			obfuscatorObfuscatedSrc,
+			obfuscatedNameECGame,
+			obfuscatedNameECGameWebserver,
+			callObfuscatedObfuscatorSrc,
+			backupObfuscationVars,
+			testSrc,
+			obfValue;
 		
-		var obfuscator = new GameEngineServer.Obfuscator();
-		var obfuscatorSrc = fs.readFileSync('../private/CodeObfuscator.js', encoding='utf8');
+		//Backup the debug setting so we cant turn it off for this test and return it to whatever it's current setting is
+		backupDebugState = ECGame.Settings.DEBUG;
+		ECGame.Settings.DEBUG = false;
+		
+		//obfuscate the obfuscator code
+		obfuscator = new ECGame.Webserver.Obfuscator();
+		obfuscatorSrc = fs.readFileSync('../private/CodeObfuscator.js', /*encoding=*/'utf8');
 		obfuscator.addSrc(obfuscatorSrc);
-		obfuscator.registerNamespace('GameEngineServer');
+		obfuscator.registerNamespace('ECGame');
+		obfuscator.registerNamespace('Webserver');
 		obfuscator.run();
-		
-		var obfuscatorObfuscatedSrc = obfuscator.getObfuscatedCode();
+		obfuscatorObfuscatedSrc = obfuscator.getObfuscatedCode();
 		//console.log('\n\n' + obfuscatorObfuscatedSrc + '\n\n');
 		
-		var gameServerObfName = obfuscator.getObfuscatedName('GameEngineServer');
-		if(gameServerObfName !== 'GameEngineServer')
+		obfuscatedNameECGame = obfuscator.getObfuscatedName('ECGame');
+		obfuscatedNameECGameWebserver = obfuscatedNameECGame + '.' + obfuscator.getObfuscatedName('Webserver');
+		if(obfuscatedNameECGameWebserver !== 'ECGame.Webserver')
 		{
-			eval(gameServerObfName + ' = {};');
+			//create ECGame NOTE: put var in front of it so it will be cleaned automatically when this function ends!!
+			eval('var ' + obfuscatedNameECGame + ' = {};');
+			//create ECGame.Webserver
+			eval(obfuscatedNameECGameWebserver + ' = {};');
+			//create ECGame.EngineLib
+			eval(obfuscatedNameECGame + '.' + obfuscator.getObfuscatedName('EngineLib') + ' = {};');
 		}
+		//console.log(obfuscatorObfuscatedSrc);		
+		//console.log(obfuscator.getUnObfuscatedName(''));
+		
+		//eval the Obfuscated obfuscator Src code!
 		eval(obfuscatorObfuscatedSrc);
-		var callObfuscatedObfuscatorSrc =
-			'var obfuscator2 = new ' + gameServerObfName + '.' + obfuscator.getObfuscatedName('Obfuscator') + '();\n' +
+		
+		//make sure generated code knows about the system settings, and the helper function it needs
+		eval(obfuscatedNameECGame + '.' + obfuscator.getObfuscatedName('Settings') + '= ECGame.Settings;');
+		eval(obfuscatedNameECGame + '.' + obfuscator.getObfuscatedName('EngineLib') + '.isNumber = ECGame.EngineLib.isNumber;');
+		
+		callObfuscatedObfuscatorSrc =
+			'var obfuscator2 = new ' + obfuscatedNameECGameWebserver + '.' + obfuscator.getObfuscatedName('Obfuscator') + '();\n' +
 			'obfuscator2.' + obfuscator.getObfuscatedName('addSrc') + '(obfuscatorSrc);\n' +
-			'obfuscator2.' + obfuscator.getObfuscatedName('registerNamespace') + '(\'GameEngineServer\');\n' +
+			'obfuscator2.' + obfuscator.getObfuscatedName('registerNamespace') + '(\'ECGame\');\n' +
+			'obfuscator2.' + obfuscator.getObfuscatedName('registerNamespace') + '(\'Webserver\');\n' +
 			'obfuscator2.' + obfuscator.getObfuscatedName('run') + '();\n' +
 			'var obfuscatorObfuscatedSrc2 = obfuscator2.' + obfuscator.getObfuscatedName('getObfuscatedCode') + '();\n'
 		;
 		//console.log("Executing code: \n" + callObfuscatedObfuscatorSrc);
-		eval(callObfuscatedObfuscatorSrc);
-		//console.log('\n\n' + obfuscatorObfuscatedSrc2 + '\n\n');
 		
-		delete a;//??TODO What is this? I hope it is the gameServerObfName
+		//create and run the Obfuscated Obfuscator
+		eval(callObfuscatedObfuscatorSrc);
+		
+		//not needed atm because it is declared above as a var
+		//eval('delete ' + obfuscatedNameECGame + ';');
 		
 		if(obfuscatorObfuscatedSrc !== obfuscatorObfuscatedSrc2)
 		{
@@ -64,15 +93,15 @@ GameUnitTests.registerTest(
 				"\n\nSECONDARY GENERATED CODE:\n\n" + obfuscatorObfuscatedSrc2
 			);
 		}
-		gameAssert(
+		ECGame.log.assert(
 			obfuscatorObfuscatedSrc === obfuscatorObfuscatedSrc2,
 			"Obfuscated Obfuscator did not produce same results as the original!"
 		);
 		
 		
 		//backup real obfuscation states and use these for the next two tests
-		var backupObfuscationVars = GameSystemVars.Server;
-		GameSystemVars.Server =
+		backupObfuscationVars = ECGame.Settings.Server;
+		ECGame.Settings.Server =
 		{
 			compressClientCode : true
 			,removeTextForLocalization : true
@@ -82,23 +111,25 @@ GameUnitTests.registerTest(
 			,useModifiedNamesNotPureObfuscate : false
 		};
 		
-		obfuscator = new GameEngineServer.Obfuscator();
-		var src = 'var testMultipleInARow = 1;\ntestMultipleInARow=testMultipleInARow/testMultipleInARow/testMultipleInARow/testMultipleInARow/testMultipleInARow/testMultipleInARow;';
-		obfuscator.addSrc(src);
+		//Test multiple symbols in a row being replaced correctly
+		obfuscator = new ECGame.Webserver.Obfuscator();
+		testSrc = 'var testMultipleInARow = 1;\ntestMultipleInARow=testMultipleInARow/testMultipleInARow/testMultipleInARow/testMultipleInARow/testMultipleInARow/testMultipleInARow;';
+		obfuscator.addSrc(testSrc);
 		obfuscator.run();
-		src = obfuscator.getObfuscatedCode();
-		var obfWord = obfuscator.getObfuscatedName('testMultipleInARow');
-		gameAssert(
-			src === 'var ' + obfWord + '=1;' + obfWord + '=' + obfWord + '/' + obfWord + '/' + obfWord + '/' + obfWord + '/' + obfWord + '/' + obfWord + ';' + obfuscator.getObfuscatedName('GameLocalization') + '=[];',
+		testSrc = obfuscator.getObfuscatedCode();
+		obfValue = obfuscator.getObfuscatedName('testMultipleInARow');
+		ECGame.log.assert(
+			testSrc === 'var ' + obfValue + '=1;' + obfValue + '=' + obfValue + '/' + obfValue + '/' + obfValue + '/' + obfValue + '/' + obfValue + '/' + obfValue + ';' + obfuscator.getObfuscatedName('GameLocalization') + '=[];',
 			"Cannot handle multiple of same var in a row!"
 		);
-				
-		obfuscator = new GameEngineServer.Obfuscator();
-		var src = 'var v1 = {asdf:[\'asdf\', [{asdf:[1,2,3]}], \'sdf\'], qwer:{}}, v2 = String(\'fudge\' + String(\'fudge2\'));';
-		obfuscator.addSrc(src);
+		
+		//Test nested crap being handled correctly
+		obfuscator = new ECGame.Webserver.Obfuscator();
+		testSrc = 'var v1 = {asdf:[\'asdf\', [{asdf:[1,2,3]}], \'sdf\'], qwer:{}}, v2 = String(\'fudge\' + String(\'fudge2\'));';
+		obfuscator.addSrc(testSrc);
 		obfuscator.run();
-		src = obfuscator.getObfuscatedCode();
-		var n = //nested stuff
+		testSrc = obfuscator.getObfuscatedCode();
+		obfValue = //nested stuff
 		{
 			v1 : obfuscator.getObfuscatedName('v1'),
 			v2 : obfuscator.getObfuscatedName('v2'),
@@ -106,16 +137,16 @@ GameUnitTests.registerTest(
 			qwer : obfuscator.getObfuscatedName('qwer'),
 			GameLocalization : obfuscator.getObfuscatedName('GameLocalization')
 		};
-		gameAssert(
-			src === 'var ' + n.v1 + '={' + n.asdf + ':[\'' + n.asdf + '\',[{' + n.asdf + ':[1,2,3]}],\'sdf\'],' + n.qwer + ':{}},' + n.v2 + '=String(\'fudge\'+String(\'fudge2\'));' + n.GameLocalization + '=[];',
+		ECGame.log.assert(
+			testSrc === 'var ' + obfValue.v1 + '={' + obfValue.asdf + ':[\'' + obfValue.asdf + '\',[{' + obfValue.asdf + ':[1,2,3]}],\'sdf\'],' + obfValue.qwer + ':{}},' + obfValue.v2 + '=String(\'fudge\'+String(\'fudge2\'));' + obfValue.GameLocalization + '=[];',
 			"Cannot handle nested brackets on variable declaration!"
 		);
 		
 		//restore obfuscation states:
-		GameSystemVars.Server = backupObfuscationVars;
+		ECGame.Settings.Server = backupObfuscationVars;
 		
 		//restore debug state:
-		GameSystemVars.DEBUG = rememberDebugState;
+		ECGame.Settings.DEBUG = backupDebugState;
 		
 		return true;
 	}

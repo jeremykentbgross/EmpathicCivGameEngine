@@ -25,6 +25,20 @@ GameLoader =
 	{
 		var include;
 		
+		//Globals:
+		ECGame = new (function ECGame(){})();
+		//ECGame.Settings =  new (function ECGameSettings(){})();	TODO??
+		//ECGame.loader GameLoader	TODO??
+		//ECGame.unitTests = new (function ECGameUnitTests(){})();	TODO??
+		if(inIsServer)
+		{
+			ECGame.Webserver = new (function ECGameWebserver(){})();	//TODO UPPER CASE!!!!
+		}
+		ECGame.EngineLib = new (function ECGameEngineLib(){})();
+		ECGame.Lib =  new (function ECGameLib(){})();
+		//ECGame.instance	TODO??
+		//GameLocalization	//TODO
+		
 		//////////////////////////////////////////////////////////////////////////////
 		////////////////////// Setup requestAnimFrame and include ////////////////////
 		if(!inIsServer)
@@ -64,31 +78,26 @@ GameLoader =
 		//////////////////////////////////////////////////////////////////////////////
 		///////////////////////////////// GAME GLOBALS ///////////////////////////////
 		//		Load the settings flags first:
-		include(inSharedPath + "scripts/engine/GameSystemVars.js");//TODO include one from engine and game folder
+		include(inSharedPath + "scripts/engine/GameSystemVars.js");//TODO include one from engine and game folder	//TODO rename this file!!
 		//		Set the server flag in the global system
-		GameSystemVars.Network.isServer = inIsServer;
+		ECGame.Settings.Network.isServer = inIsServer;
 		
-		if(inIsServer && !GameSystemVars.Network.isMultiplayer)
+		if(inIsServer && !ECGame.Settings.Network.isMultiplayer)
 		{
 			return;
 		}
-		
-		//Global Game Objects
-		GameEngineLib = {};
-		GameLib = {};
-		GameInstance = null;
-		
+				
 		//TEMP HACK!! Should go somewhere else!!
-		GameEngineLib.isNumber = function isNumber(inString)
+		ECGame.EngineLib.isNumber = function isNumber(inString)
 		{
 			return !isNaN(parseFloat(inString)) && isFinite(inString);
 		};
 		
-		//GameEngineLib.include = include;//TODO needed?
+		//ECGame.EngineLib.include = include;//TODO needed?
 				
-		if(GameSystemVars.RUN_UNIT_TESTS)
+		if(ECGame.Settings.RUN_UNIT_TESTS)
 		{
-			GameUnitTests =
+			ECGame.unitTests =
 			{
 				tests : [],
 				runTests :
@@ -106,7 +115,7 @@ GameLoader =
 							{
 								if(!aTest())
 								{
-									GameEngineLib.logger.error("Failed Test: " + aTest.testName);
+									ECGame.log.error("Failed Test: " + aTest.testName);
 								}
 								else
 								{
@@ -148,7 +157,7 @@ GameLoader =
 		include(inSharedPath + "scripts/engine/GameCircularDoublyLinkedListNode.js");
 		if(!inIsServer)
 		{
-			if(GameSystemVars.Network.isMultiplayer)
+			if(ECGame.Settings.Network.isMultiplayer)
 			{
 				include(inSharedPath + "/socket.io/socket.io.js");
 				include(inSharedPath + "scripts/engine/GameChatSystem.js");
@@ -159,17 +168,17 @@ GameLoader =
 			include(inSharedPath + "scripts/engine/GameSound2D.js");
 			include(inSharedPath + "scripts/engine/GameAssetManager.js");
 		}
-		include(inSharedPath + "scripts/engine/GameNetwork.js");
+		include(inSharedPath + "scripts/engine/GameNetwork.js");//TODO if multiplayer?
 		include(inSharedPath + "scripts/engine/GameInput.js");
 		
 		include(inSharedPath + "scripts/engine/Game2DCamera.js");
 		
 		include(inSharedPath + "scripts/engine/GameObject.js");
 		include(inSharedPath + "scripts/engine/GameObjectRef.js");
-		include(inSharedPath + "scripts/engine/GameBitPacker.js");
+		include(inSharedPath + "scripts/engine/GameBitPacker.js");//TODO if multiplayer?
 		//include(inSharedPath + "scripts/engine/MultPacker.js");//TODO
-		include(inSharedPath + "scripts/engine/GameArithmeticCompression.js");
-		include(inSharedPath + "scripts/engine/GameBinarySerializer.js");
+		include(inSharedPath + "scripts/engine/GameArithmeticCompression.js");//TODO if multiplayer?
+		include(inSharedPath + "scripts/engine/GameBinarySerializer.js");//TODO if multiplayer?
 		include(inSharedPath + "scripts/engine/GameEventSystem.js");
 		include(inSharedPath + "scripts/engine/GameEvent.js");
 		include(inSharedPath + "scripts/engine/GameEntity.js");
@@ -209,7 +218,7 @@ GameLoader =
 		
 		//////////////////////////////////////////////////////////////////////////////
 		//////////////////////////////// UNIT TEST scripts ///////////////////////////
-		if(GameSystemVars.RUN_UNIT_TESTS)
+		if(ECGame.Settings.RUN_UNIT_TESTS)
 		{			
 			//ENGINE UNIT TESTS:
 			include(inSharedPath + "scripts/engine/unit_tests/TestGameClass.js");

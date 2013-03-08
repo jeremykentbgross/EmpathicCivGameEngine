@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.GameObject = GameEngineLib.Class.create({
+ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 	Constructor : function GameObject()
 	{
 		var thisClass,
@@ -34,23 +34,23 @@ GameEngineLib.GameObject = GameEngineLib.Class.create({
 		this._ID = instanceID;//TODO rename _ID as _instanceID
 		registry.register(this);
 		
-		if(GameSystemVars.DEBUG && GameSystemVars.Debug.GameObject_Print)
+		if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.GameObject_Print)
 		{
-			GameEngineLib.logger.info("New Object: " + this.getClass().getName() + ' : ' + this._name + ' : ' + this._ID);
+			ECGame.log.info("New Object: " + this.getClass().getName() + ' : ' + this._name + ' : ' + this._ID);
 		}
 		
-		this._netOwner = GameEngineLib.User.USER_IDS.SERVER;
+		this._netOwner = ECGame.EngineLib.User.USER_IDS.SERVER;
 		this._netDirty = false;
 		this._objectBaseNetDirty = false;//TODO should be true?
 		
 		//TODO or add manually when netRep is added to instances? (including during clone)
-		if(GameSystemVars.Network.isMultiplayer
-			&& GameInstance
-			&& GameInstance.Network
-			&& GameSystemVars.Network.isServer//TODO ((server || thisClass._flags.clientCreatable) && netReplicated??)
+		if(ECGame.Settings.Network.isMultiplayer
+			&& ECGame.instance
+			&& ECGame.instance.Network
+			&& ECGame.Settings.Network.isServer//TODO ((server || thisClass._flags.clientCreatable) && netReplicated??)
 			)
 		{
-			GameInstance.Network.addNewObject(this);
+			ECGame.instance.Network.addNewObject(this);
 			this._netDirty = true;
 		}
 	},
@@ -71,7 +71,7 @@ GameEngineLib.GameObject = GameEngineLib.Class.create({
 				type : 'int',
 				net : true,
 				min : 0,
-				max : GameEngineLib.User.USER_IDS.MAX_EVER
+				max : ECGame.EngineLib.User.USER_IDS.MAX_EVER
 				//TODO condition: renamed this._objectBaseNetDirty
 			}
 			//TODO name/id (NOT net)
@@ -115,9 +115,9 @@ GameEngineLib.GameObject = GameEngineLib.Class.create({
 		destroy : function destroy()
 		{
 			//TODO have this?
-			if(GameSystemVars.DEBUG && GameSystemVars.Debug.GameObject_Print)
+			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.GameObject_Print)
 			{
-				GameEngineLib.logger.info("Destroying GameObject " + GameEngineLib.createGameObjectRef(this).getTxtPath(), true);
+				ECGame.log.info("Destroying GameObject " + ECGame.EngineLib.createGameObjectRef(this).getTxtPath(), true);
 			}
 				
 			//TODO notify all listeners
@@ -128,12 +128,12 @@ GameEngineLib.GameObject = GameEngineLib.Class.create({
 		
 		canUserModifyNet : function canUserModifyNet()
 		{
-			if(!GameSystemVars.Network.isMultiplayer || !this.getClass()._flags.net)
+			if(!ECGame.Settings.Network.isMultiplayer || !this.getClass()._flags.net)
 			{
 				return false;
 			}
-			if(this._netOwner !== GameInstance.localUser.userID
-				&& GameInstance.localUser.userID !== GameEngineLib.User.USER_IDS.SERVER)
+			if(this._netOwner !== ECGame.instance.localUser.userID
+				&& ECGame.instance.localUser.userID !== ECGame.EngineLib.User.USER_IDS.SERVER)
 			{
 				return false;
 			}
@@ -151,7 +151,7 @@ GameEngineLib.GameObject = GameEngineLib.Class.create({
 			{
 				if(!this._netDirty)
 				{
-					GameInstance.Network.addNetDirtyObject(this);
+					ECGame.instance.Network.addNetDirtyObject(this);
 					this._netDirty = true;
 				}
 				
@@ -184,7 +184,7 @@ GameEngineLib.GameObject = GameEngineLib.Class.create({
 		
 		getRef : function getRef()
 		{
-			return new GameEngineLib.GameObjectRef(this);
+			return new ECGame.EngineLib.GameObjectRef(this);
 		},
 		
 		isA : function isA(inClass)//TODO note that this only checks first/primary parents!
@@ -222,16 +222,16 @@ GameEngineLib.GameObject = GameEngineLib.Class.create({
 			
 			if(this._objectBaseNetDirty)
 			{
-				if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+				if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 				{
-					GameEngineLib.logger.info(this.getTxtPath() + " start owner: " + this._netOwner);
+					ECGame.log.info(this.getTxtPath() + " start owner: " + this._netOwner);
 				}
 				
 				serializer.serializeObject(this, this.GameObject._serializeFormat);
 				
-				if(GameSystemVars.DEBUG && GameSystemVars.Debug.NetworkMessages_Print)
+				if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 				{
-					GameEngineLib.logger.info(this.getTxtPath() + " end owner: " + this._netOwner);
+					ECGame.log.info(this.getTxtPath() + " end owner: " + this._netOwner);
 				}
 			}
 			

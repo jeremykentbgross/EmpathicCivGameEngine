@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.GameEntity = GameEngineLib.Class.create({
+ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 	Constructor : function GameEntity()
 	{
 		this.GameObject();
@@ -30,8 +30,8 @@ GameEngineLib.GameEntity = GameEngineLib.Class.create({
 	},
 	
 	Parents : [
-		GameEngineLib.GameObject,
-		GameEngineLib.GameEventSystem
+		ECGame.EngineLib.GameObject,
+		ECGame.EngineLib.GameEventSystem
 	],
 	
 	flags : {},
@@ -44,11 +44,11 @@ GameEngineLib.GameEntity = GameEngineLib.Class.create({
 		addComponent : function addComponent(inComponent)
 		{
 			this._componentMap[inComponent.getTxtPath()] = inComponent;
-			inComponent.onAddedToEntity(new GameEngineLib.GameEvent_AddedToEntity(this));
+			inComponent.onAddedToEntity(new ECGame.EngineLib.GameEvent_AddedToEntity(this));
 			
 			if(this._world)
 			{
-				inComponent.onAddedToWorld(new GameEngineLib.GameEvent_AddedToWorld(this._world));
+				inComponent.onAddedToWorld(new ECGame.EngineLib.GameEvent_AddedToWorld(this._world));
 			}
 		},
 		removeComponent : function removeComponent(inComponent)
@@ -63,12 +63,12 @@ GameEngineLib.GameEntity = GameEngineLib.Class.create({
 			
 			if(component)
 			{
-				gameAssert(component === inComponent, "WTF!!!");
+				ECGame.log.assert(component === inComponent, "WTF!!!");
 				if(this._world)
 				{
-					inComponent.onRemovedFromWorld(new GameEngineLib.GameEvent_RemovedFromWorld(this._world));
+					inComponent.onRemovedFromWorld(new ECGame.EngineLib.GameEvent_RemovedFromWorld(this._world));
 				}
-				inComponent.onRemovedFromEntity(new GameEngineLib.GameEvent_RemovedFromEntity(this));
+				inComponent.onRemovedFromEntity(new ECGame.EngineLib.GameEvent_RemovedFromEntity(this));
 			}
 		},
 		getComponentByType : function getComponentByType(inType, inoutReturnValues)
@@ -99,13 +99,13 @@ GameEngineLib.GameEntity = GameEngineLib.Class.create({
 				this.removedFromWorld(this._world);//TODO should actually call the world object remove!!
 			}
 			this._world = inWorld;
-			this.onEvent(new GameEngineLib.GameEvent_AddedToWorld(this._world));
+			this.onEvent(new ECGame.EngineLib.GameEvent_AddedToWorld(this._world));
 		},
 		removedFromWorld : function removedFromWorld(inWorld)//TODO rename onRemovedFromWorld
 		{
 			if(inWorld === this._world)
 			{
-				this.onEvent(new GameEngineLib.GameEvent_RemovedFromWorld(this._world));
+				this.onEvent(new ECGame.EngineLib.GameEvent_RemovedFromWorld(this._world));
 				this._world = null;
 			}
 		},
@@ -129,7 +129,7 @@ GameEngineLib.GameEntity = GameEngineLib.Class.create({
 			{
 				component = this._componentMap[componentName];
 				//TODO remove from world also; instead make array of them and then removeComponent for each and then destroy them
-				component.onRemovedFromEntity(new GameEngineLib.GameEvent_RemovedFromEntity(this));
+				component.onRemovedFromEntity(new ECGame.EngineLib.GameEvent_RemovedFromEntity(this));
 				component.destroy();
 			}
 			this._componentMap = null;

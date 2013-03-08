@@ -19,8 +19,10 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+ECGame.log = new (function ECGameLog(){})();//TODO make a real object or something
+
 //TODO rename this?
-gameAssert = function gameAssert(expression, message)
+ECGame.log.assert = function ECGameAssert(expression, message)
 {
 	if(!expression)
 	{
@@ -41,8 +43,9 @@ Game.Log.error(FLAG, msg);
 */
 
 
-GameEngineLib.logger = {};
-GameEngineLib.logger.createMsgType = function(inType, inFullPathDefault)
+//TODO create object here that is new'ed in or something?
+ECGame.EngineLib.logger = {};
+ECGame.EngineLib.logger.createMsgType = function(inType, inFullPathDefault)
 {
 	return function(inMsg, inFullPath)
 	{
@@ -78,21 +81,21 @@ GameEngineLib.logger.createMsgType = function(inType, inFullPathDefault)
 				stackPath = ' ' + stackPath.slice(index, index2);
 			}
 			console.log(
-		//		(GameSystemVars.Network.isServer?'\n':'') +
+		//		(ECGame.Settings.Network.isServer?'\n':'') +
 				inType + ': \'' + inMsg + '\'' + stackPath
-		//		+ (GameSystemVars.Network.isServer?'\n':'')
+		//		+ (ECGame.Settings.Network.isServer?'\n':'')
 			);
 		}
 	};
 };
 //TODO rename this GameLogger
-GameEngineLib.logger.info = GameEngineLib.logger.createMsgType("INFO");
-GameEngineLib.logger.warn = GameEngineLib.logger.createMsgType("WARNING", true);
-GameEngineLib.logger.error = GameEngineLib.logger.createMsgType("ERROR", true);
+ECGame.log.info = ECGame.EngineLib.logger.createMsgType("INFO");
+ECGame.log.warn = ECGame.EngineLib.logger.createMsgType("WARNING", true);
+ECGame.log.error = ECGame.EngineLib.logger.createMsgType("ERROR", true);
 
 
 //TODO depricated!
-GameEngineLib.addDebugInfo = function(className, instance, PRIVATE)
+ECGame.EngineLib.addDebugInfo = function(className, instance, PRIVATE)
 {
 	var propertyName;
 	

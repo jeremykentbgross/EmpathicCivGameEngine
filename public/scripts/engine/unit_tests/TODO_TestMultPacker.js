@@ -18,7 +18,7 @@
 	You should have received a copy of the GNU Lesser General Public License
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
-GameUnitTests.registerTest(
+ECGame.unitTests.registerTest(
 	'MultPacker',
 	function()
 	{
@@ -42,7 +42,7 @@ GameUnitTests.registerTest(
 		inRanges[11] = maxRange;
 		inValues[11] = 0;
 		
-		myPacker = GameEngineLib.createMultPacker();
+		myPacker = ECGame.EngineLib.createMultPacker();
 		for(var i = 0; i < loops; ++i)
 		{
 			myPacker.pack(inValues[i], inRanges[i]);
@@ -50,14 +50,14 @@ GameUnitTests.registerTest(
 		string = myPacker.getString();
 		//console.log(string);
 		
-		myPacker = GameEngineLib.createMultPacker();
+		myPacker = ECGame.EngineLib.createMultPacker();
 		myPacker.setString(string);
 		for(var i = 0; i < loops; ++i)
 		{
 			value = myPacker.unpack(inRanges[i]);
 			if(value !== inValues[i])
 			{
-				GameEngineLib.logger.error("Loop " + i + ' ' + value + '!==' + inValues[i] + " with " + inRanges[i]);
+				ECGame.log.error("Loop " + i + ' ' + value + '!==' + inValues[i] + " with " + inRanges[i]);
 				passedTest = false;
 			}
 		}
@@ -65,7 +65,7 @@ GameUnitTests.registerTest(
 		
 		
 		
-		myPacker = GameEngineLib.createMultPacker();
+		myPacker = ECGame.EngineLib.createMultPacker();
 		for(var i = 0; i < loops; ++i)
 		{
 			myPacker.pack(inValues[i], inRanges[i]);
@@ -73,14 +73,14 @@ GameUnitTests.registerTest(
 		string = myPacker.getString();
 		//console.log(string);
 		
-		myPacker = GameEngineLib.createMultPacker();
+		myPacker = ECGame.EngineLib.createMultPacker();
 		myPacker.setString(string);
 		for(var i = 0; i < loops; ++i)
 		{
 			value = myPacker.unpack(inRanges[i]);
 			if(value !== inValues[i])
 			{
-				GameEngineLib.logger.error("Loop " + i + " " + value + "!==" + inValues[i] + " with " + inRanges[i]);
+				ECGame.log.error("Loop " + i + " " + value + "!==" + inValues[i] + " with " + inRanges[i]);
 				passedTest = false;
 			}
 		}

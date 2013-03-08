@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.Sound = GameEngineLib.Class.create(
+ECGame.EngineLib.Sound = ECGame.EngineLib.Class.create(
 {
 	Constructor : function Sound(inSource, inStartedTime, inFileName)
 	{
@@ -80,9 +80,9 @@ GameEngineLib.Sound = GameEngineLib.Class.create(
 		{
 			var percentPlayed = (inCurrentTime - this._startedTime) / this._source.buffer.duration;
 							
-			GameInstance.Graphics.drawDebugText(
+			ECGame.instance.Graphics.drawDebugText(
 				'-' + this._fileName + ': %' + Math.floor(percentPlayed * 100),
-				GameSystemVars.Debug.Sound_Area_DrawColor
+				ECGame.Settings.Debug.Sound_Area_DrawColor
 			);
 		}
 	}

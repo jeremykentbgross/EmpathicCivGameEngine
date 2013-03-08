@@ -19,10 +19,10 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-if(GameSystemVars.RUN_UNIT_TESTS)
+if(ECGame.Settings.RUN_UNIT_TESTS)
 {
-	GameUnitTests.runTests();
+	ECGame.unitTests.runTests();
 }
 	
-GameInstance = GameEngineLib.createGameFrameWork();
-GameInstance.run();
+ECGame.instance = ECGame.EngineLib.createGameFrameWork();
+ECGame.instance.run();

@@ -19,14 +19,14 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.RenderableTile2D = GameEngineLib.Class.create({
+ECGame.EngineLib.RenderableTile2D = ECGame.EngineLib.Class.create({
 	Constructor : function RenderableTile2D()
 	{
 		this.GameRenderable2D();
 		this.tileValue = 0;
 		this.ownerMap = null;
 	},
-	Parents : [GameEngineLib.GameRenderable2D],
+	Parents : [ECGame.EngineLib.GameRenderable2D],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
@@ -34,7 +34,7 @@ GameEngineLib.RenderableTile2D = GameEngineLib.Class.create({
 	{
 		render : function render(inCanvas2DContext, inCameraRect)
 		{
-			if(GameSystemVars.DEBUG && GameSystemVars.Debug.Map_Draw)
+			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.Map_Draw)
 			{
 				return;
 			}

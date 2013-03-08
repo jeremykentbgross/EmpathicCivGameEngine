@@ -20,7 +20,7 @@
 */
 
 
-GameEngineLib.GameRulesBase = GameEngineLib.Class.create({
+ECGame.EngineLib.GameRulesBase = ECGame.EngineLib.Class.create({
 	Constructor : function GameRulesBase(){},
 	Parents : [],
 	flags : {},
@@ -51,7 +51,7 @@ GameEngineLib.GameRulesBase = GameEngineLib.Class.create({
 			inCanvas2DContext.fillStyle = 'rgba(64, 64, 64, 1)';
 			
 			inCanvas2DContext.font = '30px Arial';
-			if(this.getClass() === GameEngineLib.GameRulesBase)
+			if(this.getClass() === ECGame.EngineLib.GameRulesBase)
 			{
 				message = "No GameRules.js found!";
 			}

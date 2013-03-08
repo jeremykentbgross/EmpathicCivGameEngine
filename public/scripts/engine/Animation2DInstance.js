@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.Animation2DInstance = GameEngineLib.Class.create({
+ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 	Constructor : function Animation2DInstance()
 	{
 		this.GameRenderable2D();
@@ -30,7 +30,7 @@ GameEngineLib.Animation2DInstance = GameEngineLib.Class.create({
 		//TODO finished callback
 		
 	},
-	Parents : [GameEngineLib.GameRenderable2D],
+	Parents : [ECGame.EngineLib.GameRenderable2D],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
@@ -50,7 +50,7 @@ GameEngineLib.Animation2DInstance = GameEngineLib.Class.create({
 		{
 			//TODO make set function for anchorPosition so this can be updated ONLY when it is needed!
 			//OPT: This is SUPER inoptimal
-			return new GameEngineLib.Game2DAABB(
+			return new ECGame.EngineLib.Game2DAABB(
 				this._AABB.myX + this.anchorPosition.myX,
 				this._AABB.myY + this.anchorPosition.myY,
 				this._AABB.myWidth,
@@ -69,7 +69,7 @@ GameEngineLib.Animation2DInstance = GameEngineLib.Class.create({
 		render : function render(inCanvas2DContext, inCameraRect)
 		{
 			this._animation.render(inCanvas2DContext, inCameraRect, this._currentFrame, this.anchorPosition);
-			if(GameSystemVars.Debug.Sprite_Draw)
+			if(ECGame.Settings.Debug.Sprite_Draw)
 			{
 				this.debugDraw(inCanvas2DContext, inCameraRect);
 			}

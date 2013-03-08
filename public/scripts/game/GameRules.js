@@ -20,7 +20,7 @@
 */
 
 
-GameLib.GameRules = GameEngineLib.Class.create({
+ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 	Constructor : function GameRules()
 	{
 		this.GameRulesBase();
@@ -53,7 +53,7 @@ GameLib.GameRules = GameEngineLib.Class.create({
 		this._lastMouseWorldPosition = null;
 	},
 	
-	Parents : [GameEngineLib.GameRulesBase],
+	Parents : [ECGame.EngineLib.GameRulesBase],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
@@ -69,7 +69,7 @@ GameLib.GameRules = GameEngineLib.Class.create({
 			;
 			
 			/////////////////////////////////////////////////////////
-			//todo register GameLib GameObject classes
+			//todo register ECGame.Lib GameObject classes
 			
 			//todo setup updaters
 			
@@ -80,17 +80,17 @@ GameLib.GameRules = GameEngineLib.Class.create({
 			
 			/////////////////////////////////////////////////////////
 			//setup event listeners
-			if(!GameSystemVars.Network.isServer)
+			if(!ECGame.Settings.Network.isServer)
 			{
-				GameInstance.Input.registerListener('Input', this);
+				ECGame.instance.Input.registerListener('Input', this);
 			}
-			if(GameSystemVars.Network.isMultiplayer)
+			if(ECGame.Settings.Network.isMultiplayer)
 			{
-				GameInstance.Network.registerListener(
+				ECGame.instance.Network.registerListener(
 					'IdentifiedUser',//TODO use actual event class to de/register listener(s)
 					this
 				);
-				GameInstance.Network.registerListener(
+				ECGame.instance.Network.registerListener(
 					'ClientDisconnected',//TODO use actual event class to de/register listener(s)
 					this
 				);
@@ -102,44 +102,44 @@ GameLib.GameRules = GameEngineLib.Class.create({
 			
 			/////////////////////////////////////////////////////////
 			//create and initialize a game world
-			this._gameWorld = GameEngineLib.Game2DWorld.create(
+			this._gameWorld = ECGame.EngineLib.Game2DWorld.create(
 				this._mapSizeInTiles
 				,this._tileSize
 				,this._minPhysicsPartitionSize
 			);
-			this._tileset = GameEngineLib.Game2DTileSet.create(
+			this._tileset = ECGame.EngineLib.Game2DTileSet.create(
 				[
 					{
 						fileName : 'images/grass.png'
-						,anchor : GameEngineLib.createGame2DPoint()
+						,anchor : ECGame.EngineLib.createGame2DPoint()
 						,layer : 0
-						,size : GameEngineLib.createGame2DPoint(64,64)
+						,size : ECGame.EngineLib.createGame2DPoint(64,64)
 					},
 					{
 						fileName : 'images/test/waterSub.png' //'images/water.png'
-						,anchor : GameEngineLib.createGame2DPoint()
+						,anchor : ECGame.EngineLib.createGame2DPoint()
 						,layer : 0
-						,size : GameEngineLib.createGame2DPoint(/*64,64*/96,96)
-						,physics : GameEngineLib.createGame2DAABB(0, 0, 64, 64)
+						,size : ECGame.EngineLib.createGame2DPoint(/*64,64*/96,96)
+						,physics : ECGame.EngineLib.createGame2DAABB(0, 0, 64, 64)
 					},
 					{
 						fileName : 'images/ground_256.png'//'images/test/groundSub5.png' // 'images/ground_level01_01.png' //'images/dirt.png',
-						,anchor : GameEngineLib.createGame2DPoint()
+						,anchor : ECGame.EngineLib.createGame2DPoint()
 						,layer : 0
-						,size : GameEngineLib.createGame2DPoint(96,96)//64,64)
+						,size : ECGame.EngineLib.createGame2DPoint(96,96)//64,64)
 					},
 					{
 						fileName : 'images/dirt.png2'//HACK 'images/wall_level01_01__.png'
-						,anchor : GameEngineLib.createGame2DPoint()
+						,anchor : ECGame.EngineLib.createGame2DPoint()
 						,layer : 0
-						,size : GameEngineLib.createGame2DPoint(64,64)
+						,size : ECGame.EngineLib.createGame2DPoint(64,64)
 					},
 					{
 						fileName : 'images/wall_256.png'//'images/test/wall.png' //'images/wall_level01_01.png'
-						,anchor : GameEngineLib.createGame2DPoint(32, 32)
+						,anchor : ECGame.EngineLib.createGame2DPoint(32, 32)
 						,layer : 1
-						,physics : GameEngineLib.createGame2DAABB(0, 0, 64, 64)
-						,size : GameEngineLib.createGame2DPoint(96,96)
+						,physics : ECGame.EngineLib.createGame2DAABB(0, 0, 64, 64)
+						,size : ECGame.EngineLib.createGame2DPoint(96,96)
 					}
 					//,
 				]
@@ -155,11 +155,11 @@ GameLib.GameRules = GameEngineLib.Class.create({
 				{
 					if(i === 0 || j === 0 || i === this._mapSizeInTiles - 1 || j === this._mapSizeInTiles - 1)
 					{
-						this._map.setTile(new GameEngineLib.Game2DPoint(i, j), /*(i+j)%5*/4);
+						this._map.setTile(new ECGame.EngineLib.Game2DPoint(i, j), /*(i+j)%5*/4);
 					}
 					else
 					{
-						this._map.setTile(new GameEngineLib.Game2DPoint(i, j), /*(i+j)%5*/2);
+						this._map.setTile(new ECGame.EngineLib.Game2DPoint(i, j), /*(i+j)%5*/2);
 					}
 				}
 			}
@@ -183,13 +183,13 @@ GameLib.GameRules = GameEngineLib.Class.create({
 				for(i = 0; i < 8; ++i)
 				{
 					frames.push(
-						GameEngineLib.Animation2DFrame.create().init(
-							new GameEngineLib.Game2DAABB(96 * (i + 1), 96 * j, 96, 96),
-							new GameEngineLib.Game2DPoint(32, 32)
+						ECGame.EngineLib.Animation2DFrame.create().init(
+							new ECGame.EngineLib.Game2DAABB(96 * (i + 1), 96 * j, 96, 96),
+							new ECGame.EngineLib.Game2DPoint(32, 32)
 						)
 					);
 				}
-				animation = new GameEngineLib.Animation2D();
+				animation = new ECGame.EngineLib.Animation2D();
 				animation.init('images/test_anims_run/jogSheet.png', 10, frames);
 				this._animations.push(animation);
 			}
@@ -197,46 +197,46 @@ GameLib.GameRules = GameEngineLib.Class.create({
 			{
 				frames = [];
 				frames.push(
-					GameEngineLib.Animation2DFrame.create().init(
-						new GameEngineLib.Game2DAABB(0, 96 * j, 96, 96),
-						new GameEngineLib.Game2DPoint(32, 32)
+					ECGame.EngineLib.Animation2DFrame.create().init(
+						new ECGame.EngineLib.Game2DAABB(0, 96 * j, 96, 96),
+						new ECGame.EngineLib.Game2DPoint(32, 32)
 					)
 				);
-				animation = new GameEngineLib.Animation2D();
+				animation = new ECGame.EngineLib.Animation2D();
 				animation.init('images/test_anims_run/jogSheet.png', 10, frames);
 				this._animations.push(animation);
 			}
 			//create and initialize animations
 			//////////////////////////////////
 			
-			this._referenceEntity = GameEngineLib.GameEntity.create();
+			this._referenceEntity = ECGame.EngineLib.GameEntity.create();
 			
-			this._referenceEntityInputComponent = GameEngineLib.EntityComponent_Input.create();
+			this._referenceEntityInputComponent = ECGame.EngineLib.EntityComponent_Input.create();
 			this._referenceEntity.addComponent(this._referenceEntityInputComponent);
 			
-			this._referenceEntitySpriteComponent = GameEngineLib.EntityComponent_Sprite.create(this._animations);
+			this._referenceEntitySpriteComponent = ECGame.EngineLib.EntityComponent_Sprite.create(this._animations);
 			this._referenceEntity.addComponent(this._referenceEntitySpriteComponent);
 			
-			this._referenceEntityPhysicsComponent = GameEngineLib.EntityComponent_2DPhysics.create();
+			this._referenceEntityPhysicsComponent = ECGame.EngineLib.EntityComponent_2DPhysics.create();
 			this._referenceEntity.addComponent(this._referenceEntityPhysicsComponent);
 			
 			//TODO this vv should have params if it is going to call init.  Where does it get init'ed from atm?
-			this._referenceEntityCameraComponent = GameEngineLib.EntityComponent_2DCamera.create(/*TODO params??*/);
+			this._referenceEntityCameraComponent = ECGame.EngineLib.EntityComponent_2DCamera.create(/*TODO params??*/);
 			this._referenceEntity.addComponent(this._referenceEntityCameraComponent);//TODO have locally owned camera become the one for the world?
 			
-			if(!GameSystemVars.Network.isMultiplayer)
+			if(!ECGame.Settings.Network.isMultiplayer)
 			{
 				this._entities.push(this._referenceEntity.clone());
 				this._gameWorld.addEntity(this._entities[0]/*this._referenceEntity*/);
 				//TODO comment out and fix default camera vv
-				this._gameWorld.setCamera(/*this._referenceEntityCameraComponent*/this._entities[0].getComponentByType(GameEngineLib.EntityComponent_2DCamera)[0]);
+				this._gameWorld.setCamera(/*this._referenceEntityCameraComponent*/this._entities[0].getComponentByType(ECGame.EngineLib.EntityComponent_2DCamera)[0]);
 			}
 			//create reference entity
 			/////////////////////////////////////////////////////////
 			
 			//HACK TODO subscribe to timer updates!!!
-			GameInstance.UpdateOrder.push(this);
-			this._gameRunning = true;//HACK TODO should get this from GameInstance
+			ECGame.instance.UpdateOrder.push(this);
+			this._gameRunning = true;//HACK TODO should get this from ECGame.instance
 
 			
 			return true;
@@ -247,22 +247,22 @@ GameLib.GameRules = GameEngineLib.Class.create({
 		update : function update()//TODO timer should send data and many things in param object
 		{
 			var serverRebootTime = 60;//TODO make this some special settings variable
-			if(GameSystemVars.Network.isMultiplayer)
+			if(ECGame.Settings.Network.isMultiplayer)
 			{
 				var currentDateTime = new Date();
 				var minute = currentDateTime.getMinutes();
 				var second = currentDateTime.getSeconds();
 				if(minute % serverRebootTime === 0)
 				{
-					this._gameRunning = false;//HACK TODO should get this from GameInstance
-					GameInstance.exit();
+					this._gameRunning = false;//HACK TODO should get this from ECGame.instance
+					ECGame.instance.exit();
 				}
 				
 				if(serverRebootTime - minute === 1 && second !== this._lastUpdateSec)
 				{
-					if(GameSystemVars.Network.isServer)
+					if(ECGame.Settings.Network.isServer)
 					{
-						GameInstance.Network.sendMessage(
+						ECGame.instance.Network.sendMessage(
 							"Server Reboot in " + (60 - second) + " seconds."
 							//,this//sentListener
 						);
@@ -270,9 +270,9 @@ GameLib.GameRules = GameEngineLib.Class.create({
 				}
 				else if(minute !== this._lastUpdateMin)
 				{
-					if(GameSystemVars.Network.isServer)
+					if(ECGame.Settings.Network.isServer)
 					{
-						GameInstance.Network.sendMessage(
+						ECGame.instance.Network.sendMessage(
 							"Server Reboot in " + (serverRebootTime - minute) + " minutes."
 							//,this//sentListener
 						);
@@ -292,12 +292,12 @@ GameLib.GameRules = GameEngineLib.Class.create({
 			if(!this._entities[inEvent.user.userID])
 			{
 				this._entities[inEvent.user.userID] = newEntity;
-				GameEngineLib.logger.info("Setting owner for physics and input component(s) => Name: " + inEvent.user.userName + " ID: " + inEvent.user.userID);
-				newEntity.getComponentByType(GameEngineLib.EntityComponent_2DPhysics)[0].setNetOwner(inEvent.user.userID);
-				newEntity.getComponentByType(GameEngineLib.EntityComponent_Input)[0].setNetOwner(inEvent.user.userID);
+				ECGame.log.info("Setting owner for physics and input component(s) => Name: " + inEvent.user.userName + " ID: " + inEvent.user.userID);
+				newEntity.getComponentByType(ECGame.EngineLib.EntityComponent_2DPhysics)[0].setNetOwner(inEvent.user.userID);
+				newEntity.getComponentByType(ECGame.EngineLib.EntityComponent_Input)[0].setNetOwner(inEvent.user.userID);
 				//TODO camera component to control local camera??
 				//How? vvv??
-				newEntity.getComponentByType(GameEngineLib.EntityComponent_2DCamera)[0].setNetOwner(inEvent.user.userID);
+				newEntity.getComponentByType(ECGame.EngineLib.EntityComponent_2DCamera)[0].setNetOwner(inEvent.user.userID);
 			}
 			this._gameWorld.addEntity(newEntity);
 		},
@@ -310,7 +310,7 @@ GameLib.GameRules = GameEngineLib.Class.create({
 		
 		render : function render(inCanvas2DContext)
 		{
-			if(this._gameRunning)//HACK TODO should get this from GameInstance
+			if(this._gameRunning)//HACK TODO should get this from ECGame.instance
 			{
 				this._gameWorld.render(inCanvas2DContext);
 			}
@@ -353,7 +353,7 @@ GameLib.GameRules = GameEngineLib.Class.create({
 			mouseWorldPosition = inInputEvent.mouseLoc.add(cameraLeftTop);
 			
 			//TODO should be in component (and/or world)
-			GameInstance.soundSystem.setListenerPosition(cameraAABB.getCenter());
+			ECGame.instance.soundSystem.setListenerPosition(cameraAABB.getCenter());
 						
 			
 			
@@ -362,13 +362,13 @@ GameLib.GameRules = GameEngineLib.Class.create({
 			
 			if(inInputEvent.keysPressed['\x67'])//g
 			{
-				this._lastSoundPlayed = GameInstance.soundSystem.playSoundEffect(0);
+				this._lastSoundPlayed = ECGame.instance.soundSystem.playSoundEffect(0);
 			}
 			if(inInputEvent.keysPressed['\x68'])//h
 			{
-				this._lastSoundPlayed = GameInstance.soundSystem.playPositionalSoundEffect2D(
+				this._lastSoundPlayed = ECGame.instance.soundSystem.playPositionalSoundEffect2D(
 					0,
-					new GameEngineLib.Game2DPoint(
+					new ECGame.EngineLib.Game2DPoint(
 						mouseWorldPosition.myX,
 						mouseWorldPosition.myY
 					)
@@ -383,15 +383,15 @@ GameLib.GameRules = GameEngineLib.Class.create({
 			}
 			if(inInputEvent.keysPressed['\x6c'])//l
 			{
-				GameInstance.soundSystem.setMasterVolume(0.1);
+				ECGame.instance.soundSystem.setMasterVolume(0.1);
 			}
 			if(inInputEvent.keysPressed['\x6b'])//k
 			{
-				GameInstance.soundSystem.setMasterVolume(0.5);
+				ECGame.instance.soundSystem.setMasterVolume(0.5);
 			}
 			if(inInputEvent.keysPressed['\x6a'])//j
 			{
-				GameInstance.soundSystem.setMasterVolume(1.0);
+				ECGame.instance.soundSystem.setMasterVolume(1.0);
 			}
 			if(this._lastSoundPlayed && this._lastSoundPlayed.setPosition)
 			{
@@ -401,7 +401,7 @@ GameLib.GameRules = GameEngineLib.Class.create({
 					this._lastSoundPlayed.setVelocity(
 						mouseWorldPosition
 							.sub(this._lastMouseWorldPosition)
-							.multiply( 1 / GameInstance.soundSystem.getSoundHardwareTimeUpdateDelta() )
+							.multiply( 1 / ECGame.instance.soundSystem.getSoundHardwareTimeUpdateDelta() )
 					);
 				}
 			}
@@ -409,23 +409,23 @@ GameLib.GameRules = GameEngineLib.Class.create({
 			
 			if(inInputEvent.keysPressed['\x6f'])//o
 			{
-				GameSystemVars.Debug.Map_Draw = !GameSystemVars.Debug.Map_Draw;
+				ECGame.Settings.Debug.Map_Draw = !ECGame.Settings.Debug.Map_Draw;
 			}
 			if(inInputEvent.keysPressed['\x70'])//p
 			{
-				GameSystemVars.Debug.Physics_Draw = !GameSystemVars.Debug.Physics_Draw;
+				ECGame.Settings.Debug.Physics_Draw = !ECGame.Settings.Debug.Physics_Draw;
 			}
 			if(inInputEvent.keysPressed['\x69'])//i
 			{
-				GameSystemVars.Debug.SceneGraph_Draw = !GameSystemVars.Debug.SceneGraph_Draw;
+				ECGame.Settings.Debug.SceneGraph_Draw = !ECGame.Settings.Debug.SceneGraph_Draw;
 			}
 			if(inInputEvent.keysPressed['\x75'])//u
 			{
-				GameSystemVars.Debug.Input_Draw = !GameSystemVars.Debug.Input_Draw;
+				ECGame.Settings.Debug.Input_Draw = !ECGame.Settings.Debug.Input_Draw;
 			}
 			if(inInputEvent.keysPressed['\x79'])//y
 			{
-				GameSystemVars.Debug.Sound_Area_Draw = !GameSystemVars.Debug.Sound_Area_Draw;
+				ECGame.Settings.Debug.Sound_Area_Draw = !ECGame.Settings.Debug.Sound_Area_Draw;
 			}
 			//TODO drawing debug sprite, debug audio
 			

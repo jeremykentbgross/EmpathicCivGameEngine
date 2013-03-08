@@ -19,18 +19,18 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class.create({
+ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 	Constructor : function EntityComponent_2DPhysics()
 	{
 		this.GameEntityComponent();
 
-		this._position = GameEngineLib.createGame2DPoint(256, 256);//??needed? use mid instead?
-		this._velocity = GameEngineLib.createGame2DPoint();
-		this._boundingRect = GameEngineLib.createGame2DAABB(this._position.myX, this._position.myY, 64, 64);//TODO separate position from AABB in PhysicsSim2D
-		this._range = GameEngineLib.createGame2DAABB(0, 0, 65535, 65535);//TODO used? Set when added to world?
+		this._position = ECGame.EngineLib.createGame2DPoint(256, 256);//??needed? use mid instead?
+		this._velocity = ECGame.EngineLib.createGame2DPoint();
+		this._boundingRect = ECGame.EngineLib.createGame2DAABB(this._position.myX, this._position.myY, 64, 64);//TODO separate position from AABB in PhysicsSim2D
+		this._range = ECGame.EngineLib.createGame2DAABB(0, 0, 65535, 65535);//TODO used? Set when added to world?
 	},
 	
-	Parents : [GameEngineLib.GameEntityComponent],
+	Parents : [ECGame.EngineLib.GameEntityComponent],
 	
 	flags : { net : true },//TODO should I get rid of this class flag?  Is it really needed?
 	
@@ -52,8 +52,8 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class.create({
 				name : '_velocity',
 				net : true,
 				type : 'position',//TODO type should be vector2 instead
-				min : GameEngineLib.createGame2DPoint(-512,-512),	//TODO replace hack numbers
-				max : GameEngineLib.createGame2DPoint(512,512)	//TODO replace hack numbers
+				min : ECGame.EngineLib.createGame2DPoint(-512,-512),	//TODO replace hack numbers
+				max : ECGame.EngineLib.createGame2DPoint(512,512)	//TODO replace hack numbers
 			}
 			//TODO rect NOT net!
 		],
@@ -73,7 +73,7 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class.create({
 			//TODO owner.event(getposition, myPos);??
 			
 			this._owner.onEvent(
-				new GameEngineLib.GameEvent_UpdatePosition(
+				new ECGame.EngineLib.GameEvent_UpdatePosition(
 					this._position.clone(),
 					this._velocity.clone(),
 					this._boundingRect.clone()
@@ -122,7 +122,7 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class.create({
 				if(this._owner)
 				{
 					this._owner.onEvent(
-						new GameEngineLib.GameEvent_UpdatePosition(
+						new ECGame.EngineLib.GameEvent_UpdatePosition(
 							this._position.clone(),
 							this._velocity.clone(),
 							this._boundingRect.clone()
@@ -146,7 +146,7 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class.create({
 		
 		onRequestVelocity : function onRequestVelocity(inEvent)
 		{
-			//GameEngineLib.logger.info(inEvent.direction.myX + ' ' + inEvent.direction.myY);
+			//ECGame.log.info(inEvent.direction.myX + ' ' + inEvent.direction.myY);
 			this._physicsObject.requestVelocity(inEvent.direction);
 		},
 		
@@ -170,7 +170,7 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class.create({
 		{
 			this._physicsObject.release();
 			this._physicsSystem = null;
-			//this._range = GameEngineLib.createGame2DAABB(0, 0, 256, 256);//TODO clamp values in range (in serializer?)
+			//this._range = ECGame.EngineLib.createGame2DAABB(0, 0, 256, 256);//TODO clamp values in range (in serializer?)
 			//TODO clear position?
 		},
 		
@@ -178,7 +178,7 @@ GameEngineLib.EntityComponent_2DPhysics = GameEngineLib.Class.create({
 		{
 			//TODO use GameEvent! Make collection of known game events!
 			this._owner.onEvent(
-				new GameEngineLib.GameEvent_UpdatePosition(
+				new ECGame.EngineLib.GameEvent_UpdatePosition(
 					physicsUpdateInfo.position.clone(),
 					physicsUpdateInfo.velocity.clone(),
 					physicsUpdateInfo.boundingRect.clone()

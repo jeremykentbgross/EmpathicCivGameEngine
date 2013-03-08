@@ -21,16 +21,16 @@
 
 
 //TODO make this class pluggable with other 2d scene graphs?  Or just the sorting part?
-GameEngineLib.Game2DSceneGraph = function Game2DSceneGraph(){};//TODO put init in here?
-GameEngineLib.Game2DSceneGraph.prototype.constructor = GameEngineLib.Game2DSceneGraph;
+ECGame.EngineLib.Game2DSceneGraph = function Game2DSceneGraph(){};//TODO put init in here?
+ECGame.EngineLib.Game2DSceneGraph.prototype.constructor = ECGame.EngineLib.Game2DSceneGraph;
 
 
 
-GameEngineLib.Game2DSceneGraph.prototype.init = function init(inMapSize, inMinNodeSize)
+ECGame.EngineLib.Game2DSceneGraph.prototype.init = function init(inMapSize, inMinNodeSize)
 {
-	this._mySceneTree = GameEngineLib.GameQuadTree.create();
+	this._mySceneTree = ECGame.EngineLib.GameQuadTree.create();
 	this._mySceneTree.init(
-		GameEngineLib.createGame2DAABB(0, 0, inMapSize, inMapSize),
+		ECGame.EngineLib.createGame2DAABB(0, 0, inMapSize, inMapSize),
 		inMinNodeSize
 	);
 	this._myMapSize = inMapSize;
@@ -46,14 +46,14 @@ GameEngineLib.Game2DSceneGraph.prototype.init = function init(inMapSize, inMinNo
 		|cos -sin| Transose	=>	| cos sin|
 		|sin  cos|			=>	|-sin cos|
 	*/
-	this._rotMatrixRow1 = GameEngineLib.createGame2DPoint(this._cos, sin);
-	this._rotMatrixRow2 = GameEngineLib.createGame2DPoint(-sin, this._cos);
+	this._rotMatrixRow1 = ECGame.EngineLib.createGame2DPoint(this._cos, sin);
+	this._rotMatrixRow2 = ECGame.EngineLib.createGame2DPoint(-sin, this._cos);
 };
 
 
 
 //TODO more like physics handles? maybe?***************************
-GameEngineLib.Game2DSceneGraph.prototype.insertItem = function insertItem(inRenderableItem)
+ECGame.EngineLib.Game2DSceneGraph.prototype.insertItem = function insertItem(inRenderableItem)
 {
 	inRenderableItem.sceneGraphOwningNodes = [];
 	this._mySceneTree.insertToAllBestFitting(inRenderableItem, inRenderableItem.sceneGraphOwningNodes);
@@ -63,7 +63,7 @@ GameEngineLib.Game2DSceneGraph.prototype.insertItem = function insertItem(inRend
 
 
 
-GameEngineLib.Game2DSceneGraph.prototype.removeItem = function removeItem(inRenderableItem)
+ECGame.EngineLib.Game2DSceneGraph.prototype.removeItem = function removeItem(inRenderableItem)
 {
 	var nodeIndex;
 	var nodeArray = inRenderableItem.sceneGraphOwningNodes;
@@ -75,7 +75,7 @@ GameEngineLib.Game2DSceneGraph.prototype.removeItem = function removeItem(inRend
 };
 
 
-GameEngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DContext, inCameraRect)
+ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DContext, inCameraRect)
 {
 	var renderables = [];
 	var _this_ = this;
@@ -84,13 +84,13 @@ GameEngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DCont
 	this._mySceneTree.walk(
 		function(item)
 		{
-			var frameCount = GameInstance.GameTimer.getFrameCount();
+			var frameCount = ECGame.instance.GameTimer.getFrameCount();
 			
 			if(frameCount > item.lastFrameDrawn)
 			{
 				//calculate depth sorting position for this frame
 				item.screenPos = item.anchorPosition.subtract(inCameraRect.getLeftTop());
-				item.drawOrderHelper = GameEngineLib.createGame2DPoint(
+				item.drawOrderHelper = ECGame.EngineLib.createGame2DPoint(
 					item.screenPos.dot(_this_._rotMatrixRow1),
 					item.screenPos.dot(_this_._rotMatrixRow2)
 				);
@@ -118,11 +118,11 @@ GameEngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DCont
 	}
 	
 	
-	if(GameSystemVars.DEBUG && GameSystemVars.Debug.SceneGraph_Draw)
+	if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.SceneGraph_Draw)
 	{
-		var fontSize = GameSystemVars.Debug.Text_Size;
+		var fontSize = ECGame.Settings.Debug.Text_Size;
 		
-		GameInstance.Graphics.drawDebugText("Debug Drawing SceneGraph");
+		ECGame.instance.Graphics.drawDebugText("Debug Drawing SceneGraph");
 		
 		inCanvas2DContext.font = fontSize + 'px Arial';
 		for(i in renderables)
@@ -143,7 +143,7 @@ GameEngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DCont
 				inCanvas2DContext.measureText(stringDistance).width
 			);
 			
-			inCanvas2DContext.fillStyle = GameSystemVars.Debug.SpacialPartitioningTree_Item_DrawColor;
+			inCanvas2DContext.fillStyle = ECGame.Settings.Debug.SpacialPartitioningTree_Item_DrawColor;
 			inCanvas2DContext.fillRect(
 				screenPos.myX,
 				screenPos.myY,
@@ -151,7 +151,7 @@ GameEngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DCont
 				fontSize * (stringDistance !== '' ? 2 : 1)
 			);
 			
-			inCanvas2DContext.fillStyle = GameSystemVars.Debug.TextDefault_DrawColor;
+			inCanvas2DContext.fillStyle = ECGame.Settings.Debug.TextDefault_DrawColor;
 			inCanvas2DContext.fillText(
 				stringDrawOrder,
 				screenPos.myX,
@@ -166,14 +166,14 @@ GameEngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DCont
 				);
 			}
 		}
-		GameInstance.Graphics.drawDebugText("SceneGraph Draw calls:" + renderables.length);
+		ECGame.instance.Graphics.drawDebugText("SceneGraph Draw calls:" + renderables.length);
 	}
 	
 	//TODO get rid of needing this! Need auto cleaning on delete
 	//this._mySceneTree.cleanTree();//commented for speed in full map, still kind of needed
 };
 
-GameEngineLib.Game2DSceneGraph.prototype.debugDraw = function debugDraw(inCanvas2DContext, inCameraRect)
+ECGame.EngineLib.Game2DSceneGraph.prototype.debugDraw = function debugDraw(inCanvas2DContext, inCameraRect)
 {
 	this._mySceneTree.debugDraw(inCanvas2DContext, inCameraRect);//TODO scenegraph colors here
 };

@@ -19,14 +19,14 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.GameEntityComponent = GameEngineLib.Class.create({
+ECGame.EngineLib.GameEntityComponent = ECGame.EngineLib.Class.create({
 	Constructor : function GameEntityComponent()
 	{
 		this.GameObject();
 		
 		this._owner = null;//TODO rename owningEntity
 	},
-	Parents : [GameEngineLib.GameObject],
+	Parents : [ECGame.EngineLib.GameObject],
 	flags : {},
 	ChainUp : ['onRemovedFromEntity'],
 	ChainDown : ['onAddedToEntity'],

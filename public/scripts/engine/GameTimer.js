@@ -19,14 +19,14 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.createGameTimer = function(instance, PRIVATE)
+ECGame.EngineLib.createGameTimer = function(instance, PRIVATE)
 {
 	instance = instance || {};
 	PRIVATE = PRIVATE || {};
 	
-	if(GameSystemVars.DEBUG)
+	if(ECGame.Settings.DEBUG)
 	{
-		GameEngineLib.addDebugInfo('GameTimer', instance, PRIVATE);
+		ECGame.EngineLib.addDebugInfo('GameTimer', instance, PRIVATE);
 	}
 	
 	instance.init = function()
@@ -72,7 +72,7 @@ GameEngineLib.createGameTimer = function(instance, PRIVATE)
 		
 		//TODO update accumulators and fire timer events
 		
-		if(GameSystemVars.DEBUG)
+		if(ECGame.Settings.DEBUG)
 		{
 			var frameStats = [
 				"Average FPS: " + (1000 / PRIVATE.aveDt).toFixed(3),
@@ -80,14 +80,14 @@ GameEngineLib.createGameTimer = function(instance, PRIVATE)
 				"Last Frame Time: " + PRIVATE.dt,
 				"Frame Count: " + PRIVATE.frameCount
 			];
-			if(GameSystemVars.Debug.FrameStats_Draw && !GameSystemVars.Network.isServer)
+			if(ECGame.Settings.Debug.FrameStats_Draw && !ECGame.Settings.Network.isServer)
 			{
-				GameInstance.Graphics.drawDebugText(frameStats[0], GameSystemVars.Debug.FrameStats_DrawColor);
-				GameInstance.Graphics.drawDebugText(frameStats[1], GameSystemVars.Debug.FrameStats_DrawColor);
-				GameInstance.Graphics.drawDebugText(frameStats[2], GameSystemVars.Debug.FrameStats_DrawColor);
-				GameInstance.Graphics.drawDebugText(frameStats[3], GameSystemVars.Debug.FrameStats_DrawColor);
+				ECGame.instance.Graphics.drawDebugText(frameStats[0], ECGame.Settings.Debug.FrameStats_DrawColor);
+				ECGame.instance.Graphics.drawDebugText(frameStats[1], ECGame.Settings.Debug.FrameStats_DrawColor);
+				ECGame.instance.Graphics.drawDebugText(frameStats[2], ECGame.Settings.Debug.FrameStats_DrawColor);
+				ECGame.instance.Graphics.drawDebugText(frameStats[3], ECGame.Settings.Debug.FrameStats_DrawColor);
 			}
-			if(GameSystemVars.Debug.FrameStats_Print)
+			if(ECGame.Settings.Debug.FrameStats_Print)
 			{
 				console.log(
 					'\n' + frameStats[0] +

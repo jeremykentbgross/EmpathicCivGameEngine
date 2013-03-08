@@ -18,7 +18,7 @@
 	You should have received a copy of the GNU Lesser General Public License
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
-GameUnitTests.registerTest(
+ECGame.unitTests.registerTest(
 	'GameBinarySerializer',
 	function()
 	{
@@ -77,7 +77,7 @@ GameUnitTests.registerTest(
 				{
 					if(outObj[entry.name] === inObj[entry.name])
 					{
-						GameEngineLib.logger.error(
+						ECGame.log.error(
 							entry.scope + '.' + entry.name + " miss match: " +
 							outObj[entry.name] + ' === ' + inObj[entry.name]);
 						passedTest = false;
@@ -87,7 +87,7 @@ GameUnitTests.registerTest(
 				{
 					if(outObj[entry.name] !== inObj[entry.name])
 					{
-						GameEngineLib.logger.error(
+						ECGame.log.error(
 							entry.scope + '.' + entry.name + " miss match: " +
 							outObj[entry.name] + ' !== ' + inObj[entry.name]);
 						passedTest = false;
@@ -103,7 +103,7 @@ GameUnitTests.registerTest(
 		net = false;
 		
 		//write data
-		var serializer = GameEngineLib.GameBinarySerializer.create();
+		var serializer = ECGame.EngineLib.GameBinarySerializer.create();
 		serializer.initWrite({});
 		serializer.serializeObject(outObj, format);
 		
@@ -112,7 +112,7 @@ GameUnitTests.registerTest(
 		
 		//read data
 		inObj = {};
-		serializer = GameEngineLib.GameBinarySerializer.create();
+		serializer = ECGame.EngineLib.GameBinarySerializer.create();
 		serializer.initRead({}, data);
 		serializer.serializeObject(inObj, format);
 		
@@ -126,7 +126,7 @@ GameUnitTests.registerTest(
 		net = true;
 	
 		//write data
-		serializer = GameEngineLib.GameBinarySerializer.create();
+		serializer = ECGame.EngineLib.GameBinarySerializer.create();
 		serializer.initWrite({NET : true});
 		serializer.serializeObject(outObj, format);
 		
@@ -135,7 +135,7 @@ GameUnitTests.registerTest(
 		
 		//read data
 		inObj = {};
-		serializer = GameEngineLib.GameBinarySerializer.create();
+		serializer = ECGame.EngineLib.GameBinarySerializer.create();
 		serializer.initRead({NET : true}, data);
 		serializer.serializeObject(inObj, format);
 		

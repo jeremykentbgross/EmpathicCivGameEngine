@@ -18,7 +18,7 @@
 	You should have received a copy of the GNU Lesser General Public License
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
-GameUnitTests.registerTest(
+ECGame.unitTests.registerTest(
 	'GameEventSystem',
 	function()
 	{
@@ -28,7 +28,7 @@ GameUnitTests.registerTest(
 		var listener1;
 		var listener2;
 		
-		eventSystem = GameEngineLib.GameEventSystem.create();
+		eventSystem = ECGame.EngineLib.GameEventSystem.create();
 		
 		listener1 =
 		{
@@ -63,12 +63,12 @@ GameUnitTests.registerTest(
 		
 		if(listener1.recieved !== 2)
 		{
-			GameEngineLib.logger.error("First event not recieved by first listener!");
+			ECGame.log.error("First event not recieved by first listener!");
 			passedTest = false;
 		}
 		if(listener2.recieved !== 1)
 		{
-			GameEngineLib.logger.error("First event not recieved by second listener!");
+			ECGame.log.error("First event not recieved by second listener!");
 			passedTest = false;
 		}
 		
@@ -83,12 +83,12 @@ GameUnitTests.registerTest(
 		
 		if(listener1.recieved !== 0)
 		{
-			GameEngineLib.logger.error("Second event not recieved by first listener!");
+			ECGame.log.error("Second event not recieved by first listener!");
 			passedTest = false;
 		}
 		if(listener2.recieved === -1)
 		{
-			GameEngineLib.logger.error("Second event recieved by second listener!");
+			ECGame.log.error("Second event recieved by second listener!");
 			passedTest = false;
 		}
 		

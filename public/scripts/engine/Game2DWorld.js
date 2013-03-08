@@ -19,14 +19,14 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.Game2DWorld = GameEngineLib.Class.create(
+ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 {
 	Constructor : function Game2DWorld()
 	{
 		this.GameObject();
 	},
 	
-	Parents : [GameEngineLib.GameObject],
+	Parents : [ECGame.EngineLib.GameObject],
 	
 	flags : {net:true},
 	
@@ -53,43 +53,43 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class.create(
 		init : function init(inMapSizeInTiles, inTileSize, inMinPhysicsPartitionSize)
 		{
 			//TODO if??
-			this._mouseLoc = GameEngineLib.createGame2DPoint();
+			this._mouseLoc = ECGame.EngineLib.createGame2DPoint();
 			
 			this._mapsize = inMapSizeInTiles * inTileSize;
-			this._sceneGraph = new GameEngineLib.Game2DSceneGraph();
+			this._sceneGraph = new ECGame.EngineLib.Game2DSceneGraph();
 			this._sceneGraph.init(this._mapsize, inTileSize);
 			
-			this._physics = GameEngineLib.createGame2DPhysics();
+			this._physics = ECGame.EngineLib.createGame2DPhysics();
 			this._physics.init(this._mapsize, inMinPhysicsPartitionSize);
-			GameInstance.UpdateOrder.push(this._physics);//TODO make it join a physics updater, not this
+			ECGame.instance.UpdateOrder.push(this._physics);//TODO make it join a physics updater, not this
 			
 			//setup default tileset consisting of nothing but the placeholder
-			var tileset = GameEngineLib.Game2DTileSet.create();
+			var tileset = ECGame.EngineLib.Game2DTileSet.create();
 			tileset.init(
 				[
 					{
 						fileName : 'images/placeholder.png'//TODO have this listed in systemvars
-						,anchor : GameEngineLib.createGame2DPoint()
+						,anchor : ECGame.EngineLib.createGame2DPoint()
 						,layer : 0
 					}
 					//,{}
 				]
 			);
 			
-			this._map = GameEngineLib.Game2DMap.create();
+			this._map = ECGame.EngineLib.Game2DMap.create();
 			this._map.init(inMapSizeInTiles, inTileSize, tileset);
 			this._map.addedToWorld(this);
 			
 			this._entityMap = {};
 			
-			this._defaultCamera = GameEngineLib.createGame2DCamera();
+			this._defaultCamera = ECGame.EngineLib.createGame2DCamera();
 			this._camera = null;
 			
 			//for listening to cursor position.
 			//TODO Only needed to debug draw cursor which should likely be elsewhere?
-			if(!GameSystemVars.Network.isServer)
+			if(!ECGame.Settings.Network.isServer)
 			{
-				GameInstance.Input.registerListener('Input', this);
+				ECGame.instance.Input.registerListener('Input', this);
 			}
 		},
 
@@ -118,14 +118,14 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class.create(
 			return this._camera || this._defaultCamera;
 		},
 
-		//if(!GameSystemVars.Network.isServer)//TODO axe if?
+		//if(!ECGame.Settings.Network.isServer)//TODO axe if?
 		render : function render(inCanvas2DContext)
 		{
 			var camera = this.getCurrentCamera();
 			var target;
 			
 			//debug draw the map		
-			if(GameSystemVars.DEBUG && GameSystemVars.Debug.Map_Draw)
+			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.Map_Draw)
 			{
 				this._map.debugDraw(inCanvas2DContext, camera.getRect());
 			}
@@ -135,25 +135,25 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class.create(
 			this._sceneGraph.render(inCanvas2DContext, camera.getRect());		
 			
 			//debug draw scenegraph
-			if(GameSystemVars.DEBUG && GameSystemVars.Debug.SceneGraph_Draw)
+			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.SceneGraph_Draw)
 			{
 				this._sceneGraph.debugDraw(inCanvas2DContext, camera.getRect());
 			}
 			
 			//debug draw physics
-			if(GameSystemVars.DEBUG && GameSystemVars.Debug.Physics_Draw)
+			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.Physics_Draw)
 			{
 				this._physics.debugDraw(inCanvas2DContext, camera.getRect());
 			}
 			
 			//debug draw camera target point
-			if(GameSystemVars.DEBUG && GameSystemVars.Debug.GameWorld_CameraTarget_Draw)
+			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.GameWorld_CameraTarget_Draw)
 			{
-				target = GameEngineLib.createGame2DAABB(
+				target = ECGame.EngineLib.createGame2DAABB(
 					0,
 					0,
-					GameSystemVars.Debug.GameWorld_CameraTarget_Size,
-					GameSystemVars.Debug.GameWorld_CameraTarget_Size
+					ECGame.Settings.Debug.GameWorld_CameraTarget_Size,
+					ECGame.Settings.Debug.GameWorld_CameraTarget_Size
 				);
 				
 				target.setLeftTop(
@@ -168,19 +168,19 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class.create(
 				);
 							
 				//setup the color
-				inCanvas2DContext.fillStyle = GameSystemVars.Debug.GameWorld_CameraTarget_DrawColor;
+				inCanvas2DContext.fillStyle = ECGame.Settings.Debug.GameWorld_CameraTarget_DrawColor;
 				//draw the target
 				inCanvas2DContext.fillRect(target.myX, target.myY, target.myWidth, target.myHeight);
 			}
 			
 			//debugdraw cursor
-			if(GameSystemVars.DEBUG && GameSystemVars.Debug.GameWorld_MouseCursor_Draw)
+			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.GameWorld_MouseCursor_Draw)
 			{
-				target = GameEngineLib.createGame2DAABB(
+				target = ECGame.EngineLib.createGame2DAABB(
 					0,
 					0,
-					GameSystemVars.Debug.GameWorld_MouseCursor_Size,
-					GameSystemVars.Debug.GameWorld_MouseCursor_Size
+					ECGame.Settings.Debug.GameWorld_MouseCursor_Size,
+					ECGame.Settings.Debug.GameWorld_MouseCursor_Size
 				);
 				
 				//center on mouse position by subtracting half the cursor size
@@ -191,20 +191,20 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class.create(
 				);
 				
 				//setup the color
-				inCanvas2DContext.fillStyle = GameSystemVars.Debug.GameWorld_MouseCursor_DrawColor;
+				inCanvas2DContext.fillStyle = ECGame.Settings.Debug.GameWorld_MouseCursor_DrawColor;
 				//debug draw it
 				inCanvas2DContext.fillRect(target.myX, target.myY, target.myWidth, target.myHeight);
 			}
 			
-			if(GameSystemVars.Debug.Sound_Area_Draw)
+			if(ECGame.Settings.Debug.Sound_Area_Draw)
 			{
-				GameInstance.soundSystem.debugDraw(inCanvas2DContext, camera.getRect(), this);
+				ECGame.instance.soundSystem.debugDraw(inCanvas2DContext, camera.getRect(), this);
 			}
 		},
 
 		getBoundingBox : function getBoundingBox()
 		{
-			return GameEngineLib.createGame2DAABB(0, 0, this._mapsize, this._mapsize);
+			return ECGame.EngineLib.createGame2DAABB(0, 0, this._mapsize, this._mapsize);
 		},
 
 		destroy : function destroy(){},//TODO
@@ -284,7 +284,7 @@ GameEngineLib.Game2DWorld = GameEngineLib.Class.create(
 		copyFrom : function copyFrom(inOther){},//TODO
 		
 		//TODO should cursor drawing be here? probably not, maybe move to GameFrameWork (instance)
-		//if(!GameSystemVars.Network.isServer)//TODO axe if?
+		//if(!ECGame.Settings.Network.isServer)//TODO axe if?
 		onInput : function onInput(inInputEvent)
 		{
 			this._mouseLoc = inInputEvent.mouseLoc;

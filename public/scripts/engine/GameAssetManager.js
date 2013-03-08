@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.createGameAssetManager = function(instance, PRIVATE)
+ECGame.EngineLib.createGameAssetManager = function(instance, PRIVATE)
 {
 	instance = instance || {};
 	PRIVATE = PRIVATE || {};
@@ -124,7 +124,7 @@ GameEngineLib.createGameAssetManager = function(instance, PRIVATE)
 			//Decode asynchronously
 			request.onload = function()
 			{
-				GameInstance.soundSystem._context.decodeAudioData(
+				ECGame.instance.soundSystem._context.decodeAudioData(
 					request.response,
 					function(buffer)
 					{
@@ -140,7 +140,7 @@ GameEngineLib.createGameAssetManager = function(instance, PRIVATE)
 					},
 					function onError(inWhatParam)//??
 					{
-						GameEngineLib.logger.error("Failed to load " + inFileName);
+						ECGame.log.error("Failed to load " + inFileName);
 					}
 				);
 				//TODO onFailedLoad? set placeholder, else have a grey or clear sound for streaming

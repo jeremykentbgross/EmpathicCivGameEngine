@@ -18,7 +18,7 @@
 	You should have received a copy of the GNU Lesser General Public License
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
-GameUnitTests.registerTest(
+ECGame.unitTests.registerTest(
 	'GameArithmeticCompression',
 	function()
 	{
@@ -46,7 +46,7 @@ GameUnitTests.registerTest(
 			low = Math.floor(Math.random() * maxSize);
 			high = low + Math.floor(Math.random() * maxSize);// + 1;
 			values[i] = low + Math.floor(Math.random() * (high - low + 1));
-			models[i] = GameEngineLib.GameArithmeticCompressionModels.createEvenProbabilityIntegerRangeModel();
+			models[i] = ECGame.EngineLib.GameArithmeticCompressionModels.createEvenProbabilityIntegerRangeModel();
 			models[i].setMinMax(low, high);
 		}
 		
@@ -85,7 +85,7 @@ GameUnitTests.registerTest(
 		
 		////////////////////////////////////////////////////////////////////////////
 		//run///////////////////////////////////////////////////////////////////////
-		var encoder = GameEngineLib.createGameArithmeticCompression();
+		var encoder = ECGame.EngineLib.createGameArithmeticCompression();
 		
 		for(i = 0; i < numValues; ++i)
 		{
@@ -101,7 +101,7 @@ GameUnitTests.registerTest(
 		);
 		//console.log(string);
 		
-		encoder = GameEngineLib.createGameArithmeticCompression();
+		encoder = ECGame.EngineLib.createGameArithmeticCompression();
 		encoder.setString(string);
 		
 		for(i = 0; i < numValues; ++i)
@@ -109,7 +109,7 @@ GameUnitTests.registerTest(
 			value = encoder.decode(models[i]);
 			if(value !== values[i])
 			{
-				GameEngineLib.logger.error("Loop " + i + ' ' + value + '!==' + values[i] + " with (" + models[i].min + ', ' + models[i].max + ')');
+				ECGame.log.error("Loop " + i + ' ' + value + '!==' + values[i] + " with (" + models[i].min + ', ' + models[i].max + ')');
 				passedTest = false;
 				
 				failedLoops.push(i);
@@ -135,7 +135,7 @@ GameUnitTests.registerTest(
 				console.log("scaled:\t" + ((values[i]-models[i].min)/(models[i].max-models[i].min)));
 			}
 			
-			encoder = GameEngineLib.createGameArithmeticCompression();
+			encoder = ECGame.EngineLib.createGameArithmeticCompression();
 			
 			for(i = 0; i < numValues; ++i)
 			{
@@ -147,7 +147,7 @@ GameUnitTests.registerTest(
 			}
 			
 			string = encoder.getString();
-			encoder = GameEngineLib.createGameArithmeticCompression();
+			encoder = ECGame.EngineLib.createGameArithmeticCompression();
 			encoder.setString(string);
 			
 			for(i = 0; i < numValues; ++i)

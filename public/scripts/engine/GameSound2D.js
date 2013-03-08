@@ -19,17 +19,17 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.Sound2D = GameEngineLib.Class.create(
+ECGame.EngineLib.Sound2D = ECGame.EngineLib.Class.create(
 {
 	Constructor : function Sound2D(inSource, inStartedTime, inFileName, inPanner, inRadius)
 	{
 		this.Sound(inSource, inStartedTime, inFileName);
 		this._panner = inPanner;
-		this._position = new GameEngineLib.Game2DPoint();
-		this._velocity = new GameEngineLib.Game2DPoint();
+		this._position = new ECGame.EngineLib.Game2DPoint();
+		this._velocity = new ECGame.EngineLib.Game2DPoint();
 		this._radius = inRadius;
 	},
-	Parents : [GameEngineLib.Sound],
+	Parents : [ECGame.EngineLib.Sound],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
@@ -55,25 +55,25 @@ GameEngineLib.Sound2D = GameEngineLib.Class.create(
 			percentPlayed = (inCurrentTime - this._startedTime) / this._source.buffer.duration;
 			soundScreenLoc = this._position.sub(inCameraRect);
 							
-			GameInstance.Graphics.drawDebugText(
+			ECGame.instance.Graphics.drawDebugText(
 				'-' + this._fileName + ': %' + Math.floor(percentPlayed * 100),
-				GameSystemVars.Debug.Sound_Area_DrawColor
+				ECGame.Settings.Debug.Sound_Area_DrawColor
 			);
-			GameInstance.Graphics.drawDebugText(
+			ECGame.instance.Graphics.drawDebugText(
 				"----Pos:(" + this._position.myX + ', ' + this._position.myY + "), Radius:" + this._radius,
-				GameSystemVars.Debug.Sound_Area_DrawColor
+				ECGame.Settings.Debug.Sound_Area_DrawColor
 			);
-			GameInstance.Graphics.drawDebugText(
+			ECGame.instance.Graphics.drawDebugText(
 				"----Vel:(" + this._velocity.myX + ', ' + this._velocity.myY + ')',
-				GameSystemVars.Debug.Sound_Area_DrawColor
+				ECGame.Settings.Debug.Sound_Area_DrawColor
 			);
 			
 			//draw source position
 			inCanvas2DContext.fillRect(
-				soundScreenLoc.myX - (GameSystemVars.Debug.Sound_Source_Size / 2),
-				soundScreenLoc.myY - (GameSystemVars.Debug.Sound_Source_Size / 2),
-				GameSystemVars.Debug.Sound_Source_Size,
-				GameSystemVars.Debug.Sound_Source_Size
+				soundScreenLoc.myX - (ECGame.Settings.Debug.Sound_Source_Size / 2),
+				soundScreenLoc.myY - (ECGame.Settings.Debug.Sound_Source_Size / 2),
+				ECGame.Settings.Debug.Sound_Source_Size,
+				ECGame.Settings.Debug.Sound_Source_Size
 			);
 			//TODO draw facing cone
 				
@@ -95,8 +95,8 @@ GameEngineLib.Sound2D = GameEngineLib.Class.create(
 				soundScreenLoc.myY
 			);
 			inCanvas2DContext.lineTo(
-				soundScreenLoc.myX + (this._velocity.myX * GameInstance.soundSystem.getSoundHardwareTimeUpdateDelta()),
-				soundScreenLoc.myY + (this._velocity.myY * GameInstance.soundSystem.getSoundHardwareTimeUpdateDelta())
+				soundScreenLoc.myX + (this._velocity.myX * ECGame.instance.soundSystem.getSoundHardwareTimeUpdateDelta()),
+				soundScreenLoc.myY + (this._velocity.myY * ECGame.instance.soundSystem.getSoundHardwareTimeUpdateDelta())
 			);
 			inCanvas2DContext.closePath();
 			inCanvas2DContext.stroke();

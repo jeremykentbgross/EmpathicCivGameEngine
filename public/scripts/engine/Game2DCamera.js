@@ -20,10 +20,10 @@
 */
 
 //TODO depricated!
-GameEngineLib.createGame2DCamera = function(instance)
+ECGame.EngineLib.createGame2DCamera = function(instance)
 {
 	var property;
-	var temp = new GameEngineLib.Game2DCamera();
+	var temp = new ECGame.EngineLib.Game2DCamera();
 	instance = instance || {};
 	
 	for(property in temp)
@@ -44,43 +44,43 @@ GameEngineLib.createGame2DCamera = function(instance)
 //TODO derive 2d camera from rect
 
 
-GameEngineLib.Game2DCamera = function Game2DCamera()
+ECGame.EngineLib.Game2DCamera = function Game2DCamera()
 {
-	if(!GameSystemVars.Network.isServer)
+	if(!ECGame.Settings.Network.isServer)
 	{
-		this._myRect = GameEngineLib.createGame2DAABB(
+		this._myRect = ECGame.EngineLib.createGame2DAABB(
 			0,
 			0,
-			GameInstance.Graphics.getWidth(),
-			GameInstance.Graphics.getHeight()
+			ECGame.instance.Graphics.getWidth(),
+			ECGame.instance.Graphics.getHeight()
 		);
 	}
 	else
 	{
-		this._myRect = GameEngineLib.createGame2DAABB(
+		this._myRect = ECGame.EngineLib.createGame2DAABB(
 			0,
 			0,
-			GameSystemVars.Graphics.initWidth,
-			GameSystemVars.Graphics.initHeight
+			ECGame.Settings.Graphics.initWidth,
+			ECGame.Settings.Graphics.initHeight
 		);
 	}
 };
-GameEngineLib.Game2DCamera.prototype.constructor = GameEngineLib.Game2DCamera;
+ECGame.EngineLib.Game2DCamera.prototype.constructor = ECGame.EngineLib.Game2DCamera;
 
 
 
 
-GameEngineLib.Game2DCamera.prototype.init = function init(inWidth, inHeight)
+ECGame.EngineLib.Game2DCamera.prototype.init = function init(inWidth, inHeight)
 {
 	if(inWidth &&inHeight)
 	{
-		this._myRect = GameEngineLib.createGame2DAABB(0, 0, inWidth, inHeight);
+		this._myRect = ECGame.EngineLib.createGame2DAABB(0, 0, inWidth, inHeight);
 	}
 };
 
 
 
-GameEngineLib.Game2DCamera.prototype.centerOn = function centerOn(inTargetCenter, inMap)
+ECGame.EngineLib.Game2DCamera.prototype.centerOn = function centerOn(inTargetCenter, inMap)
 {		
 	var camPoint = inTargetCenter.subtract(this._myRect.getWidthHeight().multiply(0.5));
 	
@@ -88,7 +88,7 @@ GameEngineLib.Game2DCamera.prototype.centerOn = function centerOn(inTargetCenter
 	if(inMap && inMap.isWrappable && !inMap.isWrappable())
 	{
 		camPoint = camPoint.componentMin(inMap.getMapLowerRight().subtract(this._myRect.getWidthHeight()));
-		camPoint = camPoint.componentMax(GameEngineLib.createGame2DPoint(0,0));
+		camPoint = camPoint.componentMax(ECGame.EngineLib.createGame2DPoint(0,0));
 	}
 	
 	this._myRect.setLeftTop(camPoint);
@@ -97,7 +97,7 @@ GameEngineLib.Game2DCamera.prototype.centerOn = function centerOn(inTargetCenter
 
 
 //TODO have actual target entity?  I think so
-GameEngineLib.Game2DCamera.prototype.getTargetPosition = function getTargetPosition()
+ECGame.EngineLib.Game2DCamera.prototype.getTargetPosition = function getTargetPosition()
 {
 	return this._myRect.getCenter();
 };
@@ -106,7 +106,7 @@ GameEngineLib.Game2DCamera.prototype.getTargetPosition = function getTargetPosit
 
 //todo make this gameobject? with set target/map? then needs update.. eh?
 
-GameEngineLib.Game2DCamera.prototype.getRect = function getRect()
+ECGame.EngineLib.Game2DCamera.prototype.getRect = function getRect()
 {
 	return this._myRect;
 };

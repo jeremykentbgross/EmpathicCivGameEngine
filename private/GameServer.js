@@ -29,46 +29,47 @@ require("../public/scripts/GameLoader");
 
 ////////////////////////////////////////////////////////////////////
 //Web Server////////////////////////////////////////////////////////
-GameEngineServer = {};
-
-//Path/Setup
-GameEngineServer.webHostAddress = "localhost";//TODO this is NOT OK!
-GameEngineServer.webHostPort = 80;
-GameEngineServer.webHostRoot = path.join(path.dirname(__filename), '../public');
-
-
-//http file server
-GameEngineServer.expressApp = express.createServer();
-//needed to open more sockets:
-GameEngineServer.socketio = socketIO;
-//wrapper for express which is needed for socket.io to serve correctly below
-GameEngineServer.httpServer = http.createServer(GameEngineServer.expressApp);
-//needed to serve the socket.io library to others
-GameEngineServer.listenSocket = socketIO.listen(GameEngineServer.httpServer);
-
 
 //Paths looks wrong (because they will run from inside the loader)
 GameLoader.start(true, "../../public/", "../../private/");
 
-if(GameSystemVars.Network.isMultiplayer)
+//ECGame.Webserver = {};
+
+//Path/Setup
+ECGame.Webserver.webHostAddress = "localhost";//TODO this is NOT OK!
+ECGame.Webserver.webHostPort = 80;
+ECGame.Webserver.webHostRoot = path.join(path.dirname(__filename), '../public');
+
+
+//http file server
+ECGame.Webserver.expressApp = express.createServer();
+//needed to open more sockets:
+ECGame.Webserver.socketio = socketIO;
+//wrapper for express which is needed for socket.io to serve correctly below
+ECGame.Webserver.httpServer = http.createServer(ECGame.Webserver.expressApp);
+//needed to serve the socket.io library to others
+ECGame.Webserver.listenSocket = socketIO.listen(ECGame.Webserver.httpServer);
+
+
+if(ECGame.Settings.Network.isMultiplayer)
 {
 	//RUN UNIT TEST scripts
-	if(GameSystemVars.RUN_UNIT_TESTS)
+	if(ECGame.Settings.RUN_UNIT_TESTS)
 	{
-		GameUnitTests.runTests();
+		ECGame.unitTests.runTests();
 	}
 }
 
 
-if(GameSystemVars.Server.compressClientCode)
+if(ECGame.Settings.Server.compressClientCode)
 {
-	GameEngineServer.codeCompressor = new GameEngineServer.CodeCompressor("../public/");
-	GameEngineServer.codeCompressor.makeCompactGameLoader();
+	ECGame.Webserver.codeCompressor = new ECGame.Webserver.CodeCompressor("../public/");
+	ECGame.Webserver.codeCompressor.makeCompactGameLoader();
 	
-	GameEngineServer.expressApp.get(
+	ECGame.Webserver.expressApp.get(
 		'/scripts/GameLoader.js'
 		,function(req, res){
-			var code = GameEngineServer.codeCompressor.getCompactCode();
+			var code = ECGame.Webserver.codeCompressor.getCompactCode();
 			
 			res.writeHead(
 				200,
@@ -81,72 +82,72 @@ if(GameSystemVars.Server.compressClientCode)
 			res.end();
 		}
 	);
-	GameEngineServer.expressApp.get(
+	ECGame.Webserver.expressApp.get(
 		'/3rdParty/*.(js|css|html|png|jpg|mp3)'//TODO review file types
 		,function(req, res){
-			res.sendfile( path.join(GameEngineServer.webHostRoot, req.url) );
+			res.sendfile( path.join(ECGame.Webserver.webHostRoot, req.url) );
 		}
 	);
-	GameEngineServer.expressApp.get(
+	ECGame.Webserver.expressApp.get(
 		'/*.(css|html|png|jpg|mp3)'//TODO review file types
 		,function(req, res){
-			res.sendfile( path.join(GameEngineServer.webHostRoot, req.url) );
+			res.sendfile( path.join(ECGame.Webserver.webHostRoot, req.url) );
 		}
 	);
 }
 else
 {
-	GameEngineServer.expressApp.get(
+	ECGame.Webserver.expressApp.get(
 		'/*.(js|css|html|png|jpg|mp3)'//TODO review file types
 		,function(req, res){
-			res.sendfile( path.join(GameEngineServer.webHostRoot, req.url) );
+			res.sendfile( path.join(ECGame.Webserver.webHostRoot, req.url) );
 		}
 	);
 }
 
 
 
-GameEngineServer.expressApp.get(
+ECGame.Webserver.expressApp.get(
 	'/'
 	,function(req, res)
 	{
-		res.sendfile( path.join(GameEngineServer.webHostRoot, 'intro.html') );//TODO rename the index.html
+		res.sendfile( path.join(ECGame.Webserver.webHostRoot, 'intro.html') );//TODO rename the index.html
 	}
 );
 
 
 
-GameEngineServer.httpServer.listen(
-	GameEngineServer.webHostPort
-	//,GameEngineServer.webHostAddress	//Note: if this is here it cannot be accessed elsewhere
+ECGame.Webserver.httpServer.listen(
+	ECGame.Webserver.webHostPort
+	//,ECGame.Webserver.webHostAddress	//Note: if this is here it cannot be accessed elsewhere
 );
 console.log(
 	"\n\n------------------\n"
 	+ "WebServer Running:\n\n"
-	+ "Hosting at:\n\t" + GameEngineServer.webHostAddress + ":" + GameEngineServer.webHostPort + "\n\n"
-	+ "Serving files from:\n\t'" + GameEngineServer.webHostRoot + "'\n"
+	+ "Hosting at:\n\t" + ECGame.Webserver.webHostAddress + ":" + ECGame.Webserver.webHostPort + "\n\n"
+	+ "Serving files from:\n\t'" + ECGame.Webserver.webHostRoot + "'\n"
 	+ "------------------\n\n"
 );
 
 /*
-GameEngineServer.expressApp.configure(
+ECGame.Webserver.expressApp.configure(
 	function()
 	{
-		GameEngineServer.expressApp.use(express.static(GameEngineServer.webHostRoot));
+		ECGame.Webserver.expressApp.use(express.static(ECGame.Webserver.webHostRoot));
 		//TODO more configure(s)??
 	}
 );*/
 //TODO more configure(s) **types**??
 
 //TODO this should be only in GameRunner, here copied here due to debug issue with node inspector
-if(GameSystemVars.Network.isMultiplayer)
+if(ECGame.Settings.Network.isMultiplayer)
 {
 	//RUN UNIT TEST scripts
-//	if(GameSystemVars.RUN_UNIT_TESTS)
-//		GameUnitTests.runTests();
+//	if(ECGame.Settings.RUN_UNIT_TESTS)
+//		ECGame.unitTests.runTests();
 	//RUN GAME scripts
-	GameInstance = GameEngineLib.createGameFrameWork();
-	GameInstance.run();
+	ECGame.instance = ECGame.EngineLib.createGameFrameWork();
+	ECGame.instance.run();
 }
 //Web Server////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////

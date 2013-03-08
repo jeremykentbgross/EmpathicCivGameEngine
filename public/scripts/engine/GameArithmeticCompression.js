@@ -19,9 +19,9 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.GameArithmeticCompressionModels = GameEngineLib.GameArithmeticCompressionModels || {};
+ECGame.EngineLib.GameArithmeticCompressionModels = ECGame.EngineLib.GameArithmeticCompressionModels || {};
 
-GameEngineLib.GameArithmeticCompressionModels.createEvenProbabilityIntegerRangeModel = function()
+ECGame.EngineLib.GameArithmeticCompressionModels.createEvenProbabilityIntegerRangeModel = function()
 {
 	var lowOffset = 1 / 8192;//~0.0001;
 	var highOffset = 1 - lowOffset;//~0.9999;
@@ -32,7 +32,7 @@ GameEngineLib.GameArithmeticCompressionModels.createEvenProbabilityIntegerRangeM
 		{
 			if(inMax - inMin + 1 > 65536)//TODO ifdebug
 			{
-				GameEngineLib.logger.error("Range is too large!");//TODO throw error from log, and move the log!
+				ECGame.log.error("Range is too large!");//TODO throw error from log, and move the log!
 				return;
 			}
 			this.min = inMin;
@@ -91,17 +91,17 @@ GameEngineLib.GameArithmeticCompressionModels.createEvenProbabilityIntegerRangeM
 // http://number-none.com/product/
 //	http://marknelson.us/1991/02/01/arithmetic-coding-statistical-modeling-data-compression/
 //	http://www.colloquial.com/ArithmeticCoding/
-GameEngineLib.createGameArithmeticCompression = function()
+ECGame.EngineLib.createGameArithmeticCompression = function()
 {
 	var instance = {};
 	var PRIVATE = {};
 	
-	if(GameSystemVars.DEBUG)
+	if(ECGame.Settings.DEBUG)
 	{
-		GameEngineLib.addDebugInfo("GameArithmeticCompression", instance, PRIVATE);
+		ECGame.EngineLib.addDebugInfo("GameArithmeticCompression", instance, PRIVATE);
 	}
 	
-	PRIVATE.bitPacker = GameEngineLib.createGameBitPacker();
+	PRIVATE.bitPacker = ECGame.EngineLib.createGameBitPacker();
 	
 	PRIVATE.BITS = 32;//16;
 	PRIVATE.ONE = Math.pow(2, PRIVATE.BITS);						//(2^16bits) - 1 == 65535 == 0xffff:
@@ -218,7 +218,7 @@ GameEngineLib.createGameArithmeticCompression = function()
 			PRIVATE.high = (2 * PRIVATE.high + 1) % PRIVATE.ONE;
 		}
 		
-		GameEngineLib.logger.error("Encode failed!");
+		ECGame.log.error("Encode failed!");
 	};
 	
 	
@@ -229,7 +229,7 @@ GameEngineLib.createGameArithmeticCompression = function()
 		
 		if((probability > 1 || probability < 0))
 		{
-			GameEngineLib.logger.error("Decompression out of range value detected!");
+			ECGame.log.error("Decompression out of range value detected!");
 			//TODO throw an error to be caught above and disconnect them
 		}
 		
@@ -278,7 +278,7 @@ GameEngineLib.createGameArithmeticCompression = function()
 			PRIVATE.encoded = (2 * PRIVATE.encoded + PRIVATE.bitPacker.unpack(1)) % PRIVATE.ONE;
 		}
 		
-		GameEngineLib.logger.error("Did not resolve decoding a symbol before we exceeded the bits it could have fit in!");
+		ECGame.log.error("Did not resolve decoding a symbol before we exceeded the bits it could have fit in!");
 		//return valueRange.value;
 		return inModel.min;//should prevent out of range values
 	};

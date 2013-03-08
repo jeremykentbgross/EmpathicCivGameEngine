@@ -18,15 +18,15 @@
 	You should have received a copy of the GNU Lesser General Public License
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
-GameUnitTests.registerTest(
+ECGame.unitTests.registerTest(
 	'GameClass',
 	function()
 	{
 		var ClassNamespace = {};
 		
-		GameEngineLib.Class.createInstanceRegistry();
+		ECGame.EngineLib.Class.createInstanceRegistry();
 		
-		ClassNamespace.TestClass1 = GameEngineLib.Class.create({
+		ClassNamespace.TestClass1 = ECGame.EngineLib.Class.create({
 			Constructor : function TestClass1(){},
 			Parents : null,
 			flags : {},
@@ -39,7 +39,7 @@ GameUnitTests.registerTest(
 			}
 		});
 		
-		ClassNamespace.TestClass2 = GameEngineLib.Class.create({
+		ClassNamespace.TestClass2 = ECGame.EngineLib.Class.create({
 			Constructor : function TestClass2()
 			{
 				this.TestClass1();
@@ -60,24 +60,24 @@ GameUnitTests.registerTest(
 		
 		var testClass1 = new ClassNamespace.TestClass1();
 		testClass1.Func1();
-		gameAssert(testClass1.Func1Called, "Function failed from new'ed class instance!");
+		ECGame.log.assert(testClass1.Func1Called, "Function failed from new'ed class instance!");
 		
 		
 		
 		var testClass2 = ClassNamespace.TestClass2.create();
-		gameAssert(ClassNamespace.TestClass2.StaticThing === 'HaHa!', "Inherited functions failed from created class instance!");
+		ECGame.log.assert(ClassNamespace.TestClass2.StaticThing === 'HaHa!', "Inherited functions failed from created class instance!");
 		
 		testClass2.Func1();
 		testClass2.Func2();
-		gameAssert(testClass2.Func1Called && testClass2.Func2Called, "Inherited functions failed from created class instance!");
+		ECGame.log.assert(testClass2.Func1Called && testClass2.Func2Called, "Inherited functions failed from created class instance!");
 
-		ClassNamespace.TestObjectClass1 = GameEngineLib.Class.create({
+		ClassNamespace.TestObjectClass1 = ECGame.EngineLib.Class.create({
 			Constructor : function TestObjectClass1()
 			{
 				this.GameObject();
 				this.counter = 0;
 			},
-			Parents : [GameEngineLib.GameObject],
+			Parents : [ECGame.EngineLib.GameObject],
 			flags : {},
 			ChainUp : ['chainUp'],
 			ChainDown : ['chainDown'],
@@ -98,20 +98,20 @@ GameUnitTests.registerTest(
 		});
 		ClassNamespace.TestObjectClass1.registerClass();
 		
-		var foundClass = GameEngineLib.Class.getInstanceRegistry().findByName('TestObjectClass1');
+		var foundClass = ECGame.EngineLib.Class.getInstanceRegistry().findByName('TestObjectClass1');
 		var testObjectClass1 = foundClass.create();
-		gameAssert(testObjectClass1.isA(ClassNamespace.TestObjectClass1), "isA() Failed on found created class!");
+		ECGame.log.assert(testObjectClass1.isA(ClassNamespace.TestObjectClass1), "isA() Failed on found created class!");
 		
 		var found = foundClass.getInstanceRegistry().findByName(testObjectClass1.getName());
-		gameAssert(testObjectClass1 === found, "Failed to find class instance!");
+		ECGame.log.assert(testObjectClass1 === found, "Failed to find class instance!");
 		
 		var instanceName = testObjectClass1.getName();
 		testObjectClass1.destroy();
 		found = foundClass.getInstanceRegistry().findByName(instanceName);
-		gameAssert(!found, "Found destroyed object in registry!");
+		ECGame.log.assert(!found, "Found destroyed object in registry!");
 		
 		
-		ClassNamespace.TestObjectClass2 = GameEngineLib.Class.create({
+		ClassNamespace.TestObjectClass2 = ECGame.EngineLib.Class.create({
 			Constructor : function TestObjectClass2()
 			{
 				this.TestObjectClass1();
@@ -138,7 +138,7 @@ GameUnitTests.registerTest(
 		chainTestObject.chainUp();
 		chainTestObject.chainDown();
 		
-		gameAssert(
+		ECGame.log.assert(
 			chainTestObject.up2 === 1 &&
 			chainTestObject.up1 === 2 &&
 			chainTestObject.down1 === 3 &&

@@ -25,10 +25,10 @@
 
 
 //TODO depricated!
-GameEngineLib.createGame2DGraphics = function(instance)
+ECGame.EngineLib.createGame2DGraphics = function(instance)
 {
 	var property;
-	var temp = new GameEngineLib.Game2DGraphics();
+	var temp = new ECGame.EngineLib.Game2DGraphics();
 	instance = instance || {};
 	
 	for(property in temp)
@@ -48,12 +48,12 @@ GameEngineLib.createGame2DGraphics = function(instance)
 
 
 
-GameEngineLib.Game2DGraphics = function Game2DGraphics(){};
-GameEngineLib.Game2DGraphics.prototype.constructor = GameEngineLib.Game2DGraphics;
+ECGame.EngineLib.Game2DGraphics = function Game2DGraphics(){};
+ECGame.EngineLib.Game2DGraphics.prototype.constructor = ECGame.EngineLib.Game2DGraphics;
 
 
 
-GameEngineLib.Game2DGraphics.prototype.init = function init()
+ECGame.EngineLib.Game2DGraphics.prototype.init = function init()
 {
 	var _this_ = this;
 	require(
@@ -65,8 +65,8 @@ GameEngineLib.Game2DGraphics.prototype.init = function init()
 				'canvas',
 				{
 					id : 'canvas',//TODO different id here!
-					width : GameSystemVars.Graphics.initWidth,
-					height : GameSystemVars.Graphics.initHeight,
+					width : ECGame.Settings.Graphics.initWidth,
+					height : ECGame.Settings.Graphics.initHeight,
 					//TODO localize this:
 					innerHTML: "Sorry your browser does not support Canvas. Please use different browser:" +
 									"<a href=\"http:\\x2f\\x2fwww.google.com/chrome\">Get Chrome (**recommended!**) </a> or" +
@@ -96,11 +96,11 @@ GameEngineLib.Game2DGraphics.prototype.init = function init()
 
 
 
-GameEngineLib.Game2DGraphics.prototype.render = function render(inRenderer)
+ECGame.EngineLib.Game2DGraphics.prototype.render = function render(inRenderer)
 {
 	var x = 0;
 	var y = 0;
-	var fontSize = GameSystemVars.Debug.Text_Size;
+	var fontSize = ECGame.Settings.Debug.Text_Size;
 	
 	//clear canvas
 	this._myBackBufferCanvas2DContext.clearRect(0, 0, this._myCanvas.width, this._myCanvas.height);
@@ -110,7 +110,7 @@ GameEngineLib.Game2DGraphics.prototype.render = function render(inRenderer)
 	inRenderer.render(this._myBackBufferCanvas2DContext);
 	
 	//draw frame counters
-	if(GameSystemVars.DEBUG)
+	if(ECGame.Settings.DEBUG)
 	{
 		this._myBackBufferCanvas2DContext.font = fontSize + 'px Arial';
 
@@ -121,7 +121,7 @@ GameEngineLib.Game2DGraphics.prototype.render = function render(inRenderer)
 			var metrics = this._myBackBufferCanvas2DContext.measureText(this._debugText[i]);
 			maxWidth = Math.max(maxWidth, metrics.width);
 		}
-		this._myBackBufferCanvas2DContext.fillStyle = GameSystemVars.Debug.TextBackground_DrawColor;
+		this._myBackBufferCanvas2DContext.fillStyle = ECGame.Settings.Debug.TextBackground_DrawColor;
 		this._myBackBufferCanvas2DContext.fillRect(
 			x,
 			y,
@@ -146,18 +146,18 @@ GameEngineLib.Game2DGraphics.prototype.render = function render(inRenderer)
 
 
 //TODO needed?
-GameEngineLib.Game2DGraphics.prototype.getDomTarget = function getDomTarget()
+ECGame.EngineLib.Game2DGraphics.prototype.getDomTarget = function getDomTarget()
 {
 	return this._myCanvas;
 };
 
 
 
-GameEngineLib.Game2DGraphics.prototype.drawDebugText = function drawDebugText(inText, inColor)
+ECGame.EngineLib.Game2DGraphics.prototype.drawDebugText = function drawDebugText(inText, inColor)
 {
-	inColor = inColor || GameSystemVars.Debug.TextDefault_DrawColor;
+	inColor = inColor || ECGame.Settings.Debug.TextDefault_DrawColor;
 	
-	if(GameSystemVars.DEBUG && GameSystemVars.Debug.TextMessages_Draw)
+	if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.TextMessages_Draw)
 	{
 		this._debugText.push(' ' + inText + ' ');
 		this._debugTextColor.push(inColor);
@@ -166,14 +166,14 @@ GameEngineLib.Game2DGraphics.prototype.drawDebugText = function drawDebugText(in
 
 //TODO resize canvas listeners (like cameras)
 
-GameEngineLib.Game2DGraphics.prototype.getWidth = function getWidth()
+ECGame.EngineLib.Game2DGraphics.prototype.getWidth = function getWidth()
 {
 	return this._myCanvas.width;
 };
 
 
 
-GameEngineLib.Game2DGraphics.prototype.getHeight = function getHeight()
+ECGame.EngineLib.Game2DGraphics.prototype.getHeight = function getHeight()
 {
 	return this._myCanvas.height;
 };

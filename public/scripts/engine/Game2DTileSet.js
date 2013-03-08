@@ -21,7 +21,7 @@
 
 
 //TODO should be merged with Map class
-GameEngineLib.Game2DTileSet = GameEngineLib.Class.create(
+ECGame.EngineLib.Game2DTileSet = ECGame.EngineLib.Class.create(
 {
 	Constructor : function Game2DTileSet()
 	{
@@ -54,7 +54,7 @@ GameEngineLib.Game2DTileSet = GameEngineLib.Class.create(
 		*/
 	},
 	
-	Parents : [GameEngineLib.GameObject],
+	Parents : [ECGame.EngineLib.GameObject],
 	
 	flags : {},
 	
@@ -71,9 +71,9 @@ GameEngineLib.Game2DTileSet = GameEngineLib.Class.create(
 			for(i = 0; i < this._myTiles.length; ++i)
 			{
 				var tile = this._myTiles[i];
-				if(!GameSystemVars.Network.isServer)//TODO should the function return strait away?
+				if(!ECGame.Settings.Network.isServer)//TODO should the function return strait away?
 				{
-					GameInstance.AssetManager.loadImage(tile.fileName, tile);
+					ECGame.instance.AssetManager.loadImage(tile.fileName, tile);
 				}
 				this._maxLayers = tile.layer;//TODO is this needed? maybe for map floors vs tileset layer (not used atm I think)
 			}
@@ -110,9 +110,9 @@ GameEngineLib.Game2DTileSet = GameEngineLib.Class.create(
 		getTileRect : function getTileRect(inID, inPosition)
 		{
 			var tile = this._myTiles[inID];
-			inPosition = inPosition || GameEngineLib.createGame2DPoint();
+			inPosition = inPosition || ECGame.EngineLib.createGame2DPoint();
 			
-			return GameEngineLib.createGame2DAABB(
+			return ECGame.EngineLib.createGame2DAABB(
 				inPosition.myX - tile.anchor.myX,
 				inPosition.myY - tile.anchor.myY,
 				tile.size.myX,//image.width,//todo consider possible =>tile.scaledRect
@@ -134,7 +134,7 @@ GameEngineLib.Game2DTileSet = GameEngineLib.Class.create(
 				return null;
 			}
 			
-			return GameEngineLib.createGame2DAABB(
+			return ECGame.EngineLib.createGame2DAABB(
 				inPosition.myX + physicsRect.myX,
 				inPosition.myY + physicsRect.myY,
 				physicsRect.myWidth,//todo consider possible =>tile.scaledRect

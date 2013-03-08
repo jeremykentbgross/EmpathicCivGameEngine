@@ -20,25 +20,25 @@
 */
 
 //TODO depricated:
-GameEngineLib.createGameCircularDoublyLinkedListNode = function(inItem)
+ECGame.EngineLib.createGameCircularDoublyLinkedListNode = function(inItem)
 {
-	return new GameEngineLib.GameCircularDoublyLinkedListNode(inItem);
+	return new ECGame.EngineLib.GameCircularDoublyLinkedListNode(inItem);
 };
 
 
 
-GameEngineLib.GameCircularDoublyLinkedListNode = function GameCircularDoublyLinkedListNode(inItem)
+ECGame.EngineLib.GameCircularDoublyLinkedListNode = function GameCircularDoublyLinkedListNode(inItem)
 {
 	this.item = inItem;
 	
 	this.myNext = this;
 	this.myPrev = this;
 };
-GameEngineLib.GameCircularDoublyLinkedListNode.prototype.constructor = GameEngineLib.GameCircularDoublyLinkedListNode;
+ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.constructor = ECGame.EngineLib.GameCircularDoublyLinkedListNode;
 
 
 
-GameEngineLib.GameCircularDoublyLinkedListNode.prototype.insert = function insert(node)
+ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.insert = function insert(node)
 {
 	node.myPrev = this;
 	node.myNext = this.myNext;
@@ -48,14 +48,14 @@ GameEngineLib.GameCircularDoublyLinkedListNode.prototype.insert = function inser
 
 
 
-GameEngineLib.GameCircularDoublyLinkedListNode.prototype.insertBack = function insertBack(inNode)
+ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.insertBack = function insertBack(inNode)
 {
 	this.myPrev.insert(inNode);
 };
 
 
 
-GameEngineLib.GameCircularDoublyLinkedListNode.prototype.remove = function remove()
+ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.remove = function remove()
 {
 	this.myPrev.myNext = this.myNext;
 	this.myNext.myPrev = this.myPrev;
@@ -65,7 +65,7 @@ GameEngineLib.GameCircularDoublyLinkedListNode.prototype.remove = function remov
 
 
 
-GameEngineLib.GameCircularDoublyLinkedListNode.prototype.forAll = function forAll(inFunction)
+ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.forAll = function forAll(inFunction)
 {
 	var last = this;
 	var current = this;
@@ -77,7 +77,7 @@ GameEngineLib.GameCircularDoublyLinkedListNode.prototype.forAll = function forAl
 
 
 
-GameEngineLib.GameCircularDoublyLinkedListNode.prototype.forAllReverse = function forAllReverse(inFunction)
+ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.forAllReverse = function forAllReverse(inFunction)
 {
 	var last = this.myPrev;
 	var current = this.myPrev;
@@ -89,7 +89,7 @@ GameEngineLib.GameCircularDoublyLinkedListNode.prototype.forAllReverse = functio
 
 
 
-GameEngineLib.GameCircularDoublyLinkedListNode.prototype.findNodeContaining = function findNodeContaining(inValue)
+ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.findNodeContaining = function findNodeContaining(inValue)
 {
 	var last = this;
 	var current = this;
@@ -106,7 +106,7 @@ GameEngineLib.GameCircularDoublyLinkedListNode.prototype.findNodeContaining = fu
 
 
 
-GameEngineLib.GameCircularDoublyLinkedListNode.prototype.size = function size()
+ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.size = function size()
 {
 	var last = this;
 	var current = this.myNext;
@@ -122,7 +122,7 @@ GameEngineLib.GameCircularDoublyLinkedListNode.prototype.size = function size()
 
 
 
-GameEngineLib.GameCircularDoublyLinkedListNode.prototype.length = function length()
+ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.length = function length()
 {
 	return this.size();
 };

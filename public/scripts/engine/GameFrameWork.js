@@ -19,26 +19,26 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
+ECGame.EngineLib.createGameFrameWork = function(instance, PRIVATE)
 {
 	instance = instance || {};
 	PRIVATE = PRIVATE || {};
 	
-	if(GameSystemVars.DEBUG)
+	if(ECGame.Settings.DEBUG)
 	{
-		GameEngineLib.addDebugInfo('GameFrameWork', instance, PRIVATE);
+		ECGame.EngineLib.addDebugInfo('GameFrameWork', instance, PRIVATE);
 	}
 	
 	//////////////////////////////////////////////////
 	//Create gamerules instance///////////////////////
 	// TODO move default setup code elsewhere?
-	if(GameLib.GameRules !== undefined)
+	if(ECGame.Lib.GameRules !== undefined)
 	{
-		instance.GameRules = GameLib.GameRules.create();
+		instance.GameRules = ECGame.Lib.GameRules.create();
 	}
 	else
 	{
-		instance.GameRules = GameEngineLib.GameRulesBase.create();
+		instance.GameRules = ECGame.EngineLib.GameRulesBase.create();
 	}
 	//Create gamerules instance///////////////////////
 	//////////////////////////////////////////////////
@@ -54,16 +54,16 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 	{		
 		//////////////////////////////////////////////////
 		//Init frame times////////////////////////////////
-		instance.GameTimer = GameEngineLib.createGameTimer();
+		instance.GameTimer = ECGame.EngineLib.createGameTimer();
 		instance.GameTimer.init(instance);
 		//Init frame times////////////////////////////////
 		//////////////////////////////////////////////////
 		
-		if(!GameSystemVars.Network.isServer)
+		if(!ECGame.Settings.Network.isServer)
 		{
 			//////////////////////////////////////////////////
 			//Init graphics///////////////////////////////////
-			instance.Graphics = GameEngineLib.createGame2DGraphics();
+			instance.Graphics = ECGame.EngineLib.createGame2DGraphics();
 			if(!instance.Graphics.init())
 			{
 				return false;
@@ -75,28 +75,28 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 			
 			//////////////////////////////////////////////////
 			//Init Asset Manager//////////////////////////////
-			instance.AssetManager = GameEngineLib.createGameAssetManager();
+			instance.AssetManager = ECGame.EngineLib.createGameAssetManager();
 			//Init Asset Manager//////////////////////////////
 			//////////////////////////////////////////////////
 			
 			
 			//////////////////////////////////////////////////
 			//Init Sound//////////////////////////////////////
-			instance.soundSystem = GameEngineLib.GameSoundSystem.create();
+			instance.soundSystem = ECGame.EngineLib.GameSoundSystem.create();
 			//Init Sound//////////////////////////////////////
 			//////////////////////////////////////////////////
 		}
 		
-		if(GameSystemVars.Network.isServer)
+		if(ECGame.Settings.Network.isServer)
 		{
-			instance.localUser = new GameEngineLib.User("Server", GameEngineLib.User.USER_IDS.SERVER);
+			instance.localUser = new ECGame.EngineLib.User("Server", ECGame.EngineLib.User.USER_IDS.SERVER);
 		}
 		else
 		{
 			//TODO use FB id or something in the future
-			instance.localUser = new GameEngineLib.User(
+			instance.localUser = new ECGame.EngineLib.User(
 				"NewUser" + Math.floor(Math.random()*65536)
-				,GameEngineLib.User.USER_IDS.NEW_USER
+				,ECGame.EngineLib.User.USER_IDS.NEW_USER
 			);
 		}
 		
@@ -104,8 +104,8 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 		
 		//////////////////////////////////////////////////
 		//Init Input//////////////////////////////////////
-		instance.Input = GameEngineLib.createInput();
-		if(!GameSystemVars.Network.isServer)
+		instance.Input = ECGame.EngineLib.createInput();
+		if(!ECGame.Settings.Network.isServer)
 		{
 			instance.Input.initClient(instance.Graphics.getDomTarget());
 		}
@@ -117,17 +117,17 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 		
 		//////////////////////////////////////////////////
 		//Init Native GameObject Classes//////////////////
-		GameEngineLib.Class.createInstanceRegistry();
-		GameEngineLib.GameObject.registerClass();
-		GameEngineLib.GameEntity.registerClass();
-		GameEngineLib.GameEntityComponent.registerClass();
-		GameEngineLib.EntityComponent_2DCamera.registerClass();
-		GameEngineLib.EntityComponent_2DPhysics.registerClass();
-		GameEngineLib.EntityComponent_Input.registerClass();
-		GameEngineLib.EntityComponent_Sprite.registerClass();
-		GameEngineLib.Game2DMap.registerClass();
-		GameEngineLib.Game2DTileSet.registerClass();
-		GameEngineLib.Game2DWorld.registerClass();
+		ECGame.EngineLib.Class.createInstanceRegistry();
+		ECGame.EngineLib.GameObject.registerClass();
+		ECGame.EngineLib.GameEntity.registerClass();
+		ECGame.EngineLib.GameEntityComponent.registerClass();
+		ECGame.EngineLib.EntityComponent_2DCamera.registerClass();
+		ECGame.EngineLib.EntityComponent_2DPhysics.registerClass();
+		ECGame.EngineLib.EntityComponent_Input.registerClass();
+		ECGame.EngineLib.EntityComponent_Sprite.registerClass();
+		ECGame.EngineLib.Game2DMap.registerClass();
+		ECGame.EngineLib.Game2DTileSet.registerClass();
+		ECGame.EngineLib.Game2DWorld.registerClass();
 		//TODO thinnking EventSystem maybe should not be a gameobject
 		
 		//TODO also needs to manage prefabs?
@@ -135,18 +135,18 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 		//Init Native GameObject Classes//////////////////
 		//////////////////////////////////////////////////
 		
-		if(GameSystemVars.Network.isMultiplayer)
+		if(ECGame.Settings.Network.isMultiplayer)
 		{
-			instance.Network = GameEngineLib.GameNetwork.create();
+			instance.Network = ECGame.EngineLib.GameNetwork.create();
 			instance.Network.init();
 			instance.UpdateOrder.push(instance.Network);
 		}
-		if(!GameSystemVars.Network.isServer && GameSystemVars.Network.isMultiplayer)
+		if(!ECGame.Settings.Network.isServer && ECGame.Settings.Network.isMultiplayer)
 		{
-			instance.chatSystem = GameEngineLib.ChatSystem.create();
+			instance.chatSystem = ECGame.EngineLib.ChatSystem.create();
 		}
 		
-		if(!GameSystemVars.Network.isServer)
+		if(!ECGame.Settings.Network.isServer)
 		{
 			//TODO should be after physics (where is that added)?
 			instance.UpdateOrder.push(instance.soundSystem);
@@ -182,7 +182,7 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 				}
 			}
 			
-			if(!GameSystemVars.Network.isServer)
+			if(!ECGame.Settings.Network.isServer)
 			{
 				instance.Graphics.render(instance.GameRules);
 			}
@@ -215,7 +215,7 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 			}
 			else
 			{
-				GameEngineLib.logger.error("GameFrameWork Init failed!");
+				ECGame.log.error("GameFrameWork Init failed!");
 			}
 		}
 		catch(error)
@@ -228,7 +228,7 @@ GameEngineLib.createGameFrameWork = function(instance, PRIVATE)
 	{
 		PRIVATE.running = false;
 		//TODO clean everything?
-		if(GameSystemVars.Network.isServer)
+		if(ECGame.Settings.Network.isServer)
 		{
 			//TODO send reset/quit message to clients
 			process.exit(0);
