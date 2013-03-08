@@ -74,6 +74,11 @@ ECGame.Settings = //TODO rename as GameSystemSettings
 		//TODO editorPort : ??
 	},
 	
+	Timer :
+	{
+		useRequestAnimFrame : false	//false -> requestAnimFrame is almost certainly less secure, and possibly slower
+	},
+	
 	Server :
 	{
 		compressClientCode : true//true

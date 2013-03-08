@@ -50,11 +50,13 @@ ECGame.EngineLib.createInput = function(instance, PRIVATE)
 			case 'keyup':
 				key = String.fromCharCode(inEvent.keyCode);
 				PRIVATE.myKeys[key] = (eventType === 'keydown');
+				PRIVATE.myKeys[inEvent.keyCode] = (eventType === 'keydown');
 				break;
 				
 			case 'keypress':
 				key = String.fromCharCode(inEvent.keyCode);
 				PRIVATE.keysPressed[key] = true;
+				PRIVATE.keysPressed[inEvent.keyCode] = true;
 				break;
 				
 			case 'mousedown':

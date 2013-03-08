@@ -29,7 +29,7 @@ ECGame.EngineLib.Timer.create = function create()
 
 
 
-ECGame.EngineLib.Timer.prototype.init = function init()
+ECGame.EngineLib.Timer.prototype.start = function start()
 {
 	var i;
 		
@@ -43,6 +43,42 @@ ECGame.EngineLib.Timer.prototype.init = function init()
 	}
 		
 	this._lastFrameTimeStamp = (new Date()).getTime();
+	
+	if(ECGame.Settings.Timer.useRequestAnimFrame)
+	{
+		if(!ECGame.Settings.Network.isServer)
+		{
+			window.requestAnimFrame =
+				window.requestAnimationFrame || 
+				window.webkitRequestAnimationFrame || 
+				window.mozRequestAnimationFrame || 
+				window.oRequestAnimationFrame || 
+				window.msRequestAnimationFrame ||
+				function( callback ){
+					window.setTimeout(callback, 1000 / 60);
+				};
+		}
+		else
+		{
+			requestAnimFrame =
+				function( callback ){
+					setTimeout(callback, 1000 / 60);
+				};
+		}
+		
+		requestAnimFrame(this._onAnimFrame);
+	}
+	else
+	{
+		this._intervalHandle = setInterval(this._onAnimFrame, 1000 / 120);
+	}
+};
+
+
+
+ECGame.EngineLib.Timer.prototype._onAnimFrame = function _onAnimFrame(inTime)
+{
+	ECGame.instance.gameTimer.update(inTime);
 };
 
 
@@ -71,9 +107,7 @@ ECGame.EngineLib.Timer.prototype.update = function update(inTime)
 		this._aveDt += this._frameTimes[i];
 	}
 	this._aveDt /= this._frameTimes.length;
-	
-	//TODO update accumulators and fire timer events
-	
+		
 	if(ECGame.Settings.DEBUG)
 	{
 		var frameStats = [
@@ -100,7 +134,18 @@ ECGame.EngineLib.Timer.prototype.update = function update(inTime)
 		}
 	}
 	
-	return this._aveDt;
+	//TODO update accumulators and fire timer events instead (likely own update order, etc)
+	//TODO update event could have dt, aveDt, Date, etc
+	ECGame.instance.update(this._aveDt);
+	
+	if(ECGame.Settings.Timer.useRequestAnimFrame && ECGame.instance.isRunning())//TODO higher fps likely if at start??
+	{
+		requestAnimFrame(this._onAnimFrame);
+	}
+	else if(!ECGame.Settings.Timer.useRequestAnimFrame && !ECGame.instance.isRunning())
+	{
+		clearInterval(this._intervalHandle);
+	}
 };
 
 

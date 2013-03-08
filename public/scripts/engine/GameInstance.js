@@ -35,7 +35,7 @@ ECGame.EngineLib.GameInstance.prototype.run = function run()
 	{
 		if(this._init())
 		{
-			requestAnimFrame(this._update);//TODO timer instead!!
+			this.gameTimer.start();
 		}
 		else
 		{
@@ -57,7 +57,6 @@ ECGame.EngineLib.GameInstance.prototype._init = function _init()
 	
 	//Init Timer
 	this.gameTimer = ECGame.EngineLib.Timer.create();
-	this.gameTimer.init(this);
 	
 	//TODO make this ordered event listeners?
 	this.updateOrder = [];
@@ -152,31 +151,25 @@ ECGame.EngineLib.GameInstance.prototype._init = function _init()
 
 
 
-ECGame.EngineLib.GameInstance.prototype._update = function _update(inTime)
+ECGame.EngineLib.GameInstance.prototype.update = function update(inDt)
 {
-	var i,
-		aveDt,
-		_this_;
-		
-	_this_ = ECGame.instance;
+	var i;
 	
 	try
-	{
-		aveDt = _this_.gameTimer.update(inTime);
-		
+	{		
 		//TODO make update list an event system for onUpdate
-		for(i = 0; i < _this_.updateOrder.length; ++i)
+		for(i = 0; i < this.updateOrder.length; ++i)
 		{
-			var current = _this_.updateOrder[i];
+			var current = this.updateOrder[i];
 			if(current.isUpdating())//TODO they can return if they are not, meaning we can/should get rid of this
 			{
-				current.update(aveDt);
+				current.update(inDt);
 			}
 		}
 		
 		if(!ECGame.Settings.Network.isServer)
 		{
-			_this_.graphics.render(_this_.gameRules);
+			this.graphics.render(this.gameRules);
 		}
 	}
 	catch(error)
@@ -184,12 +177,8 @@ ECGame.EngineLib.GameInstance.prototype._update = function _update(inTime)
 		console.log(error.stack);
 	}
 	
-	//loop by sending browser event to queue a call to this function again
-	if(_this_._running)
-	{
-		requestAnimFrame(_this_._update);
-	}
-	else //shut down
+	//if not running then shut down
+	if(!this._running)
 	{
 		//TODO clean everything?
 		
@@ -206,4 +195,11 @@ ECGame.EngineLib.GameInstance.prototype._update = function _update(inTime)
 ECGame.EngineLib.GameInstance.prototype.exit = function exit()
 {
 	this._running = false;
+};
+
+
+
+ECGame.EngineLib.GameInstance.prototype.isRunning = function isRunning()
+{
+	return this._running;
 };

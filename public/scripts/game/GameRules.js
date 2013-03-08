@@ -236,7 +236,6 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			
 			//HACK TODO subscribe to timer updates!!!
 			ECGame.instance.updateOrder.push(this);
-			this._gameRunning = true;//HACK TODO should get this from ECGame.instance
 
 			
 			return true;
@@ -254,7 +253,6 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				var second = currentDateTime.getSeconds();
 				if(minute % serverRebootTime === 0)
 				{
-					this._gameRunning = false;//HACK TODO should get this from ECGame.instance
 					ECGame.instance.exit();
 				}
 				
@@ -310,7 +308,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 		
 		render : function render(inCanvas2DContext)
 		{
-			if(this._gameRunning)//HACK TODO should get this from ECGame.instance
+			if(ECGame.instance.isRunning())
 			{
 				this._gameWorld.render(inCanvas2DContext);
 			}
@@ -334,7 +332,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				inCanvas2DContext.fillStyle = 'rgba(64, 64, 64, 1)';
 				
 				inCanvas2DContext.font = '30px Arial';
-				message = "Game Over! Server Restarting!!!";
+				message = "Game Over! Server Restarting!!!";//TODO real message as to why game is over (may not be server restart)
 				x = (inCanvas2DContext.canvas.width - inCanvas2DContext.measureText(message).width) / 2;
 				y = (inCanvas2DContext.canvas.height - 30) / 2;
 				inCanvas2DContext.fillText(message, x, y);
@@ -428,6 +426,11 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				ECGame.Settings.Debug.Sound_Area_Draw = !ECGame.Settings.Debug.Sound_Area_Draw;
 			}
 			//TODO drawing debug sprite, debug audio
+			
+			if(inInputEvent.myKeys[27])//escape
+			{
+				ECGame.instance.exit();
+			}
 			
 			
 			if(inInputEvent.keysPressed['0'])

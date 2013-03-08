@@ -43,16 +43,6 @@ GameLoader =
 		////////////////////// Setup requestAnimFrame and include ////////////////////
 		if(!inIsServer)
 		{
-			window.requestAnimFrame =
-				window.requestAnimationFrame || 
-				window.webkitRequestAnimationFrame || 
-				window.mozRequestAnimationFrame || 
-				window.oRequestAnimationFrame || 
-				window.msRequestAnimationFrame ||
-				function( callback ){
-					window.setTimeout(callback, 1000 / 60);
-				};
-			
 			include = function(filename)
 			{
 				require([filename, 'dojo/domReady']);
@@ -60,11 +50,6 @@ GameLoader =
 		}
 		else
 		{
-			requestAnimFrame =
-				function( callback ){
-					setTimeout(callback, 1000 / 60);
-				};
-				
 			include = require;
 			//TODO obfuscator + tests!
 			include(inPrivatePath + "CodeObfuscator.js");
