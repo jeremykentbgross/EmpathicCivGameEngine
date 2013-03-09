@@ -114,7 +114,7 @@ ECGame.EngineLib.GameInstance.prototype._init = function _init()
 	}
 	
 	//Init Input
-	this.input = ECGame.EngineLib.createInput();
+	this.input = ECGame.EngineLib.Input.create();
 	if(!ECGame.Settings.Network.isServer)
 	{
 		this.input.initClient(this.graphics.getDomTarget());

@@ -140,6 +140,7 @@ GameLoader =
 		include(inSharedPath + "scripts/engine/GameRegistry.js");
 		include(inSharedPath + "scripts/engine/GameClass.js");
 		include(inSharedPath + "scripts/engine/GameCircularDoublyLinkedListNode.js");
+		include(inSharedPath + "scripts/engine/GameEventSystem.js");
 		if(!inIsServer)
 		{
 			if(ECGame.Settings.Network.isMultiplayer)
@@ -164,7 +165,7 @@ GameLoader =
 		//include(inSharedPath + "scripts/engine/MultPacker.js");//TODO
 		include(inSharedPath + "scripts/engine/GameArithmeticCompression.js");//TODO if multiplayer?
 		include(inSharedPath + "scripts/engine/GameBinarySerializer.js");//TODO if multiplayer?
-		include(inSharedPath + "scripts/engine/GameEventSystem.js");
+		
 		include(inSharedPath + "scripts/engine/GameEvent.js");
 		include(inSharedPath + "scripts/engine/GameEntity.js");
 		include(inSharedPath + "scripts/engine/GameEntityComponent.js");

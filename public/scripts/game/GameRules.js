@@ -427,7 +427,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			}
 			//TODO drawing debug sprite, debug audio
 			
-			if(inInputEvent.myKeys[27])//escape
+			if(inInputEvent.keys[27])//escape
 			{
 				ECGame.instance.exit();
 			}

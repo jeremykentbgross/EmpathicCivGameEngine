@@ -73,6 +73,7 @@ ECGame.Webserver.Obfuscator = function Obfuscator()
 	this.addIgnore('new');
 	this.addIgnore('return');
 	this.addIgnore('switch');
+	this.addIgnore('case');
 	this.addIgnore('this');
 	this.addIgnore('throw');
 	this.addIgnore('try');

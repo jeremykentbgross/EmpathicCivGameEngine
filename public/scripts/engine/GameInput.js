@@ -19,218 +19,221 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-ECGame.EngineLib.createInput = function(instance, PRIVATE)
-{
-	instance = instance || {};
-	PRIVATE = PRIVATE || {};
-	
-	ECGame.EngineLib.createEventSystem(instance);//TODO make this inheritance when I refactor this file
-	
-	if(ECGame.Settings.DEBUG)
+ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
+	Constructor : function Input()
 	{
-		ECGame.EngineLib.addDebugInfo('GameInput', instance, PRIVATE);
+		this.GameEventSystem();
+		this._mouseLoc = ECGame.EngineLib.createGame2DPoint(0, 0);
+		this._keys = {};
+		this._keysPressed = {};
+		this._buttons = {};
+		this._clicked = {};
+		this._active = false;
+	},
+	Parents : [ECGame.EngineLib.GameEventSystem],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition :
+	{
+		initClient : function initClient(inCanvas)
+		{
+			var _this_ = this;
+			
+			if(ECGame.Settings.Network.isServer)
+			{
+				return;
+			}
+				
+			require(
+				['dojo/on'],
+				function(inOn)
+				{
+					//keys:
+					inOn(document, 'keydown', _this_._onInput);
+					inOn(document, 'keyup', _this_._onInput);
+					inOn(document, 'keypress', _this_._onInput);
+									
+					//mouse:
+					inOn(inCanvas, 'mousedown', _this_._onInput);
+					inOn(inCanvas, 'mouseup', _this_._onInput);
+					inOn(inCanvas, 'mousemove', _this_._onInput);
+					//inOn(inCanvas, 'mousewheel', _this_._onInput);
+					inOn(inCanvas, 'click', _this_._onInput);
+					//inOn(inCanvas, 'dblclick', _this_._onInput);
+					inOn(inCanvas, 'mouseout', _this_._onInput);
+					inOn(inCanvas, 'mouseover', _this_._onInput);
+									
+					//prevent right click menu on the render area
+					inOn(inCanvas, 'contextmenu', function(event){ event.preventDefault(); } );
+					
+					//TODO can i turn off middle mouse button native effect
+				}
+			);
+		},
+		
+		setSupressKeyboardEvents : function setSupressKeyboardEvents(inSupress)
+		{
+			this._supressKeyboardEvents = inSupress;
+		},
+		
+		_onInput : function _onInput(inEvent)
+		{
+			ECGame.instance.input._handleInput(inEvent);
+		},
+		
+		_handleInput : function _handleInput(inEvent)
+		{		
+			var eventType = inEvent.type;
+			var key;
+					
+			switch(eventType)
+			{
+				case 'keydown':
+				case 'keyup':
+					key = String.fromCharCode(inEvent.keyCode);
+					this._keys[key] = (eventType === 'keydown');
+					this._keys[inEvent.keyCode] = (eventType === 'keydown');
+					break;
+					
+				case 'keypress':
+					key = String.fromCharCode(inEvent.keyCode);
+					this._keysPressed[key] = true;
+					this._keysPressed[inEvent.keyCode] = true;
+					break;
+					
+				case 'mousedown':
+				case 'mouseup':
+					this._buttons[inEvent.button] = (eventType === 'mousedown');
+					this._mouseLoc.myX = inEvent.offsetX;
+					this._mouseLoc.myY = inEvent.offsetY;
+					break;
+					
+				case 'mousemove':
+					this._mouseLoc.myX = inEvent.offsetX;
+					this._mouseLoc.myY = inEvent.offsetY;
+					break;
+				/*
+				case 'mousewheel':
+					//TODO?
+					break;
+				*/
+				case 'click':
+					this._clicked[inEvent.button] = true;
+					this._mouseLoc.myX = inEvent.offsetX;
+					this._mouseLoc.myY = inEvent.offsetY;
+					break;
+				/*
+				case 'dblclick':
+					//TODO
+					break;
+				*/	
+				case 'mouseout':
+					this._active = false;
+					break;
+					
+				case 'mouseover':
+					this._active = true;
+					break;
+				
+				default:
+					break;
+			}
+			
+			if(this._active === false)
+			{
+				this._keys = {};
+				this._keysPressed = {};
+				this._buttons = {};
+				this._clicked = {};
+			}
+		},
+		
+		//TODO make update an event so this is not needed
+		isUpdating : function isUpdating()
+		{
+			return true;
+		},
+		
+		update : function update()
+		{
+			var i;
+			var inputString;
+			var inputEvent;
+			
+			if(ECGame.Settings.DEBUG && !ECGame.Settings.Network.isServer)
+			{
+				inputString = "Input: " +
+					(this._active ? "Active" : "Inactive" ) + 
+					' X:' + this._mouseLoc.myX + ' Y:' + this._mouseLoc.myY + ' ';
+				for(i in this._buttons)
+				{
+					if(this._buttons[i])
+					{
+						inputString += 'MB' + i + ' ';
+					}
+				}
+				for(i in this._keys)
+				{
+					if(this._keys[i])
+					{
+						inputString += '\'' + i + '\' (' + i.charCodeAt(0) + ') ';
+					}
+				}
+				for(i in this._keysPressed)
+				{
+					if(this._keysPressed[i])
+					{
+						inputString += '\'' + i + '\' (' + i.charCodeAt(0) + ') ';
+					}
+				}
+				//todo clicks and wheel
+				
+				if(ECGame.Settings.Debug.Input_Print)
+				{
+					console.log(inputString + '\n');
+				}
+				if(ECGame.Settings.Debug.Input_Draw)
+				{
+					ECGame.instance.graphics.drawDebugText(
+						inputString,
+						(this._active ?
+							ECGame.Settings.Debug.Input_Active_DrawColor :
+							ECGame.Settings.Debug.Input_Inactive_DrawColor
+						)
+					);
+				}
+			}
+					
+			inputEvent = new ECGame.EngineLib.GameEvent_Input(this._mouseLoc.clone());
+			
+			//copy the values from PRIVATE individually so my internal data cannot be changed by users
+			for(i in this._buttons)
+			{
+				inputEvent.buttons[i] = this._buttons[i];
+			}
+			for(i in this._clicked)
+			{
+				inputEvent.clicked[i] = this._clicked[i];
+			}
+			
+			if(!this._supressKeyboardEvents)
+			{
+				for(i in this._keys)
+				{
+					inputEvent.keys[i] = this._keys[i];
+				}
+				for(i in this._keysPressed)
+				{
+					inputEvent.keysPressed[i] = this._keysPressed[i];
+				}
+			}
+			
+			//send messages for all the listeners for input
+			this.onEvent(inputEvent);
+			
+			this._keysPressed = {};
+			this._clicked = {};
+		}
 	}
-	
-	PRIVATE.mouseLoc = ECGame.EngineLib.createGame2DPoint(0, 0);
-	PRIVATE.myKeys = {};
-	PRIVATE.keysPressed = {};
-	PRIVATE.buttons = {};
-	PRIVATE.clicked = {};
-	PRIVATE.active = false;
-	
-	PRIVATE.onInput = function(inEvent)
-	{		
-		var eventType = inEvent.type;
-		var key;
-				
-		switch(eventType)
-		{
-			case 'keydown':
-			case 'keyup':
-				key = String.fromCharCode(inEvent.keyCode);
-				PRIVATE.myKeys[key] = (eventType === 'keydown');
-				PRIVATE.myKeys[inEvent.keyCode] = (eventType === 'keydown');
-				break;
-				
-			case 'keypress':
-				key = String.fromCharCode(inEvent.keyCode);
-				PRIVATE.keysPressed[key] = true;
-				PRIVATE.keysPressed[inEvent.keyCode] = true;
-				break;
-				
-			case 'mousedown':
-			case 'mouseup':
-				PRIVATE.buttons[inEvent.button] = (eventType === 'mousedown');
-				PRIVATE.mouseLoc.myX = inEvent.offsetX;
-				PRIVATE.mouseLoc.myY = inEvent.offsetY;
-				break;
-				
-			case 'mousemove':
-				PRIVATE.mouseLoc.myX = inEvent.offsetX;
-				PRIVATE.mouseLoc.myY = inEvent.offsetY;
-				break;
-			/*
-			case 'mousewheel':
-				//TODO?
-				break;
-			*/
-			case 'click':
-				PRIVATE.clicked[inEvent.button] = true;
-				PRIVATE.mouseLoc.myX = inEvent.offsetX;
-				PRIVATE.mouseLoc.myY = inEvent.offsetY;
-				break;
-			/*
-			case 'dblclick':
-				//TODO
-				break;
-			*/	
-			case 'mouseout':
-				PRIVATE.active = false;
-				break;
-				
-			case 'mouseover':
-				PRIVATE.active = true;
-				break;
-			
-			default:
-				break;
-		}
-		
-		if(PRIVATE.active === false)
-		{
-			PRIVATE.myKeys = {};
-			PRIVATE.keysPressed = {};
-			PRIVATE.buttons = {};
-			PRIVATE.clicked = {};
-		}
-	};
-	
-	instance.setSupressKeyboardEvents = function setSupressKeyboardEvents(inSupress)
-	{
-		PRIVATE._supressKeyboardEvents = inSupress;
-	};
-	
-	instance.initClient = function initClient(inCanvas)
-	{
-		if(ECGame.Settings.Network.isServer)
-		{
-			return;
-		}
-			
-		require(
-			['dojo/on'],
-			function(on)
-			{
-				//keys:
-				on(document, 'keydown', PRIVATE.onInput);
-				on(document, 'keyup', PRIVATE.onInput);
-				on(document, 'keypress', PRIVATE.onInput);
-								
-				//mouse:
-				on(inCanvas, 'mousedown', PRIVATE.onInput);
-				on(inCanvas, 'mouseup', PRIVATE.onInput);
-				on(inCanvas, 'mousemove', PRIVATE.onInput);
-				//on(inCanvas, 'mousewheel', PRIVATE.onInput);
-				on(inCanvas, 'click', PRIVATE.onInput);
-				//on(inCanvas, 'dblclick', PRIVATE.onInput);
-				on(inCanvas, 'mouseout', PRIVATE.onInput);
-				on(inCanvas, 'mouseover', PRIVATE.onInput);
-								
-				//prevent right click menu on the render area
-				on(inCanvas, 'contextmenu', function(event){ event.preventDefault(); } );
-				
-				//TODO can i turn off middle mouse button native effect
-			}
-		);
-	};
-	
-	//TODO make update an event so this is not needed
-	instance.isUpdating = function()
-	{
-		return true;
-	};
-	
-	instance.update = function()
-	{
-		var i;
-		var inputString;
-		var event;
-		
-		if(ECGame.Settings.DEBUG && !ECGame.Settings.Network.isServer)
-		{
-			inputString = "Input: " +
-				(PRIVATE.active ? "Active" : "Inactive" ) + 
-				' X:' + PRIVATE.mouseLoc.myX + ' Y:' + PRIVATE.mouseLoc.myY + ' ';
-			for(i in PRIVATE.buttons)
-			{
-				if(PRIVATE.buttons[i])
-				{
-					inputString += 'MB' + i + ' ';
-				}
-			}
-			for(i in PRIVATE.myKeys)
-			{
-				if(PRIVATE.myKeys[i])
-				{
-					inputString += '\'' + i + '\' (' + i.charCodeAt(0) + ') ';
-				}
-			}
-			for(i in PRIVATE.keysPressed)
-			{
-				if(PRIVATE.keysPressed[i])
-				{
-					inputString += '\'' + i + '\' (' + i.charCodeAt(0) + ') ';
-				}
-			}
-			//todo clicks and wheel
-			
-			if(ECGame.Settings.Debug.Input_Print)
-			{
-				console.log(inputString + '\n');
-			}
-			if(ECGame.Settings.Debug.Input_Draw)
-			{
-				ECGame.instance.graphics.drawDebugText(
-					inputString,
-					(PRIVATE.active ?
-						ECGame.Settings.Debug.Input_Active_DrawColor :
-						ECGame.Settings.Debug.Input_Inactive_DrawColor
-					)
-				);
-			}
-		}
-				
-		event = new ECGame.EngineLib.GameEvent_Input(PRIVATE.mouseLoc.clone());
-		
-		//copy the values from PRIVATE individually so my internal data cannot be changed by users
-		for(i in PRIVATE.buttons)
-		{
-			event.buttons[i] = PRIVATE.buttons[i];
-		}
-		for(i in PRIVATE.clicked)
-		{
-			event.clicked[i] = PRIVATE.clicked[i];
-		}
-		
-		if(!PRIVATE._supressKeyboardEvents)
-		{
-			for(i in PRIVATE.myKeys)
-			{
-				event.myKeys[i] = PRIVATE.myKeys[i];
-			}
-			for(i in PRIVATE.keysPressed)
-			{
-				event.keysPressed[i] = PRIVATE.keysPressed[i];
-			}
-		}
-		
-		//send messages for all the listeners for input
-		this.onEvent(event);
-		
-		PRIVATE.keysPressed = {};
-		PRIVATE.clicked = {};
-	};
-	
-	return instance;
-};
+});

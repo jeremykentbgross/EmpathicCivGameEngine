@@ -71,19 +71,19 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 			{
 				this._direction = ECGame.EngineLib.createGame2DPoint(0, 0);//TODO just set the fields, don't create a new one
 				
-				if(inInputEvent.myKeys.W/*['W']*/)
+				if(inInputEvent.keys[87]/*W*/)
 				{
 					this._direction = this._direction.add(this._up);
 				}
-				if(inInputEvent.myKeys.S/*['S']*/)
+				if(inInputEvent.keys[83]/*S*/)
 				{
 					this._direction = this._direction.add(this._down);
 				}
-				if(inInputEvent.myKeys.A/*['A']*/)
+				if(inInputEvent.keys[65]/*A*/)
 				{
 					this._direction = this._direction.add(this._left);
 				}
-				if(inInputEvent.myKeys.D/*['D']*/)
+				if(inInputEvent.keys[68]/*D*/)
 				{
 					this._direction = this._direction.add(this._right);
 				}
