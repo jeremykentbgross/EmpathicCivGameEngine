@@ -112,7 +112,7 @@ ECGame.EngineLib.Game2DTileSet = ECGame.EngineLib.Class.create(
 			var tile = this._myTiles[inID];
 			inPosition = inPosition || ECGame.EngineLib.Point2.create();
 			
-			return ECGame.EngineLib.createGame2DAABB(
+			return ECGame.EngineLib.Game2DAABB.create(
 				inPosition.myX - tile.anchor.myX,
 				inPosition.myY - tile.anchor.myY,
 				tile.size.myX,//image.width,//todo consider possible =>tile.scaledRect
@@ -134,7 +134,7 @@ ECGame.EngineLib.Game2DTileSet = ECGame.EngineLib.Class.create(
 				return null;
 			}
 			
-			return ECGame.EngineLib.createGame2DAABB(
+			return ECGame.EngineLib.Game2DAABB.create(
 				inPosition.myX + physicsRect.myX,
 				inPosition.myY + physicsRect.myY,
 				physicsRect.myWidth,//todo consider possible =>tile.scaledRect

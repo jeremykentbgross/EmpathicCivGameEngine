@@ -26,8 +26,8 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 
 		this._position = ECGame.EngineLib.Point2.create(256, 256);//??needed? use mid instead?
 		this._velocity = ECGame.EngineLib.Point2.create();
-		this._boundingRect = ECGame.EngineLib.createGame2DAABB(this._position.myX, this._position.myY, 64, 64);//TODO separate position from AABB in PhysicsSim2D
-		this._range = ECGame.EngineLib.createGame2DAABB(0, 0, 65535, 65535);//TODO used? Set when added to world?
+		this._boundingRect = ECGame.EngineLib.Game2DAABB.create(this._position.myX, this._position.myY, 64, 64);//TODO separate position from AABB in PhysicsSim2D
+		this._range = ECGame.EngineLib.Game2DAABB.create(0, 0, 65535, 65535);//TODO used? Set when added to world?
 	},
 	
 	Parents : [ECGame.EngineLib.GameEntityComponent],
@@ -170,7 +170,7 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 		{
 			this._physicsObject.release();
 			this._physicsSystem = null;
-			//this._range = ECGame.EngineLib.createGame2DAABB(0, 0, 256, 256);//TODO clamp values in range (in serializer?)
+			//this._range = ECGame.EngineLib.Game2DAABB.create(0, 0, 256, 256);//TODO clamp values in range (in serializer?)
 			//TODO clear position?
 		},
 		

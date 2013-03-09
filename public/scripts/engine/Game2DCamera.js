@@ -48,7 +48,7 @@ ECGame.EngineLib.Game2DCamera = function Game2DCamera()
 {
 	if(!ECGame.Settings.Network.isServer)
 	{
-		this._myRect = ECGame.EngineLib.createGame2DAABB(
+		this._myRect = ECGame.EngineLib.Game2DAABB.create(
 			0,
 			0,
 			ECGame.instance.graphics.getWidth(),
@@ -57,7 +57,7 @@ ECGame.EngineLib.Game2DCamera = function Game2DCamera()
 	}
 	else
 	{
-		this._myRect = ECGame.EngineLib.createGame2DAABB(
+		this._myRect = ECGame.EngineLib.Game2DAABB.create(
 			0,
 			0,
 			ECGame.Settings.Graphics.initWidth,
@@ -74,7 +74,7 @@ ECGame.EngineLib.Game2DCamera.prototype.init = function init(inWidth, inHeight)
 {
 	if(inWidth &&inHeight)
 	{
-		this._myRect = ECGame.EngineLib.createGame2DAABB(0, 0, inWidth, inHeight);
+		this._myRect = ECGame.EngineLib.Game2DAABB.create(0, 0, inWidth, inHeight);
 	}
 };
 

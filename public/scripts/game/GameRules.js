@@ -120,7 +120,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						,anchor : ECGame.EngineLib.Point2.create()
 						,layer : 0
 						,size : ECGame.EngineLib.Point2.create(/*64,64*/96,96)
-						,physics : ECGame.EngineLib.createGame2DAABB(0, 0, 64, 64)
+						,physics : ECGame.EngineLib.Game2DAABB.create(0, 0, 64, 64)
 					},
 					{
 						fileName : 'images/ground_256.png'//'images/test/groundSub5.png' // 'images/ground_level01_01.png' //'images/dirt.png',
@@ -138,7 +138,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						fileName : 'images/wall_256.png'//'images/test/wall.png' //'images/wall_level01_01.png'
 						,anchor : ECGame.EngineLib.Point2.create(32, 32)
 						,layer : 1
-						,physics : ECGame.EngineLib.createGame2DAABB(0, 0, 64, 64)
+						,physics : ECGame.EngineLib.Game2DAABB.create(0, 0, 64, 64)
 						,size : ECGame.EngineLib.Point2.create(96,96)
 					}
 					//,

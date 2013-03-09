@@ -19,17 +19,6 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//TODO deprecated
-ECGame.EngineLib.createGame2DAABB = function(inX, inY, inWidth, inHeight)
-{
-	return new ECGame.EngineLib.Game2DAABB(inX, inY, inWidth, inHeight);
-};
-
-
-
-
-
-
 ECGame.EngineLib.Game2DAABB = function Game2DAABB(inX, inY, inWidth, inHeight)
 {
 	this.myX = inX || 0;
@@ -38,6 +27,13 @@ ECGame.EngineLib.Game2DAABB = function Game2DAABB(inX, inY, inWidth, inHeight)
 	this.myHeight = inHeight || 0;
 };
 ECGame.EngineLib.Game2DAABB.prototype.constructor = ECGame.EngineLib.Game2DAABB;
+
+
+
+ECGame.EngineLib.Game2DAABB.create = function create(inX, inY, inWidth, inHeight)
+{
+	return new ECGame.EngineLib.Game2DAABB(inX, inY, inWidth, inHeight);
+};
 
 
 
@@ -101,7 +97,7 @@ ECGame.EngineLib.Game2DAABB.prototype.getIntersection = function getIntersection
 	var x = Math.max(this.myX, inOtherRect.myX);
 	var y = Math.max(this.myY, inOtherRect.myY);
 	
-	var outIntersection = ECGame.EngineLib.createGame2DAABB(
+	var outIntersection = ECGame.EngineLib.Game2DAABB.create(
 		x,
 		y,
 		Math.max(

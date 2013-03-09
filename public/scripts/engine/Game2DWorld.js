@@ -149,7 +149,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 			//debug draw camera target point
 			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.GameWorld_CameraTarget_Draw)
 			{
-				target = ECGame.EngineLib.createGame2DAABB(
+				target = ECGame.EngineLib.Game2DAABB.create(
 					0,
 					0,
 					ECGame.Settings.Debug.GameWorld_CameraTarget_Size,
@@ -176,7 +176,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 			//debugdraw cursor
 			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.GameWorld_MouseCursor_Draw)
 			{
-				target = ECGame.EngineLib.createGame2DAABB(
+				target = ECGame.EngineLib.Game2DAABB.create(
 					0,
 					0,
 					ECGame.Settings.Debug.GameWorld_MouseCursor_Size,
@@ -204,7 +204,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 
 		getBoundingBox : function getBoundingBox()
 		{
-			return ECGame.EngineLib.createGame2DAABB(0, 0, this._mapsize, this._mapsize);
+			return ECGame.EngineLib.Game2DAABB.create(0, 0, this._mapsize, this._mapsize);
 		},
 
 		destroy : function destroy(){},//TODO

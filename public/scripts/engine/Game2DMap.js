@@ -226,7 +226,7 @@ ECGame.EngineLib.Game2DMap = ECGame.EngineLib.Class.create(
 					_this_._myTileSet.renderTileInRect(
 						inCanvas2DContext,
 						item.tileValue,
-						ECGame.EngineLib.createGame2DAABB(
+						ECGame.EngineLib.Game2DAABB.create(
 							itemRect.myX - inCameraRect.myX,
 							itemRect.myY - inCameraRect.myY,
 							_this_._tileSize,
