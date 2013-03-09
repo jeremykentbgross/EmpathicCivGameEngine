@@ -111,35 +111,35 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				[
 					{
 						fileName : 'images/grass.png'
-						,anchor : ECGame.EngineLib.Game2DPoint.create()
+						,anchor : ECGame.EngineLib.Point2.create()
 						,layer : 0
-						,size : ECGame.EngineLib.Game2DPoint.create(64,64)
+						,size : ECGame.EngineLib.Point2.create(64,64)
 					},
 					{
 						fileName : 'images/test/waterSub.png' //'images/water.png'
-						,anchor : ECGame.EngineLib.Game2DPoint.create()
+						,anchor : ECGame.EngineLib.Point2.create()
 						,layer : 0
-						,size : ECGame.EngineLib.Game2DPoint.create(/*64,64*/96,96)
+						,size : ECGame.EngineLib.Point2.create(/*64,64*/96,96)
 						,physics : ECGame.EngineLib.createGame2DAABB(0, 0, 64, 64)
 					},
 					{
 						fileName : 'images/ground_256.png'//'images/test/groundSub5.png' // 'images/ground_level01_01.png' //'images/dirt.png',
-						,anchor : ECGame.EngineLib.Game2DPoint.create()
+						,anchor : ECGame.EngineLib.Point2.create()
 						,layer : 0
-						,size : ECGame.EngineLib.Game2DPoint.create(96,96)//64,64)
+						,size : ECGame.EngineLib.Point2.create(96,96)//64,64)
 					},
 					{
 						fileName : 'images/dirt.png2'//HACK 'images/wall_level01_01__.png'
-						,anchor : ECGame.EngineLib.Game2DPoint.create()
+						,anchor : ECGame.EngineLib.Point2.create()
 						,layer : 0
-						,size : ECGame.EngineLib.Game2DPoint.create(64,64)
+						,size : ECGame.EngineLib.Point2.create(64,64)
 					},
 					{
 						fileName : 'images/wall_256.png'//'images/test/wall.png' //'images/wall_level01_01.png'
-						,anchor : ECGame.EngineLib.Game2DPoint.create(32, 32)
+						,anchor : ECGame.EngineLib.Point2.create(32, 32)
 						,layer : 1
 						,physics : ECGame.EngineLib.createGame2DAABB(0, 0, 64, 64)
-						,size : ECGame.EngineLib.Game2DPoint.create(96,96)
+						,size : ECGame.EngineLib.Point2.create(96,96)
 					}
 					//,
 				]
@@ -155,11 +155,11 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				{
 					if(i === 0 || j === 0 || i === this._mapSizeInTiles - 1 || j === this._mapSizeInTiles - 1)
 					{
-						this._map.setTile(new ECGame.EngineLib.Game2DPoint(i, j), /*(i+j)%5*/4);
+						this._map.setTile(new ECGame.EngineLib.Point2(i, j), /*(i+j)%5*/4);
 					}
 					else
 					{
-						this._map.setTile(new ECGame.EngineLib.Game2DPoint(i, j), /*(i+j)%5*/2);
+						this._map.setTile(new ECGame.EngineLib.Point2(i, j), /*(i+j)%5*/2);
 					}
 				}
 			}
@@ -185,7 +185,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					frames.push(
 						ECGame.EngineLib.Animation2DFrame.create().init(
 							new ECGame.EngineLib.Game2DAABB(96 * (i + 1), 96 * j, 96, 96),
-							new ECGame.EngineLib.Game2DPoint(32, 32)
+							new ECGame.EngineLib.Point2(32, 32)
 						)
 					);
 				}
@@ -199,7 +199,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				frames.push(
 					ECGame.EngineLib.Animation2DFrame.create().init(
 						new ECGame.EngineLib.Game2DAABB(0, 96 * j, 96, 96),
-						new ECGame.EngineLib.Game2DPoint(32, 32)
+						new ECGame.EngineLib.Point2(32, 32)
 					)
 				);
 				animation = new ECGame.EngineLib.Animation2D();
@@ -366,7 +366,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			{
 				this._lastSoundPlayed = ECGame.instance.soundSystem.playPositionalSoundEffect2D(
 					0,
-					new ECGame.EngineLib.Game2DPoint(
+					new ECGame.EngineLib.Point2(
 						mouseWorldPosition.myX,
 						mouseWorldPosition.myY
 					)
@@ -398,8 +398,8 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					this._lastSoundPlayed.setPosition(mouseWorldPosition);
 					this._lastSoundPlayed.setVelocity(
 						mouseWorldPosition
-							.sub(this._lastMouseWorldPosition)
-							.multiply( 1 / ECGame.instance.soundSystem.getSoundHardwareTimeUpdateDelta() )
+							.subtract(this._lastMouseWorldPosition)
+							.scale( 1 / ECGame.instance.soundSystem.getSoundHardwareTimeUpdateDelta() )
 					);
 				}
 			}

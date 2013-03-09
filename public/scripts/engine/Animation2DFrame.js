@@ -23,7 +23,7 @@ ECGame.EngineLib.Animation2DFrame = ECGame.EngineLib.Class.create({
 	Constructor : function Animation2DFrame()
 	{
 		this._sourceRect = new ECGame.EngineLib.Game2DAABB();
-		this._origin = new ECGame.EngineLib.Game2DPoint();
+		this._origin = new ECGame.EngineLib.Point2();
 		this._AABB = new ECGame.EngineLib.Game2DAABB(
 			-this._origin.myX,
 			-this._origin.myY,
@@ -62,7 +62,7 @@ ECGame.EngineLib.Animation2DFrame = ECGame.EngineLib.Class.create({
 		
 		render : function render(inCanvas2DContext, inCameraRect, inImage, inPosition)
 		{
-			var dest = inPosition.sub(this._origin).sub(inCameraRect.getLeftTop());
+			var dest = inPosition.subtract(this._origin).subtract(inCameraRect.getLeftTop());
 			inCanvas2DContext.drawImage(
 				inImage,
 				this._sourceRect.myX,
@@ -80,7 +80,7 @@ ECGame.EngineLib.Animation2DFrame = ECGame.EngineLib.Class.create({
 		{
 			var dest, size, halfSize;
 			
-			dest = inPosition.sub(this._origin).sub(inCameraRect.getLeftTop());
+			dest = inPosition.subtract(this._origin).subtract(inCameraRect.getLeftTop());
 			size = ECGame.Settings.Debug.Sprite_Origin_Size;
 			halfSize = ECGame.Settings.Debug.Sprite_Origin_Size / 2;
 			

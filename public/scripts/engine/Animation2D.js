@@ -79,7 +79,7 @@ ECGame.EngineLib.Animation2D = ECGame.EngineLib.Class.create({
 		
 		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect, inFrame, inPosition)
 		{
-			var dest = this._AABB.getLeftTop().add(inPosition).sub(inCameraRect.getLeftTop());
+			var dest = this._AABB.getLeftTop().add(inPosition).subtract(inCameraRect.getLeftTop());
 			
 			//draw AABB
 			inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Sprite_AABB_DrawColor;

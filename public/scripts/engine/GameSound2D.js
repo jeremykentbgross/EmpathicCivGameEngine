@@ -25,8 +25,8 @@ ECGame.EngineLib.Sound2D = ECGame.EngineLib.Class.create(
 	{
 		this.Sound(inSource, inStartedTime, inFileName);
 		this._panner = inPanner;
-		this._position = new ECGame.EngineLib.Game2DPoint();
-		this._velocity = new ECGame.EngineLib.Game2DPoint();
+		this._position = new ECGame.EngineLib.Point2();
+		this._velocity = new ECGame.EngineLib.Point2();
 		this._radius = inRadius;
 	},
 	Parents : [ECGame.EngineLib.Sound],
@@ -53,7 +53,7 @@ ECGame.EngineLib.Sound2D = ECGame.EngineLib.Class.create(
 			var percentPlayed, soundScreenLoc;
 			
 			percentPlayed = (inCurrentTime - this._startedTime) / this._source.buffer.duration;
-			soundScreenLoc = this._position.sub(inCameraRect);
+			soundScreenLoc = this._position.subtract(inCameraRect);
 							
 			ECGame.instance.graphics.drawDebugText(
 				'-' + this._fileName + ': %' + Math.floor(percentPlayed * 100),

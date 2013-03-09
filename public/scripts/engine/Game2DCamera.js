@@ -82,13 +82,13 @@ ECGame.EngineLib.Game2DCamera.prototype.init = function init(inWidth, inHeight)
 
 ECGame.EngineLib.Game2DCamera.prototype.centerOn = function centerOn(inTargetCenter, inMap)
 {		
-	var camPoint = inTargetCenter.subtract(this._myRect.getWidthHeight().multiply(0.5));
+	var camPoint = inTargetCenter.subtract(this._myRect.getWidthHeight().scale(0.5));
 	
 	//if the map does not wrap, clamp camera to within the world favoring the uper left corner
 	if(inMap && inMap.isWrappable && !inMap.isWrappable())
 	{
 		camPoint = camPoint.componentMin(inMap.getMapLowerRight().subtract(this._myRect.getWidthHeight()));
-		camPoint = camPoint.componentMax(ECGame.EngineLib.Game2DPoint.create(0,0));
+		camPoint = camPoint.componentMax(ECGame.EngineLib.Point2.create(0,0));
 	}
 	
 	this._myRect.setLeftTop(camPoint);

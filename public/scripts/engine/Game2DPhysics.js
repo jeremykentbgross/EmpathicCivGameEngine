@@ -152,7 +152,7 @@ ECGame.EngineLib.createGame2DPhysics = function()
 		{
 			myStatus : STATUS__STATIC,
 			myDensity : 1,
-			myVelocity : ECGame.EngineLib.Game2DPoint.create(),//todo requested/actual velocity?
+			myVelocity : ECGame.EngineLib.Point2.create(),//todo requested/actual velocity?
 			//myFriction:,??
 			AABB : ECGame.EngineLib.createGame2DAABB(),//todo have lots of gamerects relative to a center??
 			getAABB : function getAABB(){return this.AABB;},//TODO inherit ECGame.EngineLib.GameQuadTreeItem
@@ -297,11 +297,11 @@ ECGame.EngineLib.createGame2DPhysics = function()
 				//move:
 				rect = physicsObject.AABB;
 				rect.setLeftTop(
-					rect.getLeftTop().add(physicsObject.myVelocity.multiply(timeStepDeltaTime))
+					rect.getLeftTop().add(physicsObject.myVelocity.scale(timeStepDeltaTime))
 				);
 				
 				//apply friction:
-				//physicsObject.myVelocity = physicsObject.myVelocity.multiply(0.75);//todo use a real friction value
+				//physicsObject.myVelocity = physicsObject.myVelocity.scale(0.75);//todo use a real friction value
 				
 				//detect collision
 				insertPhysicsObjectToTree(physicsObject);
@@ -338,7 +338,7 @@ ECGame.EngineLib.createGame2DPhysics = function()
 					direction = objCenter.subtract(colCenter).unit();					
 					acceleration = force / obj1.getMass();	//f=ma => a = f/m
 					
-					obj1.myVelocity = obj1.myVelocity.add(direction.multiply(acceleration));
+					obj1.myVelocity = obj1.myVelocity.add(direction.scale(acceleration));
 				}
 				if(obj2.myStatus !== STATUS__STATIC)
 				{
@@ -346,7 +346,7 @@ ECGame.EngineLib.createGame2DPhysics = function()
 					direction = objCenter.subtract(colCenter).unit();					
 					acceleration = force / obj2.getMass();	//f=ma => a = f/m
 					
-					obj2.myVelocity = obj2.myVelocity.add(direction.multiply(acceleration));
+					obj2.myVelocity = obj2.myVelocity.add(direction.scale(acceleration));
 				}
 			}
 			
@@ -368,7 +368,7 @@ ECGame.EngineLib.createGame2DPhysics = function()
 					&& Math.abs(physicsObject.myVelocity.myY) < 0.1)
 				{
 					//set sleeping:
-					physicsObject.myVelocity = ECGame.EngineLib.Game2DPoint.create();					
+					physicsObject.myVelocity = ECGame.EngineLib.Point2.create();					
 					physicsObject.myStatus = STATUS__SLEEPING;
 					physicsObject.myRegisteredActiveNode.remove();
 				}
@@ -380,7 +380,7 @@ ECGame.EngineLib.createGame2DPhysics = function()
 			//TODO if !hasownedproperty, etc continue
 			physicsObject = myPhysicsObjects[i];
 			physicsObject.myVelocity =	//TODO isnt this one proper??
-				physicsObject.AABB.getLeftTop().subtract(movedThisFrame[i]).multiply(1000 / deltaTime);
+				physicsObject.AABB.getLeftTop().subtract(movedThisFrame[i]).scale(1000 / deltaTime);
 			owner = physicsObject.myOwner;
 			if(owner && owner.onPhysObjectUpdate)
 			{

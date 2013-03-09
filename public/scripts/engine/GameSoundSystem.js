@@ -53,7 +53,7 @@ ECGame.EngineLib.GameSoundSystem = ECGame.EngineLib.Class.create({
 		
 		this._soundLib = [];
 		this._playingSounds = new ECGame.EngineLib.GameCircularDoublyLinkedListNode(null);
-		this._listenerPosition2D = new ECGame.EngineLib.Game2DPoint();
+		this._listenerPosition2D = new ECGame.EngineLib.Point2();
 		
 		try
 		{

@@ -53,7 +53,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 		init : function init(inMapSizeInTiles, inTileSize, inMinPhysicsPartitionSize)
 		{
 			//TODO if??
-			this._mouseLoc = ECGame.EngineLib.Game2DPoint.create();
+			this._mouseLoc = ECGame.EngineLib.Point2.create();
 			
 			this._mapsize = inMapSizeInTiles * inTileSize;
 			this._sceneGraph = new ECGame.EngineLib.Game2DSceneGraph();
@@ -69,7 +69,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 				[
 					{
 						fileName : 'images/placeholder.png'//TODO have this listed in systemvars
-						,anchor : ECGame.EngineLib.Game2DPoint.create()
+						,anchor : ECGame.EngineLib.Point2.create()
 						,layer : 0
 					}
 					//,{}
@@ -159,7 +159,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 				target.setLeftTop(
 					//center target rect on camera target by subtracting half its width/height
 					camera.getTargetPosition().subtract(
-						target.getWidthHeight().multiply(0.5)
+						target.getWidthHeight().scale(0.5)
 					).
 					//now account for the cameras actual world location
 					subtract(
@@ -186,7 +186,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 				//center on mouse position by subtracting half the cursor size
 				target.setLeftTop(
 					this._mouseLoc.subtract(
-						target.getWidthHeight().multiply(0.5)
+						target.getWidthHeight().scale(0.5)
 					)
 				);
 				

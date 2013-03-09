@@ -123,13 +123,13 @@ ECGame.EngineLib.Game2DAABB.prototype.getUnion = function getUnion(inOtherRect)
 {
 	var returnRect = new ECGame.EngineLib.Game2DAABB();
 	returnRect.setLeftTop(
-		new ECGame.EngineLib.Game2DPoint(
+		new ECGame.EngineLib.Point2(
 			Math.min(this.myX, inOtherRect.myX),
 			Math.min(this.myY, inOtherRect.myY)
 		)
 	);
 	returnRect.setRightBottom(
-		new ECGame.EngineLib.Game2DPoint(
+		new ECGame.EngineLib.Point2(
 			Math.max(this.myX + this.myWidth, inOtherRect.myX + inOtherRect.myWidth),
 			Math.max(this.myY + this.myHeight, inOtherRect.myY + inOtherRect.myHeight)
 		)
@@ -148,7 +148,7 @@ ECGame.EngineLib.Game2DAABB.prototype.getArea = function getArea()
 
 ECGame.EngineLib.Game2DAABB.prototype.getCenter = function getCenter()
 {
-	return ECGame.EngineLib.Game2DPoint.create(
+	return ECGame.EngineLib.Point2.create(
 		this.myX + this.myWidth / 2,
 		this.myY + this.myHeight / 2
 	);
@@ -158,7 +158,7 @@ ECGame.EngineLib.Game2DAABB.prototype.getCenter = function getCenter()
 
 ECGame.EngineLib.Game2DAABB.prototype.getLeftTop = function getLeftTop()
 {
-	return ECGame.EngineLib.Game2DPoint.create(this.myX, this.myY);
+	return ECGame.EngineLib.Point2.create(this.myX, this.myY);
 };
 
 
@@ -187,7 +187,7 @@ ECGame.EngineLib.Game2DAABB.prototype.getBottom = function getBottom()
 
 ECGame.EngineLib.Game2DAABB.prototype.getRightBottom = function getRightBottom()
 {
-	return ECGame.EngineLib.Game2DPoint.create(this.myX + this.myWidth, this.myY + this.myHeight);
+	return ECGame.EngineLib.Point2.create(this.myX + this.myWidth, this.myY + this.myHeight);
 };
 
 
@@ -202,14 +202,14 @@ ECGame.EngineLib.Game2DAABB.prototype.setRightBottom = function getRightBottom(i
 
 ECGame.EngineLib.Game2DAABB.prototype.getLeftBottom = function getLeftBottom()
 {
-	return ECGame.EngineLib.Game2DPoint.create(this.myX, this.myY + this.myHeight);
+	return ECGame.EngineLib.Point2.create(this.myX, this.myY + this.myHeight);
 };
 
 
 
 ECGame.EngineLib.Game2DAABB.prototype.getWidthHeight = function getWidthHeight()
 {
-	return ECGame.EngineLib.Game2DPoint.create(this.myWidth, this.myHeight);
+	return ECGame.EngineLib.Point2.create(this.myWidth, this.myHeight);
 };
 
 

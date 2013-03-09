@@ -25,7 +25,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 	{
 		this.GameEntityComponent();
 		
-		this._position = ECGame.EngineLib.Game2DPoint.create();//TODO this isn't used, but shouldn't use topleft of aabb either
+		this._position = ECGame.EngineLib.Point2.create();//TODO this isn't used, but shouldn't use topleft of aabb either
 		
 		this._animations = ECGame.instance.rules._animations;//HACK!!!!!//TODO 'null'/default object!! (object ref?)
 		this._currentAnimation = 8;//TODO why 8?
@@ -109,14 +109,14 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 				var angle = 0;
 				var directions =
 				[
-					new ECGame.EngineLib.Game2DPoint(Math.cos(angle), Math.sin(angle)),
-					new ECGame.EngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new ECGame.EngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new ECGame.EngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new ECGame.EngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new ECGame.EngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new ECGame.EngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new ECGame.EngineLib.Game2DPoint(Math.cos(angle+=2*Math.PI/8), Math.sin(angle))//,
+					new ECGame.EngineLib.Point2(Math.cos(angle), Math.sin(angle)),
+					new ECGame.EngineLib.Point2(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new ECGame.EngineLib.Point2(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new ECGame.EngineLib.Point2(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new ECGame.EngineLib.Point2(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new ECGame.EngineLib.Point2(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new ECGame.EngineLib.Point2(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new ECGame.EngineLib.Point2(Math.cos(angle+=2*Math.PI/8), Math.sin(angle))//,
 				];
 				var animProb = 0;
 				var bestAnimProb = 0;

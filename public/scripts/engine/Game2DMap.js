@@ -194,7 +194,7 @@ ECGame.EngineLib.Game2DMap = ECGame.EngineLib.Class.create(
 		
 		toTileCoordinate : function toTileCoordinate(inWorldCoordinate)
 		{
-			return new ECGame.EngineLib.Game2DPoint(
+			return new ECGame.EngineLib.Point2(
 				Math.floor(inWorldCoordinate.myX / this._tileSize),
 				Math.floor(inWorldCoordinate.myY / this._tileSize)
 			);

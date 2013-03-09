@@ -29,8 +29,8 @@ ECGame.EngineLib.GameRenderable2D = ECGame.EngineLib.Class.create({
 		this.sceneGraphOwningNodes = null;	//array of nodes containing this renderable in the scene graph
 		this.lastFrameDrawn = -1;
 		this.layer = 0;
-		this.anchorPosition = new ECGame.EngineLib.Game2DPoint();
-		this.screenPos = new ECGame.EngineLib.Game2DPoint();
+		this.anchorPosition = new ECGame.EngineLib.Point2();
+		this.screenPos = new ECGame.EngineLib.Point2();
 		this.drawOrderHelper = null;
 	},
 	Parents : [ECGame.EngineLib.GameQuadTreeItem],

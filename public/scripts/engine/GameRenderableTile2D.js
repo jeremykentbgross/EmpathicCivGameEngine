@@ -41,7 +41,7 @@ ECGame.EngineLib.RenderableTile2D = ECGame.EngineLib.Class.create({
 			this.ownerMap._myTileSet.renderTile(
 				inCanvas2DContext,
 				this.tileValue,
-				this.anchorPosition.sub(inCameraRect)
+				this.anchorPosition.subtract(inCameraRect)
 			);
 		}
 	}
