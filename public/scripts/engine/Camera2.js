@@ -21,7 +21,7 @@
 
 //TODO derive 2d camera from rect??
 
-ECGame.EngineLib.Game2DCamera = function Game2DCamera()
+ECGame.EngineLib.Camera2 = function Camera2()
 {
 	if(!ECGame.Settings.Network.isServer)
 	{
@@ -42,18 +42,18 @@ ECGame.EngineLib.Game2DCamera = function Game2DCamera()
 		);
 	}
 };
-ECGame.EngineLib.Game2DCamera.prototype.constructor = ECGame.EngineLib.Game2DCamera;
+ECGame.EngineLib.Camera2.prototype.constructor = ECGame.EngineLib.Camera2;
 
 
 
-ECGame.EngineLib.Game2DCamera.create = function create()
+ECGame.EngineLib.Camera2.create = function create()
 {
-	return new ECGame.EngineLib.Game2DCamera();
+	return new ECGame.EngineLib.Camera2();
 };
 
 
 
-ECGame.EngineLib.Game2DCamera.prototype.init = function init(inWidth, inHeight)
+ECGame.EngineLib.Camera2.prototype.init = function init(inWidth, inHeight)
 {
 	if(inWidth &&inHeight)
 	{
@@ -63,7 +63,7 @@ ECGame.EngineLib.Game2DCamera.prototype.init = function init(inWidth, inHeight)
 
 
 
-ECGame.EngineLib.Game2DCamera.prototype.centerOn = function centerOn(inTargetCenter, inMap)
+ECGame.EngineLib.Camera2.prototype.centerOn = function centerOn(inTargetCenter, inMap)
 {		
 	var camPoint = inTargetCenter.subtract(this._myRect.getWidthHeight().scale(0.5));
 	
@@ -80,7 +80,7 @@ ECGame.EngineLib.Game2DCamera.prototype.centerOn = function centerOn(inTargetCen
 
 
 //TODO have actual target entity?  I think so
-ECGame.EngineLib.Game2DCamera.prototype.getTargetPosition = function getTargetPosition()
+ECGame.EngineLib.Camera2.prototype.getTargetPosition = function getTargetPosition()
 {
 	return this._myRect.getCenter();
 };
@@ -89,7 +89,7 @@ ECGame.EngineLib.Game2DCamera.prototype.getTargetPosition = function getTargetPo
 
 //TODO make this gameobject? with set target/map? then needs update.. eh?
 
-ECGame.EngineLib.Game2DCamera.prototype.getRect = function getRect()
+ECGame.EngineLib.Camera2.prototype.getRect = function getRect()
 {
 	return this._myRect;
 };

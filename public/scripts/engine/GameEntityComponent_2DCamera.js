@@ -23,9 +23,9 @@ ECGame.EngineLib.EntityComponent_2DCamera = ECGame.EngineLib.Class.create({
 	Constructor : function EntityComponent_2DCamera()
 	{
 		this.GameEntityComponent();
-		this.Game2DCamera();
+		this.Camera2();
 	},
-	Parents : [ECGame.EngineLib.GameEntityComponent, ECGame.EngineLib.Game2DCamera],
+	Parents : [ECGame.EngineLib.GameEntityComponent, ECGame.EngineLib.Camera2],
 	flags : { net : true },
 	ChainUp : null,
 	ChainDown : null,
