@@ -19,269 +19,310 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-ECGame.EngineLib.GameArithmeticCompressionModels = ECGame.EngineLib.GameArithmeticCompressionModels || {};
+ECGame.EngineLib.ArithmeticCompressionModels = function ArithmeticCompressionModels(){};
 
-ECGame.EngineLib.GameArithmeticCompressionModels.createEvenProbabilityIntegerRangeModel = function()
+
+
+ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel = function EvenProbabilityIntegerRangeModel()
 {
-	var lowOffset = 1 / 8192;//~0.0001;
-	var highOffset = 1 - lowOffset;//~0.9999;
+	this._LOW_OFFSET = 1 / 8192;//~0.0001;
+	this._HIGH_OFFSET = 1 - this._LOW_OFFSET;//~0.9999;
+	
+	this.min = 0;
+	this.max = 0;
+};
+ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel.prototype.constructor = ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel;
+
+
+
+ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel.create = function create()
+{
+	return new ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel();
+};
+
+
+
+ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel.prototype.setMinMax = function setMinMax(inMin, inMax)
+{
+	if(inMax - inMin + 1 > 65536)//TODO ifdebug
+	{
+		//ECGame.log.error("Range is too large!");//TODO throw error from log, and move the log!
+		ECGame.log.assert(false, "Range is too large!");
+		return;
+	}
+	this.min = inMin;
+	this.max = inMax;
+	return this;
+};
+
+
+
+ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel.prototype.getProbabilityRange = function getProbabilityRange(inValue)
+{
+	var range,
+		valueLow,
+		valueHigh;
+		
+	//range = (this.max - this.min + 1);
+	//valueRanged = ((inValue + 0.5 - this.min) / range);
+	//valueHigh = ((inValue + 1 - this.min) / range);
+	//return {
+	//	low : valueRanged,
+	//	high : valueHigh
+	//};
+	
+	range = (this.max - this.min + 1);
+	valueLow = ((inValue + this._LOW_OFFSET - this.min) / range);
+	valueHigh = ((inValue + this._HIGH_OFFSET - this.min) / range);
 	return {
-		min : 0,
-		max : 0,
-		setMinMax : function(inMin, inMax)
-		{
-			if(inMax - inMin + 1 > 65536)//TODO ifdebug
-			{
-				ECGame.log.error("Range is too large!");//TODO throw error from log, and move the log!
-				return;
-			}
-			this.min = inMin;
-			this.max = inMax;
-			return this;
-		},
-		getProbabilityRange :
-			function(inValue)
-			{
-				/*var range = (this.max - this.min + 1);
-				var valueRanged = ((inValue + 0.5 - this.min) / range);
-				var valueHigh = ((inValue + 1 - this.min) / range);
-				return {
-					low : valueRanged,
-					high : valueHigh
-				};*/
-				
-				var range = (this.max - this.min + 1);
-				var valueLow = ((inValue + lowOffset - this.min) / range);
-				var valueHigh = ((inValue + highOffset - this.min) / range);
-				return {
-					low : valueLow,
-					high : valueHigh
-				};
-			},
-		getValueFromProbability :
-			function(inProbability)
-			{
-				/*var range = (this.max - this.min + 1);
-				var value = Math.floor(inProbability * range + this.min);
-				var valueRanged = ((value + 0.5 - this.min) / range);
-				var valueHigh = ((value + 1 - this.min) / range);
-				return {
-					value : value,
-					low : valueRanged,
-					high : valueHigh
-				};*/
-				
-				var range = (this.max - this.min + 1);
-				var value = Math.floor(inProbability * range + this.min);
-				var valueLow = ((value + lowOffset - this.min) / range);
-				var valueHigh = ((value + highOffset - this.min) / range);
-				return {
-					value : value,
-					low : valueLow,
-					high : valueHigh
-				};
-			}
+		low : valueLow,
+		high : valueHigh
 	};
 };
 
+
+
+ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel.prototype.getValueFromProbability = function getValueFromProbability(inProbability)
+{
+	var range,
+		value,	//TODO don't use value as a name!!
+		valueLow,
+		valueHigh;
+		
+	//range = (this.max - this.min + 1);
+	//value = Math.floor(inProbability * range + this.min);
+	//var valueRanged = ((value + 0.5 - this.min) / range);
+	//valueHigh = ((value + 1 - this.min) / range);
+	//return {
+	//	value : value,
+	//	low : valueRanged,
+	//	high : valueHigh
+	//};
+	
+	range = (this.max - this.min + 1);
+	value = Math.floor(inProbability * range + this.min);
+	valueLow = ((value + this._LOW_OFFSET - this.min) / range);
+	valueHigh = ((value + this._HIGH_OFFSET - this.min) / range);
+	return {
+		value : value,
+		low : valueLow,
+		high : valueHigh
+	};
+};
 //TODO probabilistic (spell?) model
+
+
+
+
+
+
+
+
+
+
+
 
 
 //see:
 // http://number-none.com/product/
 //	http://marknelson.us/1991/02/01/arithmetic-coding-statistical-modeling-data-compression/
 //	http://www.colloquial.com/ArithmeticCoding/
-ECGame.EngineLib.createGameArithmeticCompression = function()
+ECGame.EngineLib.ArithmeticCompresser = function ArithmeticCompresser()
 {
-	var instance = {};
-	var PRIVATE = {};
+	this._bitPacker = ECGame.EngineLib.createGameBitPacker();
 	
-	if(ECGame.Settings.DEBUG)
+	this._BITS = 32;//16;
+	this._ONE = Math.pow(2, this._BITS);				//(2^16bits) - 1 == 65535 == 0xffff:
+	this._QUARTER = (this._ONE) / 4;					//16384 == 0x4000://SMSB (Second most Significant bit)
+	this._HALF = 2 * this._QUARTER;						//32768 == 0x8000	//MSB (Most Significant bit)
+	this._THREEQUARTERS = this._HALF + this._QUARTER;	//49152 == 0xC000	//SMSB + MSB
+	
+	this._high = this._ONE - 1;
+	this._low = 0;
+	this._underflow_bits = 0;
+	this._encoded = 0;
+};
+ECGame.EngineLib.ArithmeticCompresser.prototype.constructor = ECGame.EngineLib.ArithmeticCompresser;
+
+
+
+ECGame.EngineLib.ArithmeticCompresser.create = function create()
+{
+	return new ECGame.EngineLib.ArithmeticCompresser();
+};
+
+
+
+ECGame.EngineLib.ArithmeticCompresser.prototype.getString = function getString()
+{
+	++this._underflow_bits;
+	if(this._low < this._QUARTER)
 	{
-		ECGame.EngineLib.addDebugInfo("GameArithmeticCompression", instance, PRIVATE);
+		this._bitPacker.pack(0, 1);	//write lowMSB (low & 0x8000)
+		while(this._underflow_bits > 0)
+		{
+			this._bitPacker.pack(1, 1);	//write ~lowMSB (~low & 0x8000)
+			--this._underflow_bits;
+		}
+	}
+	else
+	{
+		this._bitPacker.pack(1, 1);	//write lowMSB (low & 0x8000)
+		while(this._underflow_bits > 0)
+		{
+			this._bitPacker.pack(0, 1);	//write ~lowMSB (~low & 0x8000)
+			--this._underflow_bits;
+		}
 	}
 	
-	PRIVATE.bitPacker = ECGame.EngineLib.createGameBitPacker();
+	return this._bitPacker.getString();
+};
+
+
+
+ECGame.EngineLib.ArithmeticCompresser.prototype.setString = function setString(inString)
+{
+	this._bitPacker.setString(inString);
 	
-	PRIVATE.BITS = 32;//16;
-	PRIVATE.ONE = Math.pow(2, PRIVATE.BITS);						//(2^16bits) - 1 == 65535 == 0xffff:
-	PRIVATE.QUARTER = (PRIVATE.ONE) / 4;							//16384 == 0x4000://SMSB (Second most Significant bit)
-	PRIVATE.HALF = 2 * PRIVATE.QUARTER;								//32768 == 0x8000	//MSB (Most Significant bit)
-	PRIVATE.THREEQUARTERS = PRIVATE.HALF + PRIVATE.QUARTER;	//49152 == 0xC000	//SMSB + MSB
+	this._high = this._ONE - 1;
+	this._low = 0;
+	this._underflow_bits = 0;
+	this._encoded = 0;
 	
-	PRIVATE.high = PRIVATE.ONE - 1;
-	PRIVATE.low = 0;
-	PRIVATE.underflow_bits = 0;
-	PRIVATE.encoded = 0;
-	
-	
-	instance.getString = function()
+	var i;
+	for(i = 0; i < this._BITS; ++i)
 	{
-		++PRIVATE.underflow_bits;
-		if(PRIVATE.low < PRIVATE.QUARTER)
+		this._encoded = this._encoded * 2 + this._bitPacker.unpack(1);
+	}
+};
+
+
+
+ECGame.EngineLib.ArithmeticCompresser.prototype.encode = function encode(value, inModel)
+{
+	var encodeRange,
+		valueRange,
+		loops;
+	
+	encodeRange = (this._high - this._low) + 1;
+	
+	valueRange = inModel.getProbabilityRange(value);
+	
+	this._high = Math.floor(this._low + encodeRange * valueRange.high - 1);
+	this._low = Math.floor(this._low + encodeRange * valueRange.low);
+	
+	for(loops = 0; loops < this._BITS; ++loops)
+	{
+		
+		//The first two cases are a combination of one:
+		//if((high & 0x8000) == (low & 0x8000))
+		if(this._high < this._HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 0
 		{
-			PRIVATE.bitPacker.pack(0, 1);	//write lowMSB (low & 0x8000)
-			while(PRIVATE.underflow_bits > 0)
+			this._bitPacker.pack(0, 1);	//write lowMSB (low & 0x8000)
+			while(this._underflow_bits > 0)
 			{
-				PRIVATE.bitPacker.pack(1, 1);	//write ~lowMSB (~low & 0x8000)
-				--PRIVATE.underflow_bits;
+				this._bitPacker.pack(1, 1);	//write ~lowMSB (~low & 0x8000)
+				--this._underflow_bits;
 			}
+		}
+		else if(this._low >= this._HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 1
+		{
+			this._bitPacker.pack(1, 1);	//write lowMSB (low & 0x8000)
+			while(this._underflow_bits > 0)
+			{
+				this._bitPacker.pack(0, 1);	//write ~lowMSB (~low & 0x8000)
+				--this._underflow_bits;
+			}
+			
+			//remove MSB
+			this._low -= this._HALF;
+			this._high -= this._HALF;
+		}
+		//Third case is really this:
+		//else if((low & 0x4000) && !(high & 0x4000))//SMSB low and not SMSB high
+		else if(this._low >= this._QUARTER && this._high <= this._THREEQUARTERS)
+		{
+			++this._underflow_bits;
+			this._low -= this._QUARTER;	//low &= 0x3fff; remove SMSB
+			this._high -= this._QUARTER;	//high |= 0x4000;	(borrows from MSB)
 		}
 		else
 		{
-			PRIVATE.bitPacker.pack(1, 1);	//write lowMSB (low & 0x8000)
-			while(PRIVATE.underflow_bits > 0)
-			{
-				PRIVATE.bitPacker.pack(0, 1);	//write ~lowMSB (~low & 0x8000)
-				--PRIVATE.underflow_bits;
-			}
+			return;
 		}
 		
-		return PRIVATE.bitPacker.getString();
-	};
+		//low <<= 1;
+		this._low = (2 * this._low) % this._ONE;
+		//high <<= 1;
+		//high |= 1;
+		this._high = (2 * this._high + 1) % this._ONE;
+	}
 	
+	//ECGame.log.error("Encode failed!");
+	ECGame.log.assert(false, "Encode failed!");
+};
+
+
+
+ECGame.EngineLib.ArithmeticCompresser.prototype.decode = function decode(inModel)
+{
+	var encodeRange,
+		probability,
+		valueRange,
+		loops;
+		
+	encodeRange = (this._high - this._low) + 1;
+	probability = (this._encoded - this._low) / encodeRange;
 	
-	instance.setString = function(inString)
+	if((probability > 1 || probability < 0))
 	{
-		PRIVATE.bitPacker.setString(inString);
-		
-		PRIVATE.high = PRIVATE.ONE - 1;
-		PRIVATE.low = 0;
-		PRIVATE.underflow_bits = 0;
-		PRIVATE.encoded = 0;
-		
-		var i;
-		for(i = 0; i < PRIVATE.BITS; ++i)
-		{
-			PRIVATE.encoded = PRIVATE.encoded * 2 + PRIVATE.bitPacker.unpack(1);
-		}
-	};
+		//ECGame.log.error("Decompression out of range value detected!");
+		ECGame.log.assert(false, "Decompression out of range value detected!");
+		//TODO throw an error to be caught above and disconnect them
+	}
 	
+	valueRange = inModel.getValueFromProbability(probability);
 	
-	instance.encode = function(value, inModel)
+	this._high = Math.floor(this._low + encodeRange * valueRange.high - 1);
+	this._low = Math.floor(this._low + encodeRange * valueRange.low);
+	
+	for(loops = 0; loops < this._BITS; ++loops)
 	{
-		var encodeRange = (PRIVATE.high - PRIVATE.low) + 1;
-		
-		var valueRange = inModel.getProbabilityRange(value);
-		
-		PRIVATE.high = Math.floor(PRIVATE.low + encodeRange * valueRange.high - 1);
-		PRIVATE.low = Math.floor(PRIVATE.low + encodeRange * valueRange.low);
-		
-		var loops;
-		for(loops = 0; loops < PRIVATE.BITS; ++loops)
+		//if((high & 0x8000) == (low & 0x8000))
+		if(this._high < this._HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 0
 		{
-			/*
-			The first two cases are a combination of one:
-			if((high & 0x8000) == (low & 0x8000))
-			*/
-			if(PRIVATE.high < PRIVATE.HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 0
-			{
-				PRIVATE.bitPacker.pack(0, 1);	//write lowMSB (low & 0x8000)
-				while(PRIVATE.underflow_bits > 0)
-				{
-					PRIVATE.bitPacker.pack(1, 1);	//write ~lowMSB (~low & 0x8000)
-					--PRIVATE.underflow_bits;
-				}
-			}
-			else if(PRIVATE.low >= PRIVATE.HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 1
-			{
-				PRIVATE.bitPacker.pack(1, 1);	//write lowMSB (low & 0x8000)
-				while(PRIVATE.underflow_bits > 0)
-				{
-					PRIVATE.bitPacker.pack(0, 1);	//write ~lowMSB (~low & 0x8000)
-					--PRIVATE.underflow_bits;
-				}
-				
-				//remove MSB
-				PRIVATE.low -= PRIVATE.HALF;
-				PRIVATE.high -= PRIVATE.HALF;
-			}
-			/*
-			Third case is really this:
-			else if((low & 0x4000) && !(high & 0x4000))//SMSB low and not SMSB high
-			*/
-			else if(PRIVATE.low >= PRIVATE.QUARTER && PRIVATE.high <= PRIVATE.THREEQUARTERS)
-			{
-				++PRIVATE.underflow_bits;
-				PRIVATE.low -= PRIVATE.QUARTER;	//low &= 0x3fff; remove SMSB
-				PRIVATE.high -= PRIVATE.QUARTER;	//high |= 0x4000;	(borrows from MSB)
-			}
-			else
-			{
-				return;
-			}
-			
-			//low <<= 1;
-			PRIVATE.low = (2 * PRIVATE.low) % PRIVATE.ONE;
-			//high <<= 1;
-			//high |= 1;
-			PRIVATE.high = (2 * PRIVATE.high + 1) % PRIVATE.ONE;
+		}
+		else if(this._low >= this._HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 1
+		{
+			//remove MSB
+			this._encoded -= this._HALF;
+			this._low -= this._HALF;
+			this._high -= this._HALF;
+		}
+		//Third case is really this:
+		//else if((low & 0x4000) && !(high & 0x4000))//SMSB low and not SMSB high
+		else if(this._low >= this._QUARTER && this._high <= this._THREEQUARTERS)
+		{
+			this._encoded -= this._QUARTER;
+			this._low -= this._QUARTER;	//low &= 0x3fff; remove SMSB
+			this._high -= this._QUARTER;	//high |= 0x4000;	(borrows from MSB)
+		}
+		else
+		{
+			return valueRange.value;
 		}
 		
-		ECGame.log.error("Encode failed!");
-	};
+		//low <<= 1;
+		this._low = (2 * this._low) % this._ONE;
+		//high <<= 1;
+		//high |= 1;
+		this._high = (2 * this._high + 1) % this._ONE;
+		//(encoded << 1) | inBit
+		this._encoded = (2 * this._encoded + this._bitPacker.unpack(1)) % this._ONE;
+	}
 	
-	
-	instance.decode = function(inModel)
-	{
-		var encodeRange = (PRIVATE.high - PRIVATE.low) + 1;
-		var probability = (PRIVATE.encoded - PRIVATE.low) / encodeRange;
-		
-		if((probability > 1 || probability < 0))
-		{
-			ECGame.log.error("Decompression out of range value detected!");
-			//TODO throw an error to be caught above and disconnect them
-		}
-		
-		var valueRange = inModel.getValueFromProbability(probability);
-		
-		PRIVATE.high = Math.floor(PRIVATE.low + encodeRange * valueRange.high - 1);
-		PRIVATE.low = Math.floor(PRIVATE.low + encodeRange * valueRange.low);
-		
-		var loops;
-		for(loops = 0; loops < PRIVATE.BITS; ++loops)
-		{
-			/*
-			if((high & 0x8000) == (low & 0x8000))
-			*/
-			if(PRIVATE.high < PRIVATE.HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 0
-			{
-			}
-			else if(PRIVATE.low >= PRIVATE.HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 1
-			{
-				//remove MSB
-				PRIVATE.encoded -= PRIVATE.HALF;
-				PRIVATE.low -= PRIVATE.HALF;
-				PRIVATE.high -= PRIVATE.HALF;
-			}
-			/*
-			Third case is really this:
-			else if((low & 0x4000) && !(high & 0x4000))//SMSB low and not SMSB high
-			*/
-			else if(PRIVATE.low >= PRIVATE.QUARTER && PRIVATE.high <= PRIVATE.THREEQUARTERS)
-			{
-				PRIVATE.encoded -= PRIVATE.QUARTER;
-				PRIVATE.low -= PRIVATE.QUARTER;	//low &= 0x3fff; remove SMSB
-				PRIVATE.high -= PRIVATE.QUARTER;	//high |= 0x4000;	(borrows from MSB)
-			}
-			else
-			{
-				return valueRange.value;
-			}
-			
-			//low <<= 1;
-			PRIVATE.low = (2 * PRIVATE.low) % PRIVATE.ONE;
-			//high <<= 1;
-			//high |= 1;
-			PRIVATE.high = (2 * PRIVATE.high + 1) % PRIVATE.ONE;
-			//(encoded << 1) | inBit
-			PRIVATE.encoded = (2 * PRIVATE.encoded + PRIVATE.bitPacker.unpack(1)) % PRIVATE.ONE;
-		}
-		
-		ECGame.log.error("Did not resolve decoding a symbol before we exceeded the bits it could have fit in!");
-		//return valueRange.value;
-		return inModel.min;//should prevent out of range values
-	};
-	
-	return instance;
+	//ECGame.log.error("Did not resolve decoding a symbol before we exceeded the bits it could have fit in!");
+	ECGame.log.assert(false, "Did not resolve decoding a symbol before we exceeded the bits it could have fit in!");
+	//return valueRange.value;
+	return inModel.min;//should prevent out of range values
 };

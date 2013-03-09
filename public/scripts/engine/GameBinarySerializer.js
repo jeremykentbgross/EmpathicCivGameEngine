@@ -58,10 +58,10 @@ ECGame.EngineLib.GameBinarySerializer.prototype._init = function _init(inFlags)
 	this._net = inFlags.NET;
 	this._dummyMode = inFlags.DUMMY_MODE;
 	//TODO should this really be created every time?? !!likely not!!! It is being created all the time!!
-	this._compressor = ECGame.EngineLib.createGameArithmeticCompression();
+	this._compressor = ECGame.EngineLib.ArithmeticCompresser.create();
 	this._integerRangeModel = ECGame.EngineLib.
-		GameArithmeticCompressionModels.
-		createEvenProbabilityIntegerRangeModel();
+		ArithmeticCompressionModels.
+		EvenProbabilityIntegerRangeModel.create();
 };
 
 

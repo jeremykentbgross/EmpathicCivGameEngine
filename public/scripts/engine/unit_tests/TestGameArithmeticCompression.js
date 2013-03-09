@@ -46,7 +46,7 @@ ECGame.unitTests.registerTest(
 			low = Math.floor(Math.random() * maxSize);
 			high = low + Math.floor(Math.random() * maxSize);// + 1;
 			values[i] = low + Math.floor(Math.random() * (high - low + 1));
-			models[i] = ECGame.EngineLib.GameArithmeticCompressionModels.createEvenProbabilityIntegerRangeModel();
+			models[i] = ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel.create();
 			models[i].setMinMax(low, high);
 		}
 		
@@ -85,7 +85,7 @@ ECGame.unitTests.registerTest(
 		
 		////////////////////////////////////////////////////////////////////////////
 		//run///////////////////////////////////////////////////////////////////////
-		var encoder = ECGame.EngineLib.createGameArithmeticCompression();
+		var encoder = ECGame.EngineLib.ArithmeticCompresser.create();
 		
 		for(i = 0; i < numValues; ++i)
 		{
@@ -101,7 +101,7 @@ ECGame.unitTests.registerTest(
 		);
 		//console.log(string);
 		
-		encoder = ECGame.EngineLib.createGameArithmeticCompression();
+		encoder = ECGame.EngineLib.ArithmeticCompresser.create();
 		encoder.setString(string);
 		
 		for(i = 0; i < numValues; ++i)
@@ -135,7 +135,7 @@ ECGame.unitTests.registerTest(
 				console.log("scaled:\t" + ((values[i]-models[i].min)/(models[i].max-models[i].min)));
 			}
 			
-			encoder = ECGame.EngineLib.createGameArithmeticCompression();
+			encoder = ECGame.EngineLib.ArithmeticCompresser.create();
 			
 			for(i = 0; i < numValues; ++i)
 			{
@@ -147,7 +147,7 @@ ECGame.unitTests.registerTest(
 			}
 			
 			string = encoder.getString();
-			encoder = ECGame.EngineLib.createGameArithmeticCompression();
+			encoder = ECGame.EngineLib.ArithmeticCompresser.create();
 			encoder.setString(string);
 			
 			for(i = 0; i < numValues; ++i)
