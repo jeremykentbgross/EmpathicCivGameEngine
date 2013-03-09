@@ -25,7 +25,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 	{
 		this.GameEntityComponent();
 		
-		this._position = ECGame.EngineLib.createGame2DPoint();//TODO this isn't used, but shouldn't use topleft of aabb either
+		this._position = ECGame.EngineLib.Game2DPoint.create();//TODO this isn't used, but shouldn't use topleft of aabb either
 		
 		this._animations = ECGame.instance.rules._animations;//HACK!!!!!//TODO 'null'/default object!! (object ref?)
 		this._currentAnimation = 8;//TODO why 8?

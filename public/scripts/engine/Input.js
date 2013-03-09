@@ -23,7 +23,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 	Constructor : function Input()
 	{
 		this.GameEventSystem();
-		this._mouseLoc = ECGame.EngineLib.createGame2DPoint(0, 0);
+		this._mouseLoc = ECGame.EngineLib.Game2DPoint.create(0, 0);
 		this._keys = {};
 		this._keysPressed = {};
 		this._buttons = {};

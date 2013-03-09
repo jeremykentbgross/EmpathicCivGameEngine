@@ -110,7 +110,7 @@ ECGame.EngineLib.Game2DTileSet = ECGame.EngineLib.Class.create(
 		getTileRect : function getTileRect(inID, inPosition)
 		{
 			var tile = this._myTiles[inID];
-			inPosition = inPosition || ECGame.EngineLib.createGame2DPoint();
+			inPosition = inPosition || ECGame.EngineLib.Game2DPoint.create();
 			
 			return ECGame.EngineLib.createGame2DAABB(
 				inPosition.myX - tile.anchor.myX,

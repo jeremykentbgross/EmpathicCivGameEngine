@@ -27,16 +27,16 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 		this.GameEntityComponent();
 		//this._keysEventMapper = [];//TODO make keys changable??
 		
-		this._direction = ECGame.EngineLib.createGame2DPoint(0, 0);
+		this._direction = ECGame.EngineLib.Game2DPoint.create(0, 0);
 		
 		//TODO put this elsewhere??
 		this._speed = 128;
 		
 		//TODO these should go in a child class, like CharacterInput or something
-		this._up		= ECGame.EngineLib.createGame2DPoint( 0,-1);
-		this._down	= ECGame.EngineLib.createGame2DPoint( 0, 1);
-		this._left	= ECGame.EngineLib.createGame2DPoint(-1, 0);
-		this._right	= ECGame.EngineLib.createGame2DPoint( 1, 0);
+		this._up		= ECGame.EngineLib.Game2DPoint.create( 0,-1);
+		this._down	= ECGame.EngineLib.Game2DPoint.create( 0, 1);
+		this._left	= ECGame.EngineLib.Game2DPoint.create(-1, 0);
+		this._right	= ECGame.EngineLib.Game2DPoint.create( 1, 0);
 	},
 	
 	Parents : [ECGame.EngineLib.GameEntityComponent],
@@ -69,7 +69,7 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 			}
 			else
 			{
-				this._direction = ECGame.EngineLib.createGame2DPoint(0, 0);//TODO just set the fields, don't create a new one
+				this._direction = ECGame.EngineLib.Game2DPoint.create(0, 0);//TODO just set the fields, don't create a new one
 				
 				if(inInputEvent.keys[87]/*W*/)
 				{
@@ -143,8 +143,8 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 		serialize : function serialize(inSerializer)
 		{
 			var format = this.EntityComponent_Input._serializeFormat;
-			format[0].min = ECGame.EngineLib.createGame2DPoint(-this._speed,-this._speed);
-			format[0].max = ECGame.EngineLib.createGame2DPoint(this._speed,this._speed);
+			format[0].min = ECGame.EngineLib.Game2DPoint.create(-this._speed,-this._speed);
+			format[0].max = ECGame.EngineLib.Game2DPoint.create(this._speed,this._speed);
 			inSerializer.serializeObject(this, format);
 		},
 		

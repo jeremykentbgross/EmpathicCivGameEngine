@@ -53,7 +53,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 		init : function init(inMapSizeInTiles, inTileSize, inMinPhysicsPartitionSize)
 		{
 			//TODO if??
-			this._mouseLoc = ECGame.EngineLib.createGame2DPoint();
+			this._mouseLoc = ECGame.EngineLib.Game2DPoint.create();
 			
 			this._mapsize = inMapSizeInTiles * inTileSize;
 			this._sceneGraph = new ECGame.EngineLib.Game2DSceneGraph();
@@ -69,7 +69,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 				[
 					{
 						fileName : 'images/placeholder.png'//TODO have this listed in systemvars
-						,anchor : ECGame.EngineLib.createGame2DPoint()
+						,anchor : ECGame.EngineLib.Game2DPoint.create()
 						,layer : 0
 					}
 					//,{}

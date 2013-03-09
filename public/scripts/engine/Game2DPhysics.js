@@ -152,7 +152,7 @@ ECGame.EngineLib.createGame2DPhysics = function()
 		{
 			myStatus : STATUS__STATIC,
 			myDensity : 1,
-			myVelocity : ECGame.EngineLib.createGame2DPoint(),//todo requested/actual velocity?
+			myVelocity : ECGame.EngineLib.Game2DPoint.create(),//todo requested/actual velocity?
 			//myFriction:,??
 			AABB : ECGame.EngineLib.createGame2DAABB(),//todo have lots of gamerects relative to a center??
 			getAABB : function getAABB(){return this.AABB;},//TODO inherit ECGame.EngineLib.GameQuadTreeItem
@@ -368,7 +368,7 @@ ECGame.EngineLib.createGame2DPhysics = function()
 					&& Math.abs(physicsObject.myVelocity.myY) < 0.1)
 				{
 					//set sleeping:
-					physicsObject.myVelocity = ECGame.EngineLib.createGame2DPoint();					
+					physicsObject.myVelocity = ECGame.EngineLib.Game2DPoint.create();					
 					physicsObject.myStatus = STATUS__SLEEPING;
 					physicsObject.myRegisteredActiveNode.remove();
 				}

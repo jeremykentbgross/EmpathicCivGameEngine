@@ -24,8 +24,8 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 	{
 		this.GameEntityComponent();
 
-		this._position = ECGame.EngineLib.createGame2DPoint(256, 256);//??needed? use mid instead?
-		this._velocity = ECGame.EngineLib.createGame2DPoint();
+		this._position = ECGame.EngineLib.Game2DPoint.create(256, 256);//??needed? use mid instead?
+		this._velocity = ECGame.EngineLib.Game2DPoint.create();
 		this._boundingRect = ECGame.EngineLib.createGame2DAABB(this._position.myX, this._position.myY, 64, 64);//TODO separate position from AABB in PhysicsSim2D
 		this._range = ECGame.EngineLib.createGame2DAABB(0, 0, 65535, 65535);//TODO used? Set when added to world?
 	},
@@ -52,8 +52,8 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 				name : '_velocity',
 				net : true,
 				type : 'position',//TODO type should be vector2 instead
-				min : ECGame.EngineLib.createGame2DPoint(-512,-512),	//TODO replace hack numbers
-				max : ECGame.EngineLib.createGame2DPoint(512,512)	//TODO replace hack numbers
+				min : ECGame.EngineLib.Game2DPoint.create(-512,-512),	//TODO replace hack numbers
+				max : ECGame.EngineLib.Game2DPoint.create(512,512)	//TODO replace hack numbers
 			}
 			//TODO rect NOT net!
 		],

@@ -20,14 +20,6 @@
 */
 
 
-//TODO deprecated
-ECGame.EngineLib.createGame2DPoint = function(inX, inY)
-{
-	return new ECGame.EngineLib.Game2DPoint(inX, inY);
-};
-
-
-
 
 ECGame.EngineLib.Game2DPoint = function Game2DPoint(inX, inY)
 {
@@ -35,6 +27,14 @@ ECGame.EngineLib.Game2DPoint = function Game2DPoint(inX, inY)
 	this.myY = inY || 0;
 };
 ECGame.EngineLib.Game2DPoint.prototype.constructor = ECGame.EngineLib.Game2DPoint;
+
+
+
+ECGame.EngineLib.Game2DPoint.create = function create(inX, inY)
+{
+	return new ECGame.EngineLib.Game2DPoint(inX, inY);
+};
+
 
 
 ECGame.EngineLib.Game2DPoint.prototype.clone = function clone()

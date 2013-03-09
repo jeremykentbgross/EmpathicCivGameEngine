@@ -111,35 +111,35 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				[
 					{
 						fileName : 'images/grass.png'
-						,anchor : ECGame.EngineLib.createGame2DPoint()
+						,anchor : ECGame.EngineLib.Game2DPoint.create()
 						,layer : 0
-						,size : ECGame.EngineLib.createGame2DPoint(64,64)
+						,size : ECGame.EngineLib.Game2DPoint.create(64,64)
 					},
 					{
 						fileName : 'images/test/waterSub.png' //'images/water.png'
-						,anchor : ECGame.EngineLib.createGame2DPoint()
+						,anchor : ECGame.EngineLib.Game2DPoint.create()
 						,layer : 0
-						,size : ECGame.EngineLib.createGame2DPoint(/*64,64*/96,96)
+						,size : ECGame.EngineLib.Game2DPoint.create(/*64,64*/96,96)
 						,physics : ECGame.EngineLib.createGame2DAABB(0, 0, 64, 64)
 					},
 					{
 						fileName : 'images/ground_256.png'//'images/test/groundSub5.png' // 'images/ground_level01_01.png' //'images/dirt.png',
-						,anchor : ECGame.EngineLib.createGame2DPoint()
+						,anchor : ECGame.EngineLib.Game2DPoint.create()
 						,layer : 0
-						,size : ECGame.EngineLib.createGame2DPoint(96,96)//64,64)
+						,size : ECGame.EngineLib.Game2DPoint.create(96,96)//64,64)
 					},
 					{
 						fileName : 'images/dirt.png2'//HACK 'images/wall_level01_01__.png'
-						,anchor : ECGame.EngineLib.createGame2DPoint()
+						,anchor : ECGame.EngineLib.Game2DPoint.create()
 						,layer : 0
-						,size : ECGame.EngineLib.createGame2DPoint(64,64)
+						,size : ECGame.EngineLib.Game2DPoint.create(64,64)
 					},
 					{
 						fileName : 'images/wall_256.png'//'images/test/wall.png' //'images/wall_level01_01.png'
-						,anchor : ECGame.EngineLib.createGame2DPoint(32, 32)
+						,anchor : ECGame.EngineLib.Game2DPoint.create(32, 32)
 						,layer : 1
 						,physics : ECGame.EngineLib.createGame2DAABB(0, 0, 64, 64)
-						,size : ECGame.EngineLib.createGame2DPoint(96,96)
+						,size : ECGame.EngineLib.Game2DPoint.create(96,96)
 					}
 					//,
 				]

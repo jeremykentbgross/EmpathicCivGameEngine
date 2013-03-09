@@ -88,7 +88,7 @@ ECGame.EngineLib.Game2DCamera.prototype.centerOn = function centerOn(inTargetCen
 	if(inMap && inMap.isWrappable && !inMap.isWrappable())
 	{
 		camPoint = camPoint.componentMin(inMap.getMapLowerRight().subtract(this._myRect.getWidthHeight()));
-		camPoint = camPoint.componentMax(ECGame.EngineLib.createGame2DPoint(0,0));
+		camPoint = camPoint.componentMax(ECGame.EngineLib.Game2DPoint.create(0,0));
 	}
 	
 	this._myRect.setLeftTop(camPoint);
