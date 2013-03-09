@@ -33,13 +33,10 @@ require("../public/scripts/GameLoader");
 //Paths looks wrong (because they will run from inside the loader)
 GameLoader.start(true, "../../public/", "../../private/");
 
-//ECGame.Webserver = {};
-
 //Path/Setup
 ECGame.Webserver.webHostAddress = "localhost";//TODO this is NOT OK!
 ECGame.Webserver.webHostPort = 80;
 ECGame.Webserver.webHostRoot = path.join(path.dirname(__filename), '../public');
-
 
 //http file server
 ECGame.Webserver.expressApp = express.createServer();
@@ -51,7 +48,7 @@ ECGame.Webserver.httpServer = http.createServer(ECGame.Webserver.expressApp);
 ECGame.Webserver.listenSocket = socketIO.listen(ECGame.Webserver.httpServer);
 
 
-if(ECGame.Settings.Network.isMultiplayer)
+//if(ECGame.Settings.Network.isMultiplayer)
 {
 	//RUN UNIT TEST scripts
 	if(ECGame.Settings.RUN_UNIT_TESTS)
