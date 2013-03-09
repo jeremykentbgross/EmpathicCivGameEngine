@@ -99,7 +99,7 @@ GameLoader =
 		
 		//TODO order these better:
 		include(inSharedPath + "scripts/engine/Game2DAABB.js");
-		include(inSharedPath + "scripts/engine/Game2DPoint.js");
+		include(inSharedPath + "scripts/engine/Point2.js");
 		include(inSharedPath + "scripts/engine/GameRegistry.js");
 		include(inSharedPath + "scripts/engine/GameClass.js");
 		include(inSharedPath + "scripts/engine/GameCircularDoublyLinkedListNode.js");
