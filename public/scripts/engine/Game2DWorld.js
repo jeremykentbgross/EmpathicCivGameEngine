@@ -82,7 +82,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 			
 			this._entityMap = {};
 			
-			this._defaultCamera = ECGame.EngineLib.createGame2DCamera();
+			this._defaultCamera = ECGame.EngineLib.Game2DCamera.create();
 			this._camera = null;
 			
 			//for listening to cursor position.

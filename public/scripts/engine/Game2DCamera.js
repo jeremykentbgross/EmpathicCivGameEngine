@@ -19,30 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//TODO depricated!
-ECGame.EngineLib.createGame2DCamera = function(instance)
-{
-	var property;
-	var temp = new ECGame.EngineLib.Game2DCamera();
-	instance = instance || {};
-	
-	for(property in temp)
-	{
-		instance[property] = temp[property];
-	}
-	for(property in temp.prototype)
-	{
-		instance[property] = temp.prototype[property];
-	}
-	
-	return instance;
-};
-
-
-
-
-//TODO derive 2d camera from rect
-
+//TODO derive 2d camera from rect??
 
 ECGame.EngineLib.Game2DCamera = function Game2DCamera()
 {
@@ -67,6 +44,12 @@ ECGame.EngineLib.Game2DCamera = function Game2DCamera()
 };
 ECGame.EngineLib.Game2DCamera.prototype.constructor = ECGame.EngineLib.Game2DCamera;
 
+
+
+ECGame.EngineLib.Game2DCamera.create = function create()
+{
+	return new ECGame.EngineLib.Game2DCamera();
+};
 
 
 
@@ -104,7 +87,7 @@ ECGame.EngineLib.Game2DCamera.prototype.getTargetPosition = function getTargetPo
 
 //TODO listen to graphics object for resizes?
 
-//todo make this gameobject? with set target/map? then needs update.. eh?
+//TODO make this gameobject? with set target/map? then needs update.. eh?
 
 ECGame.EngineLib.Game2DCamera.prototype.getRect = function getRect()
 {
