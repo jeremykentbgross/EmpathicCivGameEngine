@@ -28,8 +28,8 @@ ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel = 
 	this._LOW_OFFSET = 1 / 8192;//~0.0001;
 	this._HIGH_OFFSET = 1 - this._LOW_OFFSET;//~0.9999;
 	
-	this.min = 0;
-	this.max = 0;
+	this.myMin = 0;
+	this.myMax = 0;
 };
 ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel.prototype.constructor = ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel;
 
@@ -50,8 +50,8 @@ ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel.pr
 		ECGame.log.assert(false, "Range is too large!");
 		return;
 	}
-	this.min = inMin;
-	this.max = inMax;
+	this.myMin = inMin;
+	this.myMax = inMax;
 	return this;
 };
 
@@ -63,17 +63,17 @@ ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel.pr
 		valueLow,
 		valueHigh;
 		
-	//range = (this.max - this.min + 1);
-	//valueRanged = ((inValue + 0.5 - this.min) / range);
-	//valueHigh = ((inValue + 1 - this.min) / range);
+	//range = (this.myMax - this.myMin + 1);
+	//valueRanged = ((inValue + 0.5 - this.myMin) / range);
+	//valueHigh = ((inValue + 1 - this.myMin) / range);
 	//return {
 	//	low : valueRanged,
 	//	high : valueHigh
 	//};
 	
-	range = (this.max - this.min + 1);
-	valueLow = ((inValue + this._LOW_OFFSET - this.min) / range);
-	valueHigh = ((inValue + this._HIGH_OFFSET - this.min) / range);
+	range = (this.myMax - this.myMin + 1);
+	valueLow = ((inValue + this._LOW_OFFSET - this.myMin) / range);
+	valueHigh = ((inValue + this._HIGH_OFFSET - this.myMin) / range);
 	return {
 		low : valueLow,
 		high : valueHigh
@@ -89,20 +89,20 @@ ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel.pr
 		valueLow,
 		valueHigh;
 		
-	//range = (this.max - this.min + 1);
-	//value = Math.floor(inProbability * range + this.min);
-	//var valueRanged = ((value + 0.5 - this.min) / range);
-	//valueHigh = ((value + 1 - this.min) / range);
+	//range = (this.myMax - this.myMin + 1);
+	//value = Math.floor(inProbability * range + this.myMin);
+	//var valueRanged = ((value + 0.5 - this.myMin) / range);
+	//valueHigh = ((value + 1 - this.myMin) / range);
 	//return {
 	//	value : value,
 	//	low : valueRanged,
 	//	high : valueHigh
 	//};
 	
-	range = (this.max - this.min + 1);
-	value = Math.floor(inProbability * range + this.min);
-	valueLow = ((value + this._LOW_OFFSET - this.min) / range);
-	valueHigh = ((value + this._HIGH_OFFSET - this.min) / range);
+	range = (this.myMax - this.myMin + 1);
+	value = Math.floor(inProbability * range + this.myMin);
+	valueLow = ((value + this._LOW_OFFSET - this.myMin) / range);
+	valueHigh = ((value + this._HIGH_OFFSET - this.myMin) / range);
 	return {
 		value : value,
 		low : valueLow,
@@ -324,5 +324,5 @@ ECGame.EngineLib.ArithmeticCompresser.prototype.decode = function decode(inModel
 	//ECGame.log.error("Did not resolve decoding a symbol before we exceeded the bits it could have fit in!");
 	ECGame.log.assert(false, "Did not resolve decoding a symbol before we exceeded the bits it could have fit in!");
 	//return valueRange.value;
-	return inModel.min;//should prevent out of range values
+	return inModel.myMin;//should prevent out of range values
 };
