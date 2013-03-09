@@ -50,7 +50,7 @@ ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 		{
 			//TODO make set function for anchorPosition so this can be updated ONLY when it is needed!
 			//OPT: This is SUPER inoptimal
-			return new ECGame.EngineLib.Game2DAABB(
+			return new ECGame.EngineLib.AABB2(
 				this._AABB.myX + this.anchorPosition.myX,
 				this._AABB.myY + this.anchorPosition.myY,
 				this._AABB.myWidth,

@@ -19,32 +19,32 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-ECGame.EngineLib.Game2DAABB = function Game2DAABB(inX, inY, inWidth, inHeight)
+ECGame.EngineLib.AABB2 = function AABB2(inX, inY, inWidth, inHeight)
 {
 	this.myX = inX || 0;
 	this.myY = inY || 0;
 	this.myWidth = inWidth || 0;
 	this.myHeight = inHeight || 0;
 };
-ECGame.EngineLib.Game2DAABB.prototype.constructor = ECGame.EngineLib.Game2DAABB;
+ECGame.EngineLib.AABB2.prototype.constructor = ECGame.EngineLib.AABB2;
 
 
 
-ECGame.EngineLib.Game2DAABB.create = function create(inX, inY, inWidth, inHeight)
+ECGame.EngineLib.AABB2.create = function create(inX, inY, inWidth, inHeight)
 {
-	return new ECGame.EngineLib.Game2DAABB(inX, inY, inWidth, inHeight);
+	return new ECGame.EngineLib.AABB2(inX, inY, inWidth, inHeight);
 };
 
 
 
-ECGame.EngineLib.Game2DAABB.prototype.clone = function clone()
+ECGame.EngineLib.AABB2.prototype.clone = function clone()
 {
-	return new ECGame.EngineLib.Game2DAABB(this.myX, this.myY, this.myWidth, this.myHeight);
+	return new ECGame.EngineLib.AABB2(this.myX, this.myY, this.myWidth, this.myHeight);
 };
 
 
 
-ECGame.EngineLib.Game2DAABB.prototype.containsRect = function containsRect(inOtherRect)
+ECGame.EngineLib.AABB2.prototype.containsRect = function containsRect(inOtherRect)
 {
 	if(inOtherRect.myX < this.myX)//TODO maybe <= for all these??
 	{
@@ -68,7 +68,7 @@ ECGame.EngineLib.Game2DAABB.prototype.containsRect = function containsRect(inOth
 
 
 
-ECGame.EngineLib.Game2DAABB.prototype.intersectsRect = function intersectsRect(inOtherRect)
+ECGame.EngineLib.AABB2.prototype.intersectsRect = function intersectsRect(inOtherRect)
 {
 	if(inOtherRect.myX + inOtherRect.myWidth <= this.myX)
 	{
@@ -92,12 +92,12 @@ ECGame.EngineLib.Game2DAABB.prototype.intersectsRect = function intersectsRect(i
 
 
 
-ECGame.EngineLib.Game2DAABB.prototype.getIntersection = function getIntersection(inOtherRect)
+ECGame.EngineLib.AABB2.prototype.getIntersection = function getIntersection(inOtherRect)
 {
 	var x = Math.max(this.myX, inOtherRect.myX);
 	var y = Math.max(this.myY, inOtherRect.myY);
 	
-	var outIntersection = ECGame.EngineLib.Game2DAABB.create(
+	var outIntersection = ECGame.EngineLib.AABB2.create(
 		x,
 		y,
 		Math.max(
@@ -115,9 +115,9 @@ ECGame.EngineLib.Game2DAABB.prototype.getIntersection = function getIntersection
 
 
 
-ECGame.EngineLib.Game2DAABB.prototype.getUnion = function getUnion(inOtherRect)
+ECGame.EngineLib.AABB2.prototype.getUnion = function getUnion(inOtherRect)
 {
-	var returnRect = new ECGame.EngineLib.Game2DAABB();
+	var returnRect = new ECGame.EngineLib.AABB2();
 	returnRect.setLeftTop(
 		new ECGame.EngineLib.Point2(
 			Math.min(this.myX, inOtherRect.myX),
@@ -135,14 +135,14 @@ ECGame.EngineLib.Game2DAABB.prototype.getUnion = function getUnion(inOtherRect)
 
 
 
-ECGame.EngineLib.Game2DAABB.prototype.getArea = function getArea()
+ECGame.EngineLib.AABB2.prototype.getArea = function getArea()
 {
 	return this.myWidth * this.myHeight;
 };
 
 
 
-ECGame.EngineLib.Game2DAABB.prototype.getCenter = function getCenter()
+ECGame.EngineLib.AABB2.prototype.getCenter = function getCenter()
 {
 	return ECGame.EngineLib.Point2.create(
 		this.myX + this.myWidth / 2,
@@ -152,14 +152,14 @@ ECGame.EngineLib.Game2DAABB.prototype.getCenter = function getCenter()
 
 
 
-ECGame.EngineLib.Game2DAABB.prototype.getLeftTop = function getLeftTop()
+ECGame.EngineLib.AABB2.prototype.getLeftTop = function getLeftTop()
 {
 	return ECGame.EngineLib.Point2.create(this.myX, this.myY);
 };
 
 
 
-ECGame.EngineLib.Game2DAABB.prototype.setLeftTop = function setLeftTop(inPoint)
+ECGame.EngineLib.AABB2.prototype.setLeftTop = function setLeftTop(inPoint)
 {
 	this.myX = inPoint.myX;
 	this.myY = inPoint.myY;
@@ -167,28 +167,28 @@ ECGame.EngineLib.Game2DAABB.prototype.setLeftTop = function setLeftTop(inPoint)
 
 
 
-ECGame.EngineLib.Game2DAABB.prototype.getRight = function getRight()
+ECGame.EngineLib.AABB2.prototype.getRight = function getRight()
 {
 	return this.myX + this.myWidth;
 };
 
 
 
-ECGame.EngineLib.Game2DAABB.prototype.getBottom = function getBottom()
+ECGame.EngineLib.AABB2.prototype.getBottom = function getBottom()
 {
 	return this.myY + this.myHeight;
 };
 
 
 
-ECGame.EngineLib.Game2DAABB.prototype.getRightBottom = function getRightBottom()
+ECGame.EngineLib.AABB2.prototype.getRightBottom = function getRightBottom()
 {
 	return ECGame.EngineLib.Point2.create(this.myX + this.myWidth, this.myY + this.myHeight);
 };
 
 
 
-ECGame.EngineLib.Game2DAABB.prototype.setRightBottom = function getRightBottom(inPoint)
+ECGame.EngineLib.AABB2.prototype.setRightBottom = function getRightBottom(inPoint)
 {
 	this.myWidth = Math.max(inPoint.myX - this.myX, 0);
 	this.myHeight = Math.max(inPoint.myY - this.myY, 0);
@@ -196,21 +196,21 @@ ECGame.EngineLib.Game2DAABB.prototype.setRightBottom = function getRightBottom(i
 
 
 
-ECGame.EngineLib.Game2DAABB.prototype.getLeftBottom = function getLeftBottom()
+ECGame.EngineLib.AABB2.prototype.getLeftBottom = function getLeftBottom()
 {
 	return ECGame.EngineLib.Point2.create(this.myX, this.myY + this.myHeight);
 };
 
 
 
-ECGame.EngineLib.Game2DAABB.prototype.getWidthHeight = function getWidthHeight()
+ECGame.EngineLib.AABB2.prototype.getWidthHeight = function getWidthHeight()
 {
 	return ECGame.EngineLib.Point2.create(this.myWidth, this.myHeight);
 };
 
 
 
-ECGame.EngineLib.Game2DAABB.prototype.copyFrom = function copyFrom(inOther)
+ECGame.EngineLib.AABB2.prototype.copyFrom = function copyFrom(inOther)
 {
 	this.myX = inOther.myX;
 	this.myY = inOther.myY;

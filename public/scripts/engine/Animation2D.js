@@ -25,7 +25,7 @@ ECGame.EngineLib.Animation2D = ECGame.EngineLib.Class.create({
 		this.image = null;
 		this._animFrames = [];
 		this._frameRate = 30;
-		this._AABB = new ECGame.EngineLib.Game2DAABB(
+		this._AABB = new ECGame.EngineLib.AABB2(
 			Number.MAX_VALUE,
 			Number.MAX_VALUE,
 			-Number.MAX_VALUE,

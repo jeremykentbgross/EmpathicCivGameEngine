@@ -39,7 +39,7 @@ ECGame.EngineLib.Game2DMap = ECGame.EngineLib.Class.create(
 			this._tileSize = inTileSize;
 			this._mapSize = this._mapSizeInTiles * this._tileSize;
 			
-			this._mapAABB = new ECGame.EngineLib.Game2DAABB(0, 0, this._mapSize, this._mapSize);
+			this._mapAABB = new ECGame.EngineLib.AABB2(0, 0, this._mapSize, this._mapSize);
 			
 			this._tileMapTree = new ECGame.EngineLib.GameQuadTree();
 			this._tileMapTree.init(this._mapAABB, this._tileSize);
@@ -80,7 +80,7 @@ ECGame.EngineLib.Game2DMap = ECGame.EngineLib.Class.create(
 				return;
 			}
 			
-			tileAABB = new ECGame.EngineLib.Game2DAABB(
+			tileAABB = new ECGame.EngineLib.AABB2(
 				inTilePosition.myX * this._tileSize,
 				inTilePosition.myY * this._tileSize,
 				this._tileSize,
@@ -174,7 +174,7 @@ ECGame.EngineLib.Game2DMap = ECGame.EngineLib.Class.create(
 			}
 			
 			this.clearTilesInRect(
-				new ECGame.EngineLib.Game2DAABB(
+				new ECGame.EngineLib.AABB2(
 					inTilePosition.myX * this._tileSize,
 					inTilePosition.myY * this._tileSize,
 					this._tileSize,
@@ -226,7 +226,7 @@ ECGame.EngineLib.Game2DMap = ECGame.EngineLib.Class.create(
 					_this_._myTileSet.renderTileInRect(
 						inCanvas2DContext,
 						item.tileValue,
-						ECGame.EngineLib.Game2DAABB.create(
+						ECGame.EngineLib.AABB2.create(
 							itemRect.myX - inCameraRect.myX,
 							itemRect.myY - inCameraRect.myY,
 							_this_._tileSize,

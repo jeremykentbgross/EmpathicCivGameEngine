@@ -45,7 +45,7 @@ ECGame.EngineLib.GameQuadTree.create = function create()
 //TODO rename gameRect treeItemBoundRect or something like that
 ECGame.EngineLib.GameQuadTree.prototype.init = function init(inGame2DAABB, inMinSize)
 {
-	this._AABB = inGame2DAABB || ECGame.EngineLib.Game2DAABB.create(0,0,1,1);//todo make sure it is pow2, but for now we trust input
+	this._AABB = inGame2DAABB || ECGame.EngineLib.AABB2.create(0,0,1,1);//todo make sure it is pow2, but for now we trust input
 	this._myChildren = null;
 	this._myMinSize = inMinSize || 1;
 	this._myItems = [];
@@ -74,25 +74,25 @@ ECGame.EngineLib.GameQuadTree.prototype._createChildren = function _createChildr
 				ECGame.EngineLib.GameQuadTree.create()
 			];
 			this._myChildren[0].init(
-				ECGame.EngineLib.Game2DAABB.create(
+				ECGame.EngineLib.AABB2.create(
 					this._AABB.myX, this._AABB.myY, halfWidth, halfHeight
 				),
 				this._myMinSize
 			);
 			this._myChildren[1].init(
-				ECGame.EngineLib.Game2DAABB.create(
+				ECGame.EngineLib.AABB2.create(
 					this._AABB.myX + halfWidth, this._AABB.myY, halfWidth, halfHeight
 				),
 				this._myMinSize
 			);
 			this._myChildren[2].init(
-				ECGame.EngineLib.Game2DAABB.create(
+				ECGame.EngineLib.AABB2.create(
 					this._AABB.myX, this._AABB.myY + halfHeight, halfWidth, halfHeight
 				),
 				this._myMinSize
 			);
 			this._myChildren[3].init(
-				ECGame.EngineLib.Game2DAABB.create(
+				ECGame.EngineLib.AABB2.create(
 					this._AABB.myX + halfWidth, this._AABB.myY + halfHeight, halfWidth, halfHeight
 				),
 				this._myMinSize

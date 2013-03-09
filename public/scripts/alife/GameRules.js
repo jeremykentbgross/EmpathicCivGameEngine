@@ -293,7 +293,7 @@ ECGame.Lib.createGameRules = function(instance, PRIVATE)
 	{
 		PRIVATE.kmean.render(
 			inCanvas2DContext
-			,ECGame.EngineLib.Game2DAABB.create(
+			,ECGame.EngineLib.AABB2.create(
 				0,
 				0,
 				ECGame.instance.graphics.getWidth(),
