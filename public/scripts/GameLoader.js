@@ -155,7 +155,7 @@ GameLoader =
 			include(inSharedPath + "scripts/engine/GameAssetManager.js");
 		}
 		include(inSharedPath + "scripts/engine/GameNetwork.js");//TODO if multiplayer?
-		include(inSharedPath + "scripts/engine/GameInput.js");
+		include(inSharedPath + "scripts/engine/Input.js");
 		
 		include(inSharedPath + "scripts/engine/Game2DCamera.js");
 		
