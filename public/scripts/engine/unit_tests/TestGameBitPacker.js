@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 ECGame.unitTests.registerTest(
-	'GameBitPacker',
+	"GameBitPacker",
 	function()
 	{
 		var packer;
@@ -41,7 +41,7 @@ ECGame.unitTests.registerTest(
 		bits[11] = 32;
 		values[11] = 0;
 		
-		packer = ECGame.EngineLib.createGameBitPacker();
+		packer = ECGame.EngineLib.BitPacker.create();
 		for(i = 0; i < numValues; ++i)
 		{
 			packer.pack(values[i], bits[i]);
@@ -49,7 +49,7 @@ ECGame.unitTests.registerTest(
 		string = packer.getString();
 		//console.log(string);
 		
-		packer = ECGame.EngineLib.createGameBitPacker();
+		packer = ECGame.EngineLib.BitPacker.create();
 		packer.setString(string);
 		for(i = 0; i < numValues; ++i)
 		{

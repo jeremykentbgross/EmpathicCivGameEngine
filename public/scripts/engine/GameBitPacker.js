@@ -19,6 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+
 //TODO:
 /*
 Need to have 2 Optionals on flag or something:
@@ -26,163 +27,191 @@ Need to have 2 Optionals on flag or something:
 2) 16 bits in Typed Array with Binary net serialization (BEST OPTION) (No binary net sockets yet)
 */
 
-ECGame.EngineLib.createGameBitPacker = function()
+ECGame.EngineLib.BitPacker = function BitPacker()
 {
-	var outPacker = {};
-	var PRIVATE =
-	{
-		data : [0],
-		bits : 0,
-		power : 1,
-		index : 0
-	};
+	this._data = [0];
+	this._bits = 0;
+	this._power = 1;
+	this._index = 0;
+	this._statics = ECGame.EngineLib.BitPacker;
+};
+ECGame.EngineLib.BitPacker.prototype.constructor = ECGame.EngineLib.BitPacker;
+
+
+
+//STATICS:
+ECGame.EngineLib.BitPacker.initStatics = function initStatics()
+{
+	var i;
 	
 	//constants
-	PRIVATE.BITCAP = 32;
-	PRIVATE.MAXBITS = 6;//16;	//max bits per storage element
-	PRIVATE.MAXPOW = Math.pow(2, PRIVATE.MAXBITS);
-	PRIVATE.POWERS = [];
+	this._BITCAP = 32;
+	this._MAXBITS = 6;//16;	//max bits per storage element
+	this._MAXPOW = Math.pow(2, this._MAXBITS);
+	this._POWERS = [];
+	
 	//make lookup to avoid calling Math.pow alot
-	var i;
-	for(i = 1; i <= PRIVATE.BITCAP; ++i)
+	for(i = 1; i <= this._BITCAP; ++i)
 	{
-		PRIVATE.POWERS[i] = Math.pow(2, i);
+		this._POWERS[i] = Math.pow(2, i);
 	}
+};
+ECGame.EngineLib.BitPacker.initStatics();
+
+
+
+ECGame.EngineLib.BitPacker.create = function create()
+{
+	return new ECGame.EngineLib.BitPacker();
+};
+
+
+
+ECGame.EngineLib.BitPacker.prototype.pack = function pack(inValue, inBits)
+{
+	var aPower,
+		aLength;
+
+	aLength = this._data.length;
 	
 	if(ECGame.Settings.DEBUG)
 	{
-		ECGame.EngineLib.addDebugInfo('bitPacker', outPacker, PRIVATE);
+		//TODO print warnings if out of bounds
+		inBits = Math.floor(inBits);
+		inBits = Math.max(inBits, 1);
+		inBits = Math.min(inBits, this._statics._BITCAP);
 	}
 	
-	outPacker.pack = function(value, bits)
+	//aPower = Math.pow(2, inBits);
+	aPower = this._statics._POWERS[inBits];
+	
+	if(ECGame.Settings.DEBUG)
 	{
-		var power;
-		var length = PRIVATE.data.length;
-		
-		if(ECGame.Settings.DEBUG)
-		{
-			//TODO print warnings if out of bounds
-			bits = Math.floor(bits);
-			bits = Math.max(bits, 1);
-			bits = Math.min(bits, PRIVATE.BITCAP);
-		}
-		
-		//power = Math.pow(2, bits);
-		power = PRIVATE.POWERS[bits];
-		
-		if(ECGame.Settings.DEBUG)
-		{
-			//TODO print warnings if out of bounds
-			value = Math.floor(value);
-			value = Math.min(value, power - 1);
-			value = Math.max(value, 0);
-		}
-				
-		PRIVATE.data[length - 1] += value * PRIVATE.power;
-		PRIVATE.power *= power;
-		PRIVATE.bits += bits;
-		
-		while(PRIVATE.bits >= PRIVATE.MAXBITS)
-		{
-			PRIVATE.bits -= PRIVATE.MAXBITS;
-			PRIVATE.power = Math.pow(2, PRIVATE.bits);
+		//TODO print warnings if out of bounds
+		inValue = Math.floor(inValue);
+		inValue = Math.min(inValue, aPower - 1);
+		inValue = Math.max(inValue, 0);
+	}
 			
-			PRIVATE.data[length] = Math.floor(PRIVATE.data[length - 1] / PRIVATE.MAXPOW);
-			PRIVATE.data[length - 1] -= PRIVATE.data[length] * PRIVATE.MAXPOW;
-						
-			length = PRIVATE.data.length;
-		}
-		
-		PRIVATE.index = length;
-	};
+	this._data[aLength - 1] += inValue * this._power;
+	this._power *= aPower;
+	this._bits += inBits;
 	
-	outPacker.setString = function(inString)
+	while(this._bits >= this._statics._MAXBITS)
 	{
-		var length = inString.length;
-		var i;
+		this._bits -= this._statics._MAXBITS;
+		this._power = Math.pow(2, this._bits);
 		
-		PRIVATE.data = [];
-		
-		for(i = 0; i < length; ++i)
-		{
-			PRIVATE.data[i] = inString.charCodeAt(i) - 32;/////HACK with 6 bits
-		}
-		
-		PRIVATE.bits = 0;
-		PRIVATE.power = 1;
-		PRIVATE.index = 0;
-	};
+		this._data[aLength] = Math.floor(this._data[aLength - 1] / this._statics._MAXPOW);
+		this._data[aLength - 1] -= this._data[aLength] * this._statics._MAXPOW;
+					
+		aLength = this._data.length;
+	}
 	
-	outPacker.getString = function()
-	{
-		var length;
-		var outString;
-		var i;
-		
-		length = PRIVATE.data.length;
-		outString = '';
-		
-		for(i = 0; i < length; ++i)
-		{
-			outString = outString + String.fromCharCode(PRIVATE.data[i] + 32);/////HACK with 6 bits
-		}
-		
-		return outString;
-	};
-	
-	outPacker.unpack = function(bits)
-	{
-		var outValue = 0;
-		var extraBits = 0;
-		
-		var power;
-		
-		if(ECGame.Settings.DEBUG)
-		{
-			bits = Math.floor(bits);
-			bits = Math.max(bits, 1);
-			bits = Math.min(bits, PRIVATE.BITCAP);
-		}
-		
-		//power = Math.pow(2, bits);
-		power = PRIVATE.POWERS[bits];
-		
-		outValue = PRIVATE.data[PRIVATE.index] / PRIVATE.power || 0;
-		PRIVATE.power *= power;
-		PRIVATE.bits += bits;
-		
-		outValue = Math.floor(outValue);
-		outValue %= power;		
-		
-		while(PRIVATE.bits >= PRIVATE.MAXBITS)
-		{
-			++PRIVATE.index;
-			PRIVATE.bits -= PRIVATE.MAXBITS;
-			PRIVATE.power = Math.pow(2, PRIVATE.bits);
-			
-			extraBits = PRIVATE.data[PRIVATE.index] || 0;
-			extraBits %= PRIVATE.power;
-			extraBits *= power / PRIVATE.power;
-			
-			outValue += extraBits;
-		}
-		
-		return outValue;
-	};
-	
-	//note does not currently print leading 0's
-	//note should probably print in reverse order?
-	outPacker.debugPrint = function()
-	{
-		var output = '';
-		var i;
-		
-		for(i = PRIVATE.data.length - 1; i >= 0 ; --i)
-		{
-			output += PRIVATE.data[i].toString(2) + ' ';
-		}
-		console.log("Bit packer: " + output);
-	};
-	
-	return outPacker;
+	this._index = aLength;
 };
+
+
+
+ECGame.EngineLib.BitPacker.prototype.setString = function setString(inString)
+{
+	var aLength,
+		i;
+	
+	aLength = inString.length;
+	
+	this._data = [];
+	
+	for(i = 0; i < aLength; ++i)
+	{
+		this._data[i] = inString.charCodeAt(i) - 32;/////HACK with 6 bits
+	}
+	
+	this._bits = 0;
+	this._power = 1;
+	this._index = 0;
+};
+
+
+
+ECGame.EngineLib.BitPacker.prototype.getString = function getString()
+{
+	var aLength,
+		outString,
+		i;
+	
+	aLength = this._data.length;
+	outString = '';
+	
+	for(i = 0; i < aLength; ++i)
+	{
+		outString = outString + String.fromCharCode(this._data[i] + 32);/////HACK with 6 bits
+	}
+	
+	return outString;
+};
+
+
+
+ECGame.EngineLib.BitPacker.prototype.unpack = function unpack(inBits)
+{
+	var outValue,
+		aExtraBits,
+		aPower;
+	
+	outValue = 0;
+	aExtraBits = 0;
+	
+	if(ECGame.Settings.DEBUG)
+	{
+		//TODO print warnings if out of bounds
+		inBits = Math.floor(inBits);
+		inBits = Math.max(inBits, 1);
+		inBits = Math.min(inBits, this._statics._BITCAP);
+	}
+	
+	//aPower = Math.pow(2, inBits);
+	aPower = this._statics._POWERS[inBits];
+	
+	outValue = this._data[this._index] / this._power || 0;
+	this._power *= aPower;
+	this._bits += inBits;
+	
+	outValue = Math.floor(outValue);
+	outValue %= aPower;		
+	
+	while(this._bits >= this._statics._MAXBITS)
+	{
+		++this._index;
+		this._bits -= this._statics._MAXBITS;
+		this._power = Math.pow(2, this._bits);
+		
+		aExtraBits = this._data[this._index] || 0;
+		aExtraBits %= this._power;
+		aExtraBits *= aPower / this._power;
+		
+		outValue += aExtraBits;
+	}
+	
+	return outValue;
+};
+
+
+
+//TODO note does not currently print leading 0's
+//TODO note should probably print in reverse order? (doesn't it??)
+ECGame.EngineLib.BitPacker.prototype.debugPrint = function debugPrint()
+{
+	var output,
+		i;
+	
+	output = '';
+	
+	for(i = this._data.length - 1; i >= 0 ; --i)
+	{
+		output += this._data[i].toString(2) + ' ';
+	}
+	console.log("Bit packer: " + output);
+};
+
+

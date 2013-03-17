@@ -25,7 +25,7 @@
 //	http://www.colloquial.com/ArithmeticCoding/
 ECGame.EngineLib.ArithmeticCompresser = function ArithmeticCompresser()
 {
-	this._bitPacker = ECGame.EngineLib.createGameBitPacker();
+	this._bitPacker = ECGame.EngineLib.BitPacker.create();
 	
 	this._BITS = 32;//16;
 	this._ONE = Math.pow(2, this._BITS);				//(2^16bits) - 1 == 65535 == 0xffff:
