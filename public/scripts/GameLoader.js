@@ -122,7 +122,7 @@ GameLoader =
 		include(inSharedPath + "scripts/engine/Camera2.js");
 		include(inSharedPath + "scripts/engine/GameObject.js");
 		include(inSharedPath + "scripts/engine/GameObjectRef.js");
-		include(inSharedPath + "scripts/engine/GameBitPacker.js");//TODO if multiplayer?
+		include(inSharedPath + "scripts/engine/BitPacker.js");//TODO if multiplayer?
 		//include(inSharedPath + "scripts/engine/MultPacker.js");//TODO
 		include(inSharedPath + "scripts/engine/ArithmeticCompression.js");//TODO if multiplayer?
 		include(inSharedPath + "scripts/engine/ArithmeticCompressionModels.js");//TODO if multiplayer?
