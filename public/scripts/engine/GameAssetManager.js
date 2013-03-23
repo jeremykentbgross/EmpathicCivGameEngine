@@ -19,141 +19,144 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-ECGame.EngineLib.createGameAssetManager = function(instance, PRIVATE)
-{
-	instance = instance || {};
-	PRIVATE = PRIVATE || {};
-	
-	PRIVATE.images = {};
-	PRIVATE.sounds = {};
-	
-	//TODO make pink say: "loading/missing asset"
-	
-	instance.loadImage = function(inFileName, outLoadTarget)
+ECGame.EngineLib.AssetManager = ECGame.EngineLib.Class.create({
+	Constructor : function AssetManager()
 	{
-		var defaultImageName = 'defaultImage';
-		var imageInfo;
-		var i;
-		
-		imageInfo = PRIVATE.images[inFileName];
-		
-		if(imageInfo !== undefined)
+		this._images = {};
+		this._sounds = {};
+	},
+	Parents : [],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition :
+	{
+		loadImage : function loadImage(inFileName, outLoadTarget)
 		{
-			if(imageInfo.isLoaded)
+			var defaultImageName,
+				imageInfo,
+				i;
+			
+			defaultImageName = 'defaultImage';
+			
+			imageInfo = this._images[inFileName];
+			
+			if(imageInfo !== undefined)
 			{
-				outLoadTarget.image = imageInfo.image;
+				if(imageInfo.isLoaded)
+				{
+					outLoadTarget.image = imageInfo.image;
+				}
+				else
+				{
+					//queue it to get set when it loads
+					imageInfo.listeners.push(outLoadTarget);
+					
+					//set the default image
+					outLoadTarget.image = document.images[defaultImageName];//TODO query this with dojo
+				}
 			}
 			else
 			{
-				//queue it to get set when it loads
-				imageInfo.listeners.push(outLoadTarget);
+				imageInfo = {};
+				imageInfo.isLoaded = false;
+				imageInfo.listeners = [];
+				
+				imageInfo.listeners[0] = outLoadTarget;
+				
+				imageInfo.image = new Image();
+				imageInfo.image.src = inFileName;
+				imageInfo.image.onload = function()
+				{
+					imageInfo.isLoaded = true;
+					
+					//set targets to have the loaded image
+					for(i = 0; i < imageInfo.listeners.length; ++i)
+					{
+						imageInfo.listeners[i].image = imageInfo.image;
+					}
+					delete imageInfo.listeners;
+				};
+				//TODO onFailedLoad? set placeholder, else have a grey or clear image for streaming
+							
+				this._images[inFileName] = imageInfo;
 				
 				//set the default image
 				outLoadTarget.image = document.images[defaultImageName];//TODO query this with dojo
 			}
-		}
-		else
-		{
-			imageInfo = {};
-			imageInfo.isLoaded = false;
-			imageInfo.listeners = [];
+		},
+		
+		loadSound : function loadSound(inFileName, outLoadTarget)
+		{		
+			var defaultSoundName = 'defaultsound',
+				soundInfo,
+				request,
+				i;
 			
-			imageInfo.listeners[0] = outLoadTarget;
+			soundInfo = this._sounds[inFileName];
 			
-			imageInfo.image = new Image();
-			imageInfo.image.src = inFileName;
-			imageInfo.image.onload = function()
+			if(soundInfo !== undefined)
 			{
-				imageInfo.isLoaded = true;
-				
-				//set targets to have the loaded image
-				for(i = 0; i < imageInfo.listeners.length; ++i)
+				if(soundInfo.isLoaded)
 				{
-					imageInfo.listeners[i].image = imageInfo.image;
+					outLoadTarget.sound = soundInfo.sound;
 				}
-				delete imageInfo.listeners;
-			};
-			//TODO onFailedLoad? set placeholder, else have a grey or clear image for streaming
-						
-			PRIVATE.images[inFileName] = imageInfo;
-			
-			//set the default image
-			outLoadTarget.image = document.images[defaultImageName];//TODO query this with dojo
-		}
-	};
-	
-	instance.loadSound = function(inFileName, outLoadTarget)
-	{		
-		var defaultSoundName = 'defaultsound',
-			soundInfo,
-			request,
-			i;
-		
-		soundInfo = PRIVATE.sounds[inFileName];
-		
-		if(soundInfo !== undefined)
-		{
-			if(soundInfo.isLoaded)
-			{
-				outLoadTarget.sound = soundInfo.sound;
+				else
+				{
+					//queue it to get set when it loads
+					soundInfo.listeners.push(outLoadTarget);
+					
+					//set the default sound
+					outLoadTarget.sound = document.sounds[defaultSoundName];//TODO query this with dojo
+				}
 			}
 			else
 			{
-				//queue it to get set when it loads
-				soundInfo.listeners.push(outLoadTarget);
+				soundInfo = {};
+				soundInfo.isLoaded = false;
+				soundInfo.listeners = [];
+				
+				soundInfo.listeners[0] = outLoadTarget;
+				
+				soundInfo.sound = null;
+				//soundInfo.sound.src = inFileName;
+				
+				request = new XMLHttpRequest();
+				request.open('GET', inFileName, true);
+				request.responseType = 'arraybuffer';
+				
+				//Decode asynchronously
+				request.onload = function()
+				{
+					ECGame.instance.soundSystem._context.decodeAudioData(
+						request.response,
+						function(buffer)
+						{
+							soundInfo.sound = buffer;
+							soundInfo.isLoaded = true;
+							
+							//set targets to have the loaded sound
+							for(i = 0; i < soundInfo.listeners.length; ++i)
+							{
+								soundInfo.listeners[i].sound = soundInfo.sound;
+							}
+							delete soundInfo.listeners;
+						},
+						function onError(inWhatParam)//??
+						{
+							ECGame.log.error("Failed to load " + inFileName);
+						}
+					);
+					//TODO onFailedLoad? set placeholder, else have a grey or clear sound for streaming
+				};
+				request.send();
+							
+				this._sounds[inFileName] = soundInfo;
 				
 				//set the default sound
-				outLoadTarget.sound = document.sounds[defaultSoundName];//TODO query this with dojo
+				//outLoadTarget.sound = document.sounds[defaultSoundName];//TODO query this with dojo
+				//TODO PUT THIS BACK^^^^^^^^^^^^^^^^^^^^^^^^^!!!
 			}
 		}
-		else
-		{
-			soundInfo = {};
-			soundInfo.isLoaded = false;
-			soundInfo.listeners = [];
-			
-			soundInfo.listeners[0] = outLoadTarget;
-			
-			soundInfo.sound = null;
-			//soundInfo.sound.src = inFileName;
-			
-			request = new XMLHttpRequest();
-			request.open('GET', inFileName, true);
-			request.responseType = 'arraybuffer';
-			
-			//Decode asynchronously
-			request.onload = function()
-			{
-				ECGame.instance.soundSystem._context.decodeAudioData(
-					request.response,
-					function(buffer)
-					{
-						soundInfo.sound = buffer;
-						soundInfo.isLoaded = true;
-						
-						//set targets to have the loaded sound
-						for(i = 0; i < soundInfo.listeners.length; ++i)
-						{
-							soundInfo.listeners[i].sound = soundInfo.sound;
-						}
-						delete soundInfo.listeners;
-					},
-					function onError(inWhatParam)//??
-					{
-						ECGame.log.error("Failed to load " + inFileName);
-					}
-				);
-				//TODO onFailedLoad? set placeholder, else have a grey or clear sound for streaming
-			};
-			request.send();
-						
-			PRIVATE.sounds[inFileName] = soundInfo;
-			
-			//set the default sound
-			//outLoadTarget.sound = document.sounds[defaultSoundName];//TODO query this with dojo
-			//TODO PUT THIS BACK^^^^^^^^^^^^^^^^^^^^^^^^^!!!
-		}
-	};
-	
-	return instance;
-};
+	}
+});
