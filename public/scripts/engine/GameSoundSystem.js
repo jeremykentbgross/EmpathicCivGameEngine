@@ -31,6 +31,23 @@ http://html5doctor.com/native-audio-in-the-browser/
 https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html
 */
 
+/*
+SoundAssetDescription
+	sound buffer
+	filename
+	
+SoundSampleDescription
+	SoundAssetDescription
+	Probability
+	PitchShift	[optional]
+	Volume		[optional]
+	repeat	(-1, or number)	[optional]
+	repeatSpace	//name??
+	
+SoundDescription
+	SoundSampleDescription[]
+*/
+
 
 
 ECGame.EngineLib.SoundDescription = function SoundDescription(inID, inFileName)
@@ -74,15 +91,19 @@ ECGame.EngineLib.GameSoundSystem = ECGame.EngineLib.Class.create({
 			//HACK!!//////////////////////////////////////////////////
 			this.loadSounds(
 				[
-					new ECGame.EngineLib.SoundDescription(0, 'sounds/placeholder.mp3')
+					new ECGame.EngineLib.SoundDescription(0, /*'sounds/placeholder.mp3'*/'sounds/Step1_Gravel.wav')
 				]
 			);
 			//HACK!!//////////////////////////////////////////////////
 			//////////////////////////////////////////////////////////
 			
+			//Setup dynamic compressor (smart sound) to prevent clipping and overly silent sounds.
+			this._dynamicCompressor = this._context.createDynamicsCompressor();
+			this._dynamicCompressor.connect(this._context.destination);
+			
 			//setup master volume
 			this._masterVolume = this._context.createGainNode();
-			this._masterVolume.connect(this._context.destination);
+			this._masterVolume.connect(this._dynamicCompressor);
 			this._masterVolumeUserValue = 0;
 			this.setMasterVolume(ECGame.Settings.Sound.masterVolume);
 			
@@ -96,9 +117,10 @@ ECGame.EngineLib.GameSoundSystem = ECGame.EngineLib.Class.create({
 						
 			//TODO setup music volume (including cross fading tracks)
 			
-			//TODO compressor node(s) (looks like after mastergain??=>http://www.html5rocks.com/en/tutorials/webaudio/games/)
 			//TODO Convolver node(s) for environment(s)
 			//TODO detect/prevent clipping
+			
+			//TODO do I ever need to disconnect soud api nodes?
 		}
 		catch(error)
 		{
@@ -164,6 +186,9 @@ ECGame.EngineLib.GameSoundSystem = ECGame.EngineLib.Class.create({
 			//remove finished sounds from this._playingSounds
 			for(i = 0; i < finishedSounds.length; ++i)
 			{
+				//Note: It may be needed to tell the sound objects audio api node to disconnect,
+				//	but from what I get from the documentation they should disconnect automatically
+				//	https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html
 				finishedSounds[i].remove();
 			}
 			
@@ -214,7 +239,10 @@ ECGame.EngineLib.GameSoundSystem = ECGame.EngineLib.Class.create({
 			source.buffer = this._soundLib[inID].sound;
 			source.connect(this._effectsVolume);
 			//source.loop = true;//TODO param about looping (+loopStart, loopEnd)
-			//source.playbackRate = ??//TODO vary sound effect slightly
+			//HACKS:
+			source.gain.value = 1 + Math.random() * 0.6 - 0.3;
+			source.playbackRate.value = Math.pow(2, (Math.random()*4-2)/12);//??//TODO vary sound effect slightly
+			//:HACKS
 			
 			sound = new ECGame.EngineLib.Sound(
 				source,

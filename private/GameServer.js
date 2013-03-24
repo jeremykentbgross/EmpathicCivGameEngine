@@ -80,13 +80,13 @@ if(ECGame.Settings.Server.compressClientCode)
 		}
 	);
 	ECGame.Webserver.expressApp.get(
-		'/3rdParty/*.(js|css|html|png|jpg|mp3)'//TODO review file types
+		'/3rdParty/*.(js|css|html|png|jpg|mp3|wav)'//TODO review file types
 		,function(req, res){
 			res.sendfile( path.join(ECGame.Webserver.webHostRoot, req.url) );
 		}
 	);
 	ECGame.Webserver.expressApp.get(
-		'/*.(css|html|png|jpg|mp3)'//TODO review file types
+		'/*.(css|html|png|jpg|mp3|wav)'//TODO review file types
 		,function(req, res){
 			res.sendfile( path.join(ECGame.Webserver.webHostRoot, req.url) );
 		}
@@ -95,7 +95,7 @@ if(ECGame.Settings.Server.compressClientCode)
 else
 {
 	ECGame.Webserver.expressApp.get(
-		'/*.(js|css|html|png|jpg|mp3)'//TODO review file types
+		'/*.(js|css|html|png|jpg|mp3|wav)'//TODO review file types
 		,function(req, res){
 			res.sendfile( path.join(ECGame.Webserver.webHostRoot, req.url) );
 		}
