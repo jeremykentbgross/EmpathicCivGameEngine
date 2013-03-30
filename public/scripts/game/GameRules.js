@@ -172,6 +172,65 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			
 			
 			/////////////////////////////////////////////////////////
+			//create audio assets
+			if(!ECGame.Settings.Network.isServer)
+			{
+				ECGame.instance.soundSystem.loadSoundAssets(
+					[
+						new ECGame.EngineLib.SoundAsset(ECGame.instance.soundSystem.generateNextAssetID()
+							,'sounds/Step1_Gravel.wav')
+						,new ECGame.EngineLib.SoundAsset(ECGame.instance.soundSystem.generateNextAssetID()
+							,'sounds/Step2_Gravel.wav')
+						,new ECGame.EngineLib.SoundAsset(ECGame.instance.soundSystem.generateNextAssetID()
+							,'sounds/Step2b_Gravel.wav')
+					]
+				);
+				ECGame.instance.soundSystem.setSoundSamples(
+					[
+						new ECGame.EngineLib.SoundSample(
+							ECGame.instance.soundSystem.generateNextSampleID()	//inID
+							,1		//inAssetID
+							,0.4	//inProbability
+							,1		//inVolume			//base volume %
+							,0.3	//inVolumeVariation		//optional +/- random range (%)
+							,2		//inPitchShift	//optional +/- random range (in semitones)
+						)
+						,new ECGame.EngineLib.SoundSample(
+							ECGame.instance.soundSystem.generateNextSampleID()		//inID
+							,2		//inAssetID
+							,0.3	//inProbability
+							,1		//inVolume			//base volume %
+							,0.3	//inVolumeVariation		//optional +/- random range (%)
+							,2		//inPitchShift	//optional +/- random range (in semitones)
+						)
+						,new ECGame.EngineLib.SoundSample(
+							ECGame.instance.soundSystem.generateNextSampleID()		//inID
+							,3		//inAssetID
+							,0.3	//inProbability
+							,1		//inVolume			//base volume %
+							,0.3	//inVolumeVariation		//optional +/- random range (%)
+							,2		//inPitchShift	//optional +/- random range (in semitones)
+						)
+					]
+				);
+				ECGame.instance.soundSystem.setSoundDescriptions(
+					[
+						new ECGame.EngineLib.SoundDescription(
+							ECGame.instance.soundSystem.generateNextSoundDescriptionID()	//inID
+							,[0, 1, 2]	//inSoundSampleIDs
+					//		,inRepeat		//[0,?) || -1 for infinite
+					//		,inRepeatDelay	//time between repeats
+					//		,inRepeatDelayVariation
+						)
+					]
+				);
+			}
+			//create audio assets
+			/////////////////////////////////////////////////////////
+			
+			
+			
+			/////////////////////////////////////////////////////////
 			//create reference entity
 			
 			//////////////////////////////////
@@ -423,7 +482,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			}
 			if(inInputEvent.keysPressed['\x79'])//y
 			{
-				ECGame.Settings.Debug.Sound_Area_Draw = !ECGame.Settings.Debug.Sound_Area_Draw;
+				ECGame.Settings.Debug.Sound_Draw = !ECGame.Settings.Debug.Sound_Draw;
 			}
 			//TODO drawing debug sprite, debug audio
 			

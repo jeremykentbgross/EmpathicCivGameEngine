@@ -146,7 +146,7 @@ ECGame.Settings = //TODO rename as GameSystemSettings
 		
 		//Sound:
 		Sound_Print : true,
-		Sound_Area_Draw : false,
+		Sound_Draw : false,
 		Sound_Area_DrawColor : 'rgba(255, 128, 0, 1)',
 		Sound_Listener_Size : 20,//TODO this should be in the regular sound part!??
 		Sound_Source_Size : 10,

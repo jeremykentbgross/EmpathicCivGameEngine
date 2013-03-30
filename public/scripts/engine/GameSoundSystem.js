@@ -19,8 +19,6 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
-
 /*
 Some relevant web links:
 http://www.html5rocks.com/en/tutorials/webaudio/intro/
@@ -31,34 +29,9 @@ http://html5doctor.com/native-audio-in-the-browser/
 https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html
 */
 
-/*
-SoundAssetDescription
-	sound buffer
-	filename
-	
-SoundSampleDescription
-	SoundAssetDescription
-	Probability
-	PitchShift	[optional]
-	Volume		[optional]
-	repeat	(-1, or number)	[optional]
-	repeatSpace	//name??
-	
-SoundDescription
-	SoundSampleDescription[]
-*/
 
 
-
-ECGame.EngineLib.SoundDescription = function SoundDescription(inID, inFileName)
-{
-	this.id = inID;
-	this.fileName = inFileName;
-	//this.sound = null;	//TODO rename _soundBuffer
-	//TODO default sound specific volume??
-};
-
-//TODO soundListenerComponent, soundPlayerComponent
+//TODO soundListenerComponent (attached to camera?), soundPlayerComponent
 
 ECGame.EngineLib.GameSoundSystem = ECGame.EngineLib.Class.create({
 	Constructor : function GameSoundSystem()
@@ -68,9 +41,16 @@ ECGame.EngineLib.GameSoundSystem = ECGame.EngineLib.Class.create({
 			return;
 		}
 		
-		this._soundLib = [];
-		this._playingSounds = new ECGame.EngineLib.GameCircularDoublyLinkedListNode(null);
-		this._listenerPosition2D = new ECGame.EngineLib.Point2();
+		this._mySoundAssetLib = [];
+		this._mySoundSampleLib = [];
+		this._mySoundDescriptionLib = [];
+		
+		this._myNextAssetID = -1;
+		this._myNextSampleID = -1;
+		this._myNextSoundDescriptionID = -1;
+		
+		this._myPlayingSounds = new ECGame.EngineLib.GameCircularDoublyLinkedListNode(null);
+		this._myListenerPosition2D = new ECGame.EngineLib.Point2();
 		
 		try
 		{
@@ -79,38 +59,28 @@ ECGame.EngineLib.GameSoundSystem = ECGame.EngineLib.Class.create({
 				window.webkitAudioContext ||
 				null;
 			
-			this._context = new AudioContext();
+			this._myContext = new AudioContext();
 			
-			this._soundHardwareUpdateTime = this.getSoundHardwareTime();
-			this._lastSoundHardwareUpdateTime = this.getSoundHardwareTime();
+			this._mySoundHardwareUpdateTime = this.getSoundHardwareTime();
+			this._myLastSoundHardwareUpdateTime = this.getSoundHardwareTime();
 			
-			this._context.listener.dopplerFactor = ECGame.Settings.Sound.dopplerFactor;
-			this._context.listener.speedOfSound = ECGame.Settings.Sound.speedOfSound;
-			
-			//////////////////////////////////////////////////////////
-			//HACK!!//////////////////////////////////////////////////
-			this.loadSounds(
-				[
-					new ECGame.EngineLib.SoundDescription(0, /*'sounds/placeholder.mp3'*/'sounds/Step1_Gravel.wav')
-				]
-			);
-			//HACK!!//////////////////////////////////////////////////
-			//////////////////////////////////////////////////////////
+			this._myContext.listener.dopplerFactor = ECGame.Settings.Sound.dopplerFactor;
+			this._myContext.listener.speedOfSound = ECGame.Settings.Sound.speedOfSound;
 			
 			//Setup dynamic compressor (smart sound) to prevent clipping and overly silent sounds.
-			this._dynamicCompressor = this._context.createDynamicsCompressor();
-			this._dynamicCompressor.connect(this._context.destination);
+			this._myDynamicCompressor = this._myContext.createDynamicsCompressor();
+			this._myDynamicCompressor.connect(this._myContext.destination);
 			
 			//setup master volume
-			this._masterVolume = this._context.createGainNode();
-			this._masterVolume.connect(this._dynamicCompressor);
-			this._masterVolumeUserValue = 0;
+			this._myMasterVolume = this._myContext.createGainNode();
+			this._myMasterVolume.connect(this._myDynamicCompressor);
+			this._myMasterVolumeUserValue = 0;
 			this.setMasterVolume(ECGame.Settings.Sound.masterVolume);
 			
 			//setup effects volume
-			this._effectsVolume = this._context.createGainNode();
-			this._effectsVolume.connect(this._masterVolume);
-			this._effectsVolumeUserValue = 0;
+			this._myEffectsVolume = this._myContext.createGainNode();
+			this._myEffectsVolume.connect(this._myMasterVolume);
+			this._myEffectsVolumeUserValue = 0;
 			this.setEffectsVolume(ECGame.Settings.Sound.effectsVolume);
 			
 			//TODO setup UI effects volume
@@ -118,9 +88,15 @@ ECGame.EngineLib.GameSoundSystem = ECGame.EngineLib.Class.create({
 			//TODO setup music volume (including cross fading tracks)
 			
 			//TODO Convolver node(s) for environment(s)
-			//TODO detect/prevent clipping
 			
 			//TODO do I ever need to disconnect soud api nodes?
+			
+			this.loadSoundAssets(
+				[
+					new ECGame.EngineLib.SoundAsset(this.generateNextAssetID()
+						,'sounds/placeholder.mp3')
+				]
+			);
 		}
 		catch(error)
 		{
@@ -134,31 +110,66 @@ ECGame.EngineLib.GameSoundSystem = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
-		loadSounds : function loadSounds(inSoundDescriptions)
+		generateNextAssetID : function generateNextAssetID()
 		{
-			var i, soundDesc;
+			return ++this._myNextAssetID;
+		},
+		generateNextSampleID : function generateNextSampleID()
+		{
+			return ++this._myNextSampleID;
+		},
+		generateNextSoundDescriptionID : function generateNextSoundDescriptionID()
+		{
+			return ++this._myNextSoundDescriptionID;
+		},
+		
+		loadSoundAssets : function loadSoundAssets(inSoundAssets)
+		{
+			var i, aSoundAsset;
 			
 			if(ECGame.Settings.Network.isServer)
 			{
 				return;
 			}
 			
-			for(i = 0; i < inSoundDescriptions.length; ++i)
+			for(i = 0; i < inSoundAssets.length; ++i)
 			{
-				soundDesc = inSoundDescriptions[i];
-				this._soundLib[soundDesc.id] = soundDesc;
-				ECGame.instance.assetManager.loadSound(soundDesc.fileName, soundDesc);
+				aSoundAsset = inSoundAssets[i];
+				this._mySoundAssetLib[aSoundAsset._myID] = aSoundAsset;
+				ECGame.instance.assetManager.loadSound(aSoundAsset._myFileName, aSoundAsset);
 			}
-			/*
-			TODO default sound in assentmanager:
-			var audioElement = document.querySelector('audio');
-			var mediaSourceNode = context.createMediaElementSource(audioElement);
-			// Create the filter
-			var filter = context.createBiquadFilter();
-			// Create the audio graph.
-			mediaSourceNode.connect(filter);
-			filter.connect(context.destination);
-			*/
+		},
+		
+		setSoundSamples : function setSoundSamples(inSamples)
+		{
+			var i, aSoundSample;
+			
+			if(ECGame.Settings.Network.isServer)
+			{
+				return;
+			}
+			
+			for(i = 0; i < inSamples.length; ++i)
+			{
+				aSoundSample = inSamples[i];
+				this._mySoundSampleLib[aSoundSample._myID] = aSoundSample;
+			}
+		},
+		
+		setSoundDescriptions : function setSoundDescriptions(inDescriptions)
+		{
+			var i, aSoundDescription;
+			
+			if(ECGame.Settings.Network.isServer)
+			{
+				return;
+			}
+			
+			for(i = 0; i < inDescriptions.length; ++i)
+			{
+				aSoundDescription = inDescriptions[i];
+				this._mySoundDescriptionLib[aSoundDescription._myID] = aSoundDescription;
+			}
 		},
 		
 		isUpdating : function isUpdating()
@@ -167,9 +178,9 @@ ECGame.EngineLib.GameSoundSystem = ECGame.EngineLib.Class.create({
 		},
 		update : function update(/*??params??*/)
 		{
-			var finishedSounds = [], i;
+			var aFinishedSounds = [], i;
 			
-			this._playingSounds.forAll(
+			this._myPlayingSounds.forAll(
 				function(inItem, inNode)
 				{
 					//head node has no sound
@@ -177,87 +188,72 @@ ECGame.EngineLib.GameSoundSystem = ECGame.EngineLib.Class.create({
 					{
 						if(inItem.isFinished())
 						{
-							finishedSounds.push(inNode);
+							aFinishedSounds.push(inNode);
 						}
 					}
 				}
 			);
 			
-			//remove finished sounds from this._playingSounds
-			for(i = 0; i < finishedSounds.length; ++i)
+			//remove finished sounds from this._myPlayingSounds
+			for(i = 0; i < aFinishedSounds.length; ++i)
 			{
 				//Note: It may be needed to tell the sound objects audio api node to disconnect,
 				//	but from what I get from the documentation they should disconnect automatically
 				//	https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html
-				finishedSounds[i].remove();
+				aFinishedSounds[i].remove();
 			}
 			
 			//TODO detect out of focus to pause/silence sounds
 			//http://www.w3.org/TR/2011/WD-page-visibility-20110602/
 			
-			this._lastSoundHardwareUpdateTime = this._soundHardwareUpdateTime;
-			this._soundHardwareUpdateTime = this.getSoundHardwareTime();
+			this._myLastSoundHardwareUpdateTime = this._mySoundHardwareUpdateTime;
+			this._mySoundHardwareUpdateTime = this.getSoundHardwareTime();
 		},
 		
 		
 		getSoundHardwareTime : function getSoundHardwareTime()
 		{
-			return this._context.currentTime;
+			return this._myContext.currentTime;
 		},
 		getSoundHardwareTimeUpdateDelta : function getSoundHardwareTimeUpdateDelta()
 		{
-			return this._soundHardwareUpdateTime - this._lastSoundHardwareUpdateTime;
+			return this._mySoundHardwareUpdateTime - this._myLastSoundHardwareUpdateTime;
 		},
 		
 		
 		setMasterVolume : function setMasterVolume(inValue)
 		{
-			this._masterVolumeUserValue = Math.min(inValue, 1);	//TODO clamp(0,1)??
-			this._masterVolume.gain.value = this._masterVolumeUserValue * this._masterVolumeUserValue;
+			this._myMasterVolumeUserValue = Math.max(Math.min(inValue, 1), 0);
+			this._myMasterVolume.gain.value = this._myMasterVolumeUserValue * this._myMasterVolumeUserValue;
 		},
 		getMasterVolume : function getMasterVolume()
 		{
-			return this._masterVolumeUserValue;
+			return this._myMasterVolumeUserValue;
 		},
 		
 		setEffectsVolume : function setEffectsVolume(inValue)
 		{
-			this._effectsVolumeUserValue = Math.min(inValue, 1);	//TODO clamp(0,1)??
-			this._effectsVolume.gain.value = this._effectsVolumeUserValue * this._effectsVolumeUserValue;
+			this._myEffectsVolumeUserValue = Math.max(Math.min(inValue, 1), 0);
+			this._myEffectsVolume.gain.value = this._myEffectsVolumeUserValue * this._myEffectsVolumeUserValue;
 		},
 		getEffectsVolume : function getEffectsVolume()
 		{
-			return this._effectsVolumeUserValue;
+			return this._myEffectsVolumeUserValue;
 		},
 		
 		
 		playSoundEffect: function playSoundEffect(inID)
 		{
-			var sound, source;
+			var aSoundDescription,
+				aSound;
 			
-			source = this._context.createBufferSource();
-			source.buffer = this._soundLib[inID].sound;
-			source.connect(this._effectsVolume);
-			//source.loop = true;//TODO param about looping (+loopStart, loopEnd)
-			//HACKS:
-			source.gain.value = 1 + Math.random() * 0.6 - 0.3;
-			source.playbackRate.value = Math.pow(2, (Math.random()*4-2)/12);//??//TODO vary sound effect slightly
-			//:HACKS
+			aSoundDescription = this._mySoundDescriptionLib[inID];
 			
-			sound = new ECGame.EngineLib.Sound(
-				source,
-				this._context.currentTime,
-				this._soundLib[inID].fileName
-			);
-			
-			sound.play(0);//TODO this would be delay parameter
-			this._playingSounds.insert(new ECGame.EngineLib.GameCircularDoublyLinkedListNode(sound));
-			if(ECGame.Settings.Debug.Sound_Print)
-			{
-				ECGame.log.info("Played sound " + this._soundLib[inID].fileName);
-			}
-			
-			return sound;
+			aSound = new ECGame.EngineLib.Sound(aSoundDescription, this._myEffectsVolume);
+			aSound.play();
+			this._myPlayingSounds.insert(new ECGame.EngineLib.GameCircularDoublyLinkedListNode(aSound));
+
+			return aSound;
 		},
 		
 		
@@ -276,51 +272,26 @@ ECGame.EngineLib.GameSoundSystem = ECGame.EngineLib.Class.create({
 		*/
 		setListenerPosition : function setListenerPosition(inPosition /*TODO velocity?*/)
 		{
-			this._listenerPosition2D.copyFrom(inPosition);
-			this._context.listener.setPosition(inPosition.myX, inPosition.myY, 0);
+			this._myListenerPosition2D.copyFrom(inPosition);
+			this._myContext.listener.setPosition(inPosition.myX, inPosition.myY, 0);
 		},
 		//TODO setListenerVelocity
 		//TODO set listener cones
 		
 		
-		//TODO param velocity?
+		//TODO param velocity, cones?
 		playPositionalSoundEffect2D : function playPositionalSoundEffect2D(inID, inPosition, inRadius)
 		{
-			var sound, source, panner;
+			var aSoundDescription,
+				aSound;
 			
-			inRadius = inRadius || ECGame.Settings.Sound.default2DRadius;
+			aSoundDescription = this._mySoundDescriptionLib[inID];
 			
-			panner = this._context.createPanner();
-			panner.connect(this._effectsVolume);
-			panner.setPosition(inPosition.myX, inPosition.myY, 0);
-			panner.maxDistance = inRadius;
-			panner.distanceModel = panner.LINEAR_DISTANCE;
-			//TODO cones
-			
-			source = this._context.createBufferSource();
-			source.buffer = this._soundLib[inID].sound;
-			source.connect(panner);
-			//source.loop = true;//TODO param about looping (+loopStart, loopEnd)
-			//source.playbackRate = ??//TODO vary sound effect slightly
-			
-			sound = new ECGame.EngineLib.Sound2D(
-				source,
-				this._context.currentTime,
-				this._soundLib[inID].fileName,
-				panner,
-				inRadius
-			);
-			sound.setPosition(inPosition);
-			//TODO velocity?
-			
-			sound.play(0);//TODO this would be delay parameter
-			this._playingSounds.insert(new ECGame.EngineLib.GameCircularDoublyLinkedListNode(sound));
-			if(ECGame.Settings.Debug.Sound_Print)
-			{
-				ECGame.log.info("Played sound " + this._soundLib[inID].fileName + " at (" + inPosition.myX + ', ' + inPosition.myY + ')');
-			}
-			
-			return sound;
+			aSound = new ECGame.EngineLib.Sound2D(aSoundDescription, this._myEffectsVolume, inPosition, inRadius);
+			aSound.play();
+			this._myPlayingSounds.insert(new ECGame.EngineLib.GameCircularDoublyLinkedListNode(aSound));
+
+			return aSound;
 		},
 		
 		
@@ -337,7 +308,7 @@ ECGame.EngineLib.GameSoundSystem = ECGame.EngineLib.Class.create({
 		
 		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect)
 		{
-			var _this_ = this, i;
+			var aCurrentTime, i;
 			ECGame.instance.graphics.drawDebugText("Debug Drawing Sounds", ECGame.Settings.Debug.Sound_Area_DrawColor);
 			
 			inCanvas2DContext.strokeStyle = ECGame.Settings.Debug.Sound_Area_DrawColor;
@@ -345,21 +316,23 @@ ECGame.EngineLib.GameSoundSystem = ECGame.EngineLib.Class.create({
 			
 			//draw listener position
 			inCanvas2DContext.fillRect(
-				this._listenerPosition2D.myX - inCameraRect.myX - (ECGame.Settings.Debug.Sound_Listener_Size / 2),
-				this._listenerPosition2D.myY - inCameraRect.myY - (ECGame.Settings.Debug.Sound_Listener_Size / 2),
+				this._myListenerPosition2D.myX - inCameraRect.myX - (ECGame.Settings.Debug.Sound_Listener_Size / 2),
+				this._myListenerPosition2D.myY - inCameraRect.myY - (ECGame.Settings.Debug.Sound_Listener_Size / 2),
 				ECGame.Settings.Debug.Sound_Listener_Size,
 				ECGame.Settings.Debug.Sound_Listener_Size
 			);
-			//TODO draw listener angle
+			//TODO draw player and listener angles
+			
+			aCurrentTime = this._myContext.currentTime;
 			
 			//draw sounds
-			this._playingSounds.forAll(
+			this._myPlayingSounds.forAll(
 				function(inItem)
 				{					
 					//head node has no sound
 					if(inItem)
 					{
-						inItem.debugDraw(inCanvas2DContext, inCameraRect, _this_._context.currentTime);
+						inItem.debugDraw(inCanvas2DContext, inCameraRect, aCurrentTime);
 					}
 				}
 			);

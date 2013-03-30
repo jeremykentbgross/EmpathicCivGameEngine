@@ -367,7 +367,7 @@ ECGame.Webserver.Obfuscator.prototype.run = function run()
 	if(ECGame.Settings.Server.saveResultsNotesToFile)
 	{
 		//is really: logData = '/*\n' + logData + '*/\n\n\n' + this._src;
-		logData = '/\x2a\n' + logData + '\x2a/\n\n\n' + this._src;
+		logData = '/\x2a\n' + logData + '\x2a/\n\n\n';// + this._src;
 		fileSystem.writeFileSync(//TODO make writeFileSync when I update my nodejs version
 			'ObfuscationResults.txt',
 			logData/*,

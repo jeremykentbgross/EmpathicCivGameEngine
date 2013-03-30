@@ -21,13 +21,22 @@
 
 ECGame.EngineLib.Sound2D = ECGame.EngineLib.Class.create(
 {
-	Constructor : function Sound2D(inSource, inStartedTime, inFileName, inPanner, inRadius)
+	Constructor : function Sound2D(inSoundDescription, inDestination, inPosition, inRadius)
 	{
-		this.Sound(inSource, inStartedTime, inFileName);
-		this._panner = inPanner;
-		this._position = new ECGame.EngineLib.Point2();
-		this._velocity = new ECGame.EngineLib.Point2();
-		this._radius = inRadius;
+		inRadius = inRadius || ECGame.Settings.Sound.default2DRadius;
+		
+		this._myPosition = inPosition.clone();
+		this._myVelocity = new ECGame.EngineLib.Point2();
+		this._myRadius = inRadius;
+		
+		this._myPanner = ECGame.instance.soundSystem._myContext.createPanner();
+		this._myPanner.connect(inDestination);
+		this._myPanner.setPosition(inPosition.myX, inPosition.myY, 0);
+		this._myPanner.maxDistance = inRadius;
+		this._myPanner.distanceModel = this._myPanner.LINEAR_DISTANCE;
+		//TODO cones
+			
+		this.Sound(inSoundDescription, this._myPanner/*inSource, inStartedTime, inFileName*/);
 	},
 	Parents : [ECGame.EngineLib.Sound],
 	flags : {},
@@ -37,41 +46,47 @@ ECGame.EngineLib.Sound2D = ECGame.EngineLib.Class.create(
 	{
 		setPosition : function setPosition(inPosition)
 		{
-			this._position.copyFrom(inPosition);
-			this._panner.setPosition(inPosition.myX, inPosition.myY, 0);
+			this._myPosition.copyFrom(inPosition);
+			this._myPanner.setPosition(inPosition.myX, inPosition.myY, 0);
 		},
 		setVelocity : function setVelocity(inVelocity)
 		{
-			this._velocity.copyFrom(inVelocity);
-			this._panner.setVelocity(inVelocity.myX, inVelocity.myY, 0);
+			this._myVelocity.copyFrom(inVelocity);
+			this._myPanner.setVelocity(inVelocity.myX, inVelocity.myY, 0);
 		},
 		//TODO set cones/angles
+		
+		_getDebugPlayingString : function _getDebugPlayingString()//TODO overload this as well!!
+		{
+			return this.Sound.prototype._getDebugPlayingString.call(this)
+				+ " at (" + Math.floor(this._myPosition.myX) + ', ' + Math.floor(this._myPosition.myY) + '):' + this._myRadius;
+		},
 		
 		
 		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect, inCurrentTime)
 		{
-			var percentPlayed, soundScreenLoc;
+			var aPercentPlayed, aSoundScreenLoc;
 			
-			percentPlayed = (inCurrentTime - this._startedTime) / this._source.buffer.duration;
-			soundScreenLoc = this._position.subtract(inCameraRect);
+			aPercentPlayed = this.getPercentPlayed(inCurrentTime);
+			aSoundScreenLoc = this._myPosition.subtract(inCameraRect);
 							
 			ECGame.instance.graphics.drawDebugText(
-				'-' + this._fileName + ': %' + Math.floor(percentPlayed * 100),
+				'-' + /*this._getDebugPlayingString()*/this.Sound.prototype._getDebugPlayingString.call(this) + ': %' + Math.floor(aPercentPlayed * 100),
 				ECGame.Settings.Debug.Sound_Area_DrawColor
 			);
 			ECGame.instance.graphics.drawDebugText(
-				"----Pos:(" + this._position.myX + ', ' + this._position.myY + "), Radius:" + this._radius,
+				"----Pos:(" + Math.floor(this._myPosition.myX) + ', ' + Math.floor(this._myPosition.myY) + "), Radius:" + this._myRadius,
 				ECGame.Settings.Debug.Sound_Area_DrawColor
 			);
 			ECGame.instance.graphics.drawDebugText(
-				"----Vel:(" + this._velocity.myX + ', ' + this._velocity.myY + ')',
+				"----Vel:(" + Math.floor(this._myVelocity.myX) + ', ' + Math.floor(this._myVelocity.myY) + ')',
 				ECGame.Settings.Debug.Sound_Area_DrawColor
 			);
 			
 			//draw source position
 			inCanvas2DContext.fillRect(
-				soundScreenLoc.myX - (ECGame.Settings.Debug.Sound_Source_Size / 2),
-				soundScreenLoc.myY - (ECGame.Settings.Debug.Sound_Source_Size / 2),
+				aSoundScreenLoc.myX - (ECGame.Settings.Debug.Sound_Source_Size / 2),
+				aSoundScreenLoc.myY - (ECGame.Settings.Debug.Sound_Source_Size / 2),
 				ECGame.Settings.Debug.Sound_Source_Size,
 				ECGame.Settings.Debug.Sound_Source_Size
 			);
@@ -80,9 +95,9 @@ ECGame.EngineLib.Sound2D = ECGame.EngineLib.Class.create(
 			//draw circle of sound
 			inCanvas2DContext.beginPath();
 			inCanvas2DContext.arc(
-				soundScreenLoc.myX,
-				soundScreenLoc.myY,
-				this._radius,
+				aSoundScreenLoc.myX,
+				aSoundScreenLoc.myY,
+				this._myRadius,
 				0,
 				2*Math.PI
 			);
@@ -91,12 +106,12 @@ ECGame.EngineLib.Sound2D = ECGame.EngineLib.Class.create(
 			//draw velocity of sound
 			inCanvas2DContext.beginPath();
 			inCanvas2DContext.moveTo(
-				soundScreenLoc.myX,
-				soundScreenLoc.myY
+				aSoundScreenLoc.myX,
+				aSoundScreenLoc.myY
 			);
 			inCanvas2DContext.lineTo(
-				soundScreenLoc.myX + (this._velocity.myX * ECGame.instance.soundSystem.getSoundHardwareTimeUpdateDelta()),
-				soundScreenLoc.myY + (this._velocity.myY * ECGame.instance.soundSystem.getSoundHardwareTimeUpdateDelta())
+				aSoundScreenLoc.myX + (this._myVelocity.myX * ECGame.instance.soundSystem.getSoundHardwareTimeUpdateDelta()),
+				aSoundScreenLoc.myY + (this._myVelocity.myY * ECGame.instance.soundSystem.getSoundHardwareTimeUpdateDelta())
 			);
 			inCanvas2DContext.closePath();
 			inCanvas2DContext.stroke();
@@ -104,9 +119,9 @@ ECGame.EngineLib.Sound2D = ECGame.EngineLib.Class.create(
 			//draw playback percent as expanding circle
 			inCanvas2DContext.beginPath();
 			inCanvas2DContext.arc(
-				soundScreenLoc.myX,
-				soundScreenLoc.myY,
-				Math.floor(this._radius * percentPlayed),
+				aSoundScreenLoc.myX,
+				aSoundScreenLoc.myY,
+				Math.floor(this._myRadius * aPercentPlayed),
 				0,
 				2*Math.PI
 			);

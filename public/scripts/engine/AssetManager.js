@@ -99,7 +99,7 @@ ECGame.EngineLib.AssetManager = ECGame.EngineLib.Class.create({
 			{
 				if(soundInfo.isLoaded)
 				{
-					outLoadTarget.sound = soundInfo.sound;
+					outLoadTarget._mySoundBuffer = soundInfo.mySoundBuffer;
 				}
 				else
 				{
@@ -107,7 +107,7 @@ ECGame.EngineLib.AssetManager = ECGame.EngineLib.Class.create({
 					soundInfo.listeners.push(outLoadTarget);
 					
 					//set the default sound
-					outLoadTarget.sound = document.sounds[defaultSoundName];//TODO query this with dojo
+					outLoadTarget._mySoundBuffer = document.sounds[defaultSoundName];//TODO query this with dojo
 				}
 			}
 			else
@@ -118,7 +118,7 @@ ECGame.EngineLib.AssetManager = ECGame.EngineLib.Class.create({
 				
 				soundInfo.listeners[0] = outLoadTarget;
 				
-				soundInfo.sound = null;
+				soundInfo.mySoundBuffer = null;
 				//soundInfo.sound.src = inFileName;
 				
 				request = new XMLHttpRequest();
@@ -128,17 +128,17 @@ ECGame.EngineLib.AssetManager = ECGame.EngineLib.Class.create({
 				//Decode asynchronously
 				request.onload = function()
 				{
-					ECGame.instance.soundSystem._context.decodeAudioData(
+					ECGame.instance.soundSystem._myContext.decodeAudioData(
 						request.response,
 						function(buffer)
 						{
-							soundInfo.sound = buffer;
+							soundInfo.mySoundBuffer = buffer;
 							soundInfo.isLoaded = true;
 							
 							//set targets to have the loaded sound
 							for(i = 0; i < soundInfo.listeners.length; ++i)
 							{
-								soundInfo.listeners[i].sound = soundInfo.sound;
+								soundInfo.listeners[i]._mySoundBuffer = soundInfo.mySoundBuffer;
 							}
 							delete soundInfo.listeners;
 						},
@@ -156,6 +156,17 @@ ECGame.EngineLib.AssetManager = ECGame.EngineLib.Class.create({
 				//set the default sound
 				//outLoadTarget.sound = document.sounds[defaultSoundName];//TODO query this with dojo
 				//TODO PUT THIS BACK^^^^^^^^^^^^^^^^^^^^^^^^^!!!
+				
+				/*
+				TODO default sound in assentmanager:
+				var audioElement = document.querySelector('audio');
+				var mediaSourceNode = context.createMediaElementSource(audioElement);
+				// Create the filter
+				var filter = context.createBiquadFilter();
+				// Create the audio graph.
+				mediaSourceNode.connect(filter);
+				filter.connect(context.destination);
+				*/
 			}
 		}
 	}

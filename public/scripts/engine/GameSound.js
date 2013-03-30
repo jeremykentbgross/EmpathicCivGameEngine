@@ -21,11 +21,11 @@
 
 ECGame.EngineLib.Sound = ECGame.EngineLib.Class.create(
 {
-	Constructor : function Sound(inSource, inStartedTime, inFileName)
+	Constructor : function Sound(inSoundDescription, inDestination)
 	{
-		this._source = inSource;
-		this._startedTime = inStartedTime;
-		this._fileName = inFileName;
+		this._myDescription = inSoundDescription;
+		this._myDestination = inDestination;
+		this._mySource = null;
 	},
 	
 	Parents : null,
@@ -35,16 +35,21 @@ ECGame.EngineLib.Sound = ECGame.EngineLib.Class.create(
 	
 	Definition :
 	{
-		play : function play(inTimeDelay)
+		play : function play(/*inTimeDelay*/)
 		{
-			inTimeDelay = inTimeDelay || 0;
-			this._source.noteOn(inTimeDelay);
+			/*inTimeDelay = inTimeDelay || 0;
+			this._mySource.noteOn(inTimeDelay);*/
+			this._mySource = this._myDescription.createAndPlaySourceBuffer(this._myDestination);
+			if(ECGame.Settings.Debug.Sound_Print)
+			{
+				ECGame.log.info("Played sound " + this._getDebugPlayingString());
+			}
 		},
 		
 		stop : function stop(inTimeDelay)
 		{
 			inTimeDelay = inTimeDelay || 0;
-			this._source.noteOff(inTimeDelay);
+			this._mySource.noteOff(inTimeDelay);
 		},
 		
 		/*
@@ -69,19 +74,32 @@ ECGame.EngineLib.Sound = ECGame.EngineLib.Class.create(
 		*/
 		isPlaying : function isPlaying()
 		{
-			return (this._source.playbackState === this._source.PLAYING_STATE);
+			return (this._mySource.playbackState === this._mySource.PLAYING_STATE);
 		},
 		isFinished : function isFinished()
 		{
-			return (this._source.playbackState === this._source.FINISHED_STATE);
+			return (this._mySource.playbackState === this._mySource.FINISHED_STATE);
+		},
+		
+		_getDebugPlayingString : function _getDebugPlayingString()//TODO overload this as well!!
+		{
+			return ''//TODO add description name
+					+ '(' + this._mySource._mySoundDescriptionID + '):'
+					//TODO sample name?
+					+ '(' + this._mySource._mySampleID + '):'
+					+ this._mySource._myFileName
+					+ '(' + this._mySource._myAssetID + ')';
+		},
+		
+		getPercentPlayed : function getPercentPlayed(inCurrentTime)
+		{
+			return (inCurrentTime - this._mySource._myStartTime) / this._mySource.buffer.duration;
 		},
 		
 		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect, inCurrentTime)
 		{
-			var percentPlayed = (inCurrentTime - this._startedTime) / this._source.buffer.duration;
-							
 			ECGame.instance.graphics.drawDebugText(
-				'-' + this._fileName + ': %' + Math.floor(percentPlayed * 100),
+				'-' + this._getDebugPlayingString() + ': %' + Math.floor(this.getPercentPlayed(inCurrentTime) * 100),
 				ECGame.Settings.Debug.Sound_Area_DrawColor
 			);
 		}

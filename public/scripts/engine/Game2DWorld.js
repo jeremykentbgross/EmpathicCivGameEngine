@@ -196,7 +196,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 				inCanvas2DContext.fillRect(target.myX, target.myY, target.myWidth, target.myHeight);
 			}
 			
-			if(ECGame.Settings.Debug.Sound_Area_Draw)
+			if(ECGame.Settings.Debug.Sound_Draw)
 			{
 				ECGame.instance.soundSystem.debugDraw(inCanvas2DContext, camera.getRect(), this);
 			}

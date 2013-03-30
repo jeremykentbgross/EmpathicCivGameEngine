@@ -101,7 +101,7 @@ ECGame.Webserver.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 	//TODO probably should be in the obfuscator itself!
 	//TODO have switch to turn off auto adding globals so I can find items in my code that are named the same as globals
 	//TODO figure out how to add: window, document, and browser controls, etc
-	systemGlobalObjects = [Array, Boolean, Date, Math, Number, String, RegExp, /*Global,*/ Object, console];
+	systemGlobalObjects = [Array, Boolean, Date, Math, Number, String, RegExp, GLOBAL,/*Global,*/ Object, console, Function];
 	for(i = 0; i < systemGlobalObjects.length; ++i)
 	{
 		currentObject = systemGlobalObjects[i];

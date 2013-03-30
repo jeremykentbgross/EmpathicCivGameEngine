@@ -1,46 +1,10 @@
 Sound listener connected to camera
 environment effect connected to listener based on listener position vs source? ex: echo in big space, not much in small, or muffled if behind an obstical
 
-
-/*
-TEMP Daves notes about the footsteps:
-There are 3 files, 1 is the 1st footstep and 2 and 2b are the second step for variety.
-I recommend you randomize volume by around 30% and pitch up or down by up to 2 semi tones.
-(200 cents) that should sound pretty good!
-=>
-semitone == halfstep == 100 cents == 1/12 of an octave.
-
-playback = 1 * 2^(octave delta)
-=>
-playback = 1 * 2^(semiTone/12)
-*/
-
-AsM //refac	DONE
- 
-SMgr
-            lib[src]
-            lib[SDesc]
-           
-AsDesc
-            src
-            path
-           
-AsUseDesc
-            AsDesc
-            prob
-            shift
-            vol
-            oth
-            reptX
-            repSpc
-           
-SDesc
-            AsUseDesc[]
-           
 Sd(mgr, SDesc)
  
 Sd2(mgr, SDesc, p, r, v)
             bVirtual()
            
-SParCol
+SParCol	//maybe actually in the game world object? (so when switching worlds..)
             Sd2[].setVirt(t/f)
