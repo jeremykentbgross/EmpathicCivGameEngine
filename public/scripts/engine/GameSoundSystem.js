@@ -33,8 +33,8 @@ https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html
 
 //TODO soundListenerComponent (attached to camera?), soundPlayerComponent
 
-ECGame.EngineLib.GameSoundSystem = ECGame.EngineLib.Class.create({
-	Constructor : function GameSoundSystem()
+ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
+	Constructor : function SoundSystem()
 	{
 		if(ECGame.Settings.Network.isServer)
 		{

@@ -110,7 +110,7 @@ ECGame.EngineLib.GameInstance.prototype._init = function _init()
 		this.assetManager = ECGame.EngineLib.AssetManager.create();
 		
 		//Init Sound
-		this.soundSystem = ECGame.EngineLib.GameSoundSystem.create();
+		this.soundSystem = ECGame.EngineLib.SoundSystem.create();
 	}
 	
 	//Init Input
