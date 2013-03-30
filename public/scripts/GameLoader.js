@@ -115,9 +115,9 @@ GameLoader =
 			include(inSharedPath + "scripts/engine/SoundAsset.js");
 			include(inSharedPath + "scripts/engine/SoundSample.js");
 			include(inSharedPath + "scripts/engine/SoundDescription.js");
-			include(inSharedPath + "scripts/engine/GameSoundSystem.js");
-			include(inSharedPath + "scripts/engine/GameSound.js");
-			include(inSharedPath + "scripts/engine/GameSound2D.js");
+			include(inSharedPath + "scripts/engine/SoundSystem.js");
+			include(inSharedPath + "scripts/engine/Sound.js");
+			include(inSharedPath + "scripts/engine/Sound2D.js");
 			include(inSharedPath + "scripts/engine/AssetManager.js");
 		}
 		include(inSharedPath + "scripts/engine/GameNetwork.js");//TODO if multiplayer?

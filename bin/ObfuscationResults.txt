@@ -110,7 +110,7 @@ Final NameSpaces:
 	createSourceBuffer
 	SoundDescription
 	createAndPlaySourceBuffer
-	GameSoundSystem
+	SoundSystem
 	generateNextAssetID
 	generateNextSampleID
 	generateNextSoundDescriptionID
@@ -409,7 +409,7 @@ Function Names:
 	createSourceBuffer
 	SoundDescription
 	createAndPlaySourceBuffer
-	GameSoundSystem
+	SoundSystem
 	generateNextAssetID
 	generateNextSampleID
 	generateNextSoundDescriptionID
@@ -1467,7 +1467,7 @@ Member Variables:
 	SoundAsset
 	SoundSample
 	SoundDescription
-	GameSoundSystem
+	SoundSystem
 	Sound2D
 	AssetManager
 	User
@@ -1801,7 +1801,7 @@ Included Words:
 	createSourceBuffer
 	SoundDescription
 	createAndPlaySourceBuffer
-	GameSoundSystem
+	SoundSystem
 	generateNextAssetID
 	generateNextSampleID
 	generateNextSoundDescriptionID
