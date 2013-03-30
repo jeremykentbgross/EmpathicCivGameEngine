@@ -244,7 +244,8 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					frames.push(
 						ECGame.EngineLib.Animation2DFrame.create().init(
 							new ECGame.EngineLib.AABB2(96 * (i + 1), 96 * j, 96, 96),
-							new ECGame.EngineLib.Point2(32, 32)
+							new ECGame.EngineLib.Point2(32, 32),
+							((i === 3 || i === 7) ? [new ECGame.EngineLib.GameEvent_PlaySound(0, true, false/*, inRadius*/)] : null)
 						)
 					);
 				}
@@ -282,6 +283,9 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			//TODO this vv should have params if it is going to call init.  Where does it get init'ed from atm?
 			this._referenceEntityCameraComponent = ECGame.EngineLib.EntityComponent_2DCamera.create(/*TODO params??*/);
 			this._referenceEntity.addComponent(this._referenceEntityCameraComponent);//TODO have locally owned camera become the one for the world?
+			
+			this._referenceEntitySoundPlayerComponent = ECGame.EngineLib.EntityComponent_SoundPlayer.create();
+			this._referenceEntity.addComponent(this._referenceEntitySoundPlayerComponent);
 			
 			if(!ECGame.Settings.Network.isMultiplayer)
 			{

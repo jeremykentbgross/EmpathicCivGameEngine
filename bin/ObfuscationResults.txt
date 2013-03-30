@@ -234,6 +234,7 @@ Final NameSpaces:
 	NetObjects
 	RequestVelocity
 	UpdatePosition
+	PlaySound
 	GameEntity
 	addComponent
 	removeComponent
@@ -254,6 +255,8 @@ Final NameSpaces:
 	EntityComponent_2DPhysics
 	onRequestVelocity
 	onPhysObjectUpdate
+	EntityComponent_SoundPlayer
+	onPlaySound
 	Timer
 	start
 	_onAnimFrame
@@ -276,6 +279,7 @@ Final NameSpaces:
 	GameRenderable2D
 	RenderableTile2D
 	Animation2DFrame
+	getFrameEvents
 	Animation2D
 	getFrameRate
 	Animation2DInstance
@@ -533,6 +537,7 @@ Function Names:
 	NetObjects
 	RequestVelocity
 	UpdatePosition
+	PlaySound
 	GameEntity
 	addComponent
 	removeComponent
@@ -553,6 +558,8 @@ Function Names:
 	EntityComponent_2DPhysics
 	onRequestVelocity
 	onPhysObjectUpdate
+	EntityComponent_SoundPlayer
+	onPlaySound
 	Timer
 	start
 	_onAnimFrame
@@ -575,6 +582,7 @@ Function Names:
 	GameRenderable2D
 	RenderableTile2D
 	Animation2DFrame
+	getFrameEvents
 	Animation2D
 	getFrameRate
 	Animation2DInstance
@@ -733,10 +741,14 @@ Parameter Variables:
 	inPos
 	inVel
 	inAABB
+	inSoundDescriptionID
+	inIsPositional
+	inIsFollowingSource
 	inComponent
 	inoutReturnValues
 	inSerializer
 	inAnimations
+	inDT
 	physicsUpdateInfo
 	callback
 	inTime
@@ -749,12 +761,13 @@ Parameter Variables:
 	inItemColor
 	inSrcRect
 	inOrigin
+	inFrameEvents
 	inImage
 	inImageName
 	inFrameRate
 	inFrames
+	inCurrentFrame
 	inFrame
-	inDT
 	inAnimation
 	inMapSize
 	inMinNodeSize
@@ -900,11 +913,13 @@ Local Variable Names:
 	componentPath
 	componentObject
 	owner
+	aFrameEvents
 	direction
 	angle
 	directions
 	animProb
 	bestAnimProb
+	aSoundSystem
 	frameStats
 	halfWidth
 	halfHeight
@@ -914,9 +929,11 @@ Local Variable Names:
 	keepChild
 	item
 	debugItems
+	outEvents
 	dest
 	size
 	halfSize
+	aCurrentFrame
 	sin
 	nodeIndex
 	nodeArray
@@ -1215,6 +1232,10 @@ Member Variables:
 	position
 	velocity
 	boundingRect
+	mySoundDescriptionID
+	myIsPositional
+	myIsFollowingSource
+	myRadius
 	_world
 	_componentMap
 	removedFromWorld
@@ -1281,6 +1302,7 @@ Member Variables:
 	ownerMap
 	_sourceRect
 	_origin
+	_myFrameEvents
 	image
 	_animFrames
 	_frameRate
@@ -1332,6 +1354,7 @@ Member Variables:
 	_drawTile
 	_lastSoundPlayed
 	_lastMouseWorldPosition
+	_referenceEntitySoundPlayerComponent
 	_lastUpdateSec
 	_lastUpdateMin
 	Func1Called
@@ -1493,10 +1516,12 @@ Member Variables:
 	GameEvent_RemovedFromWorld
 	GameEvent_RequestVelocity
 	GameEvent_UpdatePosition
+	GameEvent_PlaySound
 	GameEntity
 	EntityComponent_2DCamera
 	EntityComponent_Sprite
 	Animation2DInstance
+	EntityComponent_SoundPlayer
 	Timer
 	GameInstance
 	Game2DMap
@@ -1519,12 +1544,15 @@ Member Variables:
 	_createChainUpFunction
 	_createChainDownFunction
 	apply
+	playPositionalSoundEffect2D
+	playSoundEffect
 	dopplerFactor
 	speedOfSound
 	masterVolume
 	effectsVolume
 	play
 	default2DRadius
+	setVelocity
 	call
 	USER_IDS
 	focus
@@ -1615,14 +1643,11 @@ Member Variables:
 	getSoundHardwareTimeUpdateDelta
 	getMasterVolume
 	getEffectsVolume
-	playSoundEffect
 	setListenerPosition
-	playPositionalSoundEffect2D
 	stop
 	isPlaying
 	isFinished
 	setPosition
-	setVelocity
 	loadImage
 	loadSound
 	UNUSED
@@ -1661,6 +1686,8 @@ Member Variables:
 	onUpdatePosition
 	onRequestVelocity
 	onPhysObjectUpdate
+	onPlaySound
+	getFrameEvents
 	getFrameRate
 	setAnimation
 	setTileSet
@@ -1923,6 +1950,7 @@ Included Words:
 	NetObjects
 	RequestVelocity
 	UpdatePosition
+	PlaySound
 	GameEntity
 	addComponent
 	removeComponent
@@ -1943,6 +1971,8 @@ Included Words:
 	EntityComponent_2DPhysics
 	onRequestVelocity
 	onPhysObjectUpdate
+	EntityComponent_SoundPlayer
+	onPlaySound
 	Timer
 	_onAnimFrame
 	getFrameCount
@@ -1964,6 +1994,7 @@ Included Words:
 	GameRenderable2D
 	RenderableTile2D
 	Animation2DFrame
+	getFrameEvents
 	Animation2D
 	getFrameRate
 	Animation2DInstance
@@ -2114,10 +2145,14 @@ Included Words:
 	inPos
 	inVel
 	inAABB
+	inSoundDescriptionID
+	inIsPositional
+	inIsFollowingSource
 	inComponent
 	inoutReturnValues
 	inSerializer
 	inAnimations
+	inDT
 	physicsUpdateInfo
 	callback
 	inTime
@@ -2130,12 +2165,13 @@ Included Words:
 	inItemColor
 	inSrcRect
 	inOrigin
+	inFrameEvents
 	inImage
 	inImageName
 	inFrameRate
 	inFrames
+	inCurrentFrame
 	inFrame
-	inDT
 	inAnimation
 	inMapSize
 	inMinNodeSize
@@ -2270,11 +2306,13 @@ Included Words:
 	componentPath
 	componentObject
 	owner
+	aFrameEvents
 	direction
 	angle
 	directions
 	animProb
 	bestAnimProb
+	aSoundSystem
 	frameStats
 	halfWidth
 	halfHeight
@@ -2283,8 +2321,10 @@ Included Words:
 	minTargetNodesSize
 	keepChild
 	debugItems
+	outEvents
 	dest
 	halfSize
+	aCurrentFrame
 	nodeIndex
 	nodeArray
 	renderables
@@ -2517,6 +2557,10 @@ Included Words:
 	user
 	velocity
 	boundingRect
+	mySoundDescriptionID
+	myIsPositional
+	myIsFollowingSource
+	myRadius
 	_world
 	_componentMap
 	componentArray
@@ -2567,6 +2611,7 @@ Included Words:
 	ownerMap
 	_sourceRect
 	_origin
+	_myFrameEvents
 	image
 	_animFrames
 	_frameRate
@@ -2612,6 +2657,7 @@ Included Words:
 	_drawTile
 	_lastSoundPlayed
 	_lastMouseWorldPosition
+	_referenceEntitySoundPlayerComponent
 	_lastUpdateSec
 	_lastUpdateMin
 	Func1Called
@@ -2649,6 +2695,7 @@ Included Words:
 	GameEvent_RemovedFromWorld
 	GameEvent_RequestVelocity
 	GameEvent_UpdatePosition
+	GameEvent_PlaySound
 	createGame2DPhysics
 	Network
 	RUN_UNIT_TESTS

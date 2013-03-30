@@ -70,6 +70,7 @@ ECGame.EngineLib.GameInstance.prototype._init = function _init()
 	ECGame.EngineLib.EntityComponent_2DPhysics.registerClass();
 	ECGame.EngineLib.EntityComponent_Input.registerClass();
 	ECGame.EngineLib.EntityComponent_Sprite.registerClass();
+	ECGame.EngineLib.EntityComponent_SoundPlayer.registerClass();
 	ECGame.EngineLib.Game2DMap.registerClass();
 	ECGame.EngineLib.Game2DTileSet.registerClass();
 	ECGame.EngineLib.Game2DWorld.registerClass();

@@ -27,7 +27,7 @@ ECGame.EngineLib.GameEvent = ECGame.EngineLib.Class.create({
 	Parents : null,
 	flags : {},
 	ChainUp : [],
-	ChainDown : [],
+	ChainDown : ['copyFrom'],
 	Definition :
 	{
 		//TODO add init function for the event that chains down so that the constructor doesn't have to be used
@@ -38,11 +38,23 @@ ECGame.EngineLib.GameEvent = ECGame.EngineLib.Class.create({
 		getCallbackName : function getCallbackName()
 		{
 			return this._callbackName;
+		},
+		
+		clone : function clone()
+		{
+			var newInstance = new this.constructor();
+			newInstance.copyFrom(this);
+			return newInstance;
+		},
+		
+		copyFrom : function copyFrom(inOther)
+		{
+			this._callbackName = inOther._callbackName;
 		}
 	}
 });
 
-
+//TODO change function names (and the event listeners) to the full name (GameEvent_XXX)
 
 
 
@@ -56,7 +68,13 @@ ECGame.EngineLib.GameEvent_AddedToEntity = ECGame.EngineLib.Class.create({
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
-	Definition : {}
+	Definition : 
+	{
+		copyFrom : function copyFrom(inOther)
+		{
+			//TODO
+		}
+	}
 });
 
 
@@ -72,7 +90,13 @@ ECGame.EngineLib.GameEvent_RemovedFromEntity = ECGame.EngineLib.Class.create({
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
-	Definition : {}
+	Definition : 
+	{
+		copyFrom : function copyFrom(inOther)
+		{
+			//TODO
+		}
+	}
 });
 
 
@@ -88,7 +112,13 @@ ECGame.EngineLib.GameEvent_AddedToWorld = ECGame.EngineLib.Class.create({
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
-	Definition : {}
+	Definition : 
+	{
+		copyFrom : function copyFrom(inOther)
+		{
+			//TODO
+		}
+	}
 });
 
 
@@ -103,7 +133,13 @@ ECGame.EngineLib.GameEvent_RemovedFromWorld = ECGame.EngineLib.Class.create({
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
-	Definition : {}
+	Definition : 
+	{
+		copyFrom : function copyFrom(inOther)
+		{
+			//TODO
+		}
+	}
 });
 
 
@@ -129,7 +165,13 @@ ECGame.EngineLib.GameEvent_Input = ECGame.EngineLib.Class.create({
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
-	Definition : {}
+	Definition : 
+	{
+		copyFrom : function copyFrom(inOther)
+		{
+			//TODO
+		}
+	}
 });
 
 
@@ -146,7 +188,13 @@ ECGame.EngineLib.GameEvent_ConnectedToServer = ECGame.EngineLib.Class.create({
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
-	Definition : {}
+	Definition : 
+	{
+		copyFrom : function copyFrom(inOther)
+		{
+			//TODO
+		}
+	}
 });
 
 
@@ -165,7 +213,13 @@ ECGame.EngineLib.GameEvent_DisconnectedFromServer = ECGame.EngineLib.Class.creat
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
-	Definition : {}
+	Definition : 
+	{
+		copyFrom : function copyFrom(inOther)
+		{
+			//TODO
+		}
+	}
 });
 
 
@@ -182,7 +236,13 @@ ECGame.EngineLib.GameEvent_IdentifiedUser = ECGame.EngineLib.Class.create({
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
-	Definition : {}
+	Definition : 
+	{
+		copyFrom : function copyFrom(inOther)
+		{
+			//TODO
+		}
+	}
 });
 
 
@@ -198,7 +258,13 @@ ECGame.EngineLib.GameEvent_ClientDisconnected = ECGame.EngineLib.Class.create({
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
-	Definition : {}
+	Definition : 
+	{
+		copyFrom : function copyFrom(inOther)
+		{
+			//TODO
+		}
+	}
 });
 
 
@@ -216,7 +282,13 @@ ECGame.EngineLib.GameEvent_Msg = ECGame.EngineLib.Class.create({
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
-	Definition : {}
+	Definition : 
+	{
+		copyFrom : function copyFrom(inOther)
+		{
+			//TODO
+		}
+	}
 });
 
 
@@ -233,7 +305,13 @@ ECGame.EngineLib.GameEvent_Data = ECGame.EngineLib.Class.create({
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
-	Definition : {}
+	Definition : 
+	{
+		copyFrom : function copyFrom(inOther)
+		{
+			//TODO
+		}
+	}
 });
 
 
@@ -248,7 +326,13 @@ ECGame.EngineLib.GameEvent_NetObjects = ECGame.EngineLib.Class.create({
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
-	Definition : {}
+	Definition : 
+	{
+		copyFrom : function copyFrom(inOther)
+		{
+			//TODO
+		}
+	}
 });
 
 
@@ -263,13 +347,14 @@ ECGame.EngineLib.GameEvent_RequestVelocity = ECGame.EngineLib.Class.create({
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
-	Definition : {}
+	Definition : 
+	{
+		copyFrom : function copyFrom(inOther)
+		{
+			//TODO
+		}
+	}
 });
-
-
-
-
-
 
 
 
@@ -285,5 +370,38 @@ ECGame.EngineLib.GameEvent_UpdatePosition = ECGame.EngineLib.Class.create({
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
-	Definition : {}
+	Definition :
+	{
+		copyFrom : function copyFrom(inOther)
+		{
+			//TODO
+		}
+	}
+});
+
+
+
+ECGame.EngineLib.GameEvent_PlaySound = ECGame.EngineLib.Class.create({
+	Constructor : function PlaySound(inSoundDescriptionID, inIsPositional, inIsFollowingSource, inRadius)
+	{
+		this.GameEvent('onPlaySound');
+		this.mySoundDescriptionID = inSoundDescriptionID;
+		this.myIsPositional = inIsPositional;
+		this.myIsFollowingSource = inIsFollowingSource;//TODO rename isMovingWithSource
+		this.myRadius = inRadius;
+	},
+	Parents : [ECGame.EngineLib.GameEvent],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition :
+	{
+		copyFrom : function copyFrom(inOther)
+		{
+			this.mySoundDescriptionID = inOther.mySoundDescriptionID;
+			this.myIsPositional = inOther.myIsPositional;
+			this.myIsFollowingSource = inOther.myIsFollowingSource;
+			this.myRadius = inOther.myRadius;
+		}
+	}
 });

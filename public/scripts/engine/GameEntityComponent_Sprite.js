@@ -31,7 +31,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 		this._currentAnimation = 8;//TODO why 8?
 		this._sceneGraphRenderable = new ECGame.EngineLib.Animation2DInstance();
 /*TODO should be commented out?*/this._sceneGraphRenderable.setAnimation(this._animations[0]);//TODO should be a null/default object
-		ECGame.instance.updateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
+		ECGame.instance.updateOrder.push(this);//TODO this should be in a proper updater
 		this._sceneGraphRenderable.layer = 1;		
 		
 		//TODO frame knows filename, offset, collision rects, (sound?) events, etc //TODO move this note to the frame class?
@@ -55,6 +55,21 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			this._sceneGraphRenderable.setAnimation(this._animations[0]);
 			//ECGame.instance.updateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
 			//this._sceneGraphRenderable.layer = 1;
+		},
+		
+		isUpdating : function isUpdating(){	return true;	},
+		update : function update(inDT)
+		{
+			var aFrameEvents, i;
+			
+			aFrameEvents = this._sceneGraphRenderable.update(inDT);
+			if(aFrameEvents)
+			{
+				for(i = 0; i < aFrameEvents.length; ++i)
+				{
+					this._owner.onEvent(aFrameEvents[i]);
+				}
+			}
 		},
 
 		onAddedToEntity : function(inEvent)
@@ -107,7 +122,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			{
 				var direction = inEvent.velocity.unit();
 				var angle = 0;
-				var directions =
+				var directions =	//TODO these should be class constants
 				[
 					new ECGame.EngineLib.Point2(Math.cos(angle), Math.sin(angle)),
 					new ECGame.EngineLib.Point2(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),

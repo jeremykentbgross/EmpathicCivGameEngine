@@ -39,11 +39,22 @@ ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 		isUpdating : function isUpdating(){	return true;	},//TODO should get rid of these!!
 		update : function update(inDT)
 		{
+			var aCurrentFrame;
+			
+			aCurrentFrame = this._currentFrame;
+			
 			this._timeAccumulator += inDT;
 			//Note: accum / 1000 => seconds; seconds * frameRate => frames
 			this._currentFrame = Math.floor((this._timeAccumulator / 1000) * this._animation.getFrameRate());
 			this._currentFrame = this._currentFrame % this._animation.getFrameCount();
 			//TODO handle pinglong, loop or not, etc with callback(s)
+			
+			if(aCurrentFrame !== this._currentFrame)
+			{
+				return this._animation.getFrameEvents(this._currentFrame);
+			}
+			
+			return null;
 		},
 		
 		getAABB : function getAABB()

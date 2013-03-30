@@ -8,3 +8,11 @@ Sd2(mgr, SDesc, p, r, v)
            
 SParCol	//maybe actually in the game world object? (so when switching worlds..)
             Sd2[].setVirt(t/f)
+            
+SoundPlayerComponent
+	OnSound
+		Plays sound (thru world space partition)
+	OnSetPosition
+		Moves sounds if needed
+	
+listener //attached to camera? Or? in world update

@@ -137,6 +137,7 @@ GameLoader =
 		include(inSharedPath + "scripts/engine/GameEntityComponent_Input.js");
 		include(inSharedPath + "scripts/engine/GameEntityComponent_Sprite.js");
 		include(inSharedPath + "scripts/engine/GameEntityComponent_2DPhysics.js");
+		include(inSharedPath + "scripts/engine/GameEntityComponent_SoundPlayer.js");
 		include(inSharedPath + "scripts/engine/Timer.js");
 		include(inSharedPath + "scripts/engine/GameInstance.js");
 		include(inSharedPath + "scripts/engine/GameQuadTree.js");

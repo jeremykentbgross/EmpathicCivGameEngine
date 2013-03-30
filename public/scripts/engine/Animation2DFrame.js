@@ -30,7 +30,7 @@ ECGame.EngineLib.Animation2DFrame = ECGame.EngineLib.Class.create({
 			this._sourceRect.myWidth,
 			this._sourceRect.myHeight
 		);
-		//TODO frame events (sounds, etc)
+		this._myFrameEvents = null;
 	},
 	Parents : [],
 	flags : {},
@@ -41,7 +41,7 @@ ECGame.EngineLib.Animation2DFrame = ECGame.EngineLib.Class.create({
 		//TODO update()//fires frame events OR getEvents()
 		
 		//TODO rename origin anchor? have anchor and origin?	//rename anchor because it is the same as a js global
-		init : function init(inSrcRect, inOrigin /*TODO flags, other?*/)
+		init : function init(inSrcRect, inOrigin, inFrameEvents /*TODO flags, other?*/)
 		{
 			this._sourceRect.copyFrom(inSrcRect);
 			this._origin.copyFrom(inOrigin);
@@ -51,8 +51,22 @@ ECGame.EngineLib.Animation2DFrame = ECGame.EngineLib.Class.create({
 				this._sourceRect.myWidth,
 				this._sourceRect.myHeight
 			);
+			this._myFrameEvents = inFrameEvents || [];
 			
 			return this;
+		},
+		
+		getFrameEvents : function getFrameEvents()
+		{
+			var outEvents, i;
+			
+			outEvents = [];
+			for(i = 0; i < this._myFrameEvents.length; ++i)
+			{
+				outEvents[i] = this._myFrameEvents[i].clone();
+			}
+			
+			return outEvents;
 		},
 		
 		getAABB : function getAABB()
