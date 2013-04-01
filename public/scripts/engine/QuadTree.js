@@ -19,13 +19,13 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-ECGame.EngineLib.GameQuadTreeItem = function GameQuadTreeItem(inAABB)
+ECGame.EngineLib.QuadTreeItem = function QuadTreeItem(inAABB)
 {
 	this._myAABB = inAABB;
 };
-ECGame.EngineLib.GameQuadTreeItem.prototype.constructor = ECGame.EngineLib.GameQuadTreeItem;
+ECGame.EngineLib.QuadTreeItem.prototype.constructor = ECGame.EngineLib.QuadTreeItem;
 
-ECGame.EngineLib.GameQuadTreeItem.prototype.getAABB = function getAABB()
+ECGame.EngineLib.QuadTreeItem.prototype.getAABB = function getAABB()
 {
 	return this._myAABB;
 };
@@ -33,16 +33,16 @@ ECGame.EngineLib.GameQuadTreeItem.prototype.getAABB = function getAABB()
 
 
 
-ECGame.EngineLib.GameQuadTree = function GameQuadTree(){};
-ECGame.EngineLib.GameQuadTree.prototype.constructor = ECGame.EngineLib.GameQuadTree;
-ECGame.EngineLib.GameQuadTree.create = function create()
+ECGame.EngineLib.QuadTree = function QuadTree(){};
+ECGame.EngineLib.QuadTree.prototype.constructor = ECGame.EngineLib.QuadTree;
+ECGame.EngineLib.QuadTree.create = function create()
 {
-	return new ECGame.EngineLib.GameQuadTree();
+	return new ECGame.EngineLib.QuadTree();
 };
 
 
 //TODO get rid of init and create and just new this mother fucker
-ECGame.EngineLib.GameQuadTree.prototype.init = function init(inGame2DAABB, inMinSize, inParent)
+ECGame.EngineLib.QuadTree.prototype.init = function init(inGame2DAABB, inMinSize, inParent)
 {
 	this._myAABB = inGame2DAABB || ECGame.EngineLib.AABB2.create(0,0,1,1);
 	this._myChildren = null;
@@ -56,7 +56,7 @@ ECGame.EngineLib.GameQuadTree.prototype.init = function init(inGame2DAABB, inMin
 
 
 
-ECGame.EngineLib.GameQuadTree.prototype._createChildren = function _createChildren()
+ECGame.EngineLib.QuadTree.prototype._createChildren = function _createChildren()
 {
 	var aHalfWidth,
 		aHalfHeight,
@@ -72,10 +72,10 @@ ECGame.EngineLib.GameQuadTree.prototype._createChildren = function _createChildr
 		{
 			this._myChildren = 
 			[
-				ECGame.EngineLib.GameQuadTree.create(),
-				ECGame.EngineLib.GameQuadTree.create(),
-				ECGame.EngineLib.GameQuadTree.create(),
-				ECGame.EngineLib.GameQuadTree.create()
+				ECGame.EngineLib.QuadTree.create(),
+				ECGame.EngineLib.QuadTree.create(),
+				ECGame.EngineLib.QuadTree.create(),
+				ECGame.EngineLib.QuadTree.create()
 			];
 			this._myChildren[0].init(
 				createAABB(this._myAABB.myX, this._myAABB.myY, aHalfWidth, aHalfHeight)
@@ -104,7 +104,7 @@ ECGame.EngineLib.GameQuadTree.prototype._createChildren = function _createChildr
 
 
 //Note: you can delete the inserted item strait from the list of outContainingNodes
-ECGame.EngineLib.GameQuadTree.prototype.insertToSmallestContaining = function insertToSmallestContaining(inItem, outContainingNodes, inTargetNodesMinSize)
+ECGame.EngineLib.QuadTree.prototype.insertToSmallestContaining = function insertToSmallestContaining(inItem, outContainingNodes, inTargetNodesMinSize)
 {
 	var i, aThisNodesSize;
 	
@@ -144,7 +144,7 @@ ECGame.EngineLib.GameQuadTree.prototype.insertToSmallestContaining = function in
 
 
 //Note: you can delete the inserted item strait from the list of outContainingNodes
-ECGame.EngineLib.GameQuadTree.prototype.insertToAllBestFitting = function insertToAllBestFitting(inItem, outContainingNodes, inTargetNodesMinSize)
+ECGame.EngineLib.QuadTree.prototype.insertToAllBestFitting = function insertToAllBestFitting(inItem, outContainingNodes, inTargetNodesMinSize)
 {
 	var i, aThisNodesSize;
 	
@@ -188,7 +188,7 @@ ECGame.EngineLib.GameQuadTree.prototype.insertToAllBestFitting = function insert
 
 
 
-ECGame.EngineLib.GameQuadTree.prototype.deleteItem = function deleteItem(inItem, inTargetNodesMinSize)
+ECGame.EngineLib.QuadTree.prototype.deleteItem = function deleteItem(inItem, inTargetNodesMinSize)
 {
 	var i, aThisNodesSize;
 	
@@ -219,7 +219,7 @@ ECGame.EngineLib.GameQuadTree.prototype.deleteItem = function deleteItem(inItem,
 
 /*
 //TODO outArray[] containing deleted items, see deleteContained below
-ECGame.EngineLib.GameQuadTree.prototype.deleteIntersecting = function deleteIntersecting(inGame2DAABB)
+ECGame.EngineLib.QuadTree.prototype.deleteIntersecting = function deleteIntersecting(inGame2DAABB)
 {
 	var loops,
 		i,
@@ -267,7 +267,7 @@ ECGame.EngineLib.GameQuadTree.prototype.deleteIntersecting = function deleteInte
 
 
 
-ECGame.EngineLib.GameQuadTree.prototype.deleteContained = function deleteContained(inGame2DAABB, outDeletedItems)
+ECGame.EngineLib.QuadTree.prototype.deleteContained = function deleteContained(inGame2DAABB, outDeletedItems)
 {
 	var i, aKeepChildren, aChild;
 	
@@ -322,7 +322,7 @@ ECGame.EngineLib.GameQuadTree.prototype.deleteContained = function deleteContain
 
 
 
-ECGame.EngineLib.GameQuadTree.prototype.walk = function walk(inFunction, inGame2DAABB)
+ECGame.EngineLib.QuadTree.prototype.walk = function walk(inFunction, inGame2DAABB)
 {
 	var aItem, i;
 	
@@ -351,7 +351,7 @@ ECGame.EngineLib.GameQuadTree.prototype.walk = function walk(inFunction, inGame2
 
 
 
-ECGame.EngineLib.GameQuadTree.prototype.debugDraw = function debugDraw(inCanvas2DContext, inCameraRect, inNodeColor, inFullNodeColor, inItemColor)
+ECGame.EngineLib.QuadTree.prototype.debugDraw = function debugDraw(inCanvas2DContext, inCameraRect, inNodeColor, inFullNodeColor, inItemColor)
 {
 	var i;
 	
@@ -406,14 +406,14 @@ ECGame.EngineLib.GameQuadTree.prototype.debugDraw = function debugDraw(inCanvas2
 
 
 
-ECGame.EngineLib.GameQuadTree.prototype.containsItems = function containsItems()
+ECGame.EngineLib.QuadTree.prototype.containsItems = function containsItems()
 {
 	return (this._myItems.length !== 0 || this._myChildren !== null);
 };
 
 
 
-ECGame.EngineLib.GameQuadTree.prototype.pruneTowardsRoot = function pruneTowardsRoot()
+ECGame.EngineLib.QuadTree.prototype.pruneTowardsRoot = function pruneTowardsRoot()
 {
 	var aCurrentNode,
 		i;

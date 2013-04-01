@@ -24,7 +24,7 @@
 ECGame.EngineLib.GameRenderable2D = ECGame.EngineLib.Class.create({
 	Constructor : function GameRenderable2D()
 	{
-		this.GameQuadTreeItem(/*aabb*/);
+		this.QuadTreeItem(/*aabb*/);
 		//TODO maybe should have get functions for all these instead?
 		this.sceneGraphOwningNodes = null;	//array of nodes containing this renderable in the scene graph
 		this.lastFrameDrawn = -1;
@@ -33,7 +33,7 @@ ECGame.EngineLib.GameRenderable2D = ECGame.EngineLib.Class.create({
 		this.screenPos = new ECGame.EngineLib.Point2();
 		this.drawOrderHelper = null;
 	},
-	Parents : [ECGame.EngineLib.GameQuadTreeItem],
+	Parents : [ECGame.EngineLib.QuadTreeItem],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],

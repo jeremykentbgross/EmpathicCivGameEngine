@@ -41,7 +41,7 @@ ECGame.EngineLib.Game2DMap = ECGame.EngineLib.Class.create(
 			
 			this._mapAABB = new ECGame.EngineLib.AABB2(0, 0, this._mapSize, this._mapSize);
 			
-			this._tileMapTree = new ECGame.EngineLib.GameQuadTree();
+			this._tileMapTree = new ECGame.EngineLib.QuadTree();
 			this._tileMapTree.init(this._mapAABB, this._tileSize);
 			
 			this._myTileSet = inTileSet;
@@ -111,7 +111,7 @@ ECGame.EngineLib.Game2DMap = ECGame.EngineLib.Class.create(
 			physicsRect = this._myTileSet.getPhysicsRect(inTileValue, position);
 			
 			//create a map time
-			tile = new ECGame.EngineLib.GameQuadTreeItem(tileAABB);
+			tile = new ECGame.EngineLib.QuadTreeItem(tileAABB);
 			tile.tileValue = inTileValue;
 			if(physicsRect)
 			{

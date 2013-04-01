@@ -63,7 +63,7 @@ ECGame.EngineLib.createGame2DPhysics = function()
 		myWorldSize = inWorldSize;
 		myMinSize = inMinSize;
 		
-		myDetectionTree = ECGame.EngineLib.GameQuadTree.create();
+		myDetectionTree = ECGame.EngineLib.QuadTree.create();
 		myDetectionTree.init(
 			ECGame.EngineLib.AABB2.create(0, 0, inWorldSize, inWorldSize),
 			inMinSize
@@ -155,7 +155,7 @@ ECGame.EngineLib.createGame2DPhysics = function()
 			myVelocity : ECGame.EngineLib.Point2.create(),//todo requested/actual velocity?
 			//myFriction:,??
 			AABB : ECGame.EngineLib.AABB2.create(),//todo have lots of gamerects relative to a center??
-			getAABB : function getAABB(){return this.AABB;},//TODO inherit ECGame.EngineLib.GameQuadTreeItem
+			getAABB : function getAABB(){return this.AABB;},//TODO inherit ECGame.EngineLib.QuadTreeItem
 			myOwningNodes : [],
 			myID : 'PhysID' + (++myNextPhysicsID).toString(),//todo become just a number for serialization? (probably not serialized?)
 			myHandle : phyObjHandle,

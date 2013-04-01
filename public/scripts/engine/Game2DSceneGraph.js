@@ -28,7 +28,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.constructor = ECGame.EngineLib.Game2
 
 ECGame.EngineLib.Game2DSceneGraph.prototype.init = function init(inMapSize, inMinNodeSize)
 {
-	this._mySceneTree = ECGame.EngineLib.GameQuadTree.create();
+	this._mySceneTree = ECGame.EngineLib.QuadTree.create();
 	this._mySceneTree.init(
 		ECGame.EngineLib.AABB2.create(0, 0, inMapSize, inMapSize),
 		inMinNodeSize
