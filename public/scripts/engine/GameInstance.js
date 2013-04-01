@@ -186,6 +186,9 @@ ECGame.EngineLib.GameInstance.prototype.update = function update(inDt)
 		if(ECGame.Settings.Network.isServer)
 		{
 			//TODO send reset/quit message to clients
+			
+			//Exits Node as described here:
+			//	http://stackoverflow.com/questions/5266152/how-to-exit-in-node-js
 			process.exit(0);
 		}
 	}

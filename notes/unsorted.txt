@@ -1081,59 +1081,9 @@ SpriteCom->animplayerComp
 
 QT: Sound listeners/sounds/events (ie triggers), aabb->spheres
 
-PhysicsObj:
--center
--solids[]/triggers[]
--owner
--req vel
--mass
--impulse
--material (snd)
-Solid/trigger
--aabb ref
--current[[wrap inst],]
--colWith{otherobj:frame#}??
--trigCallback
--mass?/density?
-
-Solidspace opt!
-**Solid vs trig separation** phy sys with diff collision resolver
-Phys base class->sound/triggers/physics
-=>
-Collision system
-
 
 New versions of libs! (maybe report bugs with node inspector)
 Network CHECK ID RECIEVED FROM USER IS VALID OBJECT!!!!!!
-
-
-Change /Game loc:
--Engine
---Public
----EngineLoader.js
----Scripts
-----Editor //OR it's own directory probably
-----...
----Images
----Sounds
---Private
----...
--Game
---Public
----GameLoader.js
----Scripts
-----GameRules.js
-----...
----Images
----Sounds
---Private
----social network id's, etc
----obfuscation hints
----System Settings
-=>
-1) commandline param?: node server.js gamepath
-2) EngineLoader(gamepath) //then replace includes again
-
 
 
 

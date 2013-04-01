@@ -1,3 +1,14 @@
+Editor
+-edit properties
+-draw maps
+-preview/create sprites
+-particles
+-backend db?
+-background color editor (hotpink)
+
+
+
+
 sprite/tile gen => img, json (ads)
 fb->security (editor)
 upload->userlib (db)

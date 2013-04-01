@@ -1,4 +1,28 @@
 
+Replication:
+GObj:
+-copyfrom()//chain
+-clone(){ret create().copyfrom(this)}
+-setdirty(){listadd,noflag?}
+-netgroups
+Class ser schema //static
+//schema var condition
+Class (reg?):
+-instances{}
+-netDirty{}
+-new{}
+NetUd:
+-Forall netgroups?
+-Forall classes
+--forall new
+---ser complete
+--forall dirty
+---ser dirty
+-clear dirty/new
+NetNewCon:
+-forall classes
+--forall inst
+---ser complete
 
 /*
 //could also be added automatically or => just to GameObject:

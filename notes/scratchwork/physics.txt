@@ -1,3 +1,74 @@
+PhysicsObj:
+-center
+-solids[]/triggers[]
+-owner
+-req vel
+-mass
+-impulse
+-material (snd)
+Solid/trigger
+-aabb ref
+-current[[wrap inst],]
+-colWith{otherobj:frame#}??
+-trigCallback
+-mass?/density?
+
+Solidspace opt!
+**Solid vs trig separation** phy sys with diff collision resolver
+Phys base class->sound/triggers/physics
+=>
+Collision system
+
+
+
+
+Physics changes:
+-physics colors
+-Fix multiple detect collisions like scenegraph (for being in different nodes, and report number of collisions in debug draw/print)
+-Private
+-owner Notice of collisions
+-Accurate collision forces
+-Friction
+-Ridged body flag + triggers?
+-forces live between timesteps?
+-ray casts
+
+
+
+PhysicsObj:
+-center
+-solids[]/triggers[]
+-owner
+-req vel
+-mass
+-impulse
+-material (snd)
+Solid/trigger
+-aabb ref
+-current[[wrap inst],]
+-colWith{otherobj:frame#}??
+-trigCallback
+-mass?/density?
+
+Solidspace opt!
+**Solid vs trig separation** phy sys with diff collision resolver
+Phys base class->sound/triggers/physics
+=>
+Collision system
+
+
+
+Tree updates:
+-cpp port (recurse up clean) (minmmo dave, project (c# vers also), etc)
+-merge like //option for map solids/surfaces/?vecFields?
+-js _private/prototype
+-indexOf etc
+-node recycle	//recycler mixin?
+-solid tree: physicalize()+ begin/end physicalChangeBatch()
+
+
+
+
 ////////////////////////////////////////////////////////
 Slippery:
 

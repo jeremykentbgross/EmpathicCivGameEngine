@@ -1,0 +1,18 @@
+
+//Obfuscate wrapper/wrapping:
+GameLoader.start()
+{
+	var globals;
+	
+	ObfGameLoader()
+	{
+		...
+		if server
+			load server.js
+		...
+	}
+	
+	GameLoader.start();//runs for both client and server
+};
+=>
+main.js in bin/

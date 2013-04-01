@@ -1,62 +1,19 @@
 Short term notes:
--http://stackoverflow.com/questions/5266152/how-to-exit-in-node-js
 -Need to change icon!!
--move GameEngineLib.logger to GameInstance or something like that?
--clean scratchwork old files
 -folders
 --private/scripts/<engine/game>/?
--logger/debugdraw flags?
 -port in 'project' c#/c++ code: rays, A*, tree improvements
 -port in minimmo rays and ??
 -port/inspire in 2k4-5 map code
--html hidden image takes up space
 
 
-Network:
--need to cleanup/improve setting/clearing netdirty (object level + class/instance net lists)
--position in serializer is not using floats (still?)
--InstanceID [0-255 || 0-65535] with range check (net object ids)
--ping t->; <-t*; dt(*)
--throw error in bit packer, and encoder and class reading on bad data + disconnect
--rename netDirty to isNetDirty
--bitpacker flags for network (ie not always to text, typed arrays?)
--creates new objects too often in serializer/airthmetic/bit packer?
--much in client side network needs to be in network wrapping the client/server code
--GameBinarySerialier.js not finished
--configure socketio (to use flash or whatever etc)
--prediction?
---physics.setServerPosition?? (physics component needs cleaning)
---See Source Engine Prediction
--console chat css
--no server updates when no clients.
-
-
-Tree updates:
--cpp port (recurse up clean) (minmmo dave, project (c# vers also), etc)
--merge like //option for map solids/surfaces/?vecFields?
--js _private/prototype
--indexOf etc
--node recycle	//recycler mixin?
--solid tree: physicalize()+ begin/end physicalChangeBatch()
 
 Map:
 -tileset class
 -tile class
 
-Chat System:
--chat class w/dojo css
--see scratchwork
-
-
-Animation(s):
--
--*Character working
-
-
 Localization:
 -All Messages
-
-
 
 Testing:
 -test in ie6 or something for failure to support browser features (canvas, websockets, etc)
@@ -64,58 +21,24 @@ Testing:
 
 
 
-Editor
--edit properties
--draw maps
--preview/create sprites
--particles
--backend db?
--background color editor (hotpink)
-
-
 UI
 -css(3)
 
-
-
 Serializers
 -net ser
--clone (needed?)
 -fs?
 -ui
 -Json serializer
--string mode / binary mode serialize/bitpacker
-
 
 Engine features in game schedule:
 -Particles (should be easy w/sprites)
 -Ai systems (as needed)
 -triggers (as needed)
 
-
-
 Engine features in polish:
 -Thread ai/physics/dom (main/render)
 -map prerender
 
-
-
-Physics changes:
--physics colors
--Fix multiple detect collisions like scenegraph (for being in different nodes, and report number of collisions in debug draw/print)
--Private
--owner Notice of collisions
--Accurate collision forces
--Friction
--Ridged body flag + triggers?
--forces live between timesteps?
--ray casts
-
-
-
-Input:
--serialize
--see scratchwork
 
 
 
@@ -129,9 +52,7 @@ TCP_THIN_DUPACK
 
 OTHER GOALS:
 -Map Wrapping
--Proto/arch type entity factory
 -Find and clean todos temps and hacks
--Class system cleanup
 -animated tiles
 -conversation trees
 -AI
@@ -141,102 +62,25 @@ OTHER GOALS:
 -rename everything with out 'game' in the name
 -rename GameRect to AABB2D, including instances
 -update nodejs
--graphics system to create canvas (or three) and place it *IN DIV*
--make create class / find class+instanace functions in GameInstance to wrap class manager call
--Class function chains: instance.functionname.functionchaindown=true
 -array.push instead of array[array.length - 1] = blah
--make event registry / factory so we know all the possible events and their data + can be created
+-make event namespace / registry / factory so we know all the possible events and their data + can be created
 -todo rename physics component to physics2D
--search and clean todo's
 -Css width%
 -Auto Resize?
 -Event of resize
--Div container for graphics
 -Warning frame catchup!??
 -_this_, that -> instance
--get rid of prefix "my"
 -timer centered update (precursor to webworkers)
---Main loop: try/catch show error
--business doc
--sandbox (Distributed eval from approved users only! (editor/admin))
--should have GameEvent to 'new' instead of this { getname:func() etc.. }
 -GameEvent folder (so none are undocumented!)
 -use registries to find leaked gameobjects
 -update logger
--get rid of 'my' prefix
 
 -complete serializers/system!
 -more things should be considered net print? basic vs advanced
 -search for 'onEvent' and make sure it is always passed event objects!
 -add/remove world/entity not events?
 
-////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////
--=Class Refactor:=-
-
-//////////////////////////////////////////////Staged:
--Game2DPhysics.js
--GameFrameWork.js
--GameInput.js
--GameArithmeticCompression.js
--GameAssetManager.js
--GameBitPacker.js
--GameEngineLogger.js                  
--GameObjectClassFactory.js
--GameSpriteManager.js
--GameSystemVars.js
--GameTimer.js
--GameLoader.js
--GameRunner.js
--/game/GameRules.js
--/alife/GameRules.js
--TODO_TestMultPacker.js
--TestGameArithmeticCompression.js
--TestGameBinarySerializer.js
--TestGameBitPacker.js
--TestGameEventSystem.js
--TestGameObjectClassSystem.js
-//////////////////////////////////////////////:Staged
-
-//////////////////////////////////////////////Stage 1 (unclosure):
--Game2DAABB.js
--Game2DCamera.js
--Game2DGraphics.js
--Game2DPoint.js
--Game2DSceneGraph.js
--GameNetwork.js
--GameObjectRef.js
--GameCircularDoublyLinkedListNode.js
--GameBinarySerializer.js
--GameRegistry.js
--GameEventSystem.js
-
--GameQuadTree.js
-//////////////////////////////////////////////:Stage 1 (unclosure)
-
-//////////////////////////////////////////////Stage 2 (class'ified + replace xx.create()):
--
-//////////////////////////////////////////////:Stage 2 (class'ified + replace xx.create())
-
-//////////////////////////////////////////////To Serialize:
-O-GameObject.js
- -GameEntity.js
- -GameEntityComponent.js
- -GameEntityComponent_2DCamera.js
- -GameEntityComponent_2DPhysics.js
- -GameEntityComponent_Input.js
- -GameEntityComponent_Sprite.js
- -Game2DMap.js
- -Game2DTileSet.js
- -Game2DWorld.js
-//////////////////////////////////////////////:To Serialize
-
-////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////
-
-
 For package.json:	"v8-profiler" : "3.6.2-1"
-
 
 
 REPLICATE OBJECT DESTRUCTION!!!!!!!!
@@ -485,30 +329,6 @@ Code:
 -Jsdoc3
 -net send groups (in GameObj?), ex: fog via map / team + master + sprite frames base (with timeout timer after being seen)
 
-Replication:
-GObj:
--copyfrom()//chain
--clone(){ret create().copyfrom(this)}
--setdirty(){listadd,noflag?}
--netgroups
-Class ser schema //static
-//schema var condition
-Class (reg?):
--instances{}
--netDirty{}
--new{}
-NetUd:
--Forall netgroups?
--Forall classes
---forall new
----ser complete
---forall dirty
----ser dirty
--clear dirty/new
-NetNewCon:
--forall classes
---forall inst
----ser complete
 
 Gamify: points for games completed, financial supporter badge; meaning, goals, freedom!
 
@@ -531,26 +351,7 @@ SpriteCom->animplayerComp
 
 QT: Sound listeners/sounds/events (ie triggers), aabb->spheres
 
-PhysicsObj:
--center
--solids[]/triggers[]
--owner
--req vel
--mass
--impulse
--material (snd)
-Solid/trigger
--aabb ref
--current[[wrap inst],]
--colWith{otherobj:frame#}??
--trigCallback
--mass?/density?
 
-Solidspace opt!
-**Solid vs trig separation** phy sys with diff collision resolver
-Phys base class->sound/triggers/physics
-=>
-Collision system
 
 
 -Test clients write to server (array) + create obj!
@@ -648,50 +449,3 @@ PAGE LAUNCH:
 Like https://developers.facebook.com/docs/reference/plugins/like/
 tweet: ??
 
-
-Change /Game loc:
--Engine
---Public
----EngineLoader.js
----Scripts
-----Editor //OR it's own directory probably
-----...
----Images
----Sounds
---Private
----...
--Game
---Public
----GameLoader.js
----Scripts
-----GameRules.js
-----...
----Images
----Sounds
---Private
----social network id's, etc
----obfuscation hints
----System Settings
-=>
-1) commandline param?: node server.js gamepath
-2) EngineLoader(gamepath) //then replace includes again
-
-
-
-//Obfuscate wrapper/wrapping:
-GameLoader.start()
-{
-	var globals;
-	
-	ObfGameLoader()
-	{
-		...
-		if server
-			load server.js
-		...
-	}
-	
-	GameLoader.start();//runs for both client and server
-};
-=>
-main.js in bin/

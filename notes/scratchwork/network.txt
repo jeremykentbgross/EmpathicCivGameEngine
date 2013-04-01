@@ -114,3 +114,26 @@ update()
 ======>Object netdirty, owner
 //TODO skip objects we do not own (but queue owner changes in netserialize queue from object?)
 //TODO serialize all objects on start
+
+
+
+
+Network:
+-delete objects
+-need to cleanup/improve setting/clearing netdirty (object level + class/instance net lists)
+-flags improvements
+-net groups
+-position in serializer is not using floats (still?)
+-InstanceID [0-255 || 0-65535] with range check (net object ids)
+-ping t->; <-t*; dt(*)
+-throw error in bit packer, and encoder and class reading on bad data + disconnect
+-rename netDirty to isNetDirty
+-bitpacker flags for network (ie not always to text, typed arrays?)
+-creates new objects too often in serializer/airthmetic/bit packer?
+-much in client side network needs to be in network wrapping the client/server code
+-GameBinarySerialier.js not finished
+-configure socketio (to use flash or whatever etc), support strait websockets also!
+-prediction?
+--physics.setServerPosition?? (physics component needs cleaning)
+--See Source Engine Prediction
+
