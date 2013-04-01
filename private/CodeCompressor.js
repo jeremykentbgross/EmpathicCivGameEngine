@@ -117,6 +117,10 @@ ECGame.Webserver.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 			currentObject = Object.getOwnPropertyNames(currentObject);
 			for(systemIgnoreIndex in currentObject)
 			{
+				if(currentObject[systemIgnoreIndex] === 'ECGame')
+				{
+					continue;
+				}
 				obfuscator.addIgnore(currentObject[systemIgnoreIndex]);
 			}
 			

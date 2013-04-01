@@ -53,6 +53,8 @@ ECGame.unitTests.registerTest(
 		obfuscatedNameECGameWebserver = obfuscatedNameECGame + '.' + obfuscator.getObfuscatedName('Webserver');
 		if(obfuscatedNameECGameWebserver !== 'ECGame.Webserver')
 		{
+			//create localization:
+			eval('var ' + obfuscator.getObfuscatedName('GameLocalization') + ';');
 			//create ECGame NOTE: put var in front of it so it will be cleaned automatically when this function ends!!
 			eval('var ' + obfuscatedNameECGame + ' = {};');
 			//create ECGame.Webserver

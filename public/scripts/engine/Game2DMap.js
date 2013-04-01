@@ -41,7 +41,7 @@ ECGame.EngineLib.Game2DMap = ECGame.EngineLib.Class.create(
 			
 			this._mapAABB = new ECGame.EngineLib.AABB2(0, 0, this._mapSize, this._mapSize);
 			
-			this._tileMapTree = new ECGame.EngineLib.QuadTree();
+			this._tileMapTree = ECGame.EngineLib.QuadTree.create();
 			this._tileMapTree.init(this._mapAABB, this._tileSize);
 			
 			this._myTileSet = inTileSet;

@@ -265,9 +265,9 @@ Final NameSpaces:
 	run
 	exit
 	isRunning
-	GameQuadTreeItem
+	QuadTreeItem
 	getAABB
-	GameQuadTree
+	QuadTree
 	_createChildren
 	insertToSmallestContaining
 	insertToAllBestFitting
@@ -568,9 +568,9 @@ Function Names:
 	run
 	exit
 	isRunning
-	GameQuadTreeItem
+	QuadTreeItem
 	getAABB
-	GameQuadTree
+	QuadTree
 	_createChildren
 	insertToSmallestContaining
 	insertToAllBestFitting
@@ -1294,7 +1294,7 @@ Member Variables:
 	_myParent
 	_createChildren
 	pruneTowardsRoot
-	GameQuadTreeItem
+	QuadTreeItem
 	sceneGraphOwningNodes
 	lastFrameDrawn
 	layer
@@ -1530,7 +1530,7 @@ Member Variables:
 	Game2DMap
 	Game2DTileSet
 	Game2DWorld
-	GameQuadTree
+	QuadTree
 	RenderableTile2D
 	Animation2DFrame
 	Animation2D
@@ -1739,6 +1739,7 @@ Member Variables:
 
 
 Included Words:
+	ECGame
 	Webserver
 	EngineLib
 	Lib
@@ -1983,9 +1984,9 @@ Included Words:
 	run
 	exit
 	isRunning
-	GameQuadTreeItem
+	QuadTreeItem
 	getAABB
-	GameQuadTree
+	QuadTree
 	_createChildren
 	insertToSmallestContaining
 	insertToAllBestFitting
@@ -3020,7 +3021,6 @@ Ignored Words:
 	TypeError
 	decodeURI
 	Buffer
-	d
 	parseFloat
 	URIError
 	encodeURIComponent
@@ -3030,7 +3030,6 @@ Ignored Words:
 	console
 	Infinity
 	Uint32Array
-	ECGame
 	Float32Array
 	Error
 	root
