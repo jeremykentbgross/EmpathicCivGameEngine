@@ -272,10 +272,10 @@ Final NameSpaces:
 	insertToSmallestContaining
 	insertToAllBestFitting
 	deleteItem
-	deleteIntersecting
 	deleteContained
 	walk
-	cleanTree
+	containsItems
+	pruneTowardsRoot
 	GameRenderable2D
 	RenderableTile2D
 	Animation2DFrame
@@ -575,10 +575,10 @@ Function Names:
 	insertToSmallestContaining
 	insertToAllBestFitting
 	deleteItem
-	deleteIntersecting
 	deleteContained
 	walk
-	cleanTree
+	containsItems
+	pruneTowardsRoot
 	GameRenderable2D
 	RenderableTile2D
 	Animation2DFrame
@@ -754,7 +754,9 @@ Parameter Variables:
 	inTime
 	inGame2DAABB
 	inMinSize
+	inParent
 	outContainingNodes
+	inTargetNodesMinSize
 	outDeletedItems
 	inNodeColor
 	inFullNodeColor
@@ -921,14 +923,14 @@ Local Variable Names:
 	bestAnimProb
 	aSoundSystem
 	frameStats
-	halfWidth
-	halfHeight
-	inserted
-	thisNodeSize
-	minTargetNodesSize
-	keepChild
-	item
-	debugItems
+	aHalfWidth
+	aHalfHeight
+	createAABB
+	aThisNodesSize
+	aKeepChildren
+	aChild
+	aItem
+	aCurrentNode
 	outEvents
 	dest
 	size
@@ -1285,11 +1287,14 @@ Member Variables:
 	input
 	network
 	chatSystem
-	_AABB
+	_myAABB
 	_myChildren
 	_myMinSize
 	_myItems
+	_myParent
+	myMinSize
 	_createChildren
+	pruneTowardsRoot
 	GameQuadTreeItem
 	sceneGraphOwningNodes
 	lastFrameDrawn
@@ -1457,10 +1462,9 @@ Member Variables:
 	insertToSmallestContaining
 	insertToAllBestFitting
 	deleteItem
-	deleteIntersecting
 	deleteContained
 	walk
-	cleanTree
+	containsItems
 	insertItem
 	removeItem
 	EngineLib
@@ -1987,10 +1991,10 @@ Included Words:
 	insertToSmallestContaining
 	insertToAllBestFitting
 	deleteItem
-	deleteIntersecting
 	deleteContained
 	walk
-	cleanTree
+	containsItems
+	pruneTowardsRoot
 	GameRenderable2D
 	RenderableTile2D
 	Animation2DFrame
@@ -2158,7 +2162,9 @@ Included Words:
 	inTime
 	inGame2DAABB
 	inMinSize
+	inParent
 	outContainingNodes
+	inTargetNodesMinSize
 	outDeletedItems
 	inNodeColor
 	inFullNodeColor
@@ -2314,13 +2320,14 @@ Included Words:
 	bestAnimProb
 	aSoundSystem
 	frameStats
-	halfWidth
-	halfHeight
-	inserted
-	thisNodeSize
-	minTargetNodesSize
-	keepChild
-	debugItems
+	aHalfWidth
+	aHalfHeight
+	createAABB
+	aThisNodesSize
+	aKeepChildren
+	aChild
+	aItem
+	aCurrentNode
 	outEvents
 	dest
 	halfSize
@@ -2598,10 +2605,11 @@ Included Words:
 	soundSystem
 	network
 	chatSystem
-	_AABB
+	_myAABB
 	_myChildren
 	_myMinSize
 	_myItems
+	_myParent
 	sceneGraphOwningNodes
 	lastFrameDrawn
 	layer
@@ -3382,6 +3390,7 @@ Localized Strings:
 	"Frame Count: "
 	"GameFrameWork Init failed!"
 	"NewUser"
+	"QuadTree Node is not a square."
 	"This method must be overridden"
 	"Debug Drawing SceneGraph"
 	"SceneGraph Draw calls:"

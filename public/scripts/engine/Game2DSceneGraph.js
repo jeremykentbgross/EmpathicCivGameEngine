@@ -168,9 +168,6 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DC
 		}
 		ECGame.instance.graphics.drawDebugText("SceneGraph Draw calls:" + renderables.length);
 	}
-	
-	//TODO get rid of needing this! Need auto cleaning on delete
-	//this._mySceneTree.cleanTree();//commented for speed in full map, still kind of needed
 };
 
 ECGame.EngineLib.Game2DSceneGraph.prototype.debugDraw = function debugDraw(inCanvas2DContext, inCameraRect)

@@ -124,7 +124,7 @@ ECGame.EngineLib.Game2DMap = ECGame.EngineLib.Class.create(
 			tile.sceneGraphRenderable = new ECGame.EngineLib.RenderableTile2D();
 			tile.sceneGraphRenderable.layer = this._myTileSet.getTileLayer(inTileValue);
 			tile.sceneGraphRenderable.anchorPosition = position;
-			tile.sceneGraphRenderable._AABB = this._myTileSet.getTileRect(inTileValue, position);
+			tile.sceneGraphRenderable._myAABB = this._myTileSet.getTileRect(inTileValue, position);
 			tile.sceneGraphRenderable.tileValue = inTileValue;
 			tile.sceneGraphRenderable.ownerMap = this;
 			//insert to scenegraph

@@ -517,14 +517,57 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				this._drawTile = 4;
 			}
 			
-			
-			if(inInputEvent.buttons[0])
+			if(ECGame.Settings.Debug.Physics_Draw)
 			{
-				this._map.setTile(this._map.toTileCoordinate(mouseWorldPosition), this._drawTile);
+				if(inInputEvent.clicked[0])
+				{
+					var temp = this._gameWorld.getPhysics().createNewPhysicsObject();
+					temp.setGame2DAABB(
+						ECGame.EngineLib.AABB2.create(
+							mouseWorldPosition.myX
+							,mouseWorldPosition.myY
+							,Math.random() * 200
+							,Math.random() * 200
+						)
+					);
+				}
+				if(inInputEvent.clicked[1])
+				{
+					var temp = this._gameWorld.getPhysics().createNewPhysicsObject();
+					temp.setGame2DAABB(
+						ECGame.EngineLib.AABB2.create(
+							mouseWorldPosition.myX
+							,mouseWorldPosition.myY
+							,Math.random() * 200
+							,Math.random() * 200
+						)
+					);
+					temp.setActive();
+				}
+				if(inInputEvent.clicked[2])
+				{
+					var temp = this._gameWorld.getPhysics().createNewPhysicsObject();
+					temp.setGame2DAABB(
+						ECGame.EngineLib.AABB2.create(
+							mouseWorldPosition.myX
+							,mouseWorldPosition.myY
+							,1//Math.random() * 20
+							,1//Math.random() * 20
+						)
+					);
+					temp.setAlwaysActive();
+				}
 			}
-			if(inInputEvent.buttons[2])
+			else
 			{
-				this._map.clearTile(this._map.toTileCoordinate(mouseWorldPosition));
+				if(inInputEvent.buttons[0])
+				{
+					this._map.setTile(this._map.toTileCoordinate(mouseWorldPosition), this._drawTile);
+				}
+				if(inInputEvent.buttons[2])
+				{
+					this._map.clearTile(this._map.toTileCoordinate(mouseWorldPosition));
+				}
 			}
 			
 			

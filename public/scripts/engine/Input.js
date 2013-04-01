@@ -105,6 +105,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 				case 'mousedown':
 				case 'mouseup':
 					this._buttons[inEvent.button] = (eventType === 'mousedown');
+					this._clicked[inEvent.button] = (eventType === 'mouseup');//Needed because right mouse doesn't get click event
 					this._mouseLoc.myX = inEvent.offsetX;
 					this._mouseLoc.myY = inEvent.offsetY;
 					break;

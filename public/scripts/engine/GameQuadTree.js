@@ -21,13 +21,13 @@
 
 ECGame.EngineLib.GameQuadTreeItem = function GameQuadTreeItem(inAABB)
 {
-	this._AABB = inAABB;
+	this._myAABB = inAABB;
 };
 ECGame.EngineLib.GameQuadTreeItem.prototype.constructor = ECGame.EngineLib.GameQuadTreeItem;
 
 ECGame.EngineLib.GameQuadTreeItem.prototype.getAABB = function getAABB()
 {
-	return this._AABB;
+	return this._myAABB;
 };
 
 
@@ -42,29 +42,33 @@ ECGame.EngineLib.GameQuadTree.create = function create()
 
 
 //TODO get rid of init and create and just new this mother fucker
-//TODO rename gameRect treeItemBoundRect or something like that
-ECGame.EngineLib.GameQuadTree.prototype.init = function init(inGame2DAABB, inMinSize)
+ECGame.EngineLib.GameQuadTree.prototype.init = function init(inGame2DAABB, inMinSize, inParent)
 {
-	this._AABB = inGame2DAABB || ECGame.EngineLib.AABB2.create(0,0,1,1);//todo make sure it is pow2, but for now we trust input
+	this._myAABB = inGame2DAABB || ECGame.EngineLib.AABB2.create(0,0,1,1);
 	this._myChildren = null;
 	this._myMinSize = inMinSize || 1;
 	this._myItems = [];
+	this._myParent = inParent || null;
+	//TODO solid space??
+	
+	ECGame.log.assert(this._myAABB.myWidth === this._myAABB.myHeight, "QuadTree Node is not a square.");
 };
 
 
 
 ECGame.EngineLib.GameQuadTree.prototype._createChildren = function _createChildren()
 {
-	var halfWidth,
-		halfHeight;
+	var aHalfWidth,
+		aHalfHeight,
+		createAABB = ECGame.EngineLib.AABB2.create;
 	
 	if(this._myChildren === null)
 	{
-		halfWidth = Math.floor(this._AABB.myWidth / 2);//Should be the same, and power of 2
-		halfHeight = Math.floor(this._AABB.myHeight / 2);//Should be the same, and power of 2
+		aHalfWidth = Math.floor(this._myAABB.myWidth / 2);//Should be the same, and power of 2
+		aHalfHeight = Math.floor(this._myAABB.myHeight / 2);//Should be the same, and power of 2
 		
 		//if children will not be smaller than the min, create them
-		if(!(halfWidth < this._myMinSize || halfHeight < this._myMinSize))
+		if(!(aHalfWidth < this._myMinSize || aHalfHeight < this._myMinSize))
 		{
 			this._myChildren = 
 			[
@@ -74,28 +78,24 @@ ECGame.EngineLib.GameQuadTree.prototype._createChildren = function _createChildr
 				ECGame.EngineLib.GameQuadTree.create()
 			];
 			this._myChildren[0].init(
-				ECGame.EngineLib.AABB2.create(
-					this._AABB.myX, this._AABB.myY, halfWidth, halfHeight
-				),
-				this._myMinSize
+				createAABB(this._myAABB.myX, this._myAABB.myY, aHalfWidth, aHalfHeight)
+				,this._myMinSize
+				,this
 			);
 			this._myChildren[1].init(
-				ECGame.EngineLib.AABB2.create(
-					this._AABB.myX + halfWidth, this._AABB.myY, halfWidth, halfHeight
-				),
-				this._myMinSize
+				createAABB(this._myAABB.myX + aHalfWidth, this._myAABB.myY, aHalfWidth, aHalfHeight),
+				this._myMinSize,
+				this
 			);
 			this._myChildren[2].init(
-				ECGame.EngineLib.AABB2.create(
-					this._AABB.myX, this._AABB.myY + halfHeight, halfWidth, halfHeight
-				),
-				this._myMinSize
+				createAABB(this._myAABB.myX, this._myAABB.myY + aHalfHeight, aHalfWidth, aHalfHeight),
+				this._myMinSize,
+				this
 			);
 			this._myChildren[3].init(
-				ECGame.EngineLib.AABB2.create(
-					this._AABB.myX + halfWidth, this._AABB.myY + halfHeight, halfWidth, halfHeight
-				),
-				this._myMinSize
+				createAABB(this._myAABB.myX + aHalfWidth, this._myAABB.myY + aHalfHeight, aHalfWidth, aHalfHeight),
+				this._myMinSize,
+				this
 			);
 		}
 	}
@@ -104,161 +104,120 @@ ECGame.EngineLib.GameQuadTree.prototype._createChildren = function _createChildr
 
 
 //Note: you can delete the inserted item strait from the list of outContainingNodes
-//	this will skip traversing the tree for speed, but leaves behind empty nodes.
-//	if used, cleantree every so often
-ECGame.EngineLib.GameQuadTree.prototype.insertToSmallestContaining = function insertToSmallestContaining(inItem, outContainingNodes)
+ECGame.EngineLib.GameQuadTree.prototype.insertToSmallestContaining = function insertToSmallestContaining(inItem, outContainingNodes, inTargetNodesMinSize)
 {
-	var i, loops;
+	var i, aThisNodesSize;
 	
-	if(this._AABB.containsRect(inItem.getAABB()))
+	if(this._myAABB.containsRect(inItem.getAABB()))
 	{
-		if(this._myChildren === null)
+		inTargetNodesMinSize = inTargetNodesMinSize || Math.max(inItem.getAABB().myWidth, inItem.getAABB().myHeight);
+		aThisNodesSize = Math.max(this._myAABB.myWidth, this._myAABB.myHeight);
+
+		if(aThisNodesSize / 2 < Math.max(inTargetNodesMinSize, this._myMinSize))
 		{
-			this._createChildren();
-		}
-		if(this._myChildren !== null)
-		{
-			loops = this._myChildren.length;
-			for(i = 0; i < loops; ++i)
+			//ECGame.log.assert(this._myItems.indexOf(inItem) === -1,"Multiple insertions!");
+			
+			//it doesn't fit in the children so it goes here
+			this._myItems.push(inItem);
+			if(outContainingNodes)
 			{
-				if(this._myChildren[i].insertToSmallestContaining(inItem, outContainingNodes))
+				outContainingNodes.push(this);
+			}
+		}
+		else
+		{
+			if(this._myChildren === null)
+			{
+				this._createChildren();
+			}
+			if(this._myChildren !== null)
+			{
+				for(i = 0; i < this._myChildren.length; ++i)
 				{
-					return true;
+					this._myChildren[i].insertToSmallestContaining(inItem, outContainingNodes, inTargetNodesMinSize);
 				}
 			}
 		}
-		
-		//it doesn't fit in the children so it goes here
-		/*this._myItems[this._myItems.length] = inItem;
-		if(outContainingNodes)
-		{
-			outContainingNodes[outContainingNodes.length] = this;
-		}*/
-		this._myItems.push(inItem);
-		if(outContainingNodes)
-		{
-			outContainingNodes.push(this);
-		}
-		
-		return true;
 	}
-	
-	return false;
 };
 
 
 
 //Note: you can delete the inserted item strait from the list of outContainingNodes
-//	this will skip traversing the tree for speed, but leaves behind empty nodes.
-//	if used, cleantree every so often
-ECGame.EngineLib.GameQuadTree.prototype.insertToAllBestFitting = function insertToAllBestFitting(inItem, outContainingNodes)
+ECGame.EngineLib.GameQuadTree.prototype.insertToAllBestFitting = function insertToAllBestFitting(inItem, outContainingNodes, inTargetNodesMinSize)
 {
-	var i,
-		loops,
-		inserted = false,
-		thisNodeSize,//todo make this faster by not doing it every level??
-		minTargetNodesSize;
+	var i, aThisNodesSize;
 	
-	minTargetNodesSize = Math.max(inItem.getAABB().myWidth, inItem.getAABB().myHeight);
-	thisNodeSize = Math.max(this._AABB.myWidth, this._AABB.myHeight);
-	if(thisNodeSize < minTargetNodesSize)
+	inTargetNodesMinSize = inTargetNodesMinSize || Math.max(inItem.getAABB().myWidth, inItem.getAABB().myHeight);
+	aThisNodesSize = Math.max(this._myAABB.myWidth, this._myAABB.myHeight);
+	
+	if(aThisNodesSize < inTargetNodesMinSize)
 	{
-		return false;
+		return;
 	}
 	
-	if(this._AABB.intersectsRect(inItem.getAABB()))
+	if(this._myAABB.intersectsRect(inItem.getAABB()))
 	{
-		if(this._myChildren === null && !(thisNodeSize / 2 < minTargetNodesSize))
+		if(aThisNodesSize / 2 < Math.max(inTargetNodesMinSize, this._myMinSize))
 		{
-			this._createChildren();
-		}
-		if(this._myChildren !== null)
-		{
-			loops = this._myChildren.length;
-			for(i = 0; i < loops; ++i)
+			//ECGame.log.assert(this._myItems.indexOf(inItem) === -1,"Multiple insertions!");
+			
+			//it doesn't fit in the children so it goes here
+			this._myItems.push(inItem);
+			if(outContainingNodes)
 			{
-				if(this._myChildren[i].insertToAllBestFitting(inItem, outContainingNodes))
+				outContainingNodes.push(this);
+			}
+		}
+		else
+		{
+			if(this._myChildren === null)
+			{
+				this._createChildren();
+			}
+			if(this._myChildren !== null)
+			{
+				for(i = 0; i < this._myChildren.length; ++i)
 				{
-					inserted = true;
+					this._myChildren[i].insertToAllBestFitting(inItem, outContainingNodes, inTargetNodesMinSize);
 				}
 			}
 		}
-		if(inserted)
-		{
-			return true;
-		}
-		
-		
-		/*if(this._myItems.indexOf(inItem) !== -1)////////////////TODO DEBUG IS THIS NEEDED?
-		{
-			ECGame.log.error("Multiple insertions!");
-		}*/
-		
-		//it doesn't fit in the children so it goes here
-		this._myItems.push(inItem);
-		if(outContainingNodes)
-		{
-			outContainingNodes.push(this);
-		}
-		return true;
 	}
-	
-	return false;
 };
 
 
 
-//TODO outArray[] containing the item
-ECGame.EngineLib.GameQuadTree.prototype.deleteItem = function deleteItem(inItem)
+ECGame.EngineLib.GameQuadTree.prototype.deleteItem = function deleteItem(inItem, inTargetNodesMinSize)
 {
-	var loops,
-		i,
-		keepChild = false,
-		thisNodeSize,
-		minTargetNodesSize,
-		item;
+	var i, aThisNodesSize;
 	
-	if(this._AABB.intersectsRect(inItem.getAABB()))
+	if(this._myAABB.intersectsRect(inItem.getAABB()))
 	{
+		inTargetNodesMinSize = inTargetNodesMinSize || Math.max(inItem.getAABB().myWidth, inItem.getAABB().myHeight);
+		aThisNodesSize = Math.max(this._myAABB.myWidth, this._myAABB.myHeight);
+		
 		//if there are children and the children are not to small to contain the item:
-		minTargetNodesSize = Math.max(inItem.getAABB().myWidth, inItem.getAABB().myHeight);
-		thisNodeSize = Math.max(this._AABB.myWidth, this._AABB.myHeight);
-		if(this._myChildren !== null && !(thisNodeSize / 2 < minTargetNodesSize))
+		if(this._myChildren !== null && !(aThisNodesSize / 2 < Math.max(inTargetNodesMinSize, this._myMinSize)))
 		{
-			loops = this._myChildren.length;
-			for(i = 0; i < loops; ++i)
+			for(i = 0; i < this._myChildren.length; ++i)
 			{
-				if(this._myChildren[i].deleteItem(inItem))//TODO this may not be right, maybe should return deleted? not if to keep child??
-				{
-					keepChild = true;
-				}
-			}
-			if(!keepChild)
-			{
-				this._myChildren = null;
+				this._myChildren[i].deleteItem(inItem, inTargetNodesMinSize);
 			}
 		}
 		
-		loops = this._myItems.length;//////TODO should loop these first, if found return, else check children
-		for(i = 0; i < loops; ++i)
+		i = this._myItems.indexOf(inItem);
+		if(i !== -1)
 		{
-			item = this._myItems[i];
-			if(item === inItem)
-			{
-				//delete it
-				this._myItems.splice(i,1);
-				loops = this._myItems.length;
-				--i;
-				break;
-			}
+			this._myItems.splice(i,1);
 		}
+		
+		this.pruneTowardsRoot();
 	}
-	
-	return (this._myItems.length !==0) || (this._myChildren !== null);
 };
 
 
-
+/*
 //TODO outArray[] containing deleted items, see deleteContained below
 ECGame.EngineLib.GameQuadTree.prototype.deleteIntersecting = function deleteIntersecting(inGame2DAABB)
 {
@@ -266,13 +225,13 @@ ECGame.EngineLib.GameQuadTree.prototype.deleteIntersecting = function deleteInte
 		i,
 		keepChild = false;
 	
-	if(inGame2DAABB.containsRect(this._AABB))
+	if(inGame2DAABB.containsRect(this._myAABB))
 	{
 		this._myChildren = null;
 		this._myItems = [];
 		return false;
 	}
-	else if(this._AABB.intersectsRect(inGame2DAABB))
+	else if(this._myAABB.intersectsRect(inGame2DAABB))
 	{
 		if(this._myChildren !== null)
 		{
@@ -304,19 +263,18 @@ ECGame.EngineLib.GameQuadTree.prototype.deleteIntersecting = function deleteInte
 	}
 	
 	return (this._myItems.length !==0) || (this._myChildren !== null);
-};
+};*/
 
 
 
 ECGame.EngineLib.GameQuadTree.prototype.deleteContained = function deleteContained(inGame2DAABB, outDeletedItems)
 {
-	var loops,
-		i,
-		keepChild = false;
+	var i, aKeepChildren, aChild;
 	
 	outDeletedItems = outDeletedItems || [];
+	aKeepChildren = false;
 	
-	if(inGame2DAABB.containsRect(this._AABB))
+	if(inGame2DAABB.containsRect(this._myAABB))
 	{
 		//delete everything
 		for(i in this._myItems)
@@ -332,71 +290,60 @@ ECGame.EngineLib.GameQuadTree.prototype.deleteContained = function deleteContain
 		
 		this._myChildren = null;
 		this._myItems = [];
-		return false;
 	}
-	else if(this._AABB.intersectsRect(inGame2DAABB))
+	else if(this._myAABB.intersectsRect(inGame2DAABB))
 	{
 		if(this._myChildren !== null)
 		{
-			loops = this._myChildren.length;
-			for(i = 0; i < loops; ++i)
+			for(i = 0; i < this._myChildren.length; ++i)
 			{
-				//if(this._myChildren[i].deleteContained(inGame2DAABB, outDeletedItems))
-				//	keepChild = true;
-				keepChild = this._myChildren[i].deleteContained(inGame2DAABB, outDeletedItems) || keepChild;
+				aChild = this._myChildren[i];
+				aChild.deleteContained(inGame2DAABB, outDeletedItems);
+				aKeepChildren = aKeepChildren || aChild.containsItems();
 			}
-			if(!keepChild)
+			if(!aKeepChildren)
 			{
 				this._myChildren = null;
 			}
 		}
 	
-		loops = this._myItems.length;
-		for(i = 0; i < loops; ++i)
+		for(i = 0; i < this._myItems.length; ++i)
 		{
 			if(inGame2DAABB.containsRect(this._myItems[i].getAABB()))
 			{
 				//delete it
 				outDeletedItems.push(this._myItems[i]);
 				this._myItems.splice(i,1);
-				loops = this._myItems.length;
 				--i;
 			}
 		}
 	}
-	
-	return (this._myItems.length !==0) || (this._myChildren !== null);
 };
 
 
 
 ECGame.EngineLib.GameQuadTree.prototype.walk = function walk(inFunction, inGame2DAABB)
 {
-	var item,
-		i,
-		loops;
+	var aItem, i;
 	
 	//if nothing is specified walk the whole tree
-	inGame2DAABB = inGame2DAABB || this._AABB;
+	inGame2DAABB = inGame2DAABB || this._myAABB;
 	
-	if(this._AABB.intersectsRect(inGame2DAABB))
+	if(this._myAABB.intersectsRect(inGame2DAABB))
 	{
-		loops = this._myItems.length;
-		for(i = 0; i < loops; ++i)
+		for(i = 0; i < this._myItems.length; ++i)
 		{
-			item = this._myItems[i];
-			if(item.getAABB().intersectsRect(inGame2DAABB))
+			aItem = this._myItems[i];
+			if(aItem.getAABB().intersectsRect(inGame2DAABB))
 			{
-				inFunction(item);
+				inFunction(aItem);
 			}
 		}
 		if(this._myChildren !== null)
 		{
-			loops = this._myChildren.length;
-			for(i = 0; i < loops; ++i)
+			for(i = 0; i < this._myChildren.length; ++i)
 			{
-				/*if(*/this._myChildren[i].walk(inFunction, inGame2DAABB);
-					//return true;
+				this._myChildren[i].walk(inFunction, inGame2DAABB);
 			}
 		}
 	}
@@ -406,15 +353,14 @@ ECGame.EngineLib.GameQuadTree.prototype.walk = function walk(inFunction, inGame2
 
 ECGame.EngineLib.GameQuadTree.prototype.debugDraw = function debugDraw(inCanvas2DContext, inCameraRect, inNodeColor, inFullNodeColor, inItemColor)
 {
-	var i,
-		debugItems = this._myItems;
+	var i;
 	
 	inNodeColor = inNodeColor || ECGame.Settings.Debug.SpacialPartitioningTree_Node_DrawColor;
 	inFullNodeColor = inFullNodeColor || ECGame.Settings.Debug.SpacialPartitioningTree_OccupiedNode_DrawColor;
 	inItemColor = inItemColor || ECGame.Settings.Debug.SpacialPartitioningTree_Item_DrawColor;
-	//inCameraRect = inCameraRect || this._AABB;
+	//inCameraRect = inCameraRect || this._myAABB;
 	
-	if(!this._AABB.intersectsRect(inCameraRect))
+	if(!this._myAABB.intersectsRect(inCameraRect))
 	{
 		return;
 	}
@@ -434,19 +380,19 @@ ECGame.EngineLib.GameQuadTree.prototype.debugDraw = function debugDraw(inCanvas2
 		
 		inCanvas2DContext.strokeStyle = inFullNodeColor;
 		inCanvas2DContext.strokeRect(
-			this._AABB.myX - inCameraRect.myX + 1,
-			this._AABB.myY - inCameraRect.myY + 1,
-			this._AABB.myWidth - 2,
-			this._AABB.myHeight - 2
+			this._myAABB.myX - inCameraRect.myX + 1,
+			this._myAABB.myY - inCameraRect.myY + 1,
+			this._myAABB.myWidth - 2,
+			this._myAABB.myHeight - 2
 		);
 	}
 
 	inCanvas2DContext.strokeStyle = inNodeColor;
 	inCanvas2DContext.strokeRect(
-		this._AABB.myX - inCameraRect.myX,
-		this._AABB.myY - inCameraRect.myY,
-		this._AABB.myWidth,
-		this._AABB.myHeight
+		this._myAABB.myX - inCameraRect.myX,
+		this._myAABB.myY - inCameraRect.myY,
+		this._myAABB.myWidth,
+		this._myAABB.myHeight
 	);
 			
 	if(this._myChildren !== null)
@@ -460,27 +406,34 @@ ECGame.EngineLib.GameQuadTree.prototype.debugDraw = function debugDraw(inCanvas2
 
 
 
-ECGame.EngineLib.GameQuadTree.prototype.cleanTree = function cleanTree()
+ECGame.EngineLib.GameQuadTree.prototype.containsItems = function containsItems()
 {
-	var keepChild = false,
-		i,
-		loops;
-
-	if(this._myChildren !== null)
-	{
-		loops = this._myChildren.length;
-		for(i = 0; i < loops; ++i)
-		{
-			if(this._myChildren[i].cleanTree())
-			{
-				keepChild = true;
-			}
-		}
-		if(!keepChild)
-		{
-			this._myChildren = null;
-		}
-	}
-	
-	return (this._myItems.length !==0) || (this._myChildren !== null);
+	return (this._myItems.length !== 0 || this._myChildren !== null);
 };
+
+
+
+ECGame.EngineLib.GameQuadTree.prototype.pruneTowardsRoot = function pruneTowardsRoot()
+{
+	var aCurrentNode,
+		i;
+	
+	aCurrentNode = this;
+	while(aCurrentNode)
+	{
+		if(aCurrentNode._myChildren)
+		{
+			for(i = 0; i < aCurrentNode._myChildren.length; ++i)
+			{
+				if(aCurrentNode._myChildren[i].containsItems())
+				{
+					return;
+				}
+			}
+			aCurrentNode._myChildren = null;
+		}
+		aCurrentNode = aCurrentNode._myParent;
+	}
+};
+
+

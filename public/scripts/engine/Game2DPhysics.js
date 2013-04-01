@@ -364,8 +364,8 @@ ECGame.EngineLib.createGame2DPhysics = function()
 				node = node.myNext;
 
 				if(physicsObject.myStatus === STATUS__ACTIVE 
-					&& Math.abs(physicsObject.myVelocity.myX) < 0.1 
-					&& Math.abs(physicsObject.myVelocity.myY) < 0.1)
+					&& Math.abs(physicsObject.myVelocity.myX) < 1.0 
+					&& Math.abs(physicsObject.myVelocity.myY) < 1.0)
 				{
 					//set sleeping:
 					physicsObject.myVelocity = ECGame.EngineLib.Point2.create();					
@@ -393,9 +393,6 @@ ECGame.EngineLib.createGame2DPhysics = function()
 				);
 			}
 		}
-		
-		//todo only sometimes?? or remove need for it with parent pointers <==
-		myDetectionTree.cleanTree();
 	};
 	
 	
