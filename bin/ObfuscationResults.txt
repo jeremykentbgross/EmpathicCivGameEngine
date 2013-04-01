@@ -1292,7 +1292,6 @@ Member Variables:
 	_myMinSize
 	_myItems
 	_myParent
-	myMinSize
 	_createChildren
 	pruneTowardsRoot
 	GameQuadTreeItem
