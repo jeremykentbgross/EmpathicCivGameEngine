@@ -40,6 +40,7 @@ ECGame.Settings = //TODO rename as GameSystemSettings
 		initWidth : 768,
 		initHeight : 512
 		//use 3d?
+		//canvas (2d), webgl (3d), threejs (3d), noDefault (none)
 	},
 	
 	Sound :
@@ -81,7 +82,7 @@ ECGame.Settings = //TODO rename as GameSystemSettings
 	
 	Server :
 	{
-		compressClientCode : true//true
+		compressClientCode : true//true	//TODO should also only be considered in debug.
 		////////////////////////////////////////////
 		//only working when compressing client code:
 		,removeTextForLocalization : true//true
@@ -112,6 +113,12 @@ ECGame.Settings = //TODO rename as GameSystemSettings
 		
 		//physics
 		Physics_Draw : false,
+		Physics_StaticObject_DrawColor : 'rgba(0, 0, 0, 0.5)',
+		Physics_SleepingObject_DrawColor : 'rgba(0, 0, 255, 0.5)',
+		Physics_ActiveObject_DrawColor : 'rgba(0, 180, 180, 0.5)',
+		Physics_AlwaysActiveObject_DrawColor : 'rgba(0, 128, 0, 0.5)',
+		Physics_ObjectCollision_DrawColor : 'rgba(255, 0, 0, 0.5)',
+		Physics_ActiveObjectBorder_DrawColor : 'rgba(0, 255, 0, 1.0)',
 		//TODO colors
 		
 		//camera
@@ -120,10 +127,10 @@ ECGame.Settings = //TODO rename as GameSystemSettings
 		GameWorld_CameraTarget_DrawColor : 'rgba(255, 255, 0, 1)',
 		//TODO draw entity position locators
 		
-		//bsp tree
-		SpacialPartitioningTree_Node_DrawColor : 'rgba(64, 64, 64, 1)',
-		SpacialPartitioningTree_OccupiedNode_DrawColor : 'rgba(255, 255, 255, 1)',
-		SpacialPartitioningTree_Item_DrawColor : 'rgba(128, 0, 128, 1)',
+		//QuadTree
+		QuadTree_Node_DrawColor : 'rgba(64, 64, 64, 1)',
+		QuadTree_OccupiedNode_DrawColor : 'rgba(255, 255, 255, 1)',
+		QuadTree_Item_DrawColor : 'rgba(128, 0, 128, 1)',
 		
 		//input
 		Input_Draw : false,
@@ -168,7 +175,7 @@ ECGame.Settings = //TODO rename as GameSystemSettings
 		TextBackground_DrawColor : 'rgba(0, 0, 0, 0.5)',
 		Text_Size : 12,
 		
-		Obfuscation_Print : false
+		Obfuscation_Print : false//TODO maybe put with the other obfuscation stuff
 	}
 };
 

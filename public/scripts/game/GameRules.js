@@ -551,8 +551,8 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						ECGame.EngineLib.AABB2.create(
 							mouseWorldPosition.myX
 							,mouseWorldPosition.myY
-							,1//Math.random() * 20
-							,1//Math.random() * 20
+							,Math.random() * 200
+							,Math.random() * 200
 						)
 					);
 					temp.setAlwaysActive();

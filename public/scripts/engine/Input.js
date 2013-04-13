@@ -38,7 +38,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 	{
 		initClient : function initClient(inCanvas)
 		{
-			var _this_ = this;
+			var aThis = this;
 			
 			if(ECGame.Settings.Network.isServer)
 			{
@@ -50,19 +50,19 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 				function(inOn)
 				{
 					//keys:
-					inOn(document, 'keydown', _this_._onInput);
-					inOn(document, 'keyup', _this_._onInput);
-					inOn(document, 'keypress', _this_._onInput);
+					inOn(document, 'keydown', aThis._onInput);
+					inOn(document, 'keyup', aThis._onInput);
+					inOn(document, 'keypress', aThis._onInput);
 									
 					//mouse:
-					inOn(inCanvas, 'mousedown', _this_._onInput);
-					inOn(inCanvas, 'mouseup', _this_._onInput);
-					inOn(inCanvas, 'mousemove', _this_._onInput);
-					//inOn(inCanvas, 'mousewheel', _this_._onInput);
-					inOn(inCanvas, 'click', _this_._onInput);
-					//inOn(inCanvas, 'dblclick', _this_._onInput);
-					inOn(inCanvas, 'mouseout', _this_._onInput);
-					inOn(inCanvas, 'mouseover', _this_._onInput);
+					inOn(inCanvas, 'mousedown', aThis._onInput);
+					inOn(inCanvas, 'mouseup', aThis._onInput);
+					inOn(inCanvas, 'mousemove', aThis._onInput);
+					//inOn(inCanvas, 'mousewheel', aThis._onInput);
+					inOn(inCanvas, 'click', aThis._onInput);
+					//inOn(inCanvas, 'dblclick', aThis._onInput);
+					inOn(inCanvas, 'mouseout', aThis._onInput);
+					inOn(inCanvas, 'mouseover', aThis._onInput);
 									
 					//prevent right click menu on the render area
 					inOn(inCanvas, 'contextmenu', function(event){ event.preventDefault(); } );

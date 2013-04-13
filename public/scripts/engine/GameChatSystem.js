@@ -56,19 +56,19 @@ ECGame.EngineLib.ChatSystem = ECGame.EngineLib.Class.create({
 	{
 		init : function init()
 		{
-			var that;
+			var aThis;
 			
 			/////////////////////////////////////////////////////////
 			//Get dom manipulation objects from dojo
 			
-			that = this;
+			aThis = this;
 			require(['dojo/dom', 'dojo/dom-construct', 'dojo/on', 'dojo/dom-style'],
 				function(inDom, inDomConstruct, inDojoOn, inDojoStyle)
 				{
-					that._jojoDom = inDom;
-					that._jojoDomConstruct = inDomConstruct;
-					that._jojoOn = inDojoOn;
-					that._jojoStyle = inDojoStyle;
+					aThis._jojoDom = inDom;
+					aThis._jojoDomConstruct = inDomConstruct;
+					aThis._jojoOn = inDojoOn;
+					aThis._jojoStyle = inDojoStyle;
 				}
 			);
 			
@@ -123,7 +123,7 @@ ECGame.EngineLib.ChatSystem = ECGame.EngineLib.Class.create({
 					maxlength : 140,//TODO enforce this on the server side!
 					placeholder : "type and press enter to chat"
 				},
-				that._domChatForm
+				aThis._domChatForm
 			);
 			
 			//Create the dom chat objects
@@ -138,7 +138,7 @@ ECGame.EngineLib.ChatSystem = ECGame.EngineLib.Class.create({
 				,'submit'
 				,function(inEvent)
 				{
-					that._onChatSubmit(inEvent);
+					aThis._onChatSubmit(inEvent);
 				}
 			);
 			//Capture form submits (is the user sending chat info)
@@ -257,15 +257,15 @@ ECGame.EngineLib.ChatSystem = ECGame.EngineLib.Class.create({
 		//append to chat log
 		_sendChatToChatLog : function _sendChatToChatLog(inMessage)
 		{
-			var that, msg;
-			that = this;
+			var aThis, msg;
+			aThis = this;
 			msg = this._jojoDomConstruct.create(
 				'p',
 				{
 					innerHTML : 
 						inMessage.replace(
 							/[<>&]/g,
-							function(inIndex){ return that._specialChars[inIndex]; }//TODO debug this sometime to figure out how it works
+							function(inIndex){ return aThis._specialChars[inIndex]; }//TODO debug this sometime to figure out how it works
 						)
 					//TODO css class (team, enemy, general, etc..)
 				},

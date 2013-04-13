@@ -55,13 +55,13 @@ ECGame.EngineLib.Game2DGraphics.prototype.constructor = ECGame.EngineLib.Game2DG
 
 ECGame.EngineLib.Game2DGraphics.prototype.init = function init()
 {
-	var _this_ = this;
+	var aThis = this;
 	require(
 		['dojo/dom', 'dojo/dom-construct'],
 		function(dom, domConstruct)
 		{
 			var domGraphicsContainer = dom.byId('graphicsContainer');
-			_this_._myCanvas = domConstruct.create(
+			aThis._myCanvas = domConstruct.create(
 				'canvas',
 				{
 					id : 'canvas',//TODO different id here!

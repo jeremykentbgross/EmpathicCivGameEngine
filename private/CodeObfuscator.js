@@ -382,6 +382,11 @@ ECGame.Webserver.Obfuscator.prototype.run = function run()
 		);
 	}
 	
+	if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.Obfuscation_Print)
+	{
+		console.log(this._src);
+	}
+	
 	//TODO cleanup unneeded data
 };
 

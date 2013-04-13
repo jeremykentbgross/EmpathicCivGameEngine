@@ -78,7 +78,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.removeItem = function removeItem(inR
 ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DContext, inCameraRect)
 {
 	var renderables = [];
-	var _this_ = this;
+	var aThis = this;
 	var i;
 			
 	this._mySceneTree.walk(
@@ -91,8 +91,8 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DC
 				//calculate depth sorting position for this frame
 				item.screenPos = item.anchorPosition.subtract(inCameraRect.getLeftTop());
 				item.drawOrderHelper = ECGame.EngineLib.Point2.create(
-					item.screenPos.dot(_this_._rotMatrixRow1),
-					item.screenPos.dot(_this_._rotMatrixRow2)
+					item.screenPos.dot(aThis._rotMatrixRow1),
+					item.screenPos.dot(aThis._rotMatrixRow2)
 				);
 			
 				item.lastFrameDrawn = frameCount;
@@ -107,8 +107,8 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DC
 		{				
 			var vec = inLeft.drawOrderHelper.subtract(inRight.drawOrderHelper);
 			
-			return (vec.myY * _this_._myMapSize * _this_._cos + vec.myX) +
-				(_this_._myMapSize * _this_._myMapSize) * (inLeft.layer - inRight.layer);
+			return (vec.myY * aThis._myMapSize * aThis._cos + vec.myX) +
+				(aThis._myMapSize * aThis._myMapSize) * (inLeft.layer - inRight.layer);
 		}
 	);
 	
@@ -143,7 +143,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DC
 				inCanvas2DContext.measureText(stringDistance).width
 			);
 			
-			inCanvas2DContext.fillStyle = ECGame.Settings.Debug.SpacialPartitioningTree_Item_DrawColor;
+			inCanvas2DContext.fillStyle = ECGame.Settings.Debug.QuadTree_Item_DrawColor;
 			inCanvas2DContext.fillRect(
 				screenPos.myX,
 				screenPos.myY,

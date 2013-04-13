@@ -355,9 +355,9 @@ ECGame.EngineLib.QuadTree.prototype.debugDraw = function debugDraw(inCanvas2DCon
 {
 	var i;
 	
-	inNodeColor = inNodeColor || ECGame.Settings.Debug.SpacialPartitioningTree_Node_DrawColor;
-	inFullNodeColor = inFullNodeColor || ECGame.Settings.Debug.SpacialPartitioningTree_OccupiedNode_DrawColor;
-	inItemColor = inItemColor || ECGame.Settings.Debug.SpacialPartitioningTree_Item_DrawColor;
+	inNodeColor = inNodeColor || ECGame.Settings.Debug.QuadTree_Node_DrawColor;
+	inFullNodeColor = inFullNodeColor || ECGame.Settings.Debug.QuadTree_OccupiedNode_DrawColor;
+	inItemColor = inItemColor || ECGame.Settings.Debug.QuadTree_Item_DrawColor;
 	//inCameraRect = inCameraRect || this._myAABB;
 	
 	if(!this._myAABB.intersectsRect(inCameraRect))

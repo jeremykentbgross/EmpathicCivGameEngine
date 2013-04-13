@@ -295,6 +295,10 @@ Final NameSpaces:
 	getMapLowerRight
 	toTileCoordinate
 	isWrappable
+	Physics2D
+	_insertPhysicsObjectToTree
+	_removePhysicsObjectFromTree
+	createNewPhysicsObject
 	Game2DTileSet
 	renderTile
 	renderTileInRect
@@ -598,6 +602,10 @@ Function Names:
 	getMapLowerRight
 	toTileCoordinate
 	isWrappable
+	Physics2D
+	_insertPhysicsObjectToTree
+	_removePhysicsObjectFromTree
+	createNewPhysicsObject
 	Game2DTileSet
 	renderTile
 	renderTileInRect
@@ -785,7 +793,7 @@ Parameter Variables:
 	inRect
 	inWorldCoordinate
 	inWorldSize
-	physicsObject
+	inPhysicsObject
 	deltaTime
 	inTiles
 	inCanvasContext
@@ -835,9 +843,8 @@ Local Variable Names:
 	head
 	eventName
 	callbackName
-	that
+	aThis
 	msg
-	_this_
 	domGraphicsContainer
 	fontSize
 	maxWidth
@@ -954,36 +961,24 @@ Local Variable Names:
 	position
 	deletedTiles
 	itemRect
-	outGame2DPhysics
-	PRIVATE
-	myDetectionTree
-	myWorldSize
-	myMinSize
-	myPhysicsObjects
-	myActivePhysicsObjects
-	myCollisions
-	myCollisionsRenderList
-	myNextPhysicsID
 	STATUS__STATIC
 	STATUS__SLEEPING
 	STATUS__ACTIVE
 	STATUS__ALWAYS_ACTIVE
-	insertPhysicsObjectToTree
-	rect
-	removePhysicsObjectFromTree
+	anAABB
 	physicsObject
 	phyObjHandle
-	node
-	collision
-	timeStepDeltaTime
-	movedThisFrame
+	aPhysicsObject
+	anOwner
+	aCurrentCollision
+	aMovedObjectsThisFrame
 	obj1
 	obj2
 	objCenter
 	colCenter
 	force
 	acceleration
-	collisionRect
+	aCollisionRect
 	tileset
 	camera
 	target
@@ -1327,10 +1322,22 @@ Member Variables:
 	_myTileSet
 	_myWorld
 	clearTilesInRect
+	_myDetectionTree
+	_myObjectsMap
+	_myActiveObjectsList
+	_myCollisions
+	_myCollisionsRenderList
+	_myNextPhysicsID
+	_myFrameUpdateCount
+	_myAccumulatedTime
+	_myTimeStepInMilliSeconds
+	_myTimeStepInSeconds
 	AABB
 	myDensity
 	setStatic
 	setActive
+	_removePhysicsObjectFromTree
+	_insertPhysicsObjectToTree
 	_myTiles
 	_maxLayers
 	_physics
@@ -1536,6 +1543,7 @@ Member Variables:
 	Animation2D
 	Game2DSceneGraph
 	createGame2DPhysics
+	Physics2D
 	GameRules
 	Network
 	RUN_UNIT_TESTS
@@ -1584,12 +1592,18 @@ Member Variables:
 	SceneGraph_Draw
 	Map_Draw
 	Physics_Draw
+	Physics_StaticObject_DrawColor
+	Physics_SleepingObject_DrawColor
+	Physics_ActiveObject_DrawColor
+	Physics_AlwaysActiveObject_DrawColor
+	Physics_ObjectCollision_DrawColor
+	Physics_ActiveObjectBorder_DrawColor
 	GameWorld_CameraTarget_Draw
 	GameWorld_CameraTarget_Size
 	GameWorld_CameraTarget_DrawColor
-	SpacialPartitioningTree_Node_DrawColor
-	SpacialPartitioningTree_OccupiedNode_DrawColor
-	SpacialPartitioningTree_Item_DrawColor
+	QuadTree_Node_DrawColor
+	QuadTree_OccupiedNode_DrawColor
+	QuadTree_Item_DrawColor
 	Input_Draw
 	Input_Active_DrawColor
 	Input_Inactive_DrawColor
@@ -1701,6 +1715,7 @@ Member Variables:
 	isWrappable
 	myObj1
 	myObj2
+	createNewPhysicsObject
 	myStatus
 	myVelocity
 	myOwningNodes
@@ -2014,6 +2029,10 @@ Included Words:
 	getMapLowerRight
 	toTileCoordinate
 	isWrappable
+	Physics2D
+	_insertPhysicsObjectToTree
+	_removePhysicsObjectFromTree
+	createNewPhysicsObject
 	Game2DTileSet
 	renderTile
 	renderTileInRect
@@ -2193,7 +2212,7 @@ Included Words:
 	inRect
 	inWorldCoordinate
 	inWorldSize
-	physicsObject
+	inPhysicsObject
 	deltaTime
 	inTiles
 	inCanvasContext
@@ -2238,8 +2257,7 @@ Included Words:
 	head
 	eventName
 	callbackName
-	that
-	_this_
+	aThis
 	domGraphicsContainer
 	fontSize
 	maxWidth
@@ -2348,33 +2366,24 @@ Included Words:
 	position
 	deletedTiles
 	itemRect
-	outGame2DPhysics
-	myDetectionTree
-	myWorldSize
-	myMinSize
-	myPhysicsObjects
-	myActivePhysicsObjects
-	myCollisions
-	myCollisionsRenderList
-	myNextPhysicsID
 	STATUS__STATIC
 	STATUS__SLEEPING
 	STATUS__ACTIVE
 	STATUS__ALWAYS_ACTIVE
-	insertPhysicsObjectToTree
-	rect
-	removePhysicsObjectFromTree
+	anAABB
+	physicsObject
 	phyObjHandle
-	collision
-	timeStepDeltaTime
-	movedThisFrame
+	aPhysicsObject
+	anOwner
+	aCurrentCollision
+	aMovedObjectsThisFrame
 	obj1
 	obj2
 	objCenter
 	colCenter
 	force
 	acceleration
-	collisionRect
+	aCollisionRect
 	tileset
 	camera
 	target
@@ -2638,6 +2647,16 @@ Included Words:
 	_tileMapTree
 	_myTileSet
 	_myWorld
+	_myDetectionTree
+	_myObjectsMap
+	_myActiveObjectsList
+	_myCollisions
+	_myCollisionsRenderList
+	_myNextPhysicsID
+	_myFrameUpdateCount
+	_myAccumulatedTime
+	_myTimeStepInMilliSeconds
+	_myTimeStepInSeconds
 	AABB
 	myDensity
 	setStatic
@@ -2734,12 +2753,18 @@ Included Words:
 	SceneGraph_Draw
 	Map_Draw
 	Physics_Draw
+	Physics_StaticObject_DrawColor
+	Physics_SleepingObject_DrawColor
+	Physics_ActiveObject_DrawColor
+	Physics_AlwaysActiveObject_DrawColor
+	Physics_ObjectCollision_DrawColor
+	Physics_ActiveObjectBorder_DrawColor
 	GameWorld_CameraTarget_Draw
 	GameWorld_CameraTarget_Size
 	GameWorld_CameraTarget_DrawColor
-	SpacialPartitioningTree_Node_DrawColor
-	SpacialPartitioningTree_OccupiedNode_DrawColor
-	SpacialPartitioningTree_Item_DrawColor
+	QuadTree_Node_DrawColor
+	QuadTree_OccupiedNode_DrawColor
+	QuadTree_Item_DrawColor
 	Input_Draw
 	Input_Active_DrawColor
 	Input_Inactive_DrawColor
@@ -3263,16 +3288,12 @@ Unmapped Words:
 	onNetObjects
 	setGame2DAABB
 	requestVelocity
-	createNewPhysicsObject
 	setOwner
 	release
 	strokeRect
 	sceneGraphRenderable
-	accumulatedTime
-	timestep
 	PhysID
 	setAlwaysActive
-	frameUpdateCount
 	png
 	30px
 	grass
@@ -3397,6 +3418,7 @@ Localized Strings:
 	"Object collided with itself??"
 	"Debug Drawing Physics"
 	"Frame Update Count:"
+	"Unknown Physics object status!"
 	"No GameRules.js found!"
 	"No render code found in your GameRules.js!"
 	"Server Reboot in "

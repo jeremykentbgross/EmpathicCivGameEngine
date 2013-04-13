@@ -216,21 +216,21 @@ ECGame.EngineLib.Game2DMap = ECGame.EngineLib.Class.create(
 		
 		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect)
 		{
-			var _this_ = this;
+			var aThis = this;
 			ECGame.instance.graphics.drawDebugText("Debug Drawing Tile Map");
 			
 			this._tileMapTree.walk(
 				function(item)
 				{
 					var itemRect = item.getAABB();
-					_this_._myTileSet.renderTileInRect(
+					aThis._myTileSet.renderTileInRect(
 						inCanvas2DContext,
 						item.tileValue,
 						ECGame.EngineLib.AABB2.create(
 							itemRect.myX - inCameraRect.myX,
 							itemRect.myY - inCameraRect.myY,
-							_this_._tileSize,
-							_this_._tileSize
+							aThis._tileSize,
+							aThis._tileSize
 						)
 					);
 				},

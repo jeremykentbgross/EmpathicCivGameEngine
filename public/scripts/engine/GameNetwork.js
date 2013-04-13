@@ -157,17 +157,17 @@ ECGame.EngineLib.GameNetwork.prototype.init = function init()
 
 ECGame.EngineLib.GameNetwork.prototype._onClientConnected = function _onClientConnected(inConnectedSocket)
 {
-	var _this_ = ECGame.instance.network;
+	var aThis = ECGame.instance.network;
 	
 	//TODO unique guest name?
 	inConnectedSocket.gameUser = new ECGame.EngineLib.User("Guest", ECGame.EngineLib.User.USER_IDS.GUEST);
 	
 	//TODO event
-	inConnectedSocket.on('id', _this_._onIdRecv);
-	inConnectedSocket.on('msg', _this_._onMsgRecv);
-	inConnectedSocket.on('data', _this_._onDataRecv);
-	inConnectedSocket.on('obj', _this_._onObjectsRecv);
-	inConnectedSocket.on('disconnect', _this_._onClientDisconnected);
+	inConnectedSocket.on('id', aThis._onIdRecv);
+	inConnectedSocket.on('msg', aThis._onMsgRecv);
+	inConnectedSocket.on('data', aThis._onDataRecv);
+	inConnectedSocket.on('obj', aThis._onObjectsRecv);
+	inConnectedSocket.on('disconnect', aThis._onClientDisconnected);
 	
 	//tell everone they have connected:
 	inConnectedSocket.broadcast.emit('msg', "User Connected: " + inConnectedSocket.gameUser.userName);
@@ -193,7 +193,7 @@ ECGame.EngineLib.GameNetwork.prototype._onClientConnected = function _onClientCo
 		}
 	);
 	
-	_this_._serializeObjectsOut(allRelevantObjects, {NET : false}, inConnectedSocket);//TODO flag FULL instead??
+	aThis._serializeObjectsOut(allRelevantObjects, {NET : false}, inConnectedSocket);//TODO flag FULL instead??
 };
 
 
@@ -201,16 +201,16 @@ ECGame.EngineLib.GameNetwork.prototype._onClientConnected = function _onClientCo
 ECGame.EngineLib.GameNetwork.prototype._onClientDisconnected = function _onClientDisconnected()
 {
 	//this == socket disconnecting!
-	var _this_ = ECGame.instance.network;
+	var aThis = ECGame.instance.network;
 	
 	//TODO store their gameUser for reconnect until later (if supported)
 	
-	_this_._listenSocket.sockets.emit('msg', "User Disconnected: " + this.gameUser.userName);
+	aThis._listenSocket.sockets.emit('msg', "User Disconnected: " + this.gameUser.userName);
 	
 	//event to remove them (tell everyone they are gone) IFF it was an identified user.
 	if(ECGame.EngineLib.User.USER_IDS.GUEST !== this.gameUser.userID)
 	{
-		_this_.onEvent(new ECGame.EngineLib.GameEvent_ClientDisconnected(this.gameUser));
+		aThis.onEvent(new ECGame.EngineLib.GameEvent_ClientDisconnected(this.gameUser));
 	}
 };
 
@@ -324,26 +324,26 @@ ECGame.EngineLib.GameNetwork.prototype._sendObj = function _sendObj(inObjData, i
 
 ECGame.EngineLib.GameNetwork.prototype._onConnectedToServer = function _onConnectedToServer()
 {
-	var _this_ = ECGame.instance.network;
+	var aThis = ECGame.instance.network;
 	var event = new ECGame.EngineLib.GameEvent_ConnectedToServer();
 	
 	if(ECGame.Settings.DEBUG /*&& ECGame.Settings.Debug.NetworkMessages_Print*/)
 	{
 		ECGame.log.info("Connected to Server!");
 	}
-	_this_._socket.gameUser = new ECGame.EngineLib.User("Server", ECGame.EngineLib.User.USER_IDS.SERVER);
-	_this_._socket.emit('id', ECGame.instance.localUser);
+	aThis._socket.gameUser = new ECGame.EngineLib.User("Server", ECGame.EngineLib.User.USER_IDS.SERVER);
+	aThis._socket.emit('id', ECGame.instance.localUser);
 	
 	//TODO change this to be some kind of hand shake or login or **user verification**?
 	
-	_this_.onEvent(event);
+	aThis.onEvent(event);
 };
 
 
 
 ECGame.EngineLib.GameNetwork.prototype._onDisconnectedFromServer = function _onDisconnectedFromServer()
 {
-	var _this_ = ECGame.instance.network;
+	var aThis = ECGame.instance.network;
 	var event = new ECGame.EngineLib.GameEvent_DisconnectedFromServer();
 	
 	if(ECGame.Settings.DEBUG /*&& ECGame.Settings.Debug.NetworkMessages_Print*/)
@@ -351,14 +351,14 @@ ECGame.EngineLib.GameNetwork.prototype._onDisconnectedFromServer = function _onD
 		ECGame.log.info("Lost Server!");
 	}
 	
-	_this_.onEvent(event);
+	aThis.onEvent(event);
 };
 
 
 
 ECGame.EngineLib.GameNetwork.prototype._onIdRecv = function _onIdRecv(inUser)//TODO rename inUserID
 {
-	var _this_ = ECGame.instance.network;
+	var aThis = ECGame.instance.network;
 	
 	if(ECGame.Settings.Network.isServer)
 	{
@@ -398,7 +398,7 @@ ECGame.EngineLib.GameNetwork.prototype._onIdRecv = function _onIdRecv(inUser)//T
 			ECGame.log.info("New userid FROM: " + inUser.userName + ' : ' + this.gameUser.userID);
 		}
 		
-		_this_.onEvent(new ECGame.EngineLib.GameEvent_IdentifiedUser(inUser));
+		aThis.onEvent(new ECGame.EngineLib.GameEvent_IdentifiedUser(inUser));
 	}
 	else
 	{
@@ -415,14 +415,14 @@ ECGame.EngineLib.GameNetwork.prototype._onIdRecv = function _onIdRecv(inUser)//T
 
 ECGame.EngineLib.GameNetwork.prototype._onMsgRecv = function _onMsgRecv(inMsg)
 {
-	var _this_ = ECGame.instance.network;
+	var aThis = ECGame.instance.network;
 	
 	if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 	{
 		ECGame.log.info("Net Recv Msg: " + inMsg);
 	}
 	
-	_this_.onEvent(new ECGame.EngineLib.GameEvent_Msg(inMsg));
+	aThis.onEvent(new ECGame.EngineLib.GameEvent_Msg(inMsg));
 	
 	if(ECGame.Settings.Network.isServer)
 	{
@@ -435,7 +435,7 @@ ECGame.EngineLib.GameNetwork.prototype._onMsgRecv = function _onMsgRecv(inMsg)
 
 ECGame.EngineLib.GameNetwork.prototype._onDataRecv = function _onDataRecv(inData)
 {
-	var _this_ = ECGame.instance.network;
+	var aThis = ECGame.instance.network;
 	
 	var event = new ECGame.EngineLib.GameEvent_Data(inData);
 	
@@ -445,9 +445,9 @@ ECGame.EngineLib.GameNetwork.prototype._onDataRecv = function _onDataRecv(inData
 	}
 
 	//if this errors, don't do the rest, ESP not resend!
-	if(_this_._serializeObjectsIn(event, this, {NET : true}))
+	if(aThis._serializeObjectsIn(event, this, {NET : true}))
 	{
-		_this_.onEvent(event);
+		aThis.onEvent(event);
 		if(ECGame.Settings.Network.isServer)
 		{
 			//Note: 'this' is the recieving socket here
@@ -460,7 +460,7 @@ ECGame.EngineLib.GameNetwork.prototype._onDataRecv = function _onDataRecv(inData
 
 ECGame.EngineLib.GameNetwork.prototype._onObjectsRecv = function _onObjectsRecv(inData)
 {
-	var _this_ = ECGame.instance.network;
+	var aThis = ECGame.instance.network;
 	
 	var event = new ECGame.EngineLib.GameEvent_NetObjects(inData);
 	
@@ -470,9 +470,9 @@ ECGame.EngineLib.GameNetwork.prototype._onObjectsRecv = function _onObjectsRecv(
 	}
 
 	//if this errors, don't do the rest, ESP not resend!
-	if(_this_._serializeObjectsIn(event, this, {NET : false}))//TODO instead of !NET, maybe should be FULL or something
+	if(aThis._serializeObjectsIn(event, this, {NET : false}))//TODO instead of !NET, maybe should be FULL or something
 	{
-		_this_.onEvent(event);
+		aThis.onEvent(event);
 		if(ECGame.Settings.Network.isServer)
 		{
 			//Note: 'this' is the recieving socket here
