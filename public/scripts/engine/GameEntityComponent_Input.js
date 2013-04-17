@@ -94,7 +94,7 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 			
 			if(this._owner)
 			{
-				this._owner.onEvent(new ECGame.EngineLib.GameEvent_RequestVelocity(this._direction));
+				this._owner.onEvent(new ECGame.EngineLib.Events.RequestVelocity(this._direction));
 			}
 			else
 			{

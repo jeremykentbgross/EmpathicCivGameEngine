@@ -245,7 +245,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						ECGame.EngineLib.Animation2DFrame.create().init(
 							new ECGame.EngineLib.AABB2(96 * (i + 1), 96 * j, 96, 96),
 							new ECGame.EngineLib.Point2(32, 32),
-							((i === 3 || i === 7) ? [new ECGame.EngineLib.GameEvent_PlaySound(0, true, false/*, inRadius*/)] : null)
+							((i === 3 || i === 7) ? [new ECGame.EngineLib.Events.PlaySound(0, true, false/*, inRadius*/)] : null)
 						)
 					);
 				}

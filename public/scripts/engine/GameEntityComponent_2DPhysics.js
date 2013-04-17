@@ -73,7 +73,7 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 			//TODO owner.event(getposition, myPos);??
 			
 			this._owner.onEvent(
-				new ECGame.EngineLib.GameEvent_UpdatePosition(
+				new ECGame.EngineLib.Events.UpdatePosition(
 					this._position.clone(),
 					this._velocity.clone(),
 					this._boundingRect.clone()
@@ -122,7 +122,7 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 				if(this._owner)
 				{
 					this._owner.onEvent(
-						new ECGame.EngineLib.GameEvent_UpdatePosition(
+						new ECGame.EngineLib.Events.UpdatePosition(
 							this._position.clone(),
 							this._velocity.clone(),
 							this._boundingRect.clone()
@@ -178,7 +178,7 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 		{
 			//TODO use GameEvent! Make collection of known game events!
 			this._owner.onEvent(
-				new ECGame.EngineLib.GameEvent_UpdatePosition(
+				new ECGame.EngineLib.Events.UpdatePosition(
 					physicsUpdateInfo.position.clone(),
 					physicsUpdateInfo.velocity.clone(),
 					physicsUpdateInfo.boundingRect.clone()

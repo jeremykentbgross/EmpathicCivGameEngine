@@ -206,7 +206,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 				}
 			}
 					
-			inputEvent = new ECGame.EngineLib.GameEvent_Input(this._mouseLoc.clone());
+			inputEvent = new ECGame.EngineLib.Events.Input(this._mouseLoc.clone());
 			
 			//copy the values from PRIVATE individually so my internal data cannot be changed by users
 			for(i in this._buttons)

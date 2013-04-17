@@ -44,11 +44,11 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 		addComponent : function addComponent(inComponent)
 		{
 			this._componentMap[inComponent.getTxtPath()] = inComponent;
-			inComponent.onAddedToEntity(new ECGame.EngineLib.GameEvent_AddedToEntity(this));
+			inComponent.onAddedToEntity(new ECGame.EngineLib.Events.AddedToEntity(this));
 			
 			if(this._world)
 			{
-				inComponent.onAddedToWorld(new ECGame.EngineLib.GameEvent_AddedToWorld(this._world));
+				inComponent.onAddedToWorld(new ECGame.EngineLib.Events.AddedToWorld(this._world));
 			}
 		},
 		removeComponent : function removeComponent(inComponent)
@@ -66,9 +66,9 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 				ECGame.log.assert(component === inComponent, "WTF!!!");
 				if(this._world)
 				{
-					inComponent.onRemovedFromWorld(new ECGame.EngineLib.GameEvent_RemovedFromWorld(this._world));
+					inComponent.onRemovedFromWorld(new ECGame.EngineLib.Events.RemovedFromWorld(this._world));
 				}
-				inComponent.onRemovedFromEntity(new ECGame.EngineLib.GameEvent_RemovedFromEntity(this));
+				inComponent.onRemovedFromEntity(new ECGame.EngineLib.Events.RemovedFromEntity(this));
 			}
 		},
 		getComponentByType : function getComponentByType(inType, inoutReturnValues)
@@ -99,13 +99,13 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 				this.removedFromWorld(this._world);//TODO should actually call the world object remove!!
 			}
 			this._world = inWorld;
-			this.onEvent(new ECGame.EngineLib.GameEvent_AddedToWorld(this._world));
+			this.onEvent(new ECGame.EngineLib.Events.AddedToWorld(this._world));
 		},
 		removedFromWorld : function removedFromWorld(inWorld)//TODO rename onRemovedFromWorld
 		{
 			if(inWorld === this._world)
 			{
-				this.onEvent(new ECGame.EngineLib.GameEvent_RemovedFromWorld(this._world));
+				this.onEvent(new ECGame.EngineLib.Events.RemovedFromWorld(this._world));
 				this._world = null;
 			}
 		},
@@ -129,7 +129,7 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 			{
 				component = this._componentMap[componentName];
 				//TODO remove from world also; instead make array of them and then removeComponent for each and then destroy them
-				component.onRemovedFromEntity(new ECGame.EngineLib.GameEvent_RemovedFromEntity(this));
+				component.onRemovedFromEntity(new ECGame.EngineLib.Events.RemovedFromEntity(this));
 				component.destroy();
 			}
 			this._componentMap = null;

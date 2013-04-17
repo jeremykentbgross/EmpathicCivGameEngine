@@ -219,7 +219,8 @@ Final NameSpaces:
 	isReading
 	setDummyMode
 	getDummyMode
-	GameEvent
+	Events
+	GameEventBase
 	getCallbackName
 	AddedToEntity
 	RemovedFromEntity
@@ -526,7 +527,8 @@ Function Names:
 	isReading
 	setDummyMode
 	getDummyMode
-	GameEvent
+	Events
+	GameEventBase
 	getCallbackName
 	AddedToEntity
 	RemovedFromEntity
@@ -1214,7 +1216,7 @@ Member Variables:
 	serializeObject
 	_callbackName
 	constructor
-	GameEvent
+	GameEventBase
 	entity
 	world
 	mouseLoc
@@ -1506,27 +1508,13 @@ Member Variables:
 	User
 	GameNetwork
 	GameBinarySerializer
-	GameEvent_ClientDisconnected
-	GameEvent_ConnectedToServer
-	GameEvent_DisconnectedFromServer
-	GameEvent_IdentifiedUser
-	GameEvent_Msg
-	GameEvent_Data
-	GameEvent_NetObjects
+	Events
 	Input
-	GameEvent_Input
 	createGameObjectRef
 	GameObjectRef
 	BitPacker
 	ArithmeticCompresser
 	ArithmeticCompressionModels
-	GameEvent_AddedToEntity
-	GameEvent_RemovedFromEntity
-	GameEvent_AddedToWorld
-	GameEvent_RemovedFromWorld
-	GameEvent_RequestVelocity
-	GameEvent_UpdatePosition
-	GameEvent_PlaySound
 	GameEntity
 	EntityComponent_2DCamera
 	EntityComponent_Sprite
@@ -1573,6 +1561,20 @@ Member Variables:
 	registerClass
 	initStatics
 	EvenProbabilityIntegerRangeModel
+	ClientDisconnected
+	ConnectedToServer
+	DisconnectedFromServer
+	IdentifiedUser
+	Msg
+	Data
+	NetObjects
+	AddedToEntity
+	RemovedFromEntity
+	AddedToWorld
+	RemovedFromWorld
+	RequestVelocity
+	UpdatePosition
+	PlaySound
 	useRequestAnimFrame
 	StaticThing
 	initWidth
@@ -1954,7 +1956,8 @@ Included Words:
 	isReading
 	setDummyMode
 	getDummyMode
-	GameEvent
+	Events
+	GameEventBase
 	getCallbackName
 	AddedToEntity
 	RemovedFromEntity
@@ -2707,22 +2710,7 @@ Included Words:
 	createGameCircularDoublyLinkedListNode
 	createEventSystem
 	createGame2DGraphics
-	GameEvent_ClientDisconnected
-	GameEvent_ConnectedToServer
-	GameEvent_DisconnectedFromServer
-	GameEvent_IdentifiedUser
-	GameEvent_Msg
-	GameEvent_Data
-	GameEvent_NetObjects
-	GameEvent_Input
 	createGameObjectRef
-	GameEvent_AddedToEntity
-	GameEvent_RemovedFromEntity
-	GameEvent_AddedToWorld
-	GameEvent_RemovedFromWorld
-	GameEvent_RequestVelocity
-	GameEvent_UpdatePosition
-	GameEvent_PlaySound
 	createGame2DPhysics
 	Network
 	RUN_UNIT_TESTS

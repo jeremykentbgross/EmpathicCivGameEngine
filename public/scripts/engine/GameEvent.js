@@ -19,8 +19,13 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-ECGame.EngineLib.GameEvent = ECGame.EngineLib.Class.create({
-	Constructor : function GameEvent(inCallbackName)
+//namespace:
+ECGame.EngineLib.Events = new (function Events(){});
+
+
+
+ECGame.EngineLib.Events.GameEventBase = ECGame.EngineLib.Class.create({
+	Constructor : function GameEventBase(inCallbackName)
 	{
 		this._callbackName = inCallbackName;
 	},
@@ -58,13 +63,13 @@ ECGame.EngineLib.GameEvent = ECGame.EngineLib.Class.create({
 
 
 
-ECGame.EngineLib.GameEvent_AddedToEntity = ECGame.EngineLib.Class.create({
+ECGame.EngineLib.Events.AddedToEntity = ECGame.EngineLib.Class.create({
 	Constructor : function AddedToEntity(inEntity)
 	{
-		this.GameEvent('onAddedToEntity');
+		this.GameEventBase('onAddedToEntity');
 		this.entity = inEntity;
 	},
-	Parents : [ECGame.EngineLib.GameEvent],
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
@@ -80,13 +85,13 @@ ECGame.EngineLib.GameEvent_AddedToEntity = ECGame.EngineLib.Class.create({
 
 
 //TODO move to own file
-ECGame.EngineLib.GameEvent_RemovedFromEntity = ECGame.EngineLib.Class.create({
+ECGame.EngineLib.Events.RemovedFromEntity = ECGame.EngineLib.Class.create({
 	Constructor : function RemovedFromEntity(inEntity)
 	{
-		this.GameEvent('onRemovedFromEntity');
+		this.GameEventBase('onRemovedFromEntity');
 		this.entity = inEntity;
 	},
-	Parents : [ECGame.EngineLib.GameEvent],
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
@@ -102,13 +107,13 @@ ECGame.EngineLib.GameEvent_RemovedFromEntity = ECGame.EngineLib.Class.create({
 
 
 //TODO move to own file
-ECGame.EngineLib.GameEvent_AddedToWorld = ECGame.EngineLib.Class.create({
+ECGame.EngineLib.Events.AddedToWorld = ECGame.EngineLib.Class.create({
 	Constructor : function AddedToWorld(inWorld)
 	{
-		this.GameEvent('onAddedToWorld');
+		this.GameEventBase('onAddedToWorld');
 		this.world = inWorld;
 	},
-	Parents : [ECGame.EngineLib.GameEvent],
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
@@ -123,13 +128,13 @@ ECGame.EngineLib.GameEvent_AddedToWorld = ECGame.EngineLib.Class.create({
 
 
 
-ECGame.EngineLib.GameEvent_RemovedFromWorld = ECGame.EngineLib.Class.create({
+ECGame.EngineLib.Events.RemovedFromWorld = ECGame.EngineLib.Class.create({
 	Constructor : function RemovedFromWorld(inWorld)
 	{
-		this.GameEvent('onRemovedFromWorld');
+		this.GameEventBase('onRemovedFromWorld');
 		this.world = inWorld;
 	},
-	Parents : [ECGame.EngineLib.GameEvent],
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
@@ -144,10 +149,10 @@ ECGame.EngineLib.GameEvent_RemovedFromWorld = ECGame.EngineLib.Class.create({
 
 
 
-ECGame.EngineLib.GameEvent_Input = ECGame.EngineLib.Class.create({
+ECGame.EngineLib.Events.Input = ECGame.EngineLib.Class.create({
 	Constructor : function Input(inMousePosition, inButtons, inKeys, inKeysPressed)
 	{
-		this.GameEvent('onInput');
+		this.GameEventBase('onInput');
 		if(inMousePosition)
 		{
 			this.mouseLoc = inMousePosition.clone();//TODO rename mouseLoc to mousePos
@@ -161,7 +166,7 @@ ECGame.EngineLib.GameEvent_Input = ECGame.EngineLib.Class.create({
 		this.keysPressed = inKeysPressed || {};
 		this.clicked = {};//TODO param?
 	},
-	Parents : [ECGame.EngineLib.GameEvent],
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
@@ -179,12 +184,12 @@ ECGame.EngineLib.GameEvent_Input = ECGame.EngineLib.Class.create({
 
 
 
-ECGame.EngineLib.GameEvent_ConnectedToServer = ECGame.EngineLib.Class.create({
+ECGame.EngineLib.Events.ConnectedToServer = ECGame.EngineLib.Class.create({
 	Constructor : function ConnectedToServer()
 	{
-		this.GameEvent('onConnectedToServer');
+		this.GameEventBase('onConnectedToServer');
 	},
-	Parents : [ECGame.EngineLib.GameEvent],
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
@@ -204,12 +209,12 @@ ECGame.EngineLib.GameEvent_ConnectedToServer = ECGame.EngineLib.Class.create({
 
 
 
-ECGame.EngineLib.GameEvent_DisconnectedFromServer = ECGame.EngineLib.Class.create({
+ECGame.EngineLib.Events.DisconnectedFromServer = ECGame.EngineLib.Class.create({
 	Constructor : function DisconnectedFromServer()
 	{
-		this.GameEvent('onDisconnectedFromServer');
+		this.GameEventBase('onDisconnectedFromServer');
 	},
-	Parents : [ECGame.EngineLib.GameEvent],
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
@@ -226,13 +231,13 @@ ECGame.EngineLib.GameEvent_DisconnectedFromServer = ECGame.EngineLib.Class.creat
 
 
 
-ECGame.EngineLib.GameEvent_IdentifiedUser = ECGame.EngineLib.Class.create({
+ECGame.EngineLib.Events.IdentifiedUser = ECGame.EngineLib.Class.create({
 	Constructor : function IdentifiedUser(inUser)
 	{
-		this.GameEvent('onIdentifiedUser');
+		this.GameEventBase('onIdentifiedUser');
 		this.user = inUser;
 	},
-	Parents : [ECGame.EngineLib.GameEvent],
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
@@ -248,13 +253,13 @@ ECGame.EngineLib.GameEvent_IdentifiedUser = ECGame.EngineLib.Class.create({
 
 
 //Note: This is actually only fired if the user is identified TODO rename as such??
-ECGame.EngineLib.GameEvent_ClientDisconnected = ECGame.EngineLib.Class.create({
+ECGame.EngineLib.Events.ClientDisconnected = ECGame.EngineLib.Class.create({
 	Constructor : function ClientDisconnected(inUser)
 	{
-		this.GameEvent('onClientDisconnected');
+		this.GameEventBase('onClientDisconnected');
 		this.user = inUser;
 	},
-	Parents : [ECGame.EngineLib.GameEvent],
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
@@ -272,13 +277,13 @@ ECGame.EngineLib.GameEvent_ClientDisconnected = ECGame.EngineLib.Class.create({
 
 
 //TODO rename NetMsg
-ECGame.EngineLib.GameEvent_Msg = ECGame.EngineLib.Class.create({
+ECGame.EngineLib.Events.Msg = ECGame.EngineLib.Class.create({
 	Constructor : function Msg(inMsg)
 	{
-		this.GameEvent('onMsg');
+		this.GameEventBase('onMsg');
 		this.msg = inMsg;
 	},
-	Parents : [ECGame.EngineLib.GameEvent],
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
@@ -295,13 +300,13 @@ ECGame.EngineLib.GameEvent_Msg = ECGame.EngineLib.Class.create({
 
 
 //TODO rename NetData
-ECGame.EngineLib.GameEvent_Data = ECGame.EngineLib.Class.create({
+ECGame.EngineLib.Events.Data = ECGame.EngineLib.Class.create({
 	Constructor : function Data(inData)
 	{
-		this.GameEvent('onData');
+		this.GameEventBase('onData');
 		this.data = inData;
 	},
-	Parents : [ECGame.EngineLib.GameEvent],
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
@@ -316,13 +321,13 @@ ECGame.EngineLib.GameEvent_Data = ECGame.EngineLib.Class.create({
 
 
 
-ECGame.EngineLib.GameEvent_NetObjects = ECGame.EngineLib.Class.create({
+ECGame.EngineLib.Events.NetObjects = ECGame.EngineLib.Class.create({
 	Constructor : function NetObjects(inData)
 	{
-		this.GameEvent('onNetObjects');
+		this.GameEventBase('onNetObjects');
 		this.data = inData;
 	},
-	Parents : [ECGame.EngineLib.GameEvent],
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
@@ -337,13 +342,13 @@ ECGame.EngineLib.GameEvent_NetObjects = ECGame.EngineLib.Class.create({
 
 
 
-ECGame.EngineLib.GameEvent_RequestVelocity = ECGame.EngineLib.Class.create({
+ECGame.EngineLib.Events.RequestVelocity = ECGame.EngineLib.Class.create({
 	Constructor : function RequestVelocity(inVelocity)
 	{
-		this.GameEvent('onRequestVelocity');
+		this.GameEventBase('onRequestVelocity');
 		this.direction = inVelocity;//TODO rename direction as velocity
 	},
-	Parents : [ECGame.EngineLib.GameEvent],
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
@@ -358,15 +363,15 @@ ECGame.EngineLib.GameEvent_RequestVelocity = ECGame.EngineLib.Class.create({
 
 
 
-ECGame.EngineLib.GameEvent_UpdatePosition = ECGame.EngineLib.Class.create({
+ECGame.EngineLib.Events.UpdatePosition = ECGame.EngineLib.Class.create({
 	Constructor : function UpdatePosition(inPos, inVel, inAABB)
 	{
-		this.GameEvent('onUpdatePosition');
+		this.GameEventBase('onUpdatePosition');
 		this.position = inPos;
 		this.velocity = inVel;
 		this.boundingRect = inAABB;//TODO rename boundingRect => aabb
 	},
-	Parents : [ECGame.EngineLib.GameEvent],
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
@@ -381,16 +386,16 @@ ECGame.EngineLib.GameEvent_UpdatePosition = ECGame.EngineLib.Class.create({
 
 
 
-ECGame.EngineLib.GameEvent_PlaySound = ECGame.EngineLib.Class.create({
+ECGame.EngineLib.Events.PlaySound = ECGame.EngineLib.Class.create({
 	Constructor : function PlaySound(inSoundDescriptionID, inIsPositional, inIsFollowingSource, inRadius)
 	{
-		this.GameEvent('onPlaySound');
+		this.GameEventBase('onPlaySound');
 		this.mySoundDescriptionID = inSoundDescriptionID;
 		this.myIsPositional = inIsPositional;
 		this.myIsFollowingSource = inIsFollowingSource;//TODO rename isMovingWithSource
 		this.myRadius = inRadius;
 	},
-	Parents : [ECGame.EngineLib.GameEvent],
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],

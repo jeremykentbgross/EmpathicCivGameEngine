@@ -210,7 +210,7 @@ ECGame.EngineLib.GameNetwork.prototype._onClientDisconnected = function _onClien
 	//event to remove them (tell everyone they are gone) IFF it was an identified user.
 	if(ECGame.EngineLib.User.USER_IDS.GUEST !== this.gameUser.userID)
 	{
-		aThis.onEvent(new ECGame.EngineLib.GameEvent_ClientDisconnected(this.gameUser));
+		aThis.onEvent(new ECGame.EngineLib.Events.ClientDisconnected(this.gameUser));
 	}
 };
 
@@ -325,7 +325,7 @@ ECGame.EngineLib.GameNetwork.prototype._sendObj = function _sendObj(inObjData, i
 ECGame.EngineLib.GameNetwork.prototype._onConnectedToServer = function _onConnectedToServer()
 {
 	var aThis = ECGame.instance.network;
-	var event = new ECGame.EngineLib.GameEvent_ConnectedToServer();
+	var event = new ECGame.EngineLib.Events.ConnectedToServer();
 	
 	if(ECGame.Settings.DEBUG /*&& ECGame.Settings.Debug.NetworkMessages_Print*/)
 	{
@@ -344,7 +344,7 @@ ECGame.EngineLib.GameNetwork.prototype._onConnectedToServer = function _onConnec
 ECGame.EngineLib.GameNetwork.prototype._onDisconnectedFromServer = function _onDisconnectedFromServer()
 {
 	var aThis = ECGame.instance.network;
-	var event = new ECGame.EngineLib.GameEvent_DisconnectedFromServer();
+	var event = new ECGame.EngineLib.Events.DisconnectedFromServer();
 	
 	if(ECGame.Settings.DEBUG /*&& ECGame.Settings.Debug.NetworkMessages_Print*/)
 	{
@@ -398,7 +398,7 @@ ECGame.EngineLib.GameNetwork.prototype._onIdRecv = function _onIdRecv(inUser)//T
 			ECGame.log.info("New userid FROM: " + inUser.userName + ' : ' + this.gameUser.userID);
 		}
 		
-		aThis.onEvent(new ECGame.EngineLib.GameEvent_IdentifiedUser(inUser));
+		aThis.onEvent(new ECGame.EngineLib.Events.IdentifiedUser(inUser));
 	}
 	else
 	{
@@ -422,7 +422,7 @@ ECGame.EngineLib.GameNetwork.prototype._onMsgRecv = function _onMsgRecv(inMsg)
 		ECGame.log.info("Net Recv Msg: " + inMsg);
 	}
 	
-	aThis.onEvent(new ECGame.EngineLib.GameEvent_Msg(inMsg));
+	aThis.onEvent(new ECGame.EngineLib.Events.Msg(inMsg));
 	
 	if(ECGame.Settings.Network.isServer)
 	{
@@ -437,7 +437,7 @@ ECGame.EngineLib.GameNetwork.prototype._onDataRecv = function _onDataRecv(inData
 {
 	var aThis = ECGame.instance.network;
 	
-	var event = new ECGame.EngineLib.GameEvent_Data(inData);
+	var event = new ECGame.EngineLib.Events.Data(inData);
 	
 	if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 	{
@@ -462,7 +462,7 @@ ECGame.EngineLib.GameNetwork.prototype._onObjectsRecv = function _onObjectsRecv(
 {
 	var aThis = ECGame.instance.network;
 	
-	var event = new ECGame.EngineLib.GameEvent_NetObjects(inData);
+	var event = new ECGame.EngineLib.Events.NetObjects(inData);
 	
 	if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 	{
