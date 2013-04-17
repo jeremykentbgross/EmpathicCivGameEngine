@@ -134,34 +134,3 @@ ECGame.EngineLib.GameEventSystem.prototype.onEvent = function onEvent(inEvent)
 		current = current.myNext;
 	}
 };
-
-
-
-
-//TODO WTF???
-//ECGame.EngineLib.GameEventSystem.prototype.serialize = function serialize(serializer)
-//{		
-//	if(ECGame.Settings.DEBUG)
-//	{
-//		ECGame.log.info("Serializing EventSystem " + ECGame.EngineLib.GameObjectRef(this).getPath());
-//	}
-////	if(serializer.isReading())
-////	{
-////	}
-////	else if(serializer.isWriting())
-////	{
-////	}
-//};
-////ECGame.EngineLib.GameEventSystem.prototype.clone = function(cloneInstance, clonePrivate)
-////{
-////	cloneInstance.bIsEntity = this.bIsEntity;
-////}
-//ECGame.EngineLib.GameEventSystem.prototype.destroy = function destroy(serializer)//WTF??
-//{		
-//	if(ECGame.Settings.DEBUG)
-//	{
-//		ECGame.log.info("Destroying EventSystem " + ECGame.EngineLib.GameObjectRef(this).getPath());
-//	}
-//};
-/////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////

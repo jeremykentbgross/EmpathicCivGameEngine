@@ -78,7 +78,7 @@ ECGame.EngineLib.Timer.prototype.start = function start()
 
 ECGame.EngineLib.Timer.prototype._onAnimFrame = function _onAnimFrame(inTime)
 {
-	ECGame.instance.timer.update(inTime);
+	ECGame.instance.timer.update(inTime);//TODO static instance, assert(singleton)
 };
 
 
