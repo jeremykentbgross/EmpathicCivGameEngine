@@ -348,19 +348,23 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 		//TODO should rename this onIdentified>Net<User
 		onIdentifiedUser : function onIdentifiedUser(inEvent)
 		{
-			var newEntity;			
-			newEntity = this._referenceEntity.clone();
-			if(!this._entities[inEvent.user.userID])
+			var anEntity;			
+			if(this._entities[inEvent.user.userID])
 			{
-				this._entities[inEvent.user.userID] = newEntity;
+				anEntity = this._entities[inEvent.user.userID];
+			}
+			else
+			{
+				anEntity = this._referenceEntity.clone();
+				this._entities[inEvent.user.userID] = anEntity;
 				ECGame.log.info("Setting owner for physics and input component(s) => Name: " + inEvent.user.userName + " ID: " + inEvent.user.userID);
-				newEntity.getComponentByType(ECGame.EngineLib.EntityComponent_2DPhysics)[0].setNetOwner(inEvent.user.userID);
-				newEntity.getComponentByType(ECGame.EngineLib.EntityComponent_Input)[0].setNetOwner(inEvent.user.userID);
+				anEntity.getComponentByType(ECGame.EngineLib.EntityComponent_2DPhysics)[0].setNetOwner(inEvent.user.userID);
+				anEntity.getComponentByType(ECGame.EngineLib.EntityComponent_Input)[0].setNetOwner(inEvent.user.userID);
 				//TODO camera component to control local camera??
 				//How? vvv??
-				newEntity.getComponentByType(ECGame.EngineLib.EntityComponent_2DCamera)[0].setNetOwner(inEvent.user.userID);
+				anEntity.getComponentByType(ECGame.EngineLib.EntityComponent_2DCamera)[0].setNetOwner(inEvent.user.userID);
 			}
-			this._gameWorld.addEntity(newEntity);
+			this._gameWorld.addEntity(anEntity);
 		},
 		
 		onClientDisconnected : function onClientDisconnected(inEvent)

@@ -994,7 +994,7 @@ Local Variable Names:
 	currentDateTime
 	minute
 	second
-	newEntity
+	anEntity
 	cameraAABB
 	cameraLeftTop
 	mouseWorldPosition
@@ -2398,7 +2398,7 @@ Included Words:
 	currentDateTime
 	minute
 	second
-	newEntity
+	anEntity
 	cameraAABB
 	cameraLeftTop
 	mouseWorldPosition
