@@ -1,3 +1,17 @@
+see serializingStuff file also
+
+-check socket support
+-binary support in websockets!!!
+http://dev.w3.org/html5/websockets/#dom-websocket-protocol
+http://martinsikora.com/nodejs-and-websocket-simple-chat-tutorial
+http://www.adobe.com/devnet/html5/articles/real-time-data-exchange-in-html5-with-websockets.html
+http://stackoverflow.com/questions/12718970/javascript-typed-arrays-over-the-wire
+https://developer.mozilla.org/en-US/docs/JavaScript/Typed_arrays/ArrayBuffer
+
+-socket.io driver
+-websocket driver
+
+
 GameNetwork
 	-client/Server
 	-main bit...

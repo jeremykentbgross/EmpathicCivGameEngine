@@ -1,3 +1,13 @@
+canplaytype()?
+http://html5doctor.com/native-audio-in-the-browser/
+http://www.catswhocode.com/blog/mastering-the-html5-audio-property
+
+-Spacial partitioning!! //maybe actually in the game world object? (so when switching worlds..) ; maybe connected to soundplayer component?
+-virtually play sounds, play for real when in range
+-can play sound in browser?
+
+-Sound listener connected to camera?
+-environment effect connected to listener based on listener position vs source? ex: echo in big space, not much in small, or muffled if behind an obstical
 
 
 AUDIO:
@@ -11,12 +21,10 @@ AUDIO:
   <source src="sound.mp3">
 </audio>
 
-
 <audio controls>
   <source src="sound.ogg" type="audio/ogg" >
   <source src="sound.mp3" type="audio/mp3" >
 </audio>
-
 
 <audio controls>
   <source src="sound.ogg" type="audio/ogg" >
@@ -28,7 +36,6 @@ AUDIO:
   <source src="sound.mp3" preload="auto" >
 </audio>
 
-
 <audio id="player" src="sound.mp3"></audio>
 <div>
 	<button onclick="document.getElementById('player').play()">Play</button>
@@ -36,8 +43,3 @@ AUDIO:
 	<button onclick="document.getElementById('player').volume+=0.1">Volume Up</button>
 	<button onclick="document.getElementById('player').volume-=0.1">Volume Down</button>
 </div>
-
-
-canplaytype()?
-http://html5doctor.com/native-audio-in-the-browser/
-http://www.catswhocode.com/blog/mastering-the-html5-audio-property

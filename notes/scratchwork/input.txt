@@ -6,3 +6,5 @@ document.onselectstart = function()
 {
     return false;
 };
+
+http://stackoverflow.com/questions/7059039/how-to-prevent-accidental-select-drag-highlight-on-webpage-when-drawing-off-html

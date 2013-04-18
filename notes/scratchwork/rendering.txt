@@ -1,0 +1,69 @@
+Renderer work:
+
+-check canvas support
+
+-custom scenegraph depth sorting funcs
+-flag to update sprite/tile anims when not on screen?
+-assetmanager.load have callbacks instead of assigning it to the object
+	--onImageLoaded
+	--getPercentAssetsLoaded()
+-tile class (see bellow)
+-unify names (origin, anchor, anchorPosition, etc..)
+
+-sprite insert per frame, or per sprite?
+//	(draw more clipped or more inserts) => flag to decide!!
+
+//tile/sprite? Same render call for graph (what does this mean?)
+
+CURRENT:
+	
+Tileset:
+-renderTile(id,..)
+-get layer
+-get physics rect
+init([{
+	fileName : 'images/wall_level01_01.png'
+	,anchor : GameEngineLib.createGame2DPoint(32, 32)
+	,layer : 1
+	,physics : GameEngineLib.createGame2DAABB(0, 0, 64, 64)
+	,size : GameEngineLib.createGame2DPoint(96,96)
+}]);
+
+
+SHOULD BE:
+
+Tile (Renderable):
+-tileValue
+-physicsObj
+-render(inCanvas2DContext, inCameraRect)
+
+
+???
+ImageSheet (Object) //animation/tile
+-fileName //image
+
+
+
+TileDescription:
+-tileSheet : ...
+-src rect
+-anchor : GameEngineLib.createGame2DPoint(32, 32)
+-layer : 1
+-physics : GameEngineLib.createGame2DAABB(0, 0, 64, 64)
+//-size : GameEngineLib.createGame2DPoint(96,96)
+
+AnimatedTileDescription:
+...
+
+AnimInstance (Renderable):
+//see anim notes file
+
+2dbase: //inherit by tiledesc and animframe??
+-sourceSheet
+-src rect
+-anchor/origin
+-layer
+-render(pos)
+{
+	Draw(img, (pos-origin)+destRect,srcRecs);
+}
