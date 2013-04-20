@@ -1,6 +1,22 @@
 See networking file also
 
 
+
+-Serializable Command (pattern?)
+-Json conversation trees
+-flow graph?
+-editor page (com)
+-oauth/db
+-ui lib
+-dojo dom mgr
+-reflect ui (default tab)
+-Jsdoc3
+-net send groups (in GameObj?), ex: fog via map / team + master + sprite frames base (with timeout timer after being seen)
+
+
+
+
+
 Replication:
 GObj:
 -copyfrom()//chain

@@ -1,3 +1,9 @@
+QuadTree reworks/additions (see backlog)
+-upmerge
+-raytrace (also in physics)
+
+
+
 PhysicsObj:
 -center
 -solids[]/triggers[]

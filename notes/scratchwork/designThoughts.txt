@@ -240,4 +240,163 @@ DunKep:
 Libs -> ServerRacks (terminal)
 
 
+
+
+
+paper/rock/sissors:
+-fps range (3)
+-sc armor/air/cloak
+Dota / TD
+t/d/h/cc + b/d
+AT:
+1 Prox/remote/bot/turr/supply => colapse/clear/toggle?
+2 Fast/scan/cams/ports/cloak/hack (consoles/lines) + light/sni
+3 Secur tank/shield(s)/doors/detectors/secur bots/1 way barricade
+or bubbles
+4 Med/bio g/O2 env (supply line: crops?)
+5 Eng/rep/bridge/powerlines/rep bots (supply line: power/data)
+6 Hv/flame/ass/rock/chain
+ST:
+1 Drive / mines / structure?
+2 Sens (targeted)/cloak/hack other?/coms
+3 Def in/out (shlds/doors)
+4 "
+5 Rep/Eng/Pow
+6 Wep
+who: home tiles?
+upgrs:
+-batteries/port power (temp disconnected ports / other)
+BLD:
+AT: (see sc/dk/ns2/td/tf2/bf2142)
+-pow/lines
+-upg
+-doors
+-bridges
+-cams
+-home tiles
+-walls / shlds
+-replicators / spwnpod
+ST: (see FTL)
+-eng
+-wep
+-prop
+-doors
+-
+ST build:
+-quarters
+-eng
+-med
+-etc
+=>mass / rotational ..
+DunKep:
+Libs -> ServerRacks (terminal)
+
+
+
+
+Simulated worlds
+(Imagining a better tomorrow).
+
+Econ sim:
+Real money AH %
+Robbery, etc
+How will u organize?
+
+Real estate + transaction fee
+
+
+Code design:
+------------------
+-sniper scroll
+-cam move to killer
+-fog of war
+-map component register with map (and debug draw how many are following)
+-cylinder reflectors
+-friendly (no) firing?
+-spacemap design w/asteroids, clouds, sun (no hind sun visibl), etc use asteroids as wepons->netphysics?
+-optic filters, energy levels, shields
+-mass cloak?
+
+
+
+paper/rock/sissors:
+-fps range (3)
+-sc armor/air/cloak
+Dota / TD
+t/d/h/cc + b/d
+AT:
+1 Prox/remote/bot/turr/supply => colapse/clear/toggle?
+2 Fast/scan/cams/ports/cloak/hack (consoles/lines) + light/sni
+3 Secur tank/shield(s)/doors/detectors/secur bots/1 way barricade
+or bubbles
+4 Med/bio g/O2 env (supply line: crops?)
+5 Eng/rep/bridge/powerlines/rep bots (supply line: power/data)
+6 Hv/flame/ass/rock/chain
+ST:
+1 Drive / mines / structure?
+2 Sens (targeted)/cloak/hack other?/coms
+3 Def in/out (shlds/doors)
+4 "
+5 Rep/Eng/Pow
+6 Wep
+who: home tiles?
+upgrs:
+-batteries/port power (temp disconnected ports / other)
+BLD:
+AT: (see sc/dk/ns2/td/tf2/bf2142)
+-pow/lines
+-upg
+-doors
+-bridges
+-cams
+-home tiles
+-walls / shlds
+-replicators / spwnpod
+ST: (see FTL)
+-eng
+-wep
+-prop
+-doors
+-
+ST build:
+-quarters
+-eng
+-med
+-etc
+=>mass / rotational ..
+DunKep:
+Libs -> ServerRacks (terminal)
+http://d3js.org/
+
+
+
+
+http://en.wikipedia.org/wiki/StarTropics
+
+
+
+http://www.gamasutra.com/view/feature/1733/rock_paper_scissors__a_method_for_.php
+
+A->F->B->A
+
+  A F B
+ -----
+A|T W L
+F|L T W
+B|W L T
+
+Kil, Soc, Exp, Ach
+
+5:
+Know, Def, Att, Build, Heal/Rep/**ctrl**?
+
+Dmg: SinTar/AoE, Rng/Loc, DoT/burst
+
+Standard 5: Ft, Ran, Cler, Rog, Wiz
+
+*/
+
+Gamify: points for games completed, financial supporter badge; meaning, goals, freedom!
+
+
 http://d3js.org/

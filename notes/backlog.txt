@@ -21,6 +21,16 @@ Testing:
 
 
 
+
+(also grab mini mmo, 5thcell, 'project' a*, etc)
+
+Map rework / Helper
+-prerender (opt phase?)
+-solid space
+-minimmo style editing
+
+
+
 UI
 -css(3)
 
@@ -449,3 +459,95 @@ PAGE LAUNCH:
 Like https://developers.facebook.com/docs/reference/plugins/like/
 tweet: ??
 
+
+
+--------------------------
+Obj.shouldBeClient()??
+
+Scripting lang from ct.//??WTF did that mean?
+
+Post package.json + is lib!:
+Dir:??
+-gitignore node_modules
+-server.js
+-bat/sh run/debug/debuger (generic path vars)
+-public
+--scripts
+--css
+--imgs
+--snds
+-private
+//user node code:
+require (engine);
+engine.init(user Public/Private, debug/release);//debug/release compresses/obfuscates to 1 file!
+//requires user GameLoader, etc.
+engine.run();
+
+
+
+
+Rework logger
+Bkup pixelize/dither proj/demo
+
+Obj name, obj id (from svr only!?!)
+
+
+GObject destruction listeners
+
+
+
+
+
+-Physics collisions from multiple tree nodes??
+-Physics print all collision per frame
+-phys broad, narrow, resolution (triggers)
+-game/private/secrets:
+SysVars.xxx=fb/db/as pass
+-game sysvars appname
+-Try new art (crystals/other dirt colors)
+-npm current local vs current versions (ud all)
+-GameRules refactor (css/chat)
+-sound tree/priority/max channels/pause
+-interpret component
+(example: input => request / command; own char class stats like speed etc)
+-obj ref get/set getpath
+-Obj set !net; ex: master vs team map
+-event listener priorities
+-traitor/judas/spy (faction depends on observer)
+-class empathy (penalties/rewards for your own class?)
+-karma burnoff mechanic
+-Render/graphics obj rapper.
+-custom array funcs: push/pop_front/back
+
+Newest jsdoc3
+Everyoauth
+
+
+
+
+
+
+@depricated?? (depricated index?)
+@type (ns, class, func, memb);
+@name;
+@param type(s) name;
+@owner/scope
+@pub/priv/pro
+@parent
+Namespaces.Nsn.Classes.classname.methods. =
+{
+};
+
+-Zelda letters White w/black/trans/yellow
+-placeholdr ref sounds: SW blaster, ST scanner/beeps, rom sounds?:steps, letters? Etc..
+
+
+QT: Sound listeners/sounds/events (ie triggers), aabb->spheres
+
+
+
+AssMan.loaded()//%
+Framework.ud()
+-if!loaded&&!streaming
+--loading%
+-else ud()

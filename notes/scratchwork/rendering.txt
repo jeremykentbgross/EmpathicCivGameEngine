@@ -2,6 +2,10 @@ Renderer work:
 
 -check canvas support
 
+-issue with floating point cords
+
+-tile animation
+
 -custom scenegraph depth sorting funcs
 -flag to update sprite/tile anims when not on screen?
 -assetmanager.load have callbacks instead of assigning it to the object

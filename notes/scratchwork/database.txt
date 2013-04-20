@@ -1,0 +1,153 @@
+
+
+//package.json
+{
+	"name": "Hello-node.js-Cassandra",
+	"description": "Accessing Cassandra from node.js",
+	"version": "0.0.1",
+	"private": true,
+	"dependencies":
+	{
+		"express": "3.0.0rc4",
+		"helenus": "0.5.7"
+	}
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////
+var path = require('path');
+var express = require("express");
+var helenus = require('helenus');
+
+
+
+
+
+
+
+////////////////////////////////////////////////////
+var cassandraPool = new helenus.ConnectionPool(
+	{
+		hosts :
+		[
+			'10.48.18.114:9160',
+			'10.48.18.115:9160'
+		],
+		keyspace : "JeremysDemo",
+		user : "nodejsUser",
+		timeout : 3000
+	}
+);
+
+
+////////////////////////////////////////////////////
+
+
+//http://ketanjetty.com/coldfusion/javascript/format-json/
+// formatJson() :: formats and indents JSON string
+function formatJson(val) {
+    var retval = '';
+    var str = val;
+    var pos = 0;
+    var strLen = str.length;
+    var indentStr = '&nbsp;&nbsp;&nbsp;&nbsp;';
+    var newLine = '<br />';
+    var char = '';
+     
+    for (var i=0; i<strLen; i++) {
+        char = str.substring(i,i+1);
+         
+        if (char == '}' || char == ']') {
+            retval = retval + newLine;
+            pos = pos - 1;
+             
+            for (var j=0; j<pos; j++) {
+                retval = retval + indentStr;
+            }
+        }
+         
+        retval = retval + char;
+         
+        if (char == '{' || char == '[' || char == ',') {
+            retval = retval + newLine;
+	             
+            if (char == '{' || char == '[') {
+                pos = pos + 1;
+            }
+             
+            for (var k=0; k<pos; k++) {
+                retval = retval + indentStr;
+            }
+        }
+    }
+     
+    return retval;
+}
+
+
+
+////////////////////////////////////////////////////
+var app = express();
+
+app.set('title', 'Cassandra for the win!');
+
+app.get(
+	'/',
+	function(req, res)
+	{
+		cassandraPool.connect(
+			function(err, keyspace)
+			{
+				if(err)
+				{
+					console.log(err);
+					res.send(err);
+				}
+				else
+				{
+					cassandraPool.cql(
+						//"BEGIN BATCH "+//USING CONSISTENCY QUORUM " +
+						//	"INSERT INTO user2" + 
+						//		"(KEY, 'first', 'last', 'age')" +
+						//		"VALUES ('tamerica', 'team', 'america', '200')" +
+						//	"INSERT INTO user2" +
+						//		"(KEY, 'first', 'last')" +
+						//		"VALUES ('fyeah', 'fuck', 'yeah')" +
+						//		//"USING CONSISTENCY QUORUM;" +
+						//"APPLY BATCH;"
+						"SELECT * FROM user2;"
+						,null//['jgross']	// '?' substitues
+						,function(err, results)
+						{
+							var jsonRes = "";
+							if(results !== null && results !== undefined)
+								jsonRes = formatJson(JSON.stringify(results));
+							console.log(err, jsonRes);
+							res.send("Error: " + err + "<br/>Results: <p>\"" + jsonRes + "\"</p>");
+						}
+					);
+				}
+			}
+		);
+//		res.sendfile(
+//			path.join(__dirname, "server.js")
+//		);
+	}
+);
+
+app.get(
+	'/*.(js|json)',
+	function(req, res)
+	{
+		res.sendfile(
+			path.join(__dirname, req.url)
+		);
+	}
+);
+
+
+app.listen(8080);
+console.log("listening now!");
+
+////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////

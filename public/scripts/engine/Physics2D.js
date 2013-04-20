@@ -418,7 +418,7 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 					if(frameCount === item.lastFrameDrawn)
 					{
 						return;
-					}item.lastFrameDrawn=frameCount;
+					}item.lastFrameDrawn=frameCount;//HACK???? TODO name lastFrameDebugDrawn
 					switch(item.myStatus)
 					{
 						case STATUS__STATIC ://black
