@@ -66,6 +66,20 @@ ECGame.EngineLib.Point2.prototype.subtract = function subtract(inOther)
 
 
 
+ECGame.EngineLib.Point2.prototype.multiply = function multiply(inOther)
+{
+	return new ECGame.EngineLib.Point2(this.myX * inOther.myX, this.myY * inOther.myY);
+};
+
+
+
+ECGame.EngineLib.Point2.prototype.divide = function divide(inOther)
+{
+	return new ECGame.EngineLib.Point2(this.myX / inOther.myX, this.myY / inOther.myY);
+};
+
+
+
 ECGame.EngineLib.Point2.prototype.scale = function scale(inScalar)
 {
 	return new ECGame.EngineLib.Point2(this.myX * inScalar, this.myY * inScalar);
@@ -111,6 +125,16 @@ ECGame.EngineLib.Point2.prototype.unit = function unit()
 {
 	var len = Math.sqrt(this.myX * this.myX + this.myY * this.myY);
 	return new ECGame.EngineLib.Point2(this.myX / len, this.myY / len);
+};
+
+
+
+ECGame.EngineLib.Point2.prototype.normalize = function normalize()
+{
+	var len = Math.sqrt(this.myX * this.myX + this.myY * this.myY);
+	this.myX = this.myX / len;
+	this.myY = this.myY / len;
+	return this;
 };
 
 

@@ -36,6 +36,7 @@ Final NameSpaces:
 	AABB2
 	clone
 	containsRect
+	containsPoint
 	intersectsRect
 	getIntersection
 	getUnion
@@ -44,6 +45,8 @@ Final NameSpaces:
 	getLeftTop
 	setLeftTop
 	getRight
+	getLeft
+	getTop
 	getBottom
 	getRightBottom
 	getLeftBottom
@@ -52,12 +55,15 @@ Final NameSpaces:
 	Point2
 	add
 	subtract
+	multiply
+	divide
 	scale
 	componentMax
 	componentMin
 	lenSq
 	length
 	unit
+	normalize
 	dot
 	floor
 	GameRegistry
@@ -276,6 +282,9 @@ Final NameSpaces:
 	walk
 	containsItems
 	pruneTowardsRoot
+	findSmallestContainingNodeFromHere
+	findSmallestContainingDescendant
+	findSmallestContainingAncestor
 	GameRenderable2D
 	RenderableTile2D
 	Animation2DFrame
@@ -299,6 +308,15 @@ Final NameSpaces:
 	_insertPhysicsObjectToTree
 	_removePhysicsObjectFromTree
 	createNewPhysicsObject
+	Ray2D
+	getCurrentNode
+	getCurrentPoint
+	getStartPoint
+	getEndPoint
+	getCurrentLength
+	getMaxLength
+	RayTracer2D
+	fireRay
 	Game2DTileSet
 	renderTile
 	renderTileInRect
@@ -343,6 +361,7 @@ Function Names:
 	AABB2
 	clone
 	containsRect
+	containsPoint
 	intersectsRect
 	getIntersection
 	getUnion
@@ -351,6 +370,8 @@ Function Names:
 	getLeftTop
 	setLeftTop
 	getRight
+	getLeft
+	getTop
 	getBottom
 	getRightBottom
 	getLeftBottom
@@ -359,12 +380,15 @@ Function Names:
 	Point2
 	add
 	subtract
+	multiply
+	divide
 	scale
 	componentMax
 	componentMin
 	lenSq
 	length
 	unit
+	normalize
 	dot
 	floor
 	GameRegistry
@@ -583,6 +607,9 @@ Function Names:
 	walk
 	containsItems
 	pruneTowardsRoot
+	findSmallestContainingNodeFromHere
+	findSmallestContainingDescendant
+	findSmallestContainingAncestor
 	GameRenderable2D
 	RenderableTile2D
 	Animation2DFrame
@@ -606,6 +633,15 @@ Function Names:
 	_insertPhysicsObjectToTree
 	_removePhysicsObjectFromTree
 	createNewPhysicsObject
+	Ray2D
+	getCurrentNode
+	getCurrentPoint
+	getStartPoint
+	getEndPoint
+	getCurrentLength
+	getMaxLength
+	RayTracer2D
+	fireRay
 	Game2DTileSet
 	renderTile
 	renderTileInRect
@@ -795,6 +831,9 @@ Parameter Variables:
 	inWorldSize
 	inPhysicsObject
 	deltaTime
+	inRootNode
+	inStartingPoint
+	inEndingPoint
 	inTiles
 	inCanvasContext
 	inTargetPoint
@@ -938,6 +977,8 @@ Local Variable Names:
 	aChild
 	aItem
 	aCurrentNode
+	aNode
+	aSmallestNode
 	outEvents
 	dest
 	size
@@ -979,6 +1020,14 @@ Local Variable Names:
 	force
 	acceleration
 	aCollisionRect
+	aD123
+	aD456
+	aT123
+	aT456
+	aNewT
+	aCurrent
+	aDrawSize
+	aHalfDrawSize
 	tileset
 	camera
 	target
@@ -995,6 +1044,7 @@ Local Variable Names:
 	minute
 	second
 	anEntity
+	rayTrace
 	cameraAABB
 	cameraLeftTop
 	mouseWorldPosition
@@ -1289,6 +1339,7 @@ Member Variables:
 	_myParent
 	_createChildren
 	pruneTowardsRoot
+	findSmallestContainingAncestor
 	QuadTreeItem
 	sceneGraphOwningNodes
 	lastFrameDrawn
@@ -1338,6 +1389,17 @@ Member Variables:
 	setActive
 	_removePhysicsObjectFromTree
 	_insertPhysicsObjectToTree
+	_myP0
+	_myP1
+	_myV
+	_myT
+	_myMaxT
+	_myCurrentPoint
+	_myCurrentNode
+	_myRay
+	_myTree
+	_myVisitedNodes
+	_myNodeCollisionPoints
 	_myTiles
 	_maxLayers
 	_physics
@@ -1385,6 +1447,7 @@ Member Variables:
 	registerTest
 	clone
 	containsRect
+	containsPoint
 	intersectsRect
 	getIntersection
 	getUnion
@@ -1393,6 +1456,8 @@ Member Variables:
 	getLeftTop
 	setLeftTop
 	getRight
+	getLeft
+	getTop
 	getBottom
 	getRightBottom
 	setRightBottom
@@ -1401,12 +1466,15 @@ Member Variables:
 	copyFrom
 	add
 	subtract
+	multiply
+	divide
 	scale
 	componentMax
 	componentMin
 	lenSq
 	length
 	unit
+	normalize
 	dot
 	floor
 	getMaxID
@@ -1470,6 +1538,8 @@ Member Variables:
 	deleteContained
 	walk
 	containsItems
+	findSmallestContainingNodeFromHere
+	findSmallestContainingDescendant
 	insertItem
 	removeItem
 	EngineLib
@@ -1528,6 +1598,8 @@ Member Variables:
 	Animation2D
 	Game2DSceneGraph
 	Physics2D
+	Ray2D
+	RayTracer2D
 	GameRules
 	Network
 	RUN_UNIT_TESTS
@@ -1572,6 +1644,7 @@ Member Variables:
 	UpdatePosition
 	PlaySound
 	useRequestAnimFrame
+	ourFrameRayCounter
 	StaticThing
 	initWidth
 	initHeight
@@ -1722,6 +1795,13 @@ Member Variables:
 	myRegisteredActiveNode
 	getMass
 	myOwner
+	getCurrentNode
+	getCurrentPoint
+	getStartPoint
+	getEndPoint
+	getCurrentLength
+	getMaxLength
+	fireRay
 	renderTile
 	renderTileInRect
 	getTileRect
@@ -1773,6 +1853,7 @@ Included Words:
 	AABB2
 	clone
 	containsRect
+	containsPoint
 	intersectsRect
 	getIntersection
 	getUnion
@@ -1781,6 +1862,8 @@ Included Words:
 	getLeftTop
 	setLeftTop
 	getRight
+	getLeft
+	getTop
 	getBottom
 	getRightBottom
 	getLeftBottom
@@ -1789,11 +1872,14 @@ Included Words:
 	Point2
 	add
 	subtract
+	multiply
+	divide
 	scale
 	componentMax
 	componentMin
 	lenSq
 	unit
+	normalize
 	dot
 	GameRegistry
 	getMaxID
@@ -2008,6 +2094,9 @@ Included Words:
 	walk
 	containsItems
 	pruneTowardsRoot
+	findSmallestContainingNodeFromHere
+	findSmallestContainingDescendant
+	findSmallestContainingAncestor
 	GameRenderable2D
 	RenderableTile2D
 	Animation2DFrame
@@ -2031,6 +2120,15 @@ Included Words:
 	_insertPhysicsObjectToTree
 	_removePhysicsObjectFromTree
 	createNewPhysicsObject
+	Ray2D
+	getCurrentNode
+	getCurrentPoint
+	getStartPoint
+	getEndPoint
+	getCurrentLength
+	getMaxLength
+	RayTracer2D
+	fireRay
 	Game2DTileSet
 	renderTile
 	renderTileInRect
@@ -2212,6 +2310,9 @@ Included Words:
 	inWorldSize
 	inPhysicsObject
 	deltaTime
+	inRootNode
+	inStartingPoint
+	inEndingPoint
 	inTiles
 	inCanvasContext
 	inTargetPoint
@@ -2344,6 +2445,8 @@ Included Words:
 	aChild
 	aItem
 	aCurrentNode
+	aNode
+	aSmallestNode
 	outEvents
 	dest
 	halfSize
@@ -2382,6 +2485,14 @@ Included Words:
 	force
 	acceleration
 	aCollisionRect
+	aD123
+	aD456
+	aT123
+	aT456
+	aNewT
+	aCurrent
+	aDrawSize
+	aHalfDrawSize
 	tileset
 	camera
 	target
@@ -2397,6 +2508,7 @@ Included Words:
 	minute
 	second
 	anEntity
+	rayTrace
 	cameraAABB
 	cameraLeftTop
 	mouseWorldPosition
@@ -2659,6 +2771,17 @@ Included Words:
 	myDensity
 	setStatic
 	setActive
+	_myP0
+	_myP1
+	_myV
+	_myT
+	_myMaxT
+	_myCurrentPoint
+	_myCurrentNode
+	_myRay
+	_myTree
+	_myVisitedNodes
+	_myNodeCollisionPoints
 	_myTiles
 	_maxLayers
 	_physics
@@ -2717,6 +2840,7 @@ Included Words:
 	USER_IDS
 	_serializeFormat
 	useRequestAnimFrame
+	ourFrameRayCounter
 	StaticThing
 	initWidth
 	initHeight

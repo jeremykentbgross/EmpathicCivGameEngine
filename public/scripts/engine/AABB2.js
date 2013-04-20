@@ -68,6 +68,36 @@ ECGame.EngineLib.AABB2.prototype.containsRect = function containsRect(inOtherRec
 
 
 
+ECGame.EngineLib.AABB2.prototype.containsPoint = function containsPoint(inPoint)
+{
+	if(inPoint.myX < this.myX)//left
+	{
+		return false;
+	}
+	if(inPoint.myX > this.myX + this.myWidth)//right
+	{
+		return false;
+	}
+
+	if(inPoint.myY > this.myY + this.myHeight)//bellow
+	{
+		return false;
+	}
+	if(inPoint.myY < this.myY)//above
+	{
+		return false;
+	}
+
+//	if(inPoint.myZ < Front())
+//		return false;
+//	if(inPoint.myZ > Back())
+//		return false;
+
+	return true;
+};
+
+
+
 ECGame.EngineLib.AABB2.prototype.intersectsRect = function intersectsRect(inOtherRect)
 {
 	if(inOtherRect.myX + inOtherRect.myWidth <= this.myX)
@@ -94,10 +124,12 @@ ECGame.EngineLib.AABB2.prototype.intersectsRect = function intersectsRect(inOthe
 
 ECGame.EngineLib.AABB2.prototype.getIntersection = function getIntersection(inOtherRect)
 {
-	var x = Math.max(this.myX, inOtherRect.myX);
-	var y = Math.max(this.myY, inOtherRect.myY);
+	var x, y, outIntersection;
 	
-	var outIntersection = ECGame.EngineLib.AABB2.create(
+	x = Math.max(this.myX, inOtherRect.myX);
+	y = Math.max(this.myY, inOtherRect.myY);
+	
+	outIntersection = ECGame.EngineLib.AABB2.create(
 		x,
 		y,
 		Math.max(
@@ -170,6 +202,20 @@ ECGame.EngineLib.AABB2.prototype.setLeftTop = function setLeftTop(inPoint)
 ECGame.EngineLib.AABB2.prototype.getRight = function getRight()
 {
 	return this.myX + this.myWidth;
+};
+
+
+
+ECGame.EngineLib.AABB2.prototype.getLeft = function getLeft()
+{
+	return this.myX;
+};
+
+
+
+ECGame.EngineLib.AABB2.prototype.getTop = function getTop()
+{
+	return this.myY;
 };
 
 

@@ -377,6 +377,14 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			if(ECGame.instance.isRunning())
 			{
 				this._gameWorld.render(inCanvas2DContext);
+				
+				var rayTrace = new ECGame.EngineLib.RayTracer2D.create();
+				rayTrace.fireRay(
+					this._gameWorld.getPhysics()._myDetectionTree
+					,ECGame.EngineLib.Point2.create(32 + 64 * 2, 32 + 64 * 3)
+					,ECGame.EngineLib.Point2.create(32 + 64 * 7, 32 + 64 * 8)
+				);
+				rayTrace.debugDraw(inCanvas2DContext, this._gameWorld.getCurrentCamera().getRect());//TODO rename getRect, gameRect, etc etc..
 			}
 			else
 			{
@@ -418,9 +426,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			
 			//TODO should be in component (and/or world)
 			ECGame.instance.soundSystem.setListenerPosition(cameraAABB.getCenter());
-						
-			
-			
+		
 			/////////////////////////////////////////////////////////
 			//Handle input:
 			

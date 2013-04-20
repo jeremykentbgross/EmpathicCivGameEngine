@@ -157,12 +157,14 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 		{
 			this._world = inEvent.world;
 			this._world.getSceneGraph().insertItem(this._sceneGraphRenderable);
+			//TODO add to updater
 		},
 
 		onRemovedFromWorld : function(inEvent)
 		{
 			this._world.getSceneGraph().removeItem(this._sceneGraphRenderable);
 			this._world = null;
+			//TODO remove from updater
 		},
 
 		destroy : function(){},//TODO

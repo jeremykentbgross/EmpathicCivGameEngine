@@ -56,6 +56,13 @@ ECGame.EngineLib.QuadTree.prototype.init = function init(inGame2DAABB, inMinSize
 
 
 
+ECGame.EngineLib.QuadTree.prototype.getAABB = function getAABB()
+{
+	return this._myAABB;//Note not cloned because it **should be** faster for ray tracer
+};
+
+
+
 ECGame.EngineLib.QuadTree.prototype._createChildren = function _createChildren()
 {
 	var aHalfWidth,
@@ -437,3 +444,69 @@ ECGame.EngineLib.QuadTree.prototype.pruneTowardsRoot = function pruneTowardsRoot
 };
 
 
+
+ECGame.EngineLib.QuadTree.prototype.findSmallestContainingNodeFromHere = 
+	function findSmallestContainingNodeFromHere(inPoint, inMinSize)
+{
+	var aNode;
+	
+	inMinSize = inMinSize || 0.0;
+	
+	aNode = this.findSmallestContainingAncestor(inPoint);
+	if(aNode)
+	{
+		return aNode.findSmallestContainingDescendant(inPoint, inMinSize);
+	}
+	return null;
+};
+
+
+
+ECGame.EngineLib.QuadTree.prototype.findSmallestContainingDescendant = 
+	function findSmallestContainingDescendant(inPoint, inMinSize)
+{
+	var index,
+		aSmallestNode = null;
+	
+	inMinSize = inMinSize || 0.0;
+	
+	if(!this._myAABB.containsPoint(inPoint))
+	{
+		return null;
+	}
+	if(this._myChildren === null || this._myAABB.myWidth / 2 < inMinSize)
+	{
+		return this;
+	}
+	
+	for(index = 0; index < this._myChildren.length; ++index)
+	{
+		aSmallestNode = this._myChildren[index].findSmallestContainingDescendant(inPoint, inMinSize);
+		if(aSmallestNode !== null)
+		{
+			return aSmallestNode;
+		}
+	}
+
+	return aSmallestNode;	//should not happen, todo assert??
+};
+
+
+
+ECGame.EngineLib.QuadTree.prototype.findSmallestContainingAncestor = 
+	function findSmallestContainingAncestor(inPoint)
+{
+	var aCurrentNode;
+	
+	aCurrentNode = this;
+	while(!aCurrentNode._myAABB.containsPoint(inPoint))
+	{
+		aCurrentNode = aCurrentNode._myParent;
+		if(aCurrentNode === null)
+		{
+			break;
+		}
+	}
+		
+	return aCurrentNode;
+};
