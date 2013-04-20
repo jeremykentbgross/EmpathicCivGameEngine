@@ -148,7 +148,7 @@ GameLoader =
 		include(inSharedPath + "scripts/engine/Animation2DInstance.js");
 		include(inSharedPath + "scripts/engine/Game2DSceneGraph.js");
 		include(inSharedPath + "scripts/engine/Game2DMap.js");
-		include(inSharedPath + "scripts/engine/Game2DPhysics.js");
+		include(inSharedPath + "scripts/engine/Physics2D.js");
 		include(inSharedPath + "scripts/engine/Game2DTileSet.js");
 		include(inSharedPath + "scripts/engine/Game2DWorld.js");
 		include(inSharedPath + "scripts/engine/GameRulesBase.js");
