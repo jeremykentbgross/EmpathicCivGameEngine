@@ -117,7 +117,6 @@ Final NameSpaces:
 	loadSoundAssets
 	setSoundSamples
 	setSoundDescriptions
-	isUpdating
 	update
 	getSoundHardwareTime
 	getSoundHardwareTimeUpdateDelta
@@ -425,7 +424,6 @@ Function Names:
 	loadSoundAssets
 	setSoundSamples
 	setSoundDescriptions
-	isUpdating
 	update
 	getSoundHardwareTime
 	getSoundHardwareTimeUpdateDelta
@@ -1437,7 +1435,6 @@ Member Variables:
 	getHeight
 	_onClientDisconnected
 	sendMessage
-	isUpdating
 	_serializeObjectsIn
 	addNetDirtyObject
 	addNewObject
@@ -1530,7 +1527,6 @@ Member Variables:
 	Animation2DFrame
 	Animation2D
 	Game2DSceneGraph
-	createGame2DPhysics
 	Physics2D
 	GameRules
 	Network
@@ -1856,7 +1852,6 @@ Included Words:
 	loadSoundAssets
 	setSoundSamples
 	setSoundDescriptions
-	isUpdating
 	update
 	getSoundHardwareTime
 	getSoundHardwareTimeUpdateDelta
@@ -2711,7 +2706,6 @@ Included Words:
 	createEventSystem
 	createGame2DGraphics
 	createGameObjectRef
-	createGame2DPhysics
 	Network
 	RUN_UNIT_TESTS
 	DEBUG

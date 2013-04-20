@@ -304,7 +304,6 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			return true;
 		},
 		
-		isUpdating : function isUpdating(){return true;},
 		//TODO subscribe to timer updates!!!
 		update : function update()//TODO timer should send data and many things in param object
 		{

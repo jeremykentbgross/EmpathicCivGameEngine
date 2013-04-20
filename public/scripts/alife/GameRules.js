@@ -273,7 +273,7 @@ ECGame.Lib.createGameRules = function(instance, PRIVATE)
 		return true;
 	}
 	
-	instance.isUpdating = function(){return true;}
+	//instance.isUpdating = function(){return true;}
 	instance.update = function()
 	{
 		PRIVATE.data = PRIVATE.data.slice(1, PRIVATE.data.length);

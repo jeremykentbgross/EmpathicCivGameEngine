@@ -57,7 +57,6 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			//this._sceneGraphRenderable.layer = 1;
 		},
 		
-		isUpdating : function isUpdating(){	return true;	},
 		update : function update(inDT)
 		{
 			var aFrameEvents, i;

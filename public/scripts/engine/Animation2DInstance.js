@@ -36,7 +36,6 @@ ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{		
-		isUpdating : function isUpdating(){	return true;	},//TODO should get rid of these!!
 		update : function update(inDT)
 		{
 			var aCurrentFrame;

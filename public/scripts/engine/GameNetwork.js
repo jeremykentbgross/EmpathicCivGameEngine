@@ -482,14 +482,6 @@ ECGame.EngineLib.GameNetwork.prototype._onObjectsRecv = function _onObjectsRecv(
 };
 
 
-
-//TODO probably on BOTH sides
-ECGame.EngineLib.GameNetwork.prototype.isUpdating = function isUpdating()
-{
-	return true;//!ECGame.Settings.Network.isServer;//true;//isMultiplayer?? isConnected?
-};
-
-
 /*
 ECGame.EngineLib.GameNetwork.prototype.update = function update(inDt)
 {

@@ -149,13 +149,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 				this._clicked = {};
 			}
 		},
-		
-		//TODO make update an event so this is not needed
-		isUpdating : function isUpdating()
-		{
-			return true;
-		},
-		
+				
 		update : function update()
 		{
 			var i;

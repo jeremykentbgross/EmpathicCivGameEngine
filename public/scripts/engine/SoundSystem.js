@@ -172,10 +172,6 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 			}
 		},
 		
-		isUpdating : function isUpdating()
-		{
-			return true;
-		},
 		update : function update(/*??params??*/)
 		{
 			var aFinishedSounds = [], i;

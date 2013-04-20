@@ -161,11 +161,7 @@ ECGame.EngineLib.GameInstance.prototype.update = function update(inDt)
 		//TODO make update list an event system for onUpdate
 		for(i = 0; i < this.updateOrder.length; ++i)
 		{
-			var current = this.updateOrder[i];
-			if(current.isUpdating())//TODO they can return if they are not, meaning we can/should get rid of this
-			{
-				current.update(inDt);
-			}
+			this.updateOrder[i].update(inDt);
 		}
 		
 		if(!ECGame.Settings.Network.isServer)

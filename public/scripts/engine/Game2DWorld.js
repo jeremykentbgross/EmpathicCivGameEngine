@@ -59,7 +59,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 			this._sceneGraph = new ECGame.EngineLib.Game2DSceneGraph();
 			this._sceneGraph.init(this._mapsize, inTileSize);
 			
-			this._physics = ECGame.EngineLib.createGame2DPhysics();
+			this._physics = ECGame.EngineLib.Physics2D.create();
 			this._physics.init(this._mapsize, inMinPhysicsPartitionSize);
 			ECGame.instance.updateOrder.push(this._physics);//TODO make it join a physics updater, not this
 			
