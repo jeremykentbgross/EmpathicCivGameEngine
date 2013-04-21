@@ -51,6 +51,11 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 		//sound test stuff
 		this._lastSoundPlayed = null;
 		this._lastMouseWorldPosition = null;
+		
+		//testing rays:
+		this._isRayTestMode = true;
+		this._rayStart = ECGame.EngineLib.Point2.create();
+		this._rayEnd = ECGame.EngineLib.Point2.create();
 	},
 	
 	Parents : [ECGame.EngineLib.GameRulesBase],
@@ -378,13 +383,16 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			{
 				this._gameWorld.render(inCanvas2DContext);
 				
-				var rayTrace = new ECGame.EngineLib.RayTracer2D.create();
-				rayTrace.fireRay(
-					this._gameWorld.getPhysics()._myDetectionTree
-					,ECGame.EngineLib.Point2.create(32 + 64 * 2, 32 + 64 * 3)
-					,ECGame.EngineLib.Point2.create(32 + 64 * 7, 32 + 64 * 8)
-				);
-				rayTrace.debugDraw(inCanvas2DContext, this._gameWorld.getCurrentCamera().getRect());//TODO rename getRect, gameRect, etc etc..
+				if(this._isRayTestMode)
+				{
+					var rayTrace = new ECGame.EngineLib.RayTracer2D.create();
+					rayTrace.fireRay(
+						this._gameWorld.getPhysics()._myDetectionTree
+						,this._rayStart.clone()//ECGame.EngineLib.Point2.create(32 + 64 * 2, 32 + 64 * 3)
+						,this._rayEnd.clone()//ECGame.EngineLib.Point2.create(32 + 64 * 7, 32 + 64 * 8)
+					);
+					rayTrace.debugDraw(inCanvas2DContext, this._gameWorld.getCurrentCamera().getRect());//TODO rename getRect, gameRect, etc etc..
+				}
 			}
 			else
 			{
@@ -504,6 +512,11 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				ECGame.instance.exit();
 			}
 			
+			if(inInputEvent.keysPressed['\x72'])//r
+			{
+				this._isRayTestMode = !this._isRayTestMode;
+			}
+			
 			
 			if(inInputEvent.keysPressed['0'])
 			{
@@ -565,6 +578,17 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						)
 					);
 					temp.setAlwaysActive();
+				}
+			}
+			else if(this._isRayTestMode)
+			{
+				if(inInputEvent.buttons[0])
+				{
+					this._rayStart.copyFrom(mouseWorldPosition);
+				}
+				if(inInputEvent.buttons[2])
+				{
+					this._rayEnd.copyFrom(mouseWorldPosition);
 				}
 			}
 			else

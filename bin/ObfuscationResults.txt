@@ -309,6 +309,8 @@ Final NameSpaces:
 	_removePhysicsObjectFromTree
 	createNewPhysicsObject
 	Ray2D
+	intersectAABB
+	getPoint
 	getCurrentNode
 	getCurrentPoint
 	getStartPoint
@@ -634,6 +636,8 @@ Function Names:
 	_removePhysicsObjectFromTree
 	createNewPhysicsObject
 	Ray2D
+	intersectAABB
+	getPoint
 	getCurrentNode
 	getCurrentPoint
 	getStartPoint
@@ -834,6 +838,7 @@ Parameter Variables:
 	inRootNode
 	inStartingPoint
 	inEndingPoint
+	inT
 	inTiles
 	inCanvasContext
 	inTargetPoint
@@ -1025,6 +1030,8 @@ Local Variable Names:
 	aT123
 	aT456
 	aNewT
+	items
+	aPoint
 	aCurrent
 	aDrawSize
 	aHalfDrawSize
@@ -1396,10 +1403,12 @@ Member Variables:
 	_myMaxT
 	_myCurrentPoint
 	_myCurrentNode
+	getPoint
 	_myRay
 	_myTree
 	_myVisitedNodes
 	_myNodeCollisionPoints
+	_myItemCollisionPoints
 	_myTiles
 	_maxLayers
 	_physics
@@ -1427,6 +1436,9 @@ Member Variables:
 	_drawTile
 	_lastSoundPlayed
 	_lastMouseWorldPosition
+	_isRayTestMode
+	_rayStart
+	_rayEnd
 	_referenceEntitySoundPlayerComponent
 	_lastUpdateSec
 	_lastUpdateMin
@@ -1795,6 +1807,7 @@ Member Variables:
 	myRegisteredActiveNode
 	getMass
 	myOwner
+	intersectAABB
 	getCurrentNode
 	getCurrentPoint
 	getStartPoint
@@ -2121,6 +2134,8 @@ Included Words:
 	_removePhysicsObjectFromTree
 	createNewPhysicsObject
 	Ray2D
+	intersectAABB
+	getPoint
 	getCurrentNode
 	getCurrentPoint
 	getStartPoint
@@ -2313,6 +2328,7 @@ Included Words:
 	inRootNode
 	inStartingPoint
 	inEndingPoint
+	inT
 	inTiles
 	inCanvasContext
 	inTargetPoint
@@ -2490,6 +2506,8 @@ Included Words:
 	aT123
 	aT456
 	aNewT
+	items
+	aPoint
 	aCurrent
 	aDrawSize
 	aHalfDrawSize
@@ -2782,6 +2800,7 @@ Included Words:
 	_myTree
 	_myVisitedNodes
 	_myNodeCollisionPoints
+	_myItemCollisionPoints
 	_myTiles
 	_maxLayers
 	_physics
@@ -2805,6 +2824,9 @@ Included Words:
 	_drawTile
 	_lastSoundPlayed
 	_lastMouseWorldPosition
+	_isRayTestMode
+	_rayStart
+	_rayEnd
 	_referenceEntitySoundPlayerComponent
 	_lastUpdateSec
 	_lastUpdateMin
@@ -3525,6 +3547,9 @@ Localized Strings:
 	"Debug Drawing Physics"
 	"Frame Update Count:"
 	"Unknown Physics object status!"
+	"Debug Drawing Rays"
+	"Node Intersection Count:"
+	"Item Intersection Count:"
 	"No GameRules.js found!"
 	"No render code found in your GameRules.js!"
 	"Server Reboot in "

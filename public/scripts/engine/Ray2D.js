@@ -70,7 +70,7 @@ ECGame.EngineLib.Ray2D = ECGame.EngineLib.Class.create({
 				aT456,
 				aNewT;
 			
-			if (this._myCurrentNode === null)
+			if(this._myCurrentNode === null)
 			{
 				return false;
 			}
@@ -79,7 +79,7 @@ ECGame.EngineLib.Ray2D = ECGame.EngineLib.Class.create({
 
 //TODO: handle solid based trees!!
 			//we cannot go deeper, and this is blocled
-//			if (this._myCurrentNode->Full())//todo change this for transperancy!!
+//			if(this._myCurrentNode->Full())//todo change this for transperancy!!
 //			{
 //				return false;
 //			}
@@ -118,49 +118,115 @@ ECGame.EngineLib.Ray2D = ECGame.EngineLib.Class.create({
 			//now find the min aNewT (first plane intersection)
 			//	that is also > t_old (meaning skipping plane intersection that happened before reaching this node as t_old is last intersection)
 			aNewT = Number.MAX_VALUE;
-			if (aT123.myX < aNewT && aT123.myX > this._myT)
+			if(aT123.myX < aNewT && aT123.myX > this._myT)
 				aNewT = aT123.myX;
-			if (aT123.myY < aNewT && aT123.myY > this._myT)
+			if(aT123.myY < aNewT && aT123.myY > this._myT)
 				aNewT = aT123.myY;
-//			if (aT123.myZ < aNewT && aT123.myZ > this._myT)
+//			if(aT123.myZ < aNewT && aT123.myZ > this._myT)
 //				aNewT = aT123.myZ;
-			if (aT456.myX < aNewT && aT456.myX > this._myT)
+			if(aT456.myX < aNewT && aT456.myX > this._myT)
 				aNewT = aT456.myX;
-			if (aT456.myY < aNewT && aT456.myY > this._myT)
+			if(aT456.myY < aNewT && aT456.myY > this._myT)
 				aNewT = aT456.myY;
-//			if (aT456.myZ < aNewT && aT456.myZ > this._myT)
+//			if(aT456.myZ < aNewT && aT456.myZ > this._myT)
 //				aNewT = aT456.myZ;
 
 			//if we are past the end of the ray, quit!
-			if (aNewT > this._myMaxT)
+			if(aNewT > this._myMaxT)
 			{
+				this._myT = this._myMaxT;
+				this._myCurrentPoint = this.getPoint(this._myT);
 				return false;
 			}
 
 			//bump t into the next node, and remember this spot for next time.
 			this._myT = aNewT += 0.001;
 
-			this._myCurrentPoint = this._myP0.add(this._myV.scale(this._myT));
+			this._myCurrentPoint = this.getPoint(this._myT);
 				
 			//while we do not contain the collision point (bumped into next node) recurse to parent
-/*			do
-			{
-				this._myCurrentNode = this._myCurrentNode->parent;
-				if (this._myCurrentNode == null)
-				{
-					return false;
-				}
-			} while (!this._myCurrentNode.getAABB().Contains(this._myCurrentPoint));
-			//from the parent, find the child which is the next node
-			this._myCurrentNode = this._myCurrentNode->findSmallestContainingDescendant(this._myCurrentPoint);
-*/
+			//	then go back into the smallest child:
 			this._myCurrentNode = this._myCurrentNode.findSmallestContainingNodeFromHere(this._myCurrentPoint);
-			if(this._myCurrentNode == null)
+			if(this._myCurrentNode === null)
 			{
 				return false;
 			}
 
 			return true;
+		},
+		
+		intersectAABB : function intersectAABB(inAABB)
+		{
+			var aD123,
+				aD456,
+				aT123,
+				aT456,
+				aNewT;
+			
+			if(inAABB.containsPoint(this._myP0))
+			{
+				return this._myP0.clone();
+			}
+
+			//collide ray vs box walls (which happen to be all axis aligned planes)
+			//	Meaning: all planes are of the form: X = 3, or Y = 4
+			//		where a plane is given by: AX + BY + CZ = D
+			//	So: for "left top front", and "right bottom back" (2 sets of 3 planes)
+			//		Solve plane 1X + 0Y + 0Z = D1 and line P = p0 + t * v for 't'
+			//		Solve plane 0X + 1Y + 0Z = D2 and line P = p0 + t * v for 't'
+			//		Solve plane 0X + 0Y + 1Z = D3 and line P = p0 + t * v for 't'
+			//			This would be done by plugging P (or 'p0 + t * v') into X,Y,Z of each plane equation.
+			//	But: Each plane solution only needs one of the vector components (the others are times 0),
+			//		so we can solve all at once by putting a plane into each component of D123 and D456 and treating 't' as a vector
+			//			D1 = [1, 0, 0] * p0 + t * v		//only has x
+			//			D2 = [0, 1, 0] * p0 + t * v		//only has y
+			//			D3 = [0, 0, 1] * p0 + t * v		//only has z
+			//			=>	D123.xyz = p0 + t * v		//where t is vector, and t * v is per component mul
+			aD123 = new ECGame.EngineLib.Point2(
+				inAABB.getLeft()
+				,inAABB.getTop()
+				//,inAABB.getFront()
+			);
+			aD456 = new ECGame.EngineLib.Point2(
+				inAABB.getRight()
+				,inAABB.getBottom()
+				//,inAABB.getBack()
+			);
+			//	P = p0 + t * v
+			//	and P = D
+			//		=>	
+			//		t = (D - p0) / v
+			aT123 = aD123.subtract(this._myP0).divide(this._myV);	//per component div
+			aT456 = aD456.subtract(this._myP0).divide(this._myV);	//per component div
+
+			//now find the min aNewT (first plane intersection)
+			//	that is also > t_old (meaning skipping plane intersection that happened before reaching this node as t_old is last intersection)
+			aNewT = this._myMaxT;
+			if(aT123.myX < aNewT && aT123.myX > 0 && inAABB.containsPoint(this.getPoint(aT123.myX + 0.001)))
+				aNewT = aT123.myX;
+			if(aT123.myY < aNewT && aT123.myY > 0 && inAABB.containsPoint(this.getPoint(aT123.myY + 0.001)))
+				aNewT = aT123.myY;
+//			if(aT123.myZ < aNewT && aT123.myZ > 0)
+//				aNewT = aT123.myZ;
+			if(aT456.myX < aNewT && aT456.myX > 0 && inAABB.containsPoint(this.getPoint(aT456.myX + 0.001)))
+				aNewT = aT456.myX;
+			if(aT456.myY < aNewT && aT456.myY > 0 && inAABB.containsPoint(this.getPoint(aT456.myY + 0.001)))
+				aNewT = aT456.myY;
+//			if(aT456.myZ < aNewT && aT456.myZ > 0)
+//				aNewT = aT456.myZ;
+
+			//if we are past the end of the ray, quit!
+			if(aNewT !== this._myMaxT)
+			{
+				return this.getPoint(aNewT + 0.001);//TODO make 0.001 a constant var!
+			}
+
+			return null;
+		},
+		
+		getPoint : function getPoint(inT)
+		{
+			return this._myP0.add(this._myV.scale(inT));
 		},
 		
 		getCurrentNode : function getCurrentNode()
