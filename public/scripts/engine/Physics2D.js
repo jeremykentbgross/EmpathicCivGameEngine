@@ -19,31 +19,200 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*jslint plusplus: true */
 
-//TODO NOT OUT HERE!!!!
-//Physics Object Status constants:
-var STATUS__STATIC = 0;
-var STATUS__SLEEPING = 1;
-var STATUS__ACTIVE = 2;
-var STATUS__ALWAYS_ACTIVE = 3;
 
-//TODO extract physics object
+//TODO
 //separate broad/narrow/resolution
 //rays
 //fix update (events)
-//rename the file
 
 
+//TODO extract colidable parent class
+ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
+	Constructor : function PhysicsObject2D()
+	{
+		this.QuadTreeItem(new ECGame.EngineLib.AABB2());
+
+		this._myPhysicsSystemRef = null;
+		this._myStatus = null;
+		this._myDensity = null;
+		this._myVelocity = null;
+		this._myOwningNodes = null;
+		this._myActiveLinkedListNode = null;
+		this._myOwner = null;
+		this._myID = null;
+	},
+	Parents : [ECGame.EngineLib.QuadTreeItem],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition :
+	{
+		//Physics Object Status constants:
+		STATUS__STATIC : 0,
+		STATUS__SLEEPING : 1,
+		STATUS__ACTIVE : 2,
+		STATUS__ALWAYS_ACTIVE : 3,
+
+		init : function init(inPhysicsSystem)
+		{
+			this._myPhysicsSystemRef = inPhysicsSystem;
+			this._myStatus = this.PhysicsObject2D.STATUS__STATIC;
+			this._myDensity = 1;
+			this._myVelocity = ECGame.EngineLib.Point2.create();
+			this._myOwningNodes = [];
+			this._myActiveLinkedListNode = ECGame.EngineLib.createGameCircularDoublyLinkedListNode(this);			
+			this._myOwner = null;
+			this._myID = ++inPhysicsSystem._myNextPhysicsID;
+			inPhysicsSystem._myObjectsMap[this._myID] = this;
+		},
+		
+		getMass : function getMass()
+		{
+			return this._myDensity * this._myAABB.getArea();
+		},
+		
+		release : function release()	//TODO names: create/destroy init/clean ??/release
+		{
+			this.setStatic();//removes from active list
+			this._myPhysicsSystemRef._removePhysicsObjectFromTree(this);
+			delete this._myPhysicsSystemRef._myObjectsMap[this._myID];
+		},
+				
+		setStatic : function setStatic()
+		{
+			if(this._myStatus === this.PhysicsObject2D.STATUS__ACTIVE || this._myStatus === this.PhysicsObject2D.STATUS__ALWAYS_ACTIVE)
+			{
+				this._myActiveLinkedListNode.remove();
+			}
+			this._myStatus = this.PhysicsObject2D.STATUS__STATIC;
+		},
+		isStatic : function isStatic()
+		{
+			return this._myStatus === this.PhysicsObject2D.STATUS__STATIC;
+		},
+		
+		_setSleeping : function _setSleeping()
+		{
+			if(this._myStatus === this.PhysicsObject2D.STATUS__ACTIVE 
+				//&& Math.abs(this._myVelocity.myX) < 1.0 
+				//&& Math.abs(this._myVelocity.myY) < 1.0
+				)
+			{
+				//set sleeping:
+				this._myStatus = this.PhysicsObject2D.STATUS__SLEEPING;
+				this._myVelocity = ECGame.EngineLib.Point2.create();					
+				this._myActiveLinkedListNode.remove();
+			}
+		},
+		isSleeping : function isSleeping()
+		{
+			return this._myStatus === this.PhysicsObject2D.STATUS__SLEEPING;
+		},
+		
+		setActive : function setActive()
+		{
+			if(this._myStatus === this.PhysicsObject2D.STATUS__ACTIVE || this._myStatus === this.PhysicsObject2D.STATUS__ALWAYS_ACTIVE)
+			{
+				return;
+			}
+			this._myPhysicsSystemRef._myActiveObjectsList.insert(this._myActiveLinkedListNode);
+			this._myStatus = this.PhysicsObject2D.STATUS__ACTIVE;
+		},
+		isActive : function isActive()
+		{
+			return this._myStatus === this.PhysicsObject2D.STATUS__ACTIVE;
+		},
+		
+		setAlwaysActive : function setAlwaysActive()
+		{
+			if(this._myStatus === this.PhysicsObject2D.STATUS__ALWAYS_ACTIVE)
+			{
+				return;
+			}
+			if(this._myStatus !== this.PhysicsObject2D.STATUS__ACTIVE)
+			{
+				this._myPhysicsSystemRef._myActiveObjectsList.insert(this._myActiveLinkedListNode);
+			}
+			this._myStatus = this.PhysicsObject2D.STATUS__ALWAYS_ACTIVE;
+		},
+		isAlwaysActive : function isAlwaysActive()
+		{
+			return this._myStatus === this.PhysicsObject2D.STATUS__ALWAYS_ACTIVE;
+		},
+				
+		setAABB : function setAABB(inAABB)
+		{
+			this._myPhysicsSystemRef._removePhysicsObjectFromTree(this);
+			this._myAABB.copyFrom(inAABB);
+			this._myPhysicsSystemRef._insertPhysicsObjectToTree(this);
+		},
+		
+		requestVelocity : function requestVelocity(inVelocity)
+		{
+			this._myVelocity.copyFrom(inVelocity);
+			if(this._myVelocity.lenSq() > 0.01)
+			{
+				this.setActive();
+			}
+		},
+		
+		setOwner : function setOwner(inOwner)
+		{
+			this._myOwner = inOwner;
+		},
+		
+		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect)
+		{
+			//Defaults are:
+			//	static - black
+			//	sleeping - blue
+			//	active - bluegreen
+			//	alwaysActive - green
+			//	collisions - red
+			switch(this._myStatus)
+			{
+				case this.PhysicsObject2D.STATUS__STATIC:
+					inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Physics_StaticObject_DrawColor;
+					break;
+				case this.PhysicsObject2D.STATUS__SLEEPING:
+					inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Physics_SleepingObject_DrawColor;
+					break;
+				case this.PhysicsObject2D.STATUS__ACTIVE:
+					inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Physics_ActiveObject_DrawColor;
+					break;
+				case this.PhysicsObject2D.STATUS__ALWAYS_ACTIVE:
+					inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Physics_AlwaysActiveObject_DrawColor;
+					break;
+				default://WTF?
+					ECGame.log.assert(false, "Unknown Physics object status!");
+					inCanvas2DContext.fillStyle = 'rgba(255, 0, 255, 1)';//TODO needed??
+					break;
+			}
+			inCanvas2DContext.fillRect(
+				/*Math.round*/(this._myAABB.myX - inCameraRect.myX),//TODO rounding everywhere??
+				/*Math.round*/(this._myAABB.myY - inCameraRect.myY),
+				/*Math.round*/(this._myAABB.myWidth),
+				/*Math.round*/(this._myAABB.myHeight)
+			);
+		}
+	}
+});
+
+
+
+//TODO extract out ColisionDetection parent class
 ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 	Constructor : function Physics2D()
 	{
-		this._myDetectionTree = null;//TODO name?
-		this._myObjectsMap = null;	//TODO needed?
+		this._myDetectionTree = null;
+		this._myObjectsMap = null;	//TODO cleanup, needed?	
 		this._myActiveObjectsList = null;
-		this._myCollisions = null;	//TODO name?? TODO make collisions a linked list too?? 
-		this._myCollisionsRenderList = null;//TODO name??
+		this._myCollisions = null;
+		this._myCollisionsRenderList = null;
 		
-		this._myNextPhysicsID = 0;
+		this._myNextPhysicsID = 0;//TODO make this static member of physics object/collidable?
 		
 		this._myFrameUpdateCount = 0;
 		this._myAccumulatedTime = 0;
@@ -66,7 +235,7 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 				inMinSize
 			);
 			
-			this._myObjectsMap = {};//todo is this needed? should be linked list instead!!
+			this._myObjectsMap = {};
 			
 			this._myActiveObjectsList = ECGame.EngineLib.createGameCircularDoublyLinkedListNode();
 			
@@ -92,21 +261,21 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 					
 					ECGame.log.assert(inPhysicsObject !== inItem, "Object collided with itself??");
 
-					anAABB = inPhysicsObject.AABB.getIntersection(inItem.AABB);
+					anAABB = inPhysicsObject._myAABB.getIntersection(inItem._myAABB);
 					if(anAABB.getArea() > 0)
 					{
 						aThis._myCollisions[aThis._myCollisions.length] =//TODO create a collision object type
 						{
 							myObj1 : inPhysicsObject,
 							myObj2 : inItem,
-							AABB : anAABB
+							myAABB : anAABB
 						};
 					}
 				},
-				inPhysicsObject.AABB
+				inPhysicsObject._myAABB
 			);
 			
-			this._myDetectionTree.insertToAllBestFitting(inPhysicsObject, inPhysicsObject.myOwningNodes);
+			this._myDetectionTree.insertToAllBestFitting(inPhysicsObject, inPhysicsObject._myOwningNodes);
 		},
 		
 		_removePhysicsObjectFromTree : function _removePhysicsObjectFromTree(inPhysicsObject)
@@ -114,7 +283,7 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 			var nodeIndex,
 				nodeArray;
 			
-			nodeArray = inPhysicsObject.myOwningNodes;
+			nodeArray = inPhysicsObject._myOwningNodes;
 
 			for(nodeIndex in nodeArray)
 			{
@@ -134,126 +303,33 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 						return;
 					}
 				}
-				//,inPhysicsObject.AABB
+				//,inPhysicsObject._myAABB
 			);////////////////////TODO TEMP DEBUG CHECK?? or keep?
 			*/
 				
-			inPhysicsObject.myOwningNodes = [];
+			inPhysicsObject._myOwningNodes = [];
 		},
 		
-		createNewPhysicsObject : function createNewPhysicsObject()
+		createNewPhysicsObject : function createNewPhysicsObject()//TODO remove this?? or rename!
 		{
-			var physicsObject;
-			var phyObjHandle;
-			var aThis;
-			
-			aThis = this;
-			
-			phyObjHandle = {};
-			
-			physicsObject = 
-			{
-				myStatus : STATUS__STATIC,
-				myDensity : 1,
-				myVelocity : ECGame.EngineLib.Point2.create(),//todo requested/actual velocity?
-				//myFriction:,??
-				AABB : ECGame.EngineLib.AABB2.create(),//todo have lots of gamerects relative to a center??
-				getAABB : function getAABB(){return this.AABB;},//TODO inherit ECGame.EngineLib.QuadTreeItem
-				myOwningNodes : [],
-				myID : 'PhysID' + (++this._myNextPhysicsID).toString(),//todo become just a number for serialization? (probably not serialized?)
-				myHandle : phyObjHandle,
-				myRegisteredActiveNode : ECGame.EngineLib.createGameCircularDoublyLinkedListNode(),
-				getMass :
-							function()
-							{
-								return this.myDensity * this.AABB.getArea();
-							},
-				myOwner : null	//TODO should be listener(s)??
-			};
-			physicsObject.myRegisteredActiveNode.item = physicsObject;
-			
-			//TODO why keep this? to remove all objects later
-			aThis._myObjectsMap[physicsObject.myID] = physicsObject;
-			
-			phyObjHandle.release = function()
-			{
-				this.setStatic();//removes from active list
-				aThis._removePhysicsObjectFromTree(physicsObject);
-				delete aThis._myObjectsMap[physicsObject.myID];
-			};
-					
-			phyObjHandle.setStatic = function()
-			{
-				if(physicsObject.myStatus === STATUS__ACTIVE || physicsObject.myStatus === STATUS__ALWAYS_ACTIVE)
-				{
-					physicsObject.myRegisteredActiveNode.remove();
-				}
-				physicsObject.myStatus = STATUS__STATIC;
-				//todo remove mass and velocity??
-			};
-			
-			phyObjHandle.setActive = function()
-			{
-				if(physicsObject.myStatus === STATUS__ACTIVE || physicsObject.myStatus === STATUS__ALWAYS_ACTIVE)
-				{
-					return;
-				}
-				aThis._myActiveObjectsList.insert(physicsObject.myRegisteredActiveNode);
-				physicsObject.myStatus = STATUS__ACTIVE;
-			};
-			
-			phyObjHandle.setAlwaysActive = function()
-			{
-				if(physicsObject.myStatus === STATUS__ALWAYS_ACTIVE)
-				{
-					return;
-				}
-				if(physicsObject.myStatus !== STATUS__ACTIVE)
-				{
-					aThis._myActiveObjectsList.insert(physicsObject.myRegisteredActiveNode);
-				}
-				physicsObject.myStatus = STATUS__ALWAYS_ACTIVE;
-			};
-			
-			//todo set inactive disabled (ie not in the tree at all)
-			
-			//todo setDensity/Mass
-			
-			//todo release
-			
-			phyObjHandle.setGame2DAABB = function(inGame2DAABB)
-			{
-				aThis._removePhysicsObjectFromTree(physicsObject);
-				physicsObject.AABB.copyFrom(inGame2DAABB);
-				aThis._insertPhysicsObjectToTree(physicsObject);
-			};
-			
-			phyObjHandle.requestVelocity = function(inVelocity)
-			{
-				physicsObject.myVelocity = inVelocity;
-				if(physicsObject.myVelocity.lenSq() > 0.01)
-				{
-					this.setActive();
-				}
-			};
-			
-			phyObjHandle.setOwner = function(inOwner)
-			{
-				physicsObject.myOwner = inOwner;
-			};
-			
-			return phyObjHandle;
+			return ECGame.EngineLib.PhysicsObject2D.create(this);
 		},
 
 		update : function update(deltaTime)//TODO proper parameters for everyone here...
 		{
 			var aPhysicsObject,
 				aCurrentNode,
-				anOwner,//TODO rename listener?
+				anOwner,
 				i,
 				aCurrentCollision,
 				anAABB,
-				aMovedObjectsThisFrame;
+				aMovedObjectsThisFrame,
+				obj1, obj2,
+				objCenter,
+				colCenter,
+				direction,
+				force,
+				acceleration;
 				
 			aMovedObjectsThisFrame = {};
 			
@@ -276,9 +352,9 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 					this._removePhysicsObjectFromTree(aPhysicsObject);			
 					
 					//remember the first location from which this object was active for this frame
-					if(!aMovedObjectsThisFrame[aPhysicsObject.myID])
+					if(!aMovedObjectsThisFrame[aPhysicsObject._myID])
 					{
-						aMovedObjectsThisFrame[aPhysicsObject.myID] = aPhysicsObject.AABB.getLeftTop();
+						aMovedObjectsThisFrame[aPhysicsObject._myID] = aPhysicsObject._myAABB.getLeftTop();
 					}
 					
 					aCurrentNode = aCurrentNode.myNext;
@@ -291,13 +367,13 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 					aPhysicsObject = aCurrentNode.item;
 					
 					//move:
-					anAABB = aPhysicsObject.AABB;
+					anAABB = aPhysicsObject._myAABB;
 					anAABB.setLeftTop(
-						anAABB.getLeftTop().add(aPhysicsObject.myVelocity.scale(this._myTimeStepInSeconds))
+						anAABB.getLeftTop().add(aPhysicsObject._myVelocity.scale(this._myTimeStepInSeconds))
 					);
 					
 					//apply friction:
-					//aPhysicsObject.myVelocity = aPhysicsObject.myVelocity.scale(0.75);//todo use a real friction value
+					//aPhysicsObject._myVelocity = aPhysicsObject._myVelocity.scale(0.75);//TODO use a real friction value
 					
 					//detect collision
 					this._insertPhysicsObjectToTree(aPhysicsObject);
@@ -311,37 +387,36 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 					aCurrentCollision = this._myCollisions[i];
 					
 					//wake it up:
-					if(aCurrentCollision.myObj1.myStatus === STATUS__SLEEPING)
+					if(aCurrentCollision.myObj1.isSleeping())
 					{
-						aCurrentCollision.myObj1.myHandle.setActive();
+						aCurrentCollision.myObj1.setActive();
 					}
-					if(aCurrentCollision.myObj2.myStatus === STATUS__SLEEPING)
+					if(aCurrentCollision.myObj2.isSleeping())
 					{
-						aCurrentCollision.myObj2.myHandle.setActive();
+						aCurrentCollision.myObj2.setActive();
 					}
-					//TODO these should not be var'ed here!!
-					var obj1, obj2, objCenter, colCenter, direction, force, acceleration;
+					
 					obj1 = aCurrentCollision.myObj1;
 					obj2 = aCurrentCollision.myObj2;
-					colCenter = aCurrentCollision.AABB.getCenter();
+					colCenter = aCurrentCollision.myAABB.getCenter();
 					//TODO proper force PER direction??
-					force = aCurrentCollision.AABB.getArea() / this._myTimeStepInSeconds;//f = -kx
+					force = aCurrentCollision.myAABB.getArea() / this._myTimeStepInSeconds;//f = -kx
 					
-					if(obj1.myStatus !== STATUS__STATIC)
+					if(!obj1.isStatic())
 					{
-						objCenter = obj1.AABB.getCenter();
-						direction = objCenter.subtract(colCenter).unit();					
+						objCenter = obj1._myAABB.getCenter();
+						direction = objCenter.subtract(colCenter).unit();
+						//TODO not correct for impulse I think
 						acceleration = force / obj1.getMass();	//f=ma => a = f/m
-						
-						obj1.myVelocity = obj1.myVelocity.add(direction.scale(acceleration));
+						obj1._myVelocity = obj1._myVelocity.add(direction.scale(acceleration));
 					}
-					if(obj2.myStatus !== STATUS__STATIC)
+					if(!obj2.isStatic())
 					{
-						objCenter = obj2.AABB.getCenter();
-						direction = objCenter.subtract(colCenter).unit();					
+						objCenter = obj2._myAABB.getCenter();
+						direction = objCenter.subtract(colCenter).unit();
+						//TODO not correct for impulse I think
 						acceleration = force / obj2.getMass();	//f=ma => a = f/m
-						
-						obj2.myVelocity = obj2.myVelocity.add(direction.scale(acceleration));
+						obj2._myVelocity = obj2._myVelocity.add(direction.scale(acceleration));
 					}
 				}
 				
@@ -358,33 +433,29 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 					aPhysicsObject = aCurrentNode.item;
 					aCurrentNode = aCurrentNode.myNext;
 
-					if(aPhysicsObject.myStatus === STATUS__ACTIVE 
-						&& Math.abs(aPhysicsObject.myVelocity.myX) < 1.0 
-						&& Math.abs(aPhysicsObject.myVelocity.myY) < 1.0)
+					if(aPhysicsObject.isActive()
+						&& Math.abs(aPhysicsObject._myVelocity.myX) < 1.0 
+						&& Math.abs(aPhysicsObject._myVelocity.myY) < 1.0)
 					{
-						//set sleeping:
-						aPhysicsObject.myVelocity = ECGame.EngineLib.Point2.create();					
-						aPhysicsObject.myStatus = STATUS__SLEEPING;
-						aPhysicsObject.myRegisteredActiveNode.remove();
+						aPhysicsObject._setSleeping();
 					}
 				}
 			}
 			
 			for(i in aMovedObjectsThisFrame)
 			{
-				//TODO if !hasownedproperty, etc continue
 				aPhysicsObject = this._myObjectsMap[i];
-				aPhysicsObject.myVelocity =	//TODO isnt this one proper??
-					aPhysicsObject.AABB.getLeftTop().subtract(aMovedObjectsThisFrame[i]).scale(1000 / deltaTime);
-				anOwner = aPhysicsObject.myOwner;
+				aPhysicsObject._myVelocity =	//TODO isnt this one proper??
+					aPhysicsObject._myAABB.getLeftTop().subtract(aMovedObjectsThisFrame[i]).scale(1000 / deltaTime);
+				anOwner = aPhysicsObject._myOwner;
 				if(anOwner && anOwner.onPhysObjectUpdate)
 				{
-					anOwner.onPhysObjectUpdate(//TODO real event!!!
-						{
-							position : aPhysicsObject.AABB.getCenter(),
-							velocity : aPhysicsObject.myVelocity,//TODO send clones? these maybe messed up by users
-							boundingRect : aPhysicsObject.AABB//TODO send clones? these maybe messed up by users
-						}
+					anOwner.onPhysObjectUpdate(
+						new ECGame.EngineLib.Events.PhysObjectUpdate(
+							aPhysicsObject._myAABB.getCenter(),
+							aPhysicsObject._myVelocity.clone(),
+							aPhysicsObject._myAABB.clone()
+						)
 					);
 				}
 			}
@@ -396,67 +467,35 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 			var i,
 				aCollisionRect,
 				aPhysicsObject,
-				aCurrentNode;
+				aCurrentNode,
+				aListToDraw;
 			
 			ECGame.instance.graphics.drawDebugText("Debug Drawing Physics");
 			ECGame.instance.graphics.drawDebugText("Frame Update Count:" + this._myFrameUpdateCount);
-			//todo print (and notify) collisions this frame
-			
-			//walk:
-			//	static - black
-			//	sleeping - blue
-			//	active - bluegreen
-			//	alwaysActive - green
-			//	collisions - red
-			
-			//HACK!!!!!!!!!!!
-			var frameCount = ECGame.instance.timer.getFrameCount();
-						
+			//TODO print (and notify) collisions this frame
+
+			//make a map of them and draw them.
+			//	Note: The map will automatically filter the object from being drawn more than once if it is in more than one node
+			aListToDraw = {};
 			this._myDetectionTree.walk(
 				function(item)
 				{
-					if(frameCount === item.lastFrameDrawn)
-					{
-						return;
-					}item.lastFrameDrawn=frameCount;//HACK???? TODO name lastFrameDebugDrawn
-					switch(item.myStatus)
-					{
-						case STATUS__STATIC ://black
-							inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Physics_StaticObject_DrawColor;//'rgba(0, 0, 0, 1)';
-							break;
-						case STATUS__SLEEPING://blue
-							inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Physics_SleepingObject_DrawColor;//'rgba(0, 0, 255, 1)';
-							break;
-						case STATUS__ACTIVE://blue green
-							inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Physics_ActiveObject_DrawColor;//'rgba(0, 180, 180, 1)';
-							break;
-						case STATUS__ALWAYS_ACTIVE://green
-							inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Physics_AlwaysActiveObject_DrawColor;//'rgba(0, 128, 0, 1)';
-							break;
-						default://WTF?
-							ECGame.log.assert(false, "Unknown Physics object status!");
-							inCanvas2DContext.fillStyle = 'rgba(255, 0, 255, 1)';//TODO needed??
-							break;
-					}
-				//	inCanvas2DContext.beginPath();//HACK
-					inCanvas2DContext.fillRect(
-						/*Math.round*/(item.AABB.myX - inCameraRect.myX),
-						/*Math.round*/(item.AABB.myY - inCameraRect.myY),
-						/*Math.round*/(item.AABB.myWidth),
-						/*Math.round*/(item.AABB.myHeight)
-					);
-				//	inCanvas2DContext.fill();//HACK??
+					aListToDraw[item._myID] = item;
 				},
 				inCameraRect
 			);
+			for(i in aListToDraw)
+			{
+				aListToDraw[i].debugDraw(inCanvas2DContext, inCameraRect);
+			}
 			
-			this._myDetectionTree.debugDraw(inCanvas2DContext, inCameraRect);//todo 3 colors here from settings
+			this._myDetectionTree.debugDraw(inCanvas2DContext, inCameraRect);//TODO 3 colors here from settings
 			
 			//draw collisions
-			inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Physics_ObjectCollision_DrawColor;//'rgba(255, 0, 0, 1)';
+			inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Physics_ObjectCollision_DrawColor;
 			for(i in this._myCollisionsRenderList)
 			{
-				aCollisionRect = this._myCollisionsRenderList[i].AABB;
+				aCollisionRect = this._myCollisionsRenderList[i].myAABB;
 				if(aCollisionRect.intersectsRect(inCameraRect))
 				{
 					inCanvas2DContext.fillRect(
@@ -469,21 +508,20 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 			}
 			
 			//mark the active ones
-			inCanvas2DContext.strokeStyle = ECGame.Settings.Debug.Physics_ActiveObjectBorder_DrawColor;//'rgba(0, 255, 0, 1)';
+			inCanvas2DContext.strokeStyle = ECGame.Settings.Debug.Physics_ActiveObjectBorder_DrawColor;
 			aCurrentNode = this._myActiveObjectsList.myNext;
 			while(aCurrentNode !== this._myActiveObjectsList)
 			{
 				aPhysicsObject = aCurrentNode.item;
 				inCanvas2DContext.strokeRect(
-					aPhysicsObject.AABB.myX - inCameraRect.myX,
-					aPhysicsObject.AABB.myY - inCameraRect.myY,
-					aPhysicsObject.AABB.myWidth,
-					aPhysicsObject.AABB.myHeight
+					aPhysicsObject._myAABB.myX - inCameraRect.myX,
+					aPhysicsObject._myAABB.myY - inCameraRect.myY,
+					aPhysicsObject._myAABB.myWidth,
+					aPhysicsObject._myAABB.myHeight
 				);
 				aCurrentNode = aCurrentNode.myNext;
 			}
 		}
-		
 		
 	}
 });

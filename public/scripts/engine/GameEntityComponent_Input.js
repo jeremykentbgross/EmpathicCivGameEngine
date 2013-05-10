@@ -62,6 +62,7 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 		
 		onInput : function onInput(inInputEvent)
 		{
+			var anOldDirection;
 			//if multiplayer and not locally owned
 			if(ECGame.Settings.Network.isMultiplayer && this.getNetOwner() !== ECGame.instance.localUser.userID)
 			{
@@ -69,6 +70,7 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 			}
 			else
 			{
+				anOldDirection = this._direction;
 				this._direction = ECGame.EngineLib.Point2.create(0, 0);//TODO just set the fields, don't create a new one
 				
 				if(inInputEvent.keys[87]/*W*/)
@@ -90,6 +92,11 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 				
 				//unitize it, then scale by speed
 				this._direction = this._direction.unit().scale(this._speed);
+				
+				if(!anOldDirection.equal(this._direction))
+				{
+					//this.setNetDirty();	//TODO sending input, physics master control, etc..
+				}
 			}
 			
 			if(this._owner)

@@ -95,7 +95,8 @@ ECGame.EngineLib.Class.create = function create(inParams)
 	inParents = inParams.Parents;
 	inDefinition = inParams.Definition;
 	inFlags = inParams.flags;
-		
+	
+	Constructor.prototype[Constructor.name] = Constructor;
 	Constructor.prototype.constructor = Constructor;
 	Constructor.prototype._chainUpMethods = {};
 	Constructor.prototype._chainDownMethods = {};

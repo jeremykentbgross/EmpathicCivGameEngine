@@ -37,6 +37,13 @@ ECGame.EngineLib.Point2.create = function create(inX, inY)
 
 
 
+ECGame.EngineLib.Point2.prototype.equal = function equal(inOther)
+{
+	return this.myX === inOther.myX && this.myY === inOther.myY;
+};
+
+
+
 ECGame.EngineLib.Point2.prototype.clone = function clone()
 {
 	return new ECGame.EngineLib.Point2(this.myX, this.myY);

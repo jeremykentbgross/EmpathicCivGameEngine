@@ -82,6 +82,7 @@ GameLoader =
 			if(ECGame.Settings.RUN_UNIT_TESTS)
 			{
 				include(inPrivatePath + "unit_tests/TestObfuscator.js");
+				include(inPrivatePath + "unit_tests/TestDocJS.js");
 			}
 			//TODO put server main webserver include here??
 			if(!ECGame.Settings.Network.isMultiplayer)

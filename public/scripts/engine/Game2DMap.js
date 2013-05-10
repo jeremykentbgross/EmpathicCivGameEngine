@@ -117,7 +117,7 @@ ECGame.EngineLib.Game2DMap = ECGame.EngineLib.Class.create(
 			{
 				//note if need be, could use a tree to merge physics objects to nearest squares for optimization
 				tile.physicsObject = this._myWorld.getPhysics().createNewPhysicsObject();
-				tile.physicsObject.setGame2DAABB(physicsRect);
+				tile.physicsObject.setAABB(physicsRect);
 			}	
 			
 			//setup for scenegraph

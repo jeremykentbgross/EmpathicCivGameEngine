@@ -362,7 +362,7 @@ ECGame.EngineLib.Events.RequestVelocity = ECGame.EngineLib.Class.create({
 });
 
 
-
+//TODO ECGame.EngineLib.Events.PhysObjectUpdate and this are the same
 ECGame.EngineLib.Events.UpdatePosition = ECGame.EngineLib.Class.create({
 	Constructor : function UpdatePosition(inPos, inVel, inAABB)
 	{
@@ -407,6 +407,29 @@ ECGame.EngineLib.Events.PlaySound = ECGame.EngineLib.Class.create({
 			this.myIsPositional = inOther.myIsPositional;
 			this.myIsFollowingSource = inOther.myIsFollowingSource;
 			this.myRadius = inOther.myRadius;
+		}
+	}
+});
+
+
+//TODO ECGame.EngineLib.Events.UpdatePosition and this are the same!!!
+ECGame.EngineLib.Events.PhysObjectUpdate = ECGame.EngineLib.Class.create({
+	Constructor : function PhysObjectUpdate(inPosition, inVelocity, inAABB)
+	{
+		this.GameEventBase('onPhysObjectUpdate');//TODO rename (on)PhysicsObjectUpdate
+		this.position = inPosition;
+		this.velocity = inVelocity;
+		this.boundingRect = inAABB;//TODO rename AABB
+	},
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition :
+	{
+		copyFrom : function copyFrom(inOther)
+		{
+			//TODO
 		}
 	}
 });

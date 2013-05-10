@@ -53,6 +53,7 @@ Final NameSpaces:
 	getWidthHeight
 	copyFrom
 	Point2
+	equal
 	add
 	subtract
 	multiply
@@ -241,6 +242,7 @@ Final NameSpaces:
 	RequestVelocity
 	UpdatePosition
 	PlaySound
+	PhysObjectUpdate
 	GameEntity
 	addComponent
 	removeComponent
@@ -304,6 +306,20 @@ Final NameSpaces:
 	getMapLowerRight
 	toTileCoordinate
 	isWrappable
+	PhysicsObject2D
+	getMass
+	release
+	setStatic
+	isStatic
+	_setSleeping
+	isSleeping
+	setActive
+	isActive
+	setAlwaysActive
+	isAlwaysActive
+	setAABB
+	requestVelocity
+	setOwner
 	Physics2D
 	_insertPhysicsObjectToTree
 	_removePhysicsObjectFromTree
@@ -380,6 +396,7 @@ Function Names:
 	getWidthHeight
 	copyFrom
 	Point2
+	equal
 	add
 	subtract
 	multiply
@@ -568,6 +585,7 @@ Function Names:
 	RequestVelocity
 	UpdatePosition
 	PlaySound
+	PhysObjectUpdate
 	GameEntity
 	addComponent
 	removeComponent
@@ -631,6 +649,20 @@ Function Names:
 	getMapLowerRight
 	toTileCoordinate
 	isWrappable
+	PhysicsObject2D
+	getMass
+	release
+	setStatic
+	isStatic
+	_setSleeping
+	isSleeping
+	setActive
+	isActive
+	setAlwaysActive
+	isAlwaysActive
+	setAABB
+	requestVelocity
+	setOwner
 	Physics2D
 	_insertPhysicsObjectToTree
 	_removePhysicsObjectFromTree
@@ -832,6 +864,7 @@ Parameter Variables:
 	inTileValue
 	inRect
 	inWorldCoordinate
+	inPhysicsSystem
 	inWorldSize
 	inPhysicsObject
 	deltaTime
@@ -966,6 +999,7 @@ Local Variable Names:
 	componentPath
 	componentObject
 	owner
+	anOldDirection
 	aFrameEvents
 	direction
 	angle
@@ -1007,13 +1041,7 @@ Local Variable Names:
 	position
 	deletedTiles
 	itemRect
-	STATUS__STATIC
-	STATUS__SLEEPING
-	STATUS__ACTIVE
-	STATUS__ALWAYS_ACTIVE
 	anAABB
-	physicsObject
-	phyObjHandle
 	aPhysicsObject
 	anOwner
 	aCurrentCollision
@@ -1025,6 +1053,7 @@ Local Variable Names:
 	force
 	acceleration
 	aCollisionRect
+	aListToDraw
 	aD123
 	aD456
 	aT123
@@ -1380,6 +1409,15 @@ Member Variables:
 	_myTileSet
 	_myWorld
 	clearTilesInRect
+	_myPhysicsSystemRef
+	_myStatus
+	_myDensity
+	_myOwningNodes
+	_myActiveLinkedListNode
+	_myOwner
+	PhysicsObject2D
+	setStatic
+	setActive
 	_myDetectionTree
 	_myObjectsMap
 	_myActiveObjectsList
@@ -1390,10 +1428,6 @@ Member Variables:
 	_myAccumulatedTime
 	_myTimeStepInMilliSeconds
 	_myTimeStepInSeconds
-	AABB
-	myDensity
-	setStatic
-	setActive
 	_removePhysicsObjectFromTree
 	_insertPhysicsObjectToTree
 	_myP0
@@ -1476,6 +1510,7 @@ Member Variables:
 	getLeftBottom
 	getWidthHeight
 	copyFrom
+	equal
 	add
 	subtract
 	multiply
@@ -1655,7 +1690,12 @@ Member Variables:
 	RequestVelocity
 	UpdatePosition
 	PlaySound
+	PhysObjectUpdate
 	useRequestAnimFrame
+	STATUS__STATIC
+	STATUS__ACTIVE
+	STATUS__ALWAYS_ACTIVE
+	STATUS__SLEEPING
 	ourFrameRayCounter
 	StaticThing
 	initWidth
@@ -1796,17 +1836,21 @@ Member Variables:
 	getMapLowerRight
 	toTileCoordinate
 	isWrappable
+	getMass
+	release
+	isStatic
+	_setSleeping
+	isSleeping
+	isActive
+	setAlwaysActive
+	isAlwaysActive
+	setAABB
+	requestVelocity
+	setOwner
 	myObj1
 	myObj2
+	myAABB
 	createNewPhysicsObject
-	myStatus
-	myVelocity
-	myOwningNodes
-	myID
-	myHandle
-	myRegisteredActiveNode
-	getMass
-	myOwner
 	intersectAABB
 	getCurrentNode
 	getCurrentPoint
@@ -1883,6 +1927,7 @@ Included Words:
 	getWidthHeight
 	copyFrom
 	Point2
+	equal
 	add
 	subtract
 	multiply
@@ -2067,6 +2112,7 @@ Included Words:
 	RequestVelocity
 	UpdatePosition
 	PlaySound
+	PhysObjectUpdate
 	GameEntity
 	addComponent
 	removeComponent
@@ -2129,6 +2175,20 @@ Included Words:
 	getMapLowerRight
 	toTileCoordinate
 	isWrappable
+	PhysicsObject2D
+	getMass
+	release
+	setStatic
+	isStatic
+	_setSleeping
+	isSleeping
+	setActive
+	isActive
+	setAlwaysActive
+	isAlwaysActive
+	setAABB
+	requestVelocity
+	setOwner
 	Physics2D
 	_insertPhysicsObjectToTree
 	_removePhysicsObjectFromTree
@@ -2322,6 +2382,7 @@ Included Words:
 	inTileValue
 	inRect
 	inWorldCoordinate
+	inPhysicsSystem
 	inWorldSize
 	inPhysicsObject
 	deltaTime
@@ -2445,6 +2506,7 @@ Included Words:
 	componentPath
 	componentObject
 	owner
+	anOldDirection
 	aFrameEvents
 	direction
 	angle
@@ -2483,13 +2545,7 @@ Included Words:
 	position
 	deletedTiles
 	itemRect
-	STATUS__STATIC
-	STATUS__SLEEPING
-	STATUS__ACTIVE
-	STATUS__ALWAYS_ACTIVE
 	anAABB
-	physicsObject
-	phyObjHandle
 	aPhysicsObject
 	anOwner
 	aCurrentCollision
@@ -2501,6 +2557,7 @@ Included Words:
 	force
 	acceleration
 	aCollisionRect
+	aListToDraw
 	aD123
 	aD456
 	aT123
@@ -2775,6 +2832,12 @@ Included Words:
 	_tileMapTree
 	_myTileSet
 	_myWorld
+	_myPhysicsSystemRef
+	_myStatus
+	_myDensity
+	_myOwningNodes
+	_myActiveLinkedListNode
+	_myOwner
 	_myDetectionTree
 	_myObjectsMap
 	_myActiveObjectsList
@@ -2785,10 +2848,6 @@ Included Words:
 	_myAccumulatedTime
 	_myTimeStepInMilliSeconds
 	_myTimeStepInSeconds
-	AABB
-	myDensity
-	setStatic
-	setActive
 	_myP0
 	_myP1
 	_myV
@@ -2862,6 +2921,10 @@ Included Words:
 	USER_IDS
 	_serializeFormat
 	useRequestAnimFrame
+	STATUS__STATIC
+	STATUS__ACTIVE
+	STATUS__ALWAYS_ACTIVE
+	STATUS__SLEEPING
 	ourFrameRayCounter
 	StaticThing
 	initWidth
@@ -2936,14 +2999,7 @@ Included Words:
 	maxArrayLength
 	myObj1
 	myObj2
-	myStatus
-	myVelocity
-	myOwningNodes
-	myID
-	myHandle
-	myRegisteredActiveNode
-	getMass
-	myOwner
+	myAABB
 	fileName
 	physics
 	onTestEvent
@@ -3414,14 +3470,9 @@ Unmapped Words:
 	objRef
 	onData
 	onNetObjects
-	setGame2DAABB
-	requestVelocity
-	setOwner
-	release
 	strokeRect
+	physicsObject
 	sceneGraphRenderable
-	PhysID
-	setAlwaysActive
 	png
 	30px
 	grass
@@ -3457,6 +3508,7 @@ Localized Strings:
 	"CodeObfuscator.js"
 	"CodeCompressor.js"
 	"unit_tests/TestObfuscator.js"
+	"unit_tests/TestDocJS.js"
 	"Trying to reregister '"
 	"' : '"
 	"' but '"
@@ -3543,10 +3595,10 @@ Localized Strings:
 	"SceneGraph Draw calls:"
 	"Deleted too many tiles "
 	"Debug Drawing Tile Map"
+	"Unknown Physics object status!"
 	"Object collided with itself??"
 	"Debug Drawing Physics"
 	"Frame Update Count:"
-	"Unknown Physics object status!"
 	"Debug Drawing Rays"
 	"Node Intersection Count:"
 	"Item Intersection Count:"

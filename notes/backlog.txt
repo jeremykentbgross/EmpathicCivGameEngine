@@ -551,3 +551,6 @@ Framework.ud()
 -if!loaded&&!streaming
 --loading%
 -else ud()
+
+
+networking input and physics: should input be sent? then how to handle conflicts with physics? Note: right now there will be conflicts with collision because both the client and the server will be responding to it and sending to each other

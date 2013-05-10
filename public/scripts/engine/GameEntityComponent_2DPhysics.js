@@ -49,7 +49,7 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 				max : null	//this._range.getRightBottom(),
 			},
 			{
-				name : '_velocity',
+				name : '_velocity',	//TODO not used atm????
 				net : true,
 				type : 'position',//TODO type should be vector2 instead
 				min : ECGame.EngineLib.Point2.create(-512,-512),	//TODO replace hack numbers
@@ -115,7 +115,8 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 				
 				if(this._physicsObject)
 				{
-					this._physicsObject.setGame2DAABB(this._boundingRect);
+					this._physicsObject.setAABB(this._boundingRect);
+					//this._physicsObject.requestVelocity(this._velocity);	//TODO sending input, physics master control, etc..
 				}
 				
 				//set position and let everyone else know
@@ -155,7 +156,7 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 			this._world = inEvent.world;//TODO I dont think this is used..
 			this._physicsSystem = inEvent.world.getPhysics();
 			this._physicsObject = this._physicsSystem.createNewPhysicsObject();
-			this._physicsObject.setGame2DAABB(this._boundingRect);
+			this._physicsObject.setAABB(this._boundingRect);
 			this._physicsObject.setActive();
 			this._physicsObject.setOwner(this);
 			//TODO set the owner in the PhysObj for callbacks, triggers, etc?

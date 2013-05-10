@@ -544,7 +544,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				if(inInputEvent.clicked[0])
 				{
 					var temp = this._gameWorld.getPhysics().createNewPhysicsObject();
-					temp.setGame2DAABB(
+					temp.setAABB(
 						ECGame.EngineLib.AABB2.create(
 							mouseWorldPosition.myX
 							,mouseWorldPosition.myY
@@ -556,7 +556,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				if(inInputEvent.clicked[1])
 				{
 					var temp = this._gameWorld.getPhysics().createNewPhysicsObject();
-					temp.setGame2DAABB(
+					temp.setAABB(
 						ECGame.EngineLib.AABB2.create(
 							mouseWorldPosition.myX
 							,mouseWorldPosition.myY
@@ -569,7 +569,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				if(inInputEvent.clicked[2])
 				{
 					var temp = this._gameWorld.getPhysics().createNewPhysicsObject();
-					temp.setGame2DAABB(
+					temp.setAABB(
 						ECGame.EngineLib.AABB2.create(
 							mouseWorldPosition.myX
 							,mouseWorldPosition.myY
