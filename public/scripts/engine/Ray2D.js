@@ -215,13 +215,13 @@ ECGame.EngineLib.Ray2D = ECGame.EngineLib.Class.create({
 //			if(aT456.myZ < aNewT && aT456.myZ > 0)
 //				aNewT = aT456.myZ;
 
-			//if we are past the end of the ray, quit!
-			if(aNewT !== this._myMaxT)
+			//if we are not past the end of the ray, this is it
+			if(aNewT < this._myMaxT)
 			{
-				return this.getPoint(aNewT + 0.001);//TODO make 0.001 a constant var!
+				return (aNewT + 0.001);//TODO make 0.001 a constant var!
 			}
 
-			return null;
+			return -1;
 		},
 		
 		getPoint : function getPoint(inT)

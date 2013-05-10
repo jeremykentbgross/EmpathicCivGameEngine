@@ -42,11 +42,11 @@ ECGame.EngineLib.QuadTree.create = function create()
 
 
 //TODO get rid of init and create and just new this mother fucker
-ECGame.EngineLib.QuadTree.prototype.init = function init(inGame2DAABB, inMinSize, inParent)
+ECGame.EngineLib.QuadTree.prototype.init = function init(inAABB, inMinSize, inParent)
 {
-	this._myAABB = inGame2DAABB || ECGame.EngineLib.AABB2.create(0,0,1,1);
+	this._myAABB = inAABB || ECGame.EngineLib.AABB2.create(0,0,1,1);
 	this._myChildren = null;
-	this._myMinSize = inMinSize || 1;
+	this._myMinSize = inMinSize || 1;	//TODO find a way to have this in shared data or something
 	this._myItems = [];
 	this._myParent = inParent || null;
 	//TODO solid space??
@@ -59,6 +59,13 @@ ECGame.EngineLib.QuadTree.prototype.init = function init(inGame2DAABB, inMinSize
 ECGame.EngineLib.QuadTree.prototype.getAABB = function getAABB()
 {
 	return this._myAABB;//Note not cloned because it **should be** faster for ray tracer
+};
+
+
+
+ECGame.EngineLib.QuadTree.prototype.getParent = function getParent()
+{
+	return this._myParent;
 };
 
 
@@ -226,26 +233,26 @@ ECGame.EngineLib.QuadTree.prototype.deleteItem = function deleteItem(inItem, inT
 
 /*
 //TODO outArray[] containing deleted items, see deleteContained below
-ECGame.EngineLib.QuadTree.prototype.deleteIntersecting = function deleteIntersecting(inGame2DAABB)
+ECGame.EngineLib.QuadTree.prototype.deleteIntersecting = function deleteIntersecting(inAABB)
 {
 	var loops,
 		i,
 		keepChild = false;
 	
-	if(inGame2DAABB.containsRect(this._myAABB))
+	if(inAABB.containsRect(this._myAABB))
 	{
 		this._myChildren = null;
 		this._myItems = [];
 		return false;
 	}
-	else if(this._myAABB.intersectsRect(inGame2DAABB))
+	else if(this._myAABB.intersectsRect(inAABB))
 	{
 		if(this._myChildren !== null)
 		{
 			loops = this._myChildren.length;
 			for(i = 0; i < loops; ++i)
 			{
-				if(this._myChildren[i].deleteIntersecting(inGame2DAABB))
+				if(this._myChildren[i].deleteIntersecting(inAABB))
 				{
 					keepChild = true;
 				}
@@ -259,7 +266,7 @@ ECGame.EngineLib.QuadTree.prototype.deleteIntersecting = function deleteIntersec
 		loops = this._myItems.length;
 		for(i = 0; i < loops; ++i)
 		{
-			if(inGame2DAABB.intersectsRect(this._myItems[i].getAABB()))
+			if(inAABB.intersectsRect(this._myItems[i].getAABB()))
 			{
 				//delete it
 				this._myItems.splice(i,1);
@@ -274,14 +281,14 @@ ECGame.EngineLib.QuadTree.prototype.deleteIntersecting = function deleteIntersec
 
 
 
-ECGame.EngineLib.QuadTree.prototype.deleteContained = function deleteContained(inGame2DAABB, outDeletedItems)
+ECGame.EngineLib.QuadTree.prototype.deleteContained = function deleteContained(inAABB, outDeletedItems)
 {
 	var i, aKeepChildren, aChild;
 	
 	outDeletedItems = outDeletedItems || [];
 	aKeepChildren = false;
 	
-	if(inGame2DAABB.containsRect(this._myAABB))
+	if(inAABB.containsRect(this._myAABB))
 	{
 		//delete everything
 		for(i in this._myItems)
@@ -292,20 +299,20 @@ ECGame.EngineLib.QuadTree.prototype.deleteContained = function deleteContained(i
 		//traverse children for deleted items
 		for(i in this._myChildren)
 		{
-			this._myChildren[i].deleteContained(inGame2DAABB, outDeletedItems);
+			this._myChildren[i].deleteContained(inAABB, outDeletedItems);
 		}
 		
 		this._myChildren = null;
 		this._myItems = [];
 	}
-	else if(this._myAABB.intersectsRect(inGame2DAABB))
+	else if(this._myAABB.intersectsRect(inAABB))
 	{
 		if(this._myChildren !== null)
 		{
 			for(i = 0; i < this._myChildren.length; ++i)
 			{
 				aChild = this._myChildren[i];
-				aChild.deleteContained(inGame2DAABB, outDeletedItems);
+				aChild.deleteContained(inAABB, outDeletedItems);
 				aKeepChildren = aKeepChildren || aChild.containsItems();
 			}
 			if(!aKeepChildren)
@@ -316,7 +323,7 @@ ECGame.EngineLib.QuadTree.prototype.deleteContained = function deleteContained(i
 	
 		for(i = 0; i < this._myItems.length; ++i)
 		{
-			if(inGame2DAABB.containsRect(this._myItems[i].getAABB()))
+			if(inAABB.containsRect(this._myItems[i].getAABB()))
 			{
 				//delete it
 				outDeletedItems.push(this._myItems[i]);
@@ -329,19 +336,19 @@ ECGame.EngineLib.QuadTree.prototype.deleteContained = function deleteContained(i
 
 
 
-ECGame.EngineLib.QuadTree.prototype.walk = function walk(inFunction, inGame2DAABB)
+ECGame.EngineLib.QuadTree.prototype.walk = function walk(inFunction, inAABB)
 {
 	var aItem, i;
 	
 	//if nothing is specified walk the whole tree
-	inGame2DAABB = inGame2DAABB || this._myAABB;
+	inAABB = inAABB || this._myAABB;
 	
-	if(this._myAABB.intersectsRect(inGame2DAABB))
+	if(this._myAABB.intersectsRect(inAABB))
 	{
 		for(i = 0; i < this._myItems.length; ++i)
 		{
 			aItem = this._myItems[i];
-			if(aItem.getAABB().intersectsRect(inGame2DAABB))
+			if(aItem.getAABB().intersectsRect(inAABB))
 			{
 				inFunction(aItem);
 			}
@@ -350,7 +357,7 @@ ECGame.EngineLib.QuadTree.prototype.walk = function walk(inFunction, inGame2DAAB
 		{
 			for(i = 0; i < this._myChildren.length; ++i)
 			{
-				this._myChildren[i].walk(inFunction, inGame2DAABB);
+				this._myChildren[i].walk(inFunction, inAABB);
 			}
 		}
 	}

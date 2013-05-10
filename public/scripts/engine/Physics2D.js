@@ -68,6 +68,11 @@ ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 			inPhysicsSystem._myObjectsMap[this._myID] = this;
 		},
 		
+		getID : function getID()
+		{
+			return this._myID;
+		},
+		
 		getMass : function getMass()
 		{
 			return this._myDensity * this._myAABB.getArea();

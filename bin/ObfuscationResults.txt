@@ -276,6 +276,7 @@ Final NameSpaces:
 	QuadTreeItem
 	getAABB
 	QuadTree
+	getParent
 	_createChildren
 	insertToSmallestContaining
 	insertToAllBestFitting
@@ -335,6 +336,7 @@ Final NameSpaces:
 	getMaxLength
 	RayTracer2D
 	fireRay
+	sortCollisions
 	Game2DTileSet
 	renderTile
 	renderTileInRect
@@ -619,6 +621,7 @@ Function Names:
 	QuadTreeItem
 	getAABB
 	QuadTree
+	getParent
 	_createChildren
 	insertToSmallestContaining
 	insertToAllBestFitting
@@ -678,6 +681,7 @@ Function Names:
 	getMaxLength
 	RayTracer2D
 	fireRay
+	sortCollisions
 	Game2DTileSet
 	renderTile
 	renderTileInRect
@@ -832,7 +836,6 @@ Parameter Variables:
 	physicsUpdateInfo
 	callback
 	inTime
-	inGame2DAABB
 	inMinSize
 	inParent
 	outContainingNodes
@@ -872,6 +875,8 @@ Parameter Variables:
 	inStartingPoint
 	inEndingPoint
 	inT
+	inLHS
+	inRHS
 	inTiles
 	inCanvasContext
 	inTargetPoint
@@ -1059,11 +1064,21 @@ Local Variable Names:
 	aT123
 	aT456
 	aNewT
-	items
+	aItemsList
+	anItem
 	aPoint
+	aHitItemsMap
+	aCollisionList
+	aT
 	aCurrent
 	aDrawSize
 	aHalfDrawSize
+	aItemCollisionPointSize
+	aHalfItemCollisionPointSize
+	aEndPointDrawSize
+	aHalfEndPointDrawSize
+	aCurrentPointDrawSize
+	aHalfCurrentPointDrawSize
 	tileset
 	camera
 	target
@@ -1579,6 +1594,7 @@ Member Variables:
 	exit
 	isRunning
 	getAABB
+	getParent
 	insertToSmallestContaining
 	insertToAllBestFitting
 	deleteItem
@@ -1859,6 +1875,9 @@ Member Variables:
 	getCurrentLength
 	getMaxLength
 	fireRay
+	myItem
+	myPoint
+	myT
 	renderTile
 	renderTileInRect
 	getTileRect
@@ -2145,6 +2164,7 @@ Included Words:
 	QuadTreeItem
 	getAABB
 	QuadTree
+	getParent
 	_createChildren
 	insertToSmallestContaining
 	insertToAllBestFitting
@@ -2204,6 +2224,7 @@ Included Words:
 	getMaxLength
 	RayTracer2D
 	fireRay
+	sortCollisions
 	Game2DTileSet
 	renderTile
 	renderTileInRect
@@ -2350,7 +2371,6 @@ Included Words:
 	physicsUpdateInfo
 	callback
 	inTime
-	inGame2DAABB
 	inMinSize
 	inParent
 	outContainingNodes
@@ -2390,6 +2410,8 @@ Included Words:
 	inStartingPoint
 	inEndingPoint
 	inT
+	inLHS
+	inRHS
 	inTiles
 	inCanvasContext
 	inTargetPoint
@@ -2563,11 +2585,21 @@ Included Words:
 	aT123
 	aT456
 	aNewT
-	items
+	aItemsList
+	anItem
 	aPoint
+	aHitItemsMap
+	aCollisionList
+	aT
 	aCurrent
 	aDrawSize
 	aHalfDrawSize
+	aItemCollisionPointSize
+	aHalfItemCollisionPointSize
+	aEndPointDrawSize
+	aHalfEndPointDrawSize
+	aCurrentPointDrawSize
+	aHalfCurrentPointDrawSize
 	tileset
 	camera
 	target
@@ -3000,6 +3032,9 @@ Included Words:
 	myObj1
 	myObj2
 	myAABB
+	myItem
+	myPoint
+	myT
 	fileName
 	physics
 	onTestEvent
