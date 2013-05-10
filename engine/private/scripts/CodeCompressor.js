@@ -52,7 +52,7 @@ ECGame.Webserver.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 		systemIgnoreIndex;
 	
 	//get the gameloader source code
-	gameLoaderSrc = fs.readFileSync('../engine/public/scripts/GameLoader.js', 'utf8');
+	gameLoaderSrc = fs.readFileSync('../engine/public/scripts/EngineLoader.js', 'utf8');
 	
 	
 	///////////////////////////////////////////////////////

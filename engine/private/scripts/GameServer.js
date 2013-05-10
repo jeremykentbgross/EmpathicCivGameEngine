@@ -23,7 +23,7 @@ var path = require("path");
 var http = require("http");
 var express = require("express");
 var socketIO = require("socket.io");
-require("../../public/scripts/GameLoader");//TODO rename EngineLoader
+require("../../public/scripts/EngineLoader");//TODO rename EngineLoader
 
 
 ////////////////////////////////////////////////////////////////////
@@ -40,7 +40,7 @@ LoadEngine/*.start*/(true,
 //Path/Setup
 ECGame.Webserver.webHostAddress = "localhost";//TODO this is NOT OK!
 ECGame.Webserver.webHostPort = 80;
-ECGame.Webserver.webHostRoot = path.join(path.dirname(__filename), '../../../public');
+ECGame.Webserver.webHostRoot = path.join(path.dirname(__filename), '../../../Public');
 
 
 //http file server
@@ -69,7 +69,7 @@ if(ECGame.Settings.Server.compressClientCode)
 	ECGame.Webserver.codeCompressor.makeCompactGameLoader();
 	
 	ECGame.Webserver.expressApp.get(
-		'/engine/scripts/GameLoader.js'
+		'/engine/scripts/EngineLoader.js'
 		,function(req, res){
 			var code = ECGame.Webserver.codeCompressor.getCompactCode();
 			
