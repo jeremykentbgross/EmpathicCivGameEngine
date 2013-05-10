@@ -68,7 +68,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 			tileset.init(
 				[
 					{
-						fileName : 'images/placeholder.png'//TODO have this listed in systemvars
+						fileName : 'engine/images/placeholder.png'//TODO have this listed in systemvars
 						,anchor : ECGame.EngineLib.Point2.create()
 						,layer : 0
 					}

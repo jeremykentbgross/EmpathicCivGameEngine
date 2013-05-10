@@ -23,20 +23,25 @@ var path = require("path");
 var http = require("http");
 var express = require("express");
 var socketIO = require("socket.io");
-require("../public/scripts/GameLoader");
-
+require("../../public/scripts/GameLoader");//TODO rename EngineLoader
 
 
 ////////////////////////////////////////////////////////////////////
 //Web Server////////////////////////////////////////////////////////
 
 //Paths looks wrong (because they will run from inside the loader)
-GameLoader.start(true, "../../public/", "../../private/");
+LoadEngine/*.start*/(true,
+	"../",	//engine public parth
+	"../../private/",	//engine private path
+	"../../../engine_test_game/public/",/*TODO get some command line param or something!*/
+	"../../../engine_test_game/private/"/*TODO get some command line param or something!*/
+);
 
 //Path/Setup
 ECGame.Webserver.webHostAddress = "localhost";//TODO this is NOT OK!
 ECGame.Webserver.webHostPort = 80;
-ECGame.Webserver.webHostRoot = path.join(path.dirname(__filename), '../public');
+ECGame.Webserver.webHostRoot = path.join(path.dirname(__filename), '../../../public');
+
 
 //http file server
 ECGame.Webserver.expressApp = express.createServer();
@@ -48,23 +53,23 @@ ECGame.Webserver.httpServer = http.createServer(ECGame.Webserver.expressApp);
 ECGame.Webserver.listenSocket = socketIO.listen(ECGame.Webserver.httpServer);
 
 
-//if(ECGame.Settings.Network.isMultiplayer)
+//RUN UNIT TEST scripts
+if(ECGame.Settings.RUN_UNIT_TESTS)
 {
-	//RUN UNIT TEST scripts
-	if(ECGame.Settings.RUN_UNIT_TESTS)
-	{
-		ECGame.unitTests.runTests();
-	}
+	ECGame.unitTests.runTests();
 }
 
 
 if(ECGame.Settings.Server.compressClientCode)
 {
-	ECGame.Webserver.codeCompressor = new ECGame.Webserver.CodeCompressor("../public/");
+	ECGame.Webserver.codeCompressor = new ECGame.Webserver.CodeCompressor(
+		'../engine/public/',
+		'../engine_test_game/public/'
+	);
 	ECGame.Webserver.codeCompressor.makeCompactGameLoader();
 	
 	ECGame.Webserver.expressApp.get(
-		'/scripts/GameLoader.js'
+		'/engine/scripts/GameLoader.js'
 		,function(req, res){
 			var code = ECGame.Webserver.codeCompressor.getCompactCode();
 			
@@ -136,13 +141,9 @@ ECGame.Webserver.expressApp.configure(
 );*/
 //TODO more configure(s) **types**??
 
-//TODO this should be only in GameRunner, here copied here due to debug issue with node inspector
+
 if(ECGame.Settings.Network.isMultiplayer)
 {
-	//RUN UNIT TEST scripts
-//	if(ECGame.Settings.RUN_UNIT_TESTS)
-//		ECGame.unitTests.runTests();
-	//RUN GAME scripts
 	ECGame.instance = ECGame.EngineLib.GameInstance.create();
 	ECGame.instance.run();
 }

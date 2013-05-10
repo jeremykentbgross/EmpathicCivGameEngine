@@ -115,32 +115,32 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			this._tileset = ECGame.EngineLib.Game2DTileSet.create(
 				[
 					{
-						fileName : 'images/grass.png'
+						fileName : 'game/images/grass.png'
 						,anchor : ECGame.EngineLib.Point2.create()
 						,layer : 0
 						,size : ECGame.EngineLib.Point2.create(64,64)
 					},
 					{
-						fileName : 'images/test/waterSub.png' //'images/water.png'
+						fileName : 'game/images/test/waterSub.png' //'images/water.png'
 						,anchor : ECGame.EngineLib.Point2.create()
 						,layer : 0
 						,size : ECGame.EngineLib.Point2.create(/*64,64*/96,96)
 						,physics : ECGame.EngineLib.AABB2.create(0, 0, 64, 64)
 					},
 					{
-						fileName : 'images/ground_256.png'//'images/test/groundSub5.png' // 'images/ground_level01_01.png' //'images/dirt.png',
+						fileName : 'game/images/ground_256.png'//'images/test/groundSub5.png' // 'images/ground_level01_01.png' //'images/dirt.png',
 						,anchor : ECGame.EngineLib.Point2.create()
 						,layer : 0
 						,size : ECGame.EngineLib.Point2.create(96,96)//64,64)
 					},
 					{
-						fileName : 'images/dirt.png2'//HACK 'images/wall_level01_01__.png'
+						fileName : 'game/images/dirt.png2'//HACK 'images/wall_level01_01__.png'
 						,anchor : ECGame.EngineLib.Point2.create()
 						,layer : 0
 						,size : ECGame.EngineLib.Point2.create(64,64)
 					},
 					{
-						fileName : 'images/wall_256.png'//'images/test/wall.png' //'images/wall_level01_01.png'
+						fileName : 'game/images/wall_256.png'//'images/test/wall.png' //'images/wall_level01_01.png'
 						,anchor : ECGame.EngineLib.Point2.create(32, 32)
 						,layer : 1
 						,physics : ECGame.EngineLib.AABB2.create(0, 0, 64, 64)
@@ -183,11 +183,11 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				ECGame.instance.soundSystem.loadSoundAssets(
 					[
 						new ECGame.EngineLib.SoundAsset(ECGame.instance.soundSystem.generateNextAssetID()
-							,'sounds/Step1_Gravel.wav')
+							,'game/sounds/Step1_Gravel.wav')
 						,new ECGame.EngineLib.SoundAsset(ECGame.instance.soundSystem.generateNextAssetID()
-							,'sounds/Step2_Gravel.wav')
+							,'game/sounds/Step2_Gravel.wav')
 						,new ECGame.EngineLib.SoundAsset(ECGame.instance.soundSystem.generateNextAssetID()
-							,'sounds/Step2b_Gravel.wav')
+							,'game/sounds/Step2b_Gravel.wav')
 					]
 				);
 				ECGame.instance.soundSystem.setSoundSamples(
@@ -255,7 +255,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					);
 				}
 				animation = new ECGame.EngineLib.Animation2D();
-				animation.init('images/test_anims_run/jogSheet.png', 10, frames);
+				animation.init('game/images/test_anims_run/jogSheet.png', 10, frames);
 				this._animations.push(animation);
 			}
 			for(j = 0; j < 8; ++j)
@@ -268,7 +268,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					)
 				);
 				animation = new ECGame.EngineLib.Animation2D();
-				animation.init('images/test_anims_run/jogSheet.png', 10, frames);
+				animation.init('game/images/test_anims_run/jogSheet.png', 10, frames);
 				this._animations.push(animation);
 			}
 			//create and initialize animations

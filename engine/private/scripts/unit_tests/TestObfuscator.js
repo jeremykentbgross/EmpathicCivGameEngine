@@ -41,7 +41,7 @@ ECGame.unitTests.registerTest(
 		
 		//obfuscate the obfuscator code
 		obfuscator = new ECGame.Webserver.Obfuscator();
-		obfuscatorSrc = fs.readFileSync('../private/CodeObfuscator.js', /*encoding=*/'utf8');
+		obfuscatorSrc = fs.readFileSync('../engine/private/scripts/CodeObfuscator.js', /*encoding=*/'utf8');
 		obfuscator.addSrc(obfuscatorSrc);
 		obfuscator.registerNamespace('ECGame');
 		obfuscator.registerNamespace('Webserver');

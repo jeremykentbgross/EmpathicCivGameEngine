@@ -97,7 +97,7 @@ ECGame.unitTests.registerTest(
 		};
 		
 		var source = theTestCode.toString();
-		console.log(source);
+	//	console.log(source);
 		
 		//HACK!!!
 		var /*ECGame.Webserver.*/DocJS = ECGame.EngineLib.Class.create({
@@ -171,8 +171,8 @@ ECGame.unitTests.registerTest(
 					}
 					this._myGeneratedMetaData += ']';
 					
-					console.log("Object: " + this._myGeneratedMetaData);
-					console.log("Object: " + JSON.stringify(JSON.parse(this._myGeneratedMetaData)));
+	//				console.log("Object: " + this._myGeneratedMetaData);
+	//				console.log("Object: " + JSON.stringify(JSON.parse(this._myGeneratedMetaData)));
 				},
 				
 				_parseElementsProperties : function _parseElementsProperties(inElement, outElementData)
@@ -224,7 +224,7 @@ ECGame.unitTests.registerTest(
 				_namespace : function _namespace(inElementData)
 				{
 					var i;
-					console.log(inElementData);
+		//			console.log(inElementData);
 					
 					/**! @TODO: verify element properties*/
 					/**! @TODO: parse element properties*/
@@ -242,7 +242,7 @@ ECGame.unitTests.registerTest(
 				
 				_class : function _class(inElementData)
 				{
-					console.log(inElementData);
+		//			console.log(inElementData);
 					
 					/**! @TODO: verify element properties*/
 					/**! @TODO: parse element properties*/
@@ -255,7 +255,7 @@ ECGame.unitTests.registerTest(
 				
 				_endclass : function _endclass(inElementData)
 				{
-					console.log(inElementData);
+		//			console.log(inElementData);
 					
 					/**! @TODO: verify element properties*/
 					/**! @TODO: parse element properties*/
@@ -268,7 +268,7 @@ ECGame.unitTests.registerTest(
 				
 				_member : function _member(inElementData)
 				{
-					console.log(inElementData);
+		//			console.log(inElementData);
 					
 					/**! @TODO: verify element properties*/
 					/**! @TODO: parse element properties*/
@@ -281,7 +281,7 @@ ECGame.unitTests.registerTest(
 				
 				_method : function _method(inElementData)
 				{
-					console.log(inElementData);
+		//			console.log(inElementData);
 					
 					/**! @TODO: verify element properties*/
 					/**! @TODO: parse element properties*/
@@ -294,7 +294,7 @@ ECGame.unitTests.registerTest(
 				
 				_endmethod : function _endmethod(inElementData)
 				{
-					console.log(inElementData);
+		//			console.log(inElementData);
 					
 					/**! @TODO: verify element properties*/
 					/**! @TODO: parse element properties*/
@@ -307,7 +307,7 @@ ECGame.unitTests.registerTest(
 				
 				_todo : function _todo(inElementData)
 				{
-					console.log(inElementData);
+		//			console.log(inElementData);
 					
 					/**! @TODO: verify element properties*/
 					/**! @TODO: parse element properties*/
@@ -323,6 +323,8 @@ ECGame.unitTests.registerTest(
 		var docJS = /*ECGame.Webserver.*/DocJS.create();
 		docJS.appendSource(source);
 		docJS.run();
+		
+		return false;
 		
 		return true;
 	}

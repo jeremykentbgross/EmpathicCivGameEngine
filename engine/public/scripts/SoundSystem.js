@@ -94,7 +94,7 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 			this.loadSoundAssets(
 				[
 					new ECGame.EngineLib.SoundAsset(this.generateNextAssetID()
-						,'sounds/placeholder.mp3')
+						,'engine/sounds/placeholder.mp3')
 				]
 			);
 		}

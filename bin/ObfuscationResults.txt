@@ -23,6 +23,7 @@ Final NameSpaces:
 	Settings
 	requestAnimFrame
 	GameLocalization
+	LoadEngine
 	ECGameEngineLib
 	ECGameLib
 	ECGameWebserver
@@ -353,6 +354,7 @@ Final NameSpaces:
 	getCurrentCamera
 	getBoundingBox
 	GameRulesBase
+	LoadGame
 	GameRules
 	onIdentifiedUser
 	onClientDisconnected
@@ -367,6 +369,7 @@ Final NameSpaces:
 	TestComponent
 Function Names:
 	requestAnimFrame
+	LoadEngine
 	ECGame
 	ECGameEngineLib
 	ECGameLib
@@ -698,6 +701,7 @@ Function Names:
 	getCurrentCamera
 	getBoundingBox
 	GameRulesBase
+	LoadGame
 	GameRules
 	onIdentifiedUser
 	onClientDisconnected
@@ -712,8 +716,10 @@ Function Names:
 	TestComponent
 Parameter Variables:
 	inIsServer
-	inSharedPath
-	inPrivatePath
+	inPublicEnginePath
+	inPrivateEnginePath
+	inPublicGamePath
+	inPrivateGamePath
 	filename
 	expression
 	message
@@ -883,8 +889,11 @@ Parameter Variables:
 	inTargetRect
 	inMinPhysicsPartitionSize
 	in2DCamera
-Local Variable Names:
 	include
+Local Variable Names:
+	ECGame
+	GameLocalization
+	LoadEngine
 	stackPath
 	index
 	index2
@@ -1664,6 +1673,7 @@ Member Variables:
 	Ray2D
 	RayTracer2D
 	GameRules
+	LoadGame
 	Network
 	RUN_UNIT_TESTS
 	DEBUG
@@ -1917,6 +1927,7 @@ Included Words:
 	Settings
 	requestAnimFrame
 	GameLocalization
+	LoadEngine
 	ECGameEngineLib
 	ECGameLib
 	ECGameWebserver
@@ -2155,6 +2166,7 @@ Included Words:
 	EntityComponent_SoundPlayer
 	onPlaySound
 	Timer
+	start
 	_onAnimFrame
 	getFrameCount
 	GameInstance
@@ -2241,6 +2253,7 @@ Included Words:
 	getCurrentCamera
 	getBoundingBox
 	GameRulesBase
+	LoadGame
 	GameRules
 	onIdentifiedUser
 	onClientDisconnected
@@ -2254,8 +2267,10 @@ Included Words:
 	TestObjectClass2
 	TestComponent
 	inIsServer
-	inSharedPath
-	inPrivatePath
+	inPublicEnginePath
+	inPrivateEnginePath
+	inPublicGamePath
+	inPrivateGamePath
 	filename
 	expression
 	message
@@ -3090,8 +3105,6 @@ Ignored Words:
 	msRequestAnimationFrame
 	setTimeout
 	require
-	GameLoader
-	start
 	Array
 	arguments
 	length
@@ -3434,6 +3447,7 @@ Unmapped Words:
 	createDynamicsCompressor
 	destination
 	createGainNode
+	engine
 	sounds
 	mp3
 	strokeStyle
@@ -3510,6 +3524,7 @@ Unmapped Words:
 	sceneGraphRenderable
 	png
 	30px
+	game
 	grass
 	waterSub
 	ground_256
@@ -3540,10 +3555,10 @@ Localized Strings:
 	" with exception "
 	"\n***Running Unit Tests***"
 	"Registered Test: "
-	"CodeObfuscator.js"
-	"CodeCompressor.js"
-	"unit_tests/TestObfuscator.js"
-	"unit_tests/TestDocJS.js"
+	"scripts/CodeObfuscator.js"
+	"scripts/CodeCompressor.js"
+	"scripts/unit_tests/TestObfuscator.js"
+	"scripts/unit_tests/TestDocJS.js"
 	"Trying to reregister '"
 	"' : '"
 	"' but '"

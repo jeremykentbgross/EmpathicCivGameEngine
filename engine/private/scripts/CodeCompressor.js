@@ -29,16 +29,17 @@ Known globals:
 
 */
 
-ECGame.Webserver.CodeCompressor = function CodeCompressor(inRootPath)
+ECGame.Webserver.CodeCompressor = function CodeCompressor(inEngineRootPath, inGameRootPath)
 {
-	this._rootPath = inRootPath;
+	this._engineRootPath = inEngineRootPath;
+	this._gameRootPath = inGameRootPath;
 	this._code = "";
 };
 
 ECGame.Webserver.CodeCompressor.prototype.makeCompactGameLoader = function makeCompactGameLoader()
 {
 	var path,
-		i,
+		i, j,
 		gameLoaderSrc,
 		regEx,
 		values,
@@ -51,26 +52,57 @@ ECGame.Webserver.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 		systemIgnoreIndex;
 	
 	//get the gameloader source code
-	gameLoaderSrc = fs.readFileSync('../public/scripts/GameLoader.js', 'utf8');
+	gameLoaderSrc = fs.readFileSync('../engine/public/scripts/GameLoader.js', 'utf8');
 	
+	
+	///////////////////////////////////////////////////////
+	//replace the public engine includes with the real code
 	//find all the includes that are not commented out:
-	regEx = new RegExp('\\n\\s*include\\x28inSharedPath \\x2b \\"\\w+(\\x2f\\w+)*\\x2ejs\\"\\x29\\x3b', 'g');
+	regEx = new RegExp('\\n\\s*include\\x28inPublicEnginePath \\x2b \\"\\w+(\\x2f\\w+)*\\x2ejs\\"\\x29\\x3b', 'g');
 	values = gameLoaderSrc.match(regEx);
-	
 	regEx.compile('\\"\\w+(\\x2f\\w+)*\\x2ejs\\"');
 	//for all those includes, replace the include with the actual code!
 	for(i = 0; i < values.length; ++i)
 	{
 		path = values[i].match(regEx)[0];//get just the path
-		path = this._rootPath + path.substring(1, path.length - 1);
+		path = this._engineRootPath + path.substring(1, path.length - 1);
 
 		fileSourceCode = fs.readFileSync(path, 'utf8');
 		gameLoaderSrc = gameLoaderSrc.replace(values[i], '\n' + fileSourceCode);
 	}
+	//replace the public engine includes with the real code
+	///////////////////////////////////////////////////////
+	
+	///////////////////////////////////////////////////////
+	//replace the public game includes with the real code
+	for(j = 0; j < 2; ++j)	//Do it 2x because the first time it will just load the GameLoader
+	{
+		//find all the includes that are not commented out:
+		regEx = new RegExp('\\n\\s*include\\x28inPublicGamePath \\x2b \\"\\w+(\\x2f\\w+)*\\x2ejs\\"\\x29\\x3b', 'g');
+		values = gameLoaderSrc.match(regEx);
+		
+		if(!values)
+		{
+			break;
+		}
+		
+		regEx.compile('\\"\\w+(\\x2f\\w+)*\\x2ejs\\"');
+		//for all those includes, replace the include with the actual code!
+		for(i = 0; i < values.length; ++i)
+		{
+			path = values[i].match(regEx)[0];//get just the path
+			path = this._gameRootPath + path.substring(1, path.length - 1);
+
+			fileSourceCode = fs.readFileSync(path, 'utf8');
+			gameLoaderSrc = gameLoaderSrc.replace(values[i], '\n' + fileSourceCode);
+		}
+	}
+	//replace the public game includes with the real code
+	///////////////////////////////////////////////////////
 	
 	
 	obfuscator = new ECGame.Webserver.Obfuscator();
-	obfuscator.addSrc(gameLoaderSrc);
+	obfuscator.addSrc('var ECGame, GameLocalization; var ' + gameLoaderSrc);
 	
 	obfuscator.registerNamespace('ECGame');
 	obfuscator.registerNamespace('Webserver');//ECGame.Webserver
@@ -79,11 +111,8 @@ ECGame.Webserver.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 	obfuscator.registerNamespace('instance');//ECGame.instance
 	//obfuscator.registerNamespace('GameClassRegistryMap');
 	obfuscator.registerNamespace('unitTests');//ECGame.unitTests
-//	obfuscator.registerNamespace('GameLoader');
 	obfuscator.registerNamespace('Settings');//ECGame.Settings
-	//TODO locailization
 	//TODO logger?
-	//BIG Crashes: obfuscator.registerNamespace('PRIVATE');//TEMP HACK!!!!!
 
 	obfuscator._addFunctionName('requestAnimFrame')//TODO make not private!	
 	obfuscator.addIgnore('requestAnimationFrame');
@@ -93,10 +122,6 @@ ECGame.Webserver.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 	obfuscator.addIgnore('msRequestAnimationFrame');
 	obfuscator.addIgnore('setTimeout');
 	obfuscator.addIgnore('require');
-	
-	obfuscator.addIgnore('GameLoader');
-	obfuscator.addIgnore('start');//TODO should rename 'load' (game loader entry function)
-
 	
 	//TODO probably should be in the obfuscator itself!
 	//TODO have switch to turn off auto adding globals so I can find items in my code that are named the same as globals
@@ -117,7 +142,8 @@ ECGame.Webserver.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 			currentObject = Object.getOwnPropertyNames(currentObject);
 			for(systemIgnoreIndex in currentObject)
 			{
-				if(currentObject[systemIgnoreIndex] === 'ECGame')
+				//TODO consider the order this is created in so that we don't get stuff added here we should not!
+				if(currentObject[systemIgnoreIndex] === 'ECGame' || currentObject[systemIgnoreIndex] === 'LoadEngine')
 				{
 					continue;
 				}
@@ -171,8 +197,17 @@ ECGame.Webserver.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 	
 	
 	obfuscator.run();
-	
-	obfuscatedSrc = obfuscator.getObfuscatedCode();
+		
+	//TODO allow custom comment here
+	obfuscatedSrc = '\x2f\x2a\n'
+		+ 'This file is generated by EmpathicCivGameEngine™.\n'
+		+ '© Copyright 2012 Jeremy Gross\n'
+		+ 'jeremykentbgross@gmail.com\n'
+		+ '\x2a\x2f\n'
+		+ 'LoadEngine = function(inIsServer, inPublicEnginePath, inPrivateEnginePath, inPublicGamePath, inPrivateGamePath){'
+		+ obfuscator.getObfuscatedCode()
+		+ obfuscator.getObfuscatedName('LoadEngine') + '(inIsServer, inPublicEnginePath, inPrivateEnginePath, inPublicGamePath, inPrivateGamePath);'
+		+ '};';
 	this._code = new Buffer(obfuscatedSrc);
 };
 
