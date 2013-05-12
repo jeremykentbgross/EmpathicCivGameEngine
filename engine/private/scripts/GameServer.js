@@ -113,7 +113,7 @@ ECGame.Webserver.expressApp.get(
 	'/'
 	,function(req, res)
 	{
-		res.sendfile( path.join(ECGame.Webserver.webHostRoot, 'intro.html') );//TODO rename the index.html
+		res.sendfile( path.join(ECGame.Webserver.webHostRoot, 'welcome.html') );//TODO rename the index.html
 	}
 );
 
