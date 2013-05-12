@@ -1,2 +1,2 @@
-node.exe --debug-brk ../engine/private/scripts/GameServer.js 5858
+node.exe --debug-brk ../engine/private/scripts/main.js 5858
 pause

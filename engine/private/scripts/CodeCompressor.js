@@ -29,14 +29,14 @@ Known globals:
 
 */
 
-ECGame.Webserver.CodeCompressor = function CodeCompressor(inEngineRootPath, inGameRootPath)
+ECGame.WebServerTools.CodeCompressor = function CodeCompressor(inEngineRootPath, inGameRootPath)
 {
 	this._engineRootPath = inEngineRootPath;
 	this._gameRootPath = inGameRootPath;
 	this._code = "";
 };
 
-ECGame.Webserver.CodeCompressor.prototype.makeCompactGameLoader = function makeCompactGameLoader()
+ECGame.WebServerTools.CodeCompressor.prototype.makeCompactGameLoader = function makeCompactGameLoader()
 {
 	var path,
 		i, j,
@@ -101,14 +101,15 @@ ECGame.Webserver.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 	///////////////////////////////////////////////////////
 	
 	
-	obfuscator = new ECGame.Webserver.Obfuscator();
+	obfuscator = new ECGame.WebServerTools.Obfuscator();
 	obfuscator.addSrc('var ECGame, GameLocalization; var ' + gameLoaderSrc);
 	
 	obfuscator.registerNamespace('ECGame');
-	obfuscator.registerNamespace('Webserver');//ECGame.Webserver
+	obfuscator.registerNamespace('WebServerTools');//ECGame.WebServerTools
 	obfuscator.registerNamespace('EngineLib');//ECGame.EngineLib
 	obfuscator.registerNamespace('Lib');//ECGame.Lib
 	obfuscator.registerNamespace('instance');//ECGame.instance
+	obfuscator.registerNamespace('webServer');//ECGame.webServer
 	//obfuscator.registerNamespace('GameClassRegistryMap');
 	obfuscator.registerNamespace('unitTests');//ECGame.unitTests
 	obfuscator.registerNamespace('Settings');//ECGame.Settings
@@ -211,7 +212,7 @@ ECGame.Webserver.CodeCompressor.prototype.makeCompactGameLoader = function makeC
 	this._code = new Buffer(obfuscatedSrc);
 };
 
-ECGame.Webserver.CodeCompressor.prototype.getCompactCode = function getCompactCode()
+ECGame.WebServerTools.CodeCompressor.prototype.getCompactCode = function getCompactCode()
 {
 	return this._code;
 };

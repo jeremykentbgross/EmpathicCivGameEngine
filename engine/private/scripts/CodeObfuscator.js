@@ -32,7 +32,7 @@ Notes:
 
 var fileSystem = require('fs');
 
-ECGame.Webserver.Obfuscator = function Obfuscator()
+ECGame.WebServerTools.Obfuscator = function Obfuscator()
 {
 	this._nameSpaces = {};
 	this._functionNames = {};
@@ -153,14 +153,14 @@ ECGame.Webserver.Obfuscator = function Obfuscator()
 
 
 
-ECGame.Webserver.Obfuscator.prototype.addSrc = function addSrc(inSrc)
+ECGame.WebServerTools.Obfuscator.prototype.addSrc = function addSrc(inSrc)
 {
 	this._src += inSrc;
 };
 
 
 
-ECGame.Webserver.Obfuscator.prototype.registerNamespace = function registerNamespace(inNamespace)
+ECGame.WebServerTools.Obfuscator.prototype.registerNamespace = function registerNamespace(inNamespace)
 {
 	this._nameSpaces[inNamespace] = true;
 	this._addWord(inNamespace);
@@ -168,7 +168,7 @@ ECGame.Webserver.Obfuscator.prototype.registerNamespace = function registerNames
 
 
 
-ECGame.Webserver.Obfuscator.prototype.addIgnore = function addIgnore(inWord)
+ECGame.WebServerTools.Obfuscator.prototype.addIgnore = function addIgnore(inWord)
 {
 	this._ignoreMap[inWord] = true;
 	delete this._unmappedWordsMap[inWord];
@@ -176,7 +176,7 @@ ECGame.Webserver.Obfuscator.prototype.addIgnore = function addIgnore(inWord)
 
 
 
-ECGame.Webserver.Obfuscator.prototype.getObfuscatedName = function getObfuscatedName(inWord)
+ECGame.WebServerTools.Obfuscator.prototype.getObfuscatedName = function getObfuscatedName(inWord)
 {
 	if(!this._wordMap[inWord])
 	{
@@ -187,7 +187,7 @@ ECGame.Webserver.Obfuscator.prototype.getObfuscatedName = function getObfuscated
 
 
 
-ECGame.Webserver.Obfuscator.prototype.getUnObfuscatedName = function getUnObfuscatedName(inWord)
+ECGame.WebServerTools.Obfuscator.prototype.getUnObfuscatedName = function getUnObfuscatedName(inWord)
 {
 	if(!this._reverseWordMap[inWord])
 	{
@@ -198,14 +198,14 @@ ECGame.Webserver.Obfuscator.prototype.getUnObfuscatedName = function getUnObfusc
 
 
 
-ECGame.Webserver.Obfuscator.prototype.getObfuscatedCode = function getObfuscatedCode()
+ECGame.WebServerTools.Obfuscator.prototype.getObfuscatedCode = function getObfuscatedCode()
 {
 	return this._src;
 };
 
 
 
-ECGame.Webserver.Obfuscator.prototype.run = function run()
+ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 {
 	var name,
 		i,
@@ -392,7 +392,7 @@ ECGame.Webserver.Obfuscator.prototype.run = function run()
 
 
 
-ECGame.Webserver.Obfuscator.prototype._checkForErrors = function _checkForErrors()
+ECGame.WebServerTools.Obfuscator.prototype._checkForErrors = function _checkForErrors()
 {
 	var regEx = new RegExp(),
 		values,
@@ -437,7 +437,7 @@ ECGame.Webserver.Obfuscator.prototype._checkForErrors = function _checkForErrors
 
 
 
-ECGame.Webserver.Obfuscator.prototype._addWord = function _addWord(inWord)
+ECGame.WebServerTools.Obfuscator.prototype._addWord = function _addWord(inWord)
 {
 	if(ECGame.Settings.DEBUG && typeof inWord !== 'string')
 	{
@@ -459,7 +459,7 @@ ECGame.Webserver.Obfuscator.prototype._addWord = function _addWord(inWord)
 
 
 
-ECGame.Webserver.Obfuscator.prototype._addFunctionName = function _addFunctionName(inFunctionName)
+ECGame.WebServerTools.Obfuscator.prototype._addFunctionName = function _addFunctionName(inFunctionName)
 {
 	this._functionNames[inFunctionName] = true;
 	this.registerNamespace(inFunctionName);
@@ -467,7 +467,7 @@ ECGame.Webserver.Obfuscator.prototype._addFunctionName = function _addFunctionNa
 
 
 
-ECGame.Webserver.Obfuscator.prototype._addParameterName = function _addParameterName(inParameterName)
+ECGame.WebServerTools.Obfuscator.prototype._addParameterName = function _addParameterName(inParameterName)
 {
 	this._parameterNames[inParameterName] = true;
 	this._addWord(inParameterName);
@@ -475,7 +475,7 @@ ECGame.Webserver.Obfuscator.prototype._addParameterName = function _addParameter
 
 
 
-ECGame.Webserver.Obfuscator.prototype._addVariableName = function _addVariableName(inVariableName)
+ECGame.WebServerTools.Obfuscator.prototype._addVariableName = function _addVariableName(inVariableName)
 {
 	this._variableNames[inVariableName] = true;
 	this._addWord(inVariableName);
@@ -483,7 +483,7 @@ ECGame.Webserver.Obfuscator.prototype._addVariableName = function _addVariableNa
 
 
 
-ECGame.Webserver.Obfuscator.prototype._addMemberName = function _addMemberName(inMemberName)
+ECGame.WebServerTools.Obfuscator.prototype._addMemberName = function _addMemberName(inMemberName)
 {
 	this._memberNames[inMemberName] = true;
 	this._addWord(inMemberName);
@@ -491,7 +491,7 @@ ECGame.Webserver.Obfuscator.prototype._addMemberName = function _addMemberName(i
 
 
 
-ECGame.Webserver.Obfuscator.prototype._removeComments = function _removeComments()
+ECGame.WebServerTools.Obfuscator.prototype._removeComments = function _removeComments()
 {
 	/*remove block comments:*/
 	this._src = this._src.replace(/\x2f\x2a[\S\s]*?\x2a\x2f/g, '');
@@ -502,7 +502,7 @@ ECGame.Webserver.Obfuscator.prototype._removeComments = function _removeComments
 
 
 
-ECGame.Webserver.Obfuscator.prototype._removeTextForLocalization = function _removeTextForLocalization()
+ECGame.WebServerTools.Obfuscator.prototype._removeTextForLocalization = function _removeTextForLocalization()
 {
 	var regEx, i, stringsToRemove, currentString;
 
@@ -537,7 +537,7 @@ ECGame.Webserver.Obfuscator.prototype._removeTextForLocalization = function _rem
 
 
 
-ECGame.Webserver.Obfuscator.prototype._findAllPotentialWords = function _findAllPotentialWords()
+ECGame.WebServerTools.Obfuscator.prototype._findAllPotentialWords = function _findAllPotentialWords()
 {
 	var potentialWords = this._src.match(/\w+/g),
 		i;
@@ -556,7 +556,7 @@ ECGame.Webserver.Obfuscator.prototype._findAllPotentialWords = function _findAll
 
 
 
-ECGame.Webserver.Obfuscator.prototype._findFunctionNames = function _findFunctionNames()
+ECGame.WebServerTools.Obfuscator.prototype._findFunctionNames = function _findFunctionNames()
 {
 	var functions = this._src.match(/function\s+\w+/g) || [],
 		i;
@@ -570,7 +570,7 @@ ECGame.Webserver.Obfuscator.prototype._findFunctionNames = function _findFunctio
 
 
 
-ECGame.Webserver.Obfuscator.prototype._findParameterNames = function _findParameterNames()
+ECGame.WebServerTools.Obfuscator.prototype._findParameterNames = function _findParameterNames()
 {
 	var functionSignatures = this._src.match(/function\s*\w*\s*\x28[^\x29]+\x29/g) || [],
 		parameters = [],
@@ -591,7 +591,7 @@ ECGame.Webserver.Obfuscator.prototype._findParameterNames = function _findParame
 
 
 
-ECGame.Webserver.Obfuscator.prototype._findVariableNames = function _findVariableNames()
+ECGame.WebServerTools.Obfuscator.prototype._findVariableNames = function _findVariableNames()
 {
 	var variableDeclareLines = this._src.match(/var\s+\w+[^\x3b]*\x3b/g) || [],
 		variables,
@@ -631,7 +631,7 @@ ECGame.Webserver.Obfuscator.prototype._findVariableNames = function _findVariabl
 
 
 
-ECGame.Webserver.Obfuscator.prototype._findValuesInNamespaces = function _findValuesInNamespaces()
+ECGame.WebServerTools.Obfuscator.prototype._findValuesInNamespaces = function _findValuesInNamespaces()
 {
 	var valuesInNameSpaces = [],
 		regEx = new RegExp(),
@@ -666,7 +666,7 @@ ECGame.Webserver.Obfuscator.prototype._findValuesInNamespaces = function _findVa
 
 
 
-ECGame.Webserver.Obfuscator.prototype._findJSONFields = function _findJSONFields()
+ECGame.WebServerTools.Obfuscator.prototype._findJSONFields = function _findJSONFields()
 {
 	var fields = this._src.match(/[\x2c\x7b]\s*\w+\s*\x3a/g) || [],
 		i;
@@ -680,14 +680,14 @@ ECGame.Webserver.Obfuscator.prototype._findJSONFields = function _findJSONFields
 
 
 
-ECGame.Webserver.Obfuscator.prototype._clearNewlines = function _clearNewlines()
+ECGame.WebServerTools.Obfuscator.prototype._clearNewlines = function _clearNewlines()
 {
 	this._src = this._src.replace(/[\s]+/g, ' ');
 };
 
 
 
-ECGame.Webserver.Obfuscator.prototype._clearWhiteSpace = function _clearWhiteSpace()
+ECGame.WebServerTools.Obfuscator.prototype._clearWhiteSpace = function _clearWhiteSpace()
 {
 	var regEx = new RegExp(),
 		i,
@@ -705,7 +705,7 @@ ECGame.Webserver.Obfuscator.prototype._clearWhiteSpace = function _clearWhiteSpa
 
 
 
-ECGame.Webserver.Obfuscator.prototype._stringToHex = function _stringToHex(inString)
+ECGame.WebServerTools.Obfuscator.prototype._stringToHex = function _stringToHex(inString)
 {
 	var hex = '',
 		i,
@@ -723,7 +723,7 @@ ECGame.Webserver.Obfuscator.prototype._stringToHex = function _stringToHex(inStr
 
 
 
-ECGame.Webserver.Obfuscator.prototype._doWordReplacement = function _doWordReplacement()
+ECGame.WebServerTools.Obfuscator.prototype._doWordReplacement = function _doWordReplacement()
 {
 	var wordList = [],
 		regEx = new RegExp(),
@@ -822,7 +822,7 @@ ECGame.Webserver.Obfuscator.prototype._doWordReplacement = function _doWordRepla
 
 
 
-ECGame.Webserver.Obfuscator.prototype._genValidWordReplacement = function _genValidWordReplacement()
+ECGame.WebServerTools.Obfuscator.prototype._genValidWordReplacement = function _genValidWordReplacement()
 {
 	var replacementWord;
 	
@@ -840,7 +840,7 @@ ECGame.Webserver.Obfuscator.prototype._genValidWordReplacement = function _genVa
 
 
 
-ECGame.Webserver.Obfuscator.prototype._genWordReplacement = function _genWordReplacement()
+ECGame.WebServerTools.Obfuscator.prototype._genWordReplacement = function _genWordReplacement()
 {
 	var word = '',
 		currentCount = this._nextWordCount,

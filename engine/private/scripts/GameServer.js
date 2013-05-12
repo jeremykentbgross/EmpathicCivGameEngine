@@ -23,129 +23,130 @@ var path = require("path");
 var http = require("http");
 var express = require("express");
 var socketIO = require("socket.io");
-require("../../public/scripts/EngineLoader");//TODO rename EngineLoader
 
 
-////////////////////////////////////////////////////////////////////
-//Web Server////////////////////////////////////////////////////////
 
-//Paths looks wrong (because they will run from inside the loader)
-LoadEngine/*.start*/(true,
-	"../",	//engine public parth
-	"../../private/",	//engine private path
-	"../../../engine_test_game/public/",/*TODO get some command line param or something!*/
-	"../../../engine_test_game/private/"/*TODO get some command line param or something!*/
-);
-
-//Path/Setup
-ECGame.Webserver.webHostAddress = "localhost";//TODO this is NOT OK!
-ECGame.Webserver.webHostPort = 80;
-ECGame.Webserver.webHostRoot = path.join(path.dirname(__filename), '../../../_public_');
-
-
-//http file server
-ECGame.Webserver.expressApp = express.createServer();
-//needed to open more sockets:
-ECGame.Webserver.socketio = socketIO;
-//wrapper for express which is needed for socket.io to serve correctly below
-ECGame.Webserver.httpServer = http.createServer(ECGame.Webserver.expressApp);
-//needed to serve the socket.io library to others
-ECGame.Webserver.listenSocket = socketIO.listen(ECGame.Webserver.httpServer);
-
-
-//RUN UNIT TEST scripts
-if(ECGame.Settings.RUN_UNIT_TESTS)
+ECGame.WebServerTools.WebServer = function WebServer()//TODO WebServer
 {
-	ECGame.unitTests.runTests();
-}
-
-
-if(ECGame.Settings.Server.compressClientCode)
-{
-	ECGame.Webserver.codeCompressor = new ECGame.Webserver.CodeCompressor(
-		'../engine/public/',
-		'../engine_test_game/public/'
-	);
-	ECGame.Webserver.codeCompressor.makeCompactGameLoader();
+	//Path/Setup
+	this.webHostAddress = "localhost";//TODO this is NOT OK!
+	this.webHostPort = 80;
+	this.webHostRoot = path.join(path.dirname(__filename), '../../../_public_');
 	
-	ECGame.Webserver.expressApp.get(
-		'/engine/scripts/EngineLoader.js'
-		,function(req, res){
-			var code = ECGame.Webserver.codeCompressor.getCompactCode();
-			
-			res.writeHead(
-				200,
-				{
-	  				'Content-Length': code.length,
-				  	'Content-Type': 'text/javascript'
-				}
+	//http file server
+	this.expressApp = express.createServer();
+	//needed to open more sockets:
+	this.socketio = socketIO;//TODO only if needed in the network setup
+	//wrapper for express which is needed for socket.io to serve correctly below
+	this.httpServer = http.createServer(this.expressApp);
+	//needed to serve the socket.io library to others
+	this.listenSocket = socketIO.listen(this.httpServer);
+};
+
+
+
+ECGame.WebServerTools.WebServer.prototype.run = function run()
+{
+	var aThis = this;
+	
+	if(ECGame.Settings.RUN_UNIT_TESTS)
+	{
+		ECGame.unitTests.runTests();
+	}
+	
+	if(ECGame.Settings.Server.compressClientCode)
+	{
+		this.codeCompressor = new ECGame.WebServerTools.CodeCompressor(
+			'../engine/public/',
+			'../engine_test_game/public/'
+		);
+		this.codeCompressor.makeCompactGameLoader();
+		
+		this.expressApp.get(
+			'/engine/scripts/EngineLoader.js'
+			,function webGetCompressedCode(req, res)
+			{
+				var code = aThis.codeCompressor.getCompactCode();
+				
+				res.writeHead(
+					200,
+					{
+						'Content-Length': code.length,
+						'Content-Type': 'text/javascript'
+					}
+				);
+				res.write(code);
+				res.end();
+			}
+		);
+		this.expressApp.get(
+			'/3rdParty/*.(js|css|html|png|jpg|mp3|wav)'//TODO review file types (no waves!)
+			,function webGet3rdParty(req, res)
+			{
+				res.sendfile(
+					path.join(aThis.webHostRoot, req.url)
+				);
+			}
+		);
+		this.expressApp.get(
+			'/*.(css|html|png|jpg|mp3|wav)'//TODO review file types (no waves!)
+			,function webGetCompressed(req, res)
+			{
+				res.sendfile(
+					path.join(aThis.webHostRoot, req.url)
+				);
+			}
+		);
+	}
+	else
+	{
+		this.expressApp.get(
+			'/*.(js|css|html|png|jpg|mp3|wav)'//TODO review file types (no waves!)
+			,function webGetAny(req, res)
+			{
+				res.sendfile(
+					path.join(aThis.webHostRoot, req.url)
+				);
+			}
+		);
+	}
+
+	this.expressApp.get(
+		'/'
+		,function webGetHome(req, res)
+		{
+			res.sendfile(
+				path.join(aThis.webHostRoot, 'welcome.html')
 			);
-			res.write(code);
-			res.end();
 		}
 	);
-	ECGame.Webserver.expressApp.get(
-		'/3rdParty/*.(js|css|html|png|jpg|mp3|wav)'//TODO review file types (no waves!)
-		,function(req, res){
-			res.sendfile( path.join(ECGame.Webserver.webHostRoot, req.url) );
-		}
+
+	this.httpServer.listen(
+		this.webHostPort
+		//,this.webHostAddress	//Note: if this is here it cannot be accessed elsewhere
 	);
-	ECGame.Webserver.expressApp.get(
-		'/*.(css|html|png|jpg|mp3|wav)'//TODO review file types (no waves!)
-		,function(req, res){
-			res.sendfile( path.join(ECGame.Webserver.webHostRoot, req.url) );
-		}
+	console.log(
+		"\n\n------------------\n"
+		+ "WebServer Running:\n\n"
+		+ "Hosting at:\n\t" + this.webHostAddress + ":" + this.webHostPort + "\n\n"
+		+ "Serving files from:\n\t'" + this.webHostRoot + "'\n"
+		+ "------------------\n\n"
 	);
-}
-else
-{
-	ECGame.Webserver.expressApp.get(
-		'/*.(js|css|html|png|jpg|mp3|wav)'//TODO review file types (no waves!)
-		,function(req, res){
-			res.sendfile( path.join(ECGame.Webserver.webHostRoot, req.url) );
+
+	/*
+	this.expressApp.configure(
+		function()
+		{
+			aThis.expressApp.use(express.static(aThis.webHostRoot));
+			//TODO more configure(s)??
 		}
-	);
-}
+	);*/
+	//TODO more configure(s) **types**??
 
 
-
-ECGame.Webserver.expressApp.get(
-	'/'
-	,function(req, res)
+	if(ECGame.Settings.Network.isMultiplayer)
 	{
-		res.sendfile( path.join(ECGame.Webserver.webHostRoot, 'welcome.html') );//TODO rename the index.html
+		ECGame.instance = ECGame.EngineLib.GameInstance.create();
+		ECGame.instance.run();
 	}
-);
-
-
-
-ECGame.Webserver.httpServer.listen(
-	ECGame.Webserver.webHostPort
-	//,ECGame.Webserver.webHostAddress	//Note: if this is here it cannot be accessed elsewhere
-);
-console.log(
-	"\n\n------------------\n"
-	+ "WebServer Running:\n\n"
-	+ "Hosting at:\n\t" + ECGame.Webserver.webHostAddress + ":" + ECGame.Webserver.webHostPort + "\n\n"
-	+ "Serving files from:\n\t'" + ECGame.Webserver.webHostRoot + "'\n"
-	+ "------------------\n\n"
-);
-
-/*
-ECGame.Webserver.expressApp.configure(
-	function()
-	{
-		ECGame.Webserver.expressApp.use(express.static(ECGame.Webserver.webHostRoot));
-		//TODO more configure(s)??
-	}
-);*/
-//TODO more configure(s) **types**??
-
-
-if(ECGame.Settings.Network.isMultiplayer)
-{
-	ECGame.instance = ECGame.EngineLib.GameInstance.create();
-	ECGame.instance.run();
-}
-//Web Server////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////
+};

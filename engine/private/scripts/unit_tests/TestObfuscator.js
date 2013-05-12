@@ -29,7 +29,7 @@ ECGame.unitTests.registerTest(
 			obfuscatorSrc,
 			obfuscatorObfuscatedSrc,
 			obfuscatedNameECGame,
-			obfuscatedNameECGameWebserver,
+			obfuscatedNameECGameWebServerTools,
 			callObfuscatedObfuscatorSrc,
 			backupObfuscationVars,
 			testSrc,
@@ -40,25 +40,25 @@ ECGame.unitTests.registerTest(
 		ECGame.Settings.DEBUG = false;
 		
 		//obfuscate the obfuscator code
-		obfuscator = new ECGame.Webserver.Obfuscator();
+		obfuscator = new ECGame.WebServerTools.Obfuscator();
 		obfuscatorSrc = fs.readFileSync('../engine/private/scripts/CodeObfuscator.js', /*encoding=*/'utf8');
 		obfuscator.addSrc(obfuscatorSrc);
 		obfuscator.registerNamespace('ECGame');
-		obfuscator.registerNamespace('Webserver');
+		obfuscator.registerNamespace('WebServerTools');
 		obfuscator.run();
 		obfuscatorObfuscatedSrc = obfuscator.getObfuscatedCode();
 		//console.log('\n\n' + obfuscatorObfuscatedSrc + '\n\n');
 		
 		obfuscatedNameECGame = obfuscator.getObfuscatedName('ECGame');
-		obfuscatedNameECGameWebserver = obfuscatedNameECGame + '.' + obfuscator.getObfuscatedName('Webserver');
-		if(obfuscatedNameECGameWebserver !== 'ECGame.Webserver')
+		obfuscatedNameECGameWebServerTools = obfuscatedNameECGame + '.' + obfuscator.getObfuscatedName('WebServerTools');
+		if(obfuscatedNameECGameWebServerTools !== 'ECGame.WebServerTools')
 		{
 			//create localization:
 			eval('var ' + obfuscator.getObfuscatedName('GameLocalization') + ';');
 			//create ECGame NOTE: put var in front of it so it will be cleaned automatically when this function ends!!
 			eval('var ' + obfuscatedNameECGame + ' = {};');
-			//create ECGame.Webserver
-			eval(obfuscatedNameECGameWebserver + ' = {};');
+			//create ECGame.WebServerTools
+			eval(obfuscatedNameECGameWebServerTools + ' = {};');
 			//create ECGame.EngineLib
 			eval(obfuscatedNameECGame + '.' + obfuscator.getObfuscatedName('EngineLib') + ' = {};');
 		}
@@ -73,10 +73,10 @@ ECGame.unitTests.registerTest(
 		eval(obfuscatedNameECGame + '.' + obfuscator.getObfuscatedName('EngineLib') + '.isNumber = ECGame.EngineLib.isNumber;');
 		
 		callObfuscatedObfuscatorSrc =
-			'var obfuscator2 = new ' + obfuscatedNameECGameWebserver + '.' + obfuscator.getObfuscatedName('Obfuscator') + '();\n' +
+			'var obfuscator2 = new ' + obfuscatedNameECGameWebServerTools + '.' + obfuscator.getObfuscatedName('Obfuscator') + '();\n' +
 			'obfuscator2.' + obfuscator.getObfuscatedName('addSrc') + '(obfuscatorSrc);\n' +
 			'obfuscator2.' + obfuscator.getObfuscatedName('registerNamespace') + '(\'ECGame\');\n' +
-			'obfuscator2.' + obfuscator.getObfuscatedName('registerNamespace') + '(\'Webserver\');\n' +
+			'obfuscator2.' + obfuscator.getObfuscatedName('registerNamespace') + '(\'WebServerTools\');\n' +
 			'obfuscator2.' + obfuscator.getObfuscatedName('run') + '();\n' +
 			'var obfuscatorObfuscatedSrc2 = obfuscator2.' + obfuscator.getObfuscatedName('getObfuscatedCode') + '();\n'
 		;
@@ -114,7 +114,7 @@ ECGame.unitTests.registerTest(
 		};
 		
 		//Test multiple symbols in a row being replaced correctly
-		obfuscator = new ECGame.Webserver.Obfuscator();
+		obfuscator = new ECGame.WebServerTools.Obfuscator();
 		testSrc = 'var testMultipleInARow = 1;\ntestMultipleInARow=testMultipleInARow/testMultipleInARow/testMultipleInARow/testMultipleInARow/testMultipleInARow/testMultipleInARow;';
 		obfuscator.addSrc(testSrc);
 		obfuscator.run();
@@ -126,7 +126,7 @@ ECGame.unitTests.registerTest(
 		);
 		
 		//Test nested crap being handled correctly
-		obfuscator = new ECGame.Webserver.Obfuscator();
+		obfuscator = new ECGame.WebServerTools.Obfuscator();
 		testSrc = 'var v1 = {asdf:[\'asdf\', [{asdf:[1,2,3]}], \'sdf\'], qwer:{}}, v2 = String(\'fudge\' + String(\'fudge2\'));';
 		obfuscator.addSrc(testSrc);
 		obfuscator.run();

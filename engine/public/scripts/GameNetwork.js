@@ -110,11 +110,11 @@ ECGame.EngineLib.GameNetwork.prototype.init = function init()
 	{
 		if(ECGame.Settings.Network.GamePort !== null)
 		{
-			this._listenSocket = ECGame.Webserver.socketio.listen(ECGame.Settings.Network.GamePort);
+			this._listenSocket = ECGame.webServer.socketio.listen(ECGame.Settings.Network.GamePort);
 		}
 		else
 		{
-			this._listenSocket = ECGame.Webserver.listenSocket;
+			this._listenSocket = ECGame.webServer.listenSocket;
 		}
 		
 		//TODO proper configure:

@@ -15,5 +15,5 @@ ln -s ../logs/$filename ../logs/log.txt
 gedit ../logs/$filename &
 
 #run node with the log
-node ../engine/private/scripts/GameServer.js > ../logs/$filename
+node ../engine/private/scripts/main.js > ../logs/$filename
 

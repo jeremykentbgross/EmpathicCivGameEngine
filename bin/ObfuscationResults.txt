@@ -3,10 +3,11 @@ Base NameSpaces:
 	this
 	prototype
 	ECGame
-	Webserver
+	WebServerTools
 	EngineLib
 	Lib
 	instance
+	webServer
 	unitTests
 	Settings
 	requestAnimFrame
@@ -15,10 +16,11 @@ Final NameSpaces:
 	this
 	prototype
 	ECGame
-	Webserver
+	WebServerTools
 	EngineLib
 	Lib
 	instance
+	webServer
 	unitTests
 	Settings
 	requestAnimFrame
@@ -26,7 +28,7 @@ Final NameSpaces:
 	LoadEngine
 	ECGameEngineLib
 	ECGameLib
-	ECGameWebserver
+	ECGameWebServerTools
 	ECGameLog
 	ECGameAssert
 	isNumber
@@ -373,7 +375,7 @@ Function Names:
 	ECGame
 	ECGameEngineLib
 	ECGameLib
-	ECGameWebserver
+	ECGameWebServerTools
 	ECGameLog
 	ECGameAssert
 	isNumber
@@ -1616,13 +1618,13 @@ Member Variables:
 	removeItem
 	EngineLib
 	Lib
-	Webserver
+	WebServerTools
 	Settings
 	log
 	unitTests
 	instance
-	socketio
-	listenSocket
+	webServer
+	WebServer
 	logger
 	addDebugInfo
 	isNumber
@@ -1674,6 +1676,8 @@ Member Variables:
 	RayTracer2D
 	GameRules
 	LoadGame
+	socketio
+	listenSocket
 	Network
 	RUN_UNIT_TESTS
 	DEBUG
@@ -1919,10 +1923,11 @@ Member Variables:
 
 Included Words:
 	ECGame
-	Webserver
+	WebServerTools
 	EngineLib
 	Lib
 	instance
+	webServer
 	unitTests
 	Settings
 	requestAnimFrame
@@ -1930,7 +1935,7 @@ Included Words:
 	LoadEngine
 	ECGameEngineLib
 	ECGameLib
-	ECGameWebserver
+	ECGameWebServerTools
 	ECGameLog
 	ECGameAssert
 	isNumber
@@ -2948,8 +2953,7 @@ Included Words:
 	_containingWorld
 	_removedWorld
 	setRightBottom
-	socketio
-	listenSocket
+	WebServer
 	logger
 	addDebugInfo
 	createGameRegistry
@@ -2957,6 +2961,8 @@ Included Words:
 	createEventSystem
 	createGame2DGraphics
 	createGameObjectRef
+	socketio
+	listenSocket
 	Network
 	RUN_UNIT_TESTS
 	DEBUG
@@ -3555,6 +3561,7 @@ Localized Strings:
 	" with exception "
 	"\n***Running Unit Tests***"
 	"Registered Test: "
+	"scripts/GameServer.js"
 	"scripts/CodeObfuscator.js"
 	"scripts/CodeCompressor.js"
 	"scripts/unit_tests/TestObfuscator.js"

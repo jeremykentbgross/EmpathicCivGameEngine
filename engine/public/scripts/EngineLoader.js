@@ -34,7 +34,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	//GameLocalization	//TODO
 	if(inIsServer)
 	{
-		ECGame.Webserver = new (function ECGameWebserver(){})();	//TODO UPPER CASE!!!!
+		ECGame.WebServerTools = new (function ECGameWebServerTools(){})();
 	}
 	
 	//TODO make public and private loaders?
@@ -78,6 +78,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	
 	if(inIsServer)
 	{
+		include(inPrivateEnginePath + "scripts/GameServer.js");
 		include(inPrivateEnginePath + "scripts/CodeObfuscator.js");
 		include(inPrivateEnginePath + "scripts/CodeCompressor.js");
 		if(ECGame.Settings.RUN_UNIT_TESTS)
@@ -85,7 +86,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 			include(inPrivateEnginePath + "scripts/unit_tests/TestObfuscator.js");
 			include(inPrivateEnginePath + "scripts/unit_tests/TestDocJS.js");
 		}
-		//TODO put server main webserver include here??
+		//TODO put server main webServer include here??
 		if(!ECGame.Settings.Network.isMultiplayer)
 		{
 			return;
@@ -199,7 +200,12 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	
 	//////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////// RUN! ///////////////////////////////////
-	if(!inIsServer)//TODO when node inspector loads all scripts correctly remove the if, and run code from server code
+	if(inIsServer)
+	{
+		ECGame.webServer = new ECGame.WebServerTools.WebServer();
+		ECGame.webServer.run();
+	}
+	else
 	{
 		if(ECGame.Settings.RUN_UNIT_TESTS)
 		{

@@ -100,7 +100,7 @@ ECGame.unitTests.registerTest(
 	//	console.log(source);
 		
 		//HACK!!!
-		var /*ECGame.Webserver.*/DocJS = ECGame.EngineLib.Class.create({
+		var /*ECGame.WebServerTools.*/DocJS = ECGame.EngineLib.Class.create({
 			Constructor : function DocJS()
 			{
 				this._mySource = '';
@@ -320,7 +320,7 @@ ECGame.unitTests.registerTest(
 			}
 		});
 		
-		var docJS = /*ECGame.Webserver.*/DocJS.create();
+		var docJS = /*ECGame.WebServerTools.*/DocJS.create();
 		docJS.appendSource(source);
 		docJS.run();
 		
