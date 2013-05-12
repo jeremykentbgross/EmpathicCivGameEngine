@@ -78,7 +78,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	
 	if(inIsServer)
 	{
-		include(inPrivateEnginePath + "scripts/GameServer.js");
+		include(inPrivateEnginePath + "scripts/WebServer.js");
 		include(inPrivateEnginePath + "scripts/CodeObfuscator.js");
 		include(inPrivateEnginePath + "scripts/CodeCompressor.js");
 		if(ECGame.Settings.RUN_UNIT_TESTS)
