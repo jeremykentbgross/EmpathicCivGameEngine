@@ -40,7 +40,7 @@ LoadEngine/*.start*/(true,
 //Path/Setup
 ECGame.Webserver.webHostAddress = "localhost";//TODO this is NOT OK!
 ECGame.Webserver.webHostPort = 80;
-ECGame.Webserver.webHostRoot = path.join(path.dirname(__filename), '../../../Public');
+ECGame.Webserver.webHostRoot = path.join(path.dirname(__filename), '../../../_public_');
 
 
 //http file server
