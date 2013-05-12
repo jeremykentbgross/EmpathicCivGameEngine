@@ -36,7 +36,7 @@ ECGame.WebServerTools.WebServer = function WebServer()//TODO WebServer
 	//http file server
 	this.expressApp = express.createServer();
 	//needed to open more sockets:
-	this.socketio = socketIO;//TODO only if needed in the network setup
+	this.socketio = socketIO;			//TODO only if needed in the network setup
 	//wrapper for express which is needed for socket.io to serve correctly below
 	this.httpServer = http.createServer(this.expressApp);
 	//needed to serve the socket.io library to others

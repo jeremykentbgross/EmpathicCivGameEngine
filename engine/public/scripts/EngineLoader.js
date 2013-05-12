@@ -23,23 +23,30 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 {
 	var include;
 	
-	//Setup Globals:
+	
+	
+	//////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////Global Namespaces//////////////////////////////
+	//Setup Global namespaces:
 	ECGame = new (function ECGame(){})();
-	//ECGame.Settings =  new (function ECGameSettings(){})();	TODO??
-	//ECGame.loader GameLoader	TODO??
-	//ECGame.unitTests = new (function ECGameUnitTests(){})();	TODO??
 	ECGame.EngineLib = new (function ECGameEngineLib(){})();
 	ECGame.Lib =  new (function ECGameLib(){})();
-	//ECGame.instance	TODO??
-	//GameLocalization	//TODO
+	//ECGame.Settings TODO refactor/change how settings work?
+	//ECGame.instance
+	//ECGame.webServer
+	//GameLocalization
+	//ECGame.unitTests
 	if(inIsServer)
 	{
 		ECGame.WebServerTools = new (function ECGameWebServerTools(){})();
 	}
+	///////////////////////////////Global Namespaces//////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////
 	
-	//TODO make public and private loaders?
 	
 	
+	//////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////INCLUDE SETUP//////////////////////////////////
 	//Setup include
 	if(!inIsServer)
 	{
@@ -52,17 +59,22 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	{
 		include = require;
 	}
-			
+	///////////////////////////////INCLUDE SETUP//////////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////
+	
+	
+	
 	//Load the settings flags first:
 	include(inPublicEnginePath + "scripts/GameSettings.js");
-	//TODO include one GameSettings from engine and one from the game folder
+	//TODO include GameSettings from game folder? (or will be done by user?)
 	
-	//TODO this should be parameters for creating it!
 	//Set the server flag in the global system
-	ECGame.Settings.Network.isServer = inIsServer;
+	ECGame.Settings.Network.isServer = inIsServer;	//TODO this should be parameters for creating it!
+	
+	//TODO make public and private loaders?
 	
 	//Include the logger
-	include(inPublicEnginePath + "scripts/GameEngineLogger.js");
+	include(inPublicEnginePath + "scripts/GameEngineLogger.js");//TODO consider https://developer.mozilla.org/en-US/docs/DOM/console#Stack_traces
 	
 	//TEMP HACK!! Should go somewhere else!! (but needs to load here)
 	ECGame.EngineLib.isNumber = function isNumber(inString)
@@ -76,30 +88,36 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 		ECGame.unitTests = ECGame.EngineLib.UnitTestFramework.create();
 	}
 	
+	
+	
+	//////////////////////////////////////////////////////////////////////////////
+	//////////////////////////////// SERVER SCRIPTS //////////////////////////////
 	if(inIsServer)
 	{
 		include(inPrivateEnginePath + "scripts/WebServer.js");
 		include(inPrivateEnginePath + "scripts/CodeObfuscator.js");
 		include(inPrivateEnginePath + "scripts/CodeCompressor.js");
+		
 		if(ECGame.Settings.RUN_UNIT_TESTS)
 		{
 			include(inPrivateEnginePath + "scripts/unit_tests/TestObfuscator.js");
 			include(inPrivateEnginePath + "scripts/unit_tests/TestDocJS.js");
 		}
-		//TODO put server main webServer include here??
+		
 		if(!ECGame.Settings.Network.isMultiplayer)
 		{
+			ECGame.webServer = new ECGame.WebServerTools.WebServer();
+			ECGame.webServer.run();
 			return;
 		}
 	}
-	
-	
+	//////////////////////////////// SERVER SCRIPTS //////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////
 	
 	
 	
 	//////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////// ENGINE SCRIPTS //////////////////////////////
-	
 	//TODO order these better:
 	include(inPublicEnginePath + "scripts/AABB2.js");
 	include(inPublicEnginePath + "scripts/Point2.js");
@@ -163,16 +181,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	
 	
 	//////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////// GAME SCRIPTS ///////////////////////////////
-	include(inPublicGamePath + "scripts/GameLoader.js");
-	ECGame.Lib.LoadGame(include, inPublicGamePath, inPrivateGamePath);
-	///////////////////////////////// GAME SCRIPTS ///////////////////////////////
-	//////////////////////////////////////////////////////////////////////////////
-	
-	
-	
-	//////////////////////////////////////////////////////////////////////////////
-	//////////////////////////////// UNIT TEST scripts ///////////////////////////
+	//////////////////////////////// ENGINE UNIT TEST ////////////////////////////
 	if(ECGame.Settings.RUN_UNIT_TESTS)
 	{			
 		//ENGINE UNIT TESTS:
@@ -188,12 +197,20 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 		{
 			
 		}
-		//GAME UNIT TESTS:
 		
 		//TEMP UNIT TESTS:
 		//include(inPublicEnginePath + "LangTests.js");
 	}
-	//////////////////////////////// UNIT TEST scripts ///////////////////////////
+	//////////////////////////////// ENGINE UNIT TEST ////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////
+	
+	
+	
+	//////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////// GAME SCRIPTS ///////////////////////////////
+	include(inPublicGamePath + "scripts/GameLoader.js");
+	ECGame.Lib.LoadGame(include, inPublicGamePath, inPrivateGamePath);
+	///////////////////////////////// GAME SCRIPTS ///////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////
 	
 	

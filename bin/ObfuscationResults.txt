@@ -356,10 +356,6 @@ Final NameSpaces:
 	getCurrentCamera
 	getBoundingBox
 	GameRulesBase
-	LoadGame
-	GameRules
-	onIdentifiedUser
-	onClientDisconnected
 	TestClass1
 	Func1
 	TestClass2
@@ -369,6 +365,10 @@ Final NameSpaces:
 	chainDown
 	TestObjectClass2
 	TestComponent
+	LoadGame
+	GameRules
+	onIdentifiedUser
+	onClientDisconnected
 Function Names:
 	requestAnimFrame
 	LoadEngine
@@ -703,10 +703,6 @@ Function Names:
 	getCurrentCamera
 	getBoundingBox
 	GameRulesBase
-	LoadGame
-	GameRules
-	onIdentifiedUser
-	onClientDisconnected
 	TestClass1
 	Func1
 	TestClass2
@@ -716,6 +712,10 @@ Function Names:
 	chainDown
 	TestObjectClass2
 	TestComponent
+	LoadGame
+	GameRules
+	onIdentifiedUser
+	onClientDisconnected
 Parameter Variables:
 	inIsServer
 	inPublicEnginePath
@@ -1099,17 +1099,6 @@ Local Variable Names:
 	entityPath
 	entityObject
 	message
-	animation
-	frames
-	serverRebootTime
-	currentDateTime
-	minute
-	second
-	anEntity
-	rayTrace
-	cameraAABB
-	cameraLeftTop
-	mouseWorldPosition
 	ClassNamespace
 	testClass1
 	testClass2
@@ -1144,6 +1133,17 @@ Local Variable Names:
 	data
 	TestComponent
 	component1
+	animation
+	frames
+	serverRebootTime
+	currentDateTime
+	minute
+	second
+	anEntity
+	rayTrace
+	cameraAABB
+	cameraLeftTop
+	mouseWorldPosition
 Member Variables:
 	_myTests
 	myX
@@ -1483,6 +1483,19 @@ Member Variables:
 	entityArrayBefore
 	addEntity
 	removeEntity
+	Func1Called
+	TestClass1
+	Func2Called
+	counter
+	up1
+	down1
+	TestObjectClass1
+	up2
+	down2
+	recieved
+	added
+	_containingWorld
+	_removedWorld
 	GameRulesBase
 	_minPhysicsPartitionSize
 	_gameWorld
@@ -1502,19 +1515,6 @@ Member Variables:
 	_referenceEntitySoundPlayerComponent
 	_lastUpdateSec
 	_lastUpdateMin
-	Func1Called
-	TestClass1
-	Func2Called
-	counter
-	up1
-	down1
-	TestObjectClass1
-	up2
-	down2
-	recieved
-	added
-	_containingWorld
-	_removedWorld
 	runTests
 	registerTest
 	clone
@@ -1622,8 +1622,8 @@ Member Variables:
 	Settings
 	log
 	unitTests
-	instance
 	webServer
+	instance
 	WebServer
 	logger
 	addDebugInfo
@@ -1904,9 +1904,6 @@ Member Variables:
 	anchor
 	setCamera
 	getBoundingBox
-	physics
-	onIdentifiedUser
-	onClientDisconnected
 	Func1
 	Func2
 	chainUp
@@ -1918,6 +1915,9 @@ Member Variables:
 	aString
 	X
 	Y
+	physics
+	onIdentifiedUser
+	onClientDisconnected
 
 
 
@@ -2258,10 +2258,6 @@ Included Words:
 	getCurrentCamera
 	getBoundingBox
 	GameRulesBase
-	LoadGame
-	GameRules
-	onIdentifiedUser
-	onClientDisconnected
 	TestClass1
 	Func1
 	TestClass2
@@ -2271,6 +2267,10 @@ Included Words:
 	chainDown
 	TestObjectClass2
 	TestComponent
+	LoadGame
+	GameRules
+	onIdentifiedUser
+	onClientDisconnected
 	inIsServer
 	inPublicEnginePath
 	inPrivateEnginePath
@@ -2628,17 +2628,6 @@ Included Words:
 	newEntityMap
 	entityPath
 	entityObject
-	animation
-	frames
-	serverRebootTime
-	currentDateTime
-	minute
-	second
-	anEntity
-	rayTrace
-	cameraAABB
-	cameraLeftTop
-	mouseWorldPosition
 	ClassNamespace
 	testClass1
 	testClass2
@@ -2670,6 +2659,17 @@ Included Words:
 	outObj
 	testResults
 	component1
+	animation
+	frames
+	serverRebootTime
+	currentDateTime
+	minute
+	second
+	anEntity
+	rayTrace
+	cameraAABB
+	cameraLeftTop
+	mouseWorldPosition
 	_myTests
 	myX
 	myY
@@ -2923,6 +2923,17 @@ Included Words:
 	_camera
 	entityArray
 	entityArrayBefore
+	Func1Called
+	Func2Called
+	counter
+	up1
+	down1
+	up2
+	down2
+	recieved
+	added
+	_containingWorld
+	_removedWorld
 	_minPhysicsPartitionSize
 	_gameWorld
 	_tileset
@@ -2941,17 +2952,6 @@ Included Words:
 	_referenceEntitySoundPlayerComponent
 	_lastUpdateSec
 	_lastUpdateMin
-	Func1Called
-	Func2Called
-	counter
-	up1
-	down1
-	up2
-	down2
-	recieved
-	added
-	_containingWorld
-	_removedWorld
 	setRightBottom
 	WebServer
 	logger
@@ -3057,13 +3057,13 @@ Included Words:
 	myPoint
 	myT
 	fileName
-	physics
 	onTestEvent
 	aBool1
 	aBool2
 	aString
 	X
 	Y
+	physics
 Ignored Words:
 	this
 	prototype
@@ -3530,6 +3530,11 @@ Unmapped Words:
 	sceneGraphRenderable
 	png
 	30px
+	GameClass
+	HaHa
+	TestEvent
+	GameArithmeticCompression
+	scope
 	game
 	grass
 	waterSub
@@ -3543,11 +3548,6 @@ Unmapped Words:
 	Step2b_Gravel
 	test_anims_run
 	jogSheet
-	GameClass
-	HaHa
-	TestEvent
-	GameArithmeticCompression
-	scope
 Localized Strings:
 	"Assert failed: "
 	" (Path Not supported.)"
@@ -3561,7 +3561,7 @@ Localized Strings:
 	" with exception "
 	"\n***Running Unit Tests***"
 	"Registered Test: "
-	"scripts/GameServer.js"
+	"scripts/WebServer.js"
 	"scripts/CodeObfuscator.js"
 	"scripts/CodeCompressor.js"
 	"scripts/unit_tests/TestObfuscator.js"
@@ -3661,12 +3661,6 @@ Localized Strings:
 	"Item Intersection Count:"
 	"No GameRules.js found!"
 	"No render code found in your GameRules.js!"
-	"Server Reboot in "
-	" seconds."
-	" minutes."
-	"Setting owner for physics and input component(s) => Name: "
-	" ID: "
-	"Game Over! Server Restarting!!!"
 	"Function failed from new'ed class instance!"
 	"Inherited functions failed from created class instance!"
 	"isA() Failed on found created class!"
@@ -3696,6 +3690,12 @@ Localized Strings:
 	"Did not add component successfully"
 	"World not set correctly."
 	"Did not remove component successfully"
+	"Server Reboot in "
+	" seconds."
+	" minutes."
+	"Setting owner for physics and input component(s) => Name: "
+	" ID: "
+	"Game Over! Server Restarting!!!"
 */
 
 
