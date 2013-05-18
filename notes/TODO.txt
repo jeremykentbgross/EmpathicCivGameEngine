@@ -1,0 +1,70 @@
+game -> engine_test_game
+
+Network:
+-Refactor
+-websockets
+//http://www.html5rocks.com/en/tutorials/websockets/basics/
+-GameObjects
+--Listeners
+--object destroy
+-GameObjectRefs
+
+Physics:
+-Triggers
+-Rays
+--Rays draw in physics
+--Add ray keyboard to welcome.html
+
+TECH DEMO PUBLIC DEPLOY!
+
+Start Actual Game!!!
+
+
+
+
+NETWORK:
+Class : eventsystem
+	create(params)
+	{
+		newObject = new Constructor
+		onCreate()//notify listeners
+	}
+Object : eventsystem
+	destroy()
+	{
+		onDestroy()//notify listeners
+		cleanup()//chainup
+	}
+	netDirty
+	{
+		onDirty()//notify netgroup listeners
+	}
+Network
+	-Netgroup
+	-createNetGroup
+	-<add/remove><User/Object>FromNetGroup<s>()
+	-users{}/[]?
+NetGroup
+	-users
+		-socket
+	-objects{}
+	-dirtylist[]
+	addObject(object)
+	{
+		netcreate(object)
+		object.listen(this)
+	}
+	removeObject()
+	{
+		object.unlisten(this)
+		netDestroy()
+	}
+	
+Map:
+	binaryarray
+	//get rid of current tree?
+	-solidspace tree 4 physics
+	renderHudMap()
+MapHelper
+	brezenham?
+	proceduralGen

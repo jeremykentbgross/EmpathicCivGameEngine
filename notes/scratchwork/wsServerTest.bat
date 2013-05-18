@@ -1,0 +1,2 @@
+node ./wsServerTest.js
+pause

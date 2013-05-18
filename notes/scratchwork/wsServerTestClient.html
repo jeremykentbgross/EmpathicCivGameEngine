@@ -1,0 +1,47 @@
+<!DOCTYPE HTML>
+<html>
+	<body>
+
+	</body>
+	<script type="text/javascript">
+		var websocket;
+		console.log(location.hostname);
+		websocket = new WebSocket("ws://" + location.hostname + ":5000");
+		websocket.binaryType = 'arraybuffer';
+		websocket.onopen = function onopen(inEvent)
+		{
+			console.log(inEvent);
+			this.send("Hello!");
+			
+			var binary = new Uint8Array(20);
+			for (var i = 0; i < binary.length; i++) {
+				binary[i] = Math.floor((Math.random() * 256));
+			}
+			websocket.send(binary.buffer);
+		};
+		
+		websocket.onclose = function(inEvent)
+		{
+			console.log(inEvent);
+			console.log(websocket);
+		};
+		
+		websocket.onmessage = function(inEvent)
+		{
+			console.trace();
+			console.log(inEvent);
+			console.log(inEvent.data);
+			console.log(typeof inEvent.data);
+			console.log(new Float32Array(inEvent.data));
+		};
+		
+		websocket.onerror = function(inEvent)
+		{
+			console.log(inEvent);
+		};
+		
+		console.error("WTF");
+		console.warn(websocket);
+		
+	</script>
+</html>

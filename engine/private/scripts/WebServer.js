@@ -18,7 +18,6 @@
 	You should have received a copy of the GNU Lesser General Public License
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
-var fs = require("fs");
 var path = require("path");
 var http = require("http");
 var express = require("express");
