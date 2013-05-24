@@ -64,7 +64,7 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 		{
 			var anOldDirection;
 			//if multiplayer and not locally owned
-			if(ECGame.Settings.Network.isMultiplayer && this.getNetOwner() !== ECGame.instance.localUser.userID)
+			if(ECGame.Settings.Network.isMultiplayer && this.getNetOwnerID() !== ECGame.instance.localUser.userID)
 			{
 				//don't update using the local input data!
 			}
@@ -142,10 +142,14 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 			ECGame.instance.input.deregisterListener('Input', this);
 		},
 		
-		destroy : function destroy()
+		cleanup : function cleanup()
 		{
 			this.onRemovedFromEntity();
 		},
+		
+		//TODO
+		//set<classname>NetDirty
+		clearNetDirty : function clearNetDirty(){},
 
 		serialize : function serialize(inSerializer)
 		{

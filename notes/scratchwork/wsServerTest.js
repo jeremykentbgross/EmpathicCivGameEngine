@@ -2,7 +2,11 @@
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 //recommended ws lib
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-var WebSocketServer = require('ws').Server,
+
+//http://www.iana.org/assignments/websocket/websocket.xml#subprotocol-name
+var wsLib = require('ws');
+
+var WebSocketServer = wsLib.Server,
 	wss = new WebSocketServer(
 		//options
 		{			
@@ -119,15 +123,22 @@ wss.on(
 					binary[i] = Math.random();
 					console.log(binary[i]);
 				}
-				this.send(binary/*.buffer*/, {binary: true/*, mask: true*/});
+				this.send(
+					binary/*.buffer*/,
+					{binary: true/*, mask: true*/},
+					function(error)
+					{
+						console.error(error);
+					}
+				);
 			}
 		);
 		ws.send('something');
 		
-		ws.onmessage = function(param1, param2, param3, param4)
+/*		wsLib.WebSocket.prototype.onmessage = function(param1, param2, param3, param4)
 		{
 			console.log(param1, param2, param3, param4);
-		};
+		};*/
 	}
 );
 
@@ -177,115 +188,3 @@ httpServer.listen(
 	80
 	//,this.webHostAddress	//Note: if this is here it cannot be accessed elsewhere
 );
-
-
-/*
-ECGame.WebServerTools.WebServer = function WebServer()//TODO WebServer
-{
-	//Path/Setup
-	this.webHostAddress = "localhost";//TODO this is NOT OK!
-	this.webHostPort = 80;
-	this.webHostRoot = path.join(path.dirname(__filename), '../../../_public_');
-	
-	
-};
-
-
-
-ECGame.WebServerTools.WebServer.prototype.run = function run()
-{
-	var aThis = this;
-	
-	if(ECGame.Settings.RUN_UNIT_TESTS)
-	{
-		ECGame.unitTests.runTests();
-	}
-	
-	if(ECGame.Settings.Server.compressClientCode)
-	{
-		this.codeCompressor = new ECGame.WebServerTools.CodeCompressor(
-			'../engine/public/',
-			'../engine_test_game/public/'
-		);
-		this.codeCompressor.makeCompactGameLoader();
-		
-		this.expressApp.get(
-			'/engine/scripts/EngineLoader.js'
-			,function webGetCompressedCode(req, res)
-			{
-				var code = aThis.codeCompressor.getCompactCode();
-				
-				res.writeHead(
-					200,
-					{
-						'Content-Length': code.length,
-						'Content-Type': 'text/javascript'
-					}
-				);
-				res.write(code);
-				res.end();
-			}
-		);
-		this.expressApp.get(
-			'/3rdParty/*.(js|css|html|png|jpg|mp3|wav)'//TODO review file types (no waves!)
-			,function webGet3rdParty(req, res)
-			{
-				res.sendfile(
-					path.join(aThis.webHostRoot, req.url)
-				);
-			}
-		);
-		this.expressApp.get(
-			'/*.(css|html|png|jpg|mp3|wav)'//TODO review file types (no waves!)
-			,function webGetCompressed(req, res)
-			{
-				res.sendfile(
-					path.join(aThis.webHostRoot, req.url)
-				);
-			}
-		);
-	}
-	else
-	{
-		this.expressApp.get(
-			'/*.(js|css|html|png|jpg|mp3|wav)'//TODO review file types (no waves!)
-			,function webGetAny(req, res)
-			{
-				res.sendfile(
-					path.join(aThis.webHostRoot, req.url)
-				);
-			}
-		);
-	}
-
-	
-
-	this.httpServer.listen(
-		this.webHostPort
-		//,this.webHostAddress	//Note: if this is here it cannot be accessed elsewhere
-	);
-	console.log(
-		"\n\n------------------\n"
-		+ "WebServer Running:\n\n"
-		+ "Hosting at:\n\t" + this.webHostAddress + ":" + this.webHostPort + "\n\n"
-		+ "Serving files from:\n\t'" + this.webHostRoot + "'\n"
-		+ "------------------\n\n"
-	);
-
-	/*
-	this.expressApp.configure(
-		function()
-		{
-			aThis.expressApp.use(express.static(aThis.webHostRoot));
-			//TODO more configure(s)??
-		}
-	);
-	//TODO more configure(s) **types**??
-
-
-	if(ECGame.Settings.Network.isMultiplayer)
-	{
-		ECGame.instance = ECGame.EngineLib.GameInstance.create();
-		ECGame.instance.run();
-	}
-};*/

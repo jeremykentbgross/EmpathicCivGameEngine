@@ -207,8 +207,10 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 			return ECGame.EngineLib.AABB2.create(0, 0, this._mapsize, this._mapsize);
 		},
 
-		destroy : function destroy(){},//TODO
+		cleanup : function cleanup(){},//TODO
 		
+		//set<classname>NetDirty
+		clearNetDirty : function clearNetDirty(){},
 		serialize : function serialize(inSerializer)//TODO serialize maps somehow GameEntity has identical post/serialize for components!
 		{
 			var entity, ref;

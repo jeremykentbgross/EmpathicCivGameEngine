@@ -101,9 +101,9 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 		onUpdatePosition : function(inEvent)
 		{
 			var i;
-			if(this._world)
+			if(this._myWorld)
 			{
-				this._world.getSceneGraph().removeItem(this._sceneGraphRenderable);
+				this._myWorld.getSceneGraph().removeItem(this._sceneGraphRenderable);
 			}
 			
 			this._position = inEvent.position;
@@ -147,28 +147,31 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			}
 			
 			//TODO change renderable position everywhere it should change
-			if(this._world)
+			if(this._myWorld)
 			{
-				this._world.getSceneGraph().insertItem(this._sceneGraphRenderable);
+				this._myWorld.getSceneGraph().insertItem(this._sceneGraphRenderable);
 			}
 		},
 
 		onAddedToWorld : function(inEvent)
 		{
-			this._world = inEvent.world;
-			this._world.getSceneGraph().insertItem(this._sceneGraphRenderable);
+			this._myWorld = inEvent.world;
+			this._myWorld.getSceneGraph().insertItem(this._sceneGraphRenderable);
 			//TODO add to updater
 		},
 
 		onRemovedFromWorld : function(inEvent)
 		{
-			this._world.getSceneGraph().removeItem(this._sceneGraphRenderable);
-			this._world = null;
+			this._myWorld.getSceneGraph().removeItem(this._sceneGraphRenderable);
+			this._myWorld = null;
 			//TODO remove from updater
 		},
-
-		destroy : function(){},//TODO
-		serialize : function(){},//TODO
+		
+		//set<classname>NetDirty
+		clearNetDirty : function clearNetDirty(){},
+		
+		cleanup : function cleanup(){},//TODO
+		serialize : function serialize(){},//TODO
 		
 		copyFrom : function copyFrom(inOther)
 		{

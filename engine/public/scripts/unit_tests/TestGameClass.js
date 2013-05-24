@@ -83,7 +83,9 @@ ECGame.unitTests.registerTest(
 			ChainDown : ['chainDown'],
 			Definition :
 			{
-				destroy : function destroy(){},
+				//set<classname>NetDirty
+				clearNetDirty : function clearNetDirty(){},
+				cleanup : function cleanup(){},
 				serialize : function serialize(){},
 				copyFrom : function copyFrom(inOther){},
 				chainUp : function chainUp()
@@ -120,7 +122,9 @@ ECGame.unitTests.registerTest(
 			flags : {},
 			Definition :
 			{
-				destroy : function destroy(){},
+				//set<classname>NetDirty
+				clearNetDirty : function clearNetDirty(){},
+				cleanup : function cleanup(){},
 				serialize : function serialize(){},
 				copyFrom : function copyFrom(inOther){},
 				chainUp : function chainUp()

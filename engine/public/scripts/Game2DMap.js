@@ -208,8 +208,9 @@ ECGame.EngineLib.Game2DMap = ECGame.EngineLib.Class.create(
 			//set up scenegraph and physics for wrapping
 		},
 		
-		
-		destroy : function destroy(){},//TODO
+		//set<classname>NetDirty
+		clearNetDirty : function clearNetDirty(){},
+		cleanup : function cleanup(){},//TODO
 		serialize : function serialize(){},//TODO
 		copyFrom : function copyFrom(inOther){},//TODO
 		

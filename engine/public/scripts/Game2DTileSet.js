@@ -141,8 +141,9 @@ ECGame.EngineLib.Game2DTileSet = ECGame.EngineLib.Class.create(
 				physicsRect.myHeight
 			);
 		},
-		
-		destroy : function destroy(){},//TODO
+		//set<classname>NetDirty
+		clearNetDirty : function clearNetDirty(){},
+		cleanup : function cleanup(){},//TODO
 		serialize : function serialize(){},//TODO
 		copyFrom : function copyFrom(inOther){}//TODO
 	}

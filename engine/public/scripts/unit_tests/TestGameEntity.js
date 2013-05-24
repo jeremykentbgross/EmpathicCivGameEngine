@@ -68,9 +68,10 @@ ECGame.unitTests.registerTest(
 					this._removedWorld = true;
 					this._containingWorld = null;
 				},
-				
+				//set<classname>NetDirty
+				clearNetDirty : function clearNetDirty(){},
 				serialize : function serialize(){},
-				destroy : function destroy(){},
+				cleanup : function cleanup(){},
 				copyFrom : function copyFrom(inOther){}
 			}
 		});

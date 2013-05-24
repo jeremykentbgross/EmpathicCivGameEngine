@@ -182,13 +182,15 @@ Final NameSpaces:
 	getTxtPath
 	setName
 	setID
+	cleanup
 	destroy
 	canUserModifyNet
 	isNetDirty
 	setNetDirty
+	setGameObjectNetDirty
 	clearNetDirty
 	setNetOwner
-	getNetOwner
+	getNetOwnerID
 	getRef
 	isA
 	serialize
@@ -529,13 +531,15 @@ Function Names:
 	getTxtPath
 	setName
 	setID
+	cleanup
 	destroy
 	canUserModifyNet
 	isNetDirty
 	setNetDirty
+	setGameObjectNetDirty
 	clearNetDirty
 	setNetOwner
-	getNetOwner
+	getNetOwnerID
 	getRef
 	isA
 	serialize
@@ -979,6 +983,7 @@ Local Variable Names:
 	thisClass
 	registry
 	instanceID
+	aStartingOwner
 	newInstance
 	pathTokens
 	aPower
@@ -1170,7 +1175,7 @@ Member Variables:
 	myPrevActivePhysObj
 	myNextActivePhysObj
 	size
-	_eventListeners
+	_myEventListeners
 	_jojoDom
 	_jojoDomConstruct
 	_jojoOn
@@ -1269,16 +1274,16 @@ Member Variables:
 	onEvent
 	_myRect
 	getClass
-	_name
-	_ID
-	_netOwner
-	_netDirty
-	_objectBaseNetDirty
+	_myName
+	_myNetOwnerID
+	_myNetDirty
+	_myGameObjectNetDirty
 	getName
+	cleanup
 	canUserModifyNet
 	setNetDirty
-	getTxtPath
 	GameObject
+	getTxtPath
 	setName
 	_path
 	_value
@@ -1345,8 +1350,8 @@ Member Variables:
 	myIsPositional
 	myIsFollowingSource
 	myRadius
-	_world
-	_componentMap
+	_myWorld
+	_myComponentMap
 	removedFromWorld
 	componentArray
 	componentArrayBefore
@@ -1357,7 +1362,7 @@ Member Variables:
 	GameEntityComponent
 	Camera2
 	_myMap
-	getNetOwner
+	getNetOwnerID
 	_position
 	centerOn
 	_direction
@@ -1433,7 +1438,6 @@ Member Variables:
 	_mapAABB
 	_tileMapTree
 	_myTileSet
-	_myWorld
 	clearTilesInRect
 	_myPhysicsSystemRef
 	_myStatus
@@ -1835,9 +1839,11 @@ Member Variables:
 	setSupressKeyboardEvents
 	_onInput
 	_handleInput
+	condition
 	setID
 	destroy
 	isNetDirty
+	setGameObjectNetDirty
 	clearNetDirty
 	setNetOwner
 	getRef
@@ -2084,13 +2090,15 @@ Included Words:
 	getTxtPath
 	setName
 	setID
+	cleanup
 	destroy
 	canUserModifyNet
 	isNetDirty
 	setNetDirty
+	setGameObjectNetDirty
 	clearNetDirty
 	setNetOwner
-	getNetOwner
+	getNetOwnerID
 	getRef
 	isA
 	serialize
@@ -2514,6 +2522,7 @@ Included Words:
 	thisClass
 	registry
 	instanceID
+	aStartingOwner
 	newInstance
 	pathTokens
 	aPower
@@ -2693,7 +2702,7 @@ Included Words:
 	myPrev
 	myPrevActivePhysObj
 	myNextActivePhysObj
-	_eventListeners
+	_myEventListeners
 	_jojoDom
 	_jojoDomConstruct
 	_jojoOn
@@ -2765,11 +2774,10 @@ Included Words:
 	_active
 	_supressKeyboardEvents
 	_myRect
-	_name
-	_ID
-	_netOwner
-	_netDirty
-	_objectBaseNetDirty
+	_myName
+	_myNetOwnerID
+	_myNetDirty
+	_myGameObjectNetDirty
 	_path
 	_value
 	classID
@@ -2814,8 +2822,8 @@ Included Words:
 	myIsPositional
 	myIsFollowingSource
 	myRadius
-	_world
-	_componentMap
+	_myWorld
+	_myComponentMap
 	componentArray
 	componentArrayBefore
 	_owner
@@ -2883,7 +2891,6 @@ Included Words:
 	_mapAABB
 	_tileMapTree
 	_myTileSet
-	_myWorld
 	_myPhysicsSystemRef
 	_myStatus
 	_myDensity
@@ -3049,6 +3056,7 @@ Included Words:
 	CURRENT_MAX
 	MAX_EVER
 	NET
+	condition
 	maxArrayLength
 	myObj1
 	myObj2
@@ -3516,11 +3524,10 @@ Unmapped Words:
 	offsetY
 	default
 	MB
-	Inst_
 	_
+	bool
 	Copy_of_
 	DUMMY_MODE
-	bool
 	float
 	objRef
 	onData

@@ -522,7 +522,7 @@ ECGame.EngineLib.GameNetwork.prototype.update = function update(inDt)
 				{
 					//TODO skip objects we do not own (but queue owner changes in netserialize queue from object?)
 					if(inClass._flags.net && inObject.isNetDirty()
-					//	&& inObject.getNetOwner() === ECGame.instance.localUser.userName
+					//	&& inObject.getNetOwnerID() === ECGame.instance.localUser.userName
 					)
 					{
 						if(!ECGame.Settings.Network.isServer
@@ -535,7 +535,7 @@ ECGame.EngineLib.GameNetwork.prototype.update = function update(inDt)
 							);
 						}
 						dirtyObjects.push(inObject);
-						inObject._netDirty = false;
+						inObject.clearNetDirty();
 					}
 				}
 			);
@@ -637,12 +637,12 @@ ECGame.EngineLib.GameNetwork.prototype._serializeObjectsIn = function _serialize
 			}
 			
 			//if not from server && not from owner dummy serialize
-			if(object.getNetOwner() !== this._messageHeader.userID
+			if(object.getNetOwnerID() !== this._messageHeader.userID
 				&& this._messageHeader.userID !== ECGame.EngineLib.User.USER_IDS.SERVER)
 			{
 				//Note: could also maybe throw owner if !server && !owner && !recentOwnerQueue
 				//TODO info/warn?
-				console.log("Not the owner!: " + this._messageHeader.userID + ' != ' + object.getNetOwner());
+				console.log("Not the owner!: " + this._messageHeader.userID + ' != ' + object.getNetOwnerID());
 				this._serializer.setDummyMode(true);
 				object.serialize(this._serializer);
 				this._serializer.setDummyMode(false);
@@ -786,7 +786,7 @@ ECGame.EngineLib.GameNetwork.prototype.update = function update(inDt)
 			instanceObject = classInstanceList[i];
 			allRelevantObjects.push(instanceObject);
 			//instanceObject.clearNetDirty();
-			//instanceObject._netDirty = false;//HACK!!
+			//instanceObject._myNetDirty = false;//HACK!!
 			
 			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 			{

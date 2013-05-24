@@ -43,7 +43,7 @@ ECGame.EngineLib.createEventSystem = function(instance)//TODO get rid of once I 
 //TODO consider making GameObject inherit this as many things might want to listen to its state!
 ECGame.EngineLib.GameEventSystem = function GameEventSystem()
 {
-	this._eventListeners = {};
+	this._myEventListeners = {};
 };
 ECGame.EngineLib.GameEventSystem.prototype.constructor = ECGame.EngineLib.GameEventSystem;
 ECGame.EngineLib.GameEventSystem.create = function create()
@@ -59,11 +59,11 @@ ECGame.EngineLib.GameEventSystem.prototype.registerListener = function registerL
 	var listenerNode = ECGame.EngineLib.createGameCircularDoublyLinkedListNode();
 	listenerNode.item = inListener;
 	
-	this._eventListeners[inEventName] = 
-		this._eventListeners[inEventName] ||
+	this._myEventListeners[inEventName] = 
+		this._myEventListeners[inEventName] ||
 		ECGame.EngineLib.createGameCircularDoublyLinkedListNode();
 		
-	this._eventListeners[inEventName].myPrev.insert(listenerNode);
+	this._myEventListeners[inEventName].myPrev.insert(listenerNode);
 };
 
 
@@ -73,7 +73,7 @@ ECGame.EngineLib.GameEventSystem.prototype.deregisterListener = function deregis
 	var head;
 	var current;
 	
-	head = this._eventListeners[inEventName];
+	head = this._myEventListeners[inEventName];
 	if(!head)
 	{
 		return;
@@ -112,7 +112,7 @@ ECGame.EngineLib.GameEventSystem.prototype.onEvent = function onEvent(inEvent)
 		return;
 	}
 	
-	head = this._eventListeners[eventName];
+	head = this._myEventListeners[eventName];
 	if(!head)
 	{
 		//TODO should I print something here?

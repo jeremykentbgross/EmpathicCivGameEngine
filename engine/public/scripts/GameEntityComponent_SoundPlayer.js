@@ -113,18 +113,21 @@ ECGame.EngineLib.EntityComponent_SoundPlayer = ECGame.EngineLib.Class.create(
 
 		onAddedToWorld : function(inEvent)
 		{
-			this._world = inEvent.world;
-			//this._world.getSceneGraph().insertItem(this._sceneGraphRenderable);
+			this._myWorld = inEvent.world;
+			//this._myWorld.getSceneGraph().insertItem(this._sceneGraphRenderable);
 		},
 
 		onRemovedFromWorld : function(inEvent)
 		{
-			//this._world.getSceneGraph().removeItem(this._sceneGraphRenderable);
-			this._world = null;
+			//this._myWorld.getSceneGraph().removeItem(this._sceneGraphRenderable);
+			this._myWorld = null;
 		},
 
-		destroy : function(){},//TODO
-		serialize : function(){},//TODO
+		//set<classname>NetDirty
+		clearNetDirty : function clearNetDirty(){},
+		
+		cleanup : function cleanup(){},//TODO
+		serialize : function serialize(){},//TODO
 		copyFrom : function copyFrom(inOther){}
 	}
 });

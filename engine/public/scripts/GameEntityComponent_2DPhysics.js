@@ -93,10 +93,13 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 			//this._owner = null;
 		},
 		
-		destroy : function destroy()
+		cleanup : function cleanup()
 		{
 			//TODO this.release??
 		},
+		
+		//set<classname>NetDirty
+		clearNetDirty : function clearNetDirty(){},
 		
 		serialize : function serialize(inSerializer)
 		{
@@ -139,9 +142,9 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 				BUT when added to a world we need to keep the OLD range until the other
 				client(s) know about the change of world.  Otherwise the compression min/max will be wrong
 			*/
-		/*	if(this._world)
+		/*	if(this._myWorld)
 			{
-				this._range = this._world.getBoundingBox();
+				this._range = this._myWorld.getBoundingBox();
 			}*/
 		},
 		
@@ -153,7 +156,7 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 		
 		onAddedToWorld : function onAddedToWorld(inEvent)
 		{
-			this._world = inEvent.world;//TODO I dont think this is used..
+			this._myWorld = inEvent.world;//TODO I dont think this is used..
 			this._physicsSystem = inEvent.world.getPhysics();
 			this._physicsObject = this._physicsSystem.createNewPhysicsObject();
 			this._physicsObject.setAABB(this._boundingRect);

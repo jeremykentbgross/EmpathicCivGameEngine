@@ -25,23 +25,26 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		var thisClass,
 			registry,
 			instanceID;
+		
+		//call parent constructor
+		this.GameEventSystem();
 			
 		thisClass = this.getClass();
 		registry = thisClass.getInstanceRegistry();
 		instanceID = registry.getUnusedID();
 
-		this._name = 'Inst_' + instanceID;
-		this._ID = instanceID;//TODO rename _ID as _instanceID
+		this._myName = this.getClass().getName() + '_' + instanceID;
+		this._myID = instanceID;
 		registry.register(this);
 		
 		if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.GameObject_Print)
 		{
-			ECGame.log.info("New Object: " + this.getClass().getName() + ' : ' + this._name + ' : ' + this._ID);
+			ECGame.log.info("New Object: " + this.getClass().getName() + ' : ' + this._myName + ' : ' + this._myID);
 		}
 		
-		this._netOwner = ECGame.EngineLib.User.USER_IDS.SERVER;
-		this._netDirty = false;
-		this._objectBaseNetDirty = false;//TODO should be true?
+		this._myNetOwnerID = ECGame.EngineLib.User.USER_IDS.SERVER;
+		this._myNetDirty = false;
+		this._myGameObjectNetDirty = false;
 		
 		//TODO or add manually when netRep is added to instances? (including during clone)
 		if(ECGame.Settings.Network.isMultiplayer
@@ -51,47 +54,52 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			)
 		{
 			ECGame.instance.network.addNewObject(this);
-			this._netDirty = true;
+			this._myNetDirty = true;
 		}
 	},
 	
-	//Parents : [],//TODO eventsystem??
+	Parents : [ECGame.EngineLib.GameEventSystem],
 	
 	flags : {},
 	
-	ChainUp : ['destroy'],
-	ChainDown : ['serialize', 'copyFrom'],
+	ChainUp : ['cleanup'],
+	ChainDown : ['serialize', 'copyFrom', 'clearNetDirty'],
 	
 	Definition :
 	{
 		_serializeFormat :
 		[
 			{
-				name : '_netOwner',
+				name : '_myGameObjectNetDirty',
+				type : 'bool',
+				net : true
+			},
+			{
+				name : '_myNetOwnerID',
 				type : 'int',
 				net : true,
 				min : 0,
-				max : ECGame.EngineLib.User.USER_IDS.MAX_EVER
-				//TODO condition: renamed this._objectBaseNetDirty
+				max : ECGame.EngineLib.User.USER_IDS.MAX_EVER,
+				condition : '_myGameObjectNetDirty'
 			}
-			//TODO name/id (NOT net)
+			//TODO name/id (NOT net?)
 		],
 				
 		getName : function getName()
 		{
-			return this._name;
+			return this._myName;
 		},
 		
 		getTxtPath : function getTxtPath()
 		{
-			return this.getClass().getName() + '\\' + this.getName();
+			return this.getClass().getName() + '\\' + this.getName();//TODO \\ should be /
 		},
-		//todo get binpath vs txtpath
+		//TODO get binpath vs txtpath
 		
 		setName : function setName(inName)
 		{
 			this.getClass().getInstanceRegistry().deregister(this);
-			this._name = inName;			
+			this._myName = inName;			
 			this.getClass().getInstanceRegistry().register(this);
 				
 			//TODO event to all listeners: name changed!
@@ -99,40 +107,40 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		
 		getID : function getID()
 		{
-			return this._ID;
+			return this._myID;
 		},
 		
 		setID : function setID(inID)
 		{
 			this.getClass().getInstanceRegistry().deregister(this);
-			this._ID = inID;
+			this._myID = inID;
 			this.getClass().getInstanceRegistry().register(this);
 				
 			//TODO event to all listeners: ID changed!
 		},
 		
-		//TODO cleanup vs destroy!
+		cleanup : function cleanup(){},
 		destroy : function destroy()
 		{
-			//TODO have this?
 			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.GameObject_Print)
 			{
 				ECGame.log.info("Destroying GameObject " + ECGame.EngineLib.createGameObjectRef(this).getTxtPath(), true);
 			}
 				
-			//TODO notify all listeners
-			//TODO register for net delete
+			//TODO notify all listeners	//TODO register for net delete
+			
+			this.cleanup();
 			
 			this.getClass().getInstanceRegistry().deregister(this);
 		},
 		
 		canUserModifyNet : function canUserModifyNet()
 		{
-			if(!ECGame.Settings.Network.isMultiplayer || !this.getClass()._flags.net)
+			if(!ECGame.Settings.Network.isMultiplayer || !this.getClass()._flags.net)//TODO get rid of this net flag I think
 			{
 				return false;
 			}
-			if(this._netOwner !== ECGame.instance.localUser.userID
+			if(this._myNetOwnerID !== ECGame.instance.localUser.userID
 				&& ECGame.instance.localUser.userID !== ECGame.EngineLib.User.USER_IDS.SERVER)
 			{
 				return false;
@@ -142,17 +150,17 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		
 		isNetDirty : function isNetDirty()
 		{
-			return this._netDirty;
+			return this._myNetDirty;
 		},
 		
 		setNetDirty : function setNetDirty()
 		{
 			if(this.canUserModifyNet())
 			{
-				if(!this._netDirty)
+				if(!this._myNetDirty)
 				{
 					ECGame.instance.network.addNetDirtyObject(this);
-					this._netDirty = true;
+					this._myNetDirty = true;
 				}
 				
 				return true;
@@ -160,26 +168,32 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			return false;
 		},
 		
-		clearNetDirty : function clearNetDirty()//TODO make chain down!!!
+		setGameObjectNetDirty : function setGameObjectNetDirty()
 		{
-			this._netDirty = false;
-			this._objectBaseNetDirty = false;
+			if(setNetDirty())
+			{
+				this._myGameObjectNetDirty = true;
+			}
+		},
+		
+		clearNetDirty : function clearNetDirty()
+		{
+			this._myNetDirty = false;
+			this._myGameObjectNetDirty = false;
 		},
 		
 		setNetOwner : function setNetOwner(inOwner)
 		{
-			//only the owner or the server can change the ownership
-			if(!this.setNetDirty())
+			if(this.setNetDirty())	//only the owner or the server can change the ownership
 			{
-				return;
+				this._myNetOwnerID = inOwner;
+				this._myGameObjectNetDirty = true;
 			}
-			this._netOwner = inOwner;
-			this._objectBaseNetDirty = true;
 		},
 
-		getNetOwner : function getNetOwner()//rename getNetOwnerID
+		getNetOwnerID : function getNetOwnerID()
 		{
-			return this._netOwner;//TODO rename _netOwnerID because it is really the id, not a whole object
+			return this._myNetOwnerID;
 		},
 		
 		getRef : function getRef()
@@ -207,38 +221,30 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		
 		serialize : function serialize(serializer)
 		{
-			if(!serializer)//TODO needed still? Try to remove.
+			var aStartingOwner;
+			
+			if(!serializer)
 			{
 				return;
 			}
 			
-			//TODO if net!! (and else)
+			aStartingOwner = this._myNetOwnerID;
 			
 			//HACK TODO this should not be done like this!!
-			this._objectBaseNetDirty = this._objectBaseNetDirty || !serializer.isNet();
+			//This is because if it isn't marked as net serialize it probably IS a net serialize but it needs a 'full' serialize
+			//TODO probably need some way to do net and netfull
+			this._myGameObjectNetDirty = this._myGameObjectNetDirty || !serializer.isNet();
 			
-			this._objectBaseNetDirty =
-				serializer.serializeBool(this._objectBaseNetDirty);
+			serializer.serializeObject(this, this.GameObject._serializeFormat);
 			
-			if(this._objectBaseNetDirty)
+			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
 			{
-				if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+				if(aStartingOwner != this._myNetOwnerID)
 				{
-					ECGame.log.info(this.getTxtPath() + " start owner: " + this._netOwner);
-				}
-				
-				serializer.serializeObject(this, this.GameObject._serializeFormat);
-				
-				if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
-				{
-					ECGame.log.info(this.getTxtPath() + " end owner: " + this._netOwner);
+					ECGame.log.info(this.getTxtPath() + " start owner: " + aStartingOwner);
+					ECGame.log.info(this.getTxtPath() + " end owner: " + this._myNetOwnerID);
 				}
 			}
-			
-			/*if(serializer.isNet())//TODO maybe should be ALL flag or something (want to minimize transfers)
-			{
-				this._objectBaseNetDirty = false;
-			}*/
 		},
 		
 		clone : function clone()

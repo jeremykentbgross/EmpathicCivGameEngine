@@ -45,7 +45,10 @@ ECGame.EngineLib.GameEntityComponent = ECGame.EngineLib.Class.create({
 			this._owner = null;
 		},
 		
-		destroy : function destroy(){},
+		//set<classname>NetDirty
+		clearNetDirty : function clearNetDirty(){},
+		
+		cleanup : function cleanup(){},
 		serialize : function serialize(){},
 		
 		copyFrom : function copyFrom(){}
