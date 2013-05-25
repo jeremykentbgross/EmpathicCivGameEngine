@@ -19,28 +19,6 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//TODO depricated:
-ECGame.EngineLib.createEventSystem = function(instance)//TODO get rid of once I refactor network and input
-{
-	var property;
-	var temp = new ECGame.EngineLib.GameEventSystem();
-	instance = instance || {};
-	
-	for(property in temp)
-	{
-		instance[property] = temp[property];
-	}
-	for(property in temp.prototype)
-	{
-		instance[property] = temp.prototype[property];
-	}
-	
-	return instance;
-};
-
-
-
-//TODO consider making GameObject inherit this as many things might want to listen to its state!
 ECGame.EngineLib.GameEventSystem = function GameEventSystem()
 {
 	this._myEventListeners = {};

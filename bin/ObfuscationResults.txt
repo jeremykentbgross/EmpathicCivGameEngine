@@ -1240,6 +1240,7 @@ Member Variables:
 	_sounds
 	userName
 	userID
+	GameEventSystem
 	_maxItemsPerMessage
 	_objectHeaderFormat
 	_messageHeaderFormat
@@ -1263,7 +1264,6 @@ Member Variables:
 	_serializeObjectsOut
 	_sendData
 	_sendObj
-	GameEventSystem
 	_mouseLoc
 	_keys
 	_keysPressed
@@ -1578,12 +1578,6 @@ Member Variables:
 	drawDebugText
 	getWidth
 	getHeight
-	_onClientDisconnected
-	sendMessage
-	_serializeObjectsIn
-	addNetDirtyObject
-	addNewObject
-	update
 	getTargetPosition
 	getRect
 	toBinary
@@ -1604,6 +1598,7 @@ Member Variables:
 	setDummyMode
 	getDummyMode
 	start
+	update
 	getFrameCount
 	run
 	exit
@@ -1640,7 +1635,6 @@ Member Variables:
 	Class
 	createGameCircularDoublyLinkedListNode
 	GameCircularDoublyLinkedListNode
-	createEventSystem
 	ChatSystem
 	createGame2DGraphics
 	Game2DGraphics
@@ -1835,6 +1829,11 @@ Member Variables:
 	min
 	max
 	NET
+	_onClientDisconnected
+	sendMessage
+	_serializeObjectsIn
+	addNetDirtyObject
+	addNewObject
 	initClient
 	setSupressKeyboardEvents
 	_onInput
@@ -2965,7 +2964,6 @@ Included Words:
 	addDebugInfo
 	createGameRegistry
 	createGameCircularDoublyLinkedListNode
-	createEventSystem
 	createGame2DGraphics
 	createGameObjectRef
 	socketio
