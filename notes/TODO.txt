@@ -49,6 +49,9 @@ NetGroup
 		-socket
 	-objects{}
 	-dirtylist[]
+	-newlist[]
+	-destroylist[]
+	//-removelist[]???
 	addObject(object)
 	{
 		netcreate(object)
