@@ -1,0 +1,9 @@
+[user]
+	name = Jeremy Kent B Gross
+	email = jeremykentbgross@gmail.com
+[color]
+	ui = auto
+[core]
+	editor = vim
+[diff]
+	external = /home/jgross/diff.py
