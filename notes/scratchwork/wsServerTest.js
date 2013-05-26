@@ -1,49 +1,77 @@
+var path = require("path");
+var http = require("http");
+var express = require("express");
 
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//recommended ws lib
-//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+//http file server
+var expressApp = express.createServer();
+//needed to open more sockets:
+var httpServer = http.createServer(expressApp);
+
+
+expressApp.get(
+	'/'
+	,function webGetHome(req, res)
+	{
+		//console.log(req, res);
+		res.sendfile(
+			path.join(path.dirname(__filename), 'wsServerTestClient.html')
+		);
+	}
+);
+
+httpServer.listen(
+	80
+	//,this.webHostAddress	//Note: if this is here it cannot be accessed elsewhere
+);
+
+
+
+
+
+
+//server function
+function verifyClient(inInfo, inClientVerifiedFunction)
+{
+	console.trace();
+	console.log(arguments);
+	//console.log(inInfo, inClientVerifiedFunction);
+	
+	//TODO find user if they exist, otherwise create a new one or boot them.
+	inClientVerifiedFunction(true);
+}
+
 
 //http://www.iana.org/assignments/websocket/websocket.xml#subprotocol-name
 var wsLib = require('ws');
-
-var WebSocketServer = wsLib.Server,
-	wss = new WebSocketServer(
-		//options
-		{			
-			//host String
-			port : 5000	//Number
-			//server http.Server
-			//verifyClient Function
-			//path String
-			//noServer Boolean
-			//disableHixie Boolean
-			//clientTracking Boolean
-		}
-		//callback function(???)
-	);
-
-	
-/*
-wss = new ws.Server(
+var WebSocketServer = wsLib.Server;
+var WebSocket = wsLib.WebSocket;
+var webSocketServer = new WebSocketServer(
 	//options
 	{			
 		//host String
-		port : 5000	//Number
-		//server http.Server
-		//verifyClient Function
+//		port : 5000,	//Number
+		server : httpServer, //http.Server
+		verifyClient : verifyClient	//Function
 		//path String
 		//noServer Boolean
 		//disableHixie Boolean
 		//clientTracking Boolean
 	}
-	//callback function(???)	//only when port is given in options
+	//callback function(???)
 );
-wss.close([code], [data]);//closes server and all client sockets
-wss.handleUpgrade(request, socket, upgradeHead, callback)
-wss.on('error', function(inError){});
-wss.on('headers', function(inHeaders){});
-wss.on('connection', function(inSocket){});
+/*
+webSocketServer.close([code], [data]);//closes server and all client sockets
+webSocketServer.handleUpgrade(request, socket, upgradeHead, callback)
+webSocketServer.on('error', function(inError){});
+webSocketServer.on('headers', function(inHeaders){});
+webSocketServer.on('connection', function(inSocket){});
 */
+
+
+
+
 
 
 /*
@@ -100,47 +128,121 @@ Event: 'open'	function () { }	//Emitted when the connection is established.
 
 
 
+//socket function
+function onOpen()
+{
+	console.trace();
+	console.log(arguments);
+}
 
-
-
-wss.on(
-	'connection',
-	function(ws)
+//socket function
+function onError(inError)
+{
+	if(inError)
 	{
-		console.log(ws);
-		ws.on(
-			'message',
-			function onmessage(inMessage, inFlags)
-			{
-				console.trace();
-				console.log('Flags:', inFlags);
-				console.log('TypeOf:', typeof inMessage);
-				console.log('Message:', inMessage);
-				console.log('binary:', new Uint8Array(inMessage));
-				
-				var binary = new Float32Array(20);
-				for (var i = 0; i < binary.length; i++) {
-					binary[i] = Math.random();
-					console.log(binary[i]);
-				}
-				this.send(
-					binary/*.buffer*/,
-					{binary: true/*, mask: true*/},
-					function(error)
-					{
-						console.error(error);
-					}
-				);
-			}
-		);
-		ws.send('something');
-		
-/*		wsLib.WebSocket.prototype.onmessage = function(param1, param2, param3, param4)
+		console.error(inError);
+	}
+}
+
+function onClose(inCode, inMessage)
+{
+	console.trace();
+	console.log(inCode);
+	console.log(inMessage);
+	console.log(arguments);
+}
+
+//socket function
+function onMessage(inMessage, inFlags)
+{
+	console.trace();
+	console.log('Flags:', inFlags);
+	console.log('TypeOf:', typeof inMessage);
+	if(typeof inMessage === 'string')
+	{
+		console.log('Message:', inMessage);
+	}
+	else
+	{
+		console.log('binary:', new Uint8Array(inMessage));
+	}
+	
+	var binary = new Float32Array(20);
+	for (var i = 0; i < binary.length; i++) {
+		binary[i] = Math.random();
+		console.log("Creating: " + binary[i]);
+	}
+	this.send(
+		binary/*.buffer*/,
+		{binary: true/*, mask: true*/},
+		onError
+	);
+}
+
+
+
+
+
+
+
+
+/*
+webSocketServer.close([code], [data]);//closes server and all client sockets
+webSocketServer.handleUpgrade(request, socket, upgradeHead, callback)
+*/
+
+//server function
+//webSocketServer.on('error', function(inError){});
+/*function onError(inError)
+{
+	if(inError)
+	{
+		console.error(inError);
+	}
+}*/
+webSocketServer.on('error', onError);
+
+
+//server function
+//webSocketServer.on('headers', function(inHeaders){});
+function onHeaders(inHeaders)
+{
+	console.trace();
+	console.log(inHeaders);
+}
+webSocketServer.on('headers', onHeaders);
+
+//server function
+//webSocketServer.on('connection', function(inSocket){});
+function onClientConnected(inWebSocket)
+{
+	console.trace();
+	console.log(inWebSocket);
+	
+	inWebSocket.on('open', onOpen);	//not ever recieved, I think because we are connected to, not connecting
+	inWebSocket.on('error', onError);
+	inWebSocket.on('close', onClose);
+	inWebSocket.on('message', onMessage);
+	
+	inWebSocket.send('something', {}, onError);
+	
+	setInterval(
+		function()
 		{
-			console.log(param1, param2, param3, param4);
-		};*/
-	}
-);
+			inWebSocket.send("don't close on me now", {}, onError);
+		},
+		1000
+	);
+	
+	setInterval(
+		function()
+		{
+			inWebSocket.close();
+		},
+		20000
+	);
+}
+webSocketServer.on('connection', onClientConnected);
 
 
 
@@ -149,42 +251,3 @@ wss.on(
 
 
 
-
-
-
-
-
-console.error("WTF");
-
-
-
-
-
-
-var path = require("path");
-var http = require("http");
-var express = require("express");
-
-
-
-//http file server
-var expressApp = express.createServer();
-//needed to open more sockets:
-var httpServer = http.createServer(expressApp);
-
-
-expressApp.get(
-	'/'
-	,function webGetHome(req, res)
-	{
-		//console.log(req, res);
-		res.sendfile(
-			path.join(path.dirname(__filename), 'wsServerTestClient.html')
-		);
-	}
-);
-
-httpServer.listen(
-	80
-	//,this.webHostAddress	//Note: if this is here it cannot be accessed elsewhere
-);

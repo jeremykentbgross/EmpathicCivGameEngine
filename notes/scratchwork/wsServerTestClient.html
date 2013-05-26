@@ -4,12 +4,19 @@
 
 	</body>
 	<script type="text/javascript">
+		
 		var websocket;
-		console.log(location.hostname);
-		websocket = new WebSocket("ws://" + location.hostname + ":5000");
+	
+	//	console.log(location.hostname);
+	//	console.log(document.URL.slice(0, -1) +  ':' + 'portnum');
+	
+		websocket = new WebSocket('ws://' + location.hostname /*+ ':5000'*/);
 		websocket.binaryType = 'arraybuffer';
+		
+		
 		websocket.onopen = function onopen(inEvent)
 		{
+			console.trace();
 			console.log(inEvent);
 			this.send("Hello!");
 			
@@ -22,17 +29,26 @@
 		
 		websocket.onclose = function(inEvent)
 		{
+			//https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
+			console.trace();
 			console.log(inEvent);
-			console.log(websocket);
+			//console.log(websocket);
 		};
 		
 		websocket.onmessage = function(inEvent)
 		{
-			console.trace();
+			console.trace();	////////////////////////////////////TODO USE THIS INSTEAD OF THE CURRENT THING
 			console.log(inEvent);
-			console.log(inEvent.data);
 			console.log(typeof inEvent.data);
-			console.log(new Float32Array(inEvent.data));
+			if(typeof inEvent.data === 'string')
+			{
+				console.log(inEvent.data);
+			}
+			else
+			{
+				//console.log(inEvent.data);//to see what happens
+				console.log(new Float32Array(inEvent.data));
+			}
 		};
 		
 		websocket.onerror = function(inEvent)
@@ -42,6 +58,27 @@
 		
 		console.error("WTF");
 		console.warn(websocket);
+//		console.dir(websocket);
+//		console.dirxml(websocket);
+		
+		function test(inBlah)
+		{
+			//http://getfirebug.com/wiki/index.php/Console_API
+			//https://developers.google.com/chrome-developer-tools/docs/console-api
+			
+			console.trace();
+		//	console.log(inBlah);
+		//	console.debug(inBlah);
+		//	console.info(inBlah);
+			console.warn(inBlah);
+			console.error(inBlah);
+			//console.assert??
+			if(inBlah)
+			{
+				test(inBlah - 1);
+			}
+		}
+		//test(5);
 		
 	</script>
 </html>

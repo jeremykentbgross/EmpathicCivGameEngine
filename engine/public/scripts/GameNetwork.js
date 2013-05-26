@@ -216,7 +216,7 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 			{
 				ECGame.log.info("Net Send Msg: " + inMsg);
 			}
-			
+			//TODO make sure it is no more than max size. Also look out for embedded html hacker tags
 			if(ECGame.Settings.Network.isServer)
 			{
 				this._listenSocket.sockets.emit('msg', inMsg);

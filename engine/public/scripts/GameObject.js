@@ -132,6 +132,8 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			this.cleanup();
 			
 			this.getClass().getInstanceRegistry().deregister(this);
+			
+			//TODO wipe all properties and change prototype (__proto__??)
 		},
 		
 		canUserModifyNet : function canUserModifyNet()
@@ -159,7 +161,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			{
 				if(!this._myNetDirty)
 				{
-					ECGame.instance.network.addNetDirtyObject(this);
+					ECGame.instance.network.addNetDirtyObject(this);//TODO event instead
 					this._myNetDirty = true;
 				}
 				
