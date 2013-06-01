@@ -172,7 +172,7 @@ Final NameSpaces:
 	loadSound
 	onError
 	User
-	GameNetwork
+	Network
 	_onClientConnected
 	_onClientDisconnected
 	sendMessage
@@ -540,7 +540,7 @@ Function Names:
 	loadSound
 	onError
 	User
-	GameNetwork
+	Network
 	_onClientConnected
 	_onClientDisconnected
 	sendMessage
@@ -771,9 +771,6 @@ Parameter Variables:
 	inFullPathDefault
 	inMsg
 	inFullPath
-	className
-	instance
-	PRIVATE
 	inString
 	inTestName
 	inTest
@@ -785,6 +782,7 @@ Parameter Variables:
 	inPoint
 	inOther
 	inScalar
+	instance
 	inObject
 	inName
 	inID
@@ -941,7 +939,6 @@ Local Variable Names:
 	stackPath
 	index
 	index2
-	propertyName
 	aTest
 	i
 	x
@@ -961,6 +958,7 @@ Local Variable Names:
 	parentIndex
 	parent
 	parentClass
+	propertyName
 	methodName
 	methods
 	methodIndex
@@ -1668,7 +1666,6 @@ Member Variables:
 	instance
 	WebServer
 	logger
-	addDebugInfo
 	isNumber
 	UnitTestFramework
 	AABB2
@@ -1688,7 +1685,6 @@ Member Variables:
 	Sound2D
 	AssetManager
 	User
-	GameNetwork
 	GameBinarySerializer
 	Events
 	Input
@@ -1753,6 +1749,9 @@ Member Variables:
 	setVelocity
 	call
 	USER_IDS
+	isServer
+	isMultiplayer
+	GamePort
 	focus
 	blur
 	value
@@ -1784,9 +1783,6 @@ Member Variables:
 	StaticThing
 	initWidth
 	initHeight
-	isServer
-	isMultiplayer
-	GamePort
 	Server
 	compressClientCode
 	removeTextForLocalization
@@ -2136,7 +2132,7 @@ Included Words:
 	loadSound
 	onError
 	User
-	GameNetwork
+	Network
 	_onClientConnected
 	_onClientDisconnected
 	sendMessage
@@ -2366,7 +2362,6 @@ Included Words:
 	inFullPathDefault
 	inMsg
 	inFullPath
-	PRIVATE
 	inString
 	inTestName
 	inTest
@@ -2525,7 +2520,6 @@ Included Words:
 	stackPath
 	index
 	index2
-	propertyName
 	aTest
 	i
 	x
@@ -2541,6 +2535,7 @@ Included Words:
 	parentIndex
 	parent
 	parentClass
+	propertyName
 	methodName
 	methods
 	methodIndex
@@ -2755,7 +2750,6 @@ Included Words:
 	cameraLeftTop
 	mouseWorldPosition
 	DEBUG
-	Network
 	Debug
 	_myTests
 	myX
@@ -3040,7 +3034,6 @@ Included Words:
 	setRightBottom
 	WebServer
 	logger
-	addDebugInfo
 	createGameRegistry
 	createGameCircularDoublyLinkedListNode
 	createGame2DGraphics
@@ -3053,6 +3046,9 @@ Included Words:
 	effectsVolume
 	default2DRadius
 	USER_IDS
+	isServer
+	isMultiplayer
+	GamePort
 	_serializeFormat
 	useRequestAnimFrame
 	STATUS__STATIC
@@ -3063,9 +3059,6 @@ Included Words:
 	StaticThing
 	initWidth
 	initHeight
-	isServer
-	isMultiplayer
-	GamePort
 	Server
 	compressClientCode
 	removeTextForLocalization
@@ -3472,8 +3465,6 @@ Unmapped Words:
 	stack
 	n
 	at
-	super_
-	debug_private
 	testName
 	S
 	s

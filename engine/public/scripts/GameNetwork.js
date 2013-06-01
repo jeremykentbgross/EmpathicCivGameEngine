@@ -43,8 +43,8 @@ ECGame.EngineLib.User.USER_IDS =
 
 
 
-ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
-	Constructor : function GameNetwork()
+ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
+	Constructor : function Network()
 	{
 		this.GameEventSystem();
 	},

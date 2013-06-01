@@ -125,7 +125,7 @@ ECGame.EngineLib.GameInstance.prototype._init = function _init()
 	//setup network and chat
 	if(ECGame.Settings.Network.isMultiplayer)
 	{
-		this.network = ECGame.EngineLib.GameNetwork.create();
+		this.network = ECGame.EngineLib.Network.create();
 		this.network.init();
 		this.updateOrder.push(this.network);
 		

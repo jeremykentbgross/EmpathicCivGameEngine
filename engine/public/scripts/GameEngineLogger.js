@@ -93,13 +93,3 @@ ECGame.log.info = ECGame.EngineLib.logger.createMsgType("INFO");
 ECGame.log.warn = ECGame.EngineLib.logger.createMsgType("WARNING", true);
 ECGame.log.error = ECGame.EngineLib.logger.createMsgType("ERROR", true);
 
-
-//TODO depricated!
-ECGame.EngineLib.addDebugInfo = function(className, instance, PRIVATE)
-{
-	var propertyName;
-	
-	propertyName = 'super_' + className;
-	instance[propertyName] = instance[propertyName] || {};
-	instance[propertyName].debug_private = PRIVATE;
-};
