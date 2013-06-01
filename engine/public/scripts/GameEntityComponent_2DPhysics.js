@@ -108,6 +108,9 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 			format[0].max = this._range.getRightBottom();
 			inSerializer.serializeObject(this, format);
 			
+			//TODO serialize delta position 99% of time, and full position every so often
+			//TODO server side: make sure full position is within some reasonable range
+			
 			//TODO bool to serialize range (just like obj owner) so it can change to ideal size for its containing map
 			
 			if(inSerializer.isReading())

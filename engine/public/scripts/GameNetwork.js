@@ -36,7 +36,7 @@ ECGame.EngineLib.User.USER_IDS =
 	,GUEST : 2
 	,NEW_USER : 3
 	
-	,CURRENT_MAX : 3	//enum max!
+	,CURRENT_MAX : 3	//enum max!	TODO make static, and this one is not const!
 	
 	,MAX_EVER : 65535
 };

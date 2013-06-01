@@ -20,6 +20,10 @@
 */
 
 
+
+
+//TODO check naming convention!!
+
 /*
 TODO:
 	Events.IdentifiedUser			//GameRules spawn
@@ -32,16 +36,20 @@ TODO:
 */
 
 
-/*
+//TODO simulate latency!!!
+
+
+/*//all user objects should be added to netgroups as objects
 User : Object
 	-name
 	-id
 	-ping
-	-connected
+	-connected (bool)
 	-socket (server only??)
 	-fb/pic/etc?
 	-serialize if locally owned?, make local User
 	-netgroup (there can only be one)
+	-onDisconnectedToLongTimer
 */
 /*
 TODO put this back in:
@@ -59,13 +67,35 @@ ECGame.EngineLib.User.USER_IDS =
 {
 	UNUSED : 0
 	,SERVER : 1
-	,GUEST : 2
+	,GUEST : 2		//TODO guests and new users going to be depricated
 	,NEW_USER : 3
 	
-	,CURRENT_MAX : 3	//enum max!
+	,CURRENT_MAX : 3	//enum max!	TODO make static, and this one is not const!
 	
 	,MAX_EVER : 65535
 };
+*/
+
+
+/*
+TODO
+
+Command : Object
+	-run()
+	{
+		execute();
+		this.destroy();
+	}
+	-execute();//pure virtual
+
+Chat : Command
+	//client can create
+	
+SetUserID : Command
+	//client CANNOT create
+
+...
+
 */
 
 
@@ -74,30 +104,21 @@ ECGame.EngineLib.User.USER_IDS =
 NetGroup	//1 netgroup per user, 0-many netgroups per object
 	-users
 		-socket	//need to keep alive, AND reconnect
-	-objects{}
-	-dirtylist[]
-	-newlist[]
-	-destroylist[]
-	//-removelist[]???
-	addObject(object)//all user objects should be added as objects
-	{
-		netcreate(object)
-		object.listen(this)
-	}
-	removeObject()
-	{
-		object.unlisten(this)
-		netDestroy()
-	}
-	addUser(inUser)
-	{
-		serialize all current objects to user
-	}
-	removeUser(inUser){???}
+	//TODO suspend object somehow?
 */
 ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
-	Constructor : function NetGroup()
+	Constructor : function NetGroup(inNetwork)
 	{
+		this._myNetwork = inNetwork;
+		this._myUsers = [];
+		this._myTrackedInstances = {};
+		this._myNewInstances = {};
+		this._myNetDirtyInstances = {};	//TODO merge with _myForwardDirtyObjects??
+		this._myDestroyInstances = {};
+		
+		this._myForwardDirtyObjects = {};//[class][origin userid][]
+		
+		//TODO listen for creation of new users, and add all the current ones to objects
 	},
 	Parents : [],
 	flags : {},
@@ -105,7 +126,268 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
+		update : function update()//TODO probably onUpdate
+		{
+			var
+				//user
+				aCurrentUserIndex,
+				aCurrentUser,
+				aUserMap,
+				aSourceUserIndex,
+				//class
+				aClassName,
+				anInstanceList,
+				//lists
+				aNewInstanceList,
+				aDirtyInstanceList,
+				aDestroyInstanceList,
+				//binary buffer
+				aBinaryBuffer;
+				
+			//send all new, dirty, and destroyed instances to all users
+			for(aCurrentUserIndex in this._myUsers)
+			{
+				aCurrentUser = this._myUsers[aCurrentUserIndex];
+				
+				aNewInstanceList = [];
+				aDirtyInstanceList = [];
+				aDestroyInstanceList = [];
+				
+				//queue up new instances
+				for(aClassName in this._myNewInstances)
+				{
+					anInstanceList = this._myNewInstances[aClassName];
+					aNewInstanceList.concat(anInstanceList);
+				}
+				
+				//queue up dirty instances
+				for(aClassName in this._myNetDirtyInstances)
+				{
+					anInstanceList = this._myNetDirtyInstances[aClassName];
+					aDirtyInstanceList.concat(anInstanceList);
+				}
+				
+				//queue up dirty instances from other clients
+				for(aClassName in this._myForwardDirtyObjects)
+				{
+					aUserMap = this._myForwardDirtyObjects[aClassName];
+					for(aSourceUserIndex in aUserMap)
+					{
+						if(aCurrentUserIndex === aSourceUserIndex)
+						{
+							continue;
+						}
+						anInstanceList = aUserMap[aSourceUserIndex];
+						aDirtyInstanceList.concat(anInstanceList);
+					}
+				}
+				
+				//queue up the destroy objects
+				for(aClassName in this._myDestroyInstances)
+				{
+					anInstanceList = this._myDestroyInstances[aClassName];
+					aDestroyInstanceList.concat(anInstanceList);
+				}
+				
+				aBinaryBuffer = this._myNetwork.serializeOut(
+					aCurrentUser,
+					aNewInstanceList,
+					aDirtyInstanceList,
+					aDestroyInstanceList
+				);
+				aCurrentUser.mySocket.send(aBinaryBuffer);
+			}
+		},
 		
+		addUser : function addUser(inUser)
+		{
+			var
+				aClassName,
+				anInstanceList,
+				aNewInstanceList;
+			
+			//if the user is already here, bail
+			if(this._myUsers.indexOf(inUser) !== -1)
+			{
+				return;
+			}
+			
+			//add the user
+			this._myUsers.push(inUser);
+			
+			//serialize all this._myTrackedInstances to user as new instances
+			aNewInstanceList = [];
+			for(aClassName in this._myTrackedInstances)
+			{
+				anInstanceList = this._myTrackedInstances[aClassName];
+				aNewInstanceList.concat(anInstanceList);
+			}
+			aBinaryBuffer = this._myNetwork.serializeOut(
+				inUser,
+				aNewInstanceList,
+				null,
+				null
+			);
+			inUser.mySocket.send(aBinaryBuffer);
+		},
+		removeUser : function removeUser(inUser)
+		{
+			var anIndex, aLength;
+			
+			anIndex = this._myUsers.indexOf(inUser);
+			if(anIndex !== -1)
+			{
+				aLength = this._myUsers.length;
+				this._myUsers[anIndex] = this._myUsers[aLength - 1];
+				this._myUsers.pop();
+			}
+			//TODO consider sending all _myTrackedInstances for destruction (like maybe a team switch?)
+		},
+		
+		addOneTimeObject : function addOneTimeObject(inObject)
+		{
+			var aClassName;
+			
+			aClassName = inObject.getClass().getName();
+			
+			//add to new
+			this._myNewInstances[aClassName] = this._myNewInstances[aClassName] || [];
+			this._myNewInstances[aClassName].push(inObject);
+		},
+		
+		addObject : function addObject(inObject)
+		{
+			var aClassName, anIndex, aLength;
+			
+			aClassName = inObject.getClass().getName();
+			
+			//if the object is already tracked, return
+			if(this._myTrackedInstances[aClassName].indexOf(inObject) !== -1)
+			{
+				return;
+			}
+			
+			//add to tracked
+			this._myTrackedInstances[aClassName] = this._myTrackedInstances[aClassName] || [];
+			this._myTrackedInstances[aClassName].push(inObject);
+
+			//TODO listen to object messages: onNetDirty / onDestroy
+			
+			//if the object is set to be destroyed, remove that
+			anIndex = this._myDestroyInstances[aClassName].indexOf(inObject);
+			if(anIndex !== -1)
+			{
+				aLength = this._myDestroyInstances[aClassName].length;
+				this._myDestroyInstances[aClassName][anIndex] = this._myDestroyInstances[aClassName][aLength - 1];
+				this._myDestroyInstances[aClassName].pop();
+			}
+			
+			//add to new
+			this._myNewInstances[aClassName] = this._myNewInstances[aClassName] || [];
+			this._myNewInstances[aClassName].push(inObject);
+		},
+		removeObject : function removeObject(inObject)
+		{
+			var aClassName, anIndex, aLength;
+			
+			aClassName = inObject.getClass().getName();
+			
+			//remove from tracked instances
+			anIndex = this._myTrackedInstances[aClassName].indexOf(inObject);
+			if(anIndex !== -1)
+			{
+				aLength = this._myTrackedInstances[aClassName].length;
+				this._myTrackedInstances[aClassName][anIndex] = this._myTrackedInstances[aClassName][aLength - 1];
+				this._myTrackedInstances[aClassName].pop();
+			}
+			else //the object isn't tracked, don't bother with the rest!!
+			{
+				return;
+			}
+			
+			//if the object is already set to be destroyed, return
+			anIndex = this._myDestroyInstances[aClassName].indexOf(inObject);
+			if(anIndex !== -1)
+			{
+				return;
+			}
+			
+			//add to the destroy list
+			this._myDestroyInstances[aClassName] = this._myDestroyInstances[aClassName] || [];
+			this._myDestroyInstances[aClassName].push(inObject);
+			
+			//TODO stop listening to object messages: onNetDirty / onDestroy
+			
+			//remove from new instances
+			anIndex = this._myNewInstances[aClassName].indexOf(inObject);
+			if(anIndex !== -1)
+			{
+				aLength = this._myNewInstances[aClassName].length;
+				this._myNewInstances[aClassName][anIndex] = this._myNewInstances[aClassName][aLength - 1];
+				this._myNewInstances[aClassName].pop();
+			}
+			
+			//remove from the dirty list
+			anIndex = this._myNetDirtyInstances[aClassName].indexOf(inObject);
+			if(anIndex !== -1)
+			{
+				aLength = this._myNetDirtyInstances[aClassName].length;
+				this._myNetDirtyInstances[aClassName][anIndex] = this._myNetDirtyInstances[aClassName][aLength - 1];
+				this._myNetDirtyInstances[aClassName].pop();
+			}
+		},
+		
+		onNetDirty : function onNetDirty(inEvent)
+		{
+			var aClassName, anObject, anIndex, aUserID;
+			
+			anObject = inEvent.myObject;
+			aClassName = anObject.getClass().getName();
+			aUserID = inEvent.myUserID;
+			
+			//TODO check if this can be written to by local user
+			
+			if(!aUserID)
+			{
+				//make sure entry exists for this class
+				this._myNetDirtyInstances[aClassName] = this._myNetDirtyInstances[aClassName] || [];
+				
+				//if it is already dirty, forget it
+				anIndex = this._myNetDirtyInstances[aClassName].indexOf(anObject);
+				if(anIndex !== -1)
+				{
+					return;
+				}
+				
+				//it is dirty
+				this._myNetDirtyInstances[aClassName].push(anObject);
+			}
+			else
+			{
+				//make sure there is a list for this class
+				this._myForwardDirtyObjects[aClassName] = this._myForwardDirtyObjects[aClassName] || {};
+				
+				//make sure there is 'from user'
+				this._myForwardDirtyObjects[aClassName][aUserID] = this._myForwardDirtyObjects[aClassName][aUserID] || [];
+				
+				//if its already there, skip this
+				anIndex = this._myForwardDirtyObjects[aClassName][aUserID].indexOf(anObject);
+				if(anIndex !== -1)
+				{
+					return;
+				}
+				
+				//queue this object
+				this._myForwardDirtyObjects[aClassName][aUserID].push(anObject);
+			}
+		},
+		
+		onObjectDestroyed : function onObjectDestroyed(inEvent)
+		{
+			this.removeObject(inEvent.myObject);
+		}
+		
+		//TODO chat messages?
 	}
 });
 
@@ -168,12 +450,16 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 	{
 		this._myNetwork = inNetwork;
 		this._myWebsocket = inWebSocket;
+		//this._myUser = inWebSocket.??.myECGameUser;	//TODO get user from socket
+		this._myWebsocket.myECGameSocket = this;
+		
 		inWebSocket.on('open', this._onOpen);	//not ever recieved, I think because we are connected to, not connecting
 		inWebSocket.on('error', this._onError);
 		inWebSocket.on('close', this._onClose);
 		inWebSocket.on('message', this._onMessage);
-		this._myWebsocket.ECGameSocket = this;
-		//inNetwork.event IdentifiedUser TODO rename ClientConnected
+		
+		//TODO inNetwork.event IdentifiedUser TODO rename ClientConnected
+		this._myNetwork.onEvent(new ECGame.EngineLib.Events.IdentifiedUser(this._myUser));
 	},
 	Parents : [],
 	flags : {},
@@ -183,17 +469,27 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 	{
 		_onOpen : function _onOpen()
 		{
+			var aThis;
+			
+			aThis = this.myECGameSocket;
+			
 			console.trace();
 			console.log(arguments);
 		},
 
 		_onClose : function _onClose(inCode, inMessage)//_onClientDisconnected
 		{
+			var aThis;
+			
+			aThis = this.myECGameSocket;
+			
 			console.trace();
-		//	console.log(inCode);
-		//	console.log(inMessage);
 			console.log(arguments);
-			//inNetwork.event ClientDisconnected
+			
+			//TODO broadcast chat command
+			//aThis._listenSocket.sockets.emit('msg', "User Disconnected: " + this.gameUser.userName);
+			
+			aThis._myNetwork.onEvent(new ECGame.EngineLib.Events.ClientDisconnected(aThis._myUser));
 		},
 		
 		_onMessage : function _onMessage(inMessage, inFlags)
@@ -211,18 +507,6 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 			{
 				console.log('binary:', new Uint8Array(inMessage));
 			}
-			
-			/*var binary = new Float32Array(20);
-			for (var i = 0; i < binary.length; i++) {
-				binary[i] = Math.random();
-				console.log("Creating: " + binary[i]);
-			}
-			this.send(
-				binary//.buffer
-				,{binary: true
-				//, mask: true},
-				onError
-			);*/
 		},
 		
 		_onError : function _onError(inError)
@@ -235,6 +519,13 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 		
 		send : function send(inData)
 		{
+			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+			{
+				ECGame.log.info("Net Send Obj: " + inData);
+			}
+			
+			//TODO if not connected, queue send data to user object to resend later??
+			
 			this._myWebsocket.send(
 				inData//.buffer
 				,{
@@ -275,7 +566,7 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 		this._myWebsocket.onclose = this._onClose;
 		this._myWebsocket.onmessage = this._onMessage;
 		this._myWebsocket.onerror = this._onError;
-		this._myWebsocket.ECGameSocket = this;
+		this._myWebsocket.myECGameSocket = this;
 	},
 	Parents : [],
 	flags : {},
@@ -285,9 +576,28 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 	{
 		_onOpen : function _onOpen(inEvent)//_onConnectedToServer
 		{
-			//inNetwork.event ConnectedToServer
+			var aThis;
 			
-			console.trace();
+			aThis = this.myECGameSocket;
+			
+			if(ECGame.Settings.DEBUG
+			//	&& ECGame.Settings.Debug.NetworkMessages_Print
+			)
+			{
+				ECGame.log.info("Connected to Server!");
+			}
+			
+			//TODO assign server user to this!
+			//aThis._socket.gameUser = new ECGame.EngineLib.User("Server", ECGame.EngineLib.User.USER_IDS.SERVER);
+			
+			//TODO consider old way of reusing id on reconnect!
+			
+			aThis._myNetwork.onEvent(new ECGame.EngineLib.Events.ConnectedToServer());
+			
+			
+			
+			
+			/*console.trace();
 			console.log(inEvent);
 			this.send("Hello!");
 			
@@ -295,22 +605,40 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			for (var i = 0; i < binary.length; i++) {
 				binary[i] = Math.floor((Math.random() * 256));
 			}
-			websocket.send(binary.buffer);
+			websocket.send(binary.buffer);*/
 		},
 		
 		_onClose : function _onClose(inEvent)//_onDisconnectedFromServer
 		{
-			//inNetwork.event DisconnectedFromServer
-			
 			//https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
-			console.trace();
+			var aThis;
+			
+			aThis = this.myECGameSocket;
+			
+			if(ECGame.Settings.DEBUG
+			//	&& ECGame.Settings.Debug.NetworkMessages_Print
+			)
+			{
+				ECGame.log.info("Lost Server!");
+			}
+			aThis._myNetwork.onEvent(new ECGame.EngineLib.Events.DisconnectedFromServer());
+			
+			//TODO if not clean close try to reopen new socket!
+			
+			
+			
+			/*console.trace();
 			console.log(inEvent);
 			console.log(arguments);
-			//console.log(this._myWebsocket);
+			//console.log(this._myWebsocket);*/
 		},
 		
 		_onMessage : function _onMessage(inEvent)
 		{
+			var aThis;
+			
+			aThis = this.myECGameSocket;
+			
 			//inNetwork.event Msg
 			
 		//	console.trace();	////////////////////////////////////TODO USE THIS INSTEAD OF THE CURRENT THING
@@ -365,31 +693,16 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 
 /*
 Network
-	-Netgroup
-	-createNetGroup
-	-<add/remove><User/Object>FromNetGroup<s>()
-	-users{}/[]?
 	
 //SHARED
-	-users	!!!!!!!!!
-		-socket
-	-netgroups	!!!!!!!
-		-users	!!!!!!!
-		-newInstances
-		-dirtyInstances
-		addNetDirtyObject()
-		addNewObject()
-		update()
-			//for all new instances, send
-			//for all dirty instances, send
-			
 	-maxItemsPerMessage
 	-objectHeaderFormat
 	-messageHeaderFormat
 	-objectHeader
 	-messageHeader
-	
 	-serializer
+	
+	
 	_onIdRecv()
 		//if server
 		//	security checks
@@ -419,7 +732,6 @@ Network
 		//else send
 	_serializeObjectsIn()
 		//read in objects, create when needed
-	
 	_serializeObjectsOut()
 		//send it with headers and all
 */
@@ -427,6 +739,13 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 	Constructor : function NetworkBase()
 	{
 		this.GameEventSystem();
+		
+		this._messageHeader = {};
+		this._objectHeader = {};
+		
+		this._serializer = ECGame.EngineLib.GameBinarySerializer.create();
+		
+		this._myNetGroups = {};
 	},
 	Parents : [ECGame.EngineLib.GameEventSystem],
 	flags : {},
@@ -434,17 +753,51 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
+		createNetGroup : function createNetGroup(inName)
+		{
+			return (this._myNetGroups[inName] = ECGame.EngineLib.NetGroup.create());
+			//would the following work safely and correctly, or always create the netgroup?
+			//return (this._myNetGroups[inName] = this._myNetGroups[inName] || ECGame.EngineLib.NetGroup.create());
+		},
+		getNetGroup : getNetGroup(inName)
+		{
+			return this._myNetGroups[inName];
+		},
+		
+		broadcast : function broadcast(inMsg)
+		{
+			var netGroupName;
+			for(netGroupName in this._myNetGroups)
+			{
+				this._myNetGroups[netGroupName].addOneTimeObject(inMsg);
+			}
+		},
+		
+		serializeOut : function serializeOut(
+			inCurrentUser,
+			inNewInstanceList,
+			inDirtyInstanceList,
+			inDestroyInstanceList
+		)
+		{
+			//TODO return binary buffer!!
+		},
+		
+		serializeIn : function serializeIn()
+		{
+			//TODO...
+		},
+		
 		/*
-		MessageHeader: (additions)
-			id
-			msg		//ser string as bytes?
-			data
-			obj
-			//TODO ping/clock/pulse
+		TODO serializeObjects(inObjectArrays...)
+			return binary array
 		*/
-/*		_maxItemsPerMessage : 255,
+		
+		//TODO use '_my'/'_our'
+		_maxItemsPerMessage : 255,
 		_messageHeaderFormat :
 		[
+			//local clock? etc etc //TODO ping/clock/pulse
 			{
 				name : 'userID',
 				type : 'int',
@@ -453,10 +806,24 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				max : ECGame.EngineLib.User.USER_IDS.MAX_EVER
 			},
 			{
-				name : 'numObjects',
+				name : 'newObjects',
 				type : 'int',
 				net : true,
-				min : 1,
+				min : 0,
+				max : this._maxItemsPerMessage
+			},
+			{
+				name : 'dirtyObjects',
+				type : 'int',
+				net : true,
+				min : 0,
+				max : this._maxItemsPerMessage
+			},
+			{
+				name : 'destroyObjects',
+				type : 'int',
+				net : true,
+				min : 0,
 				max : this._maxItemsPerMessage
 			}
 		],
@@ -477,7 +844,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				max : 4096	//note: this assumes a max of 4096 objects of any given type.  may want max items per type in the future
 			}
 		],
-		*/
+		
 
 	}
 });
@@ -533,6 +900,8 @@ ECGame.EngineLib.NetworkServer = ECGame.EngineLib.Class.create({
 		this._myWebSocketServer.on('error', this._onError);
 		this._myWebSocketServer.on('headers', this._onHeaders);
 		this._myWebSocketServer.on('connection', this._onConnection);
+		
+		console.log("TCP Server running.");
 	},
 	Parents : [ECGame.EngineLib.NetworkBase],
 	flags : {},
@@ -542,10 +911,16 @@ ECGame.EngineLib.NetworkServer = ECGame.EngineLib.Class.create({
 	{
 		_verifyClient : function _verifyClient(inInfo, inClientVerifiedFunction)
 		{
+			var aUserID;
+			
 			console.trace();
 			console.log(arguments);
 			
 			//TODO find user if they exist, otherwise create a new one or boot them.
+			
+			//TODO temp:
+			aUserID = ++(ECGame.EngineLib.User.USER_IDS.CURRENT_MAX);
+			inInfo.myECGameUser = new ECGame.EngineLib.User("User" + aUserID, aUserID);
 			
 			inClientVerifiedFunction(true);
 		},
@@ -574,17 +949,23 @@ ECGame.EngineLib.NetworkServer = ECGame.EngineLib.Class.create({
 		
 		_onConnection : function _onConnection(inWebSocket)//_onClientConnected
 		{
-			//TODO create server side socket
-			var SOCKET____ = new ECGame.EngineLib.ServerSideWebSocket(inWebSocket, this);
+			var aThis;
+			
+			aThis = ECGame.instance.network;
+			
+			//create server side socket
+			var aSocket = new ECGame.EngineLib.ServerSideWebSocket(inWebSocket, aThis);
+			
+			//TODO create CommandObject to set local UserId! (send this object to the socket!)
+						
+			//TODO tell everone they have connected with a chat message CommandObject:
+			//inConnectedSocket.broadcast.emit('msg', "User Connected: " + inConnectedSocket.gameUser.userName);
+
+			
+			
 			
 			/*console.trace();
 			console.log(inWebSocket);
-			
-			inWebSocket.on('open', onOpen);	//not ever recieved, I think because we are connected to, not connecting
-			inWebSocket.on('error', onError);
-			inWebSocket.on('close', onClose);
-			inWebSocket.on('message', onMessage);
-			inWebSocket.send('something', {}, onError);*/
 			
 			//TODO keep alive msgs
 			/*
@@ -628,6 +1009,9 @@ ECGame.EngineLib.NetworkServer = ECGame.EngineLib.Class.create({
 ECGame.EngineLib.NetworkClient = ECGame.EngineLib.Class.create({
 	Constructor : function NetworkClient()
 	{
+		//TODO create user/socket??
+		//TODO should be creating server user and server user group that is subscribed to all?
+		this._mySocket = ECGame.EngineLib.ClientSideWebSocket.create(this);
 	},
 	Parents : [ECGame.EngineLib.NetworkBase],
 	flags : {},
@@ -638,3 +1022,294 @@ ECGame.EngineLib.NetworkClient = ECGame.EngineLib.Class.create({
 		
 	}
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+		TODO in called from here:
+		unpack()
+			throw	//from logerror!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+		
+		_serializeObjectsIn : function _serializeObjectsIn(inEvent, inSocket, inSerializerFlags)
+		{
+			var i, readObjects;
+			
+			this._serializer.initRead(inSerializerFlags, inEvent.data);
+			
+			if(!ECGame.Settings.Network.isServer
+				&& ECGame.Settings.DEBUG
+				&& ECGame.Settings.Debug.NetworkMessages_Draw)
+			{
+				ECGame.instance.graphics.drawDebugText(
+					"Network in:",
+					ECGame.Settings.Debug.NetworkMessages_DrawColor
+				);
+			}
+			
+			try
+			{
+				this._serializer.serializeObject(this._messageHeader, this._messageHeaderFormat);
+				
+				//check that the username matches the socket user
+				ECGame.log.assert(
+					(this._messageHeader.userID === inSocket.gameUser.userID
+					|| inSocket.gameUser.userID === ECGame.EngineLib.User.USER_IDS.SERVER)
+					,"Net user not identifying self correctly: " + (this._messageHeader.userID + ' != ' + inSocket.gameUser.userID)
+				);
+				
+				readObjects = [];
+				
+				for(i = 0; i < this._messageHeader.numObjects; ++i)
+				{
+					this._serializer.serializeObject(this._objectHeader, this._objectHeaderFormat);
+					var objectClass = ECGame.EngineLib.Class.getInstanceRegistry().findByID(this._objectHeader.classID);
+					if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+					{
+						if(!objectClass)
+						{
+							ECGame.log.warn("Unknown classID " + this._objectHeader.classID);
+						}
+					}
+					var object = objectClass.getInstanceRegistry().findByID(this._objectHeader.instanceID);
+					
+					//if not found, and not server, create it
+					if(!object)//TODO if user can create this object && not net?
+					{
+						if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+						{
+							ECGame.log.info("Network Creating: " + objectClass.getName() + ' : ' + this._objectHeader.instanceID);
+						}
+						object = objectClass.create();
+						object.setID(this._objectHeader.instanceID);
+					}
+					else if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+					{
+						ECGame.log.info("Network Changing: " + objectClass.getName() + ' : ' + this._objectHeader.instanceID);
+					}
+					
+					//if not from server && not from owner dummy serialize
+					if(object.getNetOwnerID() !== this._messageHeader.userID
+						&& this._messageHeader.userID !== ECGame.EngineLib.User.USER_IDS.SERVER)
+					{
+						//Note: could also maybe throw owner if !server && !owner && !recentOwnerQueue
+						//TODO info/warn?
+						console.log("Not the owner!: " + this._messageHeader.userID + ' != ' + object.getNetOwnerID());
+						this._serializer.setDummyMode(true);
+						object.serialize(this._serializer);
+						this._serializer.setDummyMode(false);
+					}
+					else
+					{
+						object.serialize(this._serializer);
+					}
+					
+					readObjects.push(object);
+					
+					if(!ECGame.Settings.Network.isServer
+						&& ECGame.Settings.DEBUG
+						&& ECGame.Settings.Debug.NetworkMessages_Draw)
+					{
+						//TODO not show same class name more than once, just instance (ie make print list for the end!)
+						ECGame.instance.graphics.drawDebugText(
+							'    ' + objectClass.getName(),
+							ECGame.Settings.Debug.NetworkMessages_DrawColor
+						);
+						ECGame.instance.graphics.drawDebugText(
+							'        -' + object.getName()
+							,ECGame.Settings.Debug.NetworkMessages_DrawColor
+						);
+					}
+				}
+				
+				for(i = 0; i < readObjects.length; ++i)
+				{
+					if(readObjects[i].postSerialize)//TODO make this chain function so we don't have to check for it???
+					{
+						readObjects[i].postSerialize();
+					}
+				}
+			}
+			catch(error)
+			{
+				console.log(error.stack);
+				//TODO disconnect? increment damaged packets for this user?
+				return false;
+			}
+			
+			return true;
+		},
+
+
+
+
+
+
+		addNetDirtyObject : function addNetDirtyObject(inObject)
+		{
+			var className = inObject.getClass().getName();
+			this._myNetDirtyInstances[className] = this._myNetDirtyInstances[className] || [];
+			this._myNetDirtyInstances[className].push(inObject);
+		},
+		addNewObject : function addNewObject(inObject)
+		{
+			var className = inObject.getClass().getName();
+			this._myNewInstances[className] = this._myNewInstances[className] || [];
+			this._myNewInstances[className].push(inObject);
+		},
+		//TODO removeObject??
+
+
+
+
+		update : function update(inDt)
+		{
+			var className,
+				classInstanceList,
+				instanceObject,
+				i,
+				allRelevantObjects,
+				drawNetObjects;
+			
+			drawNetObjects = !ECGame.Settings.Network.isServer
+				&& ECGame.Settings.DEBUG
+				&& ECGame.Settings.Debug.NetworkMessages_Draw;
+				
+			if(drawNetObjects)
+			{
+				ECGame.instance.graphics.drawDebugText(
+					"Network out:",
+					ECGame.Settings.Debug.NetworkMessages_DrawColor
+				);
+			}
+			
+			allRelevantObjects = [];
+			//sending the new objects
+			for(className in this._myNewInstances)
+			{
+				classInstanceList = this._myNewInstances[className];
+				if(drawNetObjects)
+				{
+					ECGame.instance.graphics.drawDebugText(
+						'    ' + className,
+						ECGame.Settings.Debug.NetworkMessages_DrawColor
+					);
+				}
+				
+				//TODO continue of this user cannot create the object!
+				
+				for(i = 0; i < classInstanceList.length; ++i)
+				{
+					instanceObject = classInstanceList[i];
+					allRelevantObjects.push(instanceObject);
+					//instanceObject.clearNetDirty();//TODO should these be net dirty at all?
+					
+					if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+					{
+						ECGame.log.info("Queueing Distributed Network Create: " + className + ' : ' + instanceObject.getID());
+					}
+					if(drawNetObjects)
+					{
+						ECGame.instance.graphics.drawDebugText(
+							'        -' + instanceObject.getName()
+							,ECGame.Settings.Debug.NetworkMessages_DrawColor
+						);
+					}
+				}
+			}
+			this._myNewInstances = {};
+			this._serializeObjectsOut(allRelevantObjects, {NET : false});//TODO flag FULL instead??
+			
+			allRelevantObjects = [];
+			//sending the dirty objects
+			for(className in this._myNetDirtyInstances)
+			{
+				classInstanceList = this._myNetDirtyInstances[className];
+				if(drawNetObjects)
+				{
+					ECGame.instance.graphics.drawDebugText(
+						'    ' + className,
+						ECGame.Settings.Debug.NetworkMessages_DrawColor
+					);
+				}
+				
+				for(i = 0; i < classInstanceList.length; ++i)
+				{
+					instanceObject = classInstanceList[i];
+					allRelevantObjects.push(instanceObject);
+					//instanceObject.clearNetDirty();
+					//instanceObject._myNetDirty = false;//HACK!!
+					
+					if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+					{
+						ECGame.log.info("Queueing Distributed Object Changes: " + className + ' : ' + instanceObject.getID());
+					}
+					if(drawNetObjects)
+					{
+						ECGame.instance.graphics.drawDebugText(
+							'        -' + instanceObject.getName()
+							,ECGame.Settings.Debug.NetworkMessages_DrawColor
+						);
+					}
+				}
+			}
+			this._myNetDirtyInstances = {};
+			this._serializeObjectsOut(allRelevantObjects, {NET : true});
+		},
+
+
+
+		_serializeObjectsOut : function _serializeObjectsOut(inList, inSerializerFlags, inSocket)
+		{
+			var sendData,
+				i;
+			
+			ECGame.log.assert(inList.length < this._maxItemsPerMessage, "Cannot currently serialize so many objects!");
+			
+			while(inList.length !== 0)//TODO limit these? I think there will be other bugs with postload if not all are present!
+			{
+				this._serializer.initWrite(inSerializerFlags);
+				
+				this._messageHeader.numObjects = Math.min(this._maxItemsPerMessage, inList.length);
+				this._messageHeader.userID = ECGame.instance.localUser.userID;
+				this._serializer.serializeObject(this._messageHeader, this._messageHeaderFormat);
+				
+				for(i = 0; i < this._messageHeader.numObjects; ++i)
+				{
+					var object = inList[i];
+					this._objectHeader.classID = object.getClass().getID();
+					this._objectHeader.instanceID = object.getID();
+					this._serializer.serializeObject(this._objectHeader, this._objectHeaderFormat);
+					object.serialize(this._serializer);
+					object.clearNetDirty();
+				}
+				
+				sendData = this._serializer.getString();
+				
+				if(inSerializerFlags.NET)//TODO should be !FULL or something?
+				{
+					this._sendData(sendData, inSocket);
+				}
+				else
+				{
+					this._sendObj(sendData, inSocket);
+				}
+				
+				inList = inList.slice(this._messageHeader.numObjects);
+			}
+		}
+	}
+	
+*/
