@@ -118,7 +118,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DC
 	}
 	
 	
-	if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.SceneGraph_Draw)
+	if(ECGame.Settings.isDebugDraw_SceneGraph())
 	{
 		var fontSize = ECGame.Settings.Debug.Text_Size;
 		

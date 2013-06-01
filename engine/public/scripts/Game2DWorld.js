@@ -125,7 +125,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 			var target;
 			
 			//debug draw the map		
-			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.Map_Draw)
+			if(ECGame.Settings.isDebugDraw_Map())
 			{
 				this._map.debugDraw(inCanvas2DContext, camera.getRect());
 			}
@@ -135,25 +135,25 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 			this._sceneGraph.render(inCanvas2DContext, camera.getRect());		
 			
 			//debug draw scenegraph
-			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.SceneGraph_Draw)
+			if(ECGame.Settings.isDebugDraw_SceneGraph())
 			{
 				this._sceneGraph.debugDraw(inCanvas2DContext, camera.getRect());
 			}
 			
 			//debug draw physics
-			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.Physics_Draw)
+			if(ECGame.Settings.isDebugDraw_Physics())
 			{
 				this._physics.debugDraw(inCanvas2DContext, camera.getRect());
 			}
 			
 			//debug draw camera target point
-			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.GameWorld_CameraTarget_Draw)
+			if(ECGame.Settings.isDebugDraw_CameraTarget())
 			{
 				target = ECGame.EngineLib.AABB2.create(
 					0,
 					0,
-					ECGame.Settings.Debug.GameWorld_CameraTarget_Size,
-					ECGame.Settings.Debug.GameWorld_CameraTarget_Size
+					ECGame.Settings.Debug.CameraTarget_Size,
+					ECGame.Settings.Debug.CameraTarget_Size
 				);
 				
 				target.setLeftTop(
@@ -168,19 +168,19 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 				);
 							
 				//setup the color
-				inCanvas2DContext.fillStyle = ECGame.Settings.Debug.GameWorld_CameraTarget_DrawColor;
+				inCanvas2DContext.fillStyle = ECGame.Settings.Debug.CameraTarget_DrawColor;
 				//draw the target
 				inCanvas2DContext.fillRect(target.myX, target.myY, target.myWidth, target.myHeight);
 			}
 			
 			//debugdraw cursor
-			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.GameWorld_MouseCursor_Draw)
+			if(ECGame.Settings.isDebugDraw_MouseCursor())//TODO need to draw a real cursor, and NOT here!!
 			{
 				target = ECGame.EngineLib.AABB2.create(
 					0,
 					0,
-					ECGame.Settings.Debug.GameWorld_MouseCursor_Size,
-					ECGame.Settings.Debug.GameWorld_MouseCursor_Size
+					ECGame.Settings.Debug.Input_MouseCursor_Size,
+					ECGame.Settings.Debug.Input_MouseCursor_Size
 				);
 				
 				//center on mouse position by subtracting half the cursor size
@@ -191,12 +191,12 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 				);
 				
 				//setup the color
-				inCanvas2DContext.fillStyle = ECGame.Settings.Debug.GameWorld_MouseCursor_DrawColor;
+				inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Input_MouseCursor_DrawColor;
 				//debug draw it
 				inCanvas2DContext.fillRect(target.myX, target.myY, target.myWidth, target.myHeight);
 			}
 			
-			if(ECGame.Settings.Debug.Sound_Draw)
+			if(ECGame.Settings.isDebugDraw_Sound())
 			{
 				ECGame.instance.soundSystem.debugDraw(inCanvas2DContext, camera.getRect(), this);
 			}

@@ -29,6 +29,25 @@ Final NameSpaces:
 	ECGameEngineLib
 	ECGameLib
 	ECGameWebServerTools
+	isDebugDraw
+	isDebugPrint
+	isDebugDraw_Text
+	isDebugDraw_SceneGraph
+	isDebugDraw_Map
+	isDebugDraw_Physics
+	isDebugDraw_CameraTarget
+	isDebugDraw_Input
+	isDebugPrint_Input
+	isDebugDraw_MouseCursor
+	isDebugDraw_FrameStats
+	isDebugPrint_FrameStats
+	isDebugPrint_GameObject
+	isDebugPrint_Sound
+	isDebugDraw_Sound
+	isDebugDraw_Sprite
+	isDebugDraw_NetworkMessages
+	isDebugPrint_NetworkMessages
+	isDebugPrint_Obfuscation
 	ECGameLog
 	ECGameAssert
 	isNumber
@@ -378,6 +397,25 @@ Function Names:
 	ECGameEngineLib
 	ECGameLib
 	ECGameWebServerTools
+	isDebugDraw
+	isDebugPrint
+	isDebugDraw_Text
+	isDebugDraw_SceneGraph
+	isDebugDraw_Map
+	isDebugDraw_Physics
+	isDebugDraw_CameraTarget
+	isDebugDraw_Input
+	isDebugPrint_Input
+	isDebugDraw_MouseCursor
+	isDebugDraw_FrameStats
+	isDebugPrint_FrameStats
+	isDebugPrint_GameObject
+	isDebugPrint_Sound
+	isDebugDraw_Sound
+	isDebugDraw_Sprite
+	isDebugDraw_NetworkMessages
+	isDebugPrint_NetworkMessages
+	isDebugPrint_Obfuscation
 	ECGameLog
 	ECGameAssert
 	isNumber
@@ -1150,6 +1188,11 @@ Local Variable Names:
 	cameraLeftTop
 	mouseWorldPosition
 Member Variables:
+	DEBUG
+	Network
+	isDebugDraw
+	Debug
+	isDebugPrint
 	_myTests
 	myX
 	myY
@@ -1676,11 +1719,24 @@ Member Variables:
 	LoadGame
 	socketio
 	listenSocket
-	Network
 	RUN_UNIT_TESTS
-	DEBUG
 	Graphics
-	Debug
+	isDebugDraw_Text
+	isDebugPrint_Sound
+	isDebugPrint_NetworkMessages
+	isDebugDraw_NetworkMessages
+	isDebugPrint_Input
+	isDebugDraw_Input
+	isDebugPrint_GameObject
+	isDebugDraw_FrameStats
+	isDebugPrint_FrameStats
+	isDebugDraw_Map
+	isDebugDraw_Sprite
+	isDebugDraw_SceneGraph
+	isDebugDraw_Physics
+	isDebugDraw_CameraTarget
+	isDebugDraw_MouseCursor
+	isDebugDraw_Sound
 	prototype
 	create
 	_createChainUpFunction
@@ -1749,9 +1805,9 @@ Member Variables:
 	Physics_AlwaysActiveObject_DrawColor
 	Physics_ObjectCollision_DrawColor
 	Physics_ActiveObjectBorder_DrawColor
-	GameWorld_CameraTarget_Draw
-	GameWorld_CameraTarget_Size
-	GameWorld_CameraTarget_DrawColor
+	CameraTarget_Draw
+	CameraTarget_Size
+	CameraTarget_DrawColor
 	QuadTree_Node_DrawColor
 	QuadTree_OccupiedNode_DrawColor
 	QuadTree_Item_DrawColor
@@ -1759,9 +1815,9 @@ Member Variables:
 	Input_Active_DrawColor
 	Input_Inactive_DrawColor
 	Input_Print
-	GameWorld_MouseCursor_Draw
-	GameWorld_MouseCursor_Size
-	GameWorld_MouseCursor_DrawColor
+	Input_MouseCursor_Draw
+	Input_MouseCursor_Size
+	Input_MouseCursor_DrawColor
 	FrameStats_Draw
 	FrameStats_DrawColor
 	FrameStats_Print
@@ -1782,6 +1838,7 @@ Member Variables:
 	TextBackground_DrawColor
 	Text_Size
 	Obfuscation_Print
+	isDebugPrint_Obfuscation
 	Constructor
 	Parents
 	flags
@@ -1941,6 +1998,25 @@ Included Words:
 	ECGameEngineLib
 	ECGameLib
 	ECGameWebServerTools
+	isDebugDraw
+	isDebugPrint
+	isDebugDraw_Text
+	isDebugDraw_SceneGraph
+	isDebugDraw_Map
+	isDebugDraw_Physics
+	isDebugDraw_CameraTarget
+	isDebugDraw_Input
+	isDebugPrint_Input
+	isDebugDraw_MouseCursor
+	isDebugDraw_FrameStats
+	isDebugPrint_FrameStats
+	isDebugPrint_GameObject
+	isDebugPrint_Sound
+	isDebugDraw_Sound
+	isDebugDraw_Sprite
+	isDebugDraw_NetworkMessages
+	isDebugPrint_NetworkMessages
+	isDebugPrint_Obfuscation
 	ECGameLog
 	ECGameAssert
 	isNumber
@@ -2678,6 +2754,9 @@ Included Words:
 	cameraAABB
 	cameraLeftTop
 	mouseWorldPosition
+	DEBUG
+	Network
+	Debug
 	_myTests
 	myX
 	myY
@@ -2968,11 +3047,8 @@ Included Words:
 	createGameObjectRef
 	socketio
 	listenSocket
-	Network
 	RUN_UNIT_TESTS
-	DEBUG
 	Graphics
-	Debug
 	masterVolume
 	effectsVolume
 	default2DRadius
@@ -3008,9 +3084,9 @@ Included Words:
 	Physics_AlwaysActiveObject_DrawColor
 	Physics_ObjectCollision_DrawColor
 	Physics_ActiveObjectBorder_DrawColor
-	GameWorld_CameraTarget_Draw
-	GameWorld_CameraTarget_Size
-	GameWorld_CameraTarget_DrawColor
+	CameraTarget_Draw
+	CameraTarget_Size
+	CameraTarget_DrawColor
 	QuadTree_Node_DrawColor
 	QuadTree_OccupiedNode_DrawColor
 	QuadTree_Item_DrawColor
@@ -3018,9 +3094,9 @@ Included Words:
 	Input_Active_DrawColor
 	Input_Inactive_DrawColor
 	Input_Print
-	GameWorld_MouseCursor_Draw
-	GameWorld_MouseCursor_Size
-	GameWorld_MouseCursor_DrawColor
+	Input_MouseCursor_Draw
+	Input_MouseCursor_Size
+	Input_MouseCursor_DrawColor
 	FrameStats_Draw
 	FrameStats_DrawColor
 	FrameStats_Print

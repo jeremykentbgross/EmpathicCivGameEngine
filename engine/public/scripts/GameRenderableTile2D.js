@@ -34,7 +34,7 @@ ECGame.EngineLib.RenderableTile2D = ECGame.EngineLib.Class.create({
 	{
 		render : function render(inCanvas2DContext, inCameraRect)
 		{
-			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.Map_Draw)
+			if(ECGame.Settings.isDebugDraw_Map())
 			{
 				return;
 			}

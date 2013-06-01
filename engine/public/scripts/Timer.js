@@ -108,7 +108,7 @@ ECGame.EngineLib.Timer.prototype.update = function update(inTime)
 	}
 	this._aveDt /= this._frameTimes.length;
 		
-	if(ECGame.Settings.DEBUG)
+	//if(ECGame.Settings.DEBUG)//Not needed with the functions below
 	{
 		var frameStats = [
 			"Average FPS: " + (1000 / this._aveDt).toFixed(3),
@@ -116,14 +116,14 @@ ECGame.EngineLib.Timer.prototype.update = function update(inTime)
 			"Last Frame Time: " + this._dt,
 			"Frame Count: " + this._frameCount
 		];
-		if(ECGame.Settings.Debug.FrameStats_Draw && !ECGame.Settings.Network.isServer)
+		if(ECGame.Settings.isDebugDraw_FrameStats())
 		{
 			ECGame.instance.graphics.drawDebugText(frameStats[0], ECGame.Settings.Debug.FrameStats_DrawColor);
 			ECGame.instance.graphics.drawDebugText(frameStats[1], ECGame.Settings.Debug.FrameStats_DrawColor);
 			ECGame.instance.graphics.drawDebugText(frameStats[2], ECGame.Settings.Debug.FrameStats_DrawColor);
 			ECGame.instance.graphics.drawDebugText(frameStats[3], ECGame.Settings.Debug.FrameStats_DrawColor);
 		}
-		if(ECGame.Settings.Debug.FrameStats_Print)
+		if(ECGame.Settings.isDebugPrint_FrameStats())
 		{
 			console.log(
 				'\n' + frameStats[0] +

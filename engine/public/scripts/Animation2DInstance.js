@@ -79,7 +79,7 @@ ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 		render : function render(inCanvas2DContext, inCameraRect)
 		{
 			this._animation.render(inCanvas2DContext, inCameraRect, this._currentFrame, this.anchorPosition);
-			if(ECGame.Settings.Debug.Sprite_Draw)
+			if(ECGame.Settings.isDebugDraw_Sprite())
 			{
 				this.debugDraw(inCanvas2DContext, inCameraRect);
 			}

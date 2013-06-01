@@ -177,7 +177,7 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 					inClass.getInstanceRegistry().forAll(
 						function(inObject)
 						{
-							if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+							if(ECGame.Settings.isDebugPrint_NetworkMessages())
 							{
 								ECGame.log.info("Queueing Network Create for New Connection: " + inClass.getName() + ' : ' + inObject.getID());
 							}
@@ -212,7 +212,7 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 
 		sendMessage : function sendMessage(inMsg, inSentListener)
 		{
-			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+			if(ECGame.Settings.isDebugPrint_NetworkMessages())
 			{
 				ECGame.log.info("Net Send Msg: " + inMsg);
 			}
@@ -233,7 +233,7 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 			{
 				//TODO queue this for resend when we are connected again?
 				
-				if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+				if(ECGame.Settings.isDebugPrint_NetworkMessages())
 				{
 					ECGame.log.info("Can't send message when disconnected.");
 				}
@@ -244,7 +244,7 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 
 		_sendData : function _sendData(inData, inSocket/*, inSentListener*/)
 		{
-			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+			if(ECGame.Settings.isDebugPrint_NetworkMessages())
 			{
 				ECGame.log.info("Net Send Data: " + inData);
 			}
@@ -270,7 +270,7 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 			{
 				//TODO queue this for resend when we are connected again
 				
-				if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+				if(ECGame.Settings.isDebugPrint_NetworkMessages())
 				{
 					ECGame.log.info("Can't send data when disconnected.");
 				}
@@ -281,7 +281,7 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 
 		_sendObj : function _sendObj(inObjData, inSocket/*, inSentListener*/)
 		{
-			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+			if(ECGame.Settings.isDebugPrint_NetworkMessages())
 			{
 				ECGame.log.info("Net Send Obj: " + inObjData);
 			}
@@ -307,7 +307,7 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 			{
 				//TODO queue this for resend when we are connected again
 				
-				if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+				if(ECGame.Settings.isDebugPrint_NetworkMessages())
 				{
 					ECGame.log.info("Can't send data when disconnected.");
 				}
@@ -411,7 +411,7 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 		{
 			var aThis = ECGame.instance.network;
 			
-			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+			if(ECGame.Settings.isDebugPrint_NetworkMessages())
 			{
 				ECGame.log.info("Net Recv Msg: " + inMsg);
 			}
@@ -433,7 +433,7 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 			
 			var event = new ECGame.EngineLib.Events.Data(inData);
 			
-			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+			if(ECGame.Settings.isDebugPrint_NetworkMessages())
 			{
 				ECGame.log.info("Net Recv Data: " + inData);
 			}
@@ -458,7 +458,7 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 			
 			var event = new ECGame.EngineLib.Events.NetObjects(inData);
 			
-			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+			if(ECGame.Settings.isDebugPrint_NetworkMessages())
 			{
 				ECGame.log.info("Net Recv Obj: " + inData);
 			}
@@ -481,9 +481,7 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 		{
 			var dirtyObjects = [];
 			
-			if(!ECGame.Settings.Network.isServer
-				&& ECGame.Settings.DEBUG
-				&& ECGame.Settings.Debug.NetworkMessages_Draw)
+			if(ECGame.Settings.isDebugDraw_NetworkMessages())
 			{
 				ECGame.instance.graphics.drawDebugText(
 					"Network out:",
@@ -501,9 +499,7 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 						return;
 					}
 						
-					if(!ECGame.Settings.Network.isServer
-						&& ECGame.Settings.DEBUG
-						&& ECGame.Settings.Debug.NetworkMessages_Draw)
+					if(ECGame.Settings.isDebugDraw_NetworkMessages())
 					{
 						ECGame.instance.graphics.drawDebugText(
 							'    ' + inClass.getName(),
@@ -519,9 +515,7 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 							//	&& inObject.getNetOwnerID() === ECGame.instance.localUser.userName
 							)
 							{
-								if(!ECGame.Settings.Network.isServer
-									&& ECGame.Settings.DEBUG
-									&& ECGame.Settings.Debug.NetworkMessages_Draw)
+								if(ECGame.Settings.isDebugDraw_NetworkMessages())
 								{
 									ECGame.instance.graphics.drawDebugText(
 										'        -' + inObject.getName()
@@ -555,7 +549,7 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 				}
 				
 				var sendData = this._serializer.getString();
-				if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+				if(ECGame.Settings.isDebugPrint_NetworkMessages())
 				{
 					ECGame.log.info("NetSend: " + sendData);
 				}
@@ -579,9 +573,7 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 			
 			this._serializer.initRead(inSerializerFlags, inEvent.data);
 			
-			if(!ECGame.Settings.Network.isServer
-				&& ECGame.Settings.DEBUG
-				&& ECGame.Settings.Debug.NetworkMessages_Draw)
+			if(ECGame.Settings.isDebugDraw_NetworkMessages())
 			{
 				ECGame.instance.graphics.drawDebugText(
 					"Network in:",
@@ -606,7 +598,7 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 				{
 					this._serializer.serializeObject(this._objectHeader, this._objectHeaderFormat);
 					var objectClass = ECGame.EngineLib.Class.getInstanceRegistry().findByID(this._objectHeader.classID);
-					if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+					if(ECGame.Settings.isDebugPrint_NetworkMessages())
 					{
 						if(!objectClass)
 						{
@@ -618,14 +610,14 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 					//if not found, and not server, create it
 					if(!object)//TODO if user can create this object && not net?
 					{
-						if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+						if(ECGame.Settings.isDebugPrint_NetworkMessages())
 						{
 							ECGame.log.info("Network Creating: " + objectClass.getName() + ' : ' + this._objectHeader.instanceID);
 						}
 						object = objectClass.create();
 						object.setID(this._objectHeader.instanceID);
 					}
-					else if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+					else if(ECGame.Settings.isDebugPrint_NetworkMessages())
 					{
 						ECGame.log.info("Network Changing: " + objectClass.getName() + ' : ' + this._objectHeader.instanceID);
 					}
@@ -648,9 +640,7 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 					
 					readObjects.push(object);
 					
-					if(!ECGame.Settings.Network.isServer
-						&& ECGame.Settings.DEBUG
-						&& ECGame.Settings.Debug.NetworkMessages_Draw)
+					if(ECGame.Settings.isDebugDraw_NetworkMessages())
 					{
 						//TODO not show same class name more than once, just instance (ie make print list for the end!)
 						ECGame.instance.graphics.drawDebugText(
@@ -713,9 +703,7 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 				allRelevantObjects,
 				drawNetObjects;
 			
-			drawNetObjects = !ECGame.Settings.Network.isServer
-				&& ECGame.Settings.DEBUG
-				&& ECGame.Settings.Debug.NetworkMessages_Draw;
+			drawNetObjects = ECGame.Settings.isDebugDraw_NetworkMessages();
 				
 			if(drawNetObjects)
 			{
@@ -746,7 +734,7 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 					allRelevantObjects.push(instanceObject);
 					//instanceObject.clearNetDirty();//TODO should these be net dirty at all?
 					
-					if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+					if(ECGame.Settings.isDebugPrint_NetworkMessages())
 					{
 						ECGame.log.info("Queueing Distributed Network Create: " + className + ' : ' + instanceObject.getID());
 					}
@@ -782,7 +770,7 @@ ECGame.EngineLib.GameNetwork = ECGame.EngineLib.Class.create({
 					//instanceObject.clearNetDirty();
 					//instanceObject._myNetDirty = false;//HACK!!
 					
-					if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+					if(ECGame.Settings.isDebugPrint_NetworkMessages())
 					{
 						ECGame.log.info("Queueing Distributed Object Changes: " + className + ' : ' + instanceObject.getID());
 					}

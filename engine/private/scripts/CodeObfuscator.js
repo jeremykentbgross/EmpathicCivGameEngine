@@ -321,7 +321,7 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 			logData += '\t' + this._localizationStrings[i] + '\n';
 		}
 		
-		if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.Obfuscation_Print)
+		if(ECGame.Settings.isDebugPrint_Obfuscation())
 		{
 			console.log(logData);
 		}
@@ -382,7 +382,7 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 		);
 	}
 	
-	if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.Obfuscation_Print)
+	if(ECGame.Settings.isDebugPrint_Obfuscation())
 	{
 		console.log(this._src);
 	}

@@ -184,11 +184,11 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 				}
 				//todo clicks and wheel
 				
-				if(ECGame.Settings.Debug.Input_Print)
+				if(ECGame.Settings.isDebugPrint_Input())
 				{
 					console.log(inputString + '\n');
 				}
-				if(ECGame.Settings.Debug.Input_Draw)
+				if(ECGame.Settings.isDebugDraw_Input())
 				{
 					ECGame.instance.graphics.drawDebugText(
 						inputString,

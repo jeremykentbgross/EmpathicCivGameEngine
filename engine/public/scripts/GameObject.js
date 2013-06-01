@@ -37,7 +37,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		this._myID = instanceID;
 		registry.register(this);
 		
-		if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.GameObject_Print)
+		if(ECGame.Settings.isDebugPrint_GameObject())
 		{
 			ECGame.log.info("New Object: " + this.getClass().getName() + ' : ' + this._myName + ' : ' + this._myID);
 		}
@@ -122,7 +122,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		cleanup : function cleanup(){},
 		destroy : function destroy()
 		{
-			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.GameObject_Print)
+			if(ECGame.Settings.isDebugPrint_GameObject())
 			{
 				ECGame.log.info("Destroying GameObject " + ECGame.EngineLib.createGameObjectRef(this).getTxtPath(), true);
 			}
@@ -239,7 +239,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			
 			serializer.serializeObject(this, this.GameObject._serializeFormat);
 			
-			if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.NetworkMessages_Print)
+			if(ECGame.Settings.isDebugPrint_NetworkMessages())
 			{
 				if(aStartingOwner != this._myNetOwnerID)
 				{

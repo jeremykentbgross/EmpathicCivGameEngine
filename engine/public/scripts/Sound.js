@@ -40,7 +40,7 @@ ECGame.EngineLib.Sound = ECGame.EngineLib.Class.create(
 			/*inTimeDelay = inTimeDelay || 0;
 			this._mySource.noteOn(inTimeDelay);*/
 			this._mySource = this._myDescription.createAndPlaySourceBuffer(this._myDestination);
-			if(ECGame.Settings.Debug.Sound_Print)
+			if(ECGame.Settings.isDebugPrint_Sound())
 			{
 				ECGame.log.info("Played sound " + this._getDebugPlayingString());
 			}

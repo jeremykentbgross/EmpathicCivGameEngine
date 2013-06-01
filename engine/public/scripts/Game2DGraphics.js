@@ -157,7 +157,7 @@ ECGame.EngineLib.Game2DGraphics.prototype.drawDebugText = function drawDebugText
 {
 	inColor = inColor || ECGame.Settings.Debug.TextDefault_DrawColor;
 	
-	if(ECGame.Settings.DEBUG && ECGame.Settings.Debug.TextMessages_Draw)
+	if(ECGame.Settings.isDebugDraw_Text())
 	{
 		this._debugText.push(' ' + inText + ' ');
 		this._debugTextColor.push(inColor);

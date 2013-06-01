@@ -20,7 +20,7 @@
 */
 
 ////////////////////////////////////////////////////////////////////
-//NOTE: THESE ARE DEFAULTS!! ADD CUSTOM LOCAL CHANGES AT THE BOTTOM!
+//NOTE: THESE ARE DEFAULTS!! ADD CUSTOM LOCAL CHANGES AT THE BOTTOM! (Or in the game specific file(s))
 //
 //Example:
 //	Add the following to the bottom of the page to turn on the drawing of physics
@@ -28,10 +28,10 @@
 //	ECGame.Settings.Debug.Physics_Draw = true;
 //
 ////////////////////////////////////////////////////////////////////
-ECGame.Settings = //TODO rename as GameSystemSettings
+ECGame.Settings =
 {
-	DEBUG : true,//TODO replace ECGame.Settings.DEBUG
-	RUN_UNIT_TESTS : true,//TODO replace ECGame.Settings.RUN_UNIT_TESTS
+	DEBUG : true,
+	RUN_UNIT_TESTS : true,
 	
 	//TODO appname
 	
@@ -95,14 +95,19 @@ ECGame.Settings = //TODO rename as GameSystemSettings
 		////////////////////////////////////////////
 	},
 	
-	//TODO make the logger in global or instance space
+	//TODO make the logger in global or instance space??????????
 	
-	//TODO move all debug items into their normal specific categories
+	//TODO move all debug items into their normal specific categories?
 	Debug :
 	{
-		//Name_Type, Type = <Print (bool), Draw (bool), DrawColor (color), Size (int/float)>
+		//variables should be of the format: Name_Type
+		//	where Type is one of:
+		//		Print (bool)
+		//		Draw (bool)
+		//		DrawColor (color)
+		//		Size (int/float)
 		
-		TextMessages_Draw : true,//TODO rename (use in renderer)
+		TextMessages_Draw : true,
 		
 		//scenegraph
 		SceneGraph_Draw : false,
@@ -121,10 +126,12 @@ ECGame.Settings = //TODO rename as GameSystemSettings
 		Physics_ActiveObjectBorder_DrawColor : 'rgba(0, 255, 0, 1.0)',
 		//TODO colors
 		
+		//TODO physics rays (inside gameworld)
+		
 		//camera
-		GameWorld_CameraTarget_Draw : false,
-		GameWorld_CameraTarget_Size : 10,
-		GameWorld_CameraTarget_DrawColor : 'rgba(255, 255, 0, 1)',
+		CameraTarget_Draw : false,
+		CameraTarget_Size : 10,
+		CameraTarget_DrawColor : 'rgba(255, 255, 0, 1)',
 		//TODO draw entity position locators
 		
 		//QuadTree
@@ -138,10 +145,10 @@ ECGame.Settings = //TODO rename as GameSystemSettings
 		Input_Inactive_DrawColor : 'rgba(0, 0, 255, 1)',
 		Input_Print : false,
 		//TODO this goes in input NOT gameworld, how make sure the cursor is rendered?? have renderer listen to input?
-		GameWorld_MouseCursor_Draw : true,//TODO merge this with Input_Draw
-		GameWorld_MouseCursor_Size : 10,
-		//TODO use active and inactive colors instead?
-		GameWorld_MouseCursor_DrawColor : 'rgba(0, 255, 0, 1)',
+		//also there should be something here that is NOT debug, ie a custom cursor
+		Input_MouseCursor_Draw : true,//TODO merge this with Input_Draw
+		Input_MouseCursor_Size : 10,
+		Input_MouseCursor_DrawColor : 'rgba(0, 255, 0, 1)',	//TODO use active and inactive colors instead?
 		
 		//frame stats
 		FrameStats_Draw : true,
@@ -163,12 +170,13 @@ ECGame.Settings = //TODO rename as GameSystemSettings
 		Sprite_Origin_DrawColor : 'rgba(256, 128, 128, 1)',
 		Sprite_Origin_Size : 10,
 		
-		//TODO search for rgba in all files		
+		//TODO search for rgba in all files and move it here as settings vars
 		
 		//Network
 		NetworkMessages_Draw : true,
 		NetworkMessages_DrawColor : 'rgba(0, 255, 0, 1)',
 		NetworkMessages_Print : true,
+		//TODO NetworkDetailedMessages_Print
 		
 		//default debug text color
 		TextDefault_DrawColor : 'rgba(255, 255, 255, 1)',
@@ -176,7 +184,96 @@ ECGame.Settings = //TODO rename as GameSystemSettings
 		Text_Size : 12,
 		
 		Obfuscation_Print : false//TODO maybe put with the other obfuscation stuff
+	},
+	
+	//helper isDebug functions
+	isDebugDraw : function isDebugDraw()
+	{
+		return this.DEBUG && !this.Network.isServer;
+	},
+	isDebugPrint : function isDebugPrint()
+	{
+		return this.DEBUG;
+	},
+	
+	
+	isDebugDraw_Text : function isDebugDraw_Text()
+	{
+		return this.isDebugDraw() && this.Debug.TextMessages_Draw;
+	},
+	isDebugDraw_SceneGraph : function isDebugDraw_SceneGraph()
+	{
+		return this.isDebugDraw() && this.Debug.SceneGraph_Draw;
+	},
+	isDebugDraw_Map : function isDebugDraw_Map()
+	{
+		return this.isDebugDraw() && this.Debug.Map_Draw;
+	},
+	isDebugDraw_Physics : function isDebugDraw_Physics()
+	{
+		return this.isDebugDraw() && this.Debug.Physics_Draw;
+	},
+	isDebugDraw_CameraTarget : function isDebugDraw_CameraTarget()
+	{
+		return this.isDebugDraw() && this.Debug.CameraTarget_Draw;
+	},
+	isDebugDraw_Input : function isDebugDraw_Input()
+	{
+		return this.isDebugDraw() && this.Debug.Input_Draw;
+	},
+	isDebugPrint_Input : function isDebugPrint_Input()
+	{
+		return this.isDebugPrint() && this.Debug.Input_Print;
+	},
+	isDebugDraw_MouseCursor : function isDebugDraw_MouseCursor()
+	{
+		return this.isDebugDraw() && this.Debug.Input_MouseCursor_Draw;
+	},
+	isDebugDraw_FrameStats : function isDebugDraw_FrameStats()
+	{
+		return this.isDebugDraw() && this.Debug.FrameStats_Draw;
+	},
+	isDebugPrint_FrameStats : function isDebugPrint_FrameStats()
+	{
+		return this.isDebugPrint() && this.Debug.FrameStats_Print;
+	},
+	isDebugPrint_GameObject : function isDebugPrint_GameObject()
+	{
+		return this.isDebugPrint() && this.Debug.GameObject_Print;
+	},
+	isDebugPrint_Sound : function isDebugPrint_Sound()
+	{
+		return this.isDebugPrint() && this.Debug.Sound_Print;
+	},
+	isDebugDraw_Sound : function isDebugDraw_Sound()
+	{
+		return this.isDebugDraw() && this.Debug.Sound_Draw;
+	},
+	isDebugDraw_Sprite : function isDebugDraw_Sprite()
+	{
+		return this.isDebugDraw() && this.Debug.Sprite_Draw;
+	},
+	isDebugDraw_NetworkMessages : function isDebugDraw_NetworkMessages()
+	{
+		return this.isDebugDraw() && this.Debug.NetworkMessages_Draw;
+	},
+	isDebugPrint_NetworkMessages : function isDebugPrint_NetworkMessages()
+	{
+		return this.isDebugPrint() && this.Debug.NetworkMessages_Print;
+	},
+	isDebugPrint_Obfuscation : function isDebugPrint_Obfuscation()
+	{
+		return this.isDebugPrint() && this.Debug.Obfuscation_Print;
 	}
+	/*
+	isDebugDraw_ : function isDebugDraw_()
+	{
+		return this.isDebugDraw() && this.Debug.;
+	},
+	isDebugPrint_ : function isDebugPrint_()
+	{
+		return this.isDebugPrint() && this.Debug.;
+	},*/
 };
 
 
