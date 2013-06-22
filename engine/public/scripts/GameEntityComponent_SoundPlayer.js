@@ -42,7 +42,7 @@ ECGame.EngineLib.EntityComponent_SoundPlayer = ECGame.EngineLib.Class.create(
 		{
 		},*/
 
-		onAddedToEntity : function(inEvent)
+		onAddedToEntity : function onAddedToEntity(inEvent)
 		{
 			var owner = this._owner;//inEvent.entity;
 			
@@ -103,7 +103,7 @@ ECGame.EngineLib.EntityComponent_SoundPlayer = ECGame.EngineLib.Class.create(
 			//TODO add to list to stop playing if it is removed from the world
 		},
 
-		onUpdatePosition : function(inEvent)
+		onUpdatePosition : function onUpdatePosition(inEvent)
 		{
 			this._myPosition.copyFrom(inEvent.position);
 			this._myVelocity.copyFrom(inEvent.velocity);
@@ -111,13 +111,13 @@ ECGame.EngineLib.EntityComponent_SoundPlayer = ECGame.EngineLib.Class.create(
 			//TODO change location in spacial partitioning in the world!!
 		},
 
-		onAddedToWorld : function(inEvent)
+		onAddedToWorld : function onAddedToWorld(inEvent)
 		{
 			this._myWorld = inEvent.world;
 			//this._myWorld.getSceneGraph().insertItem(this._sceneGraphRenderable);
 		},
 
-		onRemovedFromWorld : function(inEvent)
+		onRemovedFromWorld : function onRemovedFromWorld(inEvent)
 		{
 			//this._myWorld.getSceneGraph().removeItem(this._sceneGraphRenderable);
 			this._myWorld = null;

@@ -45,9 +45,9 @@ Game.Log.error(FLAG, msg);
 
 //TODO create object here that is new'ed in or something?
 ECGame.EngineLib.logger = {};
-ECGame.EngineLib.logger.createMsgType = function(inType, inFullPathDefault)
+ECGame.EngineLib.logger.createMsgType = function TODOrealFunctionName(inType, inFullPathDefault)
 {
-	return function(inMsg, inFullPath)
+	return function log(inMsg, inFullPath)
 	{
 		var stackPath;
 		var index = 0;

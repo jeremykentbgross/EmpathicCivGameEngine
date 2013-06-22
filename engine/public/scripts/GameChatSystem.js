@@ -63,7 +63,7 @@ ECGame.EngineLib.ChatSystem = ECGame.EngineLib.Class.create({
 			
 			aThis = this;
 			require(['dojo/dom', 'dojo/dom-construct', 'dojo/on', 'dojo/dom-style'],
-				function(inDom, inDomConstruct, inDojoOn, inDojoStyle)
+				function importDojoCallback(inDom, inDomConstruct, inDojoOn, inDojoStyle)
 				{
 					aThis._jojoDom = inDom;
 					aThis._jojoDomConstruct = inDomConstruct;
@@ -136,7 +136,7 @@ ECGame.EngineLib.ChatSystem = ECGame.EngineLib.Class.create({
 			this._jojoOn(
 				this._domChatForm
 				,'submit'
-				,function(inEvent)
+				,function onChatSubmit(inEvent)
 				{
 					aThis._onChatSubmit(inEvent);
 				}
@@ -265,7 +265,7 @@ ECGame.EngineLib.ChatSystem = ECGame.EngineLib.Class.create({
 					innerHTML : 
 						inMessage.replace(
 							/[<>&]/g,
-							function(inIndex){ return aThis._specialChars[inIndex]; }//TODO debug this sometime to figure out how it works
+							function replaceCallback(inIndex){ return aThis._specialChars[inIndex]; }//TODO debug this sometime to figure out how it works
 						)
 					//TODO css class (team, enemy, general, etc..)
 				},

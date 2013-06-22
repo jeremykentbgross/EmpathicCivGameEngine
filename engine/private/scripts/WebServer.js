@@ -47,12 +47,7 @@ ECGame.WebServerTools.WebServer = function WebServer()//TODO WebServer
 ECGame.WebServerTools.WebServer.prototype.run = function run()
 {
 	var aThis = this;
-	
-	if(ECGame.Settings.RUN_UNIT_TESTS)
-	{
-		ECGame.unitTests.runTests();
-	}
-	
+		
 	if(ECGame.Settings.Server.compressClientCode)
 	{
 		this.codeCompressor = new ECGame.WebServerTools.CodeCompressor(
@@ -141,11 +136,4 @@ ECGame.WebServerTools.WebServer.prototype.run = function run()
 		}
 	);*/
 	//TODO more configure(s) **types**??
-
-
-	if(ECGame.Settings.Network.isMultiplayer)
-	{
-		ECGame.instance = ECGame.EngineLib.GameInstance.create();
-		ECGame.instance.run();
-	}
 };

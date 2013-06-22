@@ -130,7 +130,7 @@ ECGame.EngineLib.AssetManager = ECGame.EngineLib.Class.create({
 				{
 					ECGame.instance.soundSystem._myContext.decodeAudioData(
 						request.response,
-						function(buffer)
+						function decodedCallback(buffer)
 						{
 							soundInfo.mySoundBuffer = buffer;
 							soundInfo.isLoaded = true;

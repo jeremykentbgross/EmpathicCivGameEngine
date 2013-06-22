@@ -47,7 +47,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 	
 	Definition :
 	{
-		init : function(inAnimations)
+		init : function init(inAnimations)
 		{
 			this._animations = inAnimations;
 			//this._currentAnimation = 8;//TODO why 8?
@@ -71,7 +71,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			}
 		},
 
-		onAddedToEntity : function(inEvent)
+		onAddedToEntity : function onAddedToEntity(inEvent)
 		{
 			var owner = this._owner;//inEvent.entity;
 			
@@ -98,7 +98,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			//this._owner = null;
 		},
 
-		onUpdatePosition : function(inEvent)
+		onUpdatePosition : function onUpdatePosition(inEvent)
 		{
 			var i;
 			if(this._myWorld)
@@ -153,14 +153,14 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			}
 		},
 
-		onAddedToWorld : function(inEvent)
+		onAddedToWorld : function onAddedToWorld(inEvent)
 		{
 			this._myWorld = inEvent.world;
 			this._myWorld.getSceneGraph().insertItem(this._sceneGraphRenderable);
 			//TODO add to updater
 		},
 
-		onRemovedFromWorld : function(inEvent)
+		onRemovedFromWorld : function onRemovedFromWorld(inEvent)
 		{
 			this._myWorld.getSceneGraph().removeItem(this._sceneGraphRenderable);
 			this._myWorld = null;

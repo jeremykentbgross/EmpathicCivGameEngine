@@ -82,7 +82,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DC
 	var i;
 			
 	this._mySceneTree.walk(
-		function(item)
+		function walkCallback(item)//TODO find/fix all unnamed functions; ie: function(
 		{
 			var frameCount = ECGame.instance.timer.getFrameCount();
 			
@@ -103,7 +103,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DC
 	);
 	
 	renderables.sort(
-		function(inLeft, inRight)
+		function sortRenderables(inLeft, inRight)
 		{				
 			var vec = inLeft.drawOrderHelper.subtract(inRight.drawOrderHelper);
 			

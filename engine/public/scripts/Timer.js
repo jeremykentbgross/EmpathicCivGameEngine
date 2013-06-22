@@ -54,14 +54,14 @@ ECGame.EngineLib.Timer.prototype.start = function start()
 				window.mozRequestAnimationFrame || 
 				window.oRequestAnimationFrame || 
 				window.msRequestAnimationFrame ||
-				function( callback ){
+				function requestAnimFrame( callback ){
 					window.setTimeout(callback, 1000 / 60);
 				};
 		}
 		else
 		{
 			requestAnimFrame =
-				function( callback ){
+				function requestAnimFrame( callback ){
 					setTimeout(callback, 1000 / 60);
 				};
 		}

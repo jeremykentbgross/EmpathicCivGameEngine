@@ -371,7 +371,7 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 		fileSystem.writeFileSync(//TODO make writeFileSync when I update my nodejs version
 			'ObfuscationResults.txt',
 			logData/*,
-			function(inError)
+			function ?funcname?(inError)
 			{
 				if(inError)
 				{
@@ -781,7 +781,7 @@ ECGame.WebServerTools.Obfuscator.prototype._doWordReplacement = function _doWord
 	}
 	
 	wordList.sort(
-		function(inLHS, inRHS)
+		function wordCompare(inLHS, inRHS)
 		{
 			var LHV = inLHS.count * inLHS.word.length,
 				RHV = inRHS.count * inRHS.word.length;

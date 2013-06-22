@@ -50,7 +50,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	//Setup include
 	if(!inIsServer)
 	{
-		include = function(filename)
+		include = function include(filename)
 		{
 			require([filename, 'dojo/domReady']);
 		};
@@ -106,6 +106,10 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 		
 		if(!ECGame.Settings.Network.isMultiplayer)
 		{
+			if(ECGame.Settings.RUN_UNIT_TESTS)
+			{
+				ECGame.unitTests.runTests();
+			}
 			ECGame.webServer = new ECGame.WebServerTools.WebServer();
 			ECGame.webServer.run();
 			return;
@@ -218,18 +222,17 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	
 	//////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////// RUN! ///////////////////////////////////
+	if(ECGame.Settings.RUN_UNIT_TESTS)
+	{
+		ECGame.unitTests.runTests();
+	}
 	if(inIsServer)
 	{
 		ECGame.webServer = new ECGame.WebServerTools.WebServer();
 		ECGame.webServer.run();
 	}
-	else
+	if(!inIsServer || ECGame.Settings.Network.isMultiplayer)
 	{
-		if(ECGame.Settings.RUN_UNIT_TESTS)
-		{
-			ECGame.unitTests.runTests();
-		}
-			
 		ECGame.instance = ECGame.EngineLib.GameInstance.create();
 		ECGame.instance.run();
 	}

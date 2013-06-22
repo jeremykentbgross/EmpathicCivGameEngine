@@ -423,10 +423,10 @@ ECGame.EngineLib.Class.serializeAll = function serializeAll(inSerializer)
 	if()//writing
 	{
 		ECGame.EngineLib.Class.getInstanceRegistry().forAll(
-			function(inClass)
+			function ?TODOFuncName?(inClass)
 			{
 				inClass.getInstanceRegistry().forAll(
-					function(inObject)
+					function ?name?(inObject)
 					{
 						dirtyObjects.push(inObject);
 					}

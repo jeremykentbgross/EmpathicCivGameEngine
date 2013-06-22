@@ -95,6 +95,28 @@ ECGame.Settings =
 		////////////////////////////////////////////
 	},
 	
+	Caps :
+	{
+		Audio : function isAudioAvailable()
+		{
+			try{
+				if(window === undefined)	//NOTE! This could be the test for the isServer!!
+				{
+					return false;
+				}
+				else return (
+					window.AudioContext !== undefined ||
+					window.webkitAudioContext !== undefined
+				);
+			}
+			catch(inError)
+			{
+				return false;
+			}
+		}()//evaluate the function
+		//TODO audio formats: https://hacks.mozilla.org/2013/02/simplifying-audio-in-the-browser/
+	},
+	
 	//TODO make the logger in global or instance space??????????
 	
 	//TODO move all debug items into their normal specific categories?

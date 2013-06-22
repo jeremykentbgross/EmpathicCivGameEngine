@@ -101,7 +101,7 @@ ECGame.EngineLib.GameInstance.prototype._init = function _init()
 		);
 		
 		//Init graphics
-		this.graphics = ECGame.EngineLib.createGame2DGraphics();
+		this.graphics = ECGame.EngineLib.Game2DGraphics.create();
 		if(!this.graphics.init())
 		{
 			return false;

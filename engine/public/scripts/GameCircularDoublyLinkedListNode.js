@@ -20,7 +20,7 @@
 */
 
 //TODO depricated:
-ECGame.EngineLib.createGameCircularDoublyLinkedListNode = function(inItem)
+ECGame.EngineLib.createGameCircularDoublyLinkedListNode = function TODODepricated(inItem)
 {
 	return new ECGame.EngineLib.GameCircularDoublyLinkedListNode(inItem);
 };

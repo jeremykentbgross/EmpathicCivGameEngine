@@ -178,7 +178,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			
 			/////////////////////////////////////////////////////////
 			//create audio assets
-			if(!ECGame.Settings.Network.isServer)
+			if(ECGame.Settings.Caps.Audio)
 			{
 				ECGame.instance.soundSystem.loadSoundAssets(
 					[

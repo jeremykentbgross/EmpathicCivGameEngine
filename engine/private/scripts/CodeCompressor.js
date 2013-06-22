@@ -205,7 +205,7 @@ ECGame.WebServerTools.CodeCompressor.prototype.makeCompactGameLoader = function 
 		+ '© Copyright 2012 Jeremy Gross\n'
 		+ 'jeremykentbgross@gmail.com\n'
 		+ '\x2a\x2f\n'
-		+ 'LoadEngine = function(inIsServer, inPublicEnginePath, inPrivateEnginePath, inPublicGamePath, inPrivateGamePath){'
+		+ 'LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEnginePath, inPublicGamePath, inPrivateGamePath){'
 		+ obfuscator.getObfuscatedCode()
 		+ obfuscator.getObfuscatedName('LoadEngine') + '(inIsServer, inPublicEnginePath, inPrivateEnginePath, inPublicGamePath, inPrivateGamePath);'
 		+ '};';

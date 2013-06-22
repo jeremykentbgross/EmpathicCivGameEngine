@@ -33,7 +33,7 @@ ECGame.unitTests.registerTest(
 		listener1 =
 		{
 			onTestEvent :
-				function(inEvent)
+				function onTestEvent(inEvent)
 				{
 					this.recieved = inEvent.data;
 					inEvent.data = inEvent.data - 1;
@@ -43,7 +43,7 @@ ECGame.unitTests.registerTest(
 		listener2 =
 		{
 			onTestEvent :
-				function(inEvent)
+				function onTestEvent(inEvent)
 				{
 					this.recieved = inEvent.data;
 					inEvent.data = inEvent.data - 1;

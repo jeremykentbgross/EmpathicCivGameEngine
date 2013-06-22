@@ -90,7 +90,7 @@ ECGame.EngineLib.Game2DMap = ECGame.EngineLib.Class.create(
 
 			//if the tile is the same as what is there, don't delete it and return
 			this._tileMapTree.walk(
-				function(item)
+				function walkCallback(item)
 				{
 					if(item.tileValue === inTileValue)
 					{
@@ -221,7 +221,7 @@ ECGame.EngineLib.Game2DMap = ECGame.EngineLib.Class.create(
 			ECGame.instance.graphics.drawDebugText("Debug Drawing Tile Map");
 			
 			this._tileMapTree.walk(
-				function(item)
+				function walkCallback(item)
 				{
 					var itemRect = item.getAABB();
 					aThis._myTileSet.renderTileInRect(

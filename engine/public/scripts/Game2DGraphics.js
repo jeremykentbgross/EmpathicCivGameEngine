@@ -23,33 +23,13 @@
 
 //Note: A good reference: http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#images
 
-
-//TODO depricated!
-ECGame.EngineLib.createGame2DGraphics = function(instance)
-{
-	var property;
-	var temp = new ECGame.EngineLib.Game2DGraphics();
-	instance = instance || {};
-	
-	for(property in temp)
-	{
-		instance[property] = temp[property];
-	}
-	for(property in temp.prototype)
-	{
-		instance[property] = temp.prototype[property];
-	}
-	
-	return instance;
-};
-
-
-
-
-
-
+//TODO make this a proper class
 ECGame.EngineLib.Game2DGraphics = function Game2DGraphics(){};
 ECGame.EngineLib.Game2DGraphics.prototype.constructor = ECGame.EngineLib.Game2DGraphics;
+ECGame.EngineLib.Game2DGraphics.create = function create()
+{
+	return new ECGame.EngineLib.Game2DGraphics();
+};
 
 
 
@@ -58,7 +38,7 @@ ECGame.EngineLib.Game2DGraphics.prototype.init = function init()
 	var aThis = this;
 	require(
 		['dojo/dom', 'dojo/dom-construct'],
-		function(dom, domConstruct)
+		function importDojoCallback(dom, domConstruct)
 		{
 			var domGraphicsContainer = dom.byId('graphicsContainer');
 			aThis._myCanvas = domConstruct.create(

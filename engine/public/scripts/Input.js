@@ -47,7 +47,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 				
 			require(
 				['dojo/on'],
-				function(inOn)
+				function importDojoCallback(inOn)
 				{
 					//keys:
 					inOn(document, 'keydown', aThis._onInput);
@@ -65,7 +65,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 					inOn(inCanvas, 'mouseover', aThis._onInput);
 									
 					//prevent right click menu on the render area
-					inOn(inCanvas, 'contextmenu', function(event){ event.preventDefault(); } );
+					inOn(inCanvas, 'contextmenu', function blockContextMenu(event){ event.preventDefault(); } );
 					
 					//TODO can i turn off middle mouse button native effect
 				}

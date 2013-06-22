@@ -52,6 +52,13 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 		this._myPlayingSounds = new ECGame.EngineLib.GameCircularDoublyLinkedListNode(null);
 		this._myListenerPosition2D = new ECGame.EngineLib.Point2();
 		
+		if(!ECGame.Settings.Caps.Audio)
+		{
+			ECGame.log.warn("Audio System not supported in your browser!");
+			alert("Audio System not supported in your browser!");	//TODO detect/reuse duplicate strings in compression
+			return;
+		}
+		
 		try
 		{
 			window.AudioContext =
@@ -110,6 +117,7 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
+		//noAudio : function noAudio
 		generateNextAssetID : function generateNextAssetID()
 		{
 			return ++this._myNextAssetID;
@@ -127,7 +135,7 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 		{
 			var i, aSoundAsset;
 			
-			if(ECGame.Settings.Network.isServer)
+			if(!ECGame.Settings.Caps.Audio)
 			{
 				return;
 			}
@@ -144,7 +152,7 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 		{
 			var i, aSoundSample;
 			
-			if(ECGame.Settings.Network.isServer)
+			if(!ECGame.Settings.Caps.Audio)
 			{
 				return;
 			}
@@ -160,7 +168,7 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 		{
 			var i, aSoundDescription;
 			
-			if(ECGame.Settings.Network.isServer)
+			if(!ECGame.Settings.Caps.Audio)
 			{
 				return;
 			}
@@ -172,12 +180,17 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 			}
 		},
 		
-		update : function update(/*??params??*/)
+		update : function update(/*??params??*/)	//TODO why is this not called on the server?
 		{
 			var aFinishedSounds = [], i;
 			
+			if(!ECGame.Settings.Caps.Audio)
+			{
+				return;
+			}
+			
 			this._myPlayingSounds.forAll(
-				function(inItem, inNode)
+				function checkFinished(inItem, inNode)
 				{
 					//head node has no sound
 					if(inItem)
@@ -269,6 +282,10 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 		setListenerPosition : function setListenerPosition(inPosition /*TODO velocity?*/)
 		{
 			this._myListenerPosition2D.copyFrom(inPosition);
+			if(!ECGame.Settings.Caps.Audio)
+			{
+				return;
+			}
 			this._myContext.listener.setPosition(inPosition.myX, inPosition.myY, 0);
 		},
 		//TODO setListenerVelocity
@@ -323,7 +340,7 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 			
 			//draw sounds
 			this._myPlayingSounds.forAll(
-				function(inItem)
+				function debugDrawCallback(inItem)
 				{					
 					//head node has no sound
 					if(inItem)

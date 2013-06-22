@@ -260,7 +260,7 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 			aThis = this;
 			
 			this._myDetectionTree.walk(
-				function(inItem)
+				function checkBroadCollision(inItem)
 				{
 					var anAABB;
 					
@@ -296,7 +296,7 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 			}
 			/*	
 			this._myDetectionTree.walk(////////////////////TODO TEMP DEBUG CHECK?? or keep?
-				function(item)
+				function ?funcname?(item)
 				{
 					if(inPhysicsObject === item)
 					{
@@ -483,7 +483,7 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 			//	Note: The map will automatically filter the object from being drawn more than once if it is in more than one node
 			aListToDraw = {};
 			this._myDetectionTree.walk(
-				function(item)
+				function addToRenderMap(item)
 				{
 					aListToDraw[item._myID] = item;
 				},

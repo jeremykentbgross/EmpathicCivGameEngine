@@ -447,7 +447,7 @@ websocket.ping([data], [options], [dontFailWhenClosed])	//Sends a ping. data is 
 websocket.pong([data], [options], [dontFailWhenClosed])	//Sends a pong. data is sent, options is an object with members mask and binary. dontFailWhenClosed indicates whether or not to throw if the connection isnt open.
 websocket.resume()	//Resume the client stream
 websocket.send(data, [options], [callback])	//Sends data through the connection. options can be an object with members mask and binary. The optional callback is executed after the send completes.
-websocket.stream([options], callback)	//Streams data through calls to a user supplied function. options can be an object with members mask and binary. callback is executed on successive ticks of which send is function (data, final).
+websocket.stream([options], callback)	//Streams data through calls to a user supplied function. options can be an object with members mask and binary. callback is executed on successive ticks of which send is function(data, final).
 websocket.terminate()	//Immediately shuts down the connection
 
 websocket.onopen
@@ -456,12 +456,12 @@ websocket.onclose
 websocket.onmessage	//Emulates the W3C Browser based WebSocket interface using function members.
 websocket.addEventListener(method, listener)	//Emulates the W3C Browser based WebSocket interface using addEventListener.
 
-Event: 'error'	function (error) { }	//If the client emits an error, this event is emitted (errors from the underlying net.Socket are forwarded here).
-Event: 'close'	function (code, message) { }	//Is emitted when the connection is closed. code is defined in the WebSocket specification.
+Event: 'error'	function(error) { }	//If the client emits an error, this event is emitted (errors from the underlying net.Socket are forwarded here).
+Event: 'close'	function(code, message) { }	//Is emitted when the connection is closed. code is defined in the WebSocket specification.
 	//The close event is also emitted when then underlying net.Socket closes the connection (end or close).
-Event: 'message'	function (data, flags) { }	//Is emitted when data is received. flags is an object with member binary.
-Event: 'ping'	function (data, flags) { }	//Is emitted when a ping is received. flags is an object with member binary.
-Event: 'pong'	function (data, flags) { }	//Is emitted when a pong is received. flags is an object with member binary.
+Event: 'message'	function(data, flags) { }	//Is emitted when data is received. flags is an object with member binary.
+Event: 'ping'	function(data, flags) { }	//Is emitted when a ping is received. flags is an object with member binary.
+Event: 'pong'	function(data, flags) { }	//Is emitted when a pong is received. flags is an object with member binary.
 Event: 'open'	function () { }	//Emitted when the connection is established.
 */
 ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
@@ -1222,9 +1222,9 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 		/*
 		this._myWebSocketServer.close([code], [data]);//closes server and all client sockets
 		this._myWebSocketServer.handleUpgrade(request, socket, upgradeHead, callback)??????????????????
-		this._myWebSocketServer.on('error', function(inError){});
-		this._myWebSocketServer.on('headers', function(inHeaders){});
-		this._myWebSocketServer.on('connection', function(inSocket){});
+		this._myWebSocketServer.on('error', function ?name?(inError){});
+		this._myWebSocketServer.on('headers', function ?name?(inHeaders){});
+		this._myWebSocketServer.on('connection', function ?name?(inSocket){});
 		*/
 		this._myWebSocketServer.on('error', this._onError);
 		this._myWebSocketServer.on('headers', this._onHeaders);

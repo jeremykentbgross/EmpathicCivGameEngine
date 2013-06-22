@@ -172,10 +172,10 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 			var allRelevantObjects;
 			allRelevantObjects = [];
 			ECGame.EngineLib.Class.getInstanceRegistry().forAll(
-				function(inClass)
+				function queueAllInstancesOfClass(inClass)
 				{
 					inClass.getInstanceRegistry().forAll(
-						function(inObject)
+						function queueObject(inObject)
 						{
 							if(ECGame.Settings.isDebugPrint_NetworkMessages())
 							{
@@ -491,7 +491,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 			
 			//TODO have a net dirty class list instead of iterating over everything!
 			ECGame.EngineLib.Class.getInstanceRegistry().forAll(
-				function(inClass)
+				function ?name?(inClass)
 				{
 					//TODO get rid of this when we have class dirty list instead of looping thru all classes.
 					if(!inClass._flags.net)
@@ -508,7 +508,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 					}
 					
 					inClass.getInstanceRegistry().forAll(
-						function(inObject)
+						function ?name?(inObject)
 						{
 							//TODO skip objects we do not own (but queue owner changes in netserialize queue from object?)
 							if(inClass._flags.net && inObject.isNetDirty()

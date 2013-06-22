@@ -90,7 +90,9 @@ ECGame.unitTests.registerTest(
 					*/
 					MyMethod : function MyMethod(inParam1, outParam2)
 					{
-						/**! @todo: 10 We need to do something else here! */
+						/**! @todo: 10 We need to do something else here!
+							/Example: something something
+						*/
 					}/**! @endmethod: MyMethod */
 				}
 			});/**! @endclass: MyChildClass */
@@ -114,6 +116,7 @@ ECGame.unitTests.registerTest(
 			{
 				appendSource : function appendSource(inSource)
 				{
+					/**! @TODO consider appending two more tags at the start and end of the code: file and endFile */
 					this._mySource += inSource;
 				},
 				
@@ -126,7 +129,8 @@ ECGame.unitTests.registerTest(
 						elementName,
 						elementData,
 						startIndex,
-						endIndex;
+						endIndex,	/**! @TODO proper naming conventions on these!! */
+						aLineNumber;
 					
 					this._myGeneratedMetaData = '[';
 					
@@ -141,8 +145,12 @@ ECGame.unitTests.registerTest(
 							this._myGeneratedMetaData += ',';
 						}
 						
-						//get element and chop off comment parts
+						//get element
 						element = elements[i];
+						startIndex = this._mySource.indexOf(element);
+						aLineNumber = this._mySource.substr(0, startIndex).match(/\n/g).length;
+						
+						//chop comment off of the element
 						element = element.substring(4, element.length - 2);
 						
 						//get the element type, make sure there is only one type
@@ -166,13 +174,16 @@ ECGame.unitTests.registerTest(
 						elementData = {};
 						elementData.elementType = elementType;
 						elementData.elementName = elementName;
+						elementData.fileName = "TEMPHACK.js";	/**! @TODO figure out how to put real fileName here */
+						elementData.lineNumber = aLineNumber;
 						this._parseElementsProperties(element, elementData);
-						this['_' + elementType](elementData);	/**! @todo function here should be better*/
+						this['_' + elementType](elementData);	/**! @TODO function here should be better*/
 					}
 					this._myGeneratedMetaData += ']';
 					
-	//				console.log("Object: " + this._myGeneratedMetaData);
-	//				console.log("Object: " + JSON.stringify(JSON.parse(this._myGeneratedMetaData)));
+					console.log("Object: " + this._myGeneratedMetaData);
+					console.log("Object: " + JSON.stringify(JSON.parse(this._myGeneratedMetaData)));
+					console.log(JSON.parse(this._myGeneratedMetaData));
 				},
 				
 				_parseElementsProperties : function _parseElementsProperties(inElement, outElementData)
@@ -187,10 +198,12 @@ ECGame.unitTests.registerTest(
 					
 					//get rid of unneeded whitespace and then find the property names
 					inElement = inElement.replace(/[\t\n\r]+/g, '');
-					inElement = inElement.replace(/@todo:/gi, '/todo:');
+					inElement = inElement.replace(/@todo:/gi, '/todo:');	/**! @TODO: why did I do this?? */
 					elementPropertyNames = inElement.match(/\/\w*:/g);
 					if(!elementPropertyNames)
 					{
+						outElementData.elementPropertyNames = [];
+						outElementData.elementPropertyValues = [];
 						return;
 					}
 					
@@ -223,18 +236,52 @@ ECGame.unitTests.registerTest(
 				
 				_namespace : function _namespace(inElementData)
 				{
-					var i;
-		//			console.log(inElementData);
+					var i,
+						possibleElements,
+						requiredElements;
+						
+					/**!
+						@TODO: should have a class map that has possible/required Elements for each type.
+							Then this function can be reused for all element types.
+						/Example:
+							{
+								_namespace :
+								{
+									possibleElements : ['description', 'parentnamespace'],
+									requiredElements : ['description']
+								},
+								_class : {...},
+								etc : ...
+							}
+					*/
 					
-					/**! @TODO: verify element properties*/
-					/**! @TODO: parse element properties*/
+					possibleElements = ['description', 'parentnamespace'];
+					requiredElements = ['description'];
+					
+					for(i = 0; i < inElementData.elementPropertyNames.length; ++i)
+					{
+						ECGame.log.assert(possibleElements.indexOf(inElementData.elementPropertyNames[i]) !== -1,
+							"Unexpected element property: \'" + inElementData.elementPropertyNames[i] + "\' in " + inElementData.elementType + ":" + inElementData.elementName
+						);
+					}
+					for(i = 0; i < requiredElements.length; ++i)
+					{
+						ECGame.log.assert(inElementData.elementPropertyNames.indexOf(requiredElements[i]) !== -1,
+							"Expected element property: \'" + requiredElements[i] + "\' not found in " + inElementData.elementType + ":" + inElementData.elementName
+						);
+					}
 					
 					this._myGeneratedMetaData += '{';
 					this._myGeneratedMetaData += '\"elementType\" : \"' + inElementData.elementType + '\"';
 					this._myGeneratedMetaData += ', \"elementName\" : \"' + inElementData.elementName + '\"';
+					this._myGeneratedMetaData += ', \"fileName\" : \"' + inElementData.fileName + '\"';
+					this._myGeneratedMetaData += ', \"lineNumber\" : \"' + inElementData.lineNumber + '\"';
 					for(i = 0; i < inElementData.elementPropertyNames.length; ++i)
 					{
 						this._myGeneratedMetaData += ', \"' + inElementData.elementPropertyNames[i]
+						
+							/**! @TODO: parse element properties*/
+							
 							+ '\" : \"' + inElementData.elementPropertyValues[i] + '\"';
 					}
 					this._myGeneratedMetaData += '}';
@@ -250,6 +297,11 @@ ECGame.unitTests.registerTest(
 					this._myGeneratedMetaData += '{';
 					this._myGeneratedMetaData += '\"elementType\" : \"' + inElementData.elementType + '\"';
 					this._myGeneratedMetaData += ', \"elementName\" : \"' + inElementData.elementName + '\"';
+					
+					/**! @TODO: Push onto a stack that we are in a class definition.
+						Then we add here: "members : ["
+						And then endclass will have "]}" and some assertion that it is the end of the right class which is popped off the stack */
+					
 					this._myGeneratedMetaData += '}';
 				},
 				
