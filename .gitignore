@@ -5,3 +5,4 @@ business.txt
 logs/
 node_modules/
 _public_/
+generated/

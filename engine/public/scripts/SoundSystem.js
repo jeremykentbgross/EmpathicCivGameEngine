@@ -27,6 +27,9 @@ http://www.html5rocks.com/en/tutorials/webaudio/positional_audio/
 http://www.html5rocks.com/en/tutorials/webaudio/fieldrunners/
 http://html5doctor.com/native-audio-in-the-browser/
 https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html
+
+**
+https://hacks.mozilla.org/2012/04/html5-audio-and-audio-sprites-this-should-be-simple/
 */
 
 

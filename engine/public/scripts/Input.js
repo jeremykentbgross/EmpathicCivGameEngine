@@ -111,8 +111,9 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 					break;
 					
 				case 'mousemove':
-					this._mouseLoc.myX = inEvent.offsetX;
-					this._mouseLoc.myY = inEvent.offsetY;
+					//TODO firefox doesn't like offset, but it is needed.  jquery can fix this.  Need to go back to it from jodo i think.
+					this._mouseLoc.myX = inEvent.offsetX /*|| inEvent.layerX*/;// Firefox hack:  || inEvent.layer
+					this._mouseLoc.myY = inEvent.offsetY /*|| inEvent.layerY*/;// Firefox hack:  || inEvent.layer
 					break;
 				/*
 				case 'mousewheel':
