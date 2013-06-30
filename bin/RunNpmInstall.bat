@@ -1,5 +1,5 @@
-@echo off
 cd ..
+call npm update npm -g
 call npm list
 call npm install
 call npm list

@@ -3247,244 +3247,269 @@ Ignored Words:
 	setTimeout
 	require
 	Array
-	arguments
 	length
-	isArray
 	name
+	arguments
 	caller
+	isArray
 	constructor
-	concat
-	map
-	sort
-	join
-	indexOf
-	filter
-	some
 	toString
-	reduceRight
-	splice
-	forEach
-	shift
-	unshift
 	toLocaleString
-	lastIndexOf
-	reverse
-	reduce
+	join
 	pop
 	push
-	every
+	concat
+	reverse
+	shift
+	unshift
 	slice
+	splice
+	sort
+	filter
+	forEach
+	some
+	every
+	map
+	indexOf
+	lastIndexOf
+	reduce
+	reduceRight
 	Boolean
 	valueOf
 	Date
-	now
 	UTC
 	parse
-	toUTCString
-	setMinutes
-	setUTCMonth
-	getMilliseconds
-	getTime
-	getMinutes
-	getUTCHours
-	setUTCFullYear
-	setMonth
-	getUTCMinutes
-	getUTCDate
-	setSeconds
-	toLocaleDateString
-	getMonth
-	toTimeString
-	toLocaleTimeString
-	setUTCMilliseconds
-	setYear
-	getUTCFullYear
-	getFullYear
-	getTimezoneOffset
-	setDate
-	getUTCMonth
-	getHours
-	toISOString
+	now
 	toDateString
-	getUTCSeconds
-	setUTCMinutes
-	getUTCDay
-	toJSON
-	setUTCDate
-	setUTCSeconds
-	getYear
-	getUTCMilliseconds
-	getDay
-	setFullYear
-	setMilliseconds
-	setTime
-	setHours
-	getSeconds
-	toGMTString
+	toTimeString
+	toLocaleDateString
+	toLocaleTimeString
+	getTime
+	getFullYear
+	getUTCFullYear
+	getMonth
+	getUTCMonth
 	getDate
+	getUTCDate
+	getDay
+	getUTCDay
+	getHours
+	getUTCHours
+	getMinutes
+	getUTCMinutes
+	getSeconds
+	getUTCSeconds
+	getMilliseconds
+	getUTCMilliseconds
+	getTimezoneOffset
+	setTime
+	setMilliseconds
+	setUTCMilliseconds
+	setSeconds
+	setUTCSeconds
+	setMinutes
+	setUTCMinutes
+	setHours
 	setUTCHours
-	LN10
-	PI
+	setDate
+	setUTCDate
+	setMonth
+	setUTCMonth
+	setFullYear
+	setUTCFullYear
+	toGMTString
+	toUTCString
+	getYear
+	setYear
+	toISOString
+	toJSON
 	E
-	LOG10E
-	SQRT2
-	LOG2E
-	SQRT1_2
+	LN10
 	LN2
-	cos
-	pow
-	log
-	tan
-	sqrt
-	ceil
-	asin
-	abs
-	max
-	exp
-	atan2
+	LOG2E
+	LOG10E
+	PI
+	SQRT1_2
+	SQRT2
 	random
-	round
-	floor
+	abs
 	acos
+	asin
 	atan
-	min
+	ceil
+	cos
+	exp
+	floor
+	log
+	round
 	sin
+	sqrt
+	tan
+	atan2
+	pow
+	max
+	min
 	Number
+	MAX_VALUE
+	MIN_VALUE
 	NaN
 	NEGATIVE_INFINITY
 	POSITIVE_INFINITY
-	MAX_VALUE
-	MIN_VALUE
+	isFinite
+	isNaN
+	toFixed
 	toExponential
 	toPrecision
-	toFixed
 	String
 	fromCharCode
-	localeCompare
-	substring
-	italics
-	charCodeAt
-	strike
-	toLowerCase
-	trimRight
-	toLocaleLowerCase
-	replace
-	toUpperCase
-	fontsize
-	trim
-	split
-	substr
-	sub
 	charAt
-	blink
-	sup
-	fontcolor
-	link
-	bold
-	anchor
-	trimLeft
-	small
-	search
-	fixed
-	big
+	charCodeAt
+	localeCompare
 	match
+	replace
+	search
+	split
+	substring
+	substr
+	toLowerCase
+	toLocaleLowerCase
+	toUpperCase
 	toLocaleUpperCase
+	trim
+	trimLeft
+	trimRight
+	link
+	anchor
+	fontcolor
+	fontsize
+	big
+	blink
+	bold
+	fixed
+	italics
+	small
+	strike
+	sub
+	sup
 	RegExp
-	$*
-	$3
-	$`
-	$9
-	rightContext
-	multiline
-	$7
-	lastParen
-	$input
-	$+
-	$&
-	leftContext
-	$8
-	$4
-	$1
-	$'
-	$_
 	input
+	$_
+	$input
+	multiline
+	$*
 	lastMatch
+	$&
+	lastParen
+	$+
+	leftContext
+	$`
+	rightContext
+	$'
+	$1
 	$2
+	$3
+	$4
 	$5
 	$6
-	exec
-	compile
-	test
-	clearInterval
-	TypeError
-	decodeURI
-	Buffer
-	parseFloat
-	URIError
-	encodeURIComponent
-	RangeError
-	ReferenceError
-	isNaN
-	console
-	Infinity
-	Uint32Array
-	Float32Array
-	Error
-	root
-	Uint8Array
-	DataView
-	Int32Array
-	Function
-	Math
-	encodeURI
-	Int16Array
-	escape
-	unescape
-	process
-	decodeURIComponent
-	EvalError
-	clearTimeout
-	GLOBAL
-	Int8Array
-	setInterval
-	Float64Array
-	SyntaxError
-	Object
-	eval
+	$7
+	$8
+	$9
+	source
 	global
-	Uint16Array
+	ignoreCase
+	lastIndex
+	exec
+	test
+	compile
+	Uint8Array
+	DTRACE_NET_SERVER_CONNECTION
+	setImmediate
+	parseFloat
 	parseInt
-	ArrayBuffer
+	SyntaxError
+	DTRACE_NET_SOCKET_WRITE
+	eval
+	root
+	Int32Array
+	clearInterval
+	COUNTER_HTTP_SERVER_RESPONSE
+	COUNTER_HTTP_CLIENT_REQUEST
+	Error
+	COUNTER_HTTP_CLIENT_RESPONSE
+	clearTimeout
+	COUNTER_HTTP_SERVER_REQUEST
+	COUNTER_NET_SERVER_CONNECTION
+	DTRACE_NET_SOCKET_READ
+	DTRACE_HTTP_SERVER_RESPONSE
+	Buffer
+	console
+	escape
+	encodeURI
+	encodeURIComponent
+	Uint16Array
+	DTRACE_HTTP_CLIENT_REQUEST
+	DTRACE_HTTP_CLIENT_RESPONSE
+	RangeError
+	TypeError
+	DTRACE_HTTP_SERVER_REQUEST
+	Int8Array
+	Object
+	Float64Array
+	COUNTER_NET_SERVER_CONNECTION_CLOSE
+	process
+	Function
 	JSON
-	isFinite
-	getOwnPropertyNames
-	seal
-	create
-	isFrozen
+	decodeURI
+	Infinity
+	DataView
+	URIError
+	ArrayBuffer
+	setInterval
+	Int16Array
+	Math
+	Float32Array
+	clearImmediate
+	DTRACE_NET_STREAM_END
+	decodeURIComponent
+	Uint32Array
+	GLOBAL
+	EvalError
+	Uint8ClampedArray
+	unescape
+	ReferenceError
 	keys
-	isExtensible
-	getOwnPropertyDescriptor
-	preventExtensions
-	getPrototypeOf
+	create
 	defineProperty
-	isSealed
 	defineProperties
 	freeze
-	__lookupGetter__
-	__defineGetter__
+	getPrototypeOf
+	getOwnPropertyDescriptor
+	getOwnPropertyNames
+	is
+	isExtensible
+	isFrozen
+	isSealed
+	preventExtensions
+	seal
 	hasOwnProperty
-	__defineSetter__
-	propertyIsEnumerable
 	isPrototypeOf
+	propertyIsEnumerable
+	__defineGetter__
+	__lookupGetter__
+	__defineSetter__
 	__lookupSetter__
+	_stdout
+	_stderr
+	_times
+	info
+	warn
+	error
+	dir
+	time
+	timeEnd
 	trace
 	assert
-	error
-	time
-	info
-	timeEnd
-	warn
-	dir
+	Console
 	Empty
 	bind
 	call
