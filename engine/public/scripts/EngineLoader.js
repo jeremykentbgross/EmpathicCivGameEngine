@@ -24,13 +24,29 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	var include;
 	
 	
-	
 	//////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////Global Namespaces//////////////////////////////
 	//Setup Global namespaces:
+	/**!
+		@namespace: ECGame
+		/description: This is the master namespace for the entire game / engine
+	*/
 	ECGame = new (function ECGame(){})();
+	
+	/**!
+		@namespace: EngineLib
+		/parentNamespace: ECGame
+		/description: This is the engine namespace
+	*/
 	ECGame.EngineLib = new (function ECGameEngineLib(){})();
+	
+	/**!
+		@namespace: Lib
+		/parentNamespace: ECGame
+		/description: This is the game specific namespace
+	*/
 	ECGame.Lib =  new (function ECGameLib(){})();
+	
 	//ECGame.Settings TODO refactor/change how settings work?
 	//ECGame.instance
 	//ECGame.webServer
@@ -38,6 +54,11 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	//ECGame.unitTests
 	if(inIsServer)
 	{
+		/**!
+			@namespace: WebServerTools
+			/parentNamespace: ECGame
+			/description: This is the namespace for all webserver related tools
+		*/
 		ECGame.WebServerTools = new (function ECGameWebServerTools(){})();
 	}
 	///////////////////////////////Global Namespaces//////////////////////////////

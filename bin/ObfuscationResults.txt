@@ -2728,7 +2728,6 @@ Included Words:
 	halfSize
 	head
 	high
-	i
 	image
 	imageInfo
 	importDojoCallback
@@ -3383,6 +3382,7 @@ Ignored Words:
 	global
 	hasOwnProperty
 	height
+	i
 	id
 	if
 	ignoreCase

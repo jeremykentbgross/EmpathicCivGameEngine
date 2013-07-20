@@ -30,7 +30,7 @@ ECGame.unitTests.registerTest(
 		{
 			/**!
 				@namespace: TestNamespace
-				/description: Blah blah blah
+				/description: Testing basic namespaces
 			*/
 			var TestNamespace = {};
 			
@@ -39,12 +39,19 @@ ECGame.unitTests.registerTest(
 			/**!
 				@namespace: TestChildNamespace
 				/parentNamespace: TestNamespace
-				/description: Blah blah blah
+				/description: Testing child namespaces
 			*/
 			TestNamespace.TestChildNamespace = {};
 			
+			/**!
+				@member: aMember
+				/description: testing namespace member
+				/parentNamespace: TestNamespace.TestChildNamespace
+			*/
+			TestNamespace.TestChildNamespace.aMember = 0;
+			
 			/**! @method: someMethod
-				/description: does something
+				/description: Testing namespaced scoped methods
 				/parentNamespace: TestNamespace.TestChildNamespace
 			*/
 			TestNamespace.TestChildNamespace.someMethod = function someMethod(){};
@@ -52,7 +59,7 @@ ECGame.unitTests.registerTest(
 			/**!
 				@class: TestClass
 				/parentNamespace: TestNamespace.TestChildNamespace
-				/description: Blah blah blah
+				/description: Testing namespaced scoped class
 			*/
 			TestNamespace.TestChildNamespace.TestClass = ECGame.EngineLib.Class.create({
 				Constructor : function TestClass(){},
@@ -69,7 +76,7 @@ ECGame.unitTests.registerTest(
 			/**!
 				@beginclass: TestChildClass
 				/parentNamespace: TestNamespace.TestChildNamespace
-				/description: Blah blah blah
+				/description: Testing child class in namespace scope
 				on multiple lines!!
 				/parents: TestNamespace.TestChildNamespace.TestClass
 				/listensTo: SomeEvent
@@ -79,7 +86,7 @@ ECGame.unitTests.registerTest(
 				{
 					/**!
 						@member: testMemberVariable
-						/description: Blah blah blah
+						/description: Testing class member
 						/types: [number]
 						/default: 7
 					*/
@@ -93,7 +100,7 @@ ECGame.unitTests.registerTest(
 				{
 					/**!
 						@beginmethod: testMemberMethod
-						/description: Blah blah blah
+						/description: Testing class method
 						/param1: inParam1 [string] do da do da
 						/param2: outParam2 [number] batman smells
 						/returns: [string, number] Robin laid an egg

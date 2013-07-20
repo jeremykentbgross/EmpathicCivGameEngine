@@ -24,21 +24,21 @@ var fs = require("fs");
 /**! @TODO: optional warnings in obfuscate for unnamed functions and wrong naming conventions*/
 /**! @TODO: @ link tag */
 /**! @TODO: parse element params */
-/**! @TODO: file with a function in it */
+/**! @TODO: file with a loose function in it? */
 /**! @TODO: declare method as a listener */
-/**! @TODO: at-event name -eventObjectType */
+/**! @TODO: @ event name / eventObjectType */
 /**! @todo: handle list below: */
 /*
 	-namespace page			X
-	--todos?
+	--todos?				X
 	--class					X
-	--method				O
-	--members				O
+	--method				X
+	--members				X
 	-finish class page
 	--child classes			O
 	--todos					X
 	--method:	TYPES
-	---todos
+	---todos!!
 	---params 
 	---returns
 	---fires
@@ -52,6 +52,8 @@ var fs = require("fs");
 	--todos	(2 links?)		1/2
 	--namespaces			X
 	--classes				X
+	--members				
+	--method				
 	-todo page(s)
 	--by priority
 	--by file
@@ -62,9 +64,8 @@ var fs = require("fs");
 	--firers
 */
 
-/**! @todo: should this be here?? */
-/**! @todo: document namespace function(s) like this one */
-/**! @beginmethod: rmdirRecursive
+/**!
+	@beginmethod: rmdirRecursive
 	/description: recursively removes all files and folders under the specified directory
 	/param1: inPath [string] path to the base folder
 	/parentNamespace: ECGame.WebServerTools
@@ -98,20 +99,84 @@ ECGame.WebServerTools.rmdirRecursive = function rmdirRecursive(inPath)
 /**! @endmethod: rmdirRecursive */
 
 
-
+/**!
+	@beginclass: DocJS
+	/parentNamespace: ECGame.WebServerTools
+	/description: This class generates the code documentation html pages
+*/
 ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 	Constructor : function DocJS()
 	{
+		/**!
+			@member: _myGeneratedMetaData
+			/description: Contains meta data created from parsed documentation comments
+			/types: [string]
+			/default: null
+		*/
 		this._myGeneratedMetaData = null;
+		/**!
+			@member: _mySource
+			/description: Contains the source code and file name in an object for each loaded file. Used to iterate over files in main generation loop.
+			/types: [[object]]
+			/default: []
+		*/
 		this._mySource = [];
+		/**!
+			@member: _myStack
+			/description: Contains info to detect being inside scope of classes, methods, files, etc.
+			/types: [[object]]
+			/default: []
+		*/
 		this._myStack = [];
+		/**!
+			@member: _myFileNametoSource
+			/description: Map linking the filename to the source code. Used in exporting the source file descriptions.
+			/types: [object]
+			/default: {}
+		*/
 		this._myFileNametoSource = {};
+		/**!
+			@member: _myNamespaces
+			/description: Map of all namespaces
+			/types: [object]
+			/default: {}
+		*/
 		this._myNamespaces = {};
+		/**!
+			@member: _myClasses
+			/description: Map of all classes
+			/types: [object]
+			/default: {}
+		*/
 		this._myClasses = {};
+		/**!
+			@member: _myTodos
+			/description: Array of all todos
+			/types: [[]]
+			/default: []
+		*/
 		this._myTodos = [];
-		this._myFiles = {};	/**! @todo: handle ?? is this done? */
+		/**!
+			@member: _myFiles
+			/description: Map of all files
+			/types: [object]
+			/default: {}
+		*/
+		this._myFiles = {};
+		/**!
+			@member: _myAllElements
+			/description: A map of all elements
+			/types: [object]
+			/default: {}
+		*/
 		this._myAllElements = {};
 		
+		/**!
+			@member: _myTagDescriptions
+			/description: A map to descriptors of all element types
+			/types: [object]
+			/default: See file.
+		*/
 		this._myTagDescriptions =
 		{
 			_file :
@@ -150,13 +215,11 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 			},
 			_member :
 			{
-				/**! @todo: class => parentNamespace / aliases */
-				possibleElements : ['description', 'types', 'default'],/**! @TODO: consider having both required*/
+				possibleElements : ['description', 'types', 'default', 'parentNamespace'],/**! @TODO: consider having type and default required*/
 				requiredElements : ['description']
 			},
 			_method :
 			{
-				/**! @todo: class => parentNamespace / aliases */
 				possibleElements : [
 					'parentNamespace',
 					'description',
@@ -177,7 +240,7 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 			},
 			_todo :
 			{
-				possibleElements : ['todo', 'priority', 'example'],/**! @TODO: ??keep example?? category */
+				possibleElements : ['todo', 'priority', 'example'],/**! @TODO: keep example?? add category?? */
 				requiredElements : ['todo'],
 				hasNoName : true,
 				addToList : '_myTodos'
@@ -190,8 +253,13 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
+		/**!
+			@beginmethod: loadDirectory
+			/description: Recursively loads all the source files starting at the path.
+		*/
 		loadDirectory : function loadDirectory(inPath)
 		{
+			/**! @todo: document param*/
 			var aFileList = [],
 				aThis;
 			
@@ -221,14 +289,27 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 				);
 			}
 		},
+		/**! @endmethod: loadDirectory */
 		
+		
+		/**!
+			@beginmethod: appendSource
+			/description: Adds a source file to parse for documentation comments
+		*/
 		appendSource : function appendSource(inSource, inFileName)
 		{
+			/**! @TODO: document parameters */
 			/**! @TODO: how to handle the filepath '/' etc */
 			this._mySource.push({ source : inSource, file : inFileName});
 			this._myFileNametoSource[inFileName] = inSource;
 		},
+		/**! @endmethod: appendSource*/
 		
+		/**!
+			@method: _addMissingFileHeader
+			/description: Inserts a dummy file wrapper if one is missing.
+		*/
+		/**! @todo: document params*/
 		_addMissingFileHeader : function _addMissingFileHeader(inElements, inFileName)
 		{
 			inElements.unshift('\/\*\*! @todo: document file ' + inFileName + ' \*\/');
@@ -236,6 +317,10 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 			inElements.push('\/\*\*! @endfile: ' + inFileName + ' \*\/');
 		},
 		
+		/**!
+			@method: run
+			/description: Parses all loaded source files and generates documentation into html pages.
+		*/
 		run : function run()
 		{
 			var i, j,
@@ -318,7 +403,7 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 						anEndIndex = anIndex;
 					}
 					anElementName = anElement.substring(aStartIndex, anEndIndex);
-					anElementName = anElementName.replace(/\s+/g,'');	/**! @todo: needed?? */
+					anElementName = anElementName.replace(/\s+/g,'');	/**! @todo: is it needed to get rid of this strings white space */
 					
 					//cleanup anElementType to final form, make sure there is a function to parse it
 					anElementType = anElementType.toLowerCase();
@@ -398,17 +483,20 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 			this.generateHtmlFiles();
 		},
 
-		
+		/**!
+			@method: _includeAllObjectsInTheirFileObject
+			/description: Adds all documentation objects to their file metadata object
+		*/
 		_includeAllObjectsInTheirFileObject : function _includeAllObjectsInTheirFileObject()
 		{
-			var objectPath
+			var anObjectPath
 				,anObject
 				,aFileObject
 				;
 			
-			for(objectPath in this._myAllElements)
+			for(anObjectPath in this._myAllElements)
 			{
-				anObject = this._myAllElements[objectPath];
+				anObject = this._myAllElements[anObjectPath];
 				if(anObject.elementType !== 'file')
 				{
 					aFileObject = this._myFiles[anObject.fileName];
@@ -427,6 +515,10 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 			}
 		},
 		
+		/**!
+			@method: _includeTodosInAllAncestorElements
+			/description: Adds all todo items to ancestor metadata objects
+		*/
 		_includeTodosInAllAncestorElements : function _includeTodosInAllAncestorElements()
 		{
 			var i, j
@@ -453,11 +545,16 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 			}
 		},
 		
+		/**!
+			@method: _includeAllInParentNamespaces
+			/description: Adds all documentation objects to their parentnamespace object
+		*/
 		_includeAllInParentNamespaces : function _includeAllInParentNamespaces(inFinalObjectSet)
 		{
 			var anObject,
 				aParentObject,
 				i;
+				
 			for(i = 0; i < inFinalObjectSet.length; ++i)
 			{
 				anObject = inFinalObjectSet[i];
@@ -480,11 +577,17 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 			}
 		},
 
+		/**!
+			@beginmethod: _indexCoreTypes
+			/description: Creates index of parsed metadata objects
+		*/
 		_indexCoreTypes : function _indexCoreTypes(inFinalObjectSet)
 		{
+			/**! @todo: rename function and document param */
 			var anElementTypeDescription,
 				anObject,
 				i, j;
+				
 			for(i = 0; i < inFinalObjectSet.length; ++i)
 			{
 				anObject = inFinalObjectSet[i];
@@ -514,7 +617,13 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 				}
 			}
 		},
+		/**! @endmethod: _indexCoreTypes */
 		
+		/**!
+			@method: getObjectsFullPathName
+			/description: Gets the full name index for an object based on its parent namespaces
+		*/
+		/** @todo: document parameter */
 		getObjectsFullPathName : function getObjectsFullPathName(inObject)
 		{
 			if(inObject.parentNamespace)
@@ -523,6 +632,8 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 			}
 			return inObject.elementName;
 		},
+		
+		/** @todo: keep documenting file from here */
 		
 		_parseElementsProperties : function _parseElementsProperties(inElement, outElementData)
 		{
@@ -554,17 +665,10 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 				anEndIndex = inElement.indexOf(anElementPropertyNames[i + 1], aStartIndex/* + 1*/);
 				anElementPropertyValues.push(inElement.substring(aStartIndex, anEndIndex));
 				anElementPropertyNames[i] = anElementPropertyNames[i].substring(1, anElementPropertyNames[i].length - 1);
-	//			anElementPropertyNames[i] = anElementPropertyNames[i].toLowerCase();
 			}
 			aStartIndex = inElement.indexOf(anElementPropertyNames[i], aStartIndex) + anElementPropertyNames[i].length + 1;
 			anElementPropertyValues.push(inElement.substring(aStartIndex, inElement.length));
 			anElementPropertyNames[i] = anElementPropertyNames[i].substring(1, anElementPropertyNames[i].length - 1);
-	//		anElementPropertyNames[i] = anElementPropertyNames[i].toLowerCase();
-			
-			/*for(i = 0; i < anElementPropertyValues.length; ++i)
-			{
-				anElementPropertyValues[i] = anElementPropertyValues[i].replace(/(\\t|\\n)+$/, '');
-			}*/
 
 			//put our names and values into the out data
 			outElementData.elementPropertyNames = anElementPropertyNames;
@@ -632,7 +736,7 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 				aStackElement = this._myStack.pop();
 				ECGame.log.assert(
 					aStackElement.type === anElementTypeDescription.stackPop && aStackElement.name === inElementData.elementName,
-					"Unexpected end of \'" + aStackElement.type + ':' + aStackElement.name + '\'' + this._genErrorMessageLocationFromElementData(inElementData)
+					"Expected end of \'" + aStackElement.type + ':' + aStackElement.name + '\'' + this._genErrorMessageLocationFromElementData(inElementData)
 				);
 				
 				//if the last character is a ',' then chop it off
@@ -855,9 +959,12 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 					+ "</a></li>\n";
 				aStringForFile += "</ul>\n";
 				
+				aStringForFile = this._writeTodoIndex(aStringForFile, anElement);
+				
 				//write the namespaces list
 				aStringForFile += "<h3>Child Namespaces:</h3>\n";
 				aStringForFile += "<ul>\n";
+				anElement.members = anElement.members || [];
 				for(i = 0; i < anElement.members.length; ++i)
 				{
 					subElement = anElement.members[i];
@@ -886,33 +993,174 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 				}
 				aStringForFile += "</ul>\n";
 				
-				/**! @todo: methods body needs to be written out and properly linked too!!! */
-				//write the method list
-				aStringForFile += "<h3>Methods:</h3>\n";
-				aStringForFile += "<ul>\n";
-				if(anElement.members)
-				{
-					for(i = 0; i < anElement.members.length; ++i)
-					{
-						subElement = anElement.members[i];
-						if(subElement.elementType === 'method')
-						{
-							aStringForFile += "<li><a href=\"#" + subElement.elementName + "\">"
-								+ subElement.elementName + '('
-								/**! @todo: params; this is copied from classes section so we should combined it in a function!! */
-								+ ')'
-								+ "</a></li>\n";
-						}
-					}
-				}
-				aStringForFile += "</ul>\n";
-				
 				/**! @todo: members */
-				/**! @todo: todos */
+				aStringForFile = this._writeMemberIndex(aStringForFile, anElement);
+				/**! @todo: methods body needs to be written out and properly linked too!!! */
+				aStringForFile = this._writeMethodIndex(aStringForFile, anElement);
+				
+				
+				aStringForFile = this._writeTodoList(aStringForFile, anElement);
+				aStringForFile = this._writeMemberList(aStringForFile, anElement);
+				aStringForFile = this._writeMethodList(aStringForFile, anElement);
 				
 				aStringForFile += inFileTail;
 				fs.writeFileSync("../docs/generated/" + aName + ".html", aStringForFile);
 			}
+		},
+		
+		_writeTodoIndex : function _writeTodoIndex(aStringForFile, anElement)
+		{
+			aStringForFile += "<h3>Todo's:</h3>\n";
+			aStringForFile += "<ul>\n";
+			if(anElement.members)
+			{
+				for(i = 0; i < anElement.members.length; ++i)
+				{
+					subElement = anElement.members[i];
+					if(subElement.elementType === 'todo')
+					{
+						aStringForFile += "<li><a href=\"#" + subElement.elementName + "\">"
+							+ subElement.todo
+							+ "</a>"/**! @todo: link these two also: function and file locations? */
+							+ ' (' + this._myAllElements[subElement.parentNamespace].elementName + '--' + subElement.elementName + ')'
+							+ "</li>\n";
+					}
+				}
+			}
+			aStringForFile += "</ul>\n";
+			
+			return aStringForFile;
+		},
+		_writeTodoList : function _writeTodoList(aStringForFile, anElement)
+		{
+			//add a horizontal break before we show detailed versions
+			aStringForFile += "<hr/>\n";
+			if(anElement.members)
+			{
+				for(i = 0; i < anElement.members.length; ++i)
+				{
+					subElement = anElement.members[i];
+					if(subElement.elementType === 'todo')
+					{
+						aStringForFile += "<h4 id=" + subElement.elementName + ">Todo: "
+							+ subElement.todo + ' (' + subElement.elementName + ')'
+							+ "</h4>\n";
+						aStringForFile += "<ul>\n";
+						aStringForFile += "<li>Description: " + subElement.todo + "</li>\n";
+						aStringForFile += "<li>priority: " + subElement.priority + "</li>\n";
+						/**! @todo: priority, category */
+						aStringForFile += "<li>Location: <a href=\"" + subElement.fileName + '.html#' + subElement.lineNumber + "\" target=\"mainFrame\" >"
+							+ subElement.fileName + ':' + subElement.lineNumber
+							+ "</a></li>\n";
+						aStringForFile += "</ul>\n";
+					}
+				}
+			}
+			
+			return aStringForFile;
+		},
+		_writeMemberIndex : function _writeMemberIndex(aStringForFile, anElement)
+		{
+			aStringForFile += "<h3>Members:</h3>\n";
+			aStringForFile += "<ul>\n";
+			if(anElement.members)
+			{
+				for(i = 0; i < anElement.members.length; ++i)
+				{
+					subElement = anElement.members[i];
+					if(subElement.elementType === 'member')
+					{
+						aStringForFile += "<li><a href=\"#" + subElement.elementName + "\">"
+							+ subElement.elementName
+							+ "</a></li>\n";
+					}
+				}
+			}
+			aStringForFile += "</ul>\n";
+			
+			return aStringForFile;
+		},
+		_writeMemberList : function _writeMemberList(aStringForFile, anElement)
+		{
+			//add a horizontal break before we show detailed versions
+			aStringForFile += "<hr/>\n";
+			if(anElement.members)
+			{
+				for(i = 0; i < anElement.members.length; ++i)
+				{
+					subElement = anElement.members[i];
+					if(subElement.elementType === 'member')
+					{
+						aStringForFile += "<h4 id=" + subElement.elementName + ">Member: " + subElement.elementName + "</h4>\n";
+						aStringForFile += "<ul>\n";
+						aStringForFile += "<li>Description: " + subElement.description + "</li>\n";
+						/**! @todo: types + default */
+						
+						/**! @todo: namespace (if in namespace not class; for other types of locations?) */
+						
+						aStringForFile += "<li>Location: <a href=\"" + subElement.fileName + '.html#' + subElement.lineNumber + "\" target=\"mainFrame\" >"
+							+ subElement.fileName + ':' + subElement.lineNumber
+							+ "</a></li>\n";
+						aStringForFile += "</ul>\n";
+					}
+				}
+			}
+			return aStringForFile;
+		},
+		_writeMethodIndex : function _writeMethodIndex(aStringForFile, anElement)
+		{
+			aStringForFile += "<h3>Methods:</h3>\n";
+			aStringForFile += "<ul>\n";
+			if(anElement.members)
+			{
+				for(i = 0; i < anElement.members.length; ++i)
+				{
+					subElement = anElement.members[i];
+					if(subElement.elementType === 'method')
+					{
+						aStringForFile += "<li><a href=\"#" + subElement.elementName + "\">"
+							+ subElement.elementName + '('
+							/**! @todo: params */
+							+ ')'
+							+ "</a></li>\n";
+					}
+				}
+			}
+			aStringForFile += "</ul>\n";
+			
+			return aStringForFile;
+		},
+		_writeMethodList : function _writeMethodList(aStringForFile, anElement)
+		{
+			//add a horizontal break before we show detailed versions
+			aStringForFile += "<hr/>\n";
+			if(anElement.members)
+			{
+				for(i = 0; i < anElement.members.length; ++i)
+				{
+					subElement = anElement.members[i];
+					if(subElement.elementType === 'method')
+					{
+						/**! @todo: write prototype / interface here: */
+						aStringForFile += "<h4 id=" + subElement.elementName + ">Method: " + subElement.elementName + "</h4>\n";
+						aStringForFile += "<ul>\n";
+						aStringForFile += "<li>Description: " + subElement.description + "</li>\n";
+						/**! @todo: param */
+						/**! @todo: returns */
+						/**! @todo: fires */
+						/**! @todo: todo's (need to chain up!!) */
+						
+						/**! @todo: namespace (if in namespace not class) */
+						
+						aStringForFile += "<li>Location: <a href=\"" + subElement.fileName + '.html#' + subElement.lineNumber + "\" target=\"mainFrame\" >"
+							+ subElement.fileName + ':' + subElement.lineNumber
+							+ "</a></li>\n";
+						aStringForFile += "</ul>\n";
+					}
+				}
+			}
+			
+			return aStringForFile;
 		},
 		
 		exportClasses : function exportClasses(inFileHead, inFileTail)
@@ -960,141 +1208,22 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 				
 				
 				//write the todo list
-				aStringForFile += "<h3>Todo's:</h3>\n";
-				aStringForFile += "<ul>\n";
-				if(anElement.members)
-				{
-					for(i = 0; i < anElement.members.length; ++i)
-					{
-						subElement = anElement.members[i];
-						if(subElement.elementType === 'todo')
-						{
-							aStringForFile += "<li><a href=\"#" + subElement.elementName + "\">"
-								+ subElement.todo
-								+ "</a>"/**! @todo: link these two also: function and file locations? */
-								+ ' (' + this._myAllElements[subElement.parentNamespace].elementName + '--' + subElement.elementName + ')'
-								+ "</li>\n";
-						}
-					}
-				}
-				aStringForFile += "</ul>\n";
+				aStringForFile = this._writeTodoIndex(aStringForFile, anElement);
 				
 				//write the member list
-				aStringForFile += "<h3>Members:</h3>\n";
-				aStringForFile += "<ul>\n";
-				if(anElement.members)
-				{
-					for(i = 0; i < anElement.members.length; ++i)
-					{
-						subElement = anElement.members[i];
-						if(subElement.elementType === 'member')
-						{
-							aStringForFile += "<li><a href=\"#" + subElement.elementName + "\">"
-								+ subElement.elementName
-								+ "</a></li>\n";
-						}
-					}
-				}
-				aStringForFile += "</ul>\n";
+				aStringForFile = this._writeMemberIndex(aStringForFile, anElement);
 				
 				//write the method list
-				aStringForFile += "<h3>Methods:</h3>\n";
-				aStringForFile += "<ul>\n";
-				if(anElement.members)
-				{
-					for(i = 0; i < anElement.members.length; ++i)
-					{
-						subElement = anElement.members[i];
-						if(subElement.elementType === 'method')
-						{
-							aStringForFile += "<li><a href=\"#" + subElement.elementName + "\">"
-								+ subElement.elementName + '('
-								/**! @todo: params */
-								+ ')'
-								+ "</a></li>\n";
-						}
-					}
-				}
-				aStringForFile += "</ul>\n";
+				aStringForFile = this._writeMethodIndex(aStringForFile, anElement);
 				
 				//write the actual todo's
-				//add a horizontal break before we show detailed versions
-				aStringForFile += "<hr/>\n";
-				if(anElement.members)
-				{
-					for(i = 0; i < anElement.members.length; ++i)
-					{
-						subElement = anElement.members[i];
-						if(subElement.elementType === 'todo')
-						{
-							aStringForFile += "<h4 id=" + subElement.elementName + ">Todo: "
-								+ subElement.todo + ' (' + subElement.elementName + ')'
-								+ "</h4>\n";
-							aStringForFile += "<ul>\n";
-							aStringForFile += "<li>Description: " + subElement.todo + "</li>\n";
-							aStringForFile += "<li>priority: " + subElement.priority + "</li>\n";
-							/**! @todo: priority, category */
-							aStringForFile += "<li>Location: <a href=\"" + subElement.fileName + '.html#' + subElement.lineNumber + "\" target=\"mainFrame\" >"
-								+ subElement.fileName + ':' + subElement.lineNumber
-								+ "</a></li>\n";
-							aStringForFile += "</ul>\n";
-						}
-					}
-				}
+				aStringForFile = this._writeTodoList(aStringForFile, anElement);
 				
 				//write the actual members
-				//add a horizontal break before we show detailed versions
-				aStringForFile += "<hr/>\n";
-				if(anElement.members)
-				{
-					for(i = 0; i < anElement.members.length; ++i)
-					{
-						subElement = anElement.members[i];
-						if(subElement.elementType === 'member')
-						{
-							aStringForFile += "<h4 id=" + subElement.elementName + ">Member: " + subElement.elementName + "</h4>\n";
-							aStringForFile += "<ul>\n";
-							aStringForFile += "<li>Description: " + subElement.description + "</li>\n";
-							/**! @todo: types + default */
-							
-							/**! @todo: namespace (if in namespace not class; for other types of locations?) */
-							
-							aStringForFile += "<li>Location: <a href=\"" + subElement.fileName + '.html#' + subElement.lineNumber + "\" target=\"mainFrame\" >"
-								+ subElement.fileName + ':' + subElement.lineNumber
-								+ "</a></li>\n";
-							aStringForFile += "</ul>\n";
-						}
-					}
-				}
+				aStringForFile = this._writeMemberList(aStringForFile, anElement);
 				
 				//write the actual methods
-				//add a horizontal break before we show detailed versions
-				aStringForFile += "<hr/>\n";
-				if(anElement.members)
-				{
-					for(i = 0; i < anElement.members.length; ++i)
-					{
-						subElement = anElement.members[i];
-						if(subElement.elementType === 'method')
-						{
-							/**! @todo: write prototype / interface here: */
-							aStringForFile += "<h4 id=" + subElement.elementName + ">Method: " + subElement.elementName + "</h4>\n";
-							aStringForFile += "<ul>\n";
-							aStringForFile += "<li>Description: " + subElement.description + "</li>\n";
-							/**! @todo: param */
-							/**! @todo: returns */
-							/**! @todo: fires */
-							/**! @todo: todo's (need to chain up!!) */
-							
-							/**! @todo: namespace (if in namespace not class) */
-							
-							aStringForFile += "<li>Location: <a href=\"" + subElement.fileName + '.html#' + subElement.lineNumber + "\" target=\"mainFrame\" >"
-								+ subElement.fileName + ':' + subElement.lineNumber
-								+ "</a></li>\n";
-							aStringForFile += "</ul>\n";
-						}
-					}
-				}
+				aStringForFile = this._writeMethodList(aStringForFile, anElement);
 				
 				aStringForFile += inFileTail;
 				fs.writeFileSync("../docs/generated/" + aName + ".html", aStringForFile);
@@ -1296,3 +1425,4 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 		
 	}
 });
+/**! @endclass: DocJS */
