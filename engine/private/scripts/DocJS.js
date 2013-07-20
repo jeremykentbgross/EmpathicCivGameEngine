@@ -1035,6 +1035,7 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 		{
 			//add a horizontal break before we show detailed versions
 			aStringForFile += "<hr/>\n";
+			aStringForFile += "<h3>Todo's:</h3>\n";
 			if(anElement.members)
 			{
 				for(i = 0; i < anElement.members.length; ++i)
@@ -1084,6 +1085,7 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 		{
 			//add a horizontal break before we show detailed versions
 			aStringForFile += "<hr/>\n";
+			aStringForFile += "<h3>Members:</h3>\n";
 			if(anElement.members)
 			{
 				for(i = 0; i < anElement.members.length; ++i)
@@ -1134,6 +1136,7 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 		{
 			//add a horizontal break before we show detailed versions
 			aStringForFile += "<hr/>\n";
+			aStringForFile += "<h3>Methods:</h3>\n";
 			if(anElement.members)
 			{
 				for(i = 0; i < anElement.members.length; ++i)
