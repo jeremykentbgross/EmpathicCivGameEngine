@@ -88,6 +88,8 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 		ECGame.unitTests = ECGame.EngineLib.UnitTestFramework.create();
 	}
 	
+	include(inPublicEnginePath + "scripts/GameClass.js");
+	
 	
 	
 	//////////////////////////////////////////////////////////////////////////////
@@ -95,8 +97,9 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	if(inIsServer)
 	{
 		include(inPrivateEnginePath + "scripts/WebServer.js");
-		include(inPrivateEnginePath + "scripts/CodeObfuscator.js");
-		include(inPrivateEnginePath + "scripts/CodeCompressor.js");
+		include(inPrivateEnginePath + "scripts/DocJS.js");
+		include(inPrivateEnginePath + "scripts/CodeObfuscator.js"); /**! @todo: consider naming just Obfuscator*/
+		include(inPrivateEnginePath + "scripts/CodeCompressor.js"); /**! @todo: consider naming preprocessor or something*/
 		
 		if(ECGame.Settings.RUN_UNIT_TESTS)
 		{
@@ -126,7 +129,6 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	include(inPublicEnginePath + "scripts/AABB2.js");
 	include(inPublicEnginePath + "scripts/Point2.js");
 	include(inPublicEnginePath + "scripts/GameRegistry.js");
-	include(inPublicEnginePath + "scripts/GameClass.js");
 	include(inPublicEnginePath + "scripts/GameCircularDoublyLinkedListNode.js");
 	include(inPublicEnginePath + "scripts/GameEventSystem.js");
 	if(!inIsServer)
