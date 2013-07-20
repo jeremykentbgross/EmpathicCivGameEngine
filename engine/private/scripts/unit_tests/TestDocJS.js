@@ -27,21 +27,36 @@ var fs = require("fs");
 /**! @TODO: parse element params */
 /**! @TODO: file with a function in it */
 /**! @TODO: declare method as a listener */
-/**! @TODO @event name
-	/eventObjectType
-*/
+/**! @TODO @event name /eventObjectType */
 /**!
 	@todo:
+	-namespace page			X
+	--todos?
+	--class					X
+	--method				O
+	--members				O
 	-finish class page
-	--class: parents, namespace link, ?
-	--method: params todos, etc TYPES, ?
-	--members: types, ?
+	--child classes			O
+	--todos					X
+	--method:	TYPES
+	---todos
+	---params 
+	---returns
+	---fires
+	---listens
+	---etc?
+	--members:
+	---types
+	---desc
+	---?
 	-finish file page (class like indexes at the top)
-	--namespaces
-	--classes
-	--todos
-	-big todo list
-	-namespace page
+	--todos	(2 links?)		1/2
+	--namespaces			X
+	--classes				X
+	-todo page(s)
+	--by priority
+	--by file
+	--by object path?
 	-event page
 	--types
 	--listeners
@@ -368,8 +383,8 @@ ECGame.unitTests.registerTest(
 								//if it isn't for the file, add one, and also a todo: document file
 								else if(anElementType !== 'beginfile')
 								{
-									anElementsList.unshift('\/\*\*! @todo: document ' + aFile + ' \*\/');
-									anElementsList.unshift('\/\*\*! @beginfile: ' + aFile + ' /description: todo \*\/');
+									anElementsList.unshift('\/\*\*! @todo: document file ' + aFile + ' \*\/');
+									anElementsList.unshift('\/\*\*! @beginfile: ' + aFile + ' /description: TODO document this file \*\/');
 									anElementsList.push('\/\*\*! @endfile: ' + aFile + ' \*\/');
 									--i;
 									continue;
@@ -402,7 +417,7 @@ ECGame.unitTests.registerTest(
 					
 					
 					//print the generated metadata
-					//console.log("Object: " + this._myGeneratedMetaData);
+					console.log("Object: " + this._myGeneratedMetaData);
 					
 					//parse the final object set from the meta data
 					aFinalObjectSet = JSON.parse(this._myGeneratedMetaData);
@@ -415,52 +430,28 @@ ECGame.unitTests.registerTest(
 					this._indexCoreTypes(aFinalObjectSet);
 					this._includeAllInParentNamespaces(aFinalObjectSet);
 					this._includeTodosInAllAncestorElements();
+					this._includeAllObjectsInTheirFileObject();
 					//print the lists we have gathered
 					//console.log(this._myNamespaces);
 					//console.log(this._myClasses);
 					//console.log(this._myTodos);
+					//console.log(this.??);
 					
 					//output the actual documentation
 					this.generateHtmlFiles();
 				},
-				
-				getNamespaceObject : function getNamespaceObject(inNamespace)
-				{
-					//var anObject = null;
-					
-					return this._myAllElements[inNamespace];
-					/*
-					anObject = this._myNamespaces[inNamespace];
-					if(anObject)
-					{
-						return anObject;
-					}
-					
-					anObject = this._myClasses[inNamespace];
-					if(anObject)
-					{
-						return anObject;
-					}
-					
-					anObject = this._myFiles[inNamespace];
-					if(anObject)
-					{
-						return anObject;
-					}
-					
-					return anObject;*/
-				},
+
 				
 				_includeAllObjectsInTheirFileObject : function _includeAllObjectsInTheirFileObject()
 				{
-					var i
+					var objectPath
 						,anObject
 						,aFileObject
 						;
 					
-					for(i = 0; i < this._myAllElements.length; ++i)
+					for(objectPath in this._myAllElements)
 					{
-						anObject = this._myAllElements[i];
+						anObject = this._myAllElements[objectPath];
 						if(anObject.elementType !== 'file')
 						{
 							aFileObject = this._myFiles[anObject.fileName];
@@ -489,7 +480,7 @@ ECGame.unitTests.registerTest(
 					for(i = 0; i < this._myTodos.length; ++i)
 					{
 						anObject = this._myTodos[i];
-						aParentObject = this.getNamespaceObject(anObject.parentNamespace);
+						aParentObject = this._myAllElements[anObject.parentNamespace];
 						while(aParentObject)
 						{
 							if(!aParentObject.members)
@@ -500,12 +491,11 @@ ECGame.unitTests.registerTest(
 							{
 								aParentObject.members.push(anObject);
 							}
-							aParentObject = this.getNamespaceObject(aParentObject.parentNamespace);
+							aParentObject = this._myAllElements[aParentObject.parentNamespace];
 						}
 					}
 				},
 				
-				/**! @todo make sure todos are in every parent namespace (including file scope) */
 				_includeAllInParentNamespaces : function _includeAllInParentNamespaces(inFinalObjectSet)
 				{
 					var anObject,
@@ -514,7 +504,7 @@ ECGame.unitTests.registerTest(
 					for(i = 0; i < inFinalObjectSet.length; ++i)
 					{
 						anObject = inFinalObjectSet[i];
-						aParentObject = this.getNamespaceObject(anObject.parentNamespace);
+						aParentObject = this._myAllElements[anObject.parentNamespace];
 						if(aParentObject)
 						{
 							if(!aParentObject.members)
@@ -624,9 +614,18 @@ ECGame.unitTests.registerTest(
 					outElementData.elementPropertyValues = anElementPropertyValues;
 				},
 				
-				_parseElementProperty : function _parseElementProperty()
+				_parseElementProperty : function _parseElementProperty(inPropertyType, inProperty)
 				{
-					/**! @todo */
+					console.log(inPropertyType + "::::" + inProperty);
+					
+					if('parents' === inPropertyType)
+					{
+						inProperty = inProperty.replace(/\s*/g, '');
+						return JSON.stringify(inProperty.split(','));
+					}
+					/**! @todo other types */
+					
+					return '\"' + inProperty + '\"';
 				},
 				
 				_genErrorMessageLocation : function _genErrorMessageLocation(inFileName, inLineNumber)
@@ -723,11 +722,11 @@ ECGame.unitTests.registerTest(
 					this._myGeneratedMetaData += ', \"lineNumber\" : \"' + inElementData.lineNumber + '\"';
 					for(i = 0; i < inElementData.elementPropertyNames.length; ++i)
 					{
-						this._myGeneratedMetaData += ', \"' + inElementData.elementPropertyNames[i]
-						
-							/**! @TODO: parse element properties*/
-							
-							+ '\" : \"' + inElementData.elementPropertyValues[i] + '\"';
+						this._myGeneratedMetaData += ', \"' + inElementData.elementPropertyNames[i] + '\" : '
+							+ this._parseElementProperty(
+								inElementData.elementPropertyNames[i],
+								inElementData.elementPropertyValues[i]
+							);
 					}
 					if(aStackPush)
 					{
@@ -772,7 +771,7 @@ ECGame.unitTests.registerTest(
 					
 					//export actual refrence files
 					/**! @todo: export welcome page */
-					/**! @todo: export namespaces */
+					this.exportNamespaces(fileHead, fileTail);
 					this.exportClasses(fileHead, fileTail);
 					this.exportFiles(fileHead, fileTail);
 					/**! @todo: export todos */
@@ -803,7 +802,7 @@ ECGame.unitTests.registerTest(
 					for(aName in this._myNamespaces)
 					{
 						aStringForFile +=
-							"<a href=\"http://www.w3schools.com/tags/tag_a.asp\" target=\"mainFrame\" >"
+							"<a href=\"" + aName + ".html\" target=\"mainFrame\" >"
 							+ aName
 							+ "</a><br>\n";
 					}
@@ -858,10 +857,86 @@ ECGame.unitTests.registerTest(
 						anElement = this._myTodos[aName];
 						aStringForFile +=
 							"<a href=\"" + anElement.fileName + '.html#' + anElement.lineNumber + "\" target=\"mainFrame\" >"
-							+ anElement.elementName + "</a><br>\n";
+							+ anElement.elementName
+							+ "</a><br>\n";
 					}
 					aStringForFile += inFileTail;
 					fs.writeFile("../docs/generated/todosIndex.html", aStringForFile);
+				},
+				
+				exportNamespaces : function exportNamespaces(inFileHead, inFileTail)
+				{
+					var aStringForFile
+						,aName
+						,anElement
+					//	,subName
+						,subElement
+						,i
+						,aFullPathName
+						;
+						
+					for(aName in this._myNamespaces)
+					{
+						//get the namespace object
+						anElement = this._myNamespaces[aName];
+
+						
+						//write the header of the namespace file
+						aStringForFile = inFileHead;
+						aStringForFile += "<h2>Namespace: " + anElement.elementName + "</h2>\n";
+						aStringForFile += "<ul>\n";
+						aStringForFile += "<li>Description: " + anElement.description + "</li>\n";
+						if(anElement.parentNamespace)
+						{
+							aStringForFile += "<li>Parent Namespace: "
+								+ "<a href=\"" + anElement.parentNamespace + ".html\" target=\"mainFrame\" >"
+								+ anElement.parentNamespace
+								+ "</a></li>\n";
+						}
+						aStringForFile +=
+							"<li>Location: <a href=\"" + anElement.fileName + '.html#' + anElement.lineNumber + "\" target=\"mainFrame\" >"
+							+ anElement.fileName + ':' + anElement.lineNumber
+							+ "</a></li>\n";
+						aStringForFile += "</ul>\n";
+						
+						//write the namespaces list
+						aStringForFile += "<h3>Child Namespaces:</h3>\n";
+						aStringForFile += "<ul>\n";
+						for(i = 0; i < anElement.members.length; ++i)
+						{
+							subElement = anElement.members[i];
+							if(subElement.elementType === 'namespace')
+							{
+								aFullPathName = this.getObjectsFullPathName(subElement);
+								aStringForFile += "<li><a href=\"" + aFullPathName + ".html\" target=\"mainFrame\" >"
+									+ aFullPathName
+									+ "</a></li>\n";
+							}
+						}
+						aStringForFile += "</ul>\n";
+						
+						//write the class list
+						aStringForFile += "<h3>Classes:</h3>\n";
+						aStringForFile += "<ul>\n";
+						for(i = 0; i < anElement.members.length; ++i)
+						{
+							subElement = anElement.members[i];
+							if(subElement.elementType === 'class')
+							{
+								aStringForFile += "<li><a href=\"" + this.getObjectsFullPathName(subElement) + ".html\" target=\"mainFrame\" >"
+									+ subElement.elementName
+									+ "</a></li>\n";
+							}
+						}
+						aStringForFile += "</ul>\n";
+						
+						/**! @todo: methods */
+						/**! @todo: members */
+						/**! @todo: todos */
+						
+						aStringForFile += inFileTail;
+						fs.writeFile("../docs/generated/" + aName + ".html", aStringForFile);
+					}
 				},
 				
 				exportClasses : function exportClasses(inFileHead, inFileTail)
@@ -871,6 +946,7 @@ ECGame.unitTests.registerTest(
 						,anElement
 						,subName
 						,subElement
+						,i
 						;
 					
 					for(aName in this._myClasses)
@@ -880,11 +956,26 @@ ECGame.unitTests.registerTest(
 						anElement = this._myClasses[aName];
 						aStringForFile += "<h2>Class: " + anElement.elementName + "</h2>\n";
 						aStringForFile += "<ul>\n";
-						/**! @todo make this namespace item a link!*/
-						aStringForFile += "<li>Namespace: " + anElement.parentNamespace + "</li>\n";
-						/**! @todo inherits links */
 						aStringForFile += "<li>Description: " + anElement.description + "</li>\n";
 						/**! @todo listensTo */
+						aStringForFile += "<li>Namespace: <a href=\"" + anElement.parentNamespace + ".html\" target=\"mainFrame\" >"
+							+ anElement.parentNamespace
+							+ "</a></li>\n";
+						if(anElement.parents)
+						{
+							aStringForFile += "<li>Parents: ";
+							for(i = 0; i < anElement.parents.length; ++i)
+							{
+								if(0 !== i)
+								{
+									aStringForFile += ', ';
+								}
+								aStringForFile += "<a href=\"" + anElement.parents[i] + ".html\" target=\"mainFrame\" >"
+									+ anElement.parents[i]
+									+ "</a>\n";
+							}
+							aStringForFile += "</li>\n";
+						}
 						aStringForFile +=
 							"<li>Location: <a href=\"" + anElement.fileName + '.html#' + anElement.lineNumber + "\" target=\"mainFrame\" >"
 							+ anElement.fileName + ':' + anElement.lineNumber
@@ -892,18 +983,22 @@ ECGame.unitTests.registerTest(
 						aStringForFile += "</ul>\n";
 						
 						
-						/**! @todo todo's (which need to be chained up to the top level!!) */
 						//write the todo list
 						aStringForFile += "<h3>Todo's:</h3>\n";
 						aStringForFile += "<ul>\n";
-						for(subName in anElement.members)
+						if(anElement.members)
 						{
-							subElement = anElement.members[subName];
-							if(subElement.elementType === 'todo')
+							for(i = 0; i < anElement.members.length; ++i)
 							{
-								aStringForFile += "<li><a href=\"#" + subElement.elementName + "\">"
-									+ subElement.todo// + ' (' + subElement.elementName + ')'//+ subElement.elementName
-									+ "</a>"  + ' (' + subElement.parentNamespace + ')' + "</li>\n";
+								subElement = anElement.members[i];
+								if(subElement.elementType === 'todo')
+								{
+									aStringForFile += "<li><a href=\"#" + subElement.elementName + "\">"
+										+ subElement.todo
+										+ "</a>"
+										+ ' (' + this._myAllElements[subElement.parentNamespace].elementName + '--' + subElement.elementName + ')'
+										+ "</li>\n";
+								}
 							}
 						}
 						aStringForFile += "</ul>\n";
@@ -911,14 +1006,17 @@ ECGame.unitTests.registerTest(
 						//write the member list
 						aStringForFile += "<h3>Members:</h3>\n";
 						aStringForFile += "<ul>\n";
-						for(subName in anElement.members)
+						if(anElement.members)
 						{
-							subElement = anElement.members[subName];
-							if(subElement.elementType === 'member')
+							for(i = 0; i < anElement.members.length; ++i)
 							{
-								aStringForFile += "<li><a href=\"#" + subElement.elementName + "\">"
-									+ subElement.elementName
-									+ "</a></li>\n";
+								subElement = anElement.members[i];
+								if(subElement.elementType === 'member')
+								{
+									aStringForFile += "<li><a href=\"#" + subElement.elementName + "\">"
+										+ subElement.elementName
+										+ "</a></li>\n";
+								}
 							}
 						}
 						aStringForFile += "</ul>\n";
@@ -926,16 +1024,19 @@ ECGame.unitTests.registerTest(
 						//write the method list
 						aStringForFile += "<h3>Methods:</h3>\n";
 						aStringForFile += "<ul>\n";
-						for(subName in anElement.members)
+						if(anElement.members)
 						{
-							subElement = anElement.members[subName];
-							if(subElement.elementType === 'method')
+							for(i = 0; i < anElement.members.length; ++i)
 							{
-								aStringForFile += "<li><a href=\"#" + subElement.elementName + "\">"
-									+ subElement.elementName + '('
-									/**! @todo: params */
-									+ ')'
-									+ "</a></li>\n";
+								subElement = anElement.members[i];
+								if(subElement.elementType === 'method')
+								{
+									aStringForFile += "<li><a href=\"#" + subElement.elementName + "\">"
+										+ subElement.elementName + '('
+										/**! @todo: params */
+										+ ')'
+										+ "</a></li>\n";
+								}
 							}
 						}
 						aStringForFile += "</ul>\n";
@@ -943,70 +1044,79 @@ ECGame.unitTests.registerTest(
 						//write the actual todo's
 						//add a horizontal break before we show detailed versions
 						aStringForFile += "<hr/>\n";
-						for(subName in anElement.members)
+						if(anElement.members)
 						{
-							subElement = anElement.members[subName];
-							if(subElement.elementType === 'todo')
+							for(i = 0; i < anElement.members.length; ++i)
 							{
-								aStringForFile += "<h4 id=" + subElement.elementName + ">Todo: "
-									+ subElement.todo + ' (' + subElement.elementName + ')'
-									+ "</h4>\n";
-								aStringForFile += "<ul>\n";
-								aStringForFile += "<li>Description: " + subElement.todo + "</li>\n";
-								aStringForFile += "<li>priority: " + subElement.priority + "</li>\n";
-								/**! @todo priority, category */
-								aStringForFile += "<li>Location: <a href=\"" + subElement.fileName + '.html#' + subElement.lineNumber + "\" target=\"mainFrame\" >"
-									+ subElement.fileName + ':' + subElement.lineNumber
-									+ "</a></li>\n";
-								aStringForFile += "</ul>\n";
+								subElement = anElement.members[i];
+								if(subElement.elementType === 'todo')
+								{
+									aStringForFile += "<h4 id=" + subElement.elementName + ">Todo: "
+										+ subElement.todo + ' (' + subElement.elementName + ')'
+										+ "</h4>\n";
+									aStringForFile += "<ul>\n";
+									aStringForFile += "<li>Description: " + subElement.todo + "</li>\n";
+									aStringForFile += "<li>priority: " + subElement.priority + "</li>\n";
+									/**! @todo priority, category */
+									aStringForFile += "<li>Location: <a href=\"" + subElement.fileName + '.html#' + subElement.lineNumber + "\" target=\"mainFrame\" >"
+										+ subElement.fileName + ':' + subElement.lineNumber
+										+ "</a></li>\n";
+									aStringForFile += "</ul>\n";
+								}
 							}
 						}
 						
 						//write the actual members
 						//add a horizontal break before we show detailed versions
 						aStringForFile += "<hr/>\n";
-						for(subName in anElement.members)
+						if(anElement.members)
 						{
-							subElement = anElement.members[subName];
-							if(subElement.elementType === 'member')
+							for(i = 0; i < anElement.members.length; ++i)
 							{
-								aStringForFile += "<h4 id=" + subElement.elementName + ">Member: " + subElement.elementName + "</h4>\n";
-								aStringForFile += "<ul>\n";
-								aStringForFile += "<li>Description: " + subElement.description + "</li>\n";
-								/**! @todo types + default */
-								
-								/**! @todo namespace (if in namespace not class; for other types of locations?) */
-								
-								aStringForFile += "<li>Location: <a href=\"" + subElement.fileName + '.html#' + subElement.lineNumber + "\" target=\"mainFrame\" >"
-									+ subElement.fileName + ':' + subElement.lineNumber
-									+ "</a></li>\n";
-								aStringForFile += "</ul>\n";
+								subElement = anElement.members[i];
+								if(subElement.elementType === 'member')
+								{
+									aStringForFile += "<h4 id=" + subElement.elementName + ">Member: " + subElement.elementName + "</h4>\n";
+									aStringForFile += "<ul>\n";
+									aStringForFile += "<li>Description: " + subElement.description + "</li>\n";
+									/**! @todo types + default */
+									
+									/**! @todo namespace (if in namespace not class; for other types of locations?) */
+									
+									aStringForFile += "<li>Location: <a href=\"" + subElement.fileName + '.html#' + subElement.lineNumber + "\" target=\"mainFrame\" >"
+										+ subElement.fileName + ':' + subElement.lineNumber
+										+ "</a></li>\n";
+									aStringForFile += "</ul>\n";
+								}
 							}
 						}
 						
 						//write the actual methods
 						//add a horizontal break before we show detailed versions
 						aStringForFile += "<hr/>\n";
-						for(subName in anElement.members)
+						if(anElement.members)
 						{
-							subElement = anElement.members[subName];
-							if(subElement.elementType === 'method')
+							for(i = 0; i < anElement.members.length; ++i)
 							{
-								/**! @todo write prototype/interface here: */
-								aStringForFile += "<h4 id=" + subElement.elementName + ">Method: " + subElement.elementName + "</h4>\n";
-								aStringForFile += "<ul>\n";
-								aStringForFile += "<li>Description: " + subElement.description + "</li>\n";
-								/**! @todo param */
-								/**! @todo returns */
-								/**! @todo fires */
-								/**! @todo todo's (need to chain up!!) */
-								
-								/**! @todo namespace (if in namespace not class) */
-								
-								aStringForFile += "<li>Location: <a href=\"" + subElement.fileName + '.html#' + subElement.lineNumber + "\" target=\"mainFrame\" >"
-									+ subElement.fileName + ':' + subElement.lineNumber
-									+ "</a></li>\n";
-								aStringForFile += "</ul>\n";
+								subElement = anElement.members[i];
+								if(subElement.elementType === 'method')
+								{
+									/**! @todo write prototype/interface here: */
+									aStringForFile += "<h4 id=" + subElement.elementName + ">Method: " + subElement.elementName + "</h4>\n";
+									aStringForFile += "<ul>\n";
+									aStringForFile += "<li>Description: " + subElement.description + "</li>\n";
+									/**! @todo param */
+									/**! @todo returns */
+									/**! @todo fires */
+									/**! @todo todo's (need to chain up!!) */
+									
+									/**! @todo namespace (if in namespace not class) */
+									
+									aStringForFile += "<li>Location: <a href=\"" + subElement.fileName + '.html#' + subElement.lineNumber + "\" target=\"mainFrame\" >"
+										+ subElement.fileName + ':' + subElement.lineNumber
+										+ "</a></li>\n";
+									aStringForFile += "</ul>\n";
+								}
 							}
 						}
 						
@@ -1078,12 +1188,75 @@ ECGame.unitTests.registerTest(
 						aStringForFile = inFileHead;
 						anElement = this._myFiles[aName];
 						aStringForFile += "<h2>File: " + anElement.elementName + "</h2>\n";
+						aStringForFile += "<ul>\n";
+						aStringForFile += "<li>Description: " + anElement.description + "</li>\n";
+						aStringForFile += "</ul>\n";
+
 						
-						/**! @todo: links to internal namespaces, classes, methods, todos*/
+						//write the todo list
+						aStringForFile += "<h3>Todo's:</h3>\n";
+						aStringForFile += "<ul>\n";
+						for(i = 0; i < anElement.members.length; ++i)
+						{
+							subElement = anElement.members[i];
+							if(subElement.elementType === 'todo')
+							{
+								/**! @todo: two links: todo page + file location*/
+								aStringForFile += "<li><a href=\"#" + subElement.lineNumber + "\">"
+									+ subElement.todo
+									+ "</a>"
+									+ ' (' + subElement.elementName + ')'
+									+ "</li>\n";
+							}
+						}
+						aStringForFile += "</ul>\n";
 						
+						
+						//write the namespaces list
+						aStringForFile += "<h3>Namespaces:</h3>\n";
+						aStringForFile += "<ul>\n";
+						for(i = 0; i < anElement.members.length; ++i)
+						{
+							subElement = anElement.members[i];
+							if(subElement.elementType === 'namespace')
+							{
+								aStringForFile +=
+									"<li><a href=\"" + this.getObjectsFullPathName(subElement) + ".html\" target=\"mainFrame\" >"
+									+ subElement.elementName
+									+ "</a>"
+									+ " (<a href=\"#" + subElement.lineNumber + "\">"
+									+ subElement.fileName + ':' + subElement.lineNumber
+									+ "</a>)"
+									+ "</li>\n";
+							}
+						}
+						aStringForFile += "</ul>\n";
+						
+						
+						//write the class list
+						aStringForFile += "<h3>Classes:</h3>\n";
+						aStringForFile += "<ul>\n";
+						for(i = 0; i < anElement.members.length; ++i)
+						{
+							subElement = anElement.members[i];
+							if(subElement.elementType === 'class')
+							{
+								aStringForFile +=
+									"<li><a href=\"" + this.getObjectsFullPathName(subElement) + ".html\" target=\"mainFrame\" >"
+									+ subElement.elementName
+									+ "</a>"
+									+ " (<a href=\"#" + subElement.lineNumber + "\">"
+									+ subElement.fileName + ':' + subElement.lineNumber
+									+ "</a>)"
+									+ "</li>\n";
+							}
+						}
+						aStringForFile += "</ul>\n";
+						
+						
+						aStringForFile += "<h3>Source:</h3>\n";
 						//get the source for this file
 						aSource = this._myFileNametoSource[anElement.elementName];
-						
 						//highlight the keywords
 						for(i = 0; i < keywordList.length; ++i)
 						{

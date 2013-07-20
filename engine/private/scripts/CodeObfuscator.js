@@ -209,7 +209,8 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 {
 	var name,
 		i,
-		logData = '';
+		logData = '',
+		aReorderingArray;
 	
 	this._removeComments();
 	
@@ -222,15 +223,16 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	
 	this._findAllPotentialWords();
 	
-	//if(ECGame.Settings.DEBUG)
+	aReorderingArray = [];
+	logData += "Base NameSpaces:" + '\n';
+	for(name in this._nameSpaces)
 	{
-		//console.log("Base NameSpaces:");
-		logData += "Base NameSpaces:" + '\n';
-		for(name in this._nameSpaces)
-		{
-			//console.log('\t' + name);
-			logData += '\t' + name + '\n';
-		}
+		aReorderingArray.push(name);
+	}
+	aReorderingArray.sort();
+	for(i = 0; i < aReorderingArray.length; ++i)
+	{
+		logData += '\t' + aReorderingArray[i] + '\n';
 	}
 	
 	this._findFunctionNames();
@@ -246,85 +248,117 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 		delete this._unmappedWordsMap[name];
 	}
 	
-	//if(ECGame.Settings.DEBUG/* && ECGame.Settings.Debug.Obfuscation_Print*/)
+	aReorderingArray = [];
+	logData += "Final NameSpaces:" + '\n';
+	for(name in this._nameSpaces)
 	{
-		//console.log("Final NameSpaces:");
-		logData += "Final NameSpaces:" + '\n';
-		for(name in this._nameSpaces)
-		{
-			//console.log('\t' + name);
-			logData += '\t' + name + '\n';
-		}
-		
-		//console.log("Function Names:");
-		logData += "Function Names:" + '\n';
-		for(name in this._functionNames)
-		{
-			//console.log('\t' + name);
-			logData += '\t' + name + '\n';
-		}
-		
-		//console.log("Parameter Variables:");
-		logData += "Parameter Variables:" + '\n';
-		for(name in this._parameterNames)
-		{
-			//console.log('\t' + name);
-			logData += '\t' + name + '\n';
-		}
-		
-		//console.log("Local Variable Names:");
-		logData += "Local Variable Names:" + '\n';
-		for(name in this._variableNames)
-		{
-			//console.log('\t' + name);
-			logData += '\t' + name + '\n';
-		}
-		
-		//console.log("Member Variables:");
-		logData += "Member Variables:" + '\n';
-		for(name in this._memberNames)
-		{
-			//console.log('\t' + name);
-			logData += '\t' + name + '\n';
-		}
-		
-		//console.log("\n\n\nIncluded Words:");
-		logData += "\n\n\nIncluded Words:" + '\n';
-		for(name in this._wordMap)
-		{
-			//console.log('\t' + name);
-			logData += '\t' + name + '\n';
-		}
-		
-		//console.log("Ignored Words:");
-		logData += "Ignored Words:" + '\n';
-		for(name in this._ignoreMap)
-		{
-			//console.log('\t' + name);
-			logData += '\t' + name + '\n';
-		}
-		
-		//console.log("Unmapped Words:");
-		logData += "Unmapped Words:" + '\n';
-		for(name in this._unmappedWordsMap)
-		{
-			//console.log('\t' + name);
-			logData += '\t' + name + '\n';
-		}
-		
-		//console.log("Localized Strings:");
-		logData += "Localized Strings:" + '\n';
-		for(i = 0; i < this._localizationStrings.length; ++i)
-		{
-			//console.log('\t\'' + this._localizationStrings[i] + '\'');
-			//console.log('\t' + this._localizationStrings[i]);
-			logData += '\t' + this._localizationStrings[i] + '\n';
-		}
-		
-		if(ECGame.Settings.isDebugPrint_Obfuscation())
-		{
-			console.log(logData);
-		}
+		aReorderingArray.push(name);
+	}
+	aReorderingArray.sort();
+	for(i = 0; i < aReorderingArray.length; ++i)
+	{
+		logData += '\t' + aReorderingArray[i] + '\n';
+	}
+	
+	aReorderingArray = [];
+	logData += "Function Names:" + '\n';
+	for(name in this._functionNames)
+	{
+		aReorderingArray.push(name);
+	}
+	aReorderingArray.sort();
+	for(i = 0; i < aReorderingArray.length; ++i)
+	{
+		logData += '\t' + aReorderingArray[i] + '\n';
+	}
+	
+	aReorderingArray = [];
+	logData += "Parameter Variables:" + '\n';
+	for(name in this._parameterNames)
+	{
+		aReorderingArray.push(name);
+	}
+	aReorderingArray.sort();
+	for(i = 0; i < aReorderingArray.length; ++i)
+	{
+		logData += '\t' + aReorderingArray[i] + '\n';
+	}
+	
+	aReorderingArray = [];
+	logData += "Local Variable Names:" + '\n';
+	for(name in this._variableNames)
+	{
+		aReorderingArray.push(name);
+	}
+	aReorderingArray.sort();
+	for(i = 0; i < aReorderingArray.length; ++i)
+	{
+		logData += '\t' + aReorderingArray[i] + '\n';
+	}
+	
+	aReorderingArray = [];
+	logData += "Member Variables:" + '\n';
+	for(name in this._memberNames)
+	{
+		aReorderingArray.push(name);
+	}
+	aReorderingArray.sort();
+	for(i = 0; i < aReorderingArray.length; ++i)
+	{
+		logData += '\t' + aReorderingArray[i] + '\n';
+	}
+	
+	aReorderingArray = [];
+	logData += "\n\n\nIncluded Words:" + '\n';
+	for(name in this._wordMap)
+	{
+		aReorderingArray.push(name);
+	}
+	aReorderingArray.sort();
+	for(i = 0; i < aReorderingArray.length; ++i)
+	{
+		logData += '\t' + aReorderingArray[i] + '\n';
+	}
+	
+	aReorderingArray = [];
+	logData += "Ignored Words:" + '\n';
+	for(name in this._ignoreMap)
+	{
+		aReorderingArray.push(name);
+	}
+	aReorderingArray.sort();
+	for(i = 0; i < aReorderingArray.length; ++i)
+	{
+		logData += '\t' + aReorderingArray[i] + '\n';
+	}
+	
+	aReorderingArray = [];
+	logData += "Unmapped Words:" + '\n';
+	for(name in this._unmappedWordsMap)
+	{
+		aReorderingArray.push(name);
+	}
+	aReorderingArray.sort();
+	for(i = 0; i < aReorderingArray.length; ++i)
+	{
+		logData += '\t' + aReorderingArray[i] + '\n';
+	}
+	
+	aReorderingArray = [];
+	logData += "Localized Strings:" + '\n';
+	for(i = 0; i < this._localizationStrings.length; ++i)
+	{
+		logData += '\t' + this._localizationStrings[i] + '\n';
+	}
+	aReorderingArray.sort();
+	for(i = 0; i < aReorderingArray.length; ++i)
+	{
+		logData += '\t' + aReorderingArray[i] + '\n';
+	}
+	
+	if(ECGame.Settings.isDebugPrint_Obfuscation())
+	{
+		console.log(logData);
 	}
 	
 	if(ECGame.Settings.Server.obfuscateNames)
