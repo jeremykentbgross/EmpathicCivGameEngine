@@ -43,6 +43,12 @@ ECGame.unitTests.registerTest(
 			*/
 			TestNamespace.TestChildNamespace = {};
 			
+			/**! @method: someMethod
+				/description: does something
+				/parentNamespace: TestNamespace.TestChildNamespace
+			*/
+			TestNamespace.TestChildNamespace.someMethod = function someMethod(){};
+			
 			/**!
 				@class: TestClass
 				/parentNamespace: TestNamespace.TestChildNamespace
@@ -95,7 +101,7 @@ ECGame.unitTests.registerTest(
 					*/
 					testMemberMethod : function testMemberMethod(inParam1, outParam2)
 					{
-						/**! @todo: We need to do something else here!
+						/**! @todo: We need to do something else here:
 							/priority: 10
 							/example: something something
 						*/
@@ -113,7 +119,7 @@ ECGame.unitTests.registerTest(
 //		docJS.loadDirectory('../engine_test_game');/**! @todo: put real game name here! */
 		docJS.run();
 		
-		return false;
+//		return false;
 		
 		return true;
 	}

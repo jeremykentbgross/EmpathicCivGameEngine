@@ -1723,6 +1723,7 @@ Member Variables:
 	forAll
 	forAllReverse
 	gameUser
+	generateDocumentation
 	generateNextAssetID
 	generateNextSampleID
 	generateNextSoundDescriptionID
@@ -2658,6 +2659,7 @@ Included Words:
 	funcArray
 	funcIndex
 	gameUser
+	generateDocumentation
 	generateNextAssetID
 	generateNextSampleID
 	generateNextSoundDescriptionID

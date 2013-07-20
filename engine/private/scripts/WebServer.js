@@ -31,9 +31,10 @@ ECGame.WebServerTools.WebServer = function WebServer()//TODO WebServer
 	this.webHostAddress = "localhost";//TODO this is NOT OK!
 	this.webHostPort = 80;
 	this.webHostRoot = path.join(path.dirname(__filename), '../../../_public_');
+	this.webHostDocsRoot = path.join(path.dirname(__filename), '../../..');
 	
 	//http file server
-	this.expressApp = express.createServer();
+	this.expressApp = express();
 	//needed to open more sockets:
 	this.socketio = socketIO;			//TODO only if needed in the network setup
 	//wrapper for express which is needed for socket.io to serve correctly below
@@ -46,13 +47,34 @@ ECGame.WebServerTools.WebServer = function WebServer()//TODO WebServer
 
 ECGame.WebServerTools.WebServer.prototype.run = function run()
 {
-	var aThis = this;
-		
+	var aThis
+		,docJS
+		;
+	
+	aThis = this;
+	
+	if(ECGame.Settings.Server.generateDocumentation) /**! @todo: NOT in final release mode! */
+	{
+		var docJS = ECGame.WebServerTools.DocJS.create();
+		docJS.loadDirectory('../engine');
+		docJS.loadDirectory('../engine_test_game');/**! @todo: put real game name here! */
+		docJS.run();
+		this.expressApp.get(
+			'/docs/*.(js|css|html)'//TODO review file types (no waves!)
+			,function webGetDocs(req, res)
+			{
+				res.sendfile(
+					path.join(aThis.webHostDocsRoot, req.url)
+				);
+			}
+		);
+	}
+	
 	if(ECGame.Settings.Server.compressClientCode)
 	{
 		this.codeCompressor = new ECGame.WebServerTools.CodeCompressor(
 			'../engine/public/',
-			'../engine_test_game/public/'
+			'../engine_test_game/public/'/**! @todo: put real game name here! */
 		);
 		this.codeCompressor.makeCompactGameLoader();
 		
