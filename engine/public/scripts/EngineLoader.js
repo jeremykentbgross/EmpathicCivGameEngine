@@ -168,8 +168,8 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 		include(inPublicEnginePath + "scripts/Sound2D.js");
 		include(inPublicEnginePath + "scripts/AssetManager.js");
 	}
-	include(inPublicEnginePath + "scripts/GameNetwork.js");//TODO if multiplayer?
-	//include(inPublicEnginePath + "scripts/NetworkBase.js");//TODO if multiplayer?
+include(inPublicEnginePath + "scripts/GameNetwork.js");//TODO if multiplayer?
+//include(inPublicEnginePath + "scripts/NetworkBase.js");//TODO if multiplayer?
 	include(inPublicEnginePath + "scripts/Input.js");
 	include(inPublicEnginePath + "scripts/Camera2.js");
 	include(inPublicEnginePath + "scripts/GameObject.js");

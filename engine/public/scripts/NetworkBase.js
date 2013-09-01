@@ -25,6 +25,8 @@
 //TODO check naming convention!!
 //TODO gameTime??
 
+//TODO try sending all kinds of garbage to the server to see how it handles.  lots of places it will fail atm I think!
+
 /*
 TODO:
 	Events.IdentifiedUser			//GameRules spawn
@@ -210,6 +212,8 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 			this._myForwardDirtyObjects = {};
 		},
 		
+		//TODO?? allow subscribe to classes for object creation events when tracking all objects?
+		
 		addUser : function addUser(inUser)
 		{
 			var
@@ -351,9 +355,11 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 				this._myNetDirtyInstances[aClassName][anIndex] = this._myNetDirtyInstances[aClassName][aLength - 1];
 				this._myNetDirtyInstances[aClassName].pop();
 			}
+			
+			//TODO remove from myForwardObjects?
 		},
 		
-		onNetDirty : function onNetDirty(inEvent)
+		onNetDirty : function onNetDirty(inEvent)//TODO on server side net dirty all objects read in??? How populate forwards?
 		{
 			var aClassName,
 				anObject,
@@ -366,7 +372,7 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 			
 			//TODO check if this can be written to by local user
 			
-			if(!aUserID)
+			if(!aUserID) //if no user is specified:
 			{
 				//make sure entry exists for this class
 				this._myNetDirtyInstances[aClassName] = this._myNetDirtyInstances[aClassName] || [];
@@ -381,7 +387,7 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 				//it is dirty
 				this._myNetDirtyInstances[aClassName].push(anObject);
 			}
-			else
+			else //this belongs to a user
 			{
 				//make sure there is a list for this class
 				this._myForwardDirtyObjects[aClassName] = this._myForwardDirtyObjects[aClassName] || {};
@@ -609,7 +615,7 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 		
 		_onOpen : function _onOpen(inEvent)//_onConnectedToServer
 		{
-			var aThis;
+			var aThis;	var i, binary;//HACK
 			
 			aThis = this.myECGameSocket;
 			
@@ -634,8 +640,8 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			//console.log(inEvent);
 			aThis.send("Hello!");
 			
-			var binary = new Uint8Array(20);
-			for (var i = 0; i < binary.length; i++) {
+			binary = new Uint8Array(20);
+			for(i = 0; i < binary.length; ++i) {
 				binary[i] = Math.floor((Math.random() * 256));
 			}
 			//this._myWebsocket.send(binary.buffer);
@@ -860,7 +866,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				aNetGroup.update();//TODO params??
 			}
 			
-			for(aClassName in this._mySerializedObjects)
+			for(aClassName in this._mySerializedObjects)//TODO can I get rid of this? Or is it strictly needed?
 			{
 				anInstanceMap = this._mySerializedObjects[aClassName];
 				for(anInstanceID in anInstanceMap)
@@ -987,6 +993,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				);
 			}
 			
+			//serializer without netflag at start to get full versions of objects
 			this._mySerializer.initRead({}, inBuffer);
 			
 			try
@@ -999,7 +1006,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					//|| inUser.userID === ECGame.EngineLib.User.USER_IDS.SERVER
 					)
 					,"Net user not identifying self correctly: " + (aMessageHeader.userID + ' != ' + inUser.userID)
-				);
+				);//TODO should this assert or return?  Where is it caught? can we disrupt lots of the server function by asserting here
 				
 				if(ECGame.Settings.isDebugDraw_NetworkMessages())
 				{
@@ -1013,22 +1020,24 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				{
 					//read the header
 					this._mySerializer.serializeObject(anObjectHeader, this._objectHeaderFormat);
+					
 					//find the class
 					anObjectClass = ECGame.EngineLib.Class.getInstanceRegistry().findByID(anObjectHeader.classID);
 					if(!anObjectClass)
 					{
 						if(ECGame.Settings.isDebugPrint_NetworkMessages())
 						{
+							//TODO needs to be more than a warning here
 							ECGame.log.warn("Unknown classID " + anObjectHeader.classID);
 						}
 					}
+
 					//find the instance
 					anObject = anObjectClass.getInstanceRegistry().findByID(anObjectHeader.instanceID);
-					
 //TODO: ECGame.log.assert(!anObject ,"New Network Object already exists!:" + anObject.getTxtPath());
 					
 					//if not found, and not server, create it
-					if(!anObject)//TODO if user can create this anObject && not net?!!!!!!!!!!!!!!!!!!!!!!!!
+					if(!anObject)//TODO if user can create this anObject && not net?!!!!!!!!!!!!!!!!!!!!!!!! (see dirty object section)
 					{
 						if(ECGame.Settings.isDebugPrint_NetworkMessages())
 						{
@@ -1037,7 +1046,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 						anObject = anObjectClass.create();
 						anObject.setID(anObjectHeader.instanceID);
 					}
-					else if(ECGame.Settings.isDebugPrint_NetworkMessages())
+					else if(ECGame.Settings.isDebugPrint_NetworkMessages())	//TODO this branch should not be possible I think!
 					{
 						ECGame.log.info("Network Changing: " + anObjectClass.getName() + ' : ' + anObjectHeader.instanceID);
 					}
@@ -1068,6 +1077,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				{
 					//read the header
 					this._mySerializer.serializeObject(anObjectHeader, this._objectHeaderFormat);
+					
 					//find the class
 					anObjectClass = ECGame.EngineLib.Class.getInstanceRegistry().findByID(anObjectHeader.classID);
 					if(!anObjectClass)
@@ -1077,9 +1087,9 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 							ECGame.log.warn("Unknown classID " + anObjectHeader.classID);
 						}
 					}
+					
 					//find the instance
 					anObject = anObjectClass.getInstanceRegistry().findByID(anObjectHeader.instanceID);
-					
 					ECGame.log.assert(
 						anObject,
 						//TODO use proper object path style
@@ -1091,9 +1101,13 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 						ECGame.log.info("Network Changing: " + anObjectClass.getName() + ' : ' + anObjectHeader.instanceID);
 					}
 					
-					//if not from server && not from owner dummy serialize
-					if(anObject.getNetOwnerID() !== aMessageHeader.userID
-						&& aMessageHeader.userID !== ECGame.EngineLib.User.USER_IDS.SERVER)
+					//if from server or from owner serialize
+					if(anObject.getNetOwnerID() === aMessageHeader.userID
+						|| aMessageHeader.userID === ECGame.EngineLib.User.USER_IDS.SERVER)
+					{
+						anObject.serialize(this._mySerializer);
+					}
+					else //dummy serialize
 					{
 						//Note: could also maybe throw owner if !server && !owner && !recentOwnerQueue
 						//TODO if debug print (not detailed!!)
@@ -1101,10 +1115,6 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 						this._mySerializer.setDummyMode(true);
 						anObject.serialize(this._mySerializer);
 						this._mySerializer.setDummyMode(false);
-					}
-					else
-					{
-						anObject.serialize(this._mySerializer);
 					}
 					
 					aReadObjectsList.push(anObject);
@@ -1165,6 +1175,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					{
 						aReadObjectsList[i].postSerialize();
 					}
+					//TODO maybe net dirty them if this is the server so we forward them?
 				}
 			}
 			catch(error)
@@ -1198,8 +1209,8 @@ if(ECGame.Settings.Network.isServer){
 ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 	Constructor : function NetworkServer()
 	{
-		this.NetworkBase()
-		//TODO move these out!!
+		this.NetworkBase();
+		//TODO move these out!! (to where?)
 		ECGame.WebServerTools.wsLib = require('ws');
 		ECGame.WebServerTools.WebSocketServer = ECGame.WebServerTools.wsLib.Server;
 		ECGame.WebServerTools.WebSocket = ECGame.WebServerTools.wsLib.WebSocket;
@@ -1238,12 +1249,12 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
-		_verifyClient : function _verifyClient(inInfo, inClientVerifiedFunction)
+		_verifyClient : function _verifyClient(inInfo, inClientVerifiedFunction)//???????????????
 		{
 			var aUserID;
 			
-			//console.trace();
-			//console.log(arguments);
+			console.trace();
+			console.log(arguments);
 			
 			//TODO find user if they exist, otherwise create a new one or boot them.
 			
@@ -1301,15 +1312,15 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 			/*console.trace();
 			console.log(inWebSocket);
 			*/
-			//TODO keep alive msgs
-			/*
+			//TODO keep alive msgs	//Ping!!
+			
 			setInterval(
 				function()
 				{
-					inWebSocket.send("don't close on me now", {}, onError);
+					inWebSocket.send("don't close on me now", {}, this._onError);
 				},
 				1000
-			);*/
+			);
 			
 			/*setInterval(
 				function()
