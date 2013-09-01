@@ -3456,6 +3456,7 @@ Ignored Words:
 	round
 	seal
 	search
+	send
 	setDate
 	setFullYear
 	setHours
@@ -3692,7 +3693,6 @@ Unmapped Words:
 	sceneGraphRenderable
 	scope
 	scrollIntoView
-	send
 	set
 	socket
 	sockets

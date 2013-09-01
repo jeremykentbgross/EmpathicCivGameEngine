@@ -190,7 +190,7 @@ ECGame.WebServerTools.CodeCompressor.prototype.makeCompactGameLoader = function 
 	obfuscator.addIgnore('blur');//The blur() method is used to remove focus from a dom element.
 	obfuscator.addIgnore('value');//html input.value TODO value is used for TONS of other stuff!!
 	
-	
+	obfuscator.addIgnore('send');//socket function
 	/*
 	ECGame.log.assert   AudioContext Image XMLHttpRequest io
 	*/

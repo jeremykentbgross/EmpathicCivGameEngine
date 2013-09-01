@@ -82,7 +82,7 @@ ECGame.Settings =
 	
 	Server :
 	{
-		generateDocumentation : true
+		generateDocumentation : false//true
 		,compressClientCode : true//true	//TODO should also only be considered in debug.
 		////////////////////////////////////////////
 		//only working when compressing client code:

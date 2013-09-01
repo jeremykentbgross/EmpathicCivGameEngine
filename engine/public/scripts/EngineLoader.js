@@ -168,8 +168,20 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 		include(inPublicEnginePath + "scripts/Sound2D.js");
 		include(inPublicEnginePath + "scripts/AssetManager.js");
 	}
-include(inPublicEnginePath + "scripts/GameNetwork.js");//TODO if multiplayer?
-//include(inPublicEnginePath + "scripts/NetworkBase.js");//TODO if multiplayer?
+	if(ECGame.Settings.Network.isMultiplayer)
+	{
+		include(inPublicEnginePath + "scripts/GameNetwork.js");
+		//include(inPublicEnginePath + "scripts/NetworkBase.js");
+		if(inIsServer)
+		{
+		//	include(inPrivateEnginePath + "scripts/NetworkServer.js");
+		}
+		else
+		{
+		//	include(inPublicEnginePath + "scripts/NetworkClient.js");
+		}
+	}
+
 	include(inPublicEnginePath + "scripts/Input.js");
 	include(inPublicEnginePath + "scripts/Camera2.js");
 	include(inPublicEnginePath + "scripts/GameObject.js");
