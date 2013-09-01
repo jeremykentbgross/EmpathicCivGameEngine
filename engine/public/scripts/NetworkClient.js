@@ -26,6 +26,7 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 	{
 		this._myNetwork = null;
 		this._myWebsocket = null;
+		this._myUser = null;
 	},
 	Parents : [],
 	flags : {},
@@ -55,37 +56,36 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 		
 		_onOpen : function _onOpen(inEvent)//_onConnectedToServer
 		{
-			var aThis;	var i, binary;//HACK
+			var aThis;	//var i, binary;//HACK
 			
 			aThis = this.myECGameSocket;
 			
 			if(ECGame.Settings.DEBUG
-			//	&& ECGame.Settings.Debug.NetworkMessages_Print
+			//	&& ECGame.Settings.Debug.NetworkMessages_Print	//TODO levels of netmessages!!
 			)
 			{
-				ECGame.log.info("Connected to Server!");
+				ECGame.log.info("Connected to Server, awaiting ID validation...");
 			}
 			
-			//TODO assign server user to this!
-			//aThis._socket.gameUser = new ECGame.EngineLib.User("Server", ECGame.EngineLib.User.USER_IDS.SERVER);
+			//Other side of the connection is the server.
+			aThis._myUser = new ECGame.EngineLib.User("Server", ECGame.EngineLib.User.USER_IDS.SERVER);
 			
-			//TODO consider old way of reusing id on reconnect!
+			//Send my ID to server
+			aThis.send(JSON.stringify(ECGame.instance.localUser));
 			
-			aThis._myNetwork.onEvent(new ECGame.EngineLib.Events.ConnectedToServer());//TODO get rid of new
-			
-			
+			////////
 			
 			//HACK!!!!
 			//console.trace();
 			//console.log(inEvent);
-			aThis.send("Hello!");
+		/*	aThis.send("Hello!");
 			
 			binary = new Uint8Array(20);
 			for(i = 0; i < binary.length; ++i) {
 				binary[i] = Math.floor((Math.random() * 256));
 			}
 			//this._myWebsocket.send(binary.buffer);
-			aThis.send(binary);
+			aThis.send(binary);*/
 		},
 		
 		_onClose : function _onClose(inEvent)//_onDisconnectedFromServer
@@ -94,6 +94,11 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			//http://www.iana.org/assignments/websocket/websocket.xml#subprotocol-name
 			var aThis;
 			
+			/*console.trace();
+			console.log(inEvent);
+			console.log(arguments);
+			//console.log(this._myWebsocket);*/
+			
 			aThis = this.myECGameSocket;
 			
 			if(ECGame.Settings.DEBUG
@@ -101,38 +106,84 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			)
 			{
 				ECGame.log.info("Lost Server!");
-				console.log(inEvent);
 			}
 			aThis._myNetwork.onEvent(new ECGame.EngineLib.Events.DisconnectedFromServer());//TODO get rid of new
 			
-			//TODO if not clean close try to reopen new socket!
-			
-			
-			
-			/*console.trace();
-			console.log(inEvent);
-			console.log(arguments);
-			//console.log(this._myWebsocket);*/
+			//TODO if not clean close try to reopen new socket!!!!!!!!!!
 		},
 		
 		_onMessage : function _onMessage(inEvent)
 		{
-			/*var aThis;
-			aThis = this.myECGameSocket;*/
+			var aThis
+				,inMessage
+				;
 			
-			//inNetwork.event Msg
+			//console.trace();
+			//console.log(inEvent);
+			//console.log(typeof inEvent.data);
 			
-		//	console.trace();	////////////////////////////////////TODO USE THIS INSTEAD OF THE CURRENT THING
-		//	console.log(inEvent);
-		//	console.log(typeof inEvent.data);
-			if(typeof inEvent.data === 'string')
+			aThis = this.myECGameSocket;
+			inMessage = inEvent.data;
+			
+			if(ECGame.Settings.isDebugPrint_NetworkMessages())
 			{
-				console.log(inEvent.data);
+				if(typeof inMessage === 'string')
+				{
+					ECGame.log.info("Net Message Recv (text):" + inMessage);
+				}
+				else
+				{
+					ECGame.log.info("Net Message Recv (binary):" + new Float32Array(inMessage));
+				}
+			}
+			
+			//if we are unidentified we should expect the server to id us before getting any other messages
+			if(ECGame.instance.localUser.userID === ECGame.EngineLib.User.USER_IDS.NEW_USER)
+			{
+				if(typeof inMessage === 'string')
+				{
+					aRecievedObj = JSON.parse(inMessage);
+					ECGame.log.info('User ID Message:' + inMessage);
+					//verify the object is valid
+					if(typeof aRecievedObj.userName !== 'string'
+						|| typeof aRecievedObj.userID !== 'number'
+						|| typeof aRecievedObj.reconnectKey !== 'number'
+					)
+					{
+						ECGame.log.warn("Ill formed User Identification!");
+						return;
+					}
+					
+					ECGame.instance.localUser.userName = aRecievedObj.userName;
+					ECGame.instance.localUser.userID = aRecievedObj.userID;
+					ECGame.instance.localUser.reconnectKey = aRecievedObj.reconnectKey;
+					
+					if(ECGame.Settings.DEBUG
+					//	&& ECGame.Settings.Debug.NetworkMessages_Print
+					)
+					{
+						ECGame.log.info("Connected to Server, ID validated!");
+					}
+					
+					aThis._myNetwork.onEvent(new ECGame.EngineLib.Events.ConnectedToServer());//TODO get rid of new
+				}
+				else
+				{
+					ECGame.log.warn("Recieved bad id data from server.");
+				}
+				
+				return;
+			}
+			
+			aThis._myNetwork.serializeIn(aThis._myUser, inMessage);
+			//TODO inNetwork.event Msg
+			if(typeof inMessage === 'string')
+			{
+				//console.log(inMessage);
 			}
 			else
 			{
-				//console.log(inEvent.data);//to see what happens
-				console.log(new Float32Array(inEvent.data));
+				//console.log(new Float32Array(inMessage));
 			}
 		},
 		
@@ -143,6 +194,11 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 		
 		send : function send(inData)
 		{
+			if(ECGame.Settings.isDebugPrint_NetworkMessages())
+			{
+				ECGame.log.info("Net Send to " + this._myUser.userName + ':' + inData);//ECGame.log.info("Net Send Obj: " + inData);
+			}
+			
 			if(typeof inData === 'string')
 			{
 				this._myWebsocket.send(inData);

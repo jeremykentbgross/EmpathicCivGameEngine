@@ -99,6 +99,10 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					'ClientDisconnected',//TODO use actual event class to de/register listener(s)
 					this
 				);
+				if(ECGame.Settings.TEMP_HACK_NEW_NETWORK)
+				{
+					this._myMasterNetGroup = ECGame.instance.network.createNetGroup('master_netgroup');
+				}
 			}
 			//setup event listeners
 			/////////////////////////////////////////////////////////
@@ -151,6 +155,10 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			);
 			this._map = this._gameWorld.getMap();
 			this._map.setTileSet(this._tileset);
+			if(ECGame.Settings.TEMP_HACK_NEW_NETWORK)
+			{
+				this._myMasterNetGroup.addObject(this._gameWorld);
+			}
 			
 			/////////////////////////////////////////////
 			//HACK put something in the map to start with
@@ -352,7 +360,10 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 		//TODO should rename this onIdentified>Net<User
 		onIdentifiedUser : function onIdentifiedUser(inEvent)
 		{
-			var anEntity;			
+			var anEntity;
+			
+			//this._myMasterNetGroup.addUser(inEvent.user);
+			
 			if(this._entities[inEvent.user.userID])
 			{
 				anEntity = this._entities[inEvent.user.userID];
@@ -369,11 +380,23 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				anEntity.getComponentByType(ECGame.EngineLib.EntityComponent_2DCamera)[0].setNetOwner(inEvent.user.userID);
 			}
 			this._gameWorld.addEntity(anEntity);
+			if(ECGame.Settings.TEMP_HACK_NEW_NETWORK)
+			{
+				anEntity.addToNetGroup(this._myMasterNetGroup);
+				this._myMasterNetGroup.addUser(inEvent.user);
+			}
 		},
 		
 		onClientDisconnected : function onClientDisconnected(inEvent)
 		{
-			this._gameWorld.removeEntity(this._entities[inEvent.user.userID]);
+			var anEntity;
+			
+			anEntity = this._entities[inEvent.user.userID];
+			this._gameWorld.removeEntity(anEntity);
+			if(ECGame.Settings.TEMP_HACK_NEW_NETWORK)
+			{
+				anEntity.removeFromNetGroup(this._myMasterNetGroup);
+			}
 		},
 		
 		

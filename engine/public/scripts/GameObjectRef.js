@@ -132,10 +132,10 @@ ECGame.EngineLib.GameObjectRef.prototype.toBinary = function toBinary()
 
 ECGame.EngineLib.GameObjectRef.prototype.getPath = function getPath()//TODO txt path vs bin path
 {
-	if(this._path === null)
+	if(!this._path)
 	{
 		this.deref();
-		if(this._value !== null)
+		if(this._value)
 		{
 			this._path = this._value.getTxtPath();
 		}

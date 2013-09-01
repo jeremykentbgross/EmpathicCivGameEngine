@@ -60,8 +60,11 @@ User : Object
 //TODO make server id for smaller messages!!
 ECGame.EngineLib.User = function User(inName, inID)
 {
-	this.userName = inName || "Guest";
-	this.userID = inID || ECGame.EngineLib.User.USER_IDS.GUEST;
+	this.userName = inName || "Guest";	//TODO give random name here??
+	this.userID = inID || ECGame.EngineLib.User.USER_IDS.NEW_USER;
+	this.reconnectKey = Math.random();
+	//this.mySocket = null;	//this will be added later..
+	
 	//TODO use FB id or something in the future
 };
 ECGame.EngineLib.User.prototype.constructor = ECGame.EngineLib.User;
@@ -70,7 +73,7 @@ ECGame.EngineLib.User.USER_IDS =
 {
 	UNUSED : 0
 	,SERVER : 1
-	,GUEST : 2		//TODO guests and new users going to be depricated
+//	,GUEST : 2		//TODO guests should become depricated
 	,NEW_USER : 3
 	
 	,CURRENT_MAX : 3	//enum max!	TODO make static, and this one is not const!
@@ -115,9 +118,9 @@ NetGroup	//1 netgroup per user, 0-many netgroups per object
 	//TODO suspend object somehow?
 */
 ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
-	Constructor : function NetGroup(inNetwork)
+	Constructor : function NetGroup()
 	{
-		this._myNetwork = inNetwork;
+		this._myNetwork = null;
 		this._myUsers = [];
 		this._myTrackedInstances = {};
 		this._myNewInstances = {};
@@ -134,6 +137,11 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
+		init : function init(inNetwork)
+		{
+			this._myNetwork = inNetwork;
+		},
+		
 		update : function update()//TODO probably onUpdate
 		{
 			var
@@ -157,6 +165,12 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 			{
 				aCurrentUser = this._myUsers[aCurrentUserIndex];
 				
+				if(!aCurrentUser.mySocket)
+				{
+					//TODO queue changes for reconnect?? if so, handle correctly in game too..
+					continue;
+				}
+				
 				aNewInstanceList = [];
 				aDirtyInstanceList = [];
 				aDestroyInstanceList = [];
@@ -165,14 +179,14 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 				for(aClassName in this._myNewInstances)
 				{
 					anInstanceList = this._myNewInstances[aClassName];
-					aNewInstanceList.concat(anInstanceList);
+					aNewInstanceList = aNewInstanceList.concat(anInstanceList);
 				}
 				
 				//queue up dirty instances
 				for(aClassName in this._myNetDirtyInstances)
 				{
 					anInstanceList = this._myNetDirtyInstances[aClassName];
-					aDirtyInstanceList.concat(anInstanceList);
+					aDirtyInstanceList = aDirtyInstanceList.concat(anInstanceList);
 				}
 				
 				//queue up dirty instances from other clients
@@ -184,7 +198,7 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 						if(aCurrentUserIndex !== aSourceUserIndex)
 						{
 							anInstanceList = aUserMap[aSourceUserIndex];
-							aDirtyInstanceList.concat(anInstanceList);
+							aDirtyInstanceList = aDirtyInstanceList.concat(anInstanceList);
 						}
 					}
 				}
@@ -193,16 +207,22 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 				for(aClassName in this._myDestroyInstances)
 				{
 					anInstanceList = this._myDestroyInstances[aClassName];
-					aDestroyInstanceList.concat(anInstanceList);
+					aDestroyInstanceList = aDestroyInstanceList.concat(anInstanceList);
 				}
 				
-				aBinaryBuffer = this._myNetwork.serializeOut(
-					aCurrentUser,
-					aNewInstanceList,
-					aDirtyInstanceList,
-					aDestroyInstanceList
-				);
-				aCurrentUser.mySocket.send(aBinaryBuffer);
+				if(aNewInstanceList.length !== 0
+					|| aDirtyInstanceList.length !== 0
+					|| aDestroyInstanceList.length !== 0
+				)
+				{
+					aBinaryBuffer = this._myNetwork.serializeOut(
+						aCurrentUser,
+						aNewInstanceList,
+						aDirtyInstanceList,
+						aDestroyInstanceList
+					);
+					aCurrentUser.mySocket.send(aBinaryBuffer);
+				}
 			}
 			
 			//clear our lists for the next frame
@@ -221,6 +241,8 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 				anInstanceList,
 				aNewInstanceList,
 				aBinaryBuffer;
+				
+			//TODO consider changing to avoid double serialization
 			
 			//if the user is already here, bail
 			if(this._myUsers.indexOf(inUser) !== -1)
@@ -236,7 +258,7 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 			for(aClassName in this._myTrackedInstances)
 			{
 				anInstanceList = this._myTrackedInstances[aClassName];
-				aNewInstanceList.concat(anInstanceList);
+				aNewInstanceList = aNewInstanceList.concat(anInstanceList);
 			}
 			aBinaryBuffer = this._myNetwork.serializeOut(
 				inUser,
@@ -279,18 +301,22 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 			
 			aClassName = inObject.getClass().getName();
 			
+			//make sure there is a list for this class
+			this._myTrackedInstances[aClassName] = this._myTrackedInstances[aClassName] || [];
 			//if the object is already tracked, return
 			if(this._myTrackedInstances[aClassName].indexOf(inObject) !== -1)
 			{
 				return;
 			}
-			
 			//add to tracked
-			this._myTrackedInstances[aClassName] = this._myTrackedInstances[aClassName] || [];
 			this._myTrackedInstances[aClassName].push(inObject);
 
-			//TODO listen to object messages: onNetDirty / onDestroy
+			//listen to object messages: onNetDirty / onDestroy
+			inObject.registerListener('GameObjectNetDirty', this);
+			inObject.registerListener('GameObjectDestroyed', this);
 			
+			//make sure there is a list for this class
+			this._myDestroyInstances[aClassName] = this._myDestroyInstances[aClassName] || [];
 			//if the object is set to be destroyed, remove that
 			anIndex = this._myDestroyInstances[aClassName].indexOf(inObject);
 			if(anIndex !== -1)
@@ -325,19 +351,23 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 				return;
 			}
 			
+			//be sure this list exists
+			this._myDestroyInstances[aClassName] = this._myDestroyInstances[aClassName] || [];
 			//if the object is already set to be destroyed, return
 			anIndex = this._myDestroyInstances[aClassName].indexOf(inObject);
 			if(anIndex !== -1)
 			{
 				return;
 			}
-			
 			//add to the destroy list
-			this._myDestroyInstances[aClassName] = this._myDestroyInstances[aClassName] || [];
 			this._myDestroyInstances[aClassName].push(inObject);
 			
-			//TODO stop listening to object messages: onNetDirty / onDestroy
+			//stop listening to object messages: onNetDirty / onDestroy
+			inObject.deregisterListener('GameObjectNetDirty', this);
+			inObject.deregisterListener('GameObjectDestroyed', this);
 			
+			//be sure this list exists
+			this._myNewInstances[aClassName] = this._myNewInstances[aClassName] || [];
 			//remove from new instances
 			anIndex = this._myNewInstances[aClassName].indexOf(inObject);
 			if(anIndex !== -1)
@@ -347,6 +377,8 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 				this._myNewInstances[aClassName].pop();
 			}
 			
+			//be sure this list exists
+			this._myNetDirtyInstances[aClassName] = this._myNetDirtyInstances[aClassName] || [];
 			//remove from the dirty list
 			anIndex = this._myNetDirtyInstances[aClassName].indexOf(inObject);
 			if(anIndex !== -1)
@@ -359,7 +391,7 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 			//TODO remove from myForwardObjects?
 		},
 		
-		onNetDirty : function onNetDirty(inEvent)//TODO on server side net dirty all objects read in??? How populate forwards?
+		onGameObjectNetDirty : function onGameObjectNetDirty(inEvent)//TODO on server side net dirty all objects read in??? How populate forwards?
 		{
 			var aClassName,
 				anObject,
@@ -407,7 +439,7 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 			}
 		},
 		
-		onObjectDestroyed : function onObjectDestroyed(inEvent)
+		onGameObjectDestroyed : function onGameObjectDestroyed(inEvent)
 		{
 			this.removeObject(inEvent.myObject);
 		}
@@ -536,11 +568,26 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
-		init : function init(){},//TODO remove, for backwards compat..
+		init : function init()
+		{
+//			ECGame.log.warn("Depricated!!!");
+		},
 		//TODO add objects to appropriate netgroups
-		addNewObject : function addNewObject(){},//TODO remove, for backwards compat..
+		addNewObject : function addNewObject()
+		{
+//			ECGame.log.warn("Depricated!!!");
+		},
+		//TODO remove, for backwards compat..
+		addNetDirtyObject : function addNetDirtyObject()
+		{
+//			ECGame.log.warn("Depricated!!!");
+		},
+		
 		//TODO send chat command to all
-		sendMessage : function sendMessage(){},
+		sendMessage : function sendMessage()
+		{
+//			ECGame.log.warn("Depricated!!! ????");
+		},
 		
 		update : function update()//TODO onUpdate?
 		{
@@ -561,6 +608,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				anInstanceMap = this._mySerializedObjects[aClassName];
 				for(anInstanceID in anInstanceMap)
 				{
+					ECGame.log.info("Clear Net Dirty on:" + anInstanceMap[anInstanceID].getName());
 					anInstanceMap[anInstanceID].clearNetDirty();
 				}
 			}
@@ -571,7 +619,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 		{
 			if(!this._myNetGroups[inName])
 			{
-				this._myNetGroups[inName] = ECGame.EngineLib.NetGroup.create();
+				this._myNetGroups[inName] = ECGame.EngineLib.NetGroup.create(this);
 			}
 			return this._myNetGroups[inName];
 		},
@@ -601,6 +649,10 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				anObjectHeader,
 				aClassName,
 				i;
+				
+			inNewInstanceList = inNewInstanceList || [];
+			inDirtyInstanceList = inDirtyInstanceList || [];
+			inDestroyInstanceList = inDestroyInstanceList || [];
 
 			anObjectHeader = {};
 			aMessageHeader = {};
@@ -612,7 +664,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 			
 			//TODO log what we are sending!
 			
-			this._mySerializer.initWrite(/*{NET : false}*/);
+			this._mySerializer.initWrite({NET : false});
 			
 			aMessageHeader.userID = ECGame.instance.localUser.userID;
 			aMessageHeader.newObjects = Math.min(this._ourMaxItemsPerMessage, inNewInstanceList.length);
@@ -629,6 +681,11 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				this._mySerializer.serializeObject(anObjectHeader, this._objectHeaderFormat);
 				anObject.serialize(this._mySerializer);
 				
+				if(ECGame.Settings.isDebugPrint_NetworkMessages())
+				{
+					ECGame.log.info("Net create remote on " + inUser.userName + ':' + JSON.stringify(anObjectHeader));
+				}
+				
 				//TODO anObject.clearNetDirty();
 				aClassName = anObject.getClass().getName();
 				this._mySerializedObjects[aClassName] = this._mySerializedObjects[aClassName] || {};
@@ -644,6 +701,11 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				this._mySerializer.serializeObject(anObjectHeader, this._objectHeaderFormat);
 				anObject.serialize(this._mySerializer);
 				
+				if(ECGame.Settings.isDebugPrint_NetworkMessages())
+				{
+					ECGame.log.info("Net write to " + inUser.userName + ':' + JSON.stringify(anObjectHeader));
+				}
+				
 				//TODO anObject.clearNetDirty();
 				aClassName = anObject.getClass().getName();
 				this._mySerializedObjects[aClassName] = this._mySerializedObjects[aClassName] || {};
@@ -656,6 +718,11 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				anObjectHeader.classID = anObject.getClass().getID();
 				anObjectHeader.instanceID = anObject.getID();
 				this._mySerializer.serializeObject(anObjectHeader, this._objectHeaderFormat);
+				
+				if(ECGame.Settings.isDebugPrint_NetworkMessages())
+				{
+					ECGame.log.info("Net Destroy on " + inUser.userName + ':' + JSON.stringify(anObjectHeader));
+				}
 			}
 			
 			//TODO return binary buffer!!
@@ -711,6 +778,11 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					//read the header
 					this._mySerializer.serializeObject(anObjectHeader, this._objectHeaderFormat);
 					
+					if(ECGame.Settings.isDebugPrint_NetworkMessages())
+					{
+						ECGame.log.info("Net create remotely command from " + inUser.userName + ':' + JSON.stringify(anObjectHeader));
+					}
+					
 					//find the class
 					anObjectClass = ECGame.EngineLib.Class.getInstanceRegistry().findByID(anObjectHeader.classID);
 					if(!anObjectClass)
@@ -731,14 +803,14 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					{
 						if(ECGame.Settings.isDebugPrint_NetworkMessages())
 						{
-							ECGame.log.info("Network Creating: " + anObjectClass.getName() + ' : ' + anObjectHeader.instanceID);
+							ECGame.log.info("Network Creating: " + anObjectClass.getName() + ':' + anObjectHeader.instanceID);
 						}
 						anObject = anObjectClass.create();
 						anObject.setID(anObjectHeader.instanceID);
 					}
 					else if(ECGame.Settings.isDebugPrint_NetworkMessages())	//TODO this branch should not be possible I think!
 					{
-						ECGame.log.info("Network Changing: " + anObjectClass.getName() + ' : ' + anObjectHeader.instanceID);
+						ECGame.log.info("Network Changing (instead of creating): " + anObjectClass.getName() + ':' + anObjectHeader.instanceID);
 					}
 					
 					anObject.serialize(this._mySerializer);
@@ -767,6 +839,11 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				{
 					//read the header
 					this._mySerializer.serializeObject(anObjectHeader, this._objectHeaderFormat);
+					
+					if(ECGame.Settings.isDebugPrint_NetworkMessages())
+					{
+						ECGame.log.info("Net reading from " + inUser.userName + ':' + JSON.stringify(anObjectHeader));
+					}
 					
 					//find the class
 					anObjectClass = ECGame.EngineLib.Class.getInstanceRegistry().findByID(anObjectHeader.classID);
@@ -818,6 +895,15 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					}
 				}
 				
+				for(i = 0; i < aReadObjectsList.length; ++i)
+				{
+					if(aReadObjectsList[i].postSerialize)//TODO make this chain function so we don't have to check for it???
+					{
+						aReadObjectsList[i].postSerialize();
+					}
+					//TODO maybe net dirty them if this is the server so we forward them?
+				}
+				
 				if(ECGame.Settings.isDebugDraw_NetworkMessages())
 				{
 					ECGame.instance.graphics.drawDebugText(
@@ -830,6 +916,12 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				{
 					//read the header
 					this._mySerializer.serializeObject(anObjectHeader, this._objectHeaderFormat);
+					
+					if(ECGame.Settings.isDebugPrint_NetworkMessages())
+					{
+						ECGame.log.info("Net destroy remotely order from " + inUser.userName + ':' + JSON.stringify(anObjectHeader));
+					}
+					
 					//find the class
 					anObjectClass = ECGame.EngineLib.Class.getInstanceRegistry().findByID(anObjectHeader.classID);
 					if(!anObjectClass)
@@ -842,11 +934,13 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					//find the instance
 					anObject = anObjectClass.getInstanceRegistry().findByID(anObjectHeader.instanceID);
 					
-					ECGame.log.assert(
-						anObject,
-						//TODO use proper object path style
-						"Destroy Network Object doesn't exists!:" + anObjectClass.getName() + ':' + anObjectHeader.instanceID
-					);
+					if(!anObject)
+					{
+						ECGame.log.info(
+							"Network object to destroy doesn't exists!:" + anObjectClass.getName() + ':' + anObjectHeader.instanceID
+						);
+						continue;
+					}
 					
 					if(ECGame.Settings.isDebugDraw_NetworkMessages())
 					{
@@ -857,15 +951,6 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					}
 					
 					anObject.destroy();
-				}
-				
-				for(i = 0; i < aReadObjectsList.length; ++i)
-				{
-					if(aReadObjectsList[i].postSerialize)//TODO make this chain function so we don't have to check for it???
-					{
-						aReadObjectsList[i].postSerialize();
-					}
-					//TODO maybe net dirty them if this is the server so we forward them?
 				}
 			}
 			catch(error)

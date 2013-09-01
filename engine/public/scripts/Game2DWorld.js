@@ -258,6 +258,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 				entityRef = this.entityArray[i];
 				
 				entityObject = entityRef.deref();
+				ECGame.log.assert(entityObject, "Missing entity during serialization!");
 				entityPath = entityRef.getPath();
 				
 				newEntityMap[entityPath] = entityObject;
@@ -274,6 +275,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 				entityRef = this.entityArrayBefore[i];
 				
 				entityObject = entityRef.deref();
+				ECGame.log.assert(entityObject, "Missing entity during serialization!");
 				entityPath = entityRef.getPath();
 				
 				if(!newEntityMap[entityPath])

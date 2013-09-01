@@ -126,10 +126,13 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 		{
 			var owner = this._owner;//inEntity.entity;
 			
-			//unregister for events
-			owner.deregisterListener('AddedToWorld', this);
-			owner.deregisterListener('RemovedFromWorld', this);
-			ECGame.instance.input.deregisterListener('Input', this);
+			if(owner)
+			{
+				//unregister for events
+				owner.deregisterListener('AddedToWorld', this);
+				owner.deregisterListener('RemovedFromWorld', this);
+				ECGame.instance.input.deregisterListener('Input', this);
+			}
 		},
 		
 		onAddedToWorld : function onAddedToWorld(inEvent)

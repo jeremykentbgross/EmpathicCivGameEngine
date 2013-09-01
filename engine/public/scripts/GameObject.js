@@ -127,10 +127,13 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 				ECGame.log.info("Destroying GameObject " + ECGame.EngineLib.createGameObjectRef(this).getTxtPath(), true);
 			}
 				
-			//TODO notify all listeners	//TODO register for net delete
+			//notify all listeners
+			this.onEvent(new ECGame.EngineLib.Events.GameObjectDestroyed(this));
 			
+			//call chain destructor
 			this.cleanup();
 			
+			//remove from the instance list
 			this.getClass().getInstanceRegistry().deregister(this);
 			
 			//TODO wipe all properties and change prototype (__proto__??)
@@ -164,6 +167,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 					ECGame.instance.network.addNetDirtyObject(this);//TODO event instead
 					this._myNetDirty = true;
 				}
+				this.onEvent(new ECGame.EngineLib.Events.GameObjectNetDirty(this));
 				
 				return true;
 			}

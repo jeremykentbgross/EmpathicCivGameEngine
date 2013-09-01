@@ -60,6 +60,8 @@ Final NameSpaces:
 	GameInstance
 	GameLocalization
 	GameObject
+	GameObjectDestroyed
+	GameObjectNetDirty
 	GameObjectRef
 	GameRegistry
 	GameRenderable2D
@@ -132,9 +134,11 @@ Final NameSpaces:
 	_setSleeping
 	add
 	addComponent
+	addComponents
 	addEntity
 	addNetDirtyObject
 	addNewObject
+	addToNetGroup
 	addToRenderMap
 	addedToWorld
 	blockContextMenu
@@ -186,6 +190,7 @@ Final NameSpaces:
 	fireRay
 	floor
 	forAll
+	forAllComponent
 	forAllReverse
 	generateNextAssetID
 	generateNextSampleID
@@ -343,7 +348,9 @@ Final NameSpaces:
 	release
 	remove
 	removeComponent
+	removeComponents
 	removeEntity
+	removeFromNetGroup
 	removeItem
 	removedFromWorld
 	render
@@ -455,6 +462,8 @@ Function Names:
 	GameEventSystem
 	GameInstance
 	GameObject
+	GameObjectDestroyed
+	GameObjectNetDirty
 	GameObjectRef
 	GameRegistry
 	GameRenderable2D
@@ -524,9 +533,11 @@ Function Names:
 	_setSleeping
 	add
 	addComponent
+	addComponents
 	addEntity
 	addNetDirtyObject
 	addNewObject
+	addToNetGroup
 	addToRenderMap
 	addedToWorld
 	blockContextMenu
@@ -578,6 +589,7 @@ Function Names:
 	fireRay
 	floor
 	forAll
+	forAllComponent
 	forAllReverse
 	generateNextAssetID
 	generateNextSampleID
@@ -733,7 +745,9 @@ Function Names:
 	release
 	remove
 	removeComponent
+	removeComponents
 	removeEntity
+	removeFromNetGroup
 	removeItem
 	removedFromWorld
 	render
@@ -880,6 +894,7 @@ Parameter Variables:
 	inMousePosition
 	inMsg
 	inName
+	inNetGroup
 	inNode
 	inNodeColor
 	inObjData
@@ -1282,6 +1297,8 @@ Member Variables:
 	GameEventSystem
 	GameInstance
 	GameObject
+	GameObjectDestroyed
+	GameObjectNetDirty
 	GameObjectRef
 	GameObject_Print
 	GamePort
@@ -1361,6 +1378,7 @@ Member Variables:
 	Sprite_Origin_DrawColor
 	Sprite_Origin_Size
 	StaticThing
+	TEMP_HACK_NEW_NETWORK
 	TestClass1
 	TestObjectClass1
 	TextBackground_DrawColor
@@ -1511,6 +1529,7 @@ Member Variables:
 	_myListenerPosition2D
 	_myMap
 	_myMapSize
+	_myMasterNetGroup
 	_myMasterVolume
 	_myMasterVolumeUserValue
 	_myMaxT
@@ -1636,6 +1655,7 @@ Member Variables:
 	addEntity
 	addNetDirtyObject
 	addNewObject
+	addToNetGroup
 	added
 	addedToWorld
 	anchor
@@ -1721,6 +1741,7 @@ Member Variables:
 	floor
 	focus
 	forAll
+	forAllComponent
 	forAllReverse
 	gameUser
 	generateDocumentation
@@ -1880,6 +1901,7 @@ Member Variables:
 	myNextActivePhysObj
 	myObj1
 	myObj2
+	myObject
 	myPoint
 	myPrev
 	myPrevActivePhysObj
@@ -1934,6 +1956,7 @@ Member Variables:
 	remove
 	removeComponent
 	removeEntity
+	removeFromNetGroup
 	removeItem
 	removeNewlines
 	removeNonNewlineWhiteSpace
@@ -2090,6 +2113,8 @@ Included Words:
 	GameInstance
 	GameLocalization
 	GameObject
+	GameObjectDestroyed
+	GameObjectNetDirty
 	GameObjectRef
 	GameObject_Print
 	GamePort
@@ -2170,6 +2195,7 @@ Included Words:
 	Sprite_Origin_DrawColor
 	Sprite_Origin_Size
 	StaticThing
+	TEMP_HACK_NEW_NETWORK
 	TODODepricated
 	TODOrealFunctionName
 	TestClass1
@@ -2325,6 +2351,7 @@ Included Words:
 	_myListenerPosition2D
 	_myMap
 	_myMapSize
+	_myMasterNetGroup
 	_myMasterVolume
 	_myMasterVolumeUserValue
 	_myMaxT
@@ -2504,9 +2531,11 @@ Included Words:
 	acceleration
 	add
 	addComponent
+	addComponents
 	addEntity
 	addNetDirtyObject
 	addNewObject
+	addToNetGroup
 	addToRenderMap
 	added
 	addedToWorld
@@ -2647,6 +2676,7 @@ Included Words:
 	flags
 	fontSize
 	forAll
+	forAllComponent
 	forAllReverse
 	force
 	format
@@ -2807,6 +2837,7 @@ Included Words:
 	inMousePosition
 	inMsg
 	inName
+	inNetGroup
 	inNode
 	inNodeColor
 	inObj
@@ -2990,6 +3021,7 @@ Included Words:
 	myNextActivePhysObj
 	myObj1
 	myObj2
+	myObject
 	myPoint
 	myPrev
 	myPrevActivePhysObj
@@ -3085,7 +3117,9 @@ Included Words:
 	release
 	remove
 	removeComponent
+	removeComponents
 	removeEntity
+	removeFromNetGroup
 	removeItem
 	removeNewlines
 	removeNonNewlineWhiteSpace
@@ -3576,6 +3610,8 @@ Unmapped Words:
 	_mySampleID
 	_mySoundDescriptionID
 	_myStartTime
+	addObject
+	addUser
 	alert
 	amp
 	arc
@@ -3605,6 +3641,7 @@ Unmapped Words:
 	createElement
 	createGainNode
 	createMsgType
+	createNetGroup
 	createPanner
 	currentTime
 	decodeAudioData
@@ -3652,6 +3689,7 @@ Unmapped Words:
 	listener
 	listeners
 	lt
+	master_netgroup
 	maxDistance
 	measureText
 	mousedown
@@ -3674,6 +3712,8 @@ Unmapped Words:
 	offsetX
 	offsetY
 	onData
+	onGameObjectDestroyed
+	onGameObjectNetDirty
 	onNetObjects
 	onload
 	open
@@ -3686,6 +3726,7 @@ Unmapped Words:
 	pointer
 	preventDefault
 	px
+	removeObject
 	response
 	responseType
 	rgba
@@ -3823,6 +3864,7 @@ Localized Strings:
 	"Debug Drawing Rays"
 	"Node Intersection Count:"
 	"Item Intersection Count:"
+	"Missing entity during serialization!"
 	"No GameRules.js found!"
 	"No render code found in your GameRules.js!"
 	"Function failed from new'ed class instance!"

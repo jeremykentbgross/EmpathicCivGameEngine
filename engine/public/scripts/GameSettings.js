@@ -35,6 +35,8 @@ ECGame.Settings =
 	
 	//TODO appname
 	
+	TEMP_HACK_NEW_NETWORK : false,
+	
 	Graphics :
 	{
 		initWidth : 768,
@@ -71,7 +73,7 @@ ECGame.Settings =
 	{
 		isServer : false
 		,isMultiplayer : true
-		,GamePort : null//1337	//if null then defaults to port 80 and reuses main connection
+		,GamePort : /*5000*/null//1337	//if null then defaults to port 80 and reuses main connection
 		//TODO editorPort : ??
 	},
 	

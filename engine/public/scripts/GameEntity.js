@@ -86,6 +86,37 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 			return inoutReturnValues;
 		},
 		
+		addToNetGroup : function addToNetGroup(inNetGroup)
+		{
+			inNetGroup.addObject(this);
+			this.forAllComponent(
+				function addComponents(inComponent)
+				{
+					inNetGroup.addObject(inComponent);
+				}
+			);
+		},
+		removeFromNetGroup : function removeFromNetGroup(inNetGroup)
+		{
+			inNetGroup.removeObject(this);
+			this.forAllComponent(
+				function removeComponents(inComponent)
+				{
+					inNetGroup.removeObject(inComponent);
+				}
+			);
+		},
+		
+		forAllComponent : function forAllComponent(inFunction)
+		{
+			var componentName;
+			
+			for(componentName in this._myComponentMap)
+			{
+				inFunction(this._myComponentMap[componentName]);
+			}
+		},
+		
 		//TODO maybe make added/removed+Entity/World NOT events (to save 'new' events that may not be needed)?
 		//TODO make onAddedTo/onRemovedFromWorld events so entity can set the world along with its components???
 		addedToWorld : function addedToWorld(inWorld)//TODO rename onAddedToWorld

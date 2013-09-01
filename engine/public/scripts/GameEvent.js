@@ -63,6 +63,47 @@ ECGame.EngineLib.Events.GameEventBase = ECGame.EngineLib.Class.create({
 
 
 
+ECGame.EngineLib.Events.GameObjectNetDirty = ECGame.EngineLib.Class.create({
+	Constructor : function GameObjectNetDirty(inObject)
+	{
+		this.GameEventBase('onGameObjectNetDirty');
+		this.myObject = inObject;
+	},
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition : 
+	{
+		copyFrom : function copyFrom(inOther)
+		{
+			//TODO
+		}
+	}
+});
+ECGame.EngineLib.Events.GameObjectDestroyed = ECGame.EngineLib.Class.create({
+	Constructor : function GameObjectDestroyed(inObject)
+	{
+		this.GameEventBase('onGameObjectDestroyed');
+		this.myObject = inObject;
+	},
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition : 
+	{
+		copyFrom : function copyFrom(inOther)
+		{
+			//TODO
+		}
+	}
+});
+
+
+
+
+
 ECGame.EngineLib.Events.AddedToEntity = ECGame.EngineLib.Class.create({
 	Constructor : function AddedToEntity(inEntity)
 	{

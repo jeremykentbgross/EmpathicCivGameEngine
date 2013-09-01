@@ -76,6 +76,7 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 	{
 		this._myNetwork = null;
 		this._myWebsocket = null;
+		this._myUser = null;
 	},
 	Parents : [],
 	flags : {},
@@ -87,19 +88,15 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 		{
 			this._myNetwork = inNetwork;
 			this._myWebsocket = inWebSocket;
-			this._myUser = inWebSocket.upgradeReq.myECGameUser;
 			this._myWebsocket.myECGameSocket = this;
+			
+			//this._myUser = inWebSocket.upgradeReq.myECGameUser;	//TODO if we ever have FB identification or something..
+			this._myUser = new ECGame.EngineLib.User();	//start with an unidentified user
 			
 			inWebSocket.on('open', this._onOpen);	//not ever recieved, I think because we are connected to, not connecting
 			inWebSocket.on('error', this._onError);
 			inWebSocket.on('close', this._onClose);
 			inWebSocket.on('message', this._onMessage);
-			
-			//TODO inNetwork.event IdentifiedUser TODO rename ClientConnected
-			this._myNetwork.onEvent(new ECGame.EngineLib.Events.IdentifiedUser(this._myUser));//TODO get rid of new!!
-			
-			//HACK
-			this.send("Hello!  Whats up?");
 		},
 		
 		_onOpen : function _onOpen()
@@ -117,29 +114,117 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 			
 			aThis = this.myECGameSocket;
 			
-			console.trace();
-			console.log(arguments);
+			//console.trace();
+			//console.log(arguments);
+			
+			if(ECGame.Settings.DEBUG
+			//	&& ECGame.Settings.Debug.NetworkMessages_Print
+			)
+			{
+				ECGame.log.info("Lost Client! " + aThis._myUser);
+			}
 			
 			//TODO broadcast chat command
 			//aThis._listenSocket.sockets.emit('msg', "User Disconnected: " + this.gameUser.userName);
 			
+			aThis._myUser.mySocket = null;
+			
+			//TODO see if this user is considered properly connected/id'ed first..
 			aThis._myNetwork.onEvent(new ECGame.EngineLib.Events.ClientDisconnected(aThis._myUser));//TODO get rid of new!!!
+			
+			aThis._myNetwork._removeSocket(aThis);
 		},
 		
 		_onMessage : function _onMessage(inMessage, inFlags)
 		{
-			//inNetwork.event Msg
+			var aThis
+				,aRecievedObj
+				,aUser
+				;
 			
-			console.trace();
-		//	console.log('Flags:', inFlags);
-		//	console.log('TypeOf:', typeof inMessage);
+			//console.trace();
+			//console.log('Flags:', inFlags);
+			//console.log('TypeOf:', typeof inMessage);
+			
+			aThis = this.myECGameSocket;
+			
+			if(ECGame.Settings.isDebugPrint_NetworkMessages())
+			{
+				if(typeof inMessage === 'string')
+				{
+					ECGame.log.info("Net Message Recv (text):" + inMessage);
+				}
+				else
+				{
+					ECGame.log.info("Net Message Recv (binary):" + new Uint8Array(inMessage));
+				}
+			}
+			
+			//handle connection handshake / ID
+			if(aThis._myUser.userID === ECGame.EngineLib.User.USER_IDS.NEW_USER)
+			{
+				if(typeof inMessage === 'string')
+				{
+					aRecievedObj = JSON.parse(inMessage);
+					ECGame.log.info('User ID Message:' + inMessage);
+					//verify the object is valid
+					if(typeof aRecievedObj.userName !== 'string'
+						|| typeof aRecievedObj.userID !== 'number'
+						|| typeof aRecievedObj.reconnectKey !== 'number'
+					)
+					{
+						ECGame.log.warn("Ill formed User Identification!");
+						return;
+					}
+					
+					//get existing user
+					aUser = aThis._myNetwork._myIdentifiedUsers[aRecievedObj.userID];
+					
+					//if there is no user by this id, we assign them a new id!
+					if(!aUser)
+					{
+						//set our user for this socket to be the client
+						aThis._myUser.userName = aRecievedObj.userName;
+						aThis._myUser.userID = aRecievedObj.userID = ++(ECGame.EngineLib.User.USER_IDS.CURRENT_MAX);
+						aThis._myUser.reconnectKey = aRecievedObj.reconnectKey;
+						//remember the user/client for reconnects:
+						aThis._myNetwork._myIdentifiedUsers[aRecievedObj.userID] = aThis._myUser;
+						//tell them who they are going to be from now on:
+						aThis.send(JSON.stringify(aThis._myUser));
+					}
+					//make sure they are the same user as before:
+					else if(aUser.reconnectKey === aRecievedObj.reconnectKey /*&& !aUser.connected ??*/)
+					{
+						aThis._myUser = aThis._myNetwork._myIdentifiedUsers[aRecievedObj.userID];
+					}
+					else
+					{
+						ECGame.log.warn("Recieved false reconectKey from unidentified user.");
+						aThis.close();
+						return;
+					}
+					
+					aThis._myUser.mySocket = aThis;
+					aThis._myNetwork.onEvent(new ECGame.EngineLib.Events.IdentifiedUser(aThis._myUser));
+				}
+				else
+				{
+					ECGame.log.warn("Recieved data from unidentified user.");
+				}
+				
+				return;
+			}
+			
+			aThis._myNetwork.serializeIn(aThis._myUser, inMessage);
+			
+			//TODO inNetwork.event Msg
 			if(typeof inMessage === 'string')
 			{
-				console.log('Message:', inMessage);
+				//ECGame.log.info('Message:', inMessage);
 			}
 			else
 			{
-				console.log('binary:', new Uint8Array(inMessage));
+				//ECGame.log.info('binary:', new Uint8Array(inMessage));
 			}
 		},
 		
@@ -155,7 +240,7 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 		{
 			if(ECGame.Settings.isDebugPrint_NetworkMessages())
 			{
-				ECGame.log.info("Net Send Obj: " + inData);
+				ECGame.log.info("Net Send to " + this._myUser.userName + ':' + inData);
 			}
 			
 			//TODO if not connected, queue send data to user object to resend later??
@@ -206,6 +291,10 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 	Constructor : function NetworkServer()
 	{
 		this.NetworkBase();
+		
+		this._myIdentifiedUsers = [];
+		this._mySockets = [];
+		
 		//TODO move these out!! (to where?)
 		ECGame.WebServerTools.wsLib = require('ws');
 		ECGame.WebServerTools.WebSocketServer = ECGame.WebServerTools.wsLib.Server;
@@ -237,7 +326,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 		this._myWebSocketServer.on('headers', this._onHeaders);
 		this._myWebSocketServer.on('connection', this._onConnection);
 		
-		console.log("TCP Server running.");
+		ECGame.log.info("TCP Server running.");
 	},
 	Parents : [ECGame.EngineLib.NetworkBase],
 	flags : {},
@@ -249,14 +338,12 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 		{
 			var aUserID;
 			
-			console.trace();
-			console.log(arguments);
+	//		console.trace();
+	//		console.log(arguments);
 			
-			//TODO find user if they exist, otherwise create a new one or boot them.
-			
-			//TODO temp:
-			aUserID = ++(ECGame.EngineLib.User.USER_IDS.CURRENT_MAX);
-			inInfo.req.myECGameUser = new ECGame.EngineLib.User("User" + aUserID, aUserID);
+			//TODO fb id? find user if they exist, otherwise create a new one or boot them.
+//			aUserID = ++(ECGame.EngineLib.User.USER_IDS.CURRENT_MAX);
+//			inInfo.req.myECGameUser = new ECGame.EngineLib.User("User" + aUserID, aUserID);
 			
 			inClientVerifiedFunction(true);
 		},
@@ -288,36 +375,31 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 			var aThis,
 				aSocket;
 			
+//			console.trace();
+//			console.log(inWebSocket);
+			
 			aThis = ECGame.instance.network;
 			
 			//create server side socket
 			aSocket = ECGame.EngineLib.ServerSideWebSocket.create(inWebSocket, aThis);
-			
-			//HACK where should this go??
-			this._HACKSOCKETS = this._HACKSOCKETS || [];
-			this._HACKSOCKETS.push(aSocket);
+			aThis._mySockets.push(aSocket);
+			//TODO event??
 			
 			//TODO log connection
 			
-			//TODO create CommandObject to set local UserId! (send this object to the socket!)
-						
 			//TODO tell everone they have connected with a chat message CommandObject:
 			//inConnectedSocket.broadcast.emit('msg', "User Connected: " + inConnectedSocket.gameUser.userName);
 
 			
-			/*console.trace();
-			console.log(inWebSocket);
-			*/
-			//TODO keep alive msgs	//Ping!!
 			
-			setInterval(
+			//TODO keep alive msgs??	//Ping!!
+			/*setInterval(
 				function()
 				{
 					inWebSocket.send("don't close on me now", {}, this._onError);
 				},
 				1000
-			);
-			
+			);*/
 			/*setInterval(
 				function()
 				{
@@ -325,6 +407,19 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 				},
 				20000
 			);*/
+		},
+		
+		_removeSocket : function _removeSocket(inSocket)
+		{
+			var anIndex, aLength;
+			
+			anIndex = this._mySockets.indexOf(inSocket);
+			if(anIndex !== -1)
+			{
+				aLength = this._mySockets.length;
+				this._mySockets[anIndex] = this._mySockets[aLength - 1];
+				this._mySockets.pop();
+			}
 		}
 	}
 });
