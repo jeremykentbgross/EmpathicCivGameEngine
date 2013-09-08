@@ -281,7 +281,9 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	aReorderingArray.sort();
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
-		logData += 'Parameter Variable:\t' + aReorderingArray[i] + '\n';
+		logData += 'Parameter Variable:\t' + aReorderingArray[i]
+			+ (aReorderingArray[i].indexOf('in') !== 0 ? '\t\t\t*****' : '')//highlight incorrectly named parameters
+			+ '\n';
 	}
 	
 	aReorderingArray = [];
@@ -293,7 +295,13 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	aReorderingArray.sort();
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
-		logData += 'Local Variable:\t' + aReorderingArray[i] + '\n';
+		logData += 'Local Variable:\t' + aReorderingArray[i]
+		+ (
+			(aReorderingArray[i].indexOf('a') !== 0 || aReorderingArray[i].charAt(1).toUpperCase() !== aReorderingArray[i].charAt(1))
+			&& (aReorderingArray[i].indexOf('an') !== 0 || aReorderingArray[i].charAt(2).toUpperCase() !== aReorderingArray[i].charAt(2))
+			? '\t\t\t*****' : ''	//highlight incorrectly named variables
+		)
+		+ '\n';
 	}
 	
 	aReorderingArray = [];
@@ -305,7 +313,13 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	aReorderingArray.sort();
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
-		logData += 'Member Variable:\t' + aReorderingArray[i] + '\n';
+		logData += 'Member Variable:\t' + aReorderingArray[i]
+		+ (
+			(aReorderingArray[i].indexOf('my') !== 0 || aReorderingArray[i].charAt(2).toUpperCase() !== aReorderingArray[i].charAt(2))
+			&& (aReorderingArray[i].indexOf('_my') !== 0 || aReorderingArray[i].charAt(3).toUpperCase() !== aReorderingArray[i].charAt(3))
+			? '\t\t\t*****' : ''	//highlight incorrectly named variables
+		)
+		 + '\n';
 	}
 	
 	aReorderingArray = [];

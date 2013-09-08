@@ -821,14 +821,14 @@ Function Name:	update
 Function Name:	walk
 Function Name:	walkCallback
 Parameter Variables:
-Parameter Variable:	buffer
-Parameter Variable:	callback
-Parameter Variable:	deltaTime
-Parameter Variable:	dom
-Parameter Variable:	domConstruct
-Parameter Variable:	event
-Parameter Variable:	expression
-Parameter Variable:	filename
+Parameter Variable:	buffer			*****
+Parameter Variable:	callback			*****
+Parameter Variable:	deltaTime			*****
+Parameter Variable:	dom			*****
+Parameter Variable:	domConstruct			*****
+Parameter Variable:	event			*****
+Parameter Variable:	expression			*****
+Parameter Variable:	filename			*****
 Parameter Variable:	in2DCamera
 Parameter Variable:	inAABB
 Parameter Variable:	inAnimation
@@ -985,25 +985,25 @@ Parameter Variable:	inY
 Parameter Variable:	include
 Parameter Variable:	inoutReturnValues
 Parameter Variable:	instance
-Parameter Variable:	item
-Parameter Variable:	max
-Parameter Variable:	message
-Parameter Variable:	min
-Parameter Variable:	node
-Parameter Variable:	outContainingNodes
-Parameter Variable:	outDeletedItems
-Parameter Variable:	outLoadTarget
-Parameter Variable:	physicsUpdateInfo
-Parameter Variable:	precision
-Parameter Variable:	serializer
-Parameter Variable:	value
+Parameter Variable:	item			*****
+Parameter Variable:	max			*****
+Parameter Variable:	message			*****
+Parameter Variable:	min			*****
+Parameter Variable:	node			*****
+Parameter Variable:	outContainingNodes			*****
+Parameter Variable:	outDeletedItems			*****
+Parameter Variable:	outLoadTarget			*****
+Parameter Variable:	physicsUpdateInfo			*****
+Parameter Variable:	precision			*****
+Parameter Variable:	serializer			*****
+Parameter Variable:	value			*****
 Local Variables:
-Local Variable:	ClassNamespace
-Local Variable:	Constructor
-Local Variable:	ECGame
-Local Variable:	GameLocalization
-Local Variable:	LoadEngine
-Local Variable:	TestComponent
+Local Variable:	ClassNamespace			*****
+Local Variable:	Constructor			*****
+Local Variable:	ECGame			*****
+Local Variable:	GameLocalization			*****
+Local Variable:	LoadEngine			*****
+Local Variable:	TestComponent			*****
 Local Variable:	aAudioSystem
 Local Variable:	aBinaryBuffer
 Local Variable:	aChild
@@ -1075,7 +1075,7 @@ Local Variable:	aThisNodesSize
 Local Variable:	aTotal
 Local Variable:	aUserID
 Local Variable:	aUserMap
-Local Variable:	acceleration
+Local Variable:	acceleration			*****
 Local Variable:	anAABB
 Local Variable:	anEntity
 Local Variable:	anIndex
@@ -1088,437 +1088,437 @@ Local Variable:	anObjectClass
 Local Variable:	anObjectHeader
 Local Variable:	anOldDirection
 Local Variable:	anOwner
-Local Variable:	angle
-Local Variable:	animProb
-Local Variable:	animation
-Local Variable:	arrayLength
-Local Variable:	bestAnimProb
-Local Variable:	bits
-Local Variable:	callbackName
-Local Variable:	camPoint
-Local Variable:	camera
-Local Variable:	cameraAABB
-Local Variable:	cameraLeftTop
-Local Variable:	chainTestObject
-Local Variable:	charIndex
-Local Variable:	classRegistry
-Local Variable:	colCenter
-Local Variable:	component
-Local Variable:	component1
-Local Variable:	componentName
-Local Variable:	componentObject
-Local Variable:	componentPath
-Local Variable:	componentRef
-Local Variable:	constructorSrc
-Local Variable:	count
-Local Variable:	createAABB
-Local Variable:	current
-Local Variable:	currentDateTime
-Local Variable:	currentRenderable
-Local Variable:	data
-Local Variable:	defaultImageName
-Local Variable:	defaultSoundName
-Local Variable:	deletedTiles
-Local Variable:	dest
-Local Variable:	direction
-Local Variable:	directions
-Local Variable:	domGraphicsContainer
-Local Variable:	duplicate
-Local Variable:	encodeRange
-Local Variable:	encodedBytes
-Local Variable:	encodedSizeBytes
-Local Variable:	encoder
-Local Variable:	entity
-Local Variable:	entityObject
-Local Variable:	entityPath
-Local Variable:	entityRef
-Local Variable:	entry
-Local Variable:	eventName
-Local Variable:	eventSystem
-Local Variable:	eventType
-Local Variable:	failedLoops
-Local Variable:	flagIndex
-Local Variable:	fontSize
-Local Variable:	force
-Local Variable:	format
-Local Variable:	found
-Local Variable:	foundClass
-Local Variable:	fractionalPart
-Local Variable:	frameCount
-Local Variable:	frameStats
-Local Variable:	frames
-Local Variable:	funcArray
-Local Variable:	funcIndex
-Local Variable:	halfSize
-Local Variable:	head
-Local Variable:	high
-Local Variable:	i
-Local Variable:	id
-Local Variable:	imageInfo
-Local Variable:	inDefinition
-Local Variable:	inFlags
-Local Variable:	inMessage
-Local Variable:	inObj
-Local Variable:	inParents
-Local Variable:	index
-Local Variable:	index2
-Local Variable:	inputEvent
-Local Variable:	inputString
-Local Variable:	instanceID
-Local Variable:	instanceName
-Local Variable:	itemRect
-Local Variable:	j
-Local Variable:	key
-Local Variable:	last
-Local Variable:	len
-Local Variable:	listener1
-Local Variable:	listener2
-Local Variable:	listenerNode
-Local Variable:	loops
-Local Variable:	low
-Local Variable:	managed
-Local Variable:	maxSize
-Local Variable:	maxWidth
-Local Variable:	message
-Local Variable:	methodIndex
-Local Variable:	methodName
-Local Variable:	methods
-Local Variable:	metrics
-Local Variable:	minute
-Local Variable:	models
-Local Variable:	mouseWorldPosition
-Local Variable:	msg
-Local Variable:	name
-Local Variable:	net
-Local Variable:	newComponentMap
-Local Variable:	newEntityMap
-Local Variable:	newInstance
-Local Variable:	newItem
-Local Variable:	nodeArray
-Local Variable:	nodeIndex
-Local Variable:	numValues
-Local Variable:	obj1
-Local Variable:	obj2
-Local Variable:	objCenter
-Local Variable:	object
-Local Variable:	objectClass
-Local Variable:	objectHeaderFormat
-Local Variable:	outEvents
-Local Variable:	outIntersection
-Local Variable:	outObj
-Local Variable:	outString
-Local Variable:	outValue
-Local Variable:	output
-Local Variable:	owner
-Local Variable:	packer
-Local Variable:	parent
-Local Variable:	parentClass
-Local Variable:	parentIndex
-Local Variable:	passedTest
-Local Variable:	path
-Local Variable:	pathTokens
-Local Variable:	physicsRect
-Local Variable:	position
-Local Variable:	probability
-Local Variable:	property
-Local Variable:	propertyName
-Local Variable:	range
-Local Variable:	rayTrace
-Local Variable:	readResult
-Local Variable:	ref
-Local Variable:	registry
-Local Variable:	renderables
-Local Variable:	request
-Local Variable:	returnRect
-Local Variable:	screenPos
-Local Variable:	second
-Local Variable:	serializer
-Local Variable:	serverRebootTime
-Local Variable:	sin
-Local Variable:	size
-Local Variable:	soundInfo
-Local Variable:	stackPath
-Local Variable:	startIndex
-Local Variable:	string
-Local Variable:	stringDistance
-Local Variable:	stringDrawOrder
-Local Variable:	stringLength
-Local Variable:	target
-Local Variable:	temp
-Local Variable:	testClass1
-Local Variable:	testClass2
-Local Variable:	testObjectClass1
-Local Variable:	testResults
-Local Variable:	theClass
-Local Variable:	thisClass
-Local Variable:	tile
-Local Variable:	tileAABB
-Local Variable:	tileset
-Local Variable:	value
-Local Variable:	valueHigh
-Local Variable:	valueLow
-Local Variable:	valueRange
-Local Variable:	values
-Local Variable:	vec
-Local Variable:	wholePart
-Local Variable:	width
-Local Variable:	x
-Local Variable:	y
+Local Variable:	angle			*****
+Local Variable:	animProb			*****
+Local Variable:	animation			*****
+Local Variable:	arrayLength			*****
+Local Variable:	bestAnimProb			*****
+Local Variable:	bits			*****
+Local Variable:	callbackName			*****
+Local Variable:	camPoint			*****
+Local Variable:	camera			*****
+Local Variable:	cameraAABB			*****
+Local Variable:	cameraLeftTop			*****
+Local Variable:	chainTestObject			*****
+Local Variable:	charIndex			*****
+Local Variable:	classRegistry			*****
+Local Variable:	colCenter			*****
+Local Variable:	component			*****
+Local Variable:	component1			*****
+Local Variable:	componentName			*****
+Local Variable:	componentObject			*****
+Local Variable:	componentPath			*****
+Local Variable:	componentRef			*****
+Local Variable:	constructorSrc			*****
+Local Variable:	count			*****
+Local Variable:	createAABB			*****
+Local Variable:	current			*****
+Local Variable:	currentDateTime			*****
+Local Variable:	currentRenderable			*****
+Local Variable:	data			*****
+Local Variable:	defaultImageName			*****
+Local Variable:	defaultSoundName			*****
+Local Variable:	deletedTiles			*****
+Local Variable:	dest			*****
+Local Variable:	direction			*****
+Local Variable:	directions			*****
+Local Variable:	domGraphicsContainer			*****
+Local Variable:	duplicate			*****
+Local Variable:	encodeRange			*****
+Local Variable:	encodedBytes			*****
+Local Variable:	encodedSizeBytes			*****
+Local Variable:	encoder			*****
+Local Variable:	entity			*****
+Local Variable:	entityObject			*****
+Local Variable:	entityPath			*****
+Local Variable:	entityRef			*****
+Local Variable:	entry			*****
+Local Variable:	eventName			*****
+Local Variable:	eventSystem			*****
+Local Variable:	eventType			*****
+Local Variable:	failedLoops			*****
+Local Variable:	flagIndex			*****
+Local Variable:	fontSize			*****
+Local Variable:	force			*****
+Local Variable:	format			*****
+Local Variable:	found			*****
+Local Variable:	foundClass			*****
+Local Variable:	fractionalPart			*****
+Local Variable:	frameCount			*****
+Local Variable:	frameStats			*****
+Local Variable:	frames			*****
+Local Variable:	funcArray			*****
+Local Variable:	funcIndex			*****
+Local Variable:	halfSize			*****
+Local Variable:	head			*****
+Local Variable:	high			*****
+Local Variable:	i			*****
+Local Variable:	id			*****
+Local Variable:	imageInfo			*****
+Local Variable:	inDefinition			*****
+Local Variable:	inFlags			*****
+Local Variable:	inMessage			*****
+Local Variable:	inObj			*****
+Local Variable:	inParents			*****
+Local Variable:	index			*****
+Local Variable:	index2			*****
+Local Variable:	inputEvent			*****
+Local Variable:	inputString			*****
+Local Variable:	instanceID			*****
+Local Variable:	instanceName			*****
+Local Variable:	itemRect			*****
+Local Variable:	j			*****
+Local Variable:	key			*****
+Local Variable:	last			*****
+Local Variable:	len			*****
+Local Variable:	listener1			*****
+Local Variable:	listener2			*****
+Local Variable:	listenerNode			*****
+Local Variable:	loops			*****
+Local Variable:	low			*****
+Local Variable:	managed			*****
+Local Variable:	maxSize			*****
+Local Variable:	maxWidth			*****
+Local Variable:	message			*****
+Local Variable:	methodIndex			*****
+Local Variable:	methodName			*****
+Local Variable:	methods			*****
+Local Variable:	metrics			*****
+Local Variable:	minute			*****
+Local Variable:	models			*****
+Local Variable:	mouseWorldPosition			*****
+Local Variable:	msg			*****
+Local Variable:	name			*****
+Local Variable:	net			*****
+Local Variable:	newComponentMap			*****
+Local Variable:	newEntityMap			*****
+Local Variable:	newInstance			*****
+Local Variable:	newItem			*****
+Local Variable:	nodeArray			*****
+Local Variable:	nodeIndex			*****
+Local Variable:	numValues			*****
+Local Variable:	obj1			*****
+Local Variable:	obj2			*****
+Local Variable:	objCenter			*****
+Local Variable:	object			*****
+Local Variable:	objectClass			*****
+Local Variable:	objectHeaderFormat			*****
+Local Variable:	outEvents			*****
+Local Variable:	outIntersection			*****
+Local Variable:	outObj			*****
+Local Variable:	outString			*****
+Local Variable:	outValue			*****
+Local Variable:	output			*****
+Local Variable:	owner			*****
+Local Variable:	packer			*****
+Local Variable:	parent			*****
+Local Variable:	parentClass			*****
+Local Variable:	parentIndex			*****
+Local Variable:	passedTest			*****
+Local Variable:	path			*****
+Local Variable:	pathTokens			*****
+Local Variable:	physicsRect			*****
+Local Variable:	position			*****
+Local Variable:	probability			*****
+Local Variable:	property			*****
+Local Variable:	propertyName			*****
+Local Variable:	range			*****
+Local Variable:	rayTrace			*****
+Local Variable:	readResult			*****
+Local Variable:	ref			*****
+Local Variable:	registry			*****
+Local Variable:	renderables			*****
+Local Variable:	request			*****
+Local Variable:	returnRect			*****
+Local Variable:	screenPos			*****
+Local Variable:	second			*****
+Local Variable:	serializer			*****
+Local Variable:	serverRebootTime			*****
+Local Variable:	sin			*****
+Local Variable:	size			*****
+Local Variable:	soundInfo			*****
+Local Variable:	stackPath			*****
+Local Variable:	startIndex			*****
+Local Variable:	string			*****
+Local Variable:	stringDistance			*****
+Local Variable:	stringDrawOrder			*****
+Local Variable:	stringLength			*****
+Local Variable:	target			*****
+Local Variable:	temp			*****
+Local Variable:	testClass1			*****
+Local Variable:	testClass2			*****
+Local Variable:	testObjectClass1			*****
+Local Variable:	testResults			*****
+Local Variable:	theClass			*****
+Local Variable:	thisClass			*****
+Local Variable:	tile			*****
+Local Variable:	tileAABB			*****
+Local Variable:	tileset			*****
+Local Variable:	value			*****
+Local Variable:	valueHigh			*****
+Local Variable:	valueLow			*****
+Local Variable:	valueRange			*****
+Local Variable:	values			*****
+Local Variable:	vec			*****
+Local Variable:	wholePart			*****
+Local Variable:	width			*****
+Local Variable:	x			*****
+Local Variable:	y			*****
 Member Variables:
-Member Variable:	AABB2
-Member Variable:	AddedToEntity
-Member Variable:	AddedToWorld
-Member Variable:	Animation2D
-Member Variable:	Animation2DFrame
-Member Variable:	Animation2DInstance
-Member Variable:	ArithmeticCompresser
-Member Variable:	ArithmeticCompressionModels
-Member Variable:	AssetManager
-Member Variable:	Audio
-Member Variable:	BitPacker
-Member Variable:	CURRENT_MAX
-Member Variable:	Camera2
-Member Variable:	CameraTarget_Draw
-Member Variable:	CameraTarget_DrawColor
-Member Variable:	CameraTarget_Size
-Member Variable:	Caps
-Member Variable:	ChainDown
-Member Variable:	ChainUp
-Member Variable:	ChatSystem
-Member Variable:	Class
-Member Variable:	ClientDisconnected
-Member Variable:	ClientSideWebSocket
-Member Variable:	ConnectedToServer
-Member Variable:	Constructor
-Member Variable:	DEBUG
-Member Variable:	Data
-Member Variable:	Debug
-Member Variable:	Definition
-Member Variable:	DisconnectedFromServer
-Member Variable:	EngineLib
-Member Variable:	EntityComponent_2DCamera
-Member Variable:	EntityComponent_2DPhysics
-Member Variable:	EntityComponent_Input
-Member Variable:	EntityComponent_SoundPlayer
-Member Variable:	EntityComponent_Sprite
-Member Variable:	EvenProbabilityIntegerRangeModel
-Member Variable:	Events
-Member Variable:	FrameStats_Draw
-Member Variable:	FrameStats_DrawColor
-Member Variable:	FrameStats_Print
-Member Variable:	Func1
-Member Variable:	Func1Called
-Member Variable:	Func2
-Member Variable:	Func2Called
-Member Variable:	Game2DGraphics
-Member Variable:	Game2DMap
-Member Variable:	Game2DSceneGraph
-Member Variable:	Game2DTileSet
-Member Variable:	Game2DWorld
-Member Variable:	GameBinarySerializer
-Member Variable:	GameCircularDoublyLinkedListNode
-Member Variable:	GameEntity
-Member Variable:	GameEntityComponent
-Member Variable:	GameEventBase
-Member Variable:	GameEventSystem
-Member Variable:	GameInstance
-Member Variable:	GameObject
-Member Variable:	GameObjectDestroyed
-Member Variable:	GameObjectNetDirty
-Member Variable:	GameObjectRef
-Member Variable:	GameObject_Print
-Member Variable:	GamePort
-Member Variable:	GameRegistry
-Member Variable:	GameRenderable2D
-Member Variable:	GameRules
-Member Variable:	GameRulesBase
-Member Variable:	Graphics
-Member Variable:	IdentifiedUser
-Member Variable:	Input
-Member Variable:	Input_Active_DrawColor
-Member Variable:	Input_Draw
-Member Variable:	Input_Inactive_DrawColor
-Member Variable:	Input_MouseCursor_Draw
-Member Variable:	Input_MouseCursor_DrawColor
-Member Variable:	Input_MouseCursor_Size
-Member Variable:	Input_Print
-Member Variable:	Lib
-Member Variable:	LoadGame
-Member Variable:	MAX_EVER
-Member Variable:	Map_Draw
-Member Variable:	Msg
-Member Variable:	NET
-Member Variable:	NEW_USER
-Member Variable:	NetGroup
-Member Variable:	NetObjects
-Member Variable:	Network
-Member Variable:	NetworkBase
-Member Variable:	NetworkMessages_Draw
-Member Variable:	NetworkMessages_DrawColor
-Member Variable:	NetworkMessages_Print
-Member Variable:	Obfuscation_Print
-Member Variable:	Parents
-Member Variable:	PhysObjectUpdate
-Member Variable:	Physics2D
-Member Variable:	PhysicsObject2D
-Member Variable:	Physics_ActiveObjectBorder_DrawColor
-Member Variable:	Physics_ActiveObject_DrawColor
-Member Variable:	Physics_AlwaysActiveObject_DrawColor
-Member Variable:	Physics_Draw
-Member Variable:	Physics_ObjectCollision_DrawColor
-Member Variable:	Physics_SleepingObject_DrawColor
-Member Variable:	Physics_StaticObject_DrawColor
-Member Variable:	PlaySound
-Member Variable:	Point2
-Member Variable:	QuadTree
-Member Variable:	QuadTreeItem
-Member Variable:	QuadTree_Item_DrawColor
-Member Variable:	QuadTree_Node_DrawColor
-Member Variable:	QuadTree_OccupiedNode_DrawColor
-Member Variable:	RUN_UNIT_TESTS
-Member Variable:	Ray2D
-Member Variable:	RayTracer2D
-Member Variable:	RemovedFromEntity
-Member Variable:	RemovedFromWorld
-Member Variable:	RenderableTile2D
-Member Variable:	RequestVelocity
-Member Variable:	SERVER
-Member Variable:	STATUS__ACTIVE
-Member Variable:	STATUS__ALWAYS_ACTIVE
-Member Variable:	STATUS__SLEEPING
-Member Variable:	STATUS__STATIC
-Member Variable:	SceneGraph_Draw
-Member Variable:	Server
-Member Variable:	Settings
-Member Variable:	Sound
-Member Variable:	Sound2D
-Member Variable:	SoundAsset
-Member Variable:	SoundDescription
-Member Variable:	SoundSample
-Member Variable:	SoundSystem
-Member Variable:	Sound_Area_DrawColor
-Member Variable:	Sound_Draw
-Member Variable:	Sound_Listener_Size
-Member Variable:	Sound_Print
-Member Variable:	Sound_Source_Size
-Member Variable:	Sprite_AABB_DrawColor
-Member Variable:	Sprite_Draw
-Member Variable:	Sprite_Origin_DrawColor
-Member Variable:	Sprite_Origin_Size
-Member Variable:	StaticThing
-Member Variable:	TEMP_HACK_NEW_NETWORK
-Member Variable:	TestClass1
-Member Variable:	TestObjectClass1
-Member Variable:	TextBackground_DrawColor
-Member Variable:	TextDefault_DrawColor
-Member Variable:	TextMessages_Draw
-Member Variable:	Text_Size
-Member Variable:	Timer
-Member Variable:	UNUSED
-Member Variable:	USER_IDS
-Member Variable:	UnitTestFramework
-Member Variable:	UpdatePosition
-Member Variable:	User
-Member Variable:	WebServer
-Member Variable:	WebServerTools
-Member Variable:	X
-Member Variable:	Y
-Member Variable:	_BITCAP
-Member Variable:	_BITS
-Member Variable:	_HALF
-Member Variable:	_HIGH_OFFSET
-Member Variable:	_LOW_OFFSET
-Member Variable:	_MAXBITS
-Member Variable:	_MAXPOW
-Member Variable:	_ONE
-Member Variable:	_POWERS
-Member Variable:	_QUARTER
-Member Variable:	_THREEQUARTERS
-Member Variable:	_active
-Member Variable:	_activeInput
-Member Variable:	_animFrames
-Member Variable:	_animation
-Member Variable:	_animations
-Member Variable:	_aveDt
-Member Variable:	_bitPacker
-Member Variable:	_bits
-Member Variable:	_boundingRect
-Member Variable:	_buttons
-Member Variable:	_callbackName
-Member Variable:	_camera
-Member Variable:	_chainDownMethods
-Member Variable:	_chainUpMethods
-Member Variable:	_childClasses
-Member Variable:	_classID
-Member Variable:	_clicked
-Member Variable:	_compressor
-Member Variable:	_constructor
-Member Variable:	_containingWorld
-Member Variable:	_cos
-Member Variable:	_createChainDownFunction
-Member Variable:	_createChainUpFunction
-Member Variable:	_createChildren
-Member Variable:	_currentAnimation
-Member Variable:	_currentFrame
-Member Variable:	_data
-Member Variable:	_debugText
-Member Variable:	_debugTextColor
-Member Variable:	_defaultCamera
-Member Variable:	_direction
-Member Variable:	_domChatContainer
-Member Variable:	_domChatForm
-Member Variable:	_domChatInput
-Member Variable:	_domChatLog
-Member Variable:	_domNetworkStatus
-Member Variable:	_down
-Member Variable:	_drawTile
-Member Variable:	_dt
-Member Variable:	_dummyMode
-Member Variable:	_encoded
-Member Variable:	_entities
-Member Variable:	_entityMap
-Member Variable:	_flags
-Member Variable:	_frameCount
-Member Variable:	_frameRate
-Member Variable:	_frameTimes
-Member Variable:	_gameWorld
-Member Variable:	_getDebugPlayingString
-Member Variable:	_handleInput
-Member Variable:	_high
-Member Variable:	_images
-Member Variable:	_index
-Member Variable:	_init
-Member Variable:	_insertPhysicsObjectToTree
-Member Variable:	_instanceRegistry
-Member Variable:	_instancesByID
-Member Variable:	_instancesByName
-Member Variable:	_integerRangeModel
-Member Variable:	_intervalHandle
-Member Variable:	_isRayTestMode
-Member Variable:	_isWriting
-Member Variable:	_itemCount
-Member Variable:	_jojoDom
-Member Variable:	_jojoDomConstruct
-Member Variable:	_jojoOn
-Member Variable:	_jojoStyle
-Member Variable:	_keys
-Member Variable:	_keysPressed
-Member Variable:	_lastFrameTimeStamp
-Member Variable:	_lastMouseWorldPosition
-Member Variable:	_lastSoundPlayed
-Member Variable:	_lastUpdateMin
-Member Variable:	_lastUpdateSec
-Member Variable:	_left
-Member Variable:	_low
-Member Variable:	_map
-Member Variable:	_mapAABB
-Member Variable:	_mapSize
-Member Variable:	_mapSizeInTiles
-Member Variable:	_mapsize
-Member Variable:	_maxID
-Member Variable:	_maxLayers
-Member Variable:	_minPhysicsPartitionSize
-Member Variable:	_mouseLoc
+Member Variable:	AABB2			*****
+Member Variable:	AddedToEntity			*****
+Member Variable:	AddedToWorld			*****
+Member Variable:	Animation2D			*****
+Member Variable:	Animation2DFrame			*****
+Member Variable:	Animation2DInstance			*****
+Member Variable:	ArithmeticCompresser			*****
+Member Variable:	ArithmeticCompressionModels			*****
+Member Variable:	AssetManager			*****
+Member Variable:	Audio			*****
+Member Variable:	BitPacker			*****
+Member Variable:	CURRENT_MAX			*****
+Member Variable:	Camera2			*****
+Member Variable:	CameraTarget_Draw			*****
+Member Variable:	CameraTarget_DrawColor			*****
+Member Variable:	CameraTarget_Size			*****
+Member Variable:	Caps			*****
+Member Variable:	ChainDown			*****
+Member Variable:	ChainUp			*****
+Member Variable:	ChatSystem			*****
+Member Variable:	Class			*****
+Member Variable:	ClientDisconnected			*****
+Member Variable:	ClientSideWebSocket			*****
+Member Variable:	ConnectedToServer			*****
+Member Variable:	Constructor			*****
+Member Variable:	DEBUG			*****
+Member Variable:	Data			*****
+Member Variable:	Debug			*****
+Member Variable:	Definition			*****
+Member Variable:	DisconnectedFromServer			*****
+Member Variable:	EngineLib			*****
+Member Variable:	EntityComponent_2DCamera			*****
+Member Variable:	EntityComponent_2DPhysics			*****
+Member Variable:	EntityComponent_Input			*****
+Member Variable:	EntityComponent_SoundPlayer			*****
+Member Variable:	EntityComponent_Sprite			*****
+Member Variable:	EvenProbabilityIntegerRangeModel			*****
+Member Variable:	Events			*****
+Member Variable:	FrameStats_Draw			*****
+Member Variable:	FrameStats_DrawColor			*****
+Member Variable:	FrameStats_Print			*****
+Member Variable:	Func1			*****
+Member Variable:	Func1Called			*****
+Member Variable:	Func2			*****
+Member Variable:	Func2Called			*****
+Member Variable:	Game2DGraphics			*****
+Member Variable:	Game2DMap			*****
+Member Variable:	Game2DSceneGraph			*****
+Member Variable:	Game2DTileSet			*****
+Member Variable:	Game2DWorld			*****
+Member Variable:	GameBinarySerializer			*****
+Member Variable:	GameCircularDoublyLinkedListNode			*****
+Member Variable:	GameEntity			*****
+Member Variable:	GameEntityComponent			*****
+Member Variable:	GameEventBase			*****
+Member Variable:	GameEventSystem			*****
+Member Variable:	GameInstance			*****
+Member Variable:	GameObject			*****
+Member Variable:	GameObjectDestroyed			*****
+Member Variable:	GameObjectNetDirty			*****
+Member Variable:	GameObjectRef			*****
+Member Variable:	GameObject_Print			*****
+Member Variable:	GamePort			*****
+Member Variable:	GameRegistry			*****
+Member Variable:	GameRenderable2D			*****
+Member Variable:	GameRules			*****
+Member Variable:	GameRulesBase			*****
+Member Variable:	Graphics			*****
+Member Variable:	IdentifiedUser			*****
+Member Variable:	Input			*****
+Member Variable:	Input_Active_DrawColor			*****
+Member Variable:	Input_Draw			*****
+Member Variable:	Input_Inactive_DrawColor			*****
+Member Variable:	Input_MouseCursor_Draw			*****
+Member Variable:	Input_MouseCursor_DrawColor			*****
+Member Variable:	Input_MouseCursor_Size			*****
+Member Variable:	Input_Print			*****
+Member Variable:	Lib			*****
+Member Variable:	LoadGame			*****
+Member Variable:	MAX_EVER			*****
+Member Variable:	Map_Draw			*****
+Member Variable:	Msg			*****
+Member Variable:	NET			*****
+Member Variable:	NEW_USER			*****
+Member Variable:	NetGroup			*****
+Member Variable:	NetObjects			*****
+Member Variable:	Network			*****
+Member Variable:	NetworkBase			*****
+Member Variable:	NetworkMessages_Draw			*****
+Member Variable:	NetworkMessages_DrawColor			*****
+Member Variable:	NetworkMessages_Print			*****
+Member Variable:	Obfuscation_Print			*****
+Member Variable:	Parents			*****
+Member Variable:	PhysObjectUpdate			*****
+Member Variable:	Physics2D			*****
+Member Variable:	PhysicsObject2D			*****
+Member Variable:	Physics_ActiveObjectBorder_DrawColor			*****
+Member Variable:	Physics_ActiveObject_DrawColor			*****
+Member Variable:	Physics_AlwaysActiveObject_DrawColor			*****
+Member Variable:	Physics_Draw			*****
+Member Variable:	Physics_ObjectCollision_DrawColor			*****
+Member Variable:	Physics_SleepingObject_DrawColor			*****
+Member Variable:	Physics_StaticObject_DrawColor			*****
+Member Variable:	PlaySound			*****
+Member Variable:	Point2			*****
+Member Variable:	QuadTree			*****
+Member Variable:	QuadTreeItem			*****
+Member Variable:	QuadTree_Item_DrawColor			*****
+Member Variable:	QuadTree_Node_DrawColor			*****
+Member Variable:	QuadTree_OccupiedNode_DrawColor			*****
+Member Variable:	RUN_UNIT_TESTS			*****
+Member Variable:	Ray2D			*****
+Member Variable:	RayTracer2D			*****
+Member Variable:	RemovedFromEntity			*****
+Member Variable:	RemovedFromWorld			*****
+Member Variable:	RenderableTile2D			*****
+Member Variable:	RequestVelocity			*****
+Member Variable:	SERVER			*****
+Member Variable:	STATUS__ACTIVE			*****
+Member Variable:	STATUS__ALWAYS_ACTIVE			*****
+Member Variable:	STATUS__SLEEPING			*****
+Member Variable:	STATUS__STATIC			*****
+Member Variable:	SceneGraph_Draw			*****
+Member Variable:	Server			*****
+Member Variable:	Settings			*****
+Member Variable:	Sound			*****
+Member Variable:	Sound2D			*****
+Member Variable:	SoundAsset			*****
+Member Variable:	SoundDescription			*****
+Member Variable:	SoundSample			*****
+Member Variable:	SoundSystem			*****
+Member Variable:	Sound_Area_DrawColor			*****
+Member Variable:	Sound_Draw			*****
+Member Variable:	Sound_Listener_Size			*****
+Member Variable:	Sound_Print			*****
+Member Variable:	Sound_Source_Size			*****
+Member Variable:	Sprite_AABB_DrawColor			*****
+Member Variable:	Sprite_Draw			*****
+Member Variable:	Sprite_Origin_DrawColor			*****
+Member Variable:	Sprite_Origin_Size			*****
+Member Variable:	StaticThing			*****
+Member Variable:	TEMP_HACK_NEW_NETWORK			*****
+Member Variable:	TestClass1			*****
+Member Variable:	TestObjectClass1			*****
+Member Variable:	TextBackground_DrawColor			*****
+Member Variable:	TextDefault_DrawColor			*****
+Member Variable:	TextMessages_Draw			*****
+Member Variable:	Text_Size			*****
+Member Variable:	Timer			*****
+Member Variable:	UNUSED			*****
+Member Variable:	USER_IDS			*****
+Member Variable:	UnitTestFramework			*****
+Member Variable:	UpdatePosition			*****
+Member Variable:	User			*****
+Member Variable:	WebServer			*****
+Member Variable:	WebServerTools			*****
+Member Variable:	X			*****
+Member Variable:	Y			*****
+Member Variable:	_BITCAP			*****
+Member Variable:	_BITS			*****
+Member Variable:	_HALF			*****
+Member Variable:	_HIGH_OFFSET			*****
+Member Variable:	_LOW_OFFSET			*****
+Member Variable:	_MAXBITS			*****
+Member Variable:	_MAXPOW			*****
+Member Variable:	_ONE			*****
+Member Variable:	_POWERS			*****
+Member Variable:	_QUARTER			*****
+Member Variable:	_THREEQUARTERS			*****
+Member Variable:	_active			*****
+Member Variable:	_activeInput			*****
+Member Variable:	_animFrames			*****
+Member Variable:	_animation			*****
+Member Variable:	_animations			*****
+Member Variable:	_aveDt			*****
+Member Variable:	_bitPacker			*****
+Member Variable:	_bits			*****
+Member Variable:	_boundingRect			*****
+Member Variable:	_buttons			*****
+Member Variable:	_callbackName			*****
+Member Variable:	_camera			*****
+Member Variable:	_chainDownMethods			*****
+Member Variable:	_chainUpMethods			*****
+Member Variable:	_childClasses			*****
+Member Variable:	_classID			*****
+Member Variable:	_clicked			*****
+Member Variable:	_compressor			*****
+Member Variable:	_constructor			*****
+Member Variable:	_containingWorld			*****
+Member Variable:	_cos			*****
+Member Variable:	_createChainDownFunction			*****
+Member Variable:	_createChainUpFunction			*****
+Member Variable:	_createChildren			*****
+Member Variable:	_currentAnimation			*****
+Member Variable:	_currentFrame			*****
+Member Variable:	_data			*****
+Member Variable:	_debugText			*****
+Member Variable:	_debugTextColor			*****
+Member Variable:	_defaultCamera			*****
+Member Variable:	_direction			*****
+Member Variable:	_domChatContainer			*****
+Member Variable:	_domChatForm			*****
+Member Variable:	_domChatInput			*****
+Member Variable:	_domChatLog			*****
+Member Variable:	_domNetworkStatus			*****
+Member Variable:	_down			*****
+Member Variable:	_drawTile			*****
+Member Variable:	_dt			*****
+Member Variable:	_dummyMode			*****
+Member Variable:	_encoded			*****
+Member Variable:	_entities			*****
+Member Variable:	_entityMap			*****
+Member Variable:	_flags			*****
+Member Variable:	_frameCount			*****
+Member Variable:	_frameRate			*****
+Member Variable:	_frameTimes			*****
+Member Variable:	_gameWorld			*****
+Member Variable:	_getDebugPlayingString			*****
+Member Variable:	_handleInput			*****
+Member Variable:	_high			*****
+Member Variable:	_images			*****
+Member Variable:	_index			*****
+Member Variable:	_init			*****
+Member Variable:	_insertPhysicsObjectToTree			*****
+Member Variable:	_instanceRegistry			*****
+Member Variable:	_instancesByID			*****
+Member Variable:	_instancesByName			*****
+Member Variable:	_integerRangeModel			*****
+Member Variable:	_intervalHandle			*****
+Member Variable:	_isRayTestMode			*****
+Member Variable:	_isWriting			*****
+Member Variable:	_itemCount			*****
+Member Variable:	_jojoDom			*****
+Member Variable:	_jojoDomConstruct			*****
+Member Variable:	_jojoOn			*****
+Member Variable:	_jojoStyle			*****
+Member Variable:	_keys			*****
+Member Variable:	_keysPressed			*****
+Member Variable:	_lastFrameTimeStamp			*****
+Member Variable:	_lastMouseWorldPosition			*****
+Member Variable:	_lastSoundPlayed			*****
+Member Variable:	_lastUpdateMin			*****
+Member Variable:	_lastUpdateSec			*****
+Member Variable:	_left			*****
+Member Variable:	_low			*****
+Member Variable:	_map			*****
+Member Variable:	_mapAABB			*****
+Member Variable:	_mapSize			*****
+Member Variable:	_mapSizeInTiles			*****
+Member Variable:	_mapsize			*****
+Member Variable:	_maxID			*****
+Member Variable:	_maxLayers			*****
+Member Variable:	_minPhysicsPartitionSize			*****
+Member Variable:	_mouseLoc			*****
 Member Variable:	_myAABB
 Member Variable:	_myAccumulatedTime
 Member Variable:	_myActiveLinkedListNode
@@ -1617,307 +1617,307 @@ Member Variable:	_myVolume
 Member Variable:	_myVolumeVariation
 Member Variable:	_myWebsocket
 Member Variable:	_myWorld
-Member Variable:	_net
-Member Variable:	_objectHeaderFormat
-Member Variable:	_onAnimFrame
-Member Variable:	_onChatSubmit
-Member Variable:	_onClose
-Member Variable:	_onError
-Member Variable:	_onInput
-Member Variable:	_onMessage
-Member Variable:	_onOpen
-Member Variable:	_origin
-Member Variable:	_ourMaxItemsPerMessage
-Member Variable:	_ourMessageHeaderFormat
-Member Variable:	_owner
-Member Variable:	_parent
-Member Variable:	_parents
-Member Variable:	_path
-Member Variable:	_physics
-Member Variable:	_physicsObject
-Member Variable:	_physicsSystem
-Member Variable:	_position
-Member Variable:	_power
-Member Variable:	_range
-Member Variable:	_rayEnd
-Member Variable:	_rayStart
-Member Variable:	_referenceEntity
-Member Variable:	_referenceEntityCameraComponent
-Member Variable:	_referenceEntityInputComponent
-Member Variable:	_referenceEntityPhysicsComponent
-Member Variable:	_referenceEntitySoundPlayerComponent
-Member Variable:	_referenceEntitySpriteComponent
-Member Variable:	_removePhysicsObjectFromTree
-Member Variable:	_removedWorld
-Member Variable:	_right
-Member Variable:	_rotMatrixRow1
-Member Variable:	_rotMatrixRow2
-Member Variable:	_running
-Member Variable:	_sceneGraph
-Member Variable:	_sceneGraphRenderable
-Member Variable:	_sendChatToChatLog
-Member Variable:	_serializeFormat
-Member Variable:	_setSleeping
-Member Variable:	_sounds
-Member Variable:	_sourceRect
-Member Variable:	_specialChars
-Member Variable:	_speed
-Member Variable:	_statics
-Member Variable:	_supressKeyboardEvents
-Member Variable:	_tileMapTree
-Member Variable:	_tileSize
-Member Variable:	_tileset
-Member Variable:	_timeAccumulator
-Member Variable:	_underflow_bits
-Member Variable:	_unusedInstanceIDs
-Member Variable:	_up
-Member Variable:	_value
-Member Variable:	_velocity
-Member Variable:	aBool1
-Member Variable:	aBool2
-Member Variable:	aString
-Member Variable:	add
-Member Variable:	addComponent
-Member Variable:	addEntity
-Member Variable:	addNetDirtyObject
-Member Variable:	addNewObject
-Member Variable:	addObject
-Member Variable:	addToNetGroup
-Member Variable:	addUser
-Member Variable:	added
-Member Variable:	addedToWorld
-Member Variable:	anchor
-Member Variable:	anchorPosition
-Member Variable:	apply
-Member Variable:	assert
-Member Variable:	assetManager
-Member Variable:	blur
-Member Variable:	boundingRect
-Member Variable:	buffer
-Member Variable:	buttons
-Member Variable:	call
-Member Variable:	canUserModifyNet
-Member Variable:	centerOn
-Member Variable:	chainDown
-Member Variable:	chainUp
-Member Variable:	chatSystem
-Member Variable:	class
-Member Variable:	classID
-Member Variable:	cleanup
-Member Variable:	clearNetDirty
-Member Variable:	clearTile
-Member Variable:	clearTilesInRect
-Member Variable:	clicked
-Member Variable:	clone
-Member Variable:	close
-Member Variable:	componentArray
-Member Variable:	componentArrayBefore
-Member Variable:	componentMax
-Member Variable:	componentMin
-Member Variable:	compressClientCode
-Member Variable:	condition
-Member Variable:	constructor
-Member Variable:	containsItems
-Member Variable:	containsPoint
-Member Variable:	containsRect
-Member Variable:	copyFrom
-Member Variable:	counter
-Member Variable:	create
-Member Variable:	createAndPlaySourceBuffer
-Member Variable:	createGameCircularDoublyLinkedListNode
-Member Variable:	createGameObjectRef
-Member Variable:	createGameRegistry
-Member Variable:	createInstanceRegistry
-Member Variable:	createNetGroup
-Member Variable:	createNewPhysicsObject
-Member Variable:	createSourceBuffer
-Member Variable:	data
-Member Variable:	debugDraw
-Member Variable:	debugPrint
-Member Variable:	decode
-Member Variable:	default2DRadius
-Member Variable:	deleteContained
-Member Variable:	deleteItem
-Member Variable:	deref
-Member Variable:	deregister
-Member Variable:	deregisterListener
-Member Variable:	destroy
-Member Variable:	direction
-Member Variable:	divide
-Member Variable:	dopplerFactor
-Member Variable:	dot
-Member Variable:	down1
-Member Variable:	down2
-Member Variable:	drawDebugText
-Member Variable:	drawOrderHelper
-Member Variable:	effectsVolume
-Member Variable:	encode
-Member Variable:	entity
-Member Variable:	entityArray
-Member Variable:	entityArrayBefore
-Member Variable:	equal
-Member Variable:	error
-Member Variable:	exit
-Member Variable:	fileName
-Member Variable:	findByID
-Member Variable:	findByName
-Member Variable:	findNodeContaining
-Member Variable:	findSmallestContainingAncestor
-Member Variable:	findSmallestContainingDescendant
-Member Variable:	findSmallestContainingNodeFromHere
-Member Variable:	fireRay
-Member Variable:	flags
-Member Variable:	floor
-Member Variable:	focus
-Member Variable:	forAll
-Member Variable:	forAllComponent
-Member Variable:	forAllReverse
-Member Variable:	generateDocumentation
-Member Variable:	generateNextAssetID
-Member Variable:	generateNextSampleID
-Member Variable:	generateNextSoundDescriptionID
-Member Variable:	getAABB
-Member Variable:	getArea
-Member Variable:	getBottom
-Member Variable:	getBoundingBox
-Member Variable:	getCallbackName
-Member Variable:	getCenter
-Member Variable:	getClass
-Member Variable:	getComponentByType
-Member Variable:	getCurrentCamera
-Member Variable:	getCurrentLength
-Member Variable:	getCurrentNode
-Member Variable:	getCurrentPoint
-Member Variable:	getDomTarget
-Member Variable:	getDummyMode
-Member Variable:	getEffectsVolume
-Member Variable:	getEndPoint
-Member Variable:	getFrameCount
-Member Variable:	getFrameEvents
-Member Variable:	getFrameRate
-Member Variable:	getHeight
-Member Variable:	getID
-Member Variable:	getInstanceRegistry
-Member Variable:	getIntersection
-Member Variable:	getLeft
-Member Variable:	getLeftBottom
-Member Variable:	getLeftTop
-Member Variable:	getMap
-Member Variable:	getMapLowerRight
-Member Variable:	getMass
-Member Variable:	getMasterVolume
-Member Variable:	getMaxID
-Member Variable:	getMaxLength
-Member Variable:	getName
-Member Variable:	getNetGroup
-Member Variable:	getNetOwnerID
-Member Variable:	getParent
-Member Variable:	getPath
-Member Variable:	getPercentPlayed
-Member Variable:	getPhysics
-Member Variable:	getPhysicsRect
-Member Variable:	getPoint
-Member Variable:	getProbabilityRange
-Member Variable:	getRect
-Member Variable:	getRef
-Member Variable:	getRight
-Member Variable:	getRightBottom
-Member Variable:	getSceneGraph
-Member Variable:	getSoundHardwareTime
-Member Variable:	getSoundHardwareTimeUpdateDelta
-Member Variable:	getStartPoint
-Member Variable:	getString
-Member Variable:	getTargetPosition
-Member Variable:	getTileLayer
-Member Variable:	getTileRect
-Member Variable:	getTop
-Member Variable:	getTxtPath
-Member Variable:	getUnion
-Member Variable:	getUnusedID
-Member Variable:	getValueFromProbability
-Member Variable:	getWidth
-Member Variable:	getWidthHeight
-Member Variable:	getWorld
-Member Variable:	graphics
-Member Variable:	height
-Member Variable:	high
-Member Variable:	id
-Member Variable:	image
-Member Variable:	info
-Member Variable:	init
-Member Variable:	initClient
-Member Variable:	initHeight
-Member Variable:	initRead
-Member Variable:	initStatics
-Member Variable:	initWidth
-Member Variable:	initWrite
-Member Variable:	innerHTML
-Member Variable:	input
-Member Variable:	insert
-Member Variable:	insertBack
-Member Variable:	insertItem
-Member Variable:	insertToAllBestFitting
-Member Variable:	insertToSmallestContaining
-Member Variable:	instance
-Member Variable:	instanceID
-Member Variable:	intersectAABB
-Member Variable:	intersectsRect
-Member Variable:	isA
-Member Variable:	isActive
-Member Variable:	isAlwaysActive
-Member Variable:	isDebugDraw
-Member Variable:	isDebugDraw_CameraTarget
-Member Variable:	isDebugDraw_FrameStats
-Member Variable:	isDebugDraw_Input
-Member Variable:	isDebugDraw_Map
-Member Variable:	isDebugDraw_MouseCursor
-Member Variable:	isDebugDraw_NetworkMessages
-Member Variable:	isDebugDraw_Physics
-Member Variable:	isDebugDraw_SceneGraph
-Member Variable:	isDebugDraw_Sound
-Member Variable:	isDebugDraw_Sprite
-Member Variable:	isDebugDraw_Text
-Member Variable:	isDebugPrint
-Member Variable:	isDebugPrint_FrameStats
-Member Variable:	isDebugPrint_GameObject
-Member Variable:	isDebugPrint_Input
-Member Variable:	isDebugPrint_NetworkMessages
-Member Variable:	isDebugPrint_Obfuscation
-Member Variable:	isDebugPrint_Sound
-Member Variable:	isFinished
-Member Variable:	isMultiplayer
-Member Variable:	isNet
-Member Variable:	isNetDirty
-Member Variable:	isNumber
-Member Variable:	isPlaying
-Member Variable:	isReading
-Member Variable:	isRunning
-Member Variable:	isServer
-Member Variable:	isSleeping
-Member Variable:	isStatic
-Member Variable:	isWrappable
-Member Variable:	item
-Member Variable:	keys
-Member Variable:	keysPressed
-Member Variable:	lastFrameDrawn
-Member Variable:	layer
-Member Variable:	lenSq
-Member Variable:	length
-Member Variable:	loadImage
-Member Variable:	loadSound
-Member Variable:	loadSoundAssets
-Member Variable:	localUser
-Member Variable:	log
-Member Variable:	logger
-Member Variable:	low
-Member Variable:	masterVolume
-Member Variable:	max
-Member Variable:	maxArrayLength
-Member Variable:	maxlength
-Member Variable:	min
-Member Variable:	mouseLoc
-Member Variable:	msg
-Member Variable:	multiply
+Member Variable:	_net			*****
+Member Variable:	_objectHeaderFormat			*****
+Member Variable:	_onAnimFrame			*****
+Member Variable:	_onChatSubmit			*****
+Member Variable:	_onClose			*****
+Member Variable:	_onError			*****
+Member Variable:	_onInput			*****
+Member Variable:	_onMessage			*****
+Member Variable:	_onOpen			*****
+Member Variable:	_origin			*****
+Member Variable:	_ourMaxItemsPerMessage			*****
+Member Variable:	_ourMessageHeaderFormat			*****
+Member Variable:	_owner			*****
+Member Variable:	_parent			*****
+Member Variable:	_parents			*****
+Member Variable:	_path			*****
+Member Variable:	_physics			*****
+Member Variable:	_physicsObject			*****
+Member Variable:	_physicsSystem			*****
+Member Variable:	_position			*****
+Member Variable:	_power			*****
+Member Variable:	_range			*****
+Member Variable:	_rayEnd			*****
+Member Variable:	_rayStart			*****
+Member Variable:	_referenceEntity			*****
+Member Variable:	_referenceEntityCameraComponent			*****
+Member Variable:	_referenceEntityInputComponent			*****
+Member Variable:	_referenceEntityPhysicsComponent			*****
+Member Variable:	_referenceEntitySoundPlayerComponent			*****
+Member Variable:	_referenceEntitySpriteComponent			*****
+Member Variable:	_removePhysicsObjectFromTree			*****
+Member Variable:	_removedWorld			*****
+Member Variable:	_right			*****
+Member Variable:	_rotMatrixRow1			*****
+Member Variable:	_rotMatrixRow2			*****
+Member Variable:	_running			*****
+Member Variable:	_sceneGraph			*****
+Member Variable:	_sceneGraphRenderable			*****
+Member Variable:	_sendChatToChatLog			*****
+Member Variable:	_serializeFormat			*****
+Member Variable:	_setSleeping			*****
+Member Variable:	_sounds			*****
+Member Variable:	_sourceRect			*****
+Member Variable:	_specialChars			*****
+Member Variable:	_speed			*****
+Member Variable:	_statics			*****
+Member Variable:	_supressKeyboardEvents			*****
+Member Variable:	_tileMapTree			*****
+Member Variable:	_tileSize			*****
+Member Variable:	_tileset			*****
+Member Variable:	_timeAccumulator			*****
+Member Variable:	_underflow_bits			*****
+Member Variable:	_unusedInstanceIDs			*****
+Member Variable:	_up			*****
+Member Variable:	_value			*****
+Member Variable:	_velocity			*****
+Member Variable:	aBool1			*****
+Member Variable:	aBool2			*****
+Member Variable:	aString			*****
+Member Variable:	add			*****
+Member Variable:	addComponent			*****
+Member Variable:	addEntity			*****
+Member Variable:	addNetDirtyObject			*****
+Member Variable:	addNewObject			*****
+Member Variable:	addObject			*****
+Member Variable:	addToNetGroup			*****
+Member Variable:	addUser			*****
+Member Variable:	added			*****
+Member Variable:	addedToWorld			*****
+Member Variable:	anchor			*****
+Member Variable:	anchorPosition			*****
+Member Variable:	apply			*****
+Member Variable:	assert			*****
+Member Variable:	assetManager			*****
+Member Variable:	blur			*****
+Member Variable:	boundingRect			*****
+Member Variable:	buffer			*****
+Member Variable:	buttons			*****
+Member Variable:	call			*****
+Member Variable:	canUserModifyNet			*****
+Member Variable:	centerOn			*****
+Member Variable:	chainDown			*****
+Member Variable:	chainUp			*****
+Member Variable:	chatSystem			*****
+Member Variable:	class			*****
+Member Variable:	classID			*****
+Member Variable:	cleanup			*****
+Member Variable:	clearNetDirty			*****
+Member Variable:	clearTile			*****
+Member Variable:	clearTilesInRect			*****
+Member Variable:	clicked			*****
+Member Variable:	clone			*****
+Member Variable:	close			*****
+Member Variable:	componentArray			*****
+Member Variable:	componentArrayBefore			*****
+Member Variable:	componentMax			*****
+Member Variable:	componentMin			*****
+Member Variable:	compressClientCode			*****
+Member Variable:	condition			*****
+Member Variable:	constructor			*****
+Member Variable:	containsItems			*****
+Member Variable:	containsPoint			*****
+Member Variable:	containsRect			*****
+Member Variable:	copyFrom			*****
+Member Variable:	counter			*****
+Member Variable:	create			*****
+Member Variable:	createAndPlaySourceBuffer			*****
+Member Variable:	createGameCircularDoublyLinkedListNode			*****
+Member Variable:	createGameObjectRef			*****
+Member Variable:	createGameRegistry			*****
+Member Variable:	createInstanceRegistry			*****
+Member Variable:	createNetGroup			*****
+Member Variable:	createNewPhysicsObject			*****
+Member Variable:	createSourceBuffer			*****
+Member Variable:	data			*****
+Member Variable:	debugDraw			*****
+Member Variable:	debugPrint			*****
+Member Variable:	decode			*****
+Member Variable:	default2DRadius			*****
+Member Variable:	deleteContained			*****
+Member Variable:	deleteItem			*****
+Member Variable:	deref			*****
+Member Variable:	deregister			*****
+Member Variable:	deregisterListener			*****
+Member Variable:	destroy			*****
+Member Variable:	direction			*****
+Member Variable:	divide			*****
+Member Variable:	dopplerFactor			*****
+Member Variable:	dot			*****
+Member Variable:	down1			*****
+Member Variable:	down2			*****
+Member Variable:	drawDebugText			*****
+Member Variable:	drawOrderHelper			*****
+Member Variable:	effectsVolume			*****
+Member Variable:	encode			*****
+Member Variable:	entity			*****
+Member Variable:	entityArray			*****
+Member Variable:	entityArrayBefore			*****
+Member Variable:	equal			*****
+Member Variable:	error			*****
+Member Variable:	exit			*****
+Member Variable:	fileName			*****
+Member Variable:	findByID			*****
+Member Variable:	findByName			*****
+Member Variable:	findNodeContaining			*****
+Member Variable:	findSmallestContainingAncestor			*****
+Member Variable:	findSmallestContainingDescendant			*****
+Member Variable:	findSmallestContainingNodeFromHere			*****
+Member Variable:	fireRay			*****
+Member Variable:	flags			*****
+Member Variable:	floor			*****
+Member Variable:	focus			*****
+Member Variable:	forAll			*****
+Member Variable:	forAllComponent			*****
+Member Variable:	forAllReverse			*****
+Member Variable:	generateDocumentation			*****
+Member Variable:	generateNextAssetID			*****
+Member Variable:	generateNextSampleID			*****
+Member Variable:	generateNextSoundDescriptionID			*****
+Member Variable:	getAABB			*****
+Member Variable:	getArea			*****
+Member Variable:	getBottom			*****
+Member Variable:	getBoundingBox			*****
+Member Variable:	getCallbackName			*****
+Member Variable:	getCenter			*****
+Member Variable:	getClass			*****
+Member Variable:	getComponentByType			*****
+Member Variable:	getCurrentCamera			*****
+Member Variable:	getCurrentLength			*****
+Member Variable:	getCurrentNode			*****
+Member Variable:	getCurrentPoint			*****
+Member Variable:	getDomTarget			*****
+Member Variable:	getDummyMode			*****
+Member Variable:	getEffectsVolume			*****
+Member Variable:	getEndPoint			*****
+Member Variable:	getFrameCount			*****
+Member Variable:	getFrameEvents			*****
+Member Variable:	getFrameRate			*****
+Member Variable:	getHeight			*****
+Member Variable:	getID			*****
+Member Variable:	getInstanceRegistry			*****
+Member Variable:	getIntersection			*****
+Member Variable:	getLeft			*****
+Member Variable:	getLeftBottom			*****
+Member Variable:	getLeftTop			*****
+Member Variable:	getMap			*****
+Member Variable:	getMapLowerRight			*****
+Member Variable:	getMass			*****
+Member Variable:	getMasterVolume			*****
+Member Variable:	getMaxID			*****
+Member Variable:	getMaxLength			*****
+Member Variable:	getName			*****
+Member Variable:	getNetGroup			*****
+Member Variable:	getNetOwnerID			*****
+Member Variable:	getParent			*****
+Member Variable:	getPath			*****
+Member Variable:	getPercentPlayed			*****
+Member Variable:	getPhysics			*****
+Member Variable:	getPhysicsRect			*****
+Member Variable:	getPoint			*****
+Member Variable:	getProbabilityRange			*****
+Member Variable:	getRect			*****
+Member Variable:	getRef			*****
+Member Variable:	getRight			*****
+Member Variable:	getRightBottom			*****
+Member Variable:	getSceneGraph			*****
+Member Variable:	getSoundHardwareTime			*****
+Member Variable:	getSoundHardwareTimeUpdateDelta			*****
+Member Variable:	getStartPoint			*****
+Member Variable:	getString			*****
+Member Variable:	getTargetPosition			*****
+Member Variable:	getTileLayer			*****
+Member Variable:	getTileRect			*****
+Member Variable:	getTop			*****
+Member Variable:	getTxtPath			*****
+Member Variable:	getUnion			*****
+Member Variable:	getUnusedID			*****
+Member Variable:	getValueFromProbability			*****
+Member Variable:	getWidth			*****
+Member Variable:	getWidthHeight			*****
+Member Variable:	getWorld			*****
+Member Variable:	graphics			*****
+Member Variable:	height			*****
+Member Variable:	high			*****
+Member Variable:	id			*****
+Member Variable:	image			*****
+Member Variable:	info			*****
+Member Variable:	init			*****
+Member Variable:	initClient			*****
+Member Variable:	initHeight			*****
+Member Variable:	initRead			*****
+Member Variable:	initStatics			*****
+Member Variable:	initWidth			*****
+Member Variable:	initWrite			*****
+Member Variable:	innerHTML			*****
+Member Variable:	input			*****
+Member Variable:	insert			*****
+Member Variable:	insertBack			*****
+Member Variable:	insertItem			*****
+Member Variable:	insertToAllBestFitting			*****
+Member Variable:	insertToSmallestContaining			*****
+Member Variable:	instance			*****
+Member Variable:	instanceID			*****
+Member Variable:	intersectAABB			*****
+Member Variable:	intersectsRect			*****
+Member Variable:	isA			*****
+Member Variable:	isActive			*****
+Member Variable:	isAlwaysActive			*****
+Member Variable:	isDebugDraw			*****
+Member Variable:	isDebugDraw_CameraTarget			*****
+Member Variable:	isDebugDraw_FrameStats			*****
+Member Variable:	isDebugDraw_Input			*****
+Member Variable:	isDebugDraw_Map			*****
+Member Variable:	isDebugDraw_MouseCursor			*****
+Member Variable:	isDebugDraw_NetworkMessages			*****
+Member Variable:	isDebugDraw_Physics			*****
+Member Variable:	isDebugDraw_SceneGraph			*****
+Member Variable:	isDebugDraw_Sound			*****
+Member Variable:	isDebugDraw_Sprite			*****
+Member Variable:	isDebugDraw_Text			*****
+Member Variable:	isDebugPrint			*****
+Member Variable:	isDebugPrint_FrameStats			*****
+Member Variable:	isDebugPrint_GameObject			*****
+Member Variable:	isDebugPrint_Input			*****
+Member Variable:	isDebugPrint_NetworkMessages			*****
+Member Variable:	isDebugPrint_Obfuscation			*****
+Member Variable:	isDebugPrint_Sound			*****
+Member Variable:	isFinished			*****
+Member Variable:	isMultiplayer			*****
+Member Variable:	isNet			*****
+Member Variable:	isNetDirty			*****
+Member Variable:	isNumber			*****
+Member Variable:	isPlaying			*****
+Member Variable:	isReading			*****
+Member Variable:	isRunning			*****
+Member Variable:	isServer			*****
+Member Variable:	isSleeping			*****
+Member Variable:	isStatic			*****
+Member Variable:	isWrappable			*****
+Member Variable:	item			*****
+Member Variable:	keys			*****
+Member Variable:	keysPressed			*****
+Member Variable:	lastFrameDrawn			*****
+Member Variable:	layer			*****
+Member Variable:	lenSq			*****
+Member Variable:	length			*****
+Member Variable:	loadImage			*****
+Member Variable:	loadSound			*****
+Member Variable:	loadSoundAssets			*****
+Member Variable:	localUser			*****
+Member Variable:	log			*****
+Member Variable:	logger			*****
+Member Variable:	low			*****
+Member Variable:	masterVolume			*****
+Member Variable:	max			*****
+Member Variable:	maxArrayLength			*****
+Member Variable:	maxlength			*****
+Member Variable:	min			*****
+Member Variable:	mouseLoc			*****
+Member Variable:	msg			*****
+Member Variable:	multiply			*****
 Member Variable:	myAABB
 Member Variable:	myECGameSocket
 Member Variable:	myHeight
@@ -1942,145 +1942,145 @@ Member Variable:	myUserID
 Member Variable:	myWidth
 Member Variable:	myX
 Member Variable:	myY
-Member Variable:	name
-Member Variable:	net
-Member Variable:	network
-Member Variable:	normalize
-Member Variable:	numItems
-Member Variable:	obfuscateNames
-Member Variable:	onAddedToEntity
-Member Variable:	onAddedToWorld
-Member Variable:	onClientDisconnected
-Member Variable:	onConnectedToServer
-Member Variable:	onDisconnectedFromServer
-Member Variable:	onEvent
-Member Variable:	onGameObjectDestroyed
-Member Variable:	onGameObjectNetDirty
-Member Variable:	onIdentifiedUser
-Member Variable:	onInput
-Member Variable:	onMsg
-Member Variable:	onPhysObjectUpdate
-Member Variable:	onPlaySound
-Member Variable:	onRemovedFromEntity
-Member Variable:	onRemovedFromWorld
-Member Variable:	onRequestVelocity
-Member Variable:	onSentMessage
-Member Variable:	onTestEvent
-Member Variable:	onUpdatePosition
-Member Variable:	ourFrameRayCounter
-Member Variable:	ownerMap
-Member Variable:	pack
-Member Variable:	physics
-Member Variable:	placeholder
-Member Variable:	play
-Member Variable:	playPositionalSoundEffect2D
-Member Variable:	playSoundEffect
-Member Variable:	position
-Member Variable:	postSerialize
-Member Variable:	precision
-Member Variable:	prototype
-Member Variable:	pruneTowardsRoot
-Member Variable:	recieved
-Member Variable:	reconnectKey
-Member Variable:	register
-Member Variable:	registerClass
-Member Variable:	registerListener
-Member Variable:	registerTest
-Member Variable:	release
-Member Variable:	remove
-Member Variable:	removeComponent
-Member Variable:	removeEntity
-Member Variable:	removeFromNetGroup
-Member Variable:	removeItem
-Member Variable:	removeNewlines
-Member Variable:	removeNonNewlineWhiteSpace
-Member Variable:	removeObject
-Member Variable:	removeTextForLocalization
-Member Variable:	removeUser
-Member Variable:	removedFromWorld
-Member Variable:	render
-Member Variable:	renderTile
-Member Variable:	renderTileInRect
-Member Variable:	requestVelocity
-Member Variable:	rules
-Member Variable:	run
-Member Variable:	runTests
-Member Variable:	saveResultsNotesToFile
-Member Variable:	scale
-Member Variable:	sceneGraphOwningNodes
-Member Variable:	screenPos
-Member Variable:	send
-Member Variable:	sendMessage
-Member Variable:	serialize
-Member Variable:	serializeBool
-Member Variable:	serializeFloat
-Member Variable:	serializeGameObjectRef
-Member Variable:	serializeIn
-Member Variable:	serializeInt
-Member Variable:	serializeObject
-Member Variable:	serializeOut
-Member Variable:	serializePoint2D
-Member Variable:	serializeString
-Member Variable:	setAABB
-Member Variable:	setActive
-Member Variable:	setAlwaysActive
-Member Variable:	setAnimation
-Member Variable:	setCamera
-Member Variable:	setDummyMode
-Member Variable:	setEffectsVolume
-Member Variable:	setGameObjectNetDirty
-Member Variable:	setID
-Member Variable:	setLeftTop
-Member Variable:	setListenerPosition
-Member Variable:	setMasterVolume
-Member Variable:	setMinMax
-Member Variable:	setName
-Member Variable:	setNetDirty
-Member Variable:	setNetOwner
-Member Variable:	setOwner
-Member Variable:	setPath
-Member Variable:	setPosition
-Member Variable:	setRightBottom
-Member Variable:	setSoundDescriptions
-Member Variable:	setSoundSamples
-Member Variable:	setStatic
-Member Variable:	setString
-Member Variable:	setSupressKeyboardEvents
-Member Variable:	setTile
-Member Variable:	setTileSet
-Member Variable:	setValue
-Member Variable:	setVelocity
-Member Variable:	size
-Member Variable:	soundSystem
-Member Variable:	speedOfSound
-Member Variable:	start
-Member Variable:	stop
-Member Variable:	subtract
-Member Variable:	tileValue
-Member Variable:	timer
-Member Variable:	toBinary
-Member Variable:	toTileCoordinate
-Member Variable:	toggleActiveInput
-Member Variable:	type
-Member Variable:	unit
-Member Variable:	unitTests
-Member Variable:	unpack
-Member Variable:	up1
-Member Variable:	up2
-Member Variable:	update
-Member Variable:	updateOrder
-Member Variable:	useModifiedNamesNotPureObfuscate
-Member Variable:	useRequestAnimFrame
-Member Variable:	user
-Member Variable:	userID
-Member Variable:	userName
-Member Variable:	value
-Member Variable:	velocity
-Member Variable:	walk
-Member Variable:	warn
-Member Variable:	webServer
-Member Variable:	width
-Member Variable:	world
+Member Variable:	name			*****
+Member Variable:	net			*****
+Member Variable:	network			*****
+Member Variable:	normalize			*****
+Member Variable:	numItems			*****
+Member Variable:	obfuscateNames			*****
+Member Variable:	onAddedToEntity			*****
+Member Variable:	onAddedToWorld			*****
+Member Variable:	onClientDisconnected			*****
+Member Variable:	onConnectedToServer			*****
+Member Variable:	onDisconnectedFromServer			*****
+Member Variable:	onEvent			*****
+Member Variable:	onGameObjectDestroyed			*****
+Member Variable:	onGameObjectNetDirty			*****
+Member Variable:	onIdentifiedUser			*****
+Member Variable:	onInput			*****
+Member Variable:	onMsg			*****
+Member Variable:	onPhysObjectUpdate			*****
+Member Variable:	onPlaySound			*****
+Member Variable:	onRemovedFromEntity			*****
+Member Variable:	onRemovedFromWorld			*****
+Member Variable:	onRequestVelocity			*****
+Member Variable:	onSentMessage			*****
+Member Variable:	onTestEvent			*****
+Member Variable:	onUpdatePosition			*****
+Member Variable:	ourFrameRayCounter			*****
+Member Variable:	ownerMap			*****
+Member Variable:	pack			*****
+Member Variable:	physics			*****
+Member Variable:	placeholder			*****
+Member Variable:	play			*****
+Member Variable:	playPositionalSoundEffect2D			*****
+Member Variable:	playSoundEffect			*****
+Member Variable:	position			*****
+Member Variable:	postSerialize			*****
+Member Variable:	precision			*****
+Member Variable:	prototype			*****
+Member Variable:	pruneTowardsRoot			*****
+Member Variable:	recieved			*****
+Member Variable:	reconnectKey			*****
+Member Variable:	register			*****
+Member Variable:	registerClass			*****
+Member Variable:	registerListener			*****
+Member Variable:	registerTest			*****
+Member Variable:	release			*****
+Member Variable:	remove			*****
+Member Variable:	removeComponent			*****
+Member Variable:	removeEntity			*****
+Member Variable:	removeFromNetGroup			*****
+Member Variable:	removeItem			*****
+Member Variable:	removeNewlines			*****
+Member Variable:	removeNonNewlineWhiteSpace			*****
+Member Variable:	removeObject			*****
+Member Variable:	removeTextForLocalization			*****
+Member Variable:	removeUser			*****
+Member Variable:	removedFromWorld			*****
+Member Variable:	render			*****
+Member Variable:	renderTile			*****
+Member Variable:	renderTileInRect			*****
+Member Variable:	requestVelocity			*****
+Member Variable:	rules			*****
+Member Variable:	run			*****
+Member Variable:	runTests			*****
+Member Variable:	saveResultsNotesToFile			*****
+Member Variable:	scale			*****
+Member Variable:	sceneGraphOwningNodes			*****
+Member Variable:	screenPos			*****
+Member Variable:	send			*****
+Member Variable:	sendMessage			*****
+Member Variable:	serialize			*****
+Member Variable:	serializeBool			*****
+Member Variable:	serializeFloat			*****
+Member Variable:	serializeGameObjectRef			*****
+Member Variable:	serializeIn			*****
+Member Variable:	serializeInt			*****
+Member Variable:	serializeObject			*****
+Member Variable:	serializeOut			*****
+Member Variable:	serializePoint2D			*****
+Member Variable:	serializeString			*****
+Member Variable:	setAABB			*****
+Member Variable:	setActive			*****
+Member Variable:	setAlwaysActive			*****
+Member Variable:	setAnimation			*****
+Member Variable:	setCamera			*****
+Member Variable:	setDummyMode			*****
+Member Variable:	setEffectsVolume			*****
+Member Variable:	setGameObjectNetDirty			*****
+Member Variable:	setID			*****
+Member Variable:	setLeftTop			*****
+Member Variable:	setListenerPosition			*****
+Member Variable:	setMasterVolume			*****
+Member Variable:	setMinMax			*****
+Member Variable:	setName			*****
+Member Variable:	setNetDirty			*****
+Member Variable:	setNetOwner			*****
+Member Variable:	setOwner			*****
+Member Variable:	setPath			*****
+Member Variable:	setPosition			*****
+Member Variable:	setRightBottom			*****
+Member Variable:	setSoundDescriptions			*****
+Member Variable:	setSoundSamples			*****
+Member Variable:	setStatic			*****
+Member Variable:	setString			*****
+Member Variable:	setSupressKeyboardEvents			*****
+Member Variable:	setTile			*****
+Member Variable:	setTileSet			*****
+Member Variable:	setValue			*****
+Member Variable:	setVelocity			*****
+Member Variable:	size			*****
+Member Variable:	soundSystem			*****
+Member Variable:	speedOfSound			*****
+Member Variable:	start			*****
+Member Variable:	stop			*****
+Member Variable:	subtract			*****
+Member Variable:	tileValue			*****
+Member Variable:	timer			*****
+Member Variable:	toBinary			*****
+Member Variable:	toTileCoordinate			*****
+Member Variable:	toggleActiveInput			*****
+Member Variable:	type			*****
+Member Variable:	unit			*****
+Member Variable:	unitTests			*****
+Member Variable:	unpack			*****
+Member Variable:	up1			*****
+Member Variable:	up2			*****
+Member Variable:	update			*****
+Member Variable:	updateOrder			*****
+Member Variable:	useModifiedNamesNotPureObfuscate			*****
+Member Variable:	useRequestAnimFrame			*****
+Member Variable:	user			*****
+Member Variable:	userID			*****
+Member Variable:	userName			*****
+Member Variable:	value			*****
+Member Variable:	velocity			*****
+Member Variable:	walk			*****
+Member Variable:	warn			*****
+Member Variable:	webServer			*****
+Member Variable:	width			*****
+Member Variable:	world			*****
 
 
 
