@@ -101,7 +101,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				);
 				if(ECGame.Settings.TEMP_HACK_NEW_NETWORK)
 				{
-					this._myMasterNetGroup = ECGame.instance.network.createNetGroup('master_netgroup');
+					this._myMasterNetGroup = ECGame.instance.network.getNetGroup('master_netgroup');
 				}
 			}
 			//setup event listeners
@@ -395,7 +395,8 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			this._gameWorld.removeEntity(anEntity);
 			if(ECGame.Settings.TEMP_HACK_NEW_NETWORK)
 			{
-				anEntity.removeFromNetGroup(this._myMasterNetGroup);
+				//anEntity.removeFromNetGroup(this._myMasterNetGroup);
+				anEntity.destroy();	//TODO remove from group ^^^ and then set destory on timer if they dont reconnect
 			}
 		},
 		

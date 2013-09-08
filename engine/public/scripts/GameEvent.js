@@ -64,10 +64,11 @@ ECGame.EngineLib.Events.GameEventBase = ECGame.EngineLib.Class.create({
 
 
 ECGame.EngineLib.Events.GameObjectNetDirty = ECGame.EngineLib.Class.create({
-	Constructor : function GameObjectNetDirty(inObject)
+	Constructor : function GameObjectNetDirty(inObject, inUserID)
 	{
 		this.GameEventBase('onGameObjectNetDirty');
 		this.myObject = inObject;
+		this.myUserID = inUserID;
 	},
 	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},

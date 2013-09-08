@@ -27,6 +27,7 @@ Final NameSpaces:
 	ChatSystem
 	Class
 	ClientDisconnected
+	ClientSideWebSocket
 	ConnectedToServer
 	Data
 	DisconnectedFromServer
@@ -73,8 +74,10 @@ Final NameSpaces:
 	LoadEngine
 	LoadGame
 	Msg
+	NetGroup
 	NetObjects
-	Network
+	NetworkBase
+	NetworkClient
 	PhysObjectUpdate
 	Physics2D
 	PhysicsObject2D
@@ -116,21 +119,13 @@ Final NameSpaces:
 	_insertPhysicsObjectToTree
 	_onAnimFrame
 	_onChatSubmit
-	_onClientConnected
-	_onClientDisconnected
-	_onConnectedToServer
-	_onDataRecv
-	_onDisconnectedFromServer
-	_onIdRecv
+	_onClose
+	_onError
 	_onInput
-	_onMsgRecv
-	_onObjectsRecv
+	_onMessage
+	_onOpen
 	_removePhysicsObjectFromTree
 	_sendChatToChatLog
-	_sendData
-	_sendObj
-	_serializeObjectsIn
-	_serializeObjectsOut
 	_setSleeping
 	add
 	addComponent
@@ -138,8 +133,10 @@ Final NameSpaces:
 	addEntity
 	addNetDirtyObject
 	addNewObject
+	addObject
 	addToNetGroup
 	addToRenderMap
+	addUser
 	addedToWorld
 	blockContextMenu
 	canUserModifyNet
@@ -153,6 +150,7 @@ Final NameSpaces:
 	clearTile
 	clearTilesInRect
 	clone
+	close
 	componentMax
 	componentMin
 	containsItems
@@ -162,6 +160,7 @@ Final NameSpaces:
 	create
 	createAndPlaySourceBuffer
 	createInstanceRegistry
+	createNetGroup
 	createNewPhysicsObject
 	createSourceBuffer
 	debugDraw
@@ -228,6 +227,7 @@ Final NameSpaces:
 	getMaxID
 	getMaxLength
 	getName
+	getNetGroup
 	getNetOwnerID
 	getParent
 	getPath
@@ -321,6 +321,8 @@ Final NameSpaces:
 	onDisconnectedFromServer
 	onError
 	onEvent
+	onGameObjectDestroyed
+	onGameObjectNetDirty
 	onIdentifiedUser
 	onInput
 	onMsg
@@ -339,8 +341,6 @@ Final NameSpaces:
 	postSerialize
 	prototype
 	pruneTowardsRoot
-	queueAllInstancesOfClass
-	queueObject
 	register
 	registerClass
 	registerListener
@@ -352,6 +352,8 @@ Final NameSpaces:
 	removeEntity
 	removeFromNetGroup
 	removeItem
+	removeObject
+	removeUser
 	removedFromWorld
 	render
 	renderTile
@@ -362,13 +364,16 @@ Final NameSpaces:
 	run
 	runTests
 	scale
+	send
 	sendMessage
 	serialize
 	serializeBool
 	serializeFloat
 	serializeGameObjectRef
+	serializeIn
 	serializeInt
 	serializeObject
+	serializeOut
 	serializePoint2D
 	serializeString
 	setAABB
@@ -431,6 +436,7 @@ Function Names:
 	ChatSystem
 	Class
 	ClientDisconnected
+	ClientSideWebSocket
 	ConnectedToServer
 	Data
 	DisconnectedFromServer
@@ -474,8 +480,10 @@ Function Names:
 	LoadEngine
 	LoadGame
 	Msg
+	NetGroup
 	NetObjects
-	Network
+	NetworkBase
+	NetworkClient
 	PhysObjectUpdate
 	Physics2D
 	PhysicsObject2D
@@ -515,21 +523,13 @@ Function Names:
 	_insertPhysicsObjectToTree
 	_onAnimFrame
 	_onChatSubmit
-	_onClientConnected
-	_onClientDisconnected
-	_onConnectedToServer
-	_onDataRecv
-	_onDisconnectedFromServer
-	_onIdRecv
+	_onClose
+	_onError
 	_onInput
-	_onMsgRecv
-	_onObjectsRecv
+	_onMessage
+	_onOpen
 	_removePhysicsObjectFromTree
 	_sendChatToChatLog
-	_sendData
-	_sendObj
-	_serializeObjectsIn
-	_serializeObjectsOut
 	_setSleeping
 	add
 	addComponent
@@ -537,8 +537,10 @@ Function Names:
 	addEntity
 	addNetDirtyObject
 	addNewObject
+	addObject
 	addToNetGroup
 	addToRenderMap
+	addUser
 	addedToWorld
 	blockContextMenu
 	canUserModifyNet
@@ -552,6 +554,7 @@ Function Names:
 	clearTile
 	clearTilesInRect
 	clone
+	close
 	componentMax
 	componentMin
 	containsItems
@@ -561,6 +564,7 @@ Function Names:
 	create
 	createAndPlaySourceBuffer
 	createInstanceRegistry
+	createNetGroup
 	createNewPhysicsObject
 	createSourceBuffer
 	debugDraw
@@ -627,6 +631,7 @@ Function Names:
 	getMaxID
 	getMaxLength
 	getName
+	getNetGroup
 	getNetOwnerID
 	getParent
 	getPath
@@ -719,6 +724,8 @@ Function Names:
 	onDisconnectedFromServer
 	onError
 	onEvent
+	onGameObjectDestroyed
+	onGameObjectNetDirty
 	onIdentifiedUser
 	onInput
 	onMsg
@@ -736,8 +743,6 @@ Function Names:
 	playSoundEffect
 	postSerialize
 	pruneTowardsRoot
-	queueAllInstancesOfClass
-	queueObject
 	register
 	registerClass
 	registerListener
@@ -749,6 +754,8 @@ Function Names:
 	removeEntity
 	removeFromNetGroup
 	removeItem
+	removeObject
+	removeUser
 	removedFromWorld
 	render
 	renderTile
@@ -759,13 +766,16 @@ Function Names:
 	run
 	runTests
 	scale
+	send
 	sendMessage
 	serialize
 	serializeBool
 	serializeFloat
 	serializeGameObjectRef
+	serializeIn
 	serializeInt
 	serializeObject
+	serializeOut
 	serializePoint2D
 	serializeString
 	setAABB
@@ -825,6 +835,7 @@ Parameter Variables:
 	inAnimations
 	inAssetID
 	inBits
+	inBuffer
 	inButtons
 	inCallbackName
 	inCameraRect
@@ -832,9 +843,9 @@ Parameter Variables:
 	inCanvas2DContext
 	inCanvasContext
 	inClass
+	inCode
 	inColor
 	inComponent
-	inConnectedSocket
 	inConstructor
 	inCurrentFrame
 	inCurrentTime
@@ -843,6 +854,8 @@ Parameter Variables:
 	inDataFormat
 	inDescriptions
 	inDestination
+	inDestroyInstanceList
+	inDirtyInstanceList
 	inDojoOn
 	inDojoStyle
 	inDom
@@ -878,7 +891,6 @@ Parameter Variables:
 	inKeysPressed
 	inLHS
 	inLeft
-	inList
 	inListener
 	inMap
 	inMapSize
@@ -895,9 +907,10 @@ Parameter Variables:
 	inMsg
 	inName
 	inNetGroup
+	inNetwork
+	inNewInstanceList
 	inNode
 	inNodeColor
-	inObjData
 	inObject
 	inOn
 	inOrigin
@@ -922,6 +935,7 @@ Parameter Variables:
 	inPublicGamePath
 	inRHS
 	inRadius
+	inReason
 	inRect
 	inRenderableItem
 	inRenderer
@@ -929,10 +943,7 @@ Parameter Variables:
 	inRootNode
 	inSamples
 	inScalar
-	inSentListener
 	inSerializer
-	inSerializerFlags
-	inSocket
 	inSoundAssets
 	inSoundDescription
 	inSoundDescriptionID
@@ -958,6 +969,7 @@ Parameter Variables:
 	inTimeDelay
 	inType
 	inUser
+	inUserID
 	inValue
 	inVel
 	inVelocity
@@ -993,7 +1005,9 @@ Local Variable Names:
 	LoadEngine
 	TestComponent
 	aAudioSystem
+	aBinaryBuffer
 	aChild
+	aClassName
 	aCollisionList
 	aCollisionRect
 	aCurrent
@@ -1002,8 +1016,12 @@ Local Variable Names:
 	aCurrentNode
 	aCurrentPointDrawSize
 	aCurrentTime
+	aCurrentUser
+	aCurrentUserIndex
 	aD123
 	aD456
+	aDestroyInstanceList
+	aDirtyInstanceList
 	aDrawSize
 	aEndPointDrawSize
 	aExtraBits
@@ -1022,7 +1040,11 @@ Local Variable Names:
 	aKeepChildren
 	aLength
 	aListToDraw
+	aMessageHeader
 	aMovedObjectsThisFrame
+	aNetGroup
+	aNetGroupIndex
+	aNewInstanceList
 	aNewT
 	aNode
 	aPercentPlayed
@@ -1030,6 +1052,8 @@ Local Variable Names:
 	aPoint
 	aPower
 	aRandomValue
+	aReadObjectsList
+	aRecievedObj
 	aSample
 	aSmallestNode
 	aSound
@@ -1039,6 +1063,7 @@ Local Variable Names:
 	aSoundScreenLoc
 	aSoundSystem
 	aSourceBuffer
+	aSourceUserIndex
 	aStartingOwner
 	aT
 	aT123
@@ -1048,12 +1073,19 @@ Local Variable Names:
 	aThis
 	aThisNodesSize
 	aTotal
+	aUserID
+	aUserMap
 	acceleration
-	address
-	allRelevantObjects
 	anAABB
 	anEntity
+	anIndex
+	anInstanceID
+	anInstanceList
+	anInstanceMap
 	anItem
+	anObject
+	anObjectClass
+	anObjectHeader
 	anOldDirection
 	anOwner
 	angle
@@ -1069,8 +1101,6 @@ Local Variable Names:
 	cameraLeftTop
 	chainTestObject
 	charIndex
-	classInstanceList
-	className
 	classRegistry
 	colCenter
 	component
@@ -1093,7 +1123,6 @@ Local Variable Names:
 	direction
 	directions
 	domGraphicsContainer
-	drawNetObjects
 	duplicate
 	encodeRange
 	encodedBytes
@@ -1104,7 +1133,6 @@ Local Variable Names:
 	entityPath
 	entityRef
 	entry
-	event
 	eventName
 	eventSystem
 	eventType
@@ -1129,6 +1157,7 @@ Local Variable Names:
 	imageInfo
 	inDefinition
 	inFlags
+	inMessage
 	inObj
 	inParents
 	index
@@ -1137,7 +1166,6 @@ Local Variable Names:
 	inputString
 	instanceID
 	instanceName
-	instanceObject
 	itemRect
 	j
 	key
@@ -1196,7 +1224,6 @@ Local Variable Names:
 	propertyName
 	range
 	rayTrace
-	readObjects
 	readResult
 	ref
 	registry
@@ -1205,7 +1232,6 @@ Local Variable Names:
 	returnRect
 	screenPos
 	second
-	sendData
 	serializer
 	serverRebootTime
 	sin
@@ -1261,6 +1287,7 @@ Member Variables:
 	ChatSystem
 	Class
 	ClientDisconnected
+	ClientSideWebSocket
 	ConnectedToServer
 	Constructor
 	DEBUG
@@ -1283,7 +1310,6 @@ Member Variables:
 	Func1Called
 	Func2
 	Func2Called
-	GUEST
 	Game2DGraphics
 	Game2DMap
 	Game2DSceneGraph
@@ -1323,8 +1349,10 @@ Member Variables:
 	Msg
 	NET
 	NEW_USER
+	NetGroup
 	NetObjects
 	Network
+	NetworkBase
 	NetworkMessages_Draw
 	NetworkMessages_DrawColor
 	NetworkMessages_Print
@@ -1481,7 +1509,6 @@ Member Variables:
 	_lastUpdateMin
 	_lastUpdateSec
 	_left
-	_listenSocket
 	_low
 	_map
 	_mapAABB
@@ -1489,10 +1516,7 @@ Member Variables:
 	_mapSizeInTiles
 	_mapsize
 	_maxID
-	_maxItemsPerMessage
 	_maxLayers
-	_messageHeader
-	_messageHeaderFormat
 	_minPhysicsPartitionSize
 	_mouseLoc
 	_myAABB
@@ -1513,12 +1537,14 @@ Member Variables:
 	_myDensity
 	_myDescription
 	_myDestination
+	_myDestroyInstances
 	_myDetectionTree
 	_myDynamicCompressor
 	_myEffectsVolume
 	_myEffectsVolumeUserValue
 	_myEventListeners
 	_myFileName
+	_myForwardDirtyObjects
 	_myFrameEvents
 	_myFrameUpdateCount
 	_myGameObjectNetDirty
@@ -1536,7 +1562,11 @@ Member Variables:
 	_myMinSize
 	_myName
 	_myNetDirty
+	_myNetDirtyInstances
+	_myNetGroups
 	_myNetOwnerID
+	_myNetwork
+	_myNewInstances
 	_myNextAssetID
 	_myNextPhysicsID
 	_myNextSampleID
@@ -1559,6 +1589,9 @@ Member Variables:
 	_myRect
 	_mySamples
 	_mySceneTree
+	_mySerializedObjects
+	_mySerializer
+	_mySocket
 	_mySoundAsset
 	_mySoundAssetLib
 	_mySoundBuffer
@@ -1573,30 +1606,29 @@ Member Variables:
 	_myTiles
 	_myTimeStepInMilliSeconds
 	_myTimeStepInSeconds
+	_myTrackedInstances
 	_myTree
+	_myUser
+	_myUsers
 	_myV
 	_myVelocity
 	_myVisitedNodes
 	_myVolume
 	_myVolumeVariation
+	_myWebsocket
 	_myWorld
 	_net
-	_netDirtyInstances
-	_newInstances
-	_objectHeader
 	_objectHeaderFormat
 	_onAnimFrame
 	_onChatSubmit
-	_onClientConnected
-	_onClientDisconnected
-	_onConnectedToServer
-	_onDataRecv
-	_onDisconnectedFromServer
-	_onIdRecv
+	_onClose
+	_onError
 	_onInput
-	_onMsgRecv
-	_onObjectsRecv
+	_onMessage
+	_onOpen
 	_origin
+	_ourMaxItemsPerMessage
+	_ourMessageHeaderFormat
 	_owner
 	_parent
 	_parents
@@ -1624,14 +1656,8 @@ Member Variables:
 	_sceneGraph
 	_sceneGraphRenderable
 	_sendChatToChatLog
-	_sendData
-	_sendObj
 	_serializeFormat
-	_serializeObjectsIn
-	_serializeObjectsOut
-	_serializer
 	_setSleeping
-	_socket
 	_sounds
 	_sourceRect
 	_specialChars
@@ -1655,7 +1681,9 @@ Member Variables:
 	addEntity
 	addNetDirtyObject
 	addNewObject
+	addObject
 	addToNetGroup
+	addUser
 	added
 	addedToWorld
 	anchor
@@ -1665,7 +1693,7 @@ Member Variables:
 	assetManager
 	blur
 	boundingRect
-	broadcast
+	buffer
 	buttons
 	call
 	canUserModifyNet
@@ -1681,6 +1709,7 @@ Member Variables:
 	clearTilesInRect
 	clicked
 	clone
+	close
 	componentArray
 	componentArrayBefore
 	componentMax
@@ -1699,6 +1728,7 @@ Member Variables:
 	createGameObjectRef
 	createGameRegistry
 	createInstanceRegistry
+	createNetGroup
 	createNewPhysicsObject
 	createSourceBuffer
 	data
@@ -1721,7 +1751,6 @@ Member Variables:
 	drawDebugText
 	drawOrderHelper
 	effectsVolume
-	emit
 	encode
 	entity
 	entityArray
@@ -1743,7 +1772,6 @@ Member Variables:
 	forAll
 	forAllComponent
 	forAllReverse
-	gameUser
 	generateDocumentation
 	generateNextAssetID
 	generateNextSampleID
@@ -1781,6 +1809,7 @@ Member Variables:
 	getMaxID
 	getMaxLength
 	getName
+	getNetGroup
 	getNetOwnerID
 	getParent
 	getPath
@@ -1874,7 +1903,6 @@ Member Variables:
 	layer
 	lenSq
 	length
-	listenSocket
 	loadImage
 	loadSound
 	loadSoundAssets
@@ -1891,6 +1919,7 @@ Member Variables:
 	msg
 	multiply
 	myAABB
+	myECGameSocket
 	myHeight
 	myIsFollowingSource
 	myIsPositional
@@ -1906,8 +1935,10 @@ Member Variables:
 	myPrev
 	myPrevActivePhysObj
 	myRadius
+	mySocket
 	mySoundDescriptionID
 	myT
+	myUserID
 	myWidth
 	myX
 	myY
@@ -1923,6 +1954,8 @@ Member Variables:
 	onConnectedToServer
 	onDisconnectedFromServer
 	onEvent
+	onGameObjectDestroyed
+	onGameObjectNetDirty
 	onIdentifiedUser
 	onInput
 	onMsg
@@ -1948,6 +1981,7 @@ Member Variables:
 	prototype
 	pruneTowardsRoot
 	recieved
+	reconnectKey
 	register
 	registerClass
 	registerListener
@@ -1960,7 +1994,9 @@ Member Variables:
 	removeItem
 	removeNewlines
 	removeNonNewlineWhiteSpace
+	removeObject
 	removeTextForLocalization
+	removeUser
 	removedFromWorld
 	render
 	renderTile
@@ -1973,13 +2009,16 @@ Member Variables:
 	scale
 	sceneGraphOwningNodes
 	screenPos
+	send
 	sendMessage
 	serialize
 	serializeBool
 	serializeFloat
 	serializeGameObjectRef
+	serializeIn
 	serializeInt
 	serializeObject
+	serializeOut
 	serializePoint2D
 	serializeString
 	setAABB
@@ -2012,7 +2051,6 @@ Member Variables:
 	setValue
 	setVelocity
 	size
-	socketio
 	soundSystem
 	speedOfSound
 	start
@@ -2070,6 +2108,7 @@ Included Words:
 	Class
 	ClassNamespace
 	ClientDisconnected
+	ClientSideWebSocket
 	ConnectedToServer
 	Constructor
 	DEBUG
@@ -2098,7 +2137,6 @@ Included Words:
 	Func1Called
 	Func2
 	Func2Called
-	GUEST
 	Game2DGraphics
 	Game2DMap
 	Game2DSceneGraph
@@ -2140,8 +2178,11 @@ Included Words:
 	Msg
 	NET
 	NEW_USER
+	NetGroup
 	NetObjects
 	Network
+	NetworkBase
+	NetworkClient
 	NetworkMessages_Draw
 	NetworkMessages_DrawColor
 	NetworkMessages_Print
@@ -2303,7 +2344,6 @@ Included Words:
 	_lastUpdateMin
 	_lastUpdateSec
 	_left
-	_listenSocket
 	_low
 	_map
 	_mapAABB
@@ -2311,10 +2351,7 @@ Included Words:
 	_mapSizeInTiles
 	_mapsize
 	_maxID
-	_maxItemsPerMessage
 	_maxLayers
-	_messageHeader
-	_messageHeaderFormat
 	_minPhysicsPartitionSize
 	_mouseLoc
 	_myAABB
@@ -2335,12 +2372,14 @@ Included Words:
 	_myDensity
 	_myDescription
 	_myDestination
+	_myDestroyInstances
 	_myDetectionTree
 	_myDynamicCompressor
 	_myEffectsVolume
 	_myEffectsVolumeUserValue
 	_myEventListeners
 	_myFileName
+	_myForwardDirtyObjects
 	_myFrameEvents
 	_myFrameUpdateCount
 	_myGameObjectNetDirty
@@ -2358,7 +2397,11 @@ Included Words:
 	_myMinSize
 	_myName
 	_myNetDirty
+	_myNetDirtyInstances
+	_myNetGroups
 	_myNetOwnerID
+	_myNetwork
+	_myNewInstances
 	_myNextAssetID
 	_myNextPhysicsID
 	_myNextSampleID
@@ -2381,6 +2424,9 @@ Included Words:
 	_myRect
 	_mySamples
 	_mySceneTree
+	_mySerializedObjects
+	_mySerializer
+	_mySocket
 	_mySoundAsset
 	_mySoundAssetLib
 	_mySoundBuffer
@@ -2395,30 +2441,29 @@ Included Words:
 	_myTiles
 	_myTimeStepInMilliSeconds
 	_myTimeStepInSeconds
+	_myTrackedInstances
 	_myTree
+	_myUser
+	_myUsers
 	_myV
 	_myVelocity
 	_myVisitedNodes
 	_myVolume
 	_myVolumeVariation
+	_myWebsocket
 	_myWorld
 	_net
-	_netDirtyInstances
-	_newInstances
-	_objectHeader
 	_objectHeaderFormat
 	_onAnimFrame
 	_onChatSubmit
-	_onClientConnected
-	_onClientDisconnected
-	_onConnectedToServer
-	_onDataRecv
-	_onDisconnectedFromServer
-	_onIdRecv
+	_onClose
+	_onError
 	_onInput
-	_onMsgRecv
-	_onObjectsRecv
+	_onMessage
+	_onOpen
 	_origin
+	_ourMaxItemsPerMessage
+	_ourMessageHeaderFormat
 	_owner
 	_parent
 	_parents
@@ -2446,14 +2491,8 @@ Included Words:
 	_sceneGraph
 	_sceneGraphRenderable
 	_sendChatToChatLog
-	_sendData
-	_sendObj
 	_serializeFormat
-	_serializeObjectsIn
-	_serializeObjectsOut
-	_serializer
 	_setSleeping
-	_socket
 	_sounds
 	_sourceRect
 	_specialChars
@@ -2470,9 +2509,11 @@ Included Words:
 	_value
 	_velocity
 	aAudioSystem
+	aBinaryBuffer
 	aBool1
 	aBool2
 	aChild
+	aClassName
 	aCollisionList
 	aCollisionRect
 	aCurrent
@@ -2481,8 +2522,12 @@ Included Words:
 	aCurrentNode
 	aCurrentPointDrawSize
 	aCurrentTime
+	aCurrentUser
+	aCurrentUserIndex
 	aD123
 	aD456
+	aDestroyInstanceList
+	aDirtyInstanceList
 	aDrawSize
 	aEndPointDrawSize
 	aExtraBits
@@ -2501,7 +2546,11 @@ Included Words:
 	aKeepChildren
 	aLength
 	aListToDraw
+	aMessageHeader
 	aMovedObjectsThisFrame
+	aNetGroup
+	aNetGroupIndex
+	aNewInstanceList
 	aNewT
 	aNode
 	aPercentPlayed
@@ -2509,6 +2558,8 @@ Included Words:
 	aPoint
 	aPower
 	aRandomValue
+	aReadObjectsList
+	aRecievedObj
 	aSample
 	aSmallestNode
 	aSound
@@ -2518,6 +2569,7 @@ Included Words:
 	aSoundScreenLoc
 	aSoundSystem
 	aSourceBuffer
+	aSourceUserIndex
 	aStartingOwner
 	aString
 	aT
@@ -2528,6 +2580,8 @@ Included Words:
 	aThis
 	aThisNodesSize
 	aTotal
+	aUserID
+	aUserMap
 	acceleration
 	add
 	addComponent
@@ -2535,15 +2589,22 @@ Included Words:
 	addEntity
 	addNetDirtyObject
 	addNewObject
+	addObject
 	addToNetGroup
 	addToRenderMap
+	addUser
 	added
 	addedToWorld
-	address
-	allRelevantObjects
 	anAABB
 	anEntity
+	anIndex
+	anInstanceID
+	anInstanceList
+	anInstanceMap
 	anItem
+	anObject
+	anObjectClass
+	anObjectHeader
 	anOldDirection
 	anOwner
 	anchorPosition
@@ -2556,7 +2617,6 @@ Included Words:
 	bits
 	blockContextMenu
 	boundingRect
-	broadcast
 	buttons
 	callback
 	callbackName
@@ -2574,7 +2634,6 @@ Included Words:
 	checkBroadCollision
 	checkFinished
 	classID
-	classInstanceList
 	classRegistry
 	cleanup
 	clearNetDirty
@@ -2582,6 +2641,7 @@ Included Words:
 	clearTilesInRect
 	clicked
 	clone
+	close
 	colCenter
 	component
 	component1
@@ -2608,6 +2668,7 @@ Included Words:
 	createGameObjectRef
 	createGameRegistry
 	createInstanceRegistry
+	createNetGroup
 	createNewPhysicsObject
 	createSourceBuffer
 	current
@@ -2639,7 +2700,6 @@ Included Words:
 	down1
 	down2
 	drawDebugText
-	drawNetObjects
 	drawOrderHelper
 	duplicate
 	effectsVolume
@@ -2688,7 +2748,6 @@ Included Words:
 	frames
 	funcArray
 	funcIndex
-	gameUser
 	generateDocumentation
 	generateNextAssetID
 	generateNextSampleID
@@ -2726,6 +2785,7 @@ Included Words:
 	getMaxID
 	getMaxLength
 	getName
+	getNetGroup
 	getNetOwnerID
 	getParent
 	getPath
@@ -2767,6 +2827,7 @@ Included Words:
 	inAnimations
 	inAssetID
 	inBits
+	inBuffer
 	inButtons
 	inCallbackName
 	inCameraRect
@@ -2774,9 +2835,9 @@ Included Words:
 	inCanvas2DContext
 	inCanvasContext
 	inClass
+	inCode
 	inColor
 	inComponent
-	inConnectedSocket
 	inConstructor
 	inCurrentFrame
 	inCurrentTime
@@ -2786,6 +2847,8 @@ Included Words:
 	inDefinition
 	inDescriptions
 	inDestination
+	inDestroyInstanceList
+	inDirtyInstanceList
 	inDojoOn
 	inDojoStyle
 	inDom
@@ -2821,7 +2884,6 @@ Included Words:
 	inKeysPressed
 	inLHS
 	inLeft
-	inList
 	inListener
 	inMap
 	inMapSize
@@ -2838,10 +2900,11 @@ Included Words:
 	inMsg
 	inName
 	inNetGroup
+	inNetwork
+	inNewInstanceList
 	inNode
 	inNodeColor
 	inObj
-	inObjData
 	inObject
 	inOn
 	inOrigin
@@ -2866,6 +2929,7 @@ Included Words:
 	inPublicGamePath
 	inRHS
 	inRadius
+	inReason
 	inRect
 	inRenderableItem
 	inRenderer
@@ -2873,10 +2937,7 @@ Included Words:
 	inRootNode
 	inSamples
 	inScalar
-	inSentListener
 	inSerializer
-	inSerializerFlags
-	inSocket
 	inSoundAssets
 	inSoundDescription
 	inSoundDescriptionID
@@ -2902,6 +2963,7 @@ Included Words:
 	inTimeDelay
 	inType
 	inUser
+	inUserID
 	inValue
 	inVel
 	inVelocity
@@ -2935,7 +2997,6 @@ Included Words:
 	instance
 	instanceID
 	instanceName
-	instanceObject
 	intersectAABB
 	intersectsRect
 	isA
@@ -2983,7 +3044,6 @@ Included Words:
 	layer
 	len
 	lenSq
-	listenSocket
 	listener1
 	listener2
 	listenerNode
@@ -3011,6 +3071,7 @@ Included Words:
 	mouseWorldPosition
 	multiply
 	myAABB
+	myECGameSocket
 	myHeight
 	myIsFollowingSource
 	myIsPositional
@@ -3026,8 +3087,10 @@ Included Words:
 	myPrev
 	myPrevActivePhysObj
 	myRadius
+	mySocket
 	mySoundDescriptionID
 	myT
+	myUserID
 	myWidth
 	myX
 	myY
@@ -3057,6 +3120,8 @@ Included Words:
 	onDisconnectedFromServer
 	onError
 	onEvent
+	onGameObjectDestroyed
+	onGameObjectNetDirty
 	onIdentifiedUser
 	onInput
 	onMsg
@@ -3101,11 +3166,8 @@ Included Words:
 	property
 	propertyName
 	pruneTowardsRoot
-	queueAllInstancesOfClass
-	queueObject
 	range
 	rayTrace
-	readObjects
 	readResult
 	recieved
 	ref
@@ -3123,7 +3185,9 @@ Included Words:
 	removeItem
 	removeNewlines
 	removeNonNewlineWhiteSpace
+	removeObject
 	removeTextForLocalization
+	removeUser
 	removedFromWorld
 	render
 	renderTile
@@ -3142,14 +3206,15 @@ Included Words:
 	sceneGraphOwningNodes
 	screenPos
 	second
-	sendData
 	sendMessage
 	serialize
 	serializeBool
 	serializeFloat
 	serializeGameObjectRef
+	serializeIn
 	serializeInt
 	serializeObject
+	serializeOut
 	serializePoint2D
 	serializeString
 	serializer
@@ -3182,7 +3247,6 @@ Included Words:
 	setTileSet
 	setValue
 	size
-	socketio
 	sortCollisions
 	sortRenderables
 	soundInfo
@@ -3478,6 +3542,7 @@ Ignored Words:
 	prototype
 	push
 	random
+	reconnectKey
 	reduce
 	reduceRight
 	replace
@@ -3603,21 +3668,20 @@ Unmapped Words:
 	Step2_Gravel
 	Step2b_Gravel
 	TestEvent
-	URL
+	WebSocket
 	XMLHttpRequest
 	_
 	_myAssetID
 	_mySampleID
 	_mySoundDescriptionID
 	_myStartTime
-	addObject
-	addUser
 	alert
 	amp
 	arc
 	arraybuffer
 	at
 	beginPath
+	binaryType
 	bool
 	border
 	button
@@ -3632,8 +3696,6 @@ Unmapped Words:
 	click
 	closePath
 	connect
-	connected
-	connection
 	construct
 	contextmenu
 	createBufferSource
@@ -3641,7 +3703,6 @@ Unmapped Words:
 	createElement
 	createGainNode
 	createMsgType
-	createNetGroup
 	createPanner
 	currentTime
 	decodeAudioData
@@ -3649,8 +3710,9 @@ Unmapped Words:
 	defaultImage
 	defaultsound
 	destination
+	destroyObjects
 	dirt
-	disconnect
+	dirtyObjects
 	distanceModel
 	div
 	dojo
@@ -3673,21 +3735,20 @@ Unmapped Words:
 	grass
 	ground_256
 	gt
+	hostname
 	images
 	inError
 	int
-	io
 	isLoaded
 	jogSheet
 	keyCode
 	keydown
 	keypress
 	keyup
-	level
 	lineTo
-	listen
 	listener
 	listeners
+	location
 	lt
 	master_netgroup
 	maxDistance
@@ -3703,19 +3764,20 @@ Unmapped Words:
 	n
 	netConnected
 	netDisconnected
+	newObjects
 	none
 	noteOff
 	noteOn
-	numObjects
-	obj
 	objRef
 	offsetX
 	offsetY
 	onData
-	onGameObjectDestroyed
-	onGameObjectNetDirty
 	onNetObjects
+	onclose
+	onerror
 	onload
+	onmessage
+	onopen
 	open
 	p
 	physicsObject
@@ -3726,7 +3788,6 @@ Unmapped Words:
 	pointer
 	preventDefault
 	px
-	removeObject
 	response
 	responseType
 	rgba
@@ -3735,10 +3796,9 @@ Unmapped Words:
 	scope
 	scrollIntoView
 	set
-	socket
-	sockets
 	sounds
 	stack
+	stringify
 	stroke
 	strokeRect
 	strokeStyle
@@ -3751,6 +3811,7 @@ Unmapped Words:
 	waterSub
 	wav
 	webkitAudioContext
+	ws
 Localized Strings:
 	"Assert failed: "
 	" (Path Not supported.)"
@@ -3800,37 +3861,38 @@ Localized Strings:
 	"----Vel:("
 	"Failed to load "
 	"Guest"
-	"TCP Server running."
-	"User Connected: "
-	"Queueing Network Create for New Connection: "
-	"User Disconnected: "
-	"Net Send Msg: "
-	"Can't send message when disconnected."
-	"Net Send Data: "
-	"Can't send data when disconnected."
-	"Net Send Obj: "
-	"Connected to Server!"
-	"Server"
-	"Lost Server!"
-	"Hacker ID ignored: "
-	"Identified User: "
-	" identified as "
-	"New UserID FOR: "
-	"New userid FROM: "
-	"Server Re-ID's me as: "
-	"Net Recv Msg: "
-	"Net Recv Data: "
-	"Net Recv Obj: "
+	"Clear Net Dirty on:"
+	"Cannot currently serialize so many objects!"
+	"Net create remote on "
+	"Net write to "
+	"Net Destroy on "
 	"Network in:"
 	"Net user not identifying self correctly: "
+	"    New:"
+	"Net create remotely command from "
 	"Unknown classID "
+	"Looks like we have a hacker!"
 	"Network Creating: "
+	"Network Changing (instead of creating): "
+	"    Dirty:"
+	"Net reading from "
+	"Dirty Network Object doesn't exists!:"
 	"Network Changing: "
-	"Not the owner!: "
-	"Network out:"
-	"Queueing Distributed Network Create: "
-	"Queueing Distributed Object Changes: "
-	"Cannot currently serialize so many objects!"
+	"Not the owner, skipping changes!: "
+	"    Destroy:"
+	"Net destroy remotely order from "
+	"Network object to destroy doesn't exists!:"
+	"scripts/NetworkServer.js"
+	"Connected to Server, awaiting ID validation..."
+	"Server"
+	"Lost Server!"
+	"Net Message Recv (text):"
+	"Net Message Recv (binary):"
+	"User ID Message:"
+	"Ill formed User Identification!"
+	"Connected to Server, ID validated!"
+	"Recieved bad id data from server."
+	"Net Send to "
 	"Input: "
 	"Active"
 	"Inactive"

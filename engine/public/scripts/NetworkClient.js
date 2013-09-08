@@ -69,6 +69,10 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			
 			//Other side of the connection is the server.
 			aThis._myUser = new ECGame.EngineLib.User("Server", ECGame.EngineLib.User.USER_IDS.SERVER);
+			aThis._myUser.mySocket = aThis;
+			
+			//TODO handle removing this user on disconnect!
+			ECGame.instance.network.getNetGroup('master_netgroup').addUser(aThis._myUser);
 			
 			//Send my ID to server
 			aThis.send(JSON.stringify(ECGame.instance.localUser));
@@ -116,6 +120,7 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 		{
 			var aThis
 				,inMessage
+				,aRecievedObj
 				;
 			
 			//console.trace();
@@ -137,13 +142,26 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 				}
 			}
 			
+			if(ECGame.instance.localUser.userID !== ECGame.EngineLib.User.USER_IDS.NEW_USER)
+			{
+				aThis._myNetwork.serializeIn(aThis._myUser, inMessage);
+				//TODO inNetwork.event Msg
+				if(typeof inMessage === 'string')
+				{
+					//console.log(inMessage);
+				}
+				else
+				{
+					//console.log(new Float32Array(inMessage));
+				}
+			}
 			//if we are unidentified we should expect the server to id us before getting any other messages
-			if(ECGame.instance.localUser.userID === ECGame.EngineLib.User.USER_IDS.NEW_USER)
+			else
 			{
 				if(typeof inMessage === 'string')
 				{
 					aRecievedObj = JSON.parse(inMessage);
-					ECGame.log.info('User ID Message:' + inMessage);
+					ECGame.log.info("User ID Message:" + inMessage);
 					//verify the object is valid
 					if(typeof aRecievedObj.userName !== 'string'
 						|| typeof aRecievedObj.userID !== 'number'
@@ -171,19 +189,6 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 				{
 					ECGame.log.warn("Recieved bad id data from server.");
 				}
-				
-				return;
-			}
-			
-			aThis._myNetwork.serializeIn(aThis._myUser, inMessage);
-			//TODO inNetwork.event Msg
-			if(typeof inMessage === 'string')
-			{
-				//console.log(inMessage);
-			}
-			else
-			{
-				//console.log(new Float32Array(inMessage));
 			}
 		},
 		

@@ -158,7 +158,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			return this._myNetDirty;
 		},
 		
-		setNetDirty : function setNetDirty()
+		setNetDirty : function setNetDirty(inUserID)
 		{
 			if(this.canUserModifyNet())
 			{
@@ -167,7 +167,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 					ECGame.instance.network.addNetDirtyObject(this);//TODO event instead
 					this._myNetDirty = true;
 				}
-				this.onEvent(new ECGame.EngineLib.Events.GameObjectNetDirty(this));
+				this.onEvent(new ECGame.EngineLib.Events.GameObjectNetDirty(this, inUserID));
 				
 				return true;
 			}

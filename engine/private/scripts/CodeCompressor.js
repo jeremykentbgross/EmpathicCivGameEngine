@@ -158,31 +158,39 @@ ECGame.WebServerTools.CodeCompressor.prototype.makeCompactGameLoader = function 
 	//TODO many of these should be in the obfuscator itself!
 	obfuscator.addIgnore('Math');//because for some reason doesn't have it's name property
 	obfuscator.addIgnore('console');//because for some reason doesn't have it's name property
+	obfuscator.addIgnore('window');//TODO remove unneeded
+	
 	obfuscator.addIgnore('dom');//TODO this is param, rename it so we dont need this
 	obfuscator.addIgnore('id');//TODO remove unneeded, used by dom.create
 	obfuscator.addIgnore('width');//TODO remove unneeded, used by dom.create
 	obfuscator.addIgnore('height');//TODO remove unneeded, used by dom.create
 	obfuscator.addIgnore('innerHTML');//TODO remove unneeded, used by dom.create
 	obfuscator.addIgnore('on');//TODO remove unneeded, used by dojo
-	obfuscator.addIgnore('window');//TODO remove unneeded
 	obfuscator.addIgnore('emit');//TODO remove unneeded
-//	obfuscator.addIgnore('console');//TODO remove unneeded??
 	obfuscator.addIgnore('document');//TODO remove unneeded??
+	
 	obfuscator.addIgnore('placeholder');//field for the HTML input control
 	obfuscator.addIgnore('src');//the source of a js image
 	obfuscator.addIgnore('type');//HTML user input events
 	obfuscator.addIgnore('buffer');//used by native sound system
 	obfuscator.addIgnore('class');//used as css class in html elements
 	obfuscator.addIgnore('js');//TEMP HACK until strings removed correctly
+	
+	//audio
 	obfuscator.addIgnore('setOrientation');//Native Audio
 	obfuscator.addIgnore('setPosition');//Native Audio
 	obfuscator.addIgnore('setVelocity');//Native Audio
 	obfuscator.addIgnore('dopplerFactor');//Native Audio
 	obfuscator.addIgnore('speedOfSound');//Native Audio
+	
+	//TODO, instead of ignoring these, server side should interpret them!!!
 	obfuscator.addIgnore('userName');//network user object field
 	obfuscator.addIgnore('userID');//network user object field
+	obfuscator.addIgnore('reconnectKey');//network user object field
+	//TODO depricate(d?)
 	obfuscator.addIgnore('msg');//network msg type
 	obfuscator.addIgnore('data');//network msg type
+	
 	obfuscator.addIgnore('className');//dom modify element for css
 	obfuscator.addIgnore('focus');//dom UI function
 	obfuscator.addIgnore('color');//for dom border-color

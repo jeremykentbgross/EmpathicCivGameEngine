@@ -160,8 +160,22 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 				}
 			}
 			
+			if(aThis._myUser.userID !== ECGame.EngineLib.User.USER_IDS.NEW_USER)
+			{
+				aThis._myNetwork.serializeIn(aThis._myUser, inMessage);
+			
+				//TODO inNetwork.event Msg
+				if(typeof inMessage === 'string')
+				{
+					//ECGame.log.info('Message:', inMessage);
+				}
+				else
+				{
+					//ECGame.log.info('binary:', new Uint8Array(inMessage));
+				}
+			}
 			//handle connection handshake / ID
-			if(aThis._myUser.userID === ECGame.EngineLib.User.USER_IDS.NEW_USER)
+			else
 			{
 				if(typeof inMessage === 'string')
 				{
@@ -211,20 +225,6 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 				{
 					ECGame.log.warn("Recieved data from unidentified user.");
 				}
-				
-				return;
-			}
-			
-			aThis._myNetwork.serializeIn(aThis._myUser, inMessage);
-			
-			//TODO inNetwork.event Msg
-			if(typeof inMessage === 'string')
-			{
-				//ECGame.log.info('Message:', inMessage);
-			}
-			else
-			{
-				//ECGame.log.info('binary:', new Uint8Array(inMessage));
 			}
 		},
 		

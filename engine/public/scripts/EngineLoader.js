@@ -170,15 +170,15 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	}
 	if(ECGame.Settings.Network.isMultiplayer)
 	{
-		include(inPublicEnginePath + "scripts/GameNetwork.js");
-		//include(inPublicEnginePath + "scripts/NetworkBase.js");
+		//include(inPublicEnginePath + "scripts/GameNetwork.js");
+		include(inPublicEnginePath + "scripts/NetworkBase.js");
 		if(inIsServer)
 		{
-		//	include(inPrivateEnginePath + "scripts/NetworkServer.js");
+			include(inPrivateEnginePath + "scripts/NetworkServer.js");
 		}
 		else
 		{
-		//	include(inPublicEnginePath + "scripts/NetworkClient.js");
+			include(inPublicEnginePath + "scripts/NetworkClient.js");
 		}
 	}
 
