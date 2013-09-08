@@ -196,7 +196,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	//include(inPublicEnginePath + "scripts/MultPacker.js");//TODO
 	include(inPublicEnginePath + "scripts/ArithmeticCompression.js");//TODO if multiplayer?
 	include(inPublicEnginePath + "scripts/ArithmeticCompressionModels.js");//TODO if multiplayer?
-	include(inPublicEnginePath + "scripts/GameBinarySerializer.js");//TODO if multiplayer?
+	include(inPublicEnginePath + "scripts/BinarySerializer.js");//TODO if multiplayer?
 	include(inPublicEnginePath + "scripts/GameEvent.js");
 	include(inPublicEnginePath + "scripts/GameEntity.js");
 	include(inPublicEnginePath + "scripts/GameEntityComponent.js");
