@@ -537,7 +537,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 	{
 		this.GameEventSystem();
 				
-		this._mySerializer = ECGame.EngineLib.GameBinarySerializer.create();
+		this._mySerializer = ECGame.EngineLib.BinarySerializer.create();
 		this._myNetGroups = {};
 		this._mySerializedObjects = {};	//[class][instance id]
 		

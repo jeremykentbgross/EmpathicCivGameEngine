@@ -21,11 +21,9 @@
 
 //TODO adaptive encode
 //TODO try to increase the precision of the coder and model(s)
-//TODO rename GameSerializer_Binary? actually make it not just binary in the same ser!
 
-//TODO rename BinarySerializer
-ECGame.EngineLib.GameBinarySerializer = ECGame.EngineLib.Class.create({
-	Constructor : function GameBinarySerializer()
+ECGame.EngineLib.BinarySerializer = ECGame.EngineLib.Class.create({
+	Constructor : function BinarySerializer()
 	{
 		this._myCompresser = ECGame.EngineLib.ArithmeticCompresser.create(true);
 		

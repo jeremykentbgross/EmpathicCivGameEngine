@@ -98,7 +98,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 			this._messageHeader = {};
 			this._objectHeader = {};
 			
-			this._serializer = ECGame.EngineLib.GameBinarySerializer.create();
+			this._serializer = ECGame.EngineLib.BinarySerializer.create();
 			
 			if(ECGame.Settings.Network.isServer)
 			{

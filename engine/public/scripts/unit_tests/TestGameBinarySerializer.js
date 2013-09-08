@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 ECGame.unitTests.registerTest(
-	'GameBinarySerializer',
+	'BinarySerializer',
 	function()
 	{
 		var passedTest = true;
@@ -103,7 +103,7 @@ ECGame.unitTests.registerTest(
 		net = false;
 		
 		//write data
-		var serializer = ECGame.EngineLib.GameBinarySerializer.create();
+		var serializer = ECGame.EngineLib.BinarySerializer.create();
 		serializer.initWrite({});
 		serializer.serializeObject(outObj, format);
 		
@@ -112,7 +112,7 @@ ECGame.unitTests.registerTest(
 		
 		//read data
 		inObj = {};
-		serializer = ECGame.EngineLib.GameBinarySerializer.create();
+		serializer = ECGame.EngineLib.BinarySerializer.create();
 		serializer.initRead({}, data);
 		serializer.serializeObject(inObj, format);
 		
@@ -126,7 +126,7 @@ ECGame.unitTests.registerTest(
 		net = true;
 	
 		//write data
-		serializer = ECGame.EngineLib.GameBinarySerializer.create();
+		serializer = ECGame.EngineLib.BinarySerializer.create();
 		serializer.initWrite({NET : true});
 		serializer.serializeObject(outObj, format);
 		
@@ -135,7 +135,7 @@ ECGame.unitTests.registerTest(
 		
 		//read data
 		inObj = {};
-		serializer = ECGame.EngineLib.GameBinarySerializer.create();
+		serializer = ECGame.EngineLib.BinarySerializer.create();
 		serializer.initRead({NET : true}, data);
 		serializer.serializeObject(inObj, format);
 		
