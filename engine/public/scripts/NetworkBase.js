@@ -707,7 +707,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 			aMessageHeader.destroyObjects = Math.min(this._ourMaxItemsPerMessage, inDestroyInstanceList.length);
 			this._mySerializer.serializeObject(aMessageHeader, this._ourMessageHeaderFormat);
 			
-			this._mySerializer._net = false;//TODO set serializer to full mode!
+			this._mySerializer.setNetMode(false);
 			for(i = 0; i < aMessageHeader.newObjects; ++i)
 			{
 				anObject = inNewInstanceList[i];
@@ -726,7 +726,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				this._mySerializedObjects[aClassName][anObject.getID()] = anObject;
 			}
 			
-			this._mySerializer._net = true;//TODO set serializer to partial mode!
+			this._mySerializer.setNetMode(true);
 			for(i = 0; i < aMessageHeader.dirtyObjects; ++i)
 			{
 				anObject = inDirtyInstanceList[i];
@@ -865,7 +865,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					}
 				}
 				
-				this._mySerializer._net = true;//TODO HACK need proper function to do this
+				this._mySerializer.setNetMode(true);
 				if(ECGame.Settings.isDebugDraw_NetworkMessages())
 				{
 					ECGame.instance.graphics.drawDebugText(

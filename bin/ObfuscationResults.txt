@@ -209,7 +209,6 @@ Final NameSpace:	getCurrentLength
 Final NameSpace:	getCurrentNode
 Final NameSpace:	getCurrentPoint
 Final NameSpace:	getDomTarget
-Final NameSpace:	getDummyMode
 Final NameSpace:	getEffectsVolume
 Final NameSpace:	getEndPoint
 Final NameSpace:	getFrameCount
@@ -297,8 +296,8 @@ Final NameSpace:	isDebugPrint_NetworkMessages
 Final NameSpace:	isDebugPrint_Obfuscation
 Final NameSpace:	isDebugPrint_Sound
 Final NameSpace:	isFinished
-Final NameSpace:	isNet
 Final NameSpace:	isNetDirty
+Final NameSpace:	isNetMode
 Final NameSpace:	isNumber
 Final NameSpace:	isPlaying
 Final NameSpace:	isReading
@@ -393,6 +392,7 @@ Final NameSpace:	setMasterVolume
 Final NameSpace:	setMinMax
 Final NameSpace:	setName
 Final NameSpace:	setNetDirty
+Final NameSpace:	setNetMode
 Final NameSpace:	setNetOwner
 Final NameSpace:	setOwner
 Final NameSpace:	setPath
@@ -616,7 +616,6 @@ Function Name:	getCurrentLength
 Function Name:	getCurrentNode
 Function Name:	getCurrentPoint
 Function Name:	getDomTarget
-Function Name:	getDummyMode
 Function Name:	getEffectsVolume
 Function Name:	getEndPoint
 Function Name:	getFrameCount
@@ -703,8 +702,8 @@ Function Name:	isDebugPrint_NetworkMessages
 Function Name:	isDebugPrint_Obfuscation
 Function Name:	isDebugPrint_Sound
 Function Name:	isFinished
-Function Name:	isNet
 Function Name:	isNetDirty
+Function Name:	isNetMode
 Function Name:	isNumber
 Function Name:	isPlaying
 Function Name:	isReading
@@ -798,6 +797,7 @@ Function Name:	setMasterVolume
 Function Name:	setMinMax
 Function Name:	setName
 Function Name:	setNetDirty
+Function Name:	setNetMode
 Function Name:	setNetOwner
 Function Name:	setOwner
 Function Name:	setPath
@@ -915,6 +915,7 @@ Parameter Variable:	inMousePosition
 Parameter Variable:	inMsg
 Parameter Variable:	inName
 Parameter Variable:	inNetGroup
+Parameter Variable:	inNetMode
 Parameter Variable:	inNetwork
 Parameter Variable:	inNewInstanceList
 Parameter Variable:	inNode
@@ -1075,6 +1076,7 @@ Local Variable:	aPoint
 Local Variable:	aPower
 Local Variable:	aRandomValue
 Local Variable:	aReadObjectsList
+Local Variable:	aReadResult
 Local Variable:	aRecievedObj
 Local Variable:	aSample
 Local Variable:	aSmallestNode
@@ -1104,8 +1106,10 @@ Local Variable:	aValues
 Local Variable:	acceleration			*****
 Local Variable:	anAABB
 Local Variable:	anArray
+Local Variable:	anArrayLength
 Local Variable:	anEncodedSizeBytes
 Local Variable:	anEntity
+Local Variable:	anEntry
 Local Variable:	anIndex
 Local Variable:	anInstanceID
 Local Variable:	anInstanceList
@@ -1119,7 +1123,6 @@ Local Variable:	anOwner
 Local Variable:	angle			*****
 Local Variable:	animProb			*****
 Local Variable:	animation			*****
-Local Variable:	arrayLength			*****
 Local Variable:	bestAnimProb			*****
 Local Variable:	callbackName			*****
 Local Variable:	camPoint			*****
@@ -1242,7 +1245,6 @@ Local Variable:	property			*****
 Local Variable:	propertyName			*****
 Local Variable:	range			*****
 Local Variable:	rayTrace			*****
-Local Variable:	readResult			*****
 Local Variable:	ref			*****
 Local Variable:	registry			*****
 Local Variable:	renderables			*****
@@ -1469,7 +1471,6 @@ Member Variable:	_chainUpMethods			*****
 Member Variable:	_childClasses			*****
 Member Variable:	_classID			*****
 Member Variable:	_clicked			*****
-Member Variable:	_compressor			*****
 Member Variable:	_constructor			*****
 Member Variable:	_containingWorld			*****
 Member Variable:	_cos			*****
@@ -1491,7 +1492,6 @@ Member Variable:	_domNetworkStatus			*****
 Member Variable:	_down			*****
 Member Variable:	_drawTile			*****
 Member Variable:	_dt			*****
-Member Variable:	_dummyMode			*****
 Member Variable:	_encoded			*****
 Member Variable:	_entities			*****
 Member Variable:	_entityMap			*****
@@ -1510,10 +1510,8 @@ Member Variable:	_insertPhysicsObjectToTree			*****
 Member Variable:	_instanceRegistry			*****
 Member Variable:	_instancesByID			*****
 Member Variable:	_instancesByName			*****
-Member Variable:	_integerRangeModel			*****
 Member Variable:	_intervalHandle			*****
 Member Variable:	_isRayTestMode			*****
-Member Variable:	_isWriting			*****
 Member Variable:	_itemCount			*****
 Member Variable:	_jojoDom			*****
 Member Variable:	_jojoDomConstruct			*****
@@ -1549,6 +1547,7 @@ Member Variable:	_myChildren
 Member Variable:	_myCollisions
 Member Variable:	_myCollisionsRenderList
 Member Variable:	_myComponentMap
+Member Variable:	_myCompresser
 Member Variable:	_myContext
 Member Variable:	_myCurrentNode
 Member Variable:	_myCurrentPoint
@@ -1567,6 +1566,10 @@ Member Variable:	_myFrameEvents
 Member Variable:	_myFrameUpdateCount
 Member Variable:	_myGameObjectNetDirty
 Member Variable:	_myID
+Member Variable:	_myIntegerRangeModel
+Member Variable:	_myIsDummyMode
+Member Variable:	_myIsNetMode
+Member Variable:	_myIsWriting
 Member Variable:	_myItemCollisionPoints
 Member Variable:	_myItems
 Member Variable:	_myLastSoundHardwareUpdateTime
@@ -1635,7 +1638,6 @@ Member Variable:	_myVolume
 Member Variable:	_myVolumeVariation
 Member Variable:	_myWebsocket
 Member Variable:	_myWorld
-Member Variable:	_net			*****
 Member Variable:	_objectHeaderFormat			*****
 Member Variable:	_onAnimFrame			*****
 Member Variable:	_onChatSubmit			*****
@@ -1808,7 +1810,6 @@ Member Variable:	getCurrentLength			*****
 Member Variable:	getCurrentNode			*****
 Member Variable:	getCurrentPoint			*****
 Member Variable:	getDomTarget			*****
-Member Variable:	getDummyMode			*****
 Member Variable:	getEffectsVolume			*****
 Member Variable:	getEndPoint			*****
 Member Variable:	getFrameCount			*****
@@ -1905,8 +1906,8 @@ Member Variable:	isDebugPrint_Obfuscation			*****
 Member Variable:	isDebugPrint_Sound			*****
 Member Variable:	isFinished			*****
 Member Variable:	isMultiplayer			*****
-Member Variable:	isNet			*****
 Member Variable:	isNetDirty			*****
+Member Variable:	isNetMode			*****
 Member Variable:	isNumber			*****
 Member Variable:	isPlaying			*****
 Member Variable:	isReading			*****
@@ -2055,6 +2056,7 @@ Member Variable:	setMasterVolume			*****
 Member Variable:	setMinMax			*****
 Member Variable:	setName			*****
 Member Variable:	setNetDirty			*****
+Member Variable:	setNetMode			*****
 Member Variable:	setNetOwner			*****
 Member Variable:	setOwner			*****
 Member Variable:	setPath			*****
@@ -2308,7 +2310,6 @@ Included Word:	_chainUpMethods
 Included Word:	_childClasses
 Included Word:	_classID
 Included Word:	_clicked
-Included Word:	_compressor
 Included Word:	_constructor
 Included Word:	_containingWorld
 Included Word:	_cos
@@ -2330,7 +2331,6 @@ Included Word:	_domNetworkStatus
 Included Word:	_down
 Included Word:	_drawTile
 Included Word:	_dt
-Included Word:	_dummyMode
 Included Word:	_encoded
 Included Word:	_entities
 Included Word:	_entityMap
@@ -2349,10 +2349,8 @@ Included Word:	_insertPhysicsObjectToTree
 Included Word:	_instanceRegistry
 Included Word:	_instancesByID
 Included Word:	_instancesByName
-Included Word:	_integerRangeModel
 Included Word:	_intervalHandle
 Included Word:	_isRayTestMode
-Included Word:	_isWriting
 Included Word:	_itemCount
 Included Word:	_jojoDom
 Included Word:	_jojoDomConstruct
@@ -2388,6 +2386,7 @@ Included Word:	_myChildren
 Included Word:	_myCollisions
 Included Word:	_myCollisionsRenderList
 Included Word:	_myComponentMap
+Included Word:	_myCompresser
 Included Word:	_myContext
 Included Word:	_myCurrentNode
 Included Word:	_myCurrentPoint
@@ -2406,6 +2405,10 @@ Included Word:	_myFrameEvents
 Included Word:	_myFrameUpdateCount
 Included Word:	_myGameObjectNetDirty
 Included Word:	_myID
+Included Word:	_myIntegerRangeModel
+Included Word:	_myIsDummyMode
+Included Word:	_myIsNetMode
+Included Word:	_myIsWriting
 Included Word:	_myItemCollisionPoints
 Included Word:	_myItems
 Included Word:	_myLastSoundHardwareUpdateTime
@@ -2474,7 +2477,6 @@ Included Word:	_myVolume
 Included Word:	_myVolumeVariation
 Included Word:	_myWebsocket
 Included Word:	_myWorld
-Included Word:	_net
 Included Word:	_objectHeaderFormat
 Included Word:	_onAnimFrame
 Included Word:	_onChatSubmit
@@ -2596,6 +2598,7 @@ Included Word:	aPoint
 Included Word:	aPower
 Included Word:	aRandomValue
 Included Word:	aReadObjectsList
+Included Word:	aReadResult
 Included Word:	aRecievedObj
 Included Word:	aSample
 Included Word:	aSmallestNode
@@ -2637,8 +2640,10 @@ Included Word:	added
 Included Word:	addedToWorld
 Included Word:	anAABB
 Included Word:	anArray
+Included Word:	anArrayLength
 Included Word:	anEncodedSizeBytes
 Included Word:	anEntity
+Included Word:	anEntry
 Included Word:	anIndex
 Included Word:	anInstanceID
 Included Word:	anInstanceList
@@ -2653,7 +2658,6 @@ Included Word:	anchorPosition
 Included Word:	angle
 Included Word:	animProb
 Included Word:	animation
-Included Word:	arrayLength
 Included Word:	assetManager
 Included Word:	bestAnimProb
 Included Word:	blockContextMenu
@@ -2802,7 +2806,6 @@ Included Word:	getCurrentLength
 Included Word:	getCurrentNode
 Included Word:	getCurrentPoint
 Included Word:	getDomTarget
-Included Word:	getDummyMode
 Included Word:	getEffectsVolume
 Included Word:	getEndPoint
 Included Word:	getFrameCount
@@ -2940,6 +2943,7 @@ Included Word:	inMousePosition
 Included Word:	inMsg
 Included Word:	inName
 Included Word:	inNetGroup
+Included Word:	inNetMode
 Included Word:	inNetwork
 Included Word:	inNewInstanceList
 Included Word:	inNode
@@ -3063,8 +3067,8 @@ Included Word:	isDebugPrint_Obfuscation
 Included Word:	isDebugPrint_Sound
 Included Word:	isFinished
 Included Word:	isMultiplayer
-Included Word:	isNet
 Included Word:	isNetDirty
+Included Word:	isNetMode
 Included Word:	isNumber
 Included Word:	isPlaying
 Included Word:	isReading
@@ -3204,7 +3208,6 @@ Included Word:	propertyName
 Included Word:	pruneTowardsRoot
 Included Word:	range
 Included Word:	rayTrace
-Included Word:	readResult
 Included Word:	recieved
 Included Word:	ref
 Included Word:	register
@@ -3270,6 +3273,7 @@ Included Word:	setMasterVolume
 Included Word:	setMinMax
 Included Word:	setName
 Included Word:	setNetDirty
+Included Word:	setNetMode
 Included Word:	setNetOwner
 Included Word:	setOwner
 Included Word:	setPath
@@ -3988,9 +3992,9 @@ Localized String:	" bytes in only "
 Localized String:	" a savings of %"
 Localized String:	"Binary encoded "
 Localized String:	" with ("
-Localized String:	"aLow:\t"
-Localized String:	"aValue:\t"
-Localized String:	"aHigh:\t"
+Localized String:	"low:\t"
+Localized String:	"value:\t"
+Localized String:	"high:\t"
 Localized String:	"range:\t"
 Localized String:	"scaled:\t"
 Localized String:	"Jeremy's Games are so freaking awesome, and his tech is top notch!"

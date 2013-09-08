@@ -239,7 +239,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			//HACK TODO this should not be done like this!!
 			//This is because if it isn't marked as net serialize it probably IS a net serialize but it needs a 'full' serialize
 			//TODO probably need some way to do net and netfull
-			this._myGameObjectNetDirty = this._myGameObjectNetDirty || !serializer.isNet();
+			this._myGameObjectNetDirty = this._myGameObjectNetDirty || !serializer.isNetMode();
 			
 			serializer.serializeObject(this, this.GameObject._serializeFormat);
 			
