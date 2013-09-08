@@ -102,6 +102,12 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	{
 		return !isNaN(parseFloat(inString)) && isFinite(inString);
 	};
+	ECGame.EngineLib.POWERS = [];
+	//make lookup to avoid calling Math.pow alot
+	for(i = 1; i <= 32/*this._BITCAP*/; ++i)
+	{
+		ECGame.EngineLib.POWERS[i] = Math.pow(2, i);
+	}
 	
 	if(ECGame.Settings.RUN_UNIT_TESTS)
 	{

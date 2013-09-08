@@ -38,8 +38,6 @@ Network TODO notes
 
 -socketio blocks 80? / remove socketio
 
--print category in ObfResults for each output
-
 -less verbose net printing option
 
 -dont dirty new objs in netgroup

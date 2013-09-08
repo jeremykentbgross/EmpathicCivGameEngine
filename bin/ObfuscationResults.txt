@@ -250,6 +250,7 @@ Final NameSpace:	getTileLayer
 Final NameSpace:	getTileRect
 Final NameSpace:	getTop
 Final NameSpace:	getTxtPath
+Final NameSpace:	getTypedArray
 Final NameSpace:	getUnion
 Final NameSpace:	getUnusedID
 Final NameSpace:	getValueFromProbability
@@ -261,7 +262,6 @@ Final NameSpace:	include
 Final NameSpace:	init
 Final NameSpace:	initClient
 Final NameSpace:	initRead
-Final NameSpace:	initStatics
 Final NameSpace:	initWrite
 Final NameSpace:	insert
 Final NameSpace:	insertBack
@@ -402,6 +402,7 @@ Final NameSpace:	setString
 Final NameSpace:	setSupressKeyboardEvents
 Final NameSpace:	setTile
 Final NameSpace:	setTileSet
+Final NameSpace:	setTypedArray
 Final NameSpace:	setValue
 Final NameSpace:	setVelocity
 Final NameSpace:	size
@@ -654,6 +655,7 @@ Function Name:	getTileLayer
 Function Name:	getTileRect
 Function Name:	getTop
 Function Name:	getTxtPath
+Function Name:	getTypedArray
 Function Name:	getUnion
 Function Name:	getUnusedID
 Function Name:	getValueFromProbability
@@ -665,7 +667,6 @@ Function Name:	include
 Function Name:	init
 Function Name:	initClient
 Function Name:	initRead
-Function Name:	initStatics
 Function Name:	initWrite
 Function Name:	insert
 Function Name:	insertBack
@@ -804,6 +805,7 @@ Function Name:	setString
 Function Name:	setSupressKeyboardEvents
 Function Name:	setTile
 Function Name:	setTileSet
+Function Name:	setTypedArray
 Function Name:	setValue
 Function Name:	setVelocity
 Function Name:	size
@@ -833,6 +835,7 @@ Parameter Variable:	in2DCamera
 Parameter Variable:	inAABB
 Parameter Variable:	inAnimation
 Parameter Variable:	inAnimations
+Parameter Variable:	inArray
 Parameter Variable:	inAssetID
 Parameter Variable:	inBits
 Parameter Variable:	inBuffer
@@ -861,6 +864,7 @@ Parameter Variable:	inDojoStyle
 Parameter Variable:	inDom
 Parameter Variable:	inDomConstruct
 Parameter Variable:	inDt
+Parameter Variable:	inEncodeToText
 Parameter Variable:	inEndingPoint
 Parameter Variable:	inEntity
 Parameter Variable:	inEvent
@@ -1006,6 +1010,7 @@ Local Variable:	LoadEngine			*****
 Local Variable:	TestComponent			*****
 Local Variable:	aAudioSystem
 Local Variable:	aBinaryBuffer
+Local Variable:	aBits
 Local Variable:	aChild
 Local Variable:	aClassName
 Local Variable:	aCollisionList
@@ -1047,6 +1052,10 @@ Local Variable:	aNetGroupIndex
 Local Variable:	aNewInstanceList
 Local Variable:	aNewT
 Local Variable:	aNode
+Local Variable:	aNumValuesToProcess
+Local Variable:	aPackerBinary
+Local Variable:	aPackerText
+Local Variable:	aPassedTest
 Local Variable:	aPercentPlayed
 Local Variable:	aPhysicsObject
 Local Variable:	aPoint
@@ -1065,6 +1074,7 @@ Local Variable:	aSoundSystem
 Local Variable:	aSourceBuffer
 Local Variable:	aSourceUserIndex
 Local Variable:	aStartingOwner
+Local Variable:	aString
 Local Variable:	aT
 Local Variable:	aT123
 Local Variable:	aT456
@@ -1075,8 +1085,11 @@ Local Variable:	aThisNodesSize
 Local Variable:	aTotal
 Local Variable:	aUserID
 Local Variable:	aUserMap
+Local Variable:	aValue
+Local Variable:	aValues
 Local Variable:	acceleration			*****
 Local Variable:	anAABB
+Local Variable:	anArray
 Local Variable:	anEntity
 Local Variable:	anIndex
 Local Variable:	anInstanceID
@@ -1203,6 +1216,7 @@ Local Variable:	objCenter			*****
 Local Variable:	object			*****
 Local Variable:	objectClass			*****
 Local Variable:	objectHeaderFormat			*****
+Local Variable:	outArray			*****
 Local Variable:	outEvents			*****
 Local Variable:	outIntersection			*****
 Local Variable:	outObj			*****
@@ -1210,7 +1224,6 @@ Local Variable:	outString			*****
 Local Variable:	outValue			*****
 Local Variable:	output			*****
 Local Variable:	owner			*****
-Local Variable:	packer			*****
 Local Variable:	parent			*****
 Local Variable:	parentClass			*****
 Local Variable:	parentIndex			*****
@@ -1357,6 +1370,7 @@ Member Variable:	NetworkMessages_Draw			*****
 Member Variable:	NetworkMessages_DrawColor			*****
 Member Variable:	NetworkMessages_Print			*****
 Member Variable:	Obfuscation_Print			*****
+Member Variable:	POWERS			*****
 Member Variable:	Parents			*****
 Member Variable:	PhysObjectUpdate			*****
 Member Variable:	Physics2D			*****
@@ -1425,6 +1439,7 @@ Member Variable:	X			*****
 Member Variable:	Y			*****
 Member Variable:	_BITCAP			*****
 Member Variable:	_BITS			*****
+Member Variable:	_ENCODE_TO_TEXT			*****
 Member Variable:	_HALF			*****
 Member Variable:	_HIGH_OFFSET			*****
 Member Variable:	_LOW_OFFSET			*****
@@ -1662,7 +1677,6 @@ Member Variable:	_sounds			*****
 Member Variable:	_sourceRect			*****
 Member Variable:	_specialChars			*****
 Member Variable:	_speed			*****
-Member Variable:	_statics			*****
 Member Variable:	_supressKeyboardEvents			*****
 Member Variable:	_tileMapTree			*****
 Member Variable:	_tileSize			*****
@@ -1832,6 +1846,7 @@ Member Variable:	getTileLayer			*****
 Member Variable:	getTileRect			*****
 Member Variable:	getTop			*****
 Member Variable:	getTxtPath			*****
+Member Variable:	getTypedArray			*****
 Member Variable:	getUnion			*****
 Member Variable:	getUnusedID			*****
 Member Variable:	getValueFromProbability			*****
@@ -1848,7 +1863,6 @@ Member Variable:	init			*****
 Member Variable:	initClient			*****
 Member Variable:	initHeight			*****
 Member Variable:	initRead			*****
-Member Variable:	initStatics			*****
 Member Variable:	initWidth			*****
 Member Variable:	initWrite			*****
 Member Variable:	innerHTML			*****
@@ -2048,6 +2062,7 @@ Member Variable:	setString			*****
 Member Variable:	setSupressKeyboardEvents			*****
 Member Variable:	setTile			*****
 Member Variable:	setTileSet			*****
+Member Variable:	setTypedArray			*****
 Member Variable:	setValue			*****
 Member Variable:	setVelocity			*****
 Member Variable:	size			*****
@@ -2187,6 +2202,7 @@ Included Word:	NetworkMessages_Draw
 Included Word:	NetworkMessages_DrawColor
 Included Word:	NetworkMessages_Print
 Included Word:	Obfuscation_Print
+Included Word:	POWERS
 Included Word:	Parents
 Included Word:	PhysObjectUpdate
 Included Word:	Physics2D
@@ -2260,6 +2276,7 @@ Included Word:	X
 Included Word:	Y
 Included Word:	_BITCAP
 Included Word:	_BITS
+Included Word:	_ENCODE_TO_TEXT
 Included Word:	_HALF
 Included Word:	_HIGH_OFFSET
 Included Word:	_LOW_OFFSET
@@ -2497,7 +2514,6 @@ Included Word:	_sounds
 Included Word:	_sourceRect
 Included Word:	_specialChars
 Included Word:	_speed
-Included Word:	_statics
 Included Word:	_supressKeyboardEvents
 Included Word:	_tileMapTree
 Included Word:	_tileSize
@@ -2510,6 +2526,7 @@ Included Word:	_value
 Included Word:	_velocity
 Included Word:	aAudioSystem
 Included Word:	aBinaryBuffer
+Included Word:	aBits
 Included Word:	aBool1
 Included Word:	aBool2
 Included Word:	aChild
@@ -2553,6 +2570,10 @@ Included Word:	aNetGroupIndex
 Included Word:	aNewInstanceList
 Included Word:	aNewT
 Included Word:	aNode
+Included Word:	aNumValuesToProcess
+Included Word:	aPackerBinary
+Included Word:	aPackerText
+Included Word:	aPassedTest
 Included Word:	aPercentPlayed
 Included Word:	aPhysicsObject
 Included Word:	aPoint
@@ -2582,6 +2603,8 @@ Included Word:	aThisNodesSize
 Included Word:	aTotal
 Included Word:	aUserID
 Included Word:	aUserMap
+Included Word:	aValue
+Included Word:	aValues
 Included Word:	acceleration
 Included Word:	add
 Included Word:	addComponent
@@ -2596,6 +2619,7 @@ Included Word:	addUser
 Included Word:	added
 Included Word:	addedToWorld
 Included Word:	anAABB
+Included Word:	anArray
 Included Word:	anEntity
 Included Word:	anIndex
 Included Word:	anInstanceID
@@ -2808,6 +2832,7 @@ Included Word:	getTileLayer
 Included Word:	getTileRect
 Included Word:	getTop
 Included Word:	getTxtPath
+Included Word:	getTypedArray
 Included Word:	getUnion
 Included Word:	getUnusedID
 Included Word:	getValueFromProbability
@@ -2825,6 +2850,7 @@ Included Word:	in2DCamera
 Included Word:	inAABB
 Included Word:	inAnimation
 Included Word:	inAnimations
+Included Word:	inArray
 Included Word:	inAssetID
 Included Word:	inBits
 Included Word:	inBuffer
@@ -2854,6 +2880,7 @@ Included Word:	inDojoStyle
 Included Word:	inDom
 Included Word:	inDomConstruct
 Included Word:	inDt
+Included Word:	inEncodeToText
 Included Word:	inEndingPoint
 Included Word:	inEntity
 Included Word:	inEvent
@@ -2983,7 +3010,6 @@ Included Word:	init
 Included Word:	initClient
 Included Word:	initHeight
 Included Word:	initRead
-Included Word:	initStatics
 Included Word:	initWidth
 Included Word:	initWrite
 Included Word:	inoutReturnValues
@@ -3134,6 +3160,7 @@ Included Word:	onSentMessage
 Included Word:	onTestEvent
 Included Word:	onUpdatePosition
 Included Word:	ourFrameRayCounter
+Included Word:	outArray
 Included Word:	outContainingNodes
 Included Word:	outDeletedItems
 Included Word:	outEvents
@@ -3146,7 +3173,6 @@ Included Word:	output
 Included Word:	owner
 Included Word:	ownerMap
 Included Word:	pack
-Included Word:	packer
 Included Word:	parent
 Included Word:	parentClass
 Included Word:	parentIndex
@@ -3245,6 +3271,7 @@ Included Word:	setString
 Included Word:	setSupressKeyboardEvents
 Included Word:	setTile
 Included Word:	setTileSet
+Included Word:	setTypedArray
 Included Word:	setValue
 Included Word:	size
 Included Word:	sortCollisions
@@ -3900,6 +3927,10 @@ Localized String:	"New Object: "
 Localized String:	"Destroying GameObject "
 Localized String:	" start owner: "
 Localized String:	" end owner: "
+Localized String:	"Cannot get text as when not using text incoding."
+Localized String:	"Cannot set text when not using text incoding."
+Localized String:	"Cannot get TypedArray when using text incoding."
+Localized String:	"Cannot set TypedArray when using text incoding."
 Localized String:	"Bit packer: "
 Localized String:	"Encode failed!"
 Localized String:	"Decompression out of range value detected!"
@@ -3936,8 +3967,10 @@ Localized String:	"Failed to find class instance!"
 Localized String:	"Found destroyed object in registry!"
 Localized String:	"Chain up and down calls are not working!"
 Localized String:	"GameBitPacker"
-Localized String:	"Loop "
-Localized String:	" with "
+Localized String:	"Text Parsing: Loop "
+Localized String:	" in "
+Localized String:	" bits"
+Localized String:	"Binary Parsing: Loop "
 Localized String:	"First event not recieved by first listener!"
 Localized String:	"First event not recieved by second listener!"
 Localized String:	"Second event not recieved by first listener!"
@@ -3945,6 +3978,7 @@ Localized String:	"Second event recieved by second listener!"
 Localized String:	"Encoded "
 Localized String:	" bytes in only "
 Localized String:	" a savings of %"
+Localized String:	"Loop "
 Localized String:	" with ("
 Localized String:	"low:\t"
 Localized String:	"value:\t"

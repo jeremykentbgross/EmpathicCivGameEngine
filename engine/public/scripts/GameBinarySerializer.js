@@ -64,6 +64,26 @@ ECGame.EngineLib.GameBinarySerializer.prototype._init = function _init(inFlags)
 		EvenProbabilityIntegerRangeModel.create();
 };
 
+ECGame.EngineLib.GameBinarySerializer.prototype.getString = function getString()
+{
+	return this._compressor.getString();
+};
+
+ECGame.EngineLib.GameBinarySerializer.prototype.isReading = function isReading()
+{
+	return !this._isWriting;
+};
+
+ECGame.EngineLib.GameBinarySerializer.prototype.setDummyMode = function setDummyMode(inIsDummyMode)
+{
+	this._dummyMode = inIsDummyMode;
+};
+
+ECGame.EngineLib.GameBinarySerializer.prototype.getDummyMode = function getDummyMode()
+{
+	return this._dummyMode;
+};
+
 
 ECGame.EngineLib.GameBinarySerializer.prototype.isNet = function isNet()
 {
@@ -389,24 +409,4 @@ ECGame.EngineLib.GameBinarySerializer.prototype.serializePoint2D = function seri
 	}
 	
 	return value;
-};
-
-ECGame.EngineLib.GameBinarySerializer.prototype.getString = function getString()
-{
-	return this._compressor.getString();
-};
-
-ECGame.EngineLib.GameBinarySerializer.prototype.isReading = function isReading()
-{
-	return !this._isWriting;
-};
-
-ECGame.EngineLib.GameBinarySerializer.prototype.setDummyMode = function setDummyMode(inIsDummyMode)
-{
-	this._dummyMode = inIsDummyMode;
-};
-
-ECGame.EngineLib.GameBinarySerializer.prototype.getDummyMode = function getDummyMode()
-{
-	return this._dummyMode;
 };

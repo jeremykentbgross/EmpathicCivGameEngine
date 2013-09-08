@@ -22,45 +22,61 @@ ECGame.unitTests.registerTest(
 	"GameBitPacker",
 	function()
 	{
-		var packer;
-		var values = [];
-		var bits = [];
-		var value;
-		var string;
-		var passedTest = true;
-		var numValues = 10000;
-		var i;
+		var aPackerText
+			,aPackerBinary
+			,aValues = []
+			,aBits = []
+			,aValue
+			,aString
+			,anArray
+			,aPassedTest = true
+			,aNumValuesToProcess = 10000
+			,i
+			;
 		
-		for(i = 0; i < numValues; ++i)
+		for(i = 0; i < aNumValuesToProcess; ++i)
 		{
-			bits[i] = Math.floor(Math.random() * 32);
-			values[i] = Math.floor(Math.random() * Math.pow(2, bits[i]));
+			aBits[i] = Math.floor(Math.random() * 32);
+			aValues[i] = Math.floor(Math.random() * Math.pow(2, aBits[i]));
 		}
-		bits[10] = 32;
-		values[10] = 0;
-		bits[11] = 32;
-		values[11] = 0;
+		aBits[10] = 32;
+		aValues[10] = 0;
+		aBits[11] = 32;
+		aValues[11] = 0;
 		
-		packer = ECGame.EngineLib.BitPacker.create();
-		for(i = 0; i < numValues; ++i)
+		aPackerText = ECGame.EngineLib.BitPacker.create(true);
+		aPackerBinary = ECGame.EngineLib.BitPacker.create(false);
+		for(i = 0; i < aNumValuesToProcess; ++i)
 		{
-			packer.pack(values[i], bits[i]);
+			aPackerText.pack(aValues[i], aBits[i]);
+			aPackerBinary.pack(aValues[i], aBits[i]);
 		}
-		string = packer.getString();
-		//console.log(string);
+		aString = aPackerText.getString();
+		anArray = aPackerBinary.getTypedArray();
+		//console.log(aString);
+		//console.log(anArray);
 		
-		packer = ECGame.EngineLib.BitPacker.create();
-		packer.setString(string);
-		for(i = 0; i < numValues; ++i)
+		aPackerText = ECGame.EngineLib.BitPacker.create(true);
+		aPackerBinary = ECGame.EngineLib.BitPacker.create(false);
+		aPackerText.setString(aString);
+		aPackerBinary.setTypedArray(anArray);
+		for(i = 0; i < aNumValuesToProcess; ++i)
 		{
-			value = packer.unpack(bits[i]);
-			if(value !== values[i])
+			aValue = aPackerText.unpack(aBits[i]);
+			if(aValue !== aValues[i])
 			{
-				ECGame.log.error("Loop " + i + ' ' + value + '!==' + values[i] + " with " + bits[i]);
-				passedTest = false;
+				ECGame.log.error("Text Parsing: Loop " + i + ' ' + aValue + '!==' + aValues[i] + " in " + aBits[i] + " bits");
+				aPassedTest = false;
+			}
+			
+			aValue = aPackerBinary.unpack(aBits[i]);
+			if(aValue !== aValues[i])
+			{
+				ECGame.log.error("Binary Parsing: Loop " + i + ' ' + aValue + '!==' + aValues[i] + " in " + aBits[i] + " bits");
+				aPassedTest = false;
 			}
 		}
 		
-		return passedTest;
+		return aPassedTest;
 	}
 );
