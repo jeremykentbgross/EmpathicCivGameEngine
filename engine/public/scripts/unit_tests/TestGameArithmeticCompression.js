@@ -22,62 +22,73 @@ ECGame.unitTests.registerTest(
 	'GameArithmeticCompression',
 	function()
 	{
-		var passedTest = true;
-		var numValues = 10000;
-		
-		var bits = 16;
-		var maxSize = Math.pow(2, bits);
-		
-		var models = [];
-		var values = [];
-		
-		var failedLoops = [];
-		
-		var i;
-		var low;
-		var high;
-		
-		var value;
+		var aPassedTest
+			,aNumValues
+			,aBits
+			,aMaxSize
+			,aModels
+			,aValues
+			,aFailedLoopsList
+			,aLow
+			,aHigh
+			,aValue
+			,aStartIndex
+			,aTextEncoder
+			,aBinaryEncoder
+			,aString
+			,anArray
+			,aNumEncodedBytes
+			,anEncodedSizeBytes
+			,i
+			;
+			
+		aPassedTest = true;
+		aNumValues = 10000;
+		aBits = 16;
+		aMaxSize = Math.pow(2, aBits);
+		aModels = [];
+		aValues = [];
+		aFailedLoopsList = [];
 		
 		////////////////////////////////////////////////////////////////////////////
 		//setup/////////////////////////////////////////////////////////////////////
-		for(i = 0; i < numValues; ++i)
+		for(i = 0; i < aNumValues; ++i)
 		{
-			low = Math.floor(Math.random() * maxSize);
-			high = low + Math.floor(Math.random() * maxSize);// + 1;
-			values[i] = low + Math.floor(Math.random() * (high - low + 1));
-			models[i] = ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel.create();
-			models[i].setMinMax(low, high);
+			aLow = Math.floor(Math.random() * aMaxSize);
+			aHigh = aLow + Math.floor(Math.random() * aMaxSize);// + 1;
+			aValues[i] = aLow + Math.floor(Math.random() * (aHigh - aLow + 1));
+			aModels[i] = ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel.create();
+			aModels[i].setMinMax(aLow, aHigh);
 		}
 		
 		//special cases:
-		var startIndex = 0;
+		aStartIndex = 0;
 		
 		//We have zero in a max range causing one less
-		low = 0;
-		high = maxSize - 1;
-		values[startIndex] = maxSize / 2;
-		models[startIndex].setMinMax(low, high);
-		++startIndex;
+		aLow = 0;
+		aHigh = aMaxSize - 1;
+		aValues[aStartIndex] = aMaxSize / 2;
+		aModels[aStartIndex].setMinMax(aLow, aHigh);
+		++aStartIndex;
 		//
-		low = 0;
-		high = maxSize - 1;
-		values[startIndex] = 0;
-		models[startIndex].setMinMax(low, high);
-		++startIndex;
+		aLow = 0;
+		aHigh = aMaxSize - 1;
+		aValues[aStartIndex] = 0;
+		aModels[aStartIndex].setMinMax(aLow, aHigh);
+		++aStartIndex;
 		
 		//We have max in a max range causing one more
-		low = 0;
-		high = maxSize - 1;
-		values[startIndex] = maxSize / 2;
-		models[startIndex].setMinMax(low, high);
-		++startIndex;
+		aLow = 0;
+		aHigh = aMaxSize - 1;
+		aValues[aStartIndex] = aMaxSize / 2;
+		aModels[aStartIndex].setMinMax(aLow, aHigh);
+		++aStartIndex;
 		//
-		low = 0;
-		high = maxSize - 1;
-		values[startIndex] = high;
-		models[startIndex].setMinMax(low, high);
-		++startIndex;
+		aLow = 0;
+		aHigh = aMaxSize - 1;
+		aValues[aStartIndex] = aHigh;
+		aModels[aStartIndex].setMinMax(aLow, aHigh);
+		++aStartIndex;
 		//setup/////////////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////
 		
@@ -85,34 +96,53 @@ ECGame.unitTests.registerTest(
 		
 		////////////////////////////////////////////////////////////////////////////
 		//run///////////////////////////////////////////////////////////////////////
-		var encoder = ECGame.EngineLib.ArithmeticCompresser.create();
-		
-		for(i = 0; i < numValues; ++i)
+		aTextEncoder = ECGame.EngineLib.ArithmeticCompresser.create(true);
+		aBinaryEncoder = ECGame.EngineLib.ArithmeticCompresser.create(false);
+		for(i = 0; i < aNumValues; ++i)
 		{
-			encoder.encode(values[i], models[i]);
+			aTextEncoder.encode(aValues[i], aModels[i]);
+			aBinaryEncoder.encode(aValues[i], aModels[i]);
 		}
 		
-		var string = encoder.getString();
-		var encodedBytes = (bits * numValues / 8);
-		var encodedSizeBytes = (string.length * 2);
-		console.log("Encoded " + encodedBytes
-			+ " bytes in only " + encodedSizeBytes
-			+ " a savings of %" + (100 * (1 - encodedSizeBytes / encodedBytes))
+		aString = aTextEncoder.getString();
+		anArray = aBinaryEncoder.getTypedArray();
+		aNumEncodedBytes = (aBits * aNumValues / 8);
+		anEncodedSizeBytes = aString.length;
+		console.log("Text encoded " + aNumEncodedBytes
+			+ " bytes in only " + anEncodedSizeBytes
+			+ " a savings of %" + (100 * (1 - anEncodedSizeBytes / aNumEncodedBytes))
 		);
-		//console.log(string);
+		anEncodedSizeBytes = anArray.length;
+		console.log("Binary encoded " + aNumEncodedBytes
+			+ " bytes in only " + anEncodedSizeBytes
+			+ " a savings of %" + (100 * (1 - anEncodedSizeBytes / aNumEncodedBytes))
+		);
+		//console.log(aString);
+		//console.log(anArray);
 		
-		encoder = ECGame.EngineLib.ArithmeticCompresser.create();
-		encoder.setString(string);
+		aTextEncoder.init(true);// = ECGame.EngineLib.ArithmeticCompresser.create(true);
+		aTextEncoder.setString(aString);
+		aBinaryEncoder.init(false);// = ECGame.EngineLib.ArithmeticCompresser.create(false);
+		aBinaryEncoder.setTypedArray(anArray);
 		
-		for(i = 0; i < numValues; ++i)
+		for(i = 0; i < aNumValues; ++i)
 		{
-			value = encoder.decode(models[i]);
-			if(value !== values[i])
+			aValue = aTextEncoder.decode(aModels[i]);
+			if(aValue !== aValues[i])
 			{
-				ECGame.log.error("Loop " + i + ' ' + value + '!==' + values[i] + " with (" + models[i].min + ', ' + models[i].max + ')');
-				passedTest = false;
+				ECGame.log.error("Text Parsing: Loop " + i + ' ' + aValue + '!==' + aValues[i] + " with (" + aModels[i].myMin + ', ' + aModels[i].myMax + ')');
+				aPassedTest = false;
 				
-				failedLoops.push(i);
+				aFailedLoopsList.push(i);
+			}
+			
+			aValue = aBinaryEncoder.decode(aModels[i]);
+			if(aValue !== aValues[i])
+			{
+				ECGame.log.error("Binary Parsing: Loop " + i + ' ' + aValue + '!==' + aValues[i] + " with (" + aModels[i].myMin + ', ' + aModels[i].myMax + ')');
+				aPassedTest = false;
+				
+				aFailedLoopsList.push(i);
 			}
 		}
 		//run///////////////////////////////////////////////////////////////////////
@@ -123,46 +153,53 @@ ECGame.unitTests.registerTest(
 		////////////////////////////////////////////////////////////////////////////
 		//For debugging/////////////////////////////////////////////////////////////
 		//run again if it failed with the option to break on the bad ones.
-		if(!passedTest)
+		if(!aPassedTest)
 		{
-			for(i = 0; i < numValues; ++i)
+			for(i = 0; i < aNumValues; ++i)
 			{
 				console.log(i);
-				console.log("low:\t" + models[i].min);
-				console.log("value:\t" + values[i]);
-				console.log("high:\t" + models[i].max);
-				console.log("range:\t" + (models[i].max-models[i].min));
-				console.log("scaled:\t" + ((values[i]-models[i].min)/(models[i].max-models[i].min)));
+				console.log("low:\t" + aModels[i].myMin);
+				console.log("value:\t" + aValues[i]);
+				console.log("high:\t" + aModels[i].myMax);
+				console.log("range:\t" + (aModels[i].myMax-aModels[i].myMin));
+				console.log("scaled:\t" + ((aValues[i]-aModels[i].myMin)/(aModels[i].myMax-aModels[i].myMin)));
 			}
 			
-			encoder = ECGame.EngineLib.ArithmeticCompresser.create();
+			aTextEncoder.init(true);// = ECGame.EngineLib.ArithmeticCompresser.create(true);
+			aBinaryEncoder.init(false);// = ECGame.EngineLib.ArithmeticCompresser.create(false);
 			
-			for(i = 0; i < numValues; ++i)
+			for(i = 0; i < aNumValues; ++i)
 			{
-				if(failedLoops[0] === i)
+				if(aFailedLoopsList[0] === i)
 				{
-					var aTestValue = 1;
+					var aBreakPointLocation = 1;
 				}
-				encoder.encode(values[i], models[i]);
+				aTextEncoder.encode(aValues[i], aModels[i]);
+				aBinaryEncoder.encode(aValues[i], aModels[i]);
 			}
 			
-			string = encoder.getString();
-			encoder = ECGame.EngineLib.ArithmeticCompresser.create();
-			encoder.setString(string);
+			aString = aTextEncoder.getString();
+			anArray = aBinaryEncoder.getTypedArray();
 			
-			for(i = 0; i < numValues; ++i)
+			aTextEncoder.init(true);// = ECGame.EngineLib.ArithmeticCompresser.create(true);
+			aTextEncoder.setString(aString);
+			aBinaryEncoder.init(false);// = ECGame.EngineLib.ArithmeticCompresser.create(false);
+			aBinaryEncoder.setTypedArray(anArray);
+			
+			for(i = 0; i < aNumValues; ++i)
 			{
-				if(failedLoops[0] === i)
+				if(aFailedLoopsList[0] === i)
 				{
-					failedLoops = failedLoops.slice(1, failedLoops.length);
+					aFailedLoopsList = aFailedLoopsList.slice(1, aFailedLoopsList.length);
 				}
-				value = encoder.decode(models[i]);
+				aValue = aTextEncoder.decode(aModels[i]);
+				aValue = aBinaryEncoder.decode(aModels[i]);
 			}
 		}
 		//For debugging/////////////////////////////////////////////////////////////
 		////////////////////////////////////////////////////////////////////////////
 		
 		
-		return passedTest;
+		return aPassedTest;
 	}
 );
