@@ -232,7 +232,7 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	aReorderingArray.sort();
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
-		logData += '\t' + aReorderingArray[i] + '\n';
+		logData += 'Base NameSpace:\t' + aReorderingArray[i] + '\n';
 	}
 	
 	this._findFunctionNames();
@@ -257,7 +257,7 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	aReorderingArray.sort();
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
-		logData += '\t' + aReorderingArray[i] + '\n';
+		logData += 'Final NameSpace:\t' + aReorderingArray[i] + '\n';
 	}
 	
 	aReorderingArray = [];
@@ -269,7 +269,7 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	aReorderingArray.sort();
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
-		logData += '\t' + aReorderingArray[i] + '\n';
+		logData += 'Function Name:\t' + aReorderingArray[i] + '\n';
 	}
 	
 	aReorderingArray = [];
@@ -281,11 +281,11 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	aReorderingArray.sort();
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
-		logData += '\t' + aReorderingArray[i] + '\n';
+		logData += 'Parameter Variable:\t' + aReorderingArray[i] + '\n';
 	}
 	
 	aReorderingArray = [];
-	logData += "Local Variable Names:" + '\n';
+	logData += "Local Variables:" + '\n';
 	for(name in this._variableNames)
 	{
 		aReorderingArray.push(name);
@@ -293,7 +293,7 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	aReorderingArray.sort();
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
-		logData += '\t' + aReorderingArray[i] + '\n';
+		logData += 'Local Variable:\t' + aReorderingArray[i] + '\n';
 	}
 	
 	aReorderingArray = [];
@@ -305,7 +305,7 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	aReorderingArray.sort();
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
-		logData += '\t' + aReorderingArray[i] + '\n';
+		logData += 'Member Variable:\t' + aReorderingArray[i] + '\n';
 	}
 	
 	aReorderingArray = [];
@@ -317,7 +317,7 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	aReorderingArray.sort();
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
-		logData += '\t' + aReorderingArray[i] + '\n';
+		logData += 'Included Word:\t' + aReorderingArray[i] + '\n';
 	}
 	
 	aReorderingArray = [];
@@ -329,7 +329,7 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	aReorderingArray.sort();
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
-		logData += '\t' + aReorderingArray[i] + '\n';
+		logData += 'Ignored Word:\t' + aReorderingArray[i] + '\n';
 	}
 	
 	aReorderingArray = [];
@@ -341,19 +341,14 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	aReorderingArray.sort();
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
-		logData += '\t' + aReorderingArray[i] + '\n';
+		logData += 'Unmapped Word:\t' + aReorderingArray[i] + '\n';
 	}
 	
 	aReorderingArray = [];
 	logData += "Localized Strings:" + '\n';
 	for(i = 0; i < this._localizationStrings.length; ++i)
 	{
-		logData += '\t' + this._localizationStrings[i] + '\n';
-	}
-	aReorderingArray.sort();
-	for(i = 0; i < aReorderingArray.length; ++i)
-	{
-		logData += '\t' + aReorderingArray[i] + '\n';
+		logData += 'Localized String:\t' + this._localizationStrings[i] + '\n';
 	}
 	
 	if(ECGame.Settings.isDebugPrint_Obfuscation())
