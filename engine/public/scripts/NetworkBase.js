@@ -22,7 +22,6 @@
 
 /*
 Network TODO notes
--binary
 -ping/simulate high
 -interpret user serialize instead of not obfuscating it
 -seek and destroy other TODO's in network code
@@ -37,8 +36,10 @@ Network TODO notes
 -map serialize delta !compute delta
 
 -socketio blocks 80? / remove socketio
+-TEMP_HACK_NEW_NETWORK
 
--less verbose net printing option
+-netdraw (remove them)
+-net log levels //less verbose net printing option
 
 -dont dirty new objs in netgroup
 -send crap to svr test (login/post login)
