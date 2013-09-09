@@ -22,6 +22,7 @@ Final NameSpace:	Animation2DInstance
 Final NameSpace:	ArithmeticCompresser
 Final NameSpace:	ArithmeticCompressionModels
 Final NameSpace:	AssetManager
+Final NameSpace:	BinarySerializer
 Final NameSpace:	BitPacker
 Final NameSpace:	Camera2
 Final NameSpace:	ChatSystem
@@ -52,7 +53,6 @@ Final NameSpace:	Game2DMap
 Final NameSpace:	Game2DSceneGraph
 Final NameSpace:	Game2DTileSet
 Final NameSpace:	Game2DWorld
-Final NameSpace:	GameBinarySerializer
 Final NameSpace:	GameCircularDoublyLinkedListNode
 Final NameSpace:	GameEntity
 Final NameSpace:	GameEntityComponent
@@ -434,6 +434,7 @@ Function Name:	Animation2DInstance
 Function Name:	ArithmeticCompresser
 Function Name:	ArithmeticCompressionModels
 Function Name:	AssetManager
+Function Name:	BinarySerializer
 Function Name:	BitPacker
 Function Name:	Camera2
 Function Name:	ChatSystem
@@ -463,7 +464,6 @@ Function Name:	Game2DMap
 Function Name:	Game2DSceneGraph
 Function Name:	Game2DTileSet
 Function Name:	Game2DWorld
-Function Name:	GameBinarySerializer
 Function Name:	GameCircularDoublyLinkedListNode
 Function Name:	GameEntity
 Function Name:	GameEntityComponent
@@ -937,6 +937,7 @@ Parameter Variable:	inPitchShift
 Parameter Variable:	inPoint
 Parameter Variable:	inPos
 Parameter Variable:	inPosition
+Parameter Variable:	inPrecision
 Parameter Variable:	inPrivateEnginePath
 Parameter Variable:	inPrivateGamePath
 Parameter Variable:	inProbability
@@ -995,15 +996,12 @@ Parameter Variable:	include
 Parameter Variable:	inoutReturnValues
 Parameter Variable:	instance
 Parameter Variable:	item			*****
-Parameter Variable:	max			*****
 Parameter Variable:	message			*****
-Parameter Variable:	min			*****
 Parameter Variable:	node			*****
 Parameter Variable:	outContainingNodes			*****
 Parameter Variable:	outDeletedItems			*****
 Parameter Variable:	outLoadTarget			*****
 Parameter Variable:	physicsUpdateInfo			*****
-Parameter Variable:	precision			*****
 Parameter Variable:	serializer			*****
 Parameter Variable:	value			*****
 Local Variables:
@@ -1018,6 +1016,7 @@ Local Variable:	aBinaryBuffer
 Local Variable:	aBinaryEncoder
 Local Variable:	aBits
 Local Variable:	aBreakPointLocation
+Local Variable:	aCharIndex
 Local Variable:	aChild
 Local Variable:	aClassName
 Local Variable:	aCollisionList
@@ -1039,6 +1038,7 @@ Local Variable:	aEndPointDrawSize
 Local Variable:	aExtraBits
 Local Variable:	aFailedLoopsList
 Local Variable:	aFinishedSounds
+Local Variable:	aFractionalPart
 Local Variable:	aFrameEvents
 Local Variable:	aHalfCurrentPointDrawSize
 Local Variable:	aHalfDrawSize
@@ -1091,6 +1091,7 @@ Local Variable:	aSourceUserIndex
 Local Variable:	aStartIndex
 Local Variable:	aStartingOwner
 Local Variable:	aString
+Local Variable:	aStringLength
 Local Variable:	aT
 Local Variable:	aT123
 Local Variable:	aT456
@@ -1103,6 +1104,7 @@ Local Variable:	aUserID
 Local Variable:	aUserMap
 Local Variable:	aValue
 Local Variable:	aValues
+Local Variable:	aWholePart
 Local Variable:	acceleration			*****
 Local Variable:	anAABB
 Local Variable:	anArray
@@ -1118,6 +1120,7 @@ Local Variable:	anItem
 Local Variable:	anObject
 Local Variable:	anObjectClass
 Local Variable:	anObjectHeader
+Local Variable:	anObjectHeaderFormat
 Local Variable:	anOldDirection
 Local Variable:	anOwner
 Local Variable:	angle			*****
@@ -1130,7 +1133,6 @@ Local Variable:	camera			*****
 Local Variable:	cameraAABB			*****
 Local Variable:	cameraLeftTop			*****
 Local Variable:	chainTestObject			*****
-Local Variable:	charIndex			*****
 Local Variable:	classRegistry			*****
 Local Variable:	colCenter			*****
 Local Variable:	component			*****
@@ -1169,7 +1171,6 @@ Local Variable:	force			*****
 Local Variable:	format			*****
 Local Variable:	found			*****
 Local Variable:	foundClass			*****
-Local Variable:	fractionalPart			*****
 Local Variable:	frameCount			*****
 Local Variable:	frameStats			*****
 Local Variable:	frames			*****
@@ -1221,9 +1222,7 @@ Local Variable:	nodeIndex			*****
 Local Variable:	obj1			*****
 Local Variable:	obj2			*****
 Local Variable:	objCenter			*****
-Local Variable:	object			*****
 Local Variable:	objectClass			*****
-Local Variable:	objectHeaderFormat			*****
 Local Variable:	outArray			*****
 Local Variable:	outEvents			*****
 Local Variable:	outIntersection			*****
@@ -1258,10 +1257,8 @@ Local Variable:	sin			*****
 Local Variable:	size			*****
 Local Variable:	soundInfo			*****
 Local Variable:	stackPath			*****
-Local Variable:	string			*****
 Local Variable:	stringDistance			*****
 Local Variable:	stringDrawOrder			*****
-Local Variable:	stringLength			*****
 Local Variable:	target			*****
 Local Variable:	temp			*****
 Local Variable:	testClass1			*****
@@ -1278,7 +1275,6 @@ Local Variable:	valueHigh			*****
 Local Variable:	valueLow			*****
 Local Variable:	valueRange			*****
 Local Variable:	vec			*****
-Local Variable:	wholePart			*****
 Local Variable:	width			*****
 Local Variable:	x			*****
 Local Variable:	y			*****
@@ -1293,6 +1289,7 @@ Member Variable:	ArithmeticCompresser			*****
 Member Variable:	ArithmeticCompressionModels			*****
 Member Variable:	AssetManager			*****
 Member Variable:	Audio			*****
+Member Variable:	BinarySerializer			*****
 Member Variable:	BitPacker			*****
 Member Variable:	CURRENT_MAX			*****
 Member Variable:	Camera2			*****
@@ -1333,7 +1330,6 @@ Member Variable:	Game2DMap			*****
 Member Variable:	Game2DSceneGraph			*****
 Member Variable:	Game2DTileSet			*****
 Member Variable:	Game2DWorld			*****
-Member Variable:	GameBinarySerializer			*****
 Member Variable:	GameCircularDoublyLinkedListNode			*****
 Member Variable:	GameEntity			*****
 Member Variable:	GameEntityComponent			*****
@@ -2117,6 +2113,7 @@ Included Word:	ArithmeticCompresser
 Included Word:	ArithmeticCompressionModels
 Included Word:	AssetManager
 Included Word:	Audio
+Included Word:	BinarySerializer
 Included Word:	BitPacker
 Included Word:	CURRENT_MAX
 Included Word:	Camera2
@@ -2164,7 +2161,6 @@ Included Word:	Game2DMap
 Included Word:	Game2DSceneGraph
 Included Word:	Game2DTileSet
 Included Word:	Game2DWorld
-Included Word:	GameBinarySerializer
 Included Word:	GameCircularDoublyLinkedListNode
 Included Word:	GameEntity
 Included Word:	GameEntityComponent
@@ -2540,6 +2536,7 @@ Included Word:	aBits
 Included Word:	aBool1
 Included Word:	aBool2
 Included Word:	aBreakPointLocation
+Included Word:	aCharIndex
 Included Word:	aChild
 Included Word:	aClassName
 Included Word:	aCollisionList
@@ -2561,6 +2558,7 @@ Included Word:	aEndPointDrawSize
 Included Word:	aExtraBits
 Included Word:	aFailedLoopsList
 Included Word:	aFinishedSounds
+Included Word:	aFractionalPart
 Included Word:	aFrameEvents
 Included Word:	aHalfCurrentPointDrawSize
 Included Word:	aHalfDrawSize
@@ -2613,6 +2611,7 @@ Included Word:	aSourceUserIndex
 Included Word:	aStartIndex
 Included Word:	aStartingOwner
 Included Word:	aString
+Included Word:	aStringLength
 Included Word:	aT
 Included Word:	aT123
 Included Word:	aT456
@@ -2625,6 +2624,7 @@ Included Word:	aUserID
 Included Word:	aUserMap
 Included Word:	aValue
 Included Word:	aValues
+Included Word:	aWholePart
 Included Word:	acceleration
 Included Word:	add
 Included Word:	addComponent
@@ -2652,6 +2652,7 @@ Included Word:	anItem
 Included Word:	anObject
 Included Word:	anObjectClass
 Included Word:	anObjectHeader
+Included Word:	anObjectHeaderFormat
 Included Word:	anOldDirection
 Included Word:	anOwner
 Included Word:	anchorPosition
@@ -2674,7 +2675,6 @@ Included Word:	centerOn
 Included Word:	chainDown
 Included Word:	chainTestObject
 Included Word:	chainUp
-Included Word:	charIndex
 Included Word:	chatSystem
 Included Word:	checkBroadCollision
 Included Word:	checkFinished
@@ -2783,7 +2783,6 @@ Included Word:	force
 Included Word:	format
 Included Word:	found
 Included Word:	foundClass
-Included Word:	fractionalPart
 Included Word:	frameCount
 Included Word:	frameStats
 Included Word:	frames
@@ -2966,6 +2965,7 @@ Included Word:	inPitchShift
 Included Word:	inPoint
 Included Word:	inPos
 Included Word:	inPosition
+Included Word:	inPrecision
 Included Word:	inPrivateEnginePath
 Included Word:	inPrivateGamePath
 Included Word:	inProbability
@@ -3151,7 +3151,6 @@ Included Word:	obj1
 Included Word:	obj2
 Included Word:	objCenter
 Included Word:	objectClass
-Included Word:	objectHeaderFormat
 Included Word:	onAddedToEntity
 Included Word:	onAddedToWorld
 Included Word:	onChatSubmit
@@ -3297,7 +3296,6 @@ Included Word:	start
 Included Word:	stop
 Included Word:	stringDistance
 Included Word:	stringDrawOrder
-Included Word:	stringLength
 Included Word:	subtract
 Included Word:	target
 Included Word:	temp
@@ -3333,7 +3331,6 @@ Included Word:	velocity
 Included Word:	walk
 Included Word:	walkCallback
 Included Word:	webServer
-Included Word:	wholePart
 Included Word:	world
 Included Word:	x
 Included Word:	y

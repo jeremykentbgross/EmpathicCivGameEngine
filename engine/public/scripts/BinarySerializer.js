@@ -21,6 +21,7 @@
 
 //TODO adaptive encode
 //TODO try to increase the precision of the coder and model(s)
+//TODO see if there is still a class flag for networking, and if so, can we get rid of it
 
 ECGame.EngineLib.BinarySerializer = ECGame.EngineLib.Class.create({
 	Constructor : function BinarySerializer()
@@ -44,8 +45,9 @@ ECGame.EngineLib.BinarySerializer = ECGame.EngineLib.Class.create({
 		/*
 		Flags =
 		{
-			NET,
+			NET,/FULL
 			DUMMY_MODE
+			TEXT_MODE/BINARY_MODE
 			//BINARY?, UI_GEN, NO_REFS??
 		}
 		*/
@@ -218,8 +220,7 @@ ECGame.EngineLib.BinarySerializer = ECGame.EngineLib.Class.create({
 		serializeGameObjectRef : function serializeGameObjectRef(inValue)
 		{
 			var aReadResult,
-				objectHeaderFormat,
-				object;
+				anObjectHeaderFormat;
 			
 			aReadResult = inValue;
 			
@@ -228,7 +229,7 @@ ECGame.EngineLib.BinarySerializer = ECGame.EngineLib.Class.create({
 				aReadResult = new ECGame.EngineLib.GameObjectRef();
 			}
 			
-			objectHeaderFormat =	//TODO put in shared place (like the GameObjectRef) as it is also used in Network system code!
+			anObjectHeaderFormat =	//TODO put in shared place (like the GameObjectRef) as it is also used in Network system code!
 			[
 				{
 					name : 'classID',
@@ -247,7 +248,7 @@ ECGame.EngineLib.BinarySerializer = ECGame.EngineLib.Class.create({
 			];
 			
 			aReadResult.toBinary();
-			this.serializeObject(aReadResult, objectHeaderFormat);
+			this.serializeObject(aReadResult, anObjectHeaderFormat);
 			
 			/*if(!this._myIsWriting)//Should be covered in convert to binary
 			{
@@ -284,11 +285,11 @@ ECGame.EngineLib.BinarySerializer = ECGame.EngineLib.Class.create({
 			return inValue;
 		},
 		
-		serializeInt : function serializeInt(inValue, min, max)
+		serializeInt : function serializeInt(inValue, inMin, inMax)
 		{
 			var aReadResult = inValue;
 			
-			this._myIntegerRangeModel.setMinMax(min, max);
+			this._myIntegerRangeModel.setMinMax(inMin, inMax);
 			if(this._myIsWriting)
 			{
 				this._myCompresser.encode(inValue, this._myIntegerRangeModel);
@@ -306,35 +307,40 @@ ECGame.EngineLib.BinarySerializer = ECGame.EngineLib.Class.create({
 			return inValue;
 		},
 		
-		serializeFloat : function serializeFloat(inValue, min, max, precision)
+		serializeFloat : function serializeFloat(inValue, inMin, inMax, inPrecision)
 		{
-			precision = Math.pow(10, precision);
+			var aWholePart
+				,aFractionalPart
+				,aReadResult
+				;
+			
+			inPrecision = Math.pow(10, inPrecision);
 			
 			//TODO consider if I should modify the originals like this, and if so, what notification should be given
 			//obj[anEntry.name] = Math.min(obj[anEntry.name], anEntry.max);
 			//obj[anEntry.name] = Math.max(obj[anEntry.name], anEntry.min);
 			
 			//note the precision is distributed manually because it causes floating point errors if I don't
-			var wholePart = Math.floor(inValue);
-			var fractionalPart = Math.floor(precision * inValue - precision * wholePart);
-			var aReadResult = inValue;
+			aWholePart = Math.floor(inValue);
+			aFractionalPart = Math.floor(inPrecision * inValue - inPrecision * aWholePart);
+			aReadResult = inValue;
 			//TODO consider if I should modify the originals like this, and if so, what notification should be given
 			//inValue = wholePart + fractionalPart / precision;
 			
 			if(this._myIsWriting)
 			{
 				this._myCompresser.encode(
-					wholePart,
+					aWholePart,
 					this._myIntegerRangeModel.setMinMax(
-						Math.floor(min),
-						Math.ceil(max)
+						Math.floor(inMin),
+						Math.ceil(inMax)
 					)
 				);
 				this._myCompresser.encode(
-					fractionalPart,
+					aFractionalPart,
 					this._myIntegerRangeModel.setMinMax(
 						0,
-						precision
+						inPrecision
 					)
 				);
 			}
@@ -343,16 +349,16 @@ ECGame.EngineLib.BinarySerializer = ECGame.EngineLib.Class.create({
 				aReadResult =
 					this._myCompresser.decode(
 						this._myIntegerRangeModel.setMinMax(
-							Math.floor(min),
-							Math.ceil(max)
+							Math.floor(inMin),
+							Math.ceil(inMax)
 						)
 					) +
 					this._myCompresser.decode(
 						this._myIntegerRangeModel.setMinMax(
 							0,
-							precision
+							inPrecision
 						)
-					) / precision;
+					) / inPrecision;
 			}
 			
 			if(!this._myIsDummyMode)
@@ -366,36 +372,39 @@ ECGame.EngineLib.BinarySerializer = ECGame.EngineLib.Class.create({
 		//TODO see: http://stackoverflow.com/questions/6965107/converting-between-strings-and-arraybuffers
 		serializeString : function serializeString(inValue)
 		{
-			var aReadResult = inValue;
-			var charIndex;
-			var stringLength;
-			var string;
+			var aReadResult
+				,aCharIndex
+				,aStringLength
+				,aString
+				;
+			
+			aReadResult = inValue;
 			
 			//TODO: get a proper dynamic probability model for the strings
 			this._myIntegerRangeModel.setMinMax(0, 65535);
 			if(this._myIsWriting)
 			{
-				stringLength = inValue.length;
-				string = inValue;
-				this._myCompresser.encode(stringLength, this._myIntegerRangeModel);
-				for(charIndex = 0; charIndex < stringLength; ++charIndex)
+				aStringLength = inValue.length;
+				aString = inValue;
+				this._myCompresser.encode(aStringLength, this._myIntegerRangeModel);
+				for(aCharIndex = 0; aCharIndex < aStringLength; ++aCharIndex)
 				{
-					this._myCompresser.encode(string.charCodeAt(charIndex), this._myIntegerRangeModel);
+					this._myCompresser.encode(aString.charCodeAt(aCharIndex), this._myIntegerRangeModel);
 				}
 			}
 			else
 			{
-				stringLength = this._myCompresser.decode(this._myIntegerRangeModel);
-				string = '';
-				for(charIndex = 0; charIndex < stringLength; ++charIndex)
+				aStringLength = this._myCompresser.decode(this._myIntegerRangeModel);
+				aString = '';
+				for(aCharIndex = 0; aCharIndex < aStringLength; ++aCharIndex)
 				{
-					string += String.fromCharCode(
+					aString += String.fromCharCode(
 						this._myCompresser.decode(
 							this._myIntegerRangeModel
 						)
 					);
 				}
-				aReadResult = string;
+				aReadResult = aString;
 			}
 			
 			if(!this._myIsDummyMode)
@@ -406,12 +415,12 @@ ECGame.EngineLib.BinarySerializer = ECGame.EngineLib.Class.create({
 			return inValue;
 		},
 		
-		serializePoint2D : function serializePoint2D(inValue, min, max)
+		serializePoint2D : function serializePoint2D(inValue, inMin, inMax)
 		{
 			var aReadResult = inValue.clone();
 			
-			aReadResult.myX = this.serializeFloat(aReadResult.myX, min.myX, max.myX, 3);
-			aReadResult.myY = this.serializeFloat(aReadResult.myY, min.myY, max.myY, 3);
+			aReadResult.myX = this.serializeFloat(aReadResult.myX, inMin.myX, inMax.myX, 3);
+			aReadResult.myY = this.serializeFloat(aReadResult.myY, inMin.myY, inMax.myY, 3);
 			
 			if(!this._myIsDummyMode)
 			{
