@@ -232,11 +232,11 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	{			
 		//ENGINE UNIT TESTS:
 		include(inPublicEnginePath + "scripts/unit_tests/TestGameClass.js");
-		include(inPublicEnginePath + "scripts/unit_tests/TestGameBitPacker.js");
+		include(inPublicEnginePath + "scripts/unit_tests/TestBitPacker.js");
 		include(inPublicEnginePath + "scripts/unit_tests/TestGameEventSystem.js");
 		//include(inPublicEnginePath + "scripts/unit_tests/TestMultPacker.js ");//TODO
-		include(inPublicEnginePath + "scripts/unit_tests/TestGameArithmeticCompression.js");
-		include(inPublicEnginePath + "scripts/unit_tests/TestGameBinarySerializer.js");
+		include(inPublicEnginePath + "scripts/unit_tests/TestArithmeticCompression.js");
+		include(inPublicEnginePath + "scripts/unit_tests/TestBinarySerializer.js");
 		include(inPublicEnginePath + "scripts/unit_tests/TestGameEntity.js");
 		
 		if(inIsServer)

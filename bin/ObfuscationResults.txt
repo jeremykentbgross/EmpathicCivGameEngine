@@ -3693,7 +3693,6 @@ Unmapped Word:	Copy_of_
 Unmapped Word:	DUMMY_MODE
 Unmapped Word:	FINISHED_STATE
 Unmapped Word:	GET
-Unmapped Word:	GameArithmeticCompression
 Unmapped Word:	GameClass
 Unmapped Word:	HaHa
 Unmapped Word:	Image
@@ -3976,7 +3975,7 @@ Localized String:	"isA() Failed on found created class!"
 Localized String:	"Failed to find class instance!"
 Localized String:	"Found destroyed object in registry!"
 Localized String:	"Chain up and down calls are not working!"
-Localized String:	"GameBitPacker"
+Localized String:	"BitPacker"
 Localized String:	"Text Parsing: Loop "
 Localized String:	" in "
 Localized String:	" bits"
@@ -3985,6 +3984,7 @@ Localized String:	"First event not recieved by first listener!"
 Localized String:	"First event not recieved by second listener!"
 Localized String:	"Second event not recieved by first listener!"
 Localized String:	"Second event recieved by second listener!"
+Localized String:	"ArithmeticCompression"
 Localized String:	"Text encoded "
 Localized String:	" bytes in only "
 Localized String:	" a savings of %"
@@ -3995,6 +3995,7 @@ Localized String:	"value:\t"
 Localized String:	"high:\t"
 Localized String:	"range:\t"
 Localized String:	"scaled:\t"
+Localized String:	"BinarySerializer"
 Localized String:	"Jeremy's Games are so freaking awesome, and his tech is top notch!"
 Localized String:	" miss match: "
 Localized String:	"Didn't belong to this entity!"

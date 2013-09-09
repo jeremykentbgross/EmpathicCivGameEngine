@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 ECGame.unitTests.registerTest(
-	'BinarySerializer',
+	"BinarySerializer",
 	function()
 	{
 		var aPassedTests
