@@ -138,20 +138,21 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 				}
 				else
 				{
-					ECGame.log.info("Net Message Recv (binary):" + new Float32Array(inMessage));
+					ECGame.log.info("Net Message Recv (binary):" + JSON.stringify(new Uint8Array(inMessage)));
 				}
 			}
 			
 			if(ECGame.instance.localUser.userID !== ECGame.EngineLib.User.USER_IDS.NEW_USER)
 			{
-				aThis._myNetwork.serializeIn(aThis._myUser, inMessage);
-				//TODO inNetwork.event Msg
 				if(typeof inMessage === 'string')
 				{
+					//TODO inNetwork.event Msg
+					//aThis._myNetwork.serializeIn(aThis._myUser, inMessage);
 					//console.log(inMessage);
 				}
 				else
 				{
+					aThis._myNetwork.serializeIn(aThis._myUser, new Uint8Array(inMessage));
 					//console.log(new Float32Array(inMessage));
 				}
 			}
@@ -201,7 +202,14 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 		{
 			if(ECGame.Settings.isDebugPrint_NetworkMessages())
 			{
-				ECGame.log.info("Net Send to " + this._myUser.userName + ':' + inData);//ECGame.log.info("Net Send Obj: " + inData);
+				if(typeof inData === 'string')
+				{
+					ECGame.log.info("Net Send (text) to " + this._myUser.userName + ':' + inData);
+				}
+				else
+				{
+					ECGame.log.info("Net Send (binary) to " + this._myUser.userName + ':' + JSON.stringify(inData));
+				}
 			}
 			
 			if(typeof inData === 'string')

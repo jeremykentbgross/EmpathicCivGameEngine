@@ -699,7 +699,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 			
 			//TODO log what we are sending!
 			
-			this._mySerializer.init({NET_MODE : false});
+			this._mySerializer.init({BINARY_MODE : true, NET_MODE : false});
 			
 			aMessageHeader.userID = ECGame.instance.localUser.userID;
 			aMessageHeader.newObjects = Math.min(this._ourMaxItemsPerMessage, inNewInstanceList.length);
@@ -758,8 +758,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				}
 			}
 			
-			//TODO return binary buffer!!
-			return this._mySerializer.getString();
+			return this._mySerializer.getTypedArray();
 		},
 		
 		serializeIn : function serializeIn(inUser, inBuffer)
@@ -784,7 +783,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 			}
 			
 			//serializer without netflag at start to get full versions of objects
-			this._mySerializer.init({}, inBuffer);
+			this._mySerializer.init({BINARY_MODE : true}, inBuffer);
 			
 			try
 			{

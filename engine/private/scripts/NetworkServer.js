@@ -156,21 +156,21 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 				}
 				else
 				{
-					ECGame.log.info("Net Message Recv (binary):" + new Uint8Array(inMessage));
+					ECGame.log.info("Net Message Recv (binary):" + JSON.stringify(new Uint8Array(inMessage)));
 				}
 			}
 			
 			if(aThis._myUser.userID !== ECGame.EngineLib.User.USER_IDS.NEW_USER)
 			{
-				aThis._myNetwork.serializeIn(aThis._myUser, inMessage);
-			
-				//TODO inNetwork.event Msg
 				if(typeof inMessage === 'string')
 				{
+					//TODO inNetwork.event Msg
+					//aThis._myNetwork.serializeIn(aThis._myUser, inMessage);
 					//ECGame.log.info('Message:', inMessage);
 				}
 				else
 				{
+					aThis._myNetwork.serializeIn(aThis._myUser, new Uint8Array(inMessage));
 					//ECGame.log.info('binary:', new Uint8Array(inMessage));
 				}
 			}
@@ -240,7 +240,14 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 		{
 			if(ECGame.Settings.isDebugPrint_NetworkMessages())
 			{
-				ECGame.log.info("Net Send to " + this._myUser.userName + ':' + inData);
+				if(typeof inData === 'string')
+				{
+					ECGame.log.info("Net Send (text) to " + this._myUser.userName + ':' + inData);
+				}
+				else
+				{
+					ECGame.log.info("Net Send (binary) to " + this._myUser.userName + ':' + JSON.stringify(inData));
+				}
 			}
 			
 			//TODO if not connected, queue send data to user object to resend later??
