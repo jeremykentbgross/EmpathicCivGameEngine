@@ -699,7 +699,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 			
 			//TODO log what we are sending!
 			
-			this._mySerializer.initWrite({NET : false});
+			this._mySerializer.init({NET_MODE : false});
 			
 			aMessageHeader.userID = ECGame.instance.localUser.userID;
 			aMessageHeader.newObjects = Math.min(this._ourMaxItemsPerMessage, inNewInstanceList.length);
@@ -784,7 +784,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 			}
 			
 			//serializer without netflag at start to get full versions of objects
-			this._mySerializer.initRead({}, inBuffer);
+			this._mySerializer.init({}, inBuffer);
 			
 			try
 			{

@@ -129,6 +129,7 @@ Final NameSpace:	_prepareSet
 Final NameSpace:	_removePhysicsObjectFromTree
 Final NameSpace:	_sendChatToChatLog
 Final NameSpace:	_setSleeping
+Final NameSpace:	aTestResultsFunction
 Final NameSpace:	add
 Final NameSpace:	addComponent
 Final NameSpace:	addComponents
@@ -262,8 +263,6 @@ Final NameSpace:	importDojoCallback
 Final NameSpace:	include
 Final NameSpace:	init
 Final NameSpace:	initClient
-Final NameSpace:	initRead
-Final NameSpace:	initWrite
 Final NameSpace:	insert
 Final NameSpace:	insertBack
 Final NameSpace:	insertItem
@@ -536,6 +535,7 @@ Function Name:	_prepareSet
 Function Name:	_removePhysicsObjectFromTree
 Function Name:	_sendChatToChatLog
 Function Name:	_setSleeping
+Function Name:	aTestResultsFunction
 Function Name:	add
 Function Name:	addComponent
 Function Name:	addComponents
@@ -669,8 +669,6 @@ Function Name:	importDojoCallback
 Function Name:	include
 Function Name:	init
 Function Name:	initClient
-Function Name:	initRead
-Function Name:	initWrite
 Function Name:	insert
 Function Name:	insertBack
 Function Name:	insertItem
@@ -1059,6 +1057,7 @@ Local Variable:	aMaxSize
 Local Variable:	aMessageHeader
 Local Variable:	aModels
 Local Variable:	aMovedObjectsThisFrame
+Local Variable:	aNet
 Local Variable:	aNetGroup
 Local Variable:	aNetGroupIndex
 Local Variable:	aNewInstanceList
@@ -1070,15 +1069,19 @@ Local Variable:	aNumValuesToProcess
 Local Variable:	aPackerBinary
 Local Variable:	aPackerText
 Local Variable:	aPassedTest
+Local Variable:	aPassedTests
 Local Variable:	aPercentPlayed
 Local Variable:	aPhysicsObject
 Local Variable:	aPoint
 Local Variable:	aPower
 Local Variable:	aRandomValue
+Local Variable:	aReadObject
 Local Variable:	aReadObjectsList
 Local Variable:	aReadResult
 Local Variable:	aRecievedObj
 Local Variable:	aSample
+Local Variable:	aSerializeData
+Local Variable:	aSerializer
 Local Variable:	aSmallestNode
 Local Variable:	aSound
 Local Variable:	aSoundAsset
@@ -1096,6 +1099,7 @@ Local Variable:	aT
 Local Variable:	aT123
 Local Variable:	aT456
 Local Variable:	aTest
+Local Variable:	aTestResultsFunction
 Local Variable:	aTextEncoder
 Local Variable:	aThis
 Local Variable:	aThisNodesSize
@@ -1105,6 +1109,7 @@ Local Variable:	aUserMap
 Local Variable:	aValue
 Local Variable:	aValues
 Local Variable:	aWholePart
+Local Variable:	aWriteObject
 Local Variable:	acceleration			*****
 Local Variable:	anAABB
 Local Variable:	anArray
@@ -1119,6 +1124,7 @@ Local Variable:	anInstanceMap
 Local Variable:	anItem
 Local Variable:	anObject
 Local Variable:	anObjectClass
+Local Variable:	anObjectFormat
 Local Variable:	anObjectHeader
 Local Variable:	anObjectHeaderFormat
 Local Variable:	anOldDirection
@@ -1147,7 +1153,6 @@ Local Variable:	createAABB			*****
 Local Variable:	current			*****
 Local Variable:	currentDateTime			*****
 Local Variable:	currentRenderable			*****
-Local Variable:	data			*****
 Local Variable:	defaultImageName			*****
 Local Variable:	defaultSoundName			*****
 Local Variable:	deletedTiles			*****
@@ -1161,7 +1166,6 @@ Local Variable:	entity			*****
 Local Variable:	entityObject			*****
 Local Variable:	entityPath			*****
 Local Variable:	entityRef			*****
-Local Variable:	entry			*****
 Local Variable:	eventName			*****
 Local Variable:	eventSystem			*****
 Local Variable:	eventType			*****
@@ -1184,7 +1188,6 @@ Local Variable:	imageInfo			*****
 Local Variable:	inDefinition			*****
 Local Variable:	inFlags			*****
 Local Variable:	inMessage			*****
-Local Variable:	inObj			*****
 Local Variable:	inParents			*****
 Local Variable:	index			*****
 Local Variable:	index2			*****
@@ -1212,7 +1215,6 @@ Local Variable:	minute			*****
 Local Variable:	mouseWorldPosition			*****
 Local Variable:	msg			*****
 Local Variable:	name			*****
-Local Variable:	net			*****
 Local Variable:	newComponentMap			*****
 Local Variable:	newEntityMap			*****
 Local Variable:	newInstance			*****
@@ -1226,7 +1228,6 @@ Local Variable:	objectClass			*****
 Local Variable:	outArray			*****
 Local Variable:	outEvents			*****
 Local Variable:	outIntersection			*****
-Local Variable:	outObj			*****
 Local Variable:	outString			*****
 Local Variable:	outValue			*****
 Local Variable:	output			*****
@@ -1251,7 +1252,6 @@ Local Variable:	request			*****
 Local Variable:	returnRect			*****
 Local Variable:	screenPos			*****
 Local Variable:	second			*****
-Local Variable:	serializer			*****
 Local Variable:	serverRebootTime			*****
 Local Variable:	sin			*****
 Local Variable:	size			*****
@@ -1264,7 +1264,6 @@ Local Variable:	temp			*****
 Local Variable:	testClass1			*****
 Local Variable:	testClass2			*****
 Local Variable:	testObjectClass1			*****
-Local Variable:	testResults			*****
 Local Variable:	theClass			*****
 Local Variable:	thisClass			*****
 Local Variable:	tile			*****
@@ -1289,6 +1288,7 @@ Member Variable:	ArithmeticCompresser			*****
 Member Variable:	ArithmeticCompressionModels			*****
 Member Variable:	AssetManager			*****
 Member Variable:	Audio			*****
+Member Variable:	BINARY_MODE			*****
 Member Variable:	BinarySerializer			*****
 Member Variable:	BitPacker			*****
 Member Variable:	CURRENT_MAX			*****
@@ -1361,7 +1361,7 @@ Member Variable:	LoadGame			*****
 Member Variable:	MAX_EVER			*****
 Member Variable:	Map_Draw			*****
 Member Variable:	Msg			*****
-Member Variable:	NET			*****
+Member Variable:	NET_MODE			*****
 Member Variable:	NEW_USER			*****
 Member Variable:	NetGroup			*****
 Member Variable:	NetObjects			*****
@@ -1864,9 +1864,7 @@ Member Variable:	info			*****
 Member Variable:	init			*****
 Member Variable:	initClient			*****
 Member Variable:	initHeight			*****
-Member Variable:	initRead			*****
 Member Variable:	initWidth			*****
-Member Variable:	initWrite			*****
 Member Variable:	innerHTML			*****
 Member Variable:	input			*****
 Member Variable:	insert			*****
@@ -2113,6 +2111,7 @@ Included Word:	ArithmeticCompresser
 Included Word:	ArithmeticCompressionModels
 Included Word:	AssetManager
 Included Word:	Audio
+Included Word:	BINARY_MODE
 Included Word:	BinarySerializer
 Included Word:	BitPacker
 Included Word:	CURRENT_MAX
@@ -2194,7 +2193,7 @@ Included Word:	LoadGame
 Included Word:	MAX_EVER
 Included Word:	Map_Draw
 Included Word:	Msg
-Included Word:	NET
+Included Word:	NET_MODE
 Included Word:	NEW_USER
 Included Word:	NetGroup
 Included Word:	NetObjects
@@ -2579,6 +2578,7 @@ Included Word:	aMaxSize
 Included Word:	aMessageHeader
 Included Word:	aModels
 Included Word:	aMovedObjectsThisFrame
+Included Word:	aNet
 Included Word:	aNetGroup
 Included Word:	aNetGroupIndex
 Included Word:	aNewInstanceList
@@ -2590,15 +2590,19 @@ Included Word:	aNumValuesToProcess
 Included Word:	aPackerBinary
 Included Word:	aPackerText
 Included Word:	aPassedTest
+Included Word:	aPassedTests
 Included Word:	aPercentPlayed
 Included Word:	aPhysicsObject
 Included Word:	aPoint
 Included Word:	aPower
 Included Word:	aRandomValue
+Included Word:	aReadObject
 Included Word:	aReadObjectsList
 Included Word:	aReadResult
 Included Word:	aRecievedObj
 Included Word:	aSample
+Included Word:	aSerializeData
+Included Word:	aSerializer
 Included Word:	aSmallestNode
 Included Word:	aSound
 Included Word:	aSoundAsset
@@ -2616,6 +2620,7 @@ Included Word:	aT
 Included Word:	aT123
 Included Word:	aT456
 Included Word:	aTest
+Included Word:	aTestResultsFunction
 Included Word:	aTextEncoder
 Included Word:	aThis
 Included Word:	aThisNodesSize
@@ -2625,6 +2630,7 @@ Included Word:	aUserMap
 Included Word:	aValue
 Included Word:	aValues
 Included Word:	aWholePart
+Included Word:	aWriteObject
 Included Word:	acceleration
 Included Word:	add
 Included Word:	addComponent
@@ -2651,6 +2657,7 @@ Included Word:	anInstanceMap
 Included Word:	anItem
 Included Word:	anObject
 Included Word:	anObjectClass
+Included Word:	anObjectFormat
 Included Word:	anObjectHeader
 Included Word:	anObjectHeaderFormat
 Included Word:	anOldDirection
@@ -2756,7 +2763,6 @@ Included Word:	entityArrayBefore
 Included Word:	entityObject
 Included Word:	entityPath
 Included Word:	entityRef
-Included Word:	entry
 Included Word:	equal
 Included Word:	event
 Included Word:	eventName
@@ -2947,7 +2953,6 @@ Included Word:	inNetwork
 Included Word:	inNewInstanceList
 Included Word:	inNode
 Included Word:	inNodeColor
-Included Word:	inObj
 Included Word:	inObject
 Included Word:	inOn
 Included Word:	inOrigin
@@ -3026,9 +3031,7 @@ Included Word:	index2
 Included Word:	init
 Included Word:	initClient
 Included Word:	initHeight
-Included Word:	initRead
 Included Word:	initWidth
-Included Word:	initWrite
 Included Word:	inoutReturnValues
 Included Word:	inputEvent
 Included Word:	inputString
@@ -3179,7 +3182,6 @@ Included Word:	outDeletedItems
 Included Word:	outEvents
 Included Word:	outIntersection
 Included Word:	outLoadTarget
-Included Word:	outObj
 Included Word:	outString
 Included Word:	outValue
 Included Word:	output
@@ -3302,7 +3304,6 @@ Included Word:	temp
 Included Word:	testClass1
 Included Word:	testClass2
 Included Word:	testObjectClass1
-Included Word:	testResults
 Included Word:	theClass
 Included Word:	thisClass
 Included Word:	tile
@@ -3936,10 +3937,10 @@ Localized String:	"New Object: "
 Localized String:	"Destroying GameObject "
 Localized String:	" start owner: "
 Localized String:	" end owner: "
-Localized String:	"Cannot get text as when not using text incoding."
-Localized String:	"Cannot set text when not using text incoding."
-Localized String:	"Cannot get TypedArray when using text incoding."
-Localized String:	"Cannot set TypedArray when using text incoding."
+Localized String:	"Cannot get as text when not using text incoding."
+Localized String:	"Cannot set as text when not using text incoding."
+Localized String:	"Cannot get as TypedArray when using text incoding."
+Localized String:	"Cannot set as TypedArray when using text incoding."
 Localized String:	"Bit packer: "
 Localized String:	"Encode failed!"
 Localized String:	"Decompression out of range value detected!"

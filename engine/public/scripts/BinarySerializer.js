@@ -45,31 +45,46 @@ ECGame.EngineLib.BinarySerializer = ECGame.EngineLib.Class.create({
 		/*
 		Flags =
 		{
-			NET,/FULL
-			DUMMY_MODE
-			TEXT_MODE/BINARY_MODE
-			//BINARY?, UI_GEN, NO_REFS??
+			NET_MODE,		//not all properties
+			DUMMY_MODE,		//dummy read
+			BINARY_MODE,	//not text
+			//UI_GEN, NO_REFS??
 		}
 		*/
-		//TODO flag for read/write instead of two init functions
-		initWrite : function initWrite(inFlags)
+		init : function init(inFlags, inData)
 		{
-			this._myIsWriting = true;
-			this._init(inFlags);
-		},
-		
-		initRead : function initRead(inFlags, inData)
-		{
-			this._myIsWriting = false;
-			this._init(inFlags);
-			this._myCompresser.setString(inData);
-		},
-		
-		_init : function _init(inFlags)
-		{
-			this._myIsNetMode = inFlags.NET;
+			if(inData)
+			{
+				this._myIsWriting = false;
+			}
+			else
+			{
+				this._myIsWriting = true;
+			}
+			
+			this._myIsNetMode = inFlags.NET_MODE;
 			this._myIsDummyMode = inFlags.DUMMY_MODE;
-			this._myCompresser.init(true);
+			
+			if(inFlags.BINARY_MODE)
+			{
+				this._myCompresser.init(false);
+			}
+			else
+			{
+				this._myCompresser.init(true);
+			}
+			
+			if(!this._myIsWriting)
+			{
+				if(inFlags.BINARY_MODE)
+				{
+					this._myCompresser.setTypedArray(inData);
+				}
+				else
+				{
+					this._myCompresser.setString(inData);
+				}
+			}
 		},
 		
 		isReading : function isReading()
@@ -99,7 +114,10 @@ ECGame.EngineLib.BinarySerializer = ECGame.EngineLib.Class.create({
 		{
 			return this._myCompresser.getString();
 		},
-		//TODO setString??
+		getTypedArray : function getTypedArray()
+		{
+			return this._myCompresser.getTypedArray();
+		},
 		
 		/*
 		dataDesc = [

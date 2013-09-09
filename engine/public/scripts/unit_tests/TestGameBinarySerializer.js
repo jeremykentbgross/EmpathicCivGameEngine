@@ -22,12 +22,20 @@ ECGame.unitTests.registerTest(
 	'BinarySerializer',
 	function()
 	{
-		var passedTest = true;
-		var i;
-		var net;
-		var inObj;
+		var aPassedTests
+			,aNet
+			,aReadObject
+			,aWriteObject
+			,anObjectFormat
+			,aTestResultsFunction
+			,aSerializer
+			,aSerializeData
+			,i
+			;
 		
-		var format = [
+		aPassedTests = true;
+		
+		anObjectFormat = [
 			{
 				name : 'aBool1',
 				type : 'bool',
@@ -60,7 +68,7 @@ ECGame.unitTests.registerTest(
 			}
 		];
 		
-		var outObj = {
+		aWriteObject = {
 			aBool1 : true,
 			aBool2 : false,
 			aString : "Jeremy's Games are so freaking awesome, and his tech is top notch!",
@@ -68,81 +76,146 @@ ECGame.unitTests.registerTest(
 			Y : 41512.123
 		};
 		
-		var testResults = function()
+		aTestResultsFunction = function aTestResultsFunction()
 		{
-			for(i = 0; i < format.length; ++i)
+			var anEntry;
+			for(i = 0; i < anObjectFormat.length; ++i)
 			{
-				var entry = format[i];
-				if(net && !entry.net)
+				anEntry = anObjectFormat[i];
+				if(aNet && !anEntry.net)
 				{
-					if(outObj[entry.name] === inObj[entry.name])
+					if(aWriteObject[anEntry.name] === aReadObject[anEntry.name])
 					{
 						ECGame.log.error(
-							entry.scope + '.' + entry.name + " miss match: " +
-							outObj[entry.name] + ' === ' + inObj[entry.name]);
-						passedTest = false;
+							anEntry.scope + '.' + anEntry.name + " miss match: " +
+							aWriteObject[anEntry.name] + ' === ' + aReadObject[anEntry.name]);
+						aPassedTests = false;
 					}
 				}
 				else
 				{
-					if(outObj[entry.name] !== inObj[entry.name])
+					if(aWriteObject[anEntry.name] !== aReadObject[anEntry.name])
 					{
 						ECGame.log.error(
-							entry.scope + '.' + entry.name + " miss match: " +
-							outObj[entry.name] + ' !== ' + inObj[entry.name]);
-						passedTest = false;
+							anEntry.scope + '.' + anEntry.name + " miss match: " +
+							aWriteObject[anEntry.name] + ' !== ' + aReadObject[anEntry.name]);
+						aPassedTests = false;
 					}
 				}
 			}
 		};
 		
-		
+		///////////////////////////////////////////////
+		///////////////////////////////////////////////
+		//Text
 		
 		///////////////////////////////////////////////
 		//Not net
-		net = false;
+		aNet = false;
 		
 		//write data
-		var serializer = ECGame.EngineLib.BinarySerializer.create();
-		serializer.initWrite({});
-		serializer.serializeObject(outObj, format);
+		aSerializer = ECGame.EngineLib.BinarySerializer.create();
+		aSerializer.init({});
+		aSerializer.serializeObject(aWriteObject, anObjectFormat);
 		
 		//get the written data to transfer to reader
-		var data = serializer.getString();
+		aSerializeData = aSerializer.getString();
 		
 		//read data
-		inObj = {};
-		serializer = ECGame.EngineLib.BinarySerializer.create();
-		serializer.initRead({}, data);
-		serializer.serializeObject(inObj, format);
+		aReadObject = {};
+		aSerializer = ECGame.EngineLib.BinarySerializer.create();
+		aSerializer.init({}, aSerializeData);
+		aSerializer.serializeObject(aReadObject, anObjectFormat);
 		
 		//compare values in in/out Obj
-		testResults();
+		aTestResultsFunction();
+		//Not net
+		///////////////////////////////////////////////
+		
+		///////////////////////////////////////////////
+		//net
+		aNet = true;
+	
+		//write data
+		aSerializer = ECGame.EngineLib.BinarySerializer.create();
+		aSerializer.init({NET_MODE : true});
+		aSerializer.serializeObject(aWriteObject, anObjectFormat);
+		
+		//get the written data to transfer to reader
+		aSerializeData = aSerializer.getString();
+		
+		//read data
+		aReadObject = {};
+		aSerializer = ECGame.EngineLib.BinarySerializer.create();
+		aSerializer.init({NET_MODE : true}, aSerializeData);
+		aSerializer.serializeObject(aReadObject, anObjectFormat);
+		
+		//compare values in in/out Obj
+		aTestResultsFunction();
+		//net
+		///////////////////////////////////////////////
+		
+		//Text
+		///////////////////////////////////////////////
+		///////////////////////////////////////////////
+		
+		
+		///////////////////////////////////////////////
+		///////////////////////////////////////////////
+		//Binary
+		
+		///////////////////////////////////////////////
+		//Not net
+		aNet = false;
+		
+		//write data
+		aSerializer = ECGame.EngineLib.BinarySerializer.create();
+		aSerializer.init({BINARY_MODE : true});
+		aSerializer.serializeObject(aWriteObject, anObjectFormat);
+		
+		//get the written data to transfer to reader
+		aSerializeData = aSerializer.getTypedArray();
+		
+		//read data
+		aReadObject = {};
+		aSerializer = ECGame.EngineLib.BinarySerializer.create();
+		aSerializer.init({BINARY_MODE : true}, aSerializeData);
+		aSerializer.serializeObject(aReadObject, anObjectFormat);
+		
+		//compare values in in/out Obj
+		aTestResultsFunction();
+		//Not net
 		///////////////////////////////////////////////
 		
 		
 		///////////////////////////////////////////////
 		//net
-		net = true;
+		aNet = true;
 	
 		//write data
-		serializer = ECGame.EngineLib.BinarySerializer.create();
-		serializer.initWrite({NET : true});
-		serializer.serializeObject(outObj, format);
+		aSerializer = ECGame.EngineLib.BinarySerializer.create();
+		aSerializer.init({BINARY_MODE : true, NET_MODE : true});
+		aSerializer.serializeObject(aWriteObject, anObjectFormat);
 		
 		//get the written data to transfer to reader
-		data = serializer.getString();
+		aSerializeData = aSerializer.getTypedArray();
 		
 		//read data
-		inObj = {};
-		serializer = ECGame.EngineLib.BinarySerializer.create();
-		serializer.initRead({NET : true}, data);
-		serializer.serializeObject(inObj, format);
+		aReadObject = {};
+		aSerializer = ECGame.EngineLib.BinarySerializer.create();
+		aSerializer.init({BINARY_MODE : true, NET_MODE : true}, aSerializeData);
+		aSerializer.serializeObject(aReadObject, anObjectFormat);
 		
 		//compare values in in/out Obj
-		testResults();
+		aTestResultsFunction();
+		//net
 		///////////////////////////////////////////////
 		
-		return passedTest;
+		//Binary
+		///////////////////////////////////////////////
+		///////////////////////////////////////////////
+		
+		
+		return aPassedTests;
 	}
 );
