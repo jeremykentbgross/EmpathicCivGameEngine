@@ -1029,6 +1029,7 @@ Local Variable:	aCurrentUser
 Local Variable:	aCurrentUserIndex
 Local Variable:	aD123
 Local Variable:	aD456
+Local Variable:	aDeltaTime
 Local Variable:	aDestroyInstanceList
 Local Variable:	aDirtyInstanceList
 Local Variable:	aDrawSize
@@ -1114,6 +1115,7 @@ Local Variable:	acceleration			*****
 Local Variable:	anAABB
 Local Variable:	anArray
 Local Variable:	anArrayLength
+Local Variable:	anAverageDeltaTime
 Local Variable:	anEncodedSizeBytes
 Local Variable:	anEntity
 Local Variable:	anEntry
@@ -1455,7 +1457,6 @@ Member Variable:	_activeInput			*****
 Member Variable:	_animFrames			*****
 Member Variable:	_animation			*****
 Member Variable:	_animations			*****
-Member Variable:	_aveDt			*****
 Member Variable:	_bitPacker			*****
 Member Variable:	_bits			*****
 Member Variable:	_boundingRect			*****
@@ -1487,14 +1488,11 @@ Member Variable:	_domChatLog			*****
 Member Variable:	_domNetworkStatus			*****
 Member Variable:	_down			*****
 Member Variable:	_drawTile			*****
-Member Variable:	_dt			*****
 Member Variable:	_encoded			*****
 Member Variable:	_entities			*****
 Member Variable:	_entityMap			*****
 Member Variable:	_flags			*****
-Member Variable:	_frameCount			*****
 Member Variable:	_frameRate			*****
-Member Variable:	_frameTimes			*****
 Member Variable:	_gameWorld			*****
 Member Variable:	_getDebugPlayingString			*****
 Member Variable:	_handleInput			*****
@@ -1506,7 +1504,6 @@ Member Variable:	_insertPhysicsObjectToTree			*****
 Member Variable:	_instanceRegistry			*****
 Member Variable:	_instancesByID			*****
 Member Variable:	_instancesByName			*****
-Member Variable:	_intervalHandle			*****
 Member Variable:	_isRayTestMode			*****
 Member Variable:	_itemCount			*****
 Member Variable:	_jojoDom			*****
@@ -1515,7 +1512,6 @@ Member Variable:	_jojoOn			*****
 Member Variable:	_jojoStyle			*****
 Member Variable:	_keys			*****
 Member Variable:	_keysPressed			*****
-Member Variable:	_lastFrameTimeStamp			*****
 Member Variable:	_lastMouseWorldPosition			*****
 Member Variable:	_lastSoundPlayed			*****
 Member Variable:	_lastUpdateMin			*****
@@ -1558,16 +1554,20 @@ Member Variable:	_myEffectsVolumeUserValue
 Member Variable:	_myEventListeners
 Member Variable:	_myFileName
 Member Variable:	_myForwardDirtyObjects
+Member Variable:	_myFrameCount
 Member Variable:	_myFrameEvents
+Member Variable:	_myFrameTimes
 Member Variable:	_myFrameUpdateCount
 Member Variable:	_myGameObjectNetDirty
 Member Variable:	_myID
 Member Variable:	_myIntegerRangeModel
+Member Variable:	_myIntervalHandle
 Member Variable:	_myIsDummyMode
 Member Variable:	_myIsNetMode
 Member Variable:	_myIsWriting
 Member Variable:	_myItemCollisionPoints
 Member Variable:	_myItems
+Member Variable:	_myLastFrameTimeStamp
 Member Variable:	_myLastSoundHardwareUpdateTime
 Member Variable:	_myListenerPosition2D
 Member Variable:	_myMap
@@ -2293,7 +2293,6 @@ Included Word:	_activeInput
 Included Word:	_animFrames
 Included Word:	_animation
 Included Word:	_animations
-Included Word:	_aveDt
 Included Word:	_bitPacker
 Included Word:	_bits
 Included Word:	_boundingRect
@@ -2325,14 +2324,11 @@ Included Word:	_domChatLog
 Included Word:	_domNetworkStatus
 Included Word:	_down
 Included Word:	_drawTile
-Included Word:	_dt
 Included Word:	_encoded
 Included Word:	_entities
 Included Word:	_entityMap
 Included Word:	_flags
-Included Word:	_frameCount
 Included Word:	_frameRate
-Included Word:	_frameTimes
 Included Word:	_gameWorld
 Included Word:	_getDebugPlayingString
 Included Word:	_handleInput
@@ -2344,7 +2340,6 @@ Included Word:	_insertPhysicsObjectToTree
 Included Word:	_instanceRegistry
 Included Word:	_instancesByID
 Included Word:	_instancesByName
-Included Word:	_intervalHandle
 Included Word:	_isRayTestMode
 Included Word:	_itemCount
 Included Word:	_jojoDom
@@ -2353,7 +2348,6 @@ Included Word:	_jojoOn
 Included Word:	_jojoStyle
 Included Word:	_keys
 Included Word:	_keysPressed
-Included Word:	_lastFrameTimeStamp
 Included Word:	_lastMouseWorldPosition
 Included Word:	_lastSoundPlayed
 Included Word:	_lastUpdateMin
@@ -2396,16 +2390,20 @@ Included Word:	_myEffectsVolumeUserValue
 Included Word:	_myEventListeners
 Included Word:	_myFileName
 Included Word:	_myForwardDirtyObjects
+Included Word:	_myFrameCount
 Included Word:	_myFrameEvents
+Included Word:	_myFrameTimes
 Included Word:	_myFrameUpdateCount
 Included Word:	_myGameObjectNetDirty
 Included Word:	_myID
 Included Word:	_myIntegerRangeModel
+Included Word:	_myIntervalHandle
 Included Word:	_myIsDummyMode
 Included Word:	_myIsNetMode
 Included Word:	_myIsWriting
 Included Word:	_myItemCollisionPoints
 Included Word:	_myItems
+Included Word:	_myLastFrameTimeStamp
 Included Word:	_myLastSoundHardwareUpdateTime
 Included Word:	_myListenerPosition2D
 Included Word:	_myMap
@@ -2550,6 +2548,7 @@ Included Word:	aCurrentUser
 Included Word:	aCurrentUserIndex
 Included Word:	aD123
 Included Word:	aD456
+Included Word:	aDeltaTime
 Included Word:	aDestroyInstanceList
 Included Word:	aDirtyInstanceList
 Included Word:	aDrawSize
@@ -2647,6 +2646,7 @@ Included Word:	addedToWorld
 Included Word:	anAABB
 Included Word:	anArray
 Included Word:	anArrayLength
+Included Word:	anAverageDeltaTime
 Included Word:	anEncodedSizeBytes
 Included Word:	anEntity
 Included Word:	anEntry
