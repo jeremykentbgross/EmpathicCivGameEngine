@@ -152,6 +152,7 @@ Final NameSpace:	cleanup
 Final NameSpace:	clearNetDirty
 Final NameSpace:	clearTile
 Final NameSpace:	clearTilesInRect
+Final NameSpace:	clearTimerCallback
 Final NameSpace:	clone
 Final NameSpace:	close
 Final NameSpace:	componentMax
@@ -171,6 +172,7 @@ Final NameSpace:	debugDrawCallback
 Final NameSpace:	debugPrint
 Final NameSpace:	decode
 Final NameSpace:	decodedCallback
+Final NameSpace:	delayNetworkMessage
 Final NameSpace:	deleteContained
 Final NameSpace:	deleteItem
 Final NameSpace:	deref
@@ -209,6 +211,7 @@ Final NameSpace:	getCurrentCamera
 Final NameSpace:	getCurrentLength
 Final NameSpace:	getCurrentNode
 Final NameSpace:	getCurrentPoint
+Final NameSpace:	getDebugSimulatedLagTime
 Final NameSpace:	getDomTarget
 Final NameSpace:	getEffectsVolume
 Final NameSpace:	getEndPoint
@@ -403,6 +406,7 @@ Final NameSpace:	setString
 Final NameSpace:	setSupressKeyboardEvents
 Final NameSpace:	setTile
 Final NameSpace:	setTileSet
+Final NameSpace:	setTimerCallback
 Final NameSpace:	setTypedArray
 Final NameSpace:	setValue
 Final NameSpace:	setVelocity
@@ -420,6 +424,7 @@ Final NameSpace:	unit
 Final NameSpace:	unitTests
 Final NameSpace:	unpack
 Final NameSpace:	update
+Final NameSpace:	updateTimerCallback
 Final NameSpace:	walk
 Final NameSpace:	walkCallback
 Final NameSpace:	webServer
@@ -558,6 +563,7 @@ Function Name:	cleanup
 Function Name:	clearNetDirty
 Function Name:	clearTile
 Function Name:	clearTilesInRect
+Function Name:	clearTimerCallback
 Function Name:	clone
 Function Name:	close
 Function Name:	componentMax
@@ -577,6 +583,7 @@ Function Name:	debugDrawCallback
 Function Name:	debugPrint
 Function Name:	decode
 Function Name:	decodedCallback
+Function Name:	delayNetworkMessage
 Function Name:	deleteContained
 Function Name:	deleteItem
 Function Name:	deref
@@ -615,6 +622,7 @@ Function Name:	getCurrentCamera
 Function Name:	getCurrentLength
 Function Name:	getCurrentNode
 Function Name:	getCurrentPoint
+Function Name:	getDebugSimulatedLagTime
 Function Name:	getDomTarget
 Function Name:	getEffectsVolume
 Function Name:	getEndPoint
@@ -807,6 +815,7 @@ Function Name:	setString
 Function Name:	setSupressKeyboardEvents
 Function Name:	setTile
 Function Name:	setTileSet
+Function Name:	setTimerCallback
 Function Name:	setTypedArray
 Function Name:	setValue
 Function Name:	setVelocity
@@ -822,6 +831,7 @@ Function Name:	toggleActiveInput
 Function Name:	unit
 Function Name:	unpack
 Function Name:	update
+Function Name:	updateTimerCallback
 Function Name:	walk
 Function Name:	walkCallback
 Parameter Variables:
@@ -842,6 +852,8 @@ Parameter Variable:	inAssetID
 Parameter Variable:	inBits
 Parameter Variable:	inBuffer
 Parameter Variable:	inButtons
+Parameter Variable:	inCallback
+Parameter Variable:	inCallbackHandle
 Parameter Variable:	inCallbackName
 Parameter Variable:	inCameraRect
 Parameter Variable:	inCanvas
@@ -952,6 +964,7 @@ Parameter Variable:	inRootNode
 Parameter Variable:	inSamples
 Parameter Variable:	inScalar
 Parameter Variable:	inSerializer
+Parameter Variable:	inSkipEmptyNodes
 Parameter Variable:	inSoundAssets
 Parameter Variable:	inSoundDescription
 Parameter Variable:	inSoundDescriptionID
@@ -1037,6 +1050,7 @@ Local Variable:	aEndPointDrawSize
 Local Variable:	aExtraBits
 Local Variable:	aFailedLoopsList
 Local Variable:	aFinishedSounds
+Local Variable:	aFinishedTimerNodes
 Local Variable:	aFractionalPart
 Local Variable:	aFrameEvents
 Local Variable:	aHalfCurrentPointDrawSize
@@ -1104,6 +1118,7 @@ Local Variable:	aTestResultsFunction
 Local Variable:	aTextEncoder
 Local Variable:	aThis
 Local Variable:	aThisNodesSize
+Local Variable:	aTimerNode
 Local Variable:	aTotal
 Local Variable:	aUserID
 Local Variable:	aUserMap
@@ -1372,6 +1387,7 @@ Member Variable:	NetworkBase			*****
 Member Variable:	NetworkMessages_Draw			*****
 Member Variable:	NetworkMessages_DrawColor			*****
 Member Variable:	NetworkMessages_Print			*****
+Member Variable:	Network_SimulatedLag			*****
 Member Variable:	Obfuscation_Print			*****
 Member Variable:	POWERS			*****
 Member Variable:	Parents			*****
@@ -1533,6 +1549,7 @@ Member Variable:	_myActiveLinkedListNode
 Member Variable:	_myActiveObjectsList
 Member Variable:	_myBackBufferCanvas
 Member Variable:	_myBackBufferCanvas2DContext
+Member Variable:	_myCallback
 Member Variable:	_myCanvas
 Member Variable:	_myCanvas2DContext
 Member Variable:	_myChildren
@@ -1621,8 +1638,10 @@ Member Variable:	_myT
 Member Variable:	_myTests
 Member Variable:	_myTileSet
 Member Variable:	_myTiles
+Member Variable:	_myTimeDelay
 Member Variable:	_myTimeStepInMilliSeconds
 Member Variable:	_myTimeStepInSeconds
+Member Variable:	_myTimerCallbacks
 Member Variable:	_myTrackedInstances
 Member Variable:	_myTree
 Member Variable:	_myUser
@@ -1724,6 +1743,7 @@ Member Variable:	cleanup			*****
 Member Variable:	clearNetDirty			*****
 Member Variable:	clearTile			*****
 Member Variable:	clearTilesInRect			*****
+Member Variable:	clearTimerCallback			*****
 Member Variable:	clicked			*****
 Member Variable:	clone			*****
 Member Variable:	close			*****
@@ -1805,6 +1825,7 @@ Member Variable:	getCurrentCamera			*****
 Member Variable:	getCurrentLength			*****
 Member Variable:	getCurrentNode			*****
 Member Variable:	getCurrentPoint			*****
+Member Variable:	getDebugSimulatedLagTime			*****
 Member Variable:	getDomTarget			*****
 Member Variable:	getEffectsVolume			*****
 Member Variable:	getEndPoint			*****
@@ -2063,6 +2084,7 @@ Member Variable:	setString			*****
 Member Variable:	setSupressKeyboardEvents			*****
 Member Variable:	setTile			*****
 Member Variable:	setTileSet			*****
+Member Variable:	setTimerCallback			*****
 Member Variable:	setTypedArray			*****
 Member Variable:	setValue			*****
 Member Variable:	setVelocity			*****
@@ -2203,6 +2225,7 @@ Included Word:	NetworkClient
 Included Word:	NetworkMessages_Draw
 Included Word:	NetworkMessages_DrawColor
 Included Word:	NetworkMessages_Print
+Included Word:	Network_SimulatedLag
 Included Word:	Obfuscation_Print
 Included Word:	POWERS
 Included Word:	Parents
@@ -2369,6 +2392,7 @@ Included Word:	_myActiveLinkedListNode
 Included Word:	_myActiveObjectsList
 Included Word:	_myBackBufferCanvas
 Included Word:	_myBackBufferCanvas2DContext
+Included Word:	_myCallback
 Included Word:	_myCanvas
 Included Word:	_myCanvas2DContext
 Included Word:	_myChildren
@@ -2457,8 +2481,10 @@ Included Word:	_myT
 Included Word:	_myTests
 Included Word:	_myTileSet
 Included Word:	_myTiles
+Included Word:	_myTimeDelay
 Included Word:	_myTimeStepInMilliSeconds
 Included Word:	_myTimeStepInSeconds
+Included Word:	_myTimerCallbacks
 Included Word:	_myTrackedInstances
 Included Word:	_myTree
 Included Word:	_myUser
@@ -2556,6 +2582,7 @@ Included Word:	aEndPointDrawSize
 Included Word:	aExtraBits
 Included Word:	aFailedLoopsList
 Included Word:	aFinishedSounds
+Included Word:	aFinishedTimerNodes
 Included Word:	aFractionalPart
 Included Word:	aFrameEvents
 Included Word:	aHalfCurrentPointDrawSize
@@ -2623,6 +2650,7 @@ Included Word:	aTestResultsFunction
 Included Word:	aTextEncoder
 Included Word:	aThis
 Included Word:	aThisNodesSize
+Included Word:	aTimerNode
 Included Word:	aTotal
 Included Word:	aUserID
 Included Word:	aUserMap
@@ -2691,6 +2719,7 @@ Included Word:	cleanup
 Included Word:	clearNetDirty
 Included Word:	clearTile
 Included Word:	clearTilesInRect
+Included Word:	clearTimerCallback
 Included Word:	clicked
 Included Word:	clone
 Included Word:	close
@@ -2734,6 +2763,7 @@ Included Word:	decodedCallback
 Included Word:	default2DRadius
 Included Word:	defaultImageName
 Included Word:	defaultSoundName
+Included Word:	delayNetworkMessage
 Included Word:	deleteContained
 Included Word:	deleteItem
 Included Word:	deletedTiles
@@ -2810,6 +2840,7 @@ Included Word:	getCurrentCamera
 Included Word:	getCurrentLength
 Included Word:	getCurrentNode
 Included Word:	getCurrentPoint
+Included Word:	getDebugSimulatedLagTime
 Included Word:	getDomTarget
 Included Word:	getEffectsVolume
 Included Word:	getEndPoint
@@ -2876,6 +2907,8 @@ Included Word:	inAssetID
 Included Word:	inBits
 Included Word:	inBuffer
 Included Word:	inButtons
+Included Word:	inCallback
+Included Word:	inCallbackHandle
 Included Word:	inCallbackName
 Included Word:	inCameraRect
 Included Word:	inCanvas
@@ -2987,6 +3020,7 @@ Included Word:	inRootNode
 Included Word:	inSamples
 Included Word:	inScalar
 Included Word:	inSerializer
+Included Word:	inSkipEmptyNodes
 Included Word:	inSoundAssets
 Included Word:	inSoundDescription
 Included Word:	inSoundDescriptionID
@@ -3286,6 +3320,7 @@ Included Word:	setString
 Included Word:	setSupressKeyboardEvents
 Included Word:	setTile
 Included Word:	setTileSet
+Included Word:	setTimerCallback
 Included Word:	setTypedArray
 Included Word:	setValue
 Included Word:	size
@@ -3321,6 +3356,7 @@ Included Word:	up1
 Included Word:	up2
 Included Word:	update
 Included Word:	updateOrder
+Included Word:	updateTimerCallback
 Included Word:	useModifiedNamesNotPureObfuscate
 Included Word:	useRequestAnimFrame
 Included Word:	user

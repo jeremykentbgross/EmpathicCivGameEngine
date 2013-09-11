@@ -195,15 +195,12 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 			this._myPlayingSounds.forAll(
 				function checkFinished(inItem, inNode)
 				{
-					//head node has no sound
-					if(inItem)
+					if(inItem.isFinished())
 					{
-						if(inItem.isFinished())
-						{
-							aFinishedSounds.push(inNode);
-						}
+						aFinishedSounds.push(inNode);
 					}
-				}
+				},
+				true
 			);
 			
 			//remove finished sounds from this._myPlayingSounds
@@ -345,12 +342,9 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 			this._myPlayingSounds.forAll(
 				function debugDrawCallback(inItem)
 				{					
-					//head node has no sound
-					if(inItem)
-					{
-						inItem.debugDraw(inCanvas2DContext, inCameraRect, aCurrentTime);
-					}
-				}
+					inItem.debugDraw(inCanvas2DContext, inCameraRect, aCurrentTime);
+				},
+				true
 			);
 		}
 	}

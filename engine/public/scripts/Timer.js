@@ -26,6 +26,7 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 		this._myFrameCount = 0;
 		this._myFrameTimes = [];
 		this._myIntervalHandle = null;
+		this._myTimerCallbacks = new ECGame.EngineLib.createGameCircularDoublyLinkedListNode();
 	},
 	Parents : [],
 	flags : {},
@@ -36,6 +37,28 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 		getFrameCount : function getFrameCount()
 		{
 			return this._myFrameCount;
+		},
+		//TODO getTimeStamp
+		
+		setTimerCallback : function setTimerCallback(inTimeDelay, inCallback)
+		{
+			var aTimerNode;
+
+			this._myTimerCallbacks.insertBack(
+				aTimerNode = new ECGame.EngineLib.createGameCircularDoublyLinkedListNode(
+					{
+						_myCallback : inCallback,
+						_myTimeDelay : inTimeDelay,
+						_myAccumulatedTime : 0
+					}
+				)
+			);
+			
+			return aTimerNode;
+		},
+		clearTimerCallback : function clearTimerCallback(inCallbackHandle)
+		{
+			inCallbackHandle.remove();
 		},
 
 		start : function start()
@@ -93,6 +116,8 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 		{
 			var aDeltaTime
 				,anAverageDeltaTime
+				,aFinishedTimerNodes
+				,aTimerNode
 				,i
 				;
 			
@@ -143,7 +168,30 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 				}
 			}
 			
-			//TODO update accumulators and fire timer events instead (likely own update order, etc)
+			//fire custom timers
+			aFinishedTimerNodes = [];
+			this._myTimerCallbacks.forAll(
+				function updateTimerCallback(inItem, inNode)
+				{
+					inItem._myAccumulatedTime += aDeltaTime;
+					if(inItem._myTimeDelay < inItem._myAccumulatedTime)
+					{
+						inItem._myAccumulatedTime -= inItem._myTimeDelay;
+						aFinishedTimerNodes.push(inNode);
+					}
+				},
+				true
+			);
+			for(i = 0; i < aFinishedTimerNodes.length; ++i)
+			{
+				aTimerNode = aFinishedTimerNodes[i];
+				if(!aTimerNode.item._myCallback())
+				{
+					this.clearTimerCallback(aTimerNode);
+				}
+			}
+			
+			
 			//TODO update event could have dt, aveDt, Date, etc
 			ECGame.instance.update(anAverageDeltaTime);
 			

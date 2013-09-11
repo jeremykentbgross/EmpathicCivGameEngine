@@ -65,24 +65,30 @@ ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.remove = function re
 
 
 
-ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.forAll = function forAll(inFunction)
+ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.forAll = function forAll(inFunction, inSkipEmptyNodes)
 {
 	var last = this;
 	var current = this;
 	do{
-		inFunction(current.item, current);
+		if(!inSkipEmptyNodes || current.item)
+		{
+			inFunction(current.item, current);
+		}
 		current = current.myNext;
 	} while(current !== last);
 };
 
 
 
-ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.forAllReverse = function forAllReverse(inFunction)
+ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.forAllReverse = function forAllReverse(inFunction, inSkipEmptyNodes)
 {
 	var last = this.myPrev;
 	var current = this.myPrev;
 	do{
-		inFunction(current.item, current);
+		if(!inSkipEmptyNodes || current.item)
+		{
+			inFunction(current.item, current);
+		}
 		current = current.myPrev;
 	} while(current !== last);
 };

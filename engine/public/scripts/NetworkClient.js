@@ -152,7 +152,21 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 				}
 				else
 				{
-					aThis._myNetwork.serializeIn(aThis._myUser, new Uint8Array(inMessage));
+					if(!ECGame.Settings.getDebugSimulatedLagTime())
+					{
+						aThis._myNetwork.serializeIn(aThis._myUser, new Uint8Array(inMessage));
+					}
+					else
+					{
+						ECGame.instance.timer.setTimerCallback(
+							ECGame.Settings.getDebugSimulatedLagTime(),
+							function delayNetworkMessage()
+							{
+								aThis._myNetwork.serializeIn(aThis._myUser, new Uint8Array(inMessage));
+								return false;
+							}
+						);
+					}
 					//console.log(new Float32Array(inMessage));
 				}
 			}

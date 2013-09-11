@@ -202,6 +202,7 @@ ECGame.Settings =
 		NetworkMessages_DrawColor : 'rgba(0, 255, 0, 1)',
 		NetworkMessages_Print : true,
 		//TODO NetworkDetailedMessages_Print
+		Network_SimulatedLag : 0,
 		
 		//default debug text color
 		TextDefault_DrawColor : 'rgba(255, 255, 255, 1)',
@@ -285,6 +286,14 @@ ECGame.Settings =
 	isDebugPrint_NetworkMessages : function isDebugPrint_NetworkMessages()
 	{
 		return this.isDebugPrint() && this.Debug.NetworkMessages_Print;
+	},
+	getDebugSimulatedLagTime : function getDebugSimulatedLagTime()
+	{
+		if(!this.DEBUG)
+		{
+			return 0;
+		}
+		return this.Debug.Network_SimulatedLag;
 	},
 	isDebugPrint_Obfuscation : function isDebugPrint_Obfuscation()
 	{

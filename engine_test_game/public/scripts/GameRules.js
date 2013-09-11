@@ -237,6 +237,17 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						)
 					]
 				);
+				
+				ECGame.instance.timer.clearTimerCallback(
+				ECGame.instance.timer.setTimerCallback(
+					2000,
+					function(){	ECGame.instance.soundSystem.playSoundEffect(0);	return true;}
+				)
+				);
+				ECGame.instance.timer.setTimerCallback(
+					1500,
+					function(){	ECGame.instance.soundSystem.playSoundEffect(0);	return false;}
+				);
 			}
 			//create audio assets
 			/////////////////////////////////////////////////////////
