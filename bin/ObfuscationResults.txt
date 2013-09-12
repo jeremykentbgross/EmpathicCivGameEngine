@@ -1435,7 +1435,6 @@ Member Variable:	Sprite_Draw			*****
 Member Variable:	Sprite_Origin_DrawColor			*****
 Member Variable:	Sprite_Origin_Size			*****
 Member Variable:	StaticThing			*****
-Member Variable:	TEMP_HACK_NEW_NETWORK			*****
 Member Variable:	TestClass1			*****
 Member Variable:	TestObjectClass1			*****
 Member Variable:	TextBackground_DrawColor			*****
@@ -2270,7 +2269,6 @@ Included Word:	Sprite_Draw
 Included Word:	Sprite_Origin_DrawColor
 Included Word:	Sprite_Origin_Size
 Included Word:	StaticThing
-Included Word:	TEMP_HACK_NEW_NETWORK
 Included Word:	TODODepricated
 Included Word:	TODOrealFunctionName
 Included Word:	TestClass1
@@ -3906,7 +3904,6 @@ Localized String:	"Trying to reregister '"
 Localized String:	"' : '"
 Localized String:	"' but '"
 Localized String:	"' is in use."
-Localized String:	"/socket.io/socket.io.js"
 Localized String:	"Not connected"
 Localized String:	"Chat: "
 Localized String:	"type and press enter to chat"

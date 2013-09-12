@@ -19,7 +19,8 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-
+//TODO: http://small-codes.com/tutoriel-passer-en-plein-ecran-le-html5-canvas-et-dautres-elements-du-dom/?lang=en
+//TODO: http://www.html5rocks.com/en/tutorials/casestudies/gopherwoord-studios-resizing-html5-games/
 
 //Note: A good reference: http://www.whatwg.org/specs/web-apps/current-work/multipage/the-canvas-element.html#images
 

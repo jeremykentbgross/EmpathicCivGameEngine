@@ -326,7 +326,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 			//options:
 			{			
 				//host String
-				port : ECGame.Settings.Network.GamePort,	//Number	???if(ECGame.Settings.Network.GamePort !== null)
+				port : ECGame.Settings.Network.GamePort,
 				server : ECGame.webServer.httpServer, //http.Server
 				verifyClient : this._verifyClient	//Function
 				//path String

@@ -99,10 +99,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					'ClientDisconnected',//TODO use actual event class to de/register listener(s)
 					this
 				);
-				if(ECGame.Settings.TEMP_HACK_NEW_NETWORK)
-				{
-					this._myMasterNetGroup = ECGame.instance.network.getNetGroup('master_netgroup');
-				}
+				this._myMasterNetGroup = ECGame.instance.network.getNetGroup('master_netgroup');
 			}
 			//setup event listeners
 			/////////////////////////////////////////////////////////
@@ -155,7 +152,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			);
 			this._map = this._gameWorld.getMap();
 			this._map.setTileSet(this._tileset);
-			if(ECGame.Settings.TEMP_HACK_NEW_NETWORK)
+			if(ECGame.Settings.Network.isMultiplayer)
 			{
 				this._myMasterNetGroup.addObject(this._gameWorld);
 			}
@@ -237,7 +234,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						)
 					]
 				);
-				
+				/*
 				ECGame.instance.timer.clearTimerCallback(
 				ECGame.instance.timer.setTimerCallback(
 					2000,
@@ -247,7 +244,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				ECGame.instance.timer.setTimerCallback(
 					1500,
 					function(){	ECGame.instance.soundSystem.playSoundEffect(0);	return false;}
-				);
+				);*/
 			}
 			//create audio assets
 			/////////////////////////////////////////////////////////
@@ -391,11 +388,8 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				anEntity.getComponentByType(ECGame.EngineLib.EntityComponent_2DCamera)[0].setNetOwner(inEvent.user.userID);
 			}
 			this._gameWorld.addEntity(anEntity);
-			if(ECGame.Settings.TEMP_HACK_NEW_NETWORK)
-			{
-				anEntity.addToNetGroup(this._myMasterNetGroup);
-				this._myMasterNetGroup.addUser(inEvent.user);
-			}
+			anEntity.addToNetGroup(this._myMasterNetGroup);
+			this._myMasterNetGroup.addUser(inEvent.user);
 		},
 		
 		onClientDisconnected : function onClientDisconnected(inEvent)
@@ -404,11 +398,9 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			
 			anEntity = this._entities[inEvent.user.userID];
 			this._gameWorld.removeEntity(anEntity);
-			if(ECGame.Settings.TEMP_HACK_NEW_NETWORK)
-			{
-				//anEntity.removeFromNetGroup(this._myMasterNetGroup);
-				anEntity.destroy();	//TODO remove from group ^^^ and then set destory on timer if they dont reconnect
-			}
+			
+			//anEntity.removeFromNetGroup(this._myMasterNetGroup);
+			anEntity.destroy();	//TODO remove from group ^^^ and then set destory on timer if they dont reconnect
 		},
 		
 		

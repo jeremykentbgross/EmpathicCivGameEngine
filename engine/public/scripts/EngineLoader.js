@@ -162,7 +162,6 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	{
 		if(ECGame.Settings.Network.isMultiplayer)
 		{
-			include("/socket.io/socket.io.js");/////////////////////////TODO get rid of this!!
 			include(inPublicEnginePath + "scripts/GameChatSystem.js");
 		}
 		include(inPublicEnginePath + "scripts/Game2DGraphics.js");
@@ -176,7 +175,8 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	}
 	if(ECGame.Settings.Network.isMultiplayer)
 	{
-		//include(inPublicEnginePath + "scripts/GameNetwork.js");
+		include(inPublicEnginePath + "scripts/NetUser.js");
+		include(inPublicEnginePath + "scripts/NetGroup.js");
 		include(inPublicEnginePath + "scripts/NetworkBase.js");
 		if(inIsServer)
 		{

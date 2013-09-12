@@ -21,7 +21,6 @@
 var path = require("path");
 var http = require("http");
 var express = require("express");
-var socketIO = require("socket.io");
 
 
 
@@ -35,12 +34,8 @@ ECGame.WebServerTools.WebServer = function WebServer()//TODO WebServer
 	
 	//http file server
 	this.expressApp = express();
-	//needed to open more sockets:
-	this.socketio = socketIO;			//TODO only if needed in the network setup
 	//wrapper for express which is needed for socket.io to serve correctly below
 	this.httpServer = http.createServer(this.expressApp);
-	//needed to serve the socket.io library to others
-	this.listenSocket = socketIO.listen(this.httpServer);
 };
 
 

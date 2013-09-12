@@ -34,9 +34,7 @@ ECGame.Settings =
 	RUN_UNIT_TESTS : true,
 	
 	//TODO appname
-	
-	TEMP_HACK_NEW_NETWORK : true,//TODO remove this along with socket.io
-	
+		
 	Graphics :
 	{
 		initWidth : 768,
@@ -73,7 +71,7 @@ ECGame.Settings =
 	{
 		isServer : false	//TODO consider function for this
 		,isMultiplayer : true
-		,GamePort : 5000//null//1337	//if null then defaults to port 80 and reuses main connection
+		,GamePort : null	//if null then it defaults (I don't know to what), cannot put 80 here.
 		//TODO editorPort : ??
 	},
 	
