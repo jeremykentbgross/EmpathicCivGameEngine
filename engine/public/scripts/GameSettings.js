@@ -184,7 +184,7 @@ ECGame.Settings =
 		GameObject_Print : false,
 		
 		//Sound:
-		Sound_Print : true,
+		Sound_Print : false,
 		Sound_Draw : false,
 		Sound_Area_DrawColor : 'rgba(255, 128, 0, 1)',//'rgba(128, 128, 255, 1)',//
 		Sound_Listener_Size : 20,//TODO this should be in the regular sound part!??
@@ -198,9 +198,9 @@ ECGame.Settings =
 		//TODO search for rgba in all files and move it here as settings vars
 		
 		//Network
-		NetworkMessages_Draw : true,
-		NetworkMessages_DrawColor : 'rgba(0, 255, 0, 1)',
-		NetworkMessages_Print : true,
+	//	NetworkMessages_Draw : true,
+	//	NetworkMessages_DrawColor : 'rgba(0, 255, 0, 1)',
+		NetworkMessages_Print : false,	//TODO: print levels?	0 - none, 1 - connection, 2 - Basic, 3 - detailed, 4 - packet
 		//TODO NetworkDetailedMessages_Print
 		Network_SimulatedLag : 0,
 		
@@ -279,10 +279,10 @@ ECGame.Settings =
 	{
 		return this.isDebugDraw() && this.Debug.Sprite_Draw;
 	},
-	isDebugDraw_NetworkMessages : function isDebugDraw_NetworkMessages()
+/*	isDebugDraw_NetworkMessages : function isDebugDraw_NetworkMessages()
 	{
 		return this.isDebugDraw() && this.Debug.NetworkMessages_Draw;
-	},
+	},*/
 	isDebugPrint_NetworkMessages : function isDebugPrint_NetworkMessages()
 	{
 		return this.isDebugPrint() && this.Debug.NetworkMessages_Print;

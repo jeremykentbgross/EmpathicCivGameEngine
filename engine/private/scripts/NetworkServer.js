@@ -117,9 +117,7 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 			//console.trace();
 			//console.log(arguments);
 			
-			if(ECGame.Settings.DEBUG
-			//	&& ECGame.Settings.Debug.NetworkMessages_Print
-			)
+			if(ECGame.Settings.isDebugPrint_NetworkMessages())
 			{
 				ECGame.log.info("Lost Client! " + aThis._myUser);
 			}
@@ -193,7 +191,10 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 				if(typeof inMessage === 'string')
 				{
 					aRecievedObj = JSON.parse(inMessage);
-					ECGame.log.info('User ID Message:' + inMessage);
+					if(ECGame.Settings.isDebugPrint_NetworkMessages())
+					{
+						ECGame.log.info('User ID Message:' + inMessage);
+					}
 					//verify the object is valid
 					if(typeof aRecievedObj.userName !== 'string'
 						|| typeof aRecievedObj.userID !== 'number'

@@ -284,7 +284,6 @@ Final NameSpace:	isDebugDraw_FrameStats
 Final NameSpace:	isDebugDraw_Input
 Final NameSpace:	isDebugDraw_Map
 Final NameSpace:	isDebugDraw_MouseCursor
-Final NameSpace:	isDebugDraw_NetworkMessages
 Final NameSpace:	isDebugDraw_Physics
 Final NameSpace:	isDebugDraw_SceneGraph
 Final NameSpace:	isDebugDraw_Sound
@@ -694,7 +693,6 @@ Function Name:	isDebugDraw_FrameStats
 Function Name:	isDebugDraw_Input
 Function Name:	isDebugDraw_Map
 Function Name:	isDebugDraw_MouseCursor
-Function Name:	isDebugDraw_NetworkMessages
 Function Name:	isDebugDraw_Physics
 Function Name:	isDebugDraw_SceneGraph
 Function Name:	isDebugDraw_Sound
@@ -1384,8 +1382,6 @@ Member Variable:	NetGroup			*****
 Member Variable:	NetObjects			*****
 Member Variable:	Network			*****
 Member Variable:	NetworkBase			*****
-Member Variable:	NetworkMessages_Draw			*****
-Member Variable:	NetworkMessages_DrawColor			*****
 Member Variable:	NetworkMessages_Print			*****
 Member Variable:	Network_SimulatedLag			*****
 Member Variable:	Obfuscation_Print			*****
@@ -1906,7 +1902,6 @@ Member Variable:	isDebugDraw_FrameStats			*****
 Member Variable:	isDebugDraw_Input			*****
 Member Variable:	isDebugDraw_Map			*****
 Member Variable:	isDebugDraw_MouseCursor			*****
-Member Variable:	isDebugDraw_NetworkMessages			*****
 Member Variable:	isDebugDraw_Physics			*****
 Member Variable:	isDebugDraw_SceneGraph			*****
 Member Variable:	isDebugDraw_Sound			*****
@@ -2222,8 +2217,6 @@ Included Word:	NetObjects
 Included Word:	Network
 Included Word:	NetworkBase
 Included Word:	NetworkClient
-Included Word:	NetworkMessages_Draw
-Included Word:	NetworkMessages_DrawColor
 Included Word:	NetworkMessages_Print
 Included Word:	Network_SimulatedLag
 Included Word:	Obfuscation_Print
@@ -3089,7 +3082,6 @@ Included Word:	isDebugDraw_FrameStats
 Included Word:	isDebugDraw_Input
 Included Word:	isDebugDraw_Map
 Included Word:	isDebugDraw_MouseCursor
-Included Word:	isDebugDraw_NetworkMessages
 Included Word:	isDebugDraw_Physics
 Included Word:	isDebugDraw_SceneGraph
 Included Word:	isDebugDraw_Sound
@@ -3938,22 +3930,19 @@ Localized String:	"Cannot currently serialize so many objects!"
 Localized String:	"Net create remote on "
 Localized String:	"Net write to "
 Localized String:	"Net Destroy on "
-Localized String:	"Network in:"
 Localized String:	"Net user not identifying self correctly: "
-Localized String:	"    New:"
 Localized String:	"Net create remotely command from "
 Localized String:	"Unknown classID "
 Localized String:	"Looks like we have a hacker!"
 Localized String:	"Network Creating: "
 Localized String:	"Network Changing (instead of creating): "
-Localized String:	"    Dirty:"
 Localized String:	"Net reading from "
 Localized String:	"Dirty Network Object doesn't exists!:"
 Localized String:	"Network Changing: "
 Localized String:	"Not the owner, skipping changes!: "
-Localized String:	"    Destroy:"
 Localized String:	"Net destroy remotely order from "
 Localized String:	"Network object to destroy doesn't exists!:"
+Localized String:	"Network Destroying: "
 Localized String:	"scripts/NetworkServer.js"
 Localized String:	"Connected to Server, awaiting ID validation..."
 Localized String:	"Server"

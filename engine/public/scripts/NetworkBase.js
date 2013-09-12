@@ -22,8 +22,9 @@
 
 /*
 Network TODO notes
--ping/simulate high
--interpret user serialize instead of not obfuscating it
+
+-ping
+-interpret User (as in User object) serialize instead of not obfuscating it
 -seek and destroy other TODO's in network code
 -reconnects
 -hook up chat again thru netgroups
@@ -38,8 +39,6 @@ Network TODO notes
 -socketio blocks 80? / remove socketio
 -TEMP_HACK_NEW_NETWORK
 
--netdraw (remove them)
--net log levels //less verbose net printing option
 
 -dont dirty new objs in netgroup
 -send crap to svr test (login/post login)
@@ -644,7 +643,10 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				anInstanceMap = this._mySerializedObjects[aClassName];
 				for(anInstanceID in anInstanceMap)
 				{
-					ECGame.log.info("Clear Net Dirty on:" + anInstanceMap[anInstanceID].getName());
+					if(ECGame.Settings.isDebugPrint_NetworkMessages())
+					{
+						ECGame.log.info("Clear Net Dirty on:" + anInstanceMap[anInstanceID].getName());
+					}
 					anInstanceMap[anInstanceID].clearNetDirty();
 				}
 			}
@@ -774,14 +776,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 			anObjectHeader = {};
 			aMessageHeader = {};
 			aReadObjectsList = [];
-			
-			if(ECGame.Settings.isDebugDraw_NetworkMessages())
-			{
-				ECGame.instance.graphics.drawDebugText(
-					"Network in:",
-					ECGame.Settings.Debug.NetworkMessages_DrawColor
-				);
-			}
+
 			
 			//serializer without netflag at start to get full versions of objects
 			this._mySerializer.init({BINARY_MODE : true}, inBuffer);
@@ -798,13 +793,6 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					,"Net user not identifying self correctly: " + (aMessageHeader.userID + ' != ' + inUser.userID)
 				);//TODO should this assert or return?  Where is it caught? can we disrupt lots of the server function by asserting here
 				
-				if(ECGame.Settings.isDebugDraw_NetworkMessages())
-				{
-					ECGame.instance.graphics.drawDebugText(
-						"    New:",
-						ECGame.Settings.Debug.NetworkMessages_DrawColor
-					);
-				}
 				//for all the new objects:
 				for(i = 0; i < aMessageHeader.newObjects; ++i)
 				{
@@ -855,24 +843,9 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					
 					anObject.serialize(this._mySerializer);
 					aReadObjectsList.push(anObject);
-					
-					if(ECGame.Settings.isDebugDraw_NetworkMessages())
-					{
-						ECGame.instance.graphics.drawDebugText(
-							'        -' + anObject.getTxtPath()
-							,ECGame.Settings.Debug.NetworkMessages_DrawColor
-						);
-					}
 				}
 				
 				this._mySerializer.setNetMode(true);
-				if(ECGame.Settings.isDebugDraw_NetworkMessages())
-				{
-					ECGame.instance.graphics.drawDebugText(
-						"    Dirty:",
-						ECGame.Settings.Debug.NetworkMessages_DrawColor
-					);
-				}
 				//for all the dirty objects:
 				for(i = 0; i < aMessageHeader.dirtyObjects; ++i)
 				{
@@ -904,7 +877,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					
 					if(ECGame.Settings.isDebugPrint_NetworkMessages())
 					{
-						ECGame.log.info("Network Changing: " + anObjectClass.getName() + ' : ' + anObjectHeader.instanceID);
+						ECGame.log.info("Network Changing: " + anObjectClass.getName() + ':' + anObjectHeader.instanceID);
 					}
 					
 					//if from server or from owner serialize
@@ -928,14 +901,6 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					}
 					
 					aReadObjectsList.push(anObject);
-					
-					if(ECGame.Settings.isDebugDraw_NetworkMessages())
-					{
-						ECGame.instance.graphics.drawDebugText(
-							'        -' + anObject.getTxtPath()
-							,ECGame.Settings.Debug.NetworkMessages_DrawColor
-						);
-					}
 				}
 				
 				for(i = 0; i < aReadObjectsList.length; ++i)
@@ -944,14 +909,6 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					{
 						aReadObjectsList[i].postSerialize();
 					}
-				}
-				
-				if(ECGame.Settings.isDebugDraw_NetworkMessages())
-				{
-					ECGame.instance.graphics.drawDebugText(
-						"    Destroy:",
-						ECGame.Settings.Debug.NetworkMessages_DrawColor
-					);
 				}
 				
 				ECGame.log.assert(
@@ -983,18 +940,18 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					
 					if(!anObject)
 					{
-						ECGame.log.info(
-							"Network object to destroy doesn't exists!:" + anObjectClass.getName() + ':' + anObjectHeader.instanceID
-						);
+						if(ECGame.Settings.isDebugPrint_NetworkMessages())
+						{
+							ECGame.log.info(
+								"Network object to destroy doesn't exists!:" + anObjectClass.getName() + ':' + anObjectHeader.instanceID
+							);
+						}
 						continue;
 					}
 					
-					if(ECGame.Settings.isDebugDraw_NetworkMessages())
+					if(ECGame.Settings.isDebugPrint_NetworkMessages())
 					{
-						ECGame.instance.graphics.drawDebugText(
-							'        -' + anObject.getTxtPath()
-							,ECGame.Settings.Debug.NetworkMessages_DrawColor
-						);
+						ECGame.log.info("Network Destroying: " + anObjectClass.getName() + ':' + anObjectHeader.instanceID);
 					}
 
 					anObject.destroy();

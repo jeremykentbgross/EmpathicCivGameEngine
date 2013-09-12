@@ -60,9 +60,7 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			
 			aThis = this.myECGameSocket;
 			
-			if(ECGame.Settings.DEBUG
-			//	&& ECGame.Settings.Debug.NetworkMessages_Print	//TODO levels of netmessages!!
-			)
+			if(ECGame.Settings.isDebugPrint_NetworkMessages())
 			{
 				ECGame.log.info("Connected to Server, awaiting ID validation...");
 			}
@@ -176,7 +174,10 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 				if(typeof inMessage === 'string')
 				{
 					aRecievedObj = JSON.parse(inMessage);
-					ECGame.log.info("User ID Message:" + inMessage);
+					if(ECGame.Settings.isDebugPrint_NetworkMessages())
+					{
+						ECGame.log.info("User ID Message:" + inMessage);
+					}
 					//verify the object is valid
 					if(typeof aRecievedObj.userName !== 'string'
 						|| typeof aRecievedObj.userID !== 'number'
@@ -191,9 +192,7 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 					ECGame.instance.localUser.userID = aRecievedObj.userID;
 					ECGame.instance.localUser.reconnectKey = aRecievedObj.reconnectKey;
 					
-					if(ECGame.Settings.DEBUG
-					//	&& ECGame.Settings.Debug.NetworkMessages_Print
-					)
+					if(ECGame.Settings.isDebugPrint_NetworkMessages())
 					{
 						ECGame.log.info("Connected to Server, ID validated!");
 					}
