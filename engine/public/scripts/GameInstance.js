@@ -19,15 +19,13 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//TODO update order, updaters, remove from update(er)
 //TODO naming convention (which will touch a LOT of files probably)
 //TODO rename this file/class to just Game
-
 
 ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 	Constructor : function GameInstance()
 	{
-		//TODO values listed in constructor
+		//TODO values listed in constructor, rename these (they are accessed elsewhere)
 	/*	this.rules
 		this.timer
 		this._running

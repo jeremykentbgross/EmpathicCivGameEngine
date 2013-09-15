@@ -30,6 +30,8 @@ Notes:
 //TODO search and destroy the console.log
 //console.log("Declaring Obfuscator Code");
 
+//TODO: bug: obfuscationResults: functions are not member variables
+
 var fileSystem = require('fs');
 
 ECGame.WebServerTools.Obfuscator = function Obfuscator()

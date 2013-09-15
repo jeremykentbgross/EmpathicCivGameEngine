@@ -368,7 +368,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			}
 		},
 		
-		
+		//TODO fix bug: sometimes spawns 2 characters instead of one, why?
 		//TODO should rename this onIdentified>Net<User
 		onIdentifiedUser : function onIdentifiedUser(inEvent)
 		{

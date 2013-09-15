@@ -36,8 +36,9 @@ Network TODOs:
 -Use Object Serialization on User (as in User object) instead of not obfuscating its members
 -reconnects
 -hook up chat again thru netgroups
--obj delete properties*********************************
 -reexamine netdirtys
+
+-update network at only 20-30hz?
 
 -dont dirty new objs in netgroup?
 
