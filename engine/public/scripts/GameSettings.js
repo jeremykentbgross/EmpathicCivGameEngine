@@ -37,8 +37,8 @@ ECGame.Settings =
 		
 	Graphics :
 	{
-		initWidth : 768,
-		initHeight : 512
+		initWidth : 768,	//TODO back buffer size, presentation size!
+		initHeight : 768
 		//use 3d?
 		//canvas (2d), webgl (3d), threejs (3d), noDefault (none)
 	},
@@ -98,23 +98,26 @@ ECGame.Settings =
 	
 	Caps :
 	{
-		Audio : function isAudioAvailable()
+		Audio : (function isAudioAvailable()
 		{
 			try{
 				if(window === undefined)	//NOTE! This could be the test for the isServer!!
 				{
 					return false;
 				}
-				else return (
-					window.AudioContext !== undefined ||
-					window.webkitAudioContext !== undefined
-				);
+				else
+				{
+					return (
+						window.AudioContext !== undefined ||
+						window.webkitAudioContext !== undefined
+					);
+				}
 			}
 			catch(inError)
 			{
 				return false;
 			}
-		}()//evaluate the function
+		}())//evaluate the function
 		//TODO audio formats: https://hacks.mozilla.org/2013/02/simplifying-audio-in-the-browser/
 	},
 	
@@ -207,7 +210,11 @@ ECGame.Settings =
 		TextBackground_DrawColor : 'rgba(0, 0, 0, 0.5)',
 		Text_Size : 12,
 		
-		Obfuscation_Print : false//TODO maybe put with the other obfuscation stuff
+		Obfuscation_Print : false,//TODO maybe put with the other obfuscation stuff
+		
+		Updater_Print : false,
+		Updater_Draw : true,
+		Updater_DrawColor : 'rgba(0, 255, 0, 1)'
 	},
 	
 	//helper isDebug functions
@@ -296,6 +303,14 @@ ECGame.Settings =
 	isDebugPrint_Obfuscation : function isDebugPrint_Obfuscation()
 	{
 		return this.isDebugPrint() && this.Debug.Obfuscation_Print;
+	},	
+	isDebugPrint_Updater : function isDebugPrint_Updater()
+	{
+		return this.isDebugPrint() && this.Debug.Updater_Print;
+	},
+	isDebugDraw_Updater : function isDebugDraw_Updater()
+	{
+		return this.isDebugDraw() && this.Debug.Updater_Draw;
 	}
 	/*
 	isDebugDraw_ : function isDebugDraw_()

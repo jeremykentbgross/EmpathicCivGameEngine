@@ -19,6 +19,13 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*
+Generally good references:
+http://www.w3.org/TR/websockets/#the-websocket-interface
+http://www.iana.org/assignments/websocket/websocket.xml#subprotocol-name
+https://developer.valvesoftware.com/wiki/Source_Multiplayer_Networking
+*/
+
 
 /*
 Network TODOs:
@@ -29,7 +36,7 @@ Network TODOs:
 -Use Object Serialization on User (as in User object) instead of not obfuscating its members
 -reconnects
 -hook up chat again thru netgroups
--obj delete properties
+-obj delete properties*********************************
 -reexamine netdirtys
 
 -dont dirty new objs in netgroup?
@@ -42,8 +49,6 @@ Network TODOs:
 -map serialize delta !compute delta (world entities and entity components)
 -class/inst id sizes
 -close Sockets Properly at gameover!!!
-
--check naming convention!!
 
 **bkup other code!!!
 */
@@ -226,6 +231,11 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 		sendMessage : function sendMessage()
 		{
 //			ECGame.log.warn("Depricated!!! ????");
+		},
+		
+		getUpdatePriority : function getUpdatePriority()
+		{
+			return 0;
 		},
 		
 		update : function update()//TODO onUpdate?

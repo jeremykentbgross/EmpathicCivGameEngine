@@ -29,10 +29,9 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 		
 		this._animations = ECGame.instance.rules._animations;//HACK!!!!!//TODO 'null'/default object!! (object ref?)
 		this._currentAnimation = 8;//TODO why 8?
-		this._sceneGraphRenderable = new ECGame.EngineLib.Animation2DInstance();
-/*TODO should be commented out?*/this._sceneGraphRenderable.setAnimation(this._animations[0]);//TODO should be a null/default object
-		ECGame.instance.updateOrder.push(this);//TODO this should be in a proper updater
-		this._sceneGraphRenderable.layer = 1;		
+		this._myAnimationInstance = new ECGame.EngineLib.Animation2DInstance();
+/*TODO should be commented out?*/this._myAnimationInstance.setAnimation(this._animations[0]);//TODO should be a null/default object
+		this._myAnimationInstance.layer = 1;		
 		
 		//TODO frame knows filename, offset, collision rects, (sound?) events, etc //TODO move this note to the frame class?
 		//TODO ^^^ same kind of thing for map tiles?
@@ -50,18 +49,18 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 		init : function init(inAnimations)
 		{
 			this._animations = inAnimations;
-			//this._currentAnimation = 8;//TODO why 8?
-			//this._sceneGraphRenderable = new ECGame.EngineLib.Animation2DInstance();
-			this._sceneGraphRenderable.setAnimation(this._animations[0]);
-			//ECGame.instance.updateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
-			//this._sceneGraphRenderable.layer = 1;
+			this._myAnimationInstance.setAnimation(this._animations[0]);
 		},
 		
+		getUpdatePriority : function getUpdatePriority()
+		{
+			return this.getID();
+		},
 		update : function update(inDT)
 		{
 			var aFrameEvents, i;
 			
-			aFrameEvents = this._sceneGraphRenderable.update(inDT);
+			aFrameEvents = this._myAnimationInstance.update(inDT);
 			if(aFrameEvents)
 			{
 				for(i = 0; i < aFrameEvents.length; ++i)
@@ -103,11 +102,11 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			var i;
 			if(this._myWorld)
 			{
-				this._myWorld.getSceneGraph().removeItem(this._sceneGraphRenderable);
+				this._myWorld.getSceneGraph().removeItem(this._myAnimationInstance);
 			}
 			
 			this._position = inEvent.position;
-			this._sceneGraphRenderable.anchorPosition = inEvent.boundingRect.getLeftTop();//inEvent.position;
+			this._myAnimationInstance.anchorPosition = inEvent.boundingRect.getLeftTop();//inEvent.position;
 			
 			if(inEvent.velocity.length() < 0.9)
 			{
@@ -115,7 +114,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 				{
 					this._currentAnimation += 8;
 				}
-				this._sceneGraphRenderable.setAnimation(this._animations[this._currentAnimation]);
+				this._myAnimationInstance.setAnimation(this._animations[this._currentAnimation]);
 			}
 			else
 			{
@@ -143,28 +142,28 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 						this._currentAnimation = i;
 					}
 				}
-				this._sceneGraphRenderable.setAnimation(this._animations[this._currentAnimation]);
+				this._myAnimationInstance.setAnimation(this._animations[this._currentAnimation]);
 			}
 			
 			//TODO change renderable position everywhere it should change
 			if(this._myWorld)
 			{
-				this._myWorld.getSceneGraph().insertItem(this._sceneGraphRenderable);
+				this._myWorld.getSceneGraph().insertItem(this._myAnimationInstance);
 			}
 		},
 
 		onAddedToWorld : function onAddedToWorld(inEvent)
 		{
 			this._myWorld = inEvent.world;
-			this._myWorld.getSceneGraph().insertItem(this._sceneGraphRenderable);
-			//TODO add to updater
+			this._myWorld.getSceneGraph().insertItem(this._myAnimationInstance);
+			ECGame.instance.getUpdater("SpritesUpdater").addUpdate(this);
 		},
 
 		onRemovedFromWorld : function onRemovedFromWorld(inEvent)
 		{
-			this._myWorld.getSceneGraph().removeItem(this._sceneGraphRenderable);
+			this._myWorld.getSceneGraph().removeItem(this._myAnimationInstance);
 			this._myWorld = null;
-			//TODO remove from updater
+			ECGame.instance.getUpdater("SpritesUpdater").removeUpdate(this);
 		},
 		
 		//set<classname>NetDirty
@@ -178,10 +177,9 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			this._animations = inOther._animations;
 			this._currentAnimation = inOther._currentAnimation;
 			
-			this._sceneGraphRenderable = new ECGame.EngineLib.Animation2DInstance();
-			this._sceneGraphRenderable.setAnimation(this._animations[0]);
-			ECGame.instance.updateOrder.push(this._sceneGraphRenderable);//TODO this should be in a proper updater
-			this._sceneGraphRenderable.layer = inOther._sceneGraphRenderable.layer;
+			this._myAnimationInstance = new ECGame.EngineLib.Animation2DInstance();
+			this._myAnimationInstance.setAnimation(this._animations[0]);
+			this._myAnimationInstance.layer = inOther._myAnimationInstance.layer;
 		}
 	}
 });

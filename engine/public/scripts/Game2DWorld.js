@@ -61,7 +61,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 			
 			this._physics = ECGame.EngineLib.Physics2D.create();
 			this._physics.init(this._mapsize, inMinPhysicsPartitionSize);
-			ECGame.instance.updateOrder.push(this._physics);//TODO make it join a physics updater, not this
+			ECGame.instance.getUpdater("PhysicsUpdater").addUpdate(this._physics);//TODO move this to physics system itself?
 			
 			//setup default tileset consisting of nothing but the placeholder
 			var tileset = ECGame.EngineLib.Game2DTileSet.create();

@@ -77,7 +77,11 @@ ECGame.EngineLib.GameEventSystem.prototype.onEvent = function onEvent(inEvent)
 	var head,
 		current,
 		eventName,
-		callbackName;
+		callbackName,
+		aListeners,
+		i;
+	
+	aListeners = [];
 	
 	try
 	{
@@ -100,15 +104,19 @@ ECGame.EngineLib.GameEventSystem.prototype.onEvent = function onEvent(inEvent)
 	
 	while(current !== head)
 	{
+		aListeners.push(current.item);
+		current = current.myNext;
+	}
+	
+	for(i = 0; i < aListeners.length; ++i)
+	{
 		try
 		{
-			current.item[callbackName](inEvent);
+			aListeners[i][callbackName](inEvent);
 		}
 		catch(error)
 		{
 			console.log(error.stack);
 		}
-		
-		current = current.myNext;
 	}
 };

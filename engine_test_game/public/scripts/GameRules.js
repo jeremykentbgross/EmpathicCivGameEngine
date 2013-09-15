@@ -26,7 +26,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 		this.GameRulesBase();
 		
 		//constants:
-		this._mapSizeInTiles = 16;
+		this._mapSizeInTiles = 64;
 		this._tileSize = 64;
 		this._minPhysicsPartitionSize = 8;
 		
@@ -173,6 +173,10 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					}
 				}
 			}
+			/*for(i = 0; i < 64; ++i)
+			{
+				this._map.setTile(new ECGame.EngineLib.Point2(i, Math.floor(Math.random()*this._mapSizeInTiles)), 4);
+			}*/
 			//HACK put something in the map to start with
 			/////////////////////////////////////////////
 			
@@ -319,7 +323,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			/////////////////////////////////////////////////////////
 			
 			//HACK TODO subscribe to timer updates!!!
-			ECGame.instance.updateOrder.push(this);
+			ECGame.instance.getUpdater("MiscUpdater").addUpdate(this);
 
 			
 			return true;

@@ -22,7 +22,11 @@ var path = require("path");
 var http = require("http");
 var express = require("express");
 
-
+//TODO switch dojo for jquery (it is smaller), although I might need include.js then.
+//TODO!!!!! http://dshaw.github.io/2012-05-jsday/#/
+//http://stackoverflow.com/questions/8386455/deploying-a-production-node-js-server
+//http://stackoverflow.com/questions/15839253/express-3-0-https/15839596#15839596
+//https://github.com/nodejitsu/node-http-proxy
 
 ECGame.WebServerTools.WebServer = function WebServer()//TODO WebServer
 {

@@ -355,6 +355,11 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
+		getName : function getName()
+		{
+			return 'NetworkServer';
+		},
+		
 		_verifyClient : function _verifyClient(inInfo, inClientVerifiedFunction)//???????????????
 		{
 			var aUserID;

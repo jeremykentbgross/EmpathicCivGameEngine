@@ -36,6 +36,15 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
+		getName : function getName()
+		{
+			return 'Input';
+		},
+		getUpdatePriority : function getUpdatePriority()
+		{
+			return 0;
+		},
+		
 		initClient : function initClient(inCanvas)
 		{
 			var aThis = this;

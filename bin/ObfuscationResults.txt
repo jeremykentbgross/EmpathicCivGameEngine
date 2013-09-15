@@ -107,13 +107,16 @@ Final NameSpace:	TestObjectClass1
 Final NameSpace:	TestObjectClass2
 Final NameSpace:	Timer
 Final NameSpace:	UnitTestFramework
+Final NameSpace:	UpdateChildren
 Final NameSpace:	UpdatePosition
+Final NameSpace:	Updater
 Final NameSpace:	User
 Final NameSpace:	WebServerTools
 Final NameSpace:	_createChainDownFunction
 Final NameSpace:	_createChainUpFunction
 Final NameSpace:	_createChildren
 Final NameSpace:	_getDebugPlayingString
+Final NameSpace:	_getLeadingString
 Final NameSpace:	_handleInput
 Final NameSpace:	_init
 Final NameSpace:	_insertPhysicsObjectToTree
@@ -139,6 +142,7 @@ Final NameSpace:	addNewObject
 Final NameSpace:	addObject
 Final NameSpace:	addToNetGroup
 Final NameSpace:	addToRenderMap
+Final NameSpace:	addUpdate
 Final NameSpace:	addUser
 Final NameSpace:	addedToWorld
 Final NameSpace:	blockContextMenu
@@ -155,6 +159,7 @@ Final NameSpace:	clearTilesInRect
 Final NameSpace:	clearTimerCallback
 Final NameSpace:	clone
 Final NameSpace:	close
+Final NameSpace:	compare
 Final NameSpace:	componentMax
 Final NameSpace:	componentMin
 Final NameSpace:	containsItems
@@ -167,6 +172,7 @@ Final NameSpace:	createInstanceRegistry
 Final NameSpace:	createNetGroup
 Final NameSpace:	createNewPhysicsObject
 Final NameSpace:	createSourceBuffer
+Final NameSpace:	createUpdater
 Final NameSpace:	debugDraw
 Final NameSpace:	debugDrawCallback
 Final NameSpace:	debugPrint
@@ -187,7 +193,7 @@ Final NameSpace:	equal
 Final NameSpace:	exit
 Final NameSpace:	findByID
 Final NameSpace:	findByName
-Final NameSpace:	findNodeContaining
+Final NameSpace:	findItem
 Final NameSpace:	findSmallestContainingAncestor
 Final NameSpace:	findSmallestContainingDescendant
 Final NameSpace:	findSmallestContainingNodeFromHere
@@ -258,6 +264,8 @@ Final NameSpace:	getTxtPath
 Final NameSpace:	getTypedArray
 Final NameSpace:	getUnion
 Final NameSpace:	getUnusedID
+Final NameSpace:	getUpdatePriority
+Final NameSpace:	getUpdater
 Final NameSpace:	getValueFromProbability
 Final NameSpace:	getWidth
 Final NameSpace:	getWidthHeight
@@ -266,9 +274,11 @@ Final NameSpace:	importDojoCallback
 Final NameSpace:	include
 Final NameSpace:	init
 Final NameSpace:	initClient
+Final NameSpace:	initPowerLookupTable
 Final NameSpace:	insert
 Final NameSpace:	insertBack
 Final NameSpace:	insertItem
+Final NameSpace:	insertItemBack
 Final NameSpace:	insertToAllBestFitting
 Final NameSpace:	insertToSmallestContaining
 Final NameSpace:	instance
@@ -289,6 +299,7 @@ Final NameSpace:	isDebugDraw_SceneGraph
 Final NameSpace:	isDebugDraw_Sound
 Final NameSpace:	isDebugDraw_Sprite
 Final NameSpace:	isDebugDraw_Text
+Final NameSpace:	isDebugDraw_Updater
 Final NameSpace:	isDebugPrint
 Final NameSpace:	isDebugPrint_FrameStats
 Final NameSpace:	isDebugPrint_GameObject
@@ -296,6 +307,7 @@ Final NameSpace:	isDebugPrint_Input
 Final NameSpace:	isDebugPrint_NetworkMessages
 Final NameSpace:	isDebugPrint_Obfuscation
 Final NameSpace:	isDebugPrint_Sound
+Final NameSpace:	isDebugPrint_Updater
 Final NameSpace:	isFinished
 Final NameSpace:	isNetDirty
 Final NameSpace:	isNetMode
@@ -355,6 +367,7 @@ Final NameSpace:	removeEntity
 Final NameSpace:	removeFromNetGroup
 Final NameSpace:	removeItem
 Final NameSpace:	removeObject
+Final NameSpace:	removeUpdate
 Final NameSpace:	removeUser
 Final NameSpace:	removedFromWorld
 Final NameSpace:	render
@@ -518,12 +531,15 @@ Function Name:	TestObjectClass1
 Function Name:	TestObjectClass2
 Function Name:	Timer
 Function Name:	UnitTestFramework
+Function Name:	UpdateChildren
 Function Name:	UpdatePosition
+Function Name:	Updater
 Function Name:	User
 Function Name:	_createChainDownFunction
 Function Name:	_createChainUpFunction
 Function Name:	_createChildren
 Function Name:	_getDebugPlayingString
+Function Name:	_getLeadingString
 Function Name:	_handleInput
 Function Name:	_init
 Function Name:	_insertPhysicsObjectToTree
@@ -549,6 +565,7 @@ Function Name:	addNewObject
 Function Name:	addObject
 Function Name:	addToNetGroup
 Function Name:	addToRenderMap
+Function Name:	addUpdate
 Function Name:	addUser
 Function Name:	addedToWorld
 Function Name:	blockContextMenu
@@ -565,6 +582,7 @@ Function Name:	clearTilesInRect
 Function Name:	clearTimerCallback
 Function Name:	clone
 Function Name:	close
+Function Name:	compare
 Function Name:	componentMax
 Function Name:	componentMin
 Function Name:	containsItems
@@ -577,6 +595,7 @@ Function Name:	createInstanceRegistry
 Function Name:	createNetGroup
 Function Name:	createNewPhysicsObject
 Function Name:	createSourceBuffer
+Function Name:	createUpdater
 Function Name:	debugDraw
 Function Name:	debugDrawCallback
 Function Name:	debugPrint
@@ -597,7 +616,7 @@ Function Name:	equal
 Function Name:	exit
 Function Name:	findByID
 Function Name:	findByName
-Function Name:	findNodeContaining
+Function Name:	findItem
 Function Name:	findSmallestContainingAncestor
 Function Name:	findSmallestContainingDescendant
 Function Name:	findSmallestContainingNodeFromHere
@@ -668,6 +687,8 @@ Function Name:	getTxtPath
 Function Name:	getTypedArray
 Function Name:	getUnion
 Function Name:	getUnusedID
+Function Name:	getUpdatePriority
+Function Name:	getUpdater
 Function Name:	getValueFromProbability
 Function Name:	getWidth
 Function Name:	getWidthHeight
@@ -676,9 +697,11 @@ Function Name:	importDojoCallback
 Function Name:	include
 Function Name:	init
 Function Name:	initClient
+Function Name:	initPowerLookupTable
 Function Name:	insert
 Function Name:	insertBack
 Function Name:	insertItem
+Function Name:	insertItemBack
 Function Name:	insertToAllBestFitting
 Function Name:	insertToSmallestContaining
 Function Name:	intersectAABB
@@ -698,6 +721,7 @@ Function Name:	isDebugDraw_SceneGraph
 Function Name:	isDebugDraw_Sound
 Function Name:	isDebugDraw_Sprite
 Function Name:	isDebugDraw_Text
+Function Name:	isDebugDraw_Updater
 Function Name:	isDebugPrint
 Function Name:	isDebugPrint_FrameStats
 Function Name:	isDebugPrint_GameObject
@@ -705,6 +729,7 @@ Function Name:	isDebugPrint_Input
 Function Name:	isDebugPrint_NetworkMessages
 Function Name:	isDebugPrint_Obfuscation
 Function Name:	isDebugPrint_Sound
+Function Name:	isDebugPrint_Updater
 Function Name:	isFinished
 Function Name:	isNetDirty
 Function Name:	isNetMode
@@ -763,6 +788,7 @@ Function Name:	removeEntity
 Function Name:	removeFromNetGroup
 Function Name:	removeItem
 Function Name:	removeObject
+Function Name:	removeUpdate
 Function Name:	removeUser
 Function Name:	removedFromWorld
 Function Name:	render
@@ -860,6 +886,7 @@ Parameter Variable:	inCanvasContext
 Parameter Variable:	inClass
 Parameter Variable:	inCode
 Parameter Variable:	inColor
+Parameter Variable:	inCompareFunction
 Parameter Variable:	inComponent
 Parameter Variable:	inConstructor
 Parameter Variable:	inCurrentFrame
@@ -867,6 +894,7 @@ Parameter Variable:	inCurrentTime
 Parameter Variable:	inDT
 Parameter Variable:	inData
 Parameter Variable:	inDataFormat
+Parameter Variable:	inDepth
 Parameter Variable:	inDescriptions
 Parameter Variable:	inDestination
 Parameter Variable:	inDestroyInstanceList
@@ -882,6 +910,7 @@ Parameter Variable:	inEntity
 Parameter Variable:	inEvent
 Parameter Variable:	inEventName
 Parameter Variable:	inFileName
+Parameter Variable:	inFindItem
 Parameter Variable:	inFlags
 Parameter Variable:	inFrame
 Parameter Variable:	inFrameEvents
@@ -946,6 +975,7 @@ Parameter Variable:	inPoint
 Parameter Variable:	inPos
 Parameter Variable:	inPosition
 Parameter Variable:	inPrecision
+Parameter Variable:	inPriority
 Parameter Variable:	inPrivateEnginePath
 Parameter Variable:	inPrivateGamePath
 Parameter Variable:	inProbability
@@ -987,6 +1017,8 @@ Parameter Variable:	inTiles
 Parameter Variable:	inTime
 Parameter Variable:	inTimeDelay
 Parameter Variable:	inType
+Parameter Variable:	inUpdateData
+Parameter Variable:	inUpdaterName
 Parameter Variable:	inUser
 Parameter Variable:	inUserID
 Parameter Variable:	inValue
@@ -1030,6 +1062,7 @@ Local Variable:	aChild
 Local Variable:	aClassName
 Local Variable:	aCollisionList
 Local Variable:	aCollisionRect
+Local Variable:	aCount
 Local Variable:	aCurrent
 Local Variable:	aCurrentCollision
 Local Variable:	aCurrentFrame
@@ -1063,8 +1096,11 @@ Local Variable:	aItem
 Local Variable:	aItemCollisionPointSize
 Local Variable:	aItemsList
 Local Variable:	aKeepChildren
+Local Variable:	aLastNode
+Local Variable:	aLeadString
 Local Variable:	aLength
 Local Variable:	aListToDraw
+Local Variable:	aListeners
 Local Variable:	aLow
 Local Variable:	aMaxSize
 Local Variable:	aMessageHeader
@@ -1087,6 +1123,7 @@ Local Variable:	aPercentPlayed
 Local Variable:	aPhysicsObject
 Local Variable:	aPoint
 Local Variable:	aPower
+Local Variable:	aProperty
 Local Variable:	aRandomValue
 Local Variable:	aReadObject
 Local Variable:	aReadObjectsList
@@ -1144,6 +1181,7 @@ Local Variable:	anObjectHeader
 Local Variable:	anObjectHeaderFormat
 Local Variable:	anOldDirection
 Local Variable:	anOwner
+Local Variable:	anUpdateArray
 Local Variable:	angle			*****
 Local Variable:	animProb			*****
 Local Variable:	animation			*****
@@ -1163,7 +1201,6 @@ Local Variable:	componentObject			*****
 Local Variable:	componentPath			*****
 Local Variable:	componentRef			*****
 Local Variable:	constructorSrc			*****
-Local Variable:	count			*****
 Local Variable:	createAABB			*****
 Local Variable:	current			*****
 Local Variable:	currentDateTime			*****
@@ -1213,7 +1250,6 @@ Local Variable:	instanceName			*****
 Local Variable:	itemRect			*****
 Local Variable:	j			*****
 Local Variable:	key			*****
-Local Variable:	last			*****
 Local Variable:	len			*****
 Local Variable:	listener1			*****
 Local Variable:	listener2			*****
@@ -1321,6 +1357,7 @@ Member Variable:	ClientSideWebSocket			*****
 Member Variable:	ConnectedToServer			*****
 Member Variable:	Constructor			*****
 Member Variable:	DEBUG			*****
+Member Variable:	DELETED_OBJECT			*****
 Member Variable:	Data			*****
 Member Variable:	Debug			*****
 Member Variable:	Definition			*****
@@ -1446,6 +1483,10 @@ Member Variable:	UNUSED			*****
 Member Variable:	USER_IDS			*****
 Member Variable:	UnitTestFramework			*****
 Member Variable:	UpdatePosition			*****
+Member Variable:	Updater			*****
+Member Variable:	Updater_Draw			*****
+Member Variable:	Updater_DrawColor			*****
+Member Variable:	Updater_Print			*****
 Member Variable:	User			*****
 Member Variable:	WebServer			*****
 Member Variable:	WebServerTools			*****
@@ -1506,6 +1547,7 @@ Member Variable:	_flags			*****
 Member Variable:	_frameRate			*****
 Member Variable:	_gameWorld			*****
 Member Variable:	_getDebugPlayingString			*****
+Member Variable:	_getLeadingString			*****
 Member Variable:	_handleInput			*****
 Member Variable:	_high			*****
 Member Variable:	_images			*****
@@ -1542,6 +1584,7 @@ Member Variable:	_myAABB
 Member Variable:	_myAccumulatedTime
 Member Variable:	_myActiveLinkedListNode
 Member Variable:	_myActiveObjectsList
+Member Variable:	_myAnimationInstance
 Member Variable:	_myBackBufferCanvas
 Member Variable:	_myBackBufferCanvas2DContext
 Member Variable:	_myCallback
@@ -1585,6 +1628,7 @@ Member Variable:	_myListenerPosition2D
 Member Variable:	_myMap
 Member Variable:	_myMapSize
 Member Variable:	_myMasterNetGroup
+Member Variable:	_myMasterUpdater
 Member Variable:	_myMasterVolume
 Member Variable:	_myMasterVolumeUserValue
 Member Variable:	_myMaxT
@@ -1612,6 +1656,7 @@ Member Variable:	_myPhysicsSystemRef
 Member Variable:	_myPitchVariation
 Member Variable:	_myPlayingSounds
 Member Variable:	_myPosition
+Member Variable:	_myPriority
 Member Variable:	_myProbablity
 Member Variable:	_myRadius
 Member Variable:	_myRay
@@ -1639,6 +1684,8 @@ Member Variable:	_myTimeStepInSeconds
 Member Variable:	_myTimerCallbacks
 Member Variable:	_myTrackedInstances
 Member Variable:	_myTree
+Member Variable:	_myUpdateList
+Member Variable:	_myUpdaterMap
 Member Variable:	_myUser
 Member Variable:	_myUsers
 Member Variable:	_myV
@@ -1686,7 +1733,6 @@ Member Variable:	_rotMatrixRow1			*****
 Member Variable:	_rotMatrixRow2			*****
 Member Variable:	_running			*****
 Member Variable:	_sceneGraph			*****
-Member Variable:	_sceneGraphRenderable			*****
 Member Variable:	_sendChatToChatLog			*****
 Member Variable:	_serializeFormat			*****
 Member Variable:	_setSleeping			*****
@@ -1714,6 +1760,7 @@ Member Variable:	addNetDirtyObject			*****
 Member Variable:	addNewObject			*****
 Member Variable:	addObject			*****
 Member Variable:	addToNetGroup			*****
+Member Variable:	addUpdate			*****
 Member Variable:	addUser			*****
 Member Variable:	added			*****
 Member Variable:	addedToWorld			*****
@@ -1757,12 +1804,12 @@ Member Variable:	counter			*****
 Member Variable:	create			*****
 Member Variable:	createAndPlaySourceBuffer			*****
 Member Variable:	createGameCircularDoublyLinkedListNode			*****
-Member Variable:	createGameObjectRef			*****
 Member Variable:	createGameRegistry			*****
 Member Variable:	createInstanceRegistry			*****
 Member Variable:	createNetGroup			*****
 Member Variable:	createNewPhysicsObject			*****
 Member Variable:	createSourceBuffer			*****
+Member Variable:	createUpdater			*****
 Member Variable:	data			*****
 Member Variable:	debugDraw			*****
 Member Variable:	debugPrint			*****
@@ -1793,7 +1840,7 @@ Member Variable:	exit			*****
 Member Variable:	fileName			*****
 Member Variable:	findByID			*****
 Member Variable:	findByName			*****
-Member Variable:	findNodeContaining			*****
+Member Variable:	findItem			*****
 Member Variable:	findSmallestContainingAncestor			*****
 Member Variable:	findSmallestContainingDescendant			*****
 Member Variable:	findSmallestContainingNodeFromHere			*****
@@ -1867,11 +1914,14 @@ Member Variable:	getTxtPath			*****
 Member Variable:	getTypedArray			*****
 Member Variable:	getUnion			*****
 Member Variable:	getUnusedID			*****
+Member Variable:	getUpdatePriority			*****
+Member Variable:	getUpdater			*****
 Member Variable:	getValueFromProbability			*****
 Member Variable:	getWidth			*****
 Member Variable:	getWidthHeight			*****
 Member Variable:	getWorld			*****
 Member Variable:	graphics			*****
+Member Variable:	hasOwnProperty			*****
 Member Variable:	height			*****
 Member Variable:	high			*****
 Member Variable:	id			*****
@@ -1886,6 +1936,7 @@ Member Variable:	input			*****
 Member Variable:	insert			*****
 Member Variable:	insertBack			*****
 Member Variable:	insertItem			*****
+Member Variable:	insertItemBack			*****
 Member Variable:	insertToAllBestFitting			*****
 Member Variable:	insertToSmallestContaining			*****
 Member Variable:	instance			*****
@@ -1906,6 +1957,7 @@ Member Variable:	isDebugDraw_SceneGraph			*****
 Member Variable:	isDebugDraw_Sound			*****
 Member Variable:	isDebugDraw_Sprite			*****
 Member Variable:	isDebugDraw_Text			*****
+Member Variable:	isDebugDraw_Updater			*****
 Member Variable:	isDebugPrint			*****
 Member Variable:	isDebugPrint_FrameStats			*****
 Member Variable:	isDebugPrint_GameObject			*****
@@ -1913,6 +1965,7 @@ Member Variable:	isDebugPrint_Input			*****
 Member Variable:	isDebugPrint_NetworkMessages			*****
 Member Variable:	isDebugPrint_Obfuscation			*****
 Member Variable:	isDebugPrint_Sound			*****
+Member Variable:	isDebugPrint_Updater			*****
 Member Variable:	isFinished			*****
 Member Variable:	isMultiplayer			*****
 Member Variable:	isNetDirty			*****
@@ -1956,13 +2009,11 @@ Member Variable:	myItem
 Member Variable:	myMax
 Member Variable:	myMin
 Member Variable:	myNext
-Member Variable:	myNextActivePhysObj
 Member Variable:	myObj1
 Member Variable:	myObj2
 Member Variable:	myObject
 Member Variable:	myPoint
 Member Variable:	myPrev
-Member Variable:	myPrevActivePhysObj
 Member Variable:	myRadius
 Member Variable:	mySocket
 Member Variable:	mySoundDescriptionID
@@ -2025,6 +2076,7 @@ Member Variable:	removeNewlines			*****
 Member Variable:	removeNonNewlineWhiteSpace			*****
 Member Variable:	removeObject			*****
 Member Variable:	removeTextForLocalization			*****
+Member Variable:	removeUpdate			*****
 Member Variable:	removeUser			*****
 Member Variable:	removedFromWorld			*****
 Member Variable:	render			*****
@@ -2100,7 +2152,6 @@ Member Variable:	unpack			*****
 Member Variable:	up1			*****
 Member Variable:	up2			*****
 Member Variable:	update			*****
-Member Variable:	updateOrder			*****
 Member Variable:	useModifiedNamesNotPureObfuscate			*****
 Member Variable:	useRequestAnimFrame			*****
 Member Variable:	user			*****
@@ -2146,6 +2197,7 @@ Included Word:	ClientSideWebSocket
 Included Word:	ConnectedToServer
 Included Word:	Constructor
 Included Word:	DEBUG
+Included Word:	DELETED_OBJECT
 Included Word:	Data
 Included Word:	Debug
 Included Word:	Definition
@@ -2284,7 +2336,12 @@ Included Word:	Timer
 Included Word:	UNUSED
 Included Word:	USER_IDS
 Included Word:	UnitTestFramework
+Included Word:	UpdateChildren
 Included Word:	UpdatePosition
+Included Word:	Updater
+Included Word:	Updater_Draw
+Included Word:	Updater_DrawColor
+Included Word:	Updater_Print
 Included Word:	User
 Included Word:	WebServer
 Included Word:	WebServerTools
@@ -2345,6 +2402,7 @@ Included Word:	_flags
 Included Word:	_frameRate
 Included Word:	_gameWorld
 Included Word:	_getDebugPlayingString
+Included Word:	_getLeadingString
 Included Word:	_handleInput
 Included Word:	_high
 Included Word:	_images
@@ -2381,6 +2439,7 @@ Included Word:	_myAABB
 Included Word:	_myAccumulatedTime
 Included Word:	_myActiveLinkedListNode
 Included Word:	_myActiveObjectsList
+Included Word:	_myAnimationInstance
 Included Word:	_myBackBufferCanvas
 Included Word:	_myBackBufferCanvas2DContext
 Included Word:	_myCallback
@@ -2424,6 +2483,7 @@ Included Word:	_myListenerPosition2D
 Included Word:	_myMap
 Included Word:	_myMapSize
 Included Word:	_myMasterNetGroup
+Included Word:	_myMasterUpdater
 Included Word:	_myMasterVolume
 Included Word:	_myMasterVolumeUserValue
 Included Word:	_myMaxT
@@ -2451,6 +2511,7 @@ Included Word:	_myPhysicsSystemRef
 Included Word:	_myPitchVariation
 Included Word:	_myPlayingSounds
 Included Word:	_myPosition
+Included Word:	_myPriority
 Included Word:	_myProbablity
 Included Word:	_myRadius
 Included Word:	_myRay
@@ -2478,6 +2539,8 @@ Included Word:	_myTimeStepInSeconds
 Included Word:	_myTimerCallbacks
 Included Word:	_myTrackedInstances
 Included Word:	_myTree
+Included Word:	_myUpdateList
+Included Word:	_myUpdaterMap
 Included Word:	_myUser
 Included Word:	_myUsers
 Included Word:	_myV
@@ -2525,7 +2588,6 @@ Included Word:	_rotMatrixRow1
 Included Word:	_rotMatrixRow2
 Included Word:	_running
 Included Word:	_sceneGraph
-Included Word:	_sceneGraphRenderable
 Included Word:	_sendChatToChatLog
 Included Word:	_serializeFormat
 Included Word:	_setSleeping
@@ -2555,6 +2617,7 @@ Included Word:	aChild
 Included Word:	aClassName
 Included Word:	aCollisionList
 Included Word:	aCollisionRect
+Included Word:	aCount
 Included Word:	aCurrent
 Included Word:	aCurrentCollision
 Included Word:	aCurrentFrame
@@ -2588,8 +2651,11 @@ Included Word:	aItem
 Included Word:	aItemCollisionPointSize
 Included Word:	aItemsList
 Included Word:	aKeepChildren
+Included Word:	aLastNode
+Included Word:	aLeadString
 Included Word:	aLength
 Included Word:	aListToDraw
+Included Word:	aListeners
 Included Word:	aLow
 Included Word:	aMaxSize
 Included Word:	aMessageHeader
@@ -2612,6 +2678,7 @@ Included Word:	aPercentPlayed
 Included Word:	aPhysicsObject
 Included Word:	aPoint
 Included Word:	aPower
+Included Word:	aProperty
 Included Word:	aRandomValue
 Included Word:	aReadObject
 Included Word:	aReadObjectsList
@@ -2659,6 +2726,7 @@ Included Word:	addNewObject
 Included Word:	addObject
 Included Word:	addToNetGroup
 Included Word:	addToRenderMap
+Included Word:	addUpdate
 Included Word:	addUser
 Included Word:	added
 Included Word:	addedToWorld
@@ -2681,6 +2749,7 @@ Included Word:	anObjectHeader
 Included Word:	anObjectHeaderFormat
 Included Word:	anOldDirection
 Included Word:	anOwner
+Included Word:	anUpdateArray
 Included Word:	anchorPosition
 Included Word:	angle
 Included Word:	animProb
@@ -2715,6 +2784,7 @@ Included Word:	clicked
 Included Word:	clone
 Included Word:	close
 Included Word:	colCenter
+Included Word:	compare
 Included Word:	component
 Included Word:	component1
 Included Word:	componentArray
@@ -2732,17 +2802,16 @@ Included Word:	containsItems
 Included Word:	containsPoint
 Included Word:	containsRect
 Included Word:	copyFrom
-Included Word:	count
 Included Word:	counter
 Included Word:	createAABB
 Included Word:	createAndPlaySourceBuffer
 Included Word:	createGameCircularDoublyLinkedListNode
-Included Word:	createGameObjectRef
 Included Word:	createGameRegistry
 Included Word:	createInstanceRegistry
 Included Word:	createNetGroup
 Included Word:	createNewPhysicsObject
 Included Word:	createSourceBuffer
+Included Word:	createUpdater
 Included Word:	current
 Included Word:	currentDateTime
 Included Word:	currentRenderable
@@ -2795,7 +2864,7 @@ Included Word:	fileName
 Included Word:	filename
 Included Word:	findByID
 Included Word:	findByName
-Included Word:	findNodeContaining
+Included Word:	findItem
 Included Word:	findSmallestContainingAncestor
 Included Word:	findSmallestContainingDescendant
 Included Word:	findSmallestContainingNodeFromHere
@@ -2878,6 +2947,8 @@ Included Word:	getTxtPath
 Included Word:	getTypedArray
 Included Word:	getUnion
 Included Word:	getUnusedID
+Included Word:	getUpdatePriority
+Included Word:	getUpdater
 Included Word:	getValueFromProbability
 Included Word:	getWidth
 Included Word:	getWidthHeight
@@ -2908,6 +2979,7 @@ Included Word:	inCanvasContext
 Included Word:	inClass
 Included Word:	inCode
 Included Word:	inColor
+Included Word:	inCompareFunction
 Included Word:	inComponent
 Included Word:	inConstructor
 Included Word:	inCurrentFrame
@@ -2916,6 +2988,7 @@ Included Word:	inDT
 Included Word:	inData
 Included Word:	inDataFormat
 Included Word:	inDefinition
+Included Word:	inDepth
 Included Word:	inDescriptions
 Included Word:	inDestination
 Included Word:	inDestroyInstanceList
@@ -2931,6 +3004,7 @@ Included Word:	inEntity
 Included Word:	inEvent
 Included Word:	inEventName
 Included Word:	inFileName
+Included Word:	inFindItem
 Included Word:	inFlags
 Included Word:	inFrame
 Included Word:	inFrameEvents
@@ -2995,6 +3069,7 @@ Included Word:	inPoint
 Included Word:	inPos
 Included Word:	inPosition
 Included Word:	inPrecision
+Included Word:	inPriority
 Included Word:	inPrivateEnginePath
 Included Word:	inPrivateGamePath
 Included Word:	inProbability
@@ -3036,6 +3111,8 @@ Included Word:	inTiles
 Included Word:	inTime
 Included Word:	inTimeDelay
 Included Word:	inType
+Included Word:	inUpdateData
+Included Word:	inUpdaterName
 Included Word:	inUser
 Included Word:	inUserID
 Included Word:	inValue
@@ -3056,6 +3133,7 @@ Included Word:	index2
 Included Word:	init
 Included Word:	initClient
 Included Word:	initHeight
+Included Word:	initPowerLookupTable
 Included Word:	initWidth
 Included Word:	inoutReturnValues
 Included Word:	inputEvent
@@ -3063,6 +3141,7 @@ Included Word:	inputString
 Included Word:	insert
 Included Word:	insertBack
 Included Word:	insertItem
+Included Word:	insertItemBack
 Included Word:	insertToAllBestFitting
 Included Word:	insertToSmallestContaining
 Included Word:	instance
@@ -3085,6 +3164,7 @@ Included Word:	isDebugDraw_SceneGraph
 Included Word:	isDebugDraw_Sound
 Included Word:	isDebugDraw_Sprite
 Included Word:	isDebugDraw_Text
+Included Word:	isDebugDraw_Updater
 Included Word:	isDebugPrint
 Included Word:	isDebugPrint_FrameStats
 Included Word:	isDebugPrint_GameObject
@@ -3092,6 +3172,7 @@ Included Word:	isDebugPrint_Input
 Included Word:	isDebugPrint_NetworkMessages
 Included Word:	isDebugPrint_Obfuscation
 Included Word:	isDebugPrint_Sound
+Included Word:	isDebugPrint_Updater
 Included Word:	isFinished
 Included Word:	isMultiplayer
 Included Word:	isNetDirty
@@ -3109,7 +3190,6 @@ Included Word:	itemRect
 Included Word:	j
 Included Word:	key
 Included Word:	keysPressed
-Included Word:	last
 Included Word:	lastFrameDrawn
 Included Word:	layer
 Included Word:	len
@@ -3147,13 +3227,11 @@ Included Word:	myItem
 Included Word:	myMax
 Included Word:	myMin
 Included Word:	myNext
-Included Word:	myNextActivePhysObj
 Included Word:	myObj1
 Included Word:	myObj2
 Included Word:	myObject
 Included Word:	myPoint
 Included Word:	myPrev
-Included Word:	myPrevActivePhysObj
 Included Word:	myRadius
 Included Word:	mySocket
 Included Word:	mySoundDescriptionID
@@ -3251,6 +3329,7 @@ Included Word:	removeNewlines
 Included Word:	removeNonNewlineWhiteSpace
 Included Word:	removeObject
 Included Word:	removeTextForLocalization
+Included Word:	removeUpdate
 Included Word:	removeUser
 Included Word:	removedFromWorld
 Included Word:	render
@@ -3345,7 +3424,6 @@ Included Word:	unpack
 Included Word:	up1
 Included Word:	up2
 Included Word:	update
-Included Word:	updateOrder
 Included Word:	updateTimerCallback
 Included Word:	useModifiedNamesNotPureObfuscate
 Included Word:	useRequestAnimFrame
@@ -3904,6 +3982,8 @@ Localized String:	"Trying to reregister '"
 Localized String:	"' : '"
 Localized String:	"' but '"
 Localized String:	"' is in use."
+Localized String:	"Update: "
+Localized String:	" (Priority:"
 Localized String:	"Not connected"
 Localized String:	"Chat: "
 Localized String:	"type and press enter to chat"
@@ -3955,8 +4035,8 @@ Localized String:	"Net Send (binary) to "
 Localized String:	"Input: "
 Localized String:	"Active"
 Localized String:	"Inactive"
-Localized String:	"New Object: "
-Localized String:	"Destroying GameObject "
+Localized String:	"New GameObject: "
+Localized String:	"Destroying GameObject: "
 Localized String:	" start owner: "
 Localized String:	" end owner: "
 Localized String:	"Cannot get as text when not using text incoding."
@@ -3970,11 +4050,18 @@ Localized String:	"Did not resolve decoding a symbol before we exceeded the bits
 Localized String:	"Range is too large!"
 Localized String:	"WTF!!!"
 Localized String:	"Should not be getting input updates right now."
+Localized String:	"SpritesUpdater"
 Localized String:	"Average FPS: "
 Localized String:	"Average MS/F: "
 Localized String:	"Last Frame Time: "
 Localized String:	"Frame Count: "
 Localized String:	"GameFrameWork Init failed!"
+Localized String:	"MasterUpdater"
+Localized String:	"InputUpdater"
+Localized String:	"NetworkUpdater"
+Localized String:	"SoundUpdater"
+Localized String:	"PhysicsUpdater"
+Localized String:	"MiscUpdater"
 Localized String:	"NewUser"
 Localized String:	"QuadTree Node is not a square."
 Localized String:	"This method must be overridden"

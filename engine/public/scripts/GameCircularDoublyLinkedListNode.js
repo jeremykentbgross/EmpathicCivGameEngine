@@ -38,6 +38,97 @@ ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.constructor = ECGame
 
 
 
+
+/*Not tested:
+ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.insertItemFront = function insertItemFront(inItem, inCompareFunction)
+{
+	var aLastNode
+		,aCurrentNode
+		;
+	
+	aLastNode = this;
+	aCurrentNode = this;
+	do{
+		if(aCurrentNode.item)
+		{
+			if(inCompareFunction(inItem, aCurrentNode.item) > 0)
+			{
+				aCurrentNode.insertBack(new ECGame.EngineLib.GameCircularDoublyLinkedListNode(inItem));
+				return;
+			}
+		}
+		aCurrentNode = aCurrentNode.myNext;
+	} while(aCurrentNode !== aLastNode);
+
+	return null;
+};*/
+
+
+ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.insertItemBack = function insertItemBack(inItem, inCompareFunction)
+{
+	var aLastNode
+		,aCurrentNode
+		;
+	
+	aLastNode = this;
+	aCurrentNode = this.myPrev;
+	do{
+		if(aCurrentNode.item)
+		{
+			if(inCompareFunction(inItem, aCurrentNode.item) > 0)
+			{
+				aCurrentNode.insert(new ECGame.EngineLib.GameCircularDoublyLinkedListNode(inItem));
+				return;
+			}
+		}
+		else
+		{
+			aCurrentNode.insert(new ECGame.EngineLib.GameCircularDoublyLinkedListNode(inItem));
+			return;
+		}
+		aCurrentNode = aCurrentNode.myPrev;
+	} while(aCurrentNode !== aLastNode);
+
+	return null;
+};
+
+
+ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.findItem = function findItem(inFindItem)
+{
+	var aLastNode
+		,aCurrentNode
+		;
+	
+	aLastNode = this;
+	aCurrentNode = this;
+	do{
+		if(inFindItem === aCurrentNode.item)
+		{
+			return aCurrentNode;
+		}
+		aCurrentNode = aCurrentNode.myNext;
+	} while(aCurrentNode !== aLastNode);
+
+	return null;
+};
+
+
+ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.removeItem = function removeItem(inItem)
+{
+	var aNode;
+	
+	aNode = this.findItem(inItem);
+	if(aNode)
+	{
+		aNode.remove();
+	}
+	return aNode;
+};
+
+
+
+
+
 ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.insert = function insert(node)
 {
 	node.myPrev = this;
@@ -47,7 +138,7 @@ ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.insert = function in
 };
 
 
-
+//WARNING: This function is only 'insertBack' at the head node.  Otherwise it basically inserts in front of the current node
 ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.insertBack = function insertBack(inNode)
 {
 	this.myPrev.insert(inNode);
@@ -59,76 +150,72 @@ ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.remove = function re
 {
 	this.myPrev.myNext = this.myNext;
 	this.myNext.myPrev = this.myPrev;
-	this.myPrevActivePhysObj = null;
-	this.myNextActivePhysObj = null;
+	this.myPrev = null;
+	this.myNext = null;
 };
 
 
 
 ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.forAll = function forAll(inFunction, inSkipEmptyNodes)
 {
-	var last = this;
-	var current = this;
+	var aLastNode
+		,aCurrentNode
+		;
+	
+	aLastNode = this;
+	aCurrentNode = this;
 	do{
-		if(!inSkipEmptyNodes || current.item)
+		if(!inSkipEmptyNodes || aCurrentNode.item)
 		{
-			inFunction(current.item, current);
+			if(inFunction(aCurrentNode.item, aCurrentNode))
+			{
+				return;
+			}
 		}
-		current = current.myNext;
-	} while(current !== last);
+		aCurrentNode = aCurrentNode.myNext;
+	} while(aCurrentNode !== aLastNode);
 };
 
 
 
 ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.forAllReverse = function forAllReverse(inFunction, inSkipEmptyNodes)
 {
-	var last = this.myPrev;
-	var current = this.myPrev;
+	var aLastNode
+		,aCurrentNode
+		;
+	
+	aLastNode = this;
+	aCurrentNode = this;
 	do{
-		if(!inSkipEmptyNodes || current.item)
+		if(!inSkipEmptyNodes || aCurrentNode.item)
 		{
-			inFunction(current.item, current);
+			if(inFunction(aCurrentNode.item, aCurrentNode))
+			{
+				return;
+			}
 		}
-		current = current.myPrev;
-	} while(current !== last);
-};
-
-
-
-ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.findNodeContaining = function findNodeContaining(inValue)
-{
-	var last = this;
-	var current = this;
-	do{
-		if(inValue === current.item)
-		{
-			return current;
-		}
-		current = current.myNext;
-	} while(current !== last);
-
-	return null;
+		aCurrentNode = aCurrentNode.myPrev;
+	} while(aCurrentNode !== aLastNode);
 };
 
 
 
 ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.size = function size()
 {
-	var last = this;
-	var current = this.myNext;
-	var count = 0;
-	while(current !== last)
+	var aLastNode
+		,aCurrentNode
+		,aCount
+		;
+	
+	aLastNode = this;
+	aCurrentNode = this.myNext;
+	aCount = 0;
+	while(aCurrentNode !== aLastNode)
 	{
-		++count;
-		current = current.myNext;
+		++aCount;
+		aCurrentNode = aCurrentNode.myNext;
 	}
 	
-	return count;
+	return aCount;
 };
 
-
-
-ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.length = function length()
-{
-	return this.size();
-};

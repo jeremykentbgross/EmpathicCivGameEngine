@@ -283,7 +283,10 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
-		
+		getName : function getName()
+		{
+			return 'NetworkClient';
+		}
 	}
 });
 

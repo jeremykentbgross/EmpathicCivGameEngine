@@ -39,7 +39,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		
 		if(ECGame.Settings.isDebugPrint_GameObject())
 		{
-			ECGame.log.info("New Object: " + this.getClass().getName() + ' : ' + this._myName + ' : ' + this._myID);
+			ECGame.log.info("New GameObject: " + this.getClass().getName() + ':' + this._myName + ':' + this._myID, true);
 		}
 		
 		this._myNetOwnerID = ECGame.EngineLib.User.USER_IDS.SERVER;
@@ -122,9 +122,11 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		cleanup : function cleanup(){},
 		destroy : function destroy()
 		{
+			var aProperty;
+			
 			if(ECGame.Settings.isDebugPrint_GameObject())
 			{
-				ECGame.log.info("Destroying GameObject " + ECGame.EngineLib.createGameObjectRef(this).getTxtPath(), true);
+				ECGame.log.info("Destroying GameObject: " + this.getClass().getName() + ':' + this._myName + ':' + this._myID, true);
 			}
 				
 			//notify all listeners
@@ -136,7 +138,16 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			//remove from the instance list
 			this.getClass().getInstanceRegistry().deregister(this);
 			
-			//TODO wipe all properties and change prototype (__proto__??)
+			//wipe all properties
+			for(aProperty in this)
+			{
+				//leave the id as it is still needed by networking to identify the destroyed objects
+				if(this.hasOwnProperty(aProperty) && aProperty !== '_myID')
+				{
+					delete this[aProperty];
+				}
+			}
+			this.DELETED_OBJECT = true;//for debugging
 		},
 		
 		canUserModifyNet : function canUserModifyNet()
@@ -174,9 +185,9 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			return false;
 		},
 		
-		setGameObjectNetDirty : function setGameObjectNetDirty()
+		setGameObjectNetDirty : function setGameObjectNetDirty()//Never called? wtf?
 		{
-			if(setNetDirty())
+			if(this.setNetDirty())
 			{
 				this._myGameObjectNetDirty = true;
 			}
@@ -243,9 +254,9 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			
 			serializer.serializeObject(this, this.GameObject._serializeFormat);
 			
-			if(ECGame.Settings.isDebugPrint_NetworkMessages())
+			if(ECGame.Settings.isDebugPrint_NetworkMessages() || ECGame.Settings.isDebugPrint_GameObject())
 			{
-				if(aStartingOwner != this._myNetOwnerID)
+				if(aStartingOwner !== this._myNetOwnerID)
 				{
 					ECGame.log.info(this.getTxtPath() + " start owner: " + aStartingOwner);
 					ECGame.log.info(this.getTxtPath() + " end owner: " + this._myNetOwnerID);
