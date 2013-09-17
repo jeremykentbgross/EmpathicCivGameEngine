@@ -174,7 +174,7 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 					}
 					else
 					{
-						ECGame.instance.timer.setTimerCallback(
+						ECGame.instance.getTimer().setTimerCallback(
 							ECGame.Settings.getDebugSimulatedLagTime(),
 							function delayNetworkMessage()
 							{
@@ -404,7 +404,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 //			console.trace();
 //			console.log(inWebSocket);
 			
-			aThis = ECGame.instance.network;
+			aThis = ECGame.instance.getNetwork();
 			
 			//create server side socket
 			aSocket = ECGame.EngineLib.ServerSideWebSocket.create(inWebSocket, aThis);

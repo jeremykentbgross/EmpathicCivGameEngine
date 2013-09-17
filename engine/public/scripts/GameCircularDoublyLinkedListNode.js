@@ -70,7 +70,7 @@ ECGame.EngineLib.GameCircularDoublyLinkedListNode.prototype.insertItemBack = fun
 		,aCurrentNode
 		;
 	
-	aLastNode = this;
+	aLastNode = this.myPrev;
 	aCurrentNode = this.myPrev;
 	do{
 		if(aCurrentNode.item)

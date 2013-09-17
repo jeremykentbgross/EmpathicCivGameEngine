@@ -96,6 +96,15 @@ ECGame.Settings =
 		////////////////////////////////////////////
 	},
 	
+	UpdateOrder :
+	{
+		INPUT : 0,
+		PHYSICS : 1,
+		SPRITES : 2,	//should be animation?
+		SOUND : 3,
+		NETWORK : 4
+	},
+	
 	Caps :
 	{
 		Audio : (function isAudioAvailable()

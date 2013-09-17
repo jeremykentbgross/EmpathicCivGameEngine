@@ -32,7 +32,7 @@ ECGame.EngineLib.SoundSample = ECGame.EngineLib.Class.create({
 		)
 	{
 		this._myID = inID;
-		this._mySoundAsset = ECGame.instance.soundSystem._mySoundAssetLib[inAssetID];
+		this._mySoundAsset = ECGame.instance.getSoundSystem()._mySoundAssetLib[inAssetID];
 		this._myProbablity = (inProbability === undefined) ? 1 : inProbability;
 		this._myVolume = (inVolume === undefined) ? 1 : inVolume;
 		this._myVolumeVariation = (inVolumeVariation === undefined) ? 0 : inVolumeVariation;
@@ -48,7 +48,7 @@ ECGame.EngineLib.SoundSample = ECGame.EngineLib.Class.create({
 		{
 			var aSound, aSourceBuffer;
 			
-			aSourceBuffer = ECGame.instance.soundSystem._myContext.createBufferSource();
+			aSourceBuffer = ECGame.instance.getSoundSystem()._myContext.createBufferSource();
 			aSourceBuffer.buffer = this._mySoundAsset._mySoundBuffer;
 			aSourceBuffer._myFileName = this._mySoundAsset._myFileName;
 			aSourceBuffer._myAssetID = this._mySoundAsset._myID;

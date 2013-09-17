@@ -475,8 +475,8 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 				aCurrentNode,
 				aListToDraw;
 			
-			ECGame.instance.graphics.drawDebugText("Debug Drawing Physics");
-			ECGame.instance.graphics.drawDebugText("Frame Update Count:" + this._myFrameUpdateCount);
+			ECGame.instance.getGraphics().drawDebugText("Debug Drawing Physics");
+			ECGame.instance.getGraphics().drawDebugText("Frame Update Count:" + this._myFrameUpdateCount);
 			//TODO print (and notify) collisions this frame
 
 			//make a map of them and draw them.

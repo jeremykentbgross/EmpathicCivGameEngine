@@ -148,15 +148,15 @@ ECGame.EngineLib.ChatSystem = ECGame.EngineLib.Class.create({
 			
 			/////////////////////////////////////////////////////////
 			//Register to listen to messages from the server
-			ECGame.instance.network.registerListener(
+			ECGame.instance.getNetwork().registerListener(
 				'ConnectedToServer',
 				this
 			);
-			ECGame.instance.network.registerListener(
+			ECGame.instance.getNetwork().registerListener(
 				'DisconnectedFromServer',
 				this
 			);
-			ECGame.instance.network.registerListener(
+			ECGame.instance.getNetwork().registerListener(
 				'Msg',
 				this
 			);
@@ -167,7 +167,7 @@ ECGame.EngineLib.ChatSystem = ECGame.EngineLib.Class.create({
 			
 			/////////////////////////////////////////////////////////
 			//Listen to main input
-			ECGame.instance.input.registerListener('Input', this);
+			ECGame.instance.getInput().registerListener('Input', this);
 			//Listen to main input
 			/////////////////////////////////////////////////////////
 			
@@ -232,14 +232,14 @@ ECGame.EngineLib.ChatSystem = ECGame.EngineLib.Class.create({
 				this._jojoStyle.set(this._domChatContainer, 'pointer-events', '');
 				this._jojoStyle.set(this._domChatContainer, 'border-color', '#00ff00');
 				this._domChatInput.focus();
-				ECGame.instance.input.setSupressKeyboardEvents(true);
+				ECGame.instance.getInput().setSupressKeyboardEvents(true);
 			}
 			else
 			{
 				this._jojoStyle.set(this._domChatContainer, 'pointer-events', 'none');
 				this._jojoStyle.set(this._domChatContainer, 'border-color', '#0000ff');
 				this._domChatInput.blur();
-				ECGame.instance.input.setSupressKeyboardEvents(false);
+				ECGame.instance.getInput().setSupressKeyboardEvents(false);
 			}
 		},
 		
@@ -247,7 +247,7 @@ ECGame.EngineLib.ChatSystem = ECGame.EngineLib.Class.create({
 		_onChatSubmit : function _onChatSubmit(event)
 		{
 			event.preventDefault();
-			ECGame.instance.network.sendMessage(
+			ECGame.instance.getNetwork().sendMessage(
 				this._domChatInput.value,
 				this//sentListener
 			);

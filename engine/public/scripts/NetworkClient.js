@@ -70,10 +70,10 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			aThis._myUser.mySocket = aThis;
 			
 			//TODO handle removing this user on disconnect!
-			ECGame.instance.network.getNetGroup('master_netgroup').addUser(aThis._myUser);
+			ECGame.instance.getNetwork().getNetGroup('master_netgroup').addUser(aThis._myUser);
 			
 			//Send my ID to server
-			aThis.send(JSON.stringify(ECGame.instance.localUser));
+			aThis.send(JSON.stringify(ECGame.instance.getLocalUser()));
 			
 			////////
 			
@@ -119,6 +119,7 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			var aThis
 				,inMessage
 				,aRecievedObj
+				,aLocalUser
 				;
 			
 			//console.trace();
@@ -127,6 +128,7 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			
 			aThis = this.myECGameSocket;
 			inMessage = inEvent.data;
+			aLocalUser = ECGame.instance.getLocalUser();
 			
 			if(ECGame.Settings.isDebugPrint_NetworkMessages())
 			{
@@ -140,7 +142,7 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 				}
 			}
 			
-			if(ECGame.instance.localUser.userID !== ECGame.EngineLib.User.USER_IDS.NEW_USER)
+			if(aLocalUser.userID !== ECGame.EngineLib.User.USER_IDS.NEW_USER)
 			{
 				if(typeof inMessage === 'string')
 				{
@@ -156,7 +158,7 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 					}
 					else
 					{
-						ECGame.instance.timer.setTimerCallback(
+						ECGame.instance.getTimer().setTimerCallback(
 							ECGame.Settings.getDebugSimulatedLagTime(),
 							function delayNetworkMessage()
 							{
@@ -188,9 +190,9 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 						return;
 					}
 					
-					ECGame.instance.localUser.userName = aRecievedObj.userName;
-					ECGame.instance.localUser.userID = aRecievedObj.userID;
-					ECGame.instance.localUser.reconnectKey = aRecievedObj.reconnectKey;
+					aLocalUser.userName = aRecievedObj.userName;
+					aLocalUser.userID = aRecievedObj.userID;
+					aLocalUser.reconnectKey = aRecievedObj.reconnectKey;
 					
 					if(ECGame.Settings.isDebugPrint_NetworkMessages())
 					{

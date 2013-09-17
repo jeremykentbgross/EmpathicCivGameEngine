@@ -28,8 +28,8 @@ ECGame.EngineLib.Camera2 = function Camera2()
 		this._myRect = ECGame.EngineLib.AABB2.create(
 			0,
 			0,
-			ECGame.instance.graphics.getWidth(),
-			ECGame.instance.graphics.getHeight()
+			ECGame.instance.getGraphics().getWidth(),
+			ECGame.instance.getGraphics().getHeight()
 		);
 	}
 	else

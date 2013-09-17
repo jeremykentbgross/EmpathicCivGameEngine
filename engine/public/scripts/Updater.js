@@ -83,7 +83,7 @@ ECGame.EngineLib.Updater = ECGame.EngineLib.Class.create({
 				}
 				if(ECGame.Settings.isDebugDraw_Updater())
 				{
-					ECGame.instance.graphics.drawDebugText(aString, ECGame.Settings.Debug.Updater_DrawColor);
+					ECGame.instance.getGraphics().drawDebugText(aString, ECGame.Settings.Debug.Updater_DrawColor);
 				}
 			}
 			
@@ -126,7 +126,7 @@ ECGame.EngineLib.Updater = ECGame.EngineLib.Class.create({
 					}
 					if(ECGame.Settings.isDebugDraw_Updater())
 					{
-						ECGame.instance.graphics.drawDebugText(aString, ECGame.Settings.Debug.Updater_DrawColor);
+						ECGame.instance.getGraphics().drawDebugText(aString, ECGame.Settings.Debug.Updater_DrawColor);
 					}
 				}
 				anUpdateArray[i].update(inUpdateData, inDepth);

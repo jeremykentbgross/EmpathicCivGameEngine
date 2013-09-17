@@ -25,21 +25,24 @@
 ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 	Constructor : function GameInstance()
 	{
-		//TODO values listed in constructor, rename these (they are accessed elsewhere)
-	/*	this.rules
-		this.timer
-		this._running
-		this.updateOrder
-		this.graphics
-		this.localUser
-		this.assetManager
-		this.soundSystem
-		this.input
-		this.network
-		this.chatSystem*/
+		this._myIsRunning = false;
+		
+		this._myGameRules = null;
 		
 		this._myUpdaterMap = null;
 		this._myMasterUpdater = null;
+		
+		this._myTimer = null;
+		this._myInput = null;
+		this._myGraphics = null;
+		this._mySoundSystem = null;
+		this._myNetwork = null;
+		
+		this._myAssetManager = null;
+		
+		this._myChatSystem = null;
+		
+		this._myLocalUser = null;
 	},
 	Parents : [],
 	flags : {},
@@ -53,7 +56,7 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			{
 				if(this._init())
 				{
-					this.timer.start();
+					this._myTimer.start();
 				}
 				else
 				{
@@ -68,28 +71,66 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 		
 		isRunning : function isRunning()
 		{
-			return this._running;
+			return this._myIsRunning;
 		},
 		
 		exit : function exit()
 		{
-			this._running = false;
+			this._myIsRunning = false;
 		},
+		
+		createUpdater : function createUpdater(inUpdaterName, inPriority)
+		{
+			return this._myUpdaterMap[inUpdaterName] = ECGame.EngineLib.Updater.create(inUpdaterName, inPriority);
+		},
+		getUpdater : function getUpdater(inUpdaterName)
+		{
+			return this._myUpdaterMap[inUpdaterName];
+		},
+		
+		getTimer : function getTimer()
+		{
+			return this._myTimer;
+		},
+		getInput : function getInput()
+		{
+			return this._myInput;
+		},
+		getGraphics : function getGraphics()
+		{
+			return this._myGraphics;
+		},
+		getSoundSystem : function getSoundSystem()
+		{
+			return this._mySoundSystem;
+		},
+		getNetwork : function getNetwork()
+		{
+			return this._myNetwork;
+		},
+		getAssetManager : function getAssetManager()
+		{
+			return this._myAssetManager;
+		},
+		getLocalUser : function getLocalUser()
+		{
+			return this._myLocalUser;
+		},
+		
+		
+		
 		
 		update : function update(inDt)
 		{
 			try
-			{		
-				//TODO make update list an event system for onUpdate
-				/*for(i = 0; i < this.updateOrder.length; ++i)
-				{
-					this.updateOrder[i].update(inDt);
-				}*/
+			{
+				//TODO pass update struct instead
 				this._myMasterUpdater.update(inDt);
 				
 				if(!ECGame.Settings.Network.isServer)
 				{
-					this.graphics.render(this.rules);
+					//TODO pass graphics/struct to stuff and not just the back buffer
+					this._myGraphics.render(this._myGameRules);
 				}
 			}
 			catch(error)
@@ -98,7 +139,7 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			}
 			
 			//if not running then shut down
-			if(!this._running)
+			if(!this._myIsRunning)
 			{
 				//TODO clean everything?
 				
@@ -113,35 +154,19 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			}
 		},
 		
-		
-		createUpdater : function createUpdater(inUpdaterName, inPriority)
-		{
-			return this._myUpdaterMap[inUpdaterName] = ECGame.EngineLib.Updater.create(inUpdaterName, inPriority);
-		},
-		getUpdater : function getUpdater(inUpdaterName)
-		{
-			return this._myUpdaterMap[inUpdaterName];
-		},
-		
-		
 		_init : function _init()
 		{
 			//the app is running or not
-			this._running = true;
+			this._myIsRunning = true;
 			
 			//Init Timer
-			this.timer = ECGame.EngineLib.Timer.create();
+			this._myTimer = ECGame.EngineLib.Timer.create();
 			
-			//TODO make this ordered event listeners?
-			//this.updateOrder = [];
 			this._myUpdaterMap = {};
 			this._myMasterUpdater = this.createUpdater("MasterUpdater", 0);
-			this._myMasterUpdater.addUpdate(this.createUpdater("InputUpdater", 1));//TODO name them _updater
-			this._myMasterUpdater.addUpdate(this.createUpdater("NetworkUpdater", 2));
-			this._myMasterUpdater.addUpdate(this.createUpdater("SoundUpdater", 3));
-			this._myMasterUpdater.addUpdate(this.createUpdater("SpritesUpdater", 2.7));
-			this._myMasterUpdater.addUpdate(this.createUpdater("PhysicsUpdater", 2.5));
-			this._myMasterUpdater.addUpdate(this.createUpdater("MiscUpdater", 5));
+			this._myMasterUpdater.addUpdate(this.createUpdater("SpritesUpdater", ECGame.Settings.UpdateOrder.SPRITES));
+			this._myMasterUpdater.addUpdate(this.createUpdater("PhysicsUpdater", ECGame.Settings.UpdateOrder.PHYSICS));
+
 			
 			//Init Native GameObject Classes
 			ECGame.EngineLib.Class.createInstanceRegistry();
@@ -163,71 +188,60 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			//Create gamerules
 			if(ECGame.Lib.GameRules !== undefined)
 			{
-				this.rules = ECGame.Lib.GameRules.create();
+				this._myGameRules = ECGame.Lib.GameRules.create();
 			}
 			else
 			{
-				this.rules = ECGame.EngineLib.GameRulesBase.create();
+				this._myGameRules = ECGame.EngineLib.GameRulesBase.create();
 			}
 			
 			if(ECGame.Settings.Network.isServer)
 			{
-				this.localUser = new ECGame.EngineLib.User("Server", ECGame.EngineLib.User.USER_IDS.SERVER);
+				this._myLocalUser = new ECGame.EngineLib.User("Server", ECGame.EngineLib.User.USER_IDS.SERVER);
 			}
 			else
 			{
 				//TODO use FB id or something in the future
-				this.localUser = new ECGame.EngineLib.User(
+				this._myLocalUser = new ECGame.EngineLib.User(
 					"NewUser" + Math.floor(Math.random()*65536)
 					,ECGame.EngineLib.User.USER_IDS.NEW_USER
 				);
 				
 				//Init graphics
-				this.graphics = ECGame.EngineLib.Game2DGraphics.create();
-				if(!this.graphics.init())
+				this._myGraphics = ECGame.EngineLib.Game2DGraphics.create();
+				if(!this._myGraphics.init())
 				{
 					return false;
 				}
 			
 				//Init Asset Manager
-				this.assetManager = ECGame.EngineLib.AssetManager.create();
+				this._myAssetManager = ECGame.EngineLib.AssetManager.create();
 				
 				//Init Sound
-				this.soundSystem = ECGame.EngineLib.SoundSystem.create();
+				this._mySoundSystem = ECGame.EngineLib.SoundSystem.create();
 			}
 			
 			//Init Input
-			this.input = ECGame.EngineLib.Input.create();
+			this._myInput = ECGame.EngineLib.Input.create();
 			if(!ECGame.Settings.Network.isServer)
 			{
-				this.input.initClient(this.graphics.getDomTarget());
+				this._myInput.initClient(this._myGraphics.getDomTarget());
 			}
-			//this.updateOrder.push(this.input);
-			this.getUpdater("InputUpdater").addUpdate(this.input);
 			
 			//setup network and chat
 			if(ECGame.Settings.Network.isMultiplayer)
 			{
-				this.network = ECGame.EngineLib.Network.create();
-				this.network.init();
-				//this.updateOrder.push(this.network);
-				this.getUpdater("NetworkUpdater").addUpdate(this.network);
+				this._myNetwork = ECGame.EngineLib.Network.create();
+				this._myNetwork.init();
 				
 				if(!ECGame.Settings.Network.isServer)
 				{
-					this.chatSystem = ECGame.EngineLib.ChatSystem.create();
+					this._myChatSystem = ECGame.EngineLib.ChatSystem.create();
 				}
 			}
-				
-			if(!ECGame.Settings.Network.isServer)
-			{
-				//TODO should be after physics (where is that added)?
-				//this.updateOrder.push(this.soundSystem);
-				this.getUpdater("SoundUpdater").addUpdate(this.soundSystem);
-			}
 			
-			//return this.rules.init();
-			if(!this.rules.init())
+			//return this._myGameRules.init();
+			if(!this._myGameRules.init())
 			{
 				return false;
 			}

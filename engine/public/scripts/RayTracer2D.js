@@ -126,9 +126,9 @@ ECGame.EngineLib.RayTracer2D = ECGame.EngineLib.Class.create({
 			//HACK TODO get all these from settings file
 			////////////////////////////////////////////
 			
-			ECGame.instance.graphics.drawDebugText("Debug Drawing Rays", 'rgba(255, 128, 128, 1.0)'/*HACK color goes in settings*/);
-			ECGame.instance.graphics.drawDebugText("Node Intersection Count:" + this._myNodeCollisionPoints.length, 'rgba(255, 128, 128, 1.0)'/*HACK color goes in settings*/);
-			ECGame.instance.graphics.drawDebugText("Item Intersection Count:" + this._myItemCollisionPoints.length, 'rgba(255, 128, 128, 1.0)'/*HACK color goes in settings*/);
+			ECGame.instance.getGraphics().drawDebugText("Debug Drawing Rays", 'rgba(255, 128, 128, 1.0)'/*HACK color goes in settings*/);
+			ECGame.instance.getGraphics().drawDebugText("Node Intersection Count:" + this._myNodeCollisionPoints.length, 'rgba(255, 128, 128, 1.0)'/*HACK color goes in settings*/);
+			ECGame.instance.getGraphics().drawDebugText("Item Intersection Count:" + this._myItemCollisionPoints.length, 'rgba(255, 128, 128, 1.0)'/*HACK color goes in settings*/);
 			
 			this._myTree.debugDraw(
 				inCanvas2DContext

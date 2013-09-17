@@ -215,7 +215,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 		init : function init()
 		{
 			this.createNetGroup('master_netgroup');
-//			ECGame.log.warn("Depricated!!!");
+			ECGame.instance.getUpdater("MasterUpdater").addUpdate(this);
 		},
 		//TODO add objects to appropriate netgroups
 		addNewObject : function addNewObject()
@@ -236,7 +236,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 		
 		getUpdatePriority : function getUpdatePriority()
 		{
-			return 0;
+			return ECGame.Settings.UpdateOrder.NETWORK;
 		},
 		
 		update : function update()//TODO onUpdate?
@@ -319,7 +319,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 			
 			this._mySerializer.init({BINARY_MODE : true, NET_MODE : false});
 			
-			aMessageHeader.userID = ECGame.instance.localUser.userID;
+			aMessageHeader.userID = ECGame.instance.getLocalUser().userID;
 			aMessageHeader.newObjects = Math.min(this._ourMaxItemsPerMessage, inNewInstanceList.length);
 			aMessageHeader.dirtyObjects = Math.min(this._ourMaxItemsPerMessage, inDirtyInstanceList.length);
 			aMessageHeader.destroyObjects = Math.min(this._ourMaxItemsPerMessage, inDestroyInstanceList.length);

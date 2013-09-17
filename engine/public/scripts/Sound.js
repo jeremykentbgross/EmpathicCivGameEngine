@@ -98,7 +98,7 @@ ECGame.EngineLib.Sound = ECGame.EngineLib.Class.create(
 		
 		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect, inCurrentTime)
 		{
-			ECGame.instance.graphics.drawDebugText(
+			ECGame.instance.getGraphics().drawDebugText(
 				'-' + this._getDebugPlayingString() + ': %' + Math.floor(this.getPercentPlayed(inCurrentTime) * 100),
 				ECGame.Settings.Debug.Sound_Area_DrawColor
 			);

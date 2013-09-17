@@ -218,7 +218,7 @@ ECGame.EngineLib.Game2DMap = ECGame.EngineLib.Class.create(
 		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect)
 		{
 			var aThis = this;
-			ECGame.instance.graphics.drawDebugText("Debug Drawing Tile Map");
+			ECGame.instance.getGraphics().drawDebugText("Debug Drawing Tile Map");
 			
 			this._tileMapTree.walk(
 				function walkCallback(item)

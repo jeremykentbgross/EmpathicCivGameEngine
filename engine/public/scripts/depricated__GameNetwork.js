@@ -151,7 +151,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 
 		_onClientConnected : function _onClientConnected(inConnectedSocket)
 		{
-			var aThis = ECGame.instance.network;
+			var aThis = ECGame.instance.getNetwork();
 			
 			//TODO unique guest name?
 			inConnectedSocket.gameUser = new ECGame.EngineLib.User("Guest", ECGame.EngineLib.User.USER_IDS.GUEST);
@@ -195,7 +195,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 		_onClientDisconnected : function _onClientDisconnected()
 		{
 			//this == socket disconnecting!
-			var aThis = ECGame.instance.network;
+			var aThis = ECGame.instance.getNetwork();
 			
 			//TODO store their gameUser for reconnect until later (if supported)
 			
@@ -318,7 +318,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 
 		_onConnectedToServer : function _onConnectedToServer()
 		{
-			var aThis = ECGame.instance.network;
+			var aThis = ECGame.instance.getNetwork();
 			var event = new ECGame.EngineLib.Events.ConnectedToServer();
 			
 			if(ECGame.Settings.DEBUG /*&& ECGame.Settings.Debug.NetworkMessages_Print*/)
@@ -337,7 +337,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 
 		_onDisconnectedFromServer : function _onDisconnectedFromServer()
 		{
-			var aThis = ECGame.instance.network;
+			var aThis = ECGame.instance.getNetwork();
 			var event = new ECGame.EngineLib.Events.DisconnectedFromServer();
 			
 			if(ECGame.Settings.DEBUG /*&& ECGame.Settings.Debug.NetworkMessages_Print*/)
@@ -352,7 +352,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 
 		_onIdRecv : function _onIdRecv(inUser)//TODO rename inUserID
 		{
-			var aThis = ECGame.instance.network;
+			var aThis = ECGame.instance.getNetwork();
 			
 			if(ECGame.Settings.Network.isServer)
 			{
@@ -409,7 +409,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 
 		_onMsgRecv : function _onMsgRecv(inMsg)
 		{
-			var aThis = ECGame.instance.network;
+			var aThis = ECGame.instance.getNetwork();
 			
 			if(ECGame.Settings.isDebugPrint_NetworkMessages())
 			{
@@ -429,7 +429,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 
 		_onDataRecv : function _onDataRecv(inData)
 		{
-			var aThis = ECGame.instance.network;
+			var aThis = ECGame.instance.getNetwork();
 			
 			var event = new ECGame.EngineLib.Events.Data(inData);
 			
@@ -454,7 +454,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 
 		_onObjectsRecv : function _onObjectsRecv(inData)
 		{
-			var aThis = ECGame.instance.network;
+			var aThis = ECGame.instance.getNetwork();
 			
 			var event = new ECGame.EngineLib.Events.NetObjects(inData);
 			
@@ -483,7 +483,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 			
 			if(ECGame.Settings.isDebugDraw_NetworkMessages())
 			{
-				ECGame.instance.graphics.drawDebugText(
+				ECGame.instance.getGraphics().drawDebugText(
 					"Network out:",
 					ECGame.Settings.Debug.NetworkMessages_DrawColor
 				);
@@ -501,7 +501,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 						
 					if(ECGame.Settings.isDebugDraw_NetworkMessages())
 					{
-						ECGame.instance.graphics.drawDebugText(
+						ECGame.instance.getGraphics().drawDebugText(
 							'    ' + inClass.getName(),
 							ECGame.Settings.Debug.NetworkMessages_DrawColor
 						);
@@ -517,7 +517,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 							{
 								if(ECGame.Settings.isDebugDraw_NetworkMessages())
 								{
-									ECGame.instance.graphics.drawDebugText(
+									ECGame.instance.getGraphics().drawDebugText(
 										'        -' + inObject.getName()
 										,ECGame.Settings.Debug.NetworkMessages_DrawColor
 									);
@@ -575,7 +575,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 			
 			if(ECGame.Settings.isDebugDraw_NetworkMessages())
 			{
-				ECGame.instance.graphics.drawDebugText(
+				ECGame.instance.getGraphics().drawDebugText(
 					"Network in:",
 					ECGame.Settings.Debug.NetworkMessages_DrawColor
 				);
@@ -643,11 +643,11 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 					if(ECGame.Settings.isDebugDraw_NetworkMessages())
 					{
 						//TODO not show same class name more than once, just instance (ie make print list for the end!)
-						ECGame.instance.graphics.drawDebugText(
+						ECGame.instance.getGraphics().drawDebugText(
 							'    ' + objectClass.getName(),
 							ECGame.Settings.Debug.NetworkMessages_DrawColor
 						);
-						ECGame.instance.graphics.drawDebugText(
+						ECGame.instance.getGraphics().drawDebugText(
 							'        -' + object.getName()
 							,ECGame.Settings.Debug.NetworkMessages_DrawColor
 						);
@@ -707,7 +707,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 				
 			if(drawNetObjects)
 			{
-				ECGame.instance.graphics.drawDebugText(
+				ECGame.instance.getGraphics().drawDebugText(
 					"Network out:",
 					ECGame.Settings.Debug.NetworkMessages_DrawColor
 				);
@@ -720,7 +720,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 				classInstanceList = this._newInstances[className];
 				if(drawNetObjects)
 				{
-					ECGame.instance.graphics.drawDebugText(
+					ECGame.instance.getGraphics().drawDebugText(
 						'    ' + className,
 						ECGame.Settings.Debug.NetworkMessages_DrawColor
 					);
@@ -740,7 +740,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 					}
 					if(drawNetObjects)
 					{
-						ECGame.instance.graphics.drawDebugText(
+						ECGame.instance.getGraphics().drawDebugText(
 							'        -' + instanceObject.getName()
 							,ECGame.Settings.Debug.NetworkMessages_DrawColor
 						);
@@ -757,7 +757,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 				classInstanceList = this._netDirtyInstances[className];
 				if(drawNetObjects)
 				{
-					ECGame.instance.graphics.drawDebugText(
+					ECGame.instance.getGraphics().drawDebugText(
 						'    ' + className,
 						ECGame.Settings.Debug.NetworkMessages_DrawColor
 					);
@@ -776,7 +776,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 					}
 					if(drawNetObjects)
 					{
-						ECGame.instance.graphics.drawDebugText(
+						ECGame.instance.getGraphics().drawDebugText(
 							'        -' + instanceObject.getName()
 							,ECGame.Settings.Debug.NetworkMessages_DrawColor
 						);

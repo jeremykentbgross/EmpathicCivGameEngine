@@ -84,7 +84,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DC
 	this._mySceneTree.walk(
 		function walkCallback(item)//TODO find/fix all unnamed functions; ie: function(
 		{
-			var frameCount = ECGame.instance.timer.getFrameCount();
+			var frameCount = ECGame.instance.getTimer().getFrameCount();
 			
 			if(frameCount > item.lastFrameDrawn)
 			{
@@ -122,7 +122,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DC
 	{
 		var fontSize = ECGame.Settings.Debug.Text_Size;
 		
-		ECGame.instance.graphics.drawDebugText("Debug Drawing SceneGraph");
+		ECGame.instance.getGraphics().drawDebugText("Debug Drawing SceneGraph");
 		
 		inCanvas2DContext.font = fontSize + 'px Arial';
 		for(i in renderables)
@@ -166,7 +166,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DC
 				);
 			}
 		}
-		ECGame.instance.graphics.drawDebugText("SceneGraph Draw calls:" + renderables.length);
+		ECGame.instance.getGraphics().drawDebugText("SceneGraph Draw calls:" + renderables.length);
 	}
 };
 

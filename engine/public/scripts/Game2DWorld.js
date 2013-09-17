@@ -89,7 +89,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 			//TODO Only needed to debug draw cursor which should likely be elsewhere?
 			if(!ECGame.Settings.Network.isServer)
 			{
-				ECGame.instance.input.registerListener('Input', this);
+				ECGame.instance.getInput().registerListener('Input', this);
 			}
 		},
 
@@ -198,7 +198,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 			
 			if(ECGame.Settings.isDebugDraw_Sound())
 			{
-				ECGame.instance.soundSystem.debugDraw(inCanvas2DContext, camera.getRect(), this);
+				ECGame.instance.getSoundSystem().debugDraw(inCanvas2DContext, camera.getRect(), this);
 			}
 		},
 

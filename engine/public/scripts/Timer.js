@@ -152,10 +152,10 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 				];
 				if(ECGame.Settings.isDebugDraw_FrameStats())
 				{
-					ECGame.instance.graphics.drawDebugText(frameStats[0], ECGame.Settings.Debug.FrameStats_DrawColor);
-					ECGame.instance.graphics.drawDebugText(frameStats[1], ECGame.Settings.Debug.FrameStats_DrawColor);
-					ECGame.instance.graphics.drawDebugText(frameStats[2], ECGame.Settings.Debug.FrameStats_DrawColor);
-					ECGame.instance.graphics.drawDebugText(frameStats[3], ECGame.Settings.Debug.FrameStats_DrawColor);
+					ECGame.instance.getGraphics().drawDebugText(frameStats[0], ECGame.Settings.Debug.FrameStats_DrawColor);
+					ECGame.instance.getGraphics().drawDebugText(frameStats[1], ECGame.Settings.Debug.FrameStats_DrawColor);
+					ECGame.instance.getGraphics().drawDebugText(frameStats[2], ECGame.Settings.Debug.FrameStats_DrawColor);
+					ECGame.instance.getGraphics().drawDebugText(frameStats[3], ECGame.Settings.Debug.FrameStats_DrawColor);
 				}
 				if(ECGame.Settings.isDebugPrint_FrameStats())
 				{
@@ -207,7 +207,7 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 		
 		_onAnimFrame : function _onAnimFrame(inTime)
 		{
-			ECGame.instance.timer.update(inTime);//TODO static instance, assert(singleton)
+			ECGame.instance.getTimer().update(inTime);//TODO static instance, assert(singleton)
 		}
 	}
 });

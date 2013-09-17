@@ -63,7 +63,7 @@ ECGame.EngineLib.EntityComponent_2DCamera = ECGame.EngineLib.Class.create({
 			this._myMap = inEvent.world.getMap();
 			//TODO register as a camera entity with the world
 			
-			if(this.getNetOwnerID() === ECGame.instance.localUser.userID)//TODO maybe make search from game rules to find cams that are local owned?
+			if(this.getNetOwnerID() === ECGame.instance.getLocalUser().userID)//TODO maybe make search from game rules to find cams that are local owned?
 			{
 				inEvent.world.setCamera(this);
 			}

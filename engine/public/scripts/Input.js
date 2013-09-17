@@ -29,6 +29,8 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 		this._buttons = {};
 		this._clicked = {};
 		this._active = false;
+		
+		ECGame.instance.getUpdater("MasterUpdater").addUpdate(this);
 	},
 	Parents : [ECGame.EngineLib.GameEventSystem],
 	flags : {},
@@ -42,7 +44,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 		},
 		getUpdatePriority : function getUpdatePriority()
 		{
-			return 0;
+			return ECGame.Settings.UpdateOrder.INPUT;
 		},
 		
 		initClient : function initClient(inCanvas)
@@ -88,7 +90,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 		
 		_onInput : function _onInput(inEvent)
 		{
-			ECGame.instance.input._handleInput(inEvent);
+			ECGame.instance.getInput()._handleInput(inEvent);
 		},
 		
 		_handleInput : function _handleInput(inEvent)
@@ -200,7 +202,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 				}
 				if(ECGame.Settings.isDebugDraw_Input())
 				{
-					ECGame.instance.graphics.drawDebugText(
+					ECGame.instance.getGraphics().drawDebugText(
 						inputString,
 						(this._active ?
 							ECGame.Settings.Debug.Input_Active_DrawColor :

@@ -207,6 +207,7 @@ Final NameSpace:	generateNextSampleID
 Final NameSpace:	generateNextSoundDescriptionID
 Final NameSpace:	getAABB
 Final NameSpace:	getArea
+Final NameSpace:	getAssetManager
 Final NameSpace:	getBottom
 Final NameSpace:	getBoundingBox
 Final NameSpace:	getCallbackName
@@ -224,13 +225,16 @@ Final NameSpace:	getEndPoint
 Final NameSpace:	getFrameCount
 Final NameSpace:	getFrameEvents
 Final NameSpace:	getFrameRate
+Final NameSpace:	getGraphics
 Final NameSpace:	getHeight
 Final NameSpace:	getID
+Final NameSpace:	getInput
 Final NameSpace:	getInstanceRegistry
 Final NameSpace:	getIntersection
 Final NameSpace:	getLeft
 Final NameSpace:	getLeftBottom
 Final NameSpace:	getLeftTop
+Final NameSpace:	getLocalUser
 Final NameSpace:	getMap
 Final NameSpace:	getMapLowerRight
 Final NameSpace:	getMass
@@ -240,6 +244,7 @@ Final NameSpace:	getMaxLength
 Final NameSpace:	getName
 Final NameSpace:	getNetGroup
 Final NameSpace:	getNetOwnerID
+Final NameSpace:	getNetwork
 Final NameSpace:	getParent
 Final NameSpace:	getPath
 Final NameSpace:	getPercentPlayed
@@ -254,11 +259,13 @@ Final NameSpace:	getRightBottom
 Final NameSpace:	getSceneGraph
 Final NameSpace:	getSoundHardwareTime
 Final NameSpace:	getSoundHardwareTimeUpdateDelta
+Final NameSpace:	getSoundSystem
 Final NameSpace:	getStartPoint
 Final NameSpace:	getString
 Final NameSpace:	getTargetPosition
 Final NameSpace:	getTileLayer
 Final NameSpace:	getTileRect
+Final NameSpace:	getTimer
 Final NameSpace:	getTop
 Final NameSpace:	getTxtPath
 Final NameSpace:	getTypedArray
@@ -630,6 +637,7 @@ Function Name:	generateNextSampleID
 Function Name:	generateNextSoundDescriptionID
 Function Name:	getAABB
 Function Name:	getArea
+Function Name:	getAssetManager
 Function Name:	getBottom
 Function Name:	getBoundingBox
 Function Name:	getCallbackName
@@ -647,13 +655,16 @@ Function Name:	getEndPoint
 Function Name:	getFrameCount
 Function Name:	getFrameEvents
 Function Name:	getFrameRate
+Function Name:	getGraphics
 Function Name:	getHeight
 Function Name:	getID
+Function Name:	getInput
 Function Name:	getInstanceRegistry
 Function Name:	getIntersection
 Function Name:	getLeft
 Function Name:	getLeftBottom
 Function Name:	getLeftTop
+Function Name:	getLocalUser
 Function Name:	getMap
 Function Name:	getMapLowerRight
 Function Name:	getMass
@@ -663,6 +674,7 @@ Function Name:	getMaxLength
 Function Name:	getName
 Function Name:	getNetGroup
 Function Name:	getNetOwnerID
+Function Name:	getNetwork
 Function Name:	getParent
 Function Name:	getPath
 Function Name:	getPercentPlayed
@@ -677,11 +689,13 @@ Function Name:	getRightBottom
 Function Name:	getSceneGraph
 Function Name:	getSoundHardwareTime
 Function Name:	getSoundHardwareTimeUpdateDelta
+Function Name:	getSoundSystem
 Function Name:	getStartPoint
 Function Name:	getString
 Function Name:	getTargetPosition
 Function Name:	getTileLayer
 Function Name:	getTileRect
+Function Name:	getTimer
 Function Name:	getTop
 Function Name:	getTxtPath
 Function Name:	getTypedArray
@@ -1101,6 +1115,7 @@ Local Variable:	aLeadString
 Local Variable:	aLength
 Local Variable:	aListToDraw
 Local Variable:	aListeners
+Local Variable:	aLocalUser
 Local Variable:	aLow
 Local Variable:	aMaxSize
 Local Variable:	aMessageHeader
@@ -1399,6 +1414,7 @@ Member Variable:	GameRenderable2D			*****
 Member Variable:	GameRules			*****
 Member Variable:	GameRulesBase			*****
 Member Variable:	Graphics			*****
+Member Variable:	INPUT			*****
 Member Variable:	IdentifiedUser			*****
 Member Variable:	Input			*****
 Member Variable:	Input_Active_DrawColor			*****
@@ -1413,6 +1429,7 @@ Member Variable:	LoadGame			*****
 Member Variable:	MAX_EVER			*****
 Member Variable:	Map_Draw			*****
 Member Variable:	Msg			*****
+Member Variable:	NETWORK			*****
 Member Variable:	NET_MODE			*****
 Member Variable:	NEW_USER			*****
 Member Variable:	NetGroup			*****
@@ -1422,6 +1439,7 @@ Member Variable:	NetworkBase			*****
 Member Variable:	NetworkMessages_Print			*****
 Member Variable:	Network_SimulatedLag			*****
 Member Variable:	Obfuscation_Print			*****
+Member Variable:	PHYSICS			*****
 Member Variable:	POWERS			*****
 Member Variable:	Parents			*****
 Member Variable:	PhysObjectUpdate			*****
@@ -1449,6 +1467,8 @@ Member Variable:	RemovedFromWorld			*****
 Member Variable:	RenderableTile2D			*****
 Member Variable:	RequestVelocity			*****
 Member Variable:	SERVER			*****
+Member Variable:	SOUND			*****
+Member Variable:	SPRITES			*****
 Member Variable:	STATUS__ACTIVE			*****
 Member Variable:	STATUS__ALWAYS_ACTIVE			*****
 Member Variable:	STATUS__SLEEPING			*****
@@ -1482,6 +1502,7 @@ Member Variable:	Timer			*****
 Member Variable:	UNUSED			*****
 Member Variable:	USER_IDS			*****
 Member Variable:	UnitTestFramework			*****
+Member Variable:	UpdateOrder			*****
 Member Variable:	UpdatePosition			*****
 Member Variable:	Updater			*****
 Member Variable:	Updater_Draw			*****
@@ -1585,11 +1606,13 @@ Member Variable:	_myAccumulatedTime
 Member Variable:	_myActiveLinkedListNode
 Member Variable:	_myActiveObjectsList
 Member Variable:	_myAnimationInstance
+Member Variable:	_myAssetManager
 Member Variable:	_myBackBufferCanvas
 Member Variable:	_myBackBufferCanvas2DContext
 Member Variable:	_myCallback
 Member Variable:	_myCanvas
 Member Variable:	_myCanvas2DContext
+Member Variable:	_myChatSystem
 Member Variable:	_myChildren
 Member Variable:	_myCollisions
 Member Variable:	_myCollisionsRenderList
@@ -1614,17 +1637,22 @@ Member Variable:	_myFrameEvents
 Member Variable:	_myFrameTimes
 Member Variable:	_myFrameUpdateCount
 Member Variable:	_myGameObjectNetDirty
+Member Variable:	_myGameRules
+Member Variable:	_myGraphics
 Member Variable:	_myID
+Member Variable:	_myInput
 Member Variable:	_myIntegerRangeModel
 Member Variable:	_myIntervalHandle
 Member Variable:	_myIsDummyMode
 Member Variable:	_myIsNetMode
+Member Variable:	_myIsRunning
 Member Variable:	_myIsWriting
 Member Variable:	_myItemCollisionPoints
 Member Variable:	_myItems
 Member Variable:	_myLastFrameTimeStamp
 Member Variable:	_myLastSoundHardwareUpdateTime
 Member Variable:	_myListenerPosition2D
+Member Variable:	_myLocalUser
 Member Variable:	_myMap
 Member Variable:	_myMapSize
 Member Variable:	_myMasterNetGroup
@@ -1672,6 +1700,7 @@ Member Variable:	_mySoundBuffer
 Member Variable:	_mySoundDescriptionLib
 Member Variable:	_mySoundHardwareUpdateTime
 Member Variable:	_mySoundSampleLib
+Member Variable:	_mySoundSystem
 Member Variable:	_mySource
 Member Variable:	_myStatus
 Member Variable:	_myT
@@ -1681,6 +1710,7 @@ Member Variable:	_myTiles
 Member Variable:	_myTimeDelay
 Member Variable:	_myTimeStepInMilliSeconds
 Member Variable:	_myTimeStepInSeconds
+Member Variable:	_myTimer
 Member Variable:	_myTimerCallbacks
 Member Variable:	_myTrackedInstances
 Member Variable:	_myTree
@@ -1731,7 +1761,6 @@ Member Variable:	_removedWorld			*****
 Member Variable:	_right			*****
 Member Variable:	_rotMatrixRow1			*****
 Member Variable:	_rotMatrixRow2			*****
-Member Variable:	_running			*****
 Member Variable:	_sceneGraph			*****
 Member Variable:	_sendChatToChatLog			*****
 Member Variable:	_serializeFormat			*****
@@ -1768,7 +1797,6 @@ Member Variable:	anchor			*****
 Member Variable:	anchorPosition			*****
 Member Variable:	apply			*****
 Member Variable:	assert			*****
-Member Variable:	assetManager			*****
 Member Variable:	blur			*****
 Member Variable:	boundingRect			*****
 Member Variable:	buffer			*****
@@ -1778,7 +1806,6 @@ Member Variable:	canUserModifyNet			*****
 Member Variable:	centerOn			*****
 Member Variable:	chainDown			*****
 Member Variable:	chainUp			*****
-Member Variable:	chatSystem			*****
 Member Variable:	class			*****
 Member Variable:	classID			*****
 Member Variable:	cleanup			*****
@@ -1857,6 +1884,7 @@ Member Variable:	generateNextSampleID			*****
 Member Variable:	generateNextSoundDescriptionID			*****
 Member Variable:	getAABB			*****
 Member Variable:	getArea			*****
+Member Variable:	getAssetManager			*****
 Member Variable:	getBottom			*****
 Member Variable:	getBoundingBox			*****
 Member Variable:	getCallbackName			*****
@@ -1874,13 +1902,16 @@ Member Variable:	getEndPoint			*****
 Member Variable:	getFrameCount			*****
 Member Variable:	getFrameEvents			*****
 Member Variable:	getFrameRate			*****
+Member Variable:	getGraphics			*****
 Member Variable:	getHeight			*****
 Member Variable:	getID			*****
+Member Variable:	getInput			*****
 Member Variable:	getInstanceRegistry			*****
 Member Variable:	getIntersection			*****
 Member Variable:	getLeft			*****
 Member Variable:	getLeftBottom			*****
 Member Variable:	getLeftTop			*****
+Member Variable:	getLocalUser			*****
 Member Variable:	getMap			*****
 Member Variable:	getMapLowerRight			*****
 Member Variable:	getMass			*****
@@ -1890,6 +1921,7 @@ Member Variable:	getMaxLength			*****
 Member Variable:	getName			*****
 Member Variable:	getNetGroup			*****
 Member Variable:	getNetOwnerID			*****
+Member Variable:	getNetwork			*****
 Member Variable:	getParent			*****
 Member Variable:	getPath			*****
 Member Variable:	getPercentPlayed			*****
@@ -1904,11 +1936,13 @@ Member Variable:	getRightBottom			*****
 Member Variable:	getSceneGraph			*****
 Member Variable:	getSoundHardwareTime			*****
 Member Variable:	getSoundHardwareTimeUpdateDelta			*****
+Member Variable:	getSoundSystem			*****
 Member Variable:	getStartPoint			*****
 Member Variable:	getString			*****
 Member Variable:	getTargetPosition			*****
 Member Variable:	getTileLayer			*****
 Member Variable:	getTileRect			*****
+Member Variable:	getTimer			*****
 Member Variable:	getTop			*****
 Member Variable:	getTxtPath			*****
 Member Variable:	getTypedArray			*****
@@ -1920,7 +1954,6 @@ Member Variable:	getValueFromProbability			*****
 Member Variable:	getWidth			*****
 Member Variable:	getWidthHeight			*****
 Member Variable:	getWorld			*****
-Member Variable:	graphics			*****
 Member Variable:	hasOwnProperty			*****
 Member Variable:	height			*****
 Member Variable:	high			*****
@@ -1932,7 +1965,6 @@ Member Variable:	initClient			*****
 Member Variable:	initHeight			*****
 Member Variable:	initWidth			*****
 Member Variable:	innerHTML			*****
-Member Variable:	input			*****
 Member Variable:	insert			*****
 Member Variable:	insertBack			*****
 Member Variable:	insertItem			*****
@@ -1988,7 +2020,6 @@ Member Variable:	length			*****
 Member Variable:	loadImage			*****
 Member Variable:	loadSound			*****
 Member Variable:	loadSoundAssets			*****
-Member Variable:	localUser			*****
 Member Variable:	log			*****
 Member Variable:	logger			*****
 Member Variable:	low			*****
@@ -2024,7 +2055,6 @@ Member Variable:	myX
 Member Variable:	myY
 Member Variable:	name			*****
 Member Variable:	net			*****
-Member Variable:	network			*****
 Member Variable:	normalize			*****
 Member Variable:	numItems			*****
 Member Variable:	obfuscateNames			*****
@@ -2083,7 +2113,6 @@ Member Variable:	render			*****
 Member Variable:	renderTile			*****
 Member Variable:	renderTileInRect			*****
 Member Variable:	requestVelocity			*****
-Member Variable:	rules			*****
 Member Variable:	run			*****
 Member Variable:	runTests			*****
 Member Variable:	saveResultsNotesToFile			*****
@@ -2135,13 +2164,11 @@ Member Variable:	setTypedArray			*****
 Member Variable:	setValue			*****
 Member Variable:	setVelocity			*****
 Member Variable:	size			*****
-Member Variable:	soundSystem			*****
 Member Variable:	speedOfSound			*****
 Member Variable:	start			*****
 Member Variable:	stop			*****
 Member Variable:	subtract			*****
 Member Variable:	tileValue			*****
-Member Variable:	timer			*****
 Member Variable:	toBinary			*****
 Member Variable:	toTileCoordinate			*****
 Member Variable:	toggleActiveInput			*****
@@ -2246,6 +2273,7 @@ Included Word:	GameRenderable2D
 Included Word:	GameRules
 Included Word:	GameRulesBase
 Included Word:	Graphics
+Included Word:	INPUT
 Included Word:	IdentifiedUser
 Included Word:	Input
 Included Word:	Input_Active_DrawColor
@@ -2261,6 +2289,7 @@ Included Word:	LoadGame
 Included Word:	MAX_EVER
 Included Word:	Map_Draw
 Included Word:	Msg
+Included Word:	NETWORK
 Included Word:	NET_MODE
 Included Word:	NEW_USER
 Included Word:	NetGroup
@@ -2271,6 +2300,7 @@ Included Word:	NetworkClient
 Included Word:	NetworkMessages_Print
 Included Word:	Network_SimulatedLag
 Included Word:	Obfuscation_Print
+Included Word:	PHYSICS
 Included Word:	POWERS
 Included Word:	Parents
 Included Word:	PhysObjectUpdate
@@ -2298,6 +2328,8 @@ Included Word:	RemovedFromWorld
 Included Word:	RenderableTile2D
 Included Word:	RequestVelocity
 Included Word:	SERVER
+Included Word:	SOUND
+Included Word:	SPRITES
 Included Word:	STATUS__ACTIVE
 Included Word:	STATUS__ALWAYS_ACTIVE
 Included Word:	STATUS__SLEEPING
@@ -2337,6 +2369,7 @@ Included Word:	UNUSED
 Included Word:	USER_IDS
 Included Word:	UnitTestFramework
 Included Word:	UpdateChildren
+Included Word:	UpdateOrder
 Included Word:	UpdatePosition
 Included Word:	Updater
 Included Word:	Updater_Draw
@@ -2440,11 +2473,13 @@ Included Word:	_myAccumulatedTime
 Included Word:	_myActiveLinkedListNode
 Included Word:	_myActiveObjectsList
 Included Word:	_myAnimationInstance
+Included Word:	_myAssetManager
 Included Word:	_myBackBufferCanvas
 Included Word:	_myBackBufferCanvas2DContext
 Included Word:	_myCallback
 Included Word:	_myCanvas
 Included Word:	_myCanvas2DContext
+Included Word:	_myChatSystem
 Included Word:	_myChildren
 Included Word:	_myCollisions
 Included Word:	_myCollisionsRenderList
@@ -2469,17 +2504,22 @@ Included Word:	_myFrameEvents
 Included Word:	_myFrameTimes
 Included Word:	_myFrameUpdateCount
 Included Word:	_myGameObjectNetDirty
+Included Word:	_myGameRules
+Included Word:	_myGraphics
 Included Word:	_myID
+Included Word:	_myInput
 Included Word:	_myIntegerRangeModel
 Included Word:	_myIntervalHandle
 Included Word:	_myIsDummyMode
 Included Word:	_myIsNetMode
+Included Word:	_myIsRunning
 Included Word:	_myIsWriting
 Included Word:	_myItemCollisionPoints
 Included Word:	_myItems
 Included Word:	_myLastFrameTimeStamp
 Included Word:	_myLastSoundHardwareUpdateTime
 Included Word:	_myListenerPosition2D
+Included Word:	_myLocalUser
 Included Word:	_myMap
 Included Word:	_myMapSize
 Included Word:	_myMasterNetGroup
@@ -2527,6 +2567,7 @@ Included Word:	_mySoundBuffer
 Included Word:	_mySoundDescriptionLib
 Included Word:	_mySoundHardwareUpdateTime
 Included Word:	_mySoundSampleLib
+Included Word:	_mySoundSystem
 Included Word:	_mySource
 Included Word:	_myStatus
 Included Word:	_myT
@@ -2536,6 +2577,7 @@ Included Word:	_myTiles
 Included Word:	_myTimeDelay
 Included Word:	_myTimeStepInMilliSeconds
 Included Word:	_myTimeStepInSeconds
+Included Word:	_myTimer
 Included Word:	_myTimerCallbacks
 Included Word:	_myTrackedInstances
 Included Word:	_myTree
@@ -2586,7 +2628,6 @@ Included Word:	_removedWorld
 Included Word:	_right
 Included Word:	_rotMatrixRow1
 Included Word:	_rotMatrixRow2
-Included Word:	_running
 Included Word:	_sceneGraph
 Included Word:	_sendChatToChatLog
 Included Word:	_serializeFormat
@@ -2656,6 +2697,7 @@ Included Word:	aLeadString
 Included Word:	aLength
 Included Word:	aListToDraw
 Included Word:	aListeners
+Included Word:	aLocalUser
 Included Word:	aLow
 Included Word:	aMaxSize
 Included Word:	aMessageHeader
@@ -2754,7 +2796,6 @@ Included Word:	anchorPosition
 Included Word:	angle
 Included Word:	animProb
 Included Word:	animation
-Included Word:	assetManager
 Included Word:	bestAnimProb
 Included Word:	blockContextMenu
 Included Word:	boundingRect
@@ -2770,7 +2811,6 @@ Included Word:	centerOn
 Included Word:	chainDown
 Included Word:	chainTestObject
 Included Word:	chainUp
-Included Word:	chatSystem
 Included Word:	checkBroadCollision
 Included Word:	checkFinished
 Included Word:	classID
@@ -2890,6 +2930,7 @@ Included Word:	generateNextSampleID
 Included Word:	generateNextSoundDescriptionID
 Included Word:	getAABB
 Included Word:	getArea
+Included Word:	getAssetManager
 Included Word:	getBottom
 Included Word:	getBoundingBox
 Included Word:	getCallbackName
@@ -2907,13 +2948,16 @@ Included Word:	getEndPoint
 Included Word:	getFrameCount
 Included Word:	getFrameEvents
 Included Word:	getFrameRate
+Included Word:	getGraphics
 Included Word:	getHeight
 Included Word:	getID
+Included Word:	getInput
 Included Word:	getInstanceRegistry
 Included Word:	getIntersection
 Included Word:	getLeft
 Included Word:	getLeftBottom
 Included Word:	getLeftTop
+Included Word:	getLocalUser
 Included Word:	getMap
 Included Word:	getMapLowerRight
 Included Word:	getMass
@@ -2923,6 +2967,7 @@ Included Word:	getMaxLength
 Included Word:	getName
 Included Word:	getNetGroup
 Included Word:	getNetOwnerID
+Included Word:	getNetwork
 Included Word:	getParent
 Included Word:	getPath
 Included Word:	getPercentPlayed
@@ -2937,11 +2982,13 @@ Included Word:	getRightBottom
 Included Word:	getSceneGraph
 Included Word:	getSoundHardwareTime
 Included Word:	getSoundHardwareTimeUpdateDelta
+Included Word:	getSoundSystem
 Included Word:	getStartPoint
 Included Word:	getString
 Included Word:	getTargetPosition
 Included Word:	getTileLayer
 Included Word:	getTileRect
+Included Word:	getTimer
 Included Word:	getTop
 Included Word:	getTxtPath
 Included Word:	getTypedArray
@@ -2953,7 +3000,6 @@ Included Word:	getValueFromProbability
 Included Word:	getWidth
 Included Word:	getWidthHeight
 Included Word:	getWorld
-Included Word:	graphics
 Included Word:	halfSize
 Included Word:	head
 Included Word:	high
@@ -3200,7 +3246,6 @@ Included Word:	listenerNode
 Included Word:	loadImage
 Included Word:	loadSound
 Included Word:	loadSoundAssets
-Included Word:	localUser
 Included Word:	logger
 Included Word:	loops
 Included Word:	low
@@ -3241,7 +3286,6 @@ Included Word:	myWidth
 Included Word:	myX
 Included Word:	myY
 Included Word:	net
-Included Word:	network
 Included Word:	newComponentMap
 Included Word:	newEntityMap
 Included Word:	newInstance
@@ -3341,7 +3385,6 @@ Included Word:	request
 Included Word:	requestAnimFrame
 Included Word:	requestVelocity
 Included Word:	returnRect
-Included Word:	rules
 Included Word:	run
 Included Word:	runTests
 Included Word:	saveResultsNotesToFile
@@ -3396,7 +3439,6 @@ Included Word:	size
 Included Word:	sortCollisions
 Included Word:	sortRenderables
 Included Word:	soundInfo
-Included Word:	soundSystem
 Included Word:	stackPath
 Included Word:	start
 Included Word:	stop
@@ -3414,7 +3456,6 @@ Included Word:	tile
 Included Word:	tileAABB
 Included Word:	tileValue
 Included Word:	tileset
-Included Word:	timer
 Included Word:	toBinary
 Included Word:	toTileCoordinate
 Included Word:	toggleActiveInput
@@ -3993,6 +4034,7 @@ Localized String:	"Sorry your browser does not support Canvas. Please use differ
 Localized String:	"<a href=\"http:\\x2f\\x2fwww.google.com/chrome\">Get Chrome (**recommended!**) </a> or"
 Localized String:	"<a href=\"http:\\x2f\\x2fwww.mozilla-europe.org/en/firefox/\">Get Firefox</a>"
 Localized String:	"Audio System not supported in your browser!"
+Localized String:	"MasterUpdater"
 Localized String:	"Audio System failed to start in your browser!"
 Localized String:	"Debug Drawing Sounds"
 Localized String:	"Played sound "
@@ -4056,12 +4098,7 @@ Localized String:	"Average MS/F: "
 Localized String:	"Last Frame Time: "
 Localized String:	"Frame Count: "
 Localized String:	"GameFrameWork Init failed!"
-Localized String:	"MasterUpdater"
-Localized String:	"InputUpdater"
-Localized String:	"NetworkUpdater"
-Localized String:	"SoundUpdater"
 Localized String:	"PhysicsUpdater"
-Localized String:	"MiscUpdater"
 Localized String:	"NewUser"
 Localized String:	"QuadTree Node is not a square."
 Localized String:	"This method must be overridden"

@@ -64,7 +64,7 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 		{
 			var anOldDirection;
 			//if multiplayer and not locally owned
-			if(ECGame.Settings.Network.isMultiplayer && this.getNetOwnerID() !== ECGame.instance.localUser.userID)
+			if(ECGame.Settings.Network.isMultiplayer && this.getNetOwnerID() !== ECGame.instance.getLocalUser().userID)
 			{
 				//don't update using the local input data!
 			}
@@ -116,10 +116,10 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 			//register for events
 			owner.registerListener('AddedToWorld', this);
 			owner.registerListener('RemovedFromWorld', this);
-			if(inEvent.entity.getWorld())
+			/*if(inEvent.entity.getWorld())	//should be done when added to world, which will happen next
 			{
-				ECGame.instance.input.registerListener('Input', this);
-			}
+				ECGame.instance.getInput().registerListener('Input', this);
+			}*/
 		},
 
 		onRemovedFromEntity : function onRemovedFromEntity(inEvent)
@@ -131,18 +131,18 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 				//unregister for events
 				owner.deregisterListener('AddedToWorld', this);
 				owner.deregisterListener('RemovedFromWorld', this);
-				ECGame.instance.input.deregisterListener('Input', this);
+				//ECGame.instance.getInput().deregisterListener('Input', this);	//should be done when removed from world (which happens first)
 			}
 		},
 		
 		onAddedToWorld : function onAddedToWorld(inEvent)
 		{
-			ECGame.instance.input.registerListener('Input', this);
+			ECGame.instance.getInput().registerListener('Input', this);
 		},
 		
 		onRemovedFromWorld : function onRemovedFromWorld(inEvent)
 		{
-			ECGame.instance.input.deregisterListener('Input', this);
+			ECGame.instance.getInput().deregisterListener('Input', this);
 		},
 		
 		cleanup : function cleanup()

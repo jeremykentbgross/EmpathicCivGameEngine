@@ -29,7 +29,7 @@ ECGame.EngineLib.Sound2D = ECGame.EngineLib.Class.create(
 		this._myVelocity = new ECGame.EngineLib.Point2();
 		this._myRadius = inRadius;
 		
-		this._myPanner = ECGame.instance.soundSystem._myContext.createPanner();
+		this._myPanner = ECGame.instance.getSoundSystem()._myContext.createPanner();
 		this._myPanner.connect(inDestination);
 		this._myPanner.setPosition(inPosition.myX, inPosition.myY, 0);
 		this._myPanner.maxDistance = inRadius;
@@ -70,15 +70,15 @@ ECGame.EngineLib.Sound2D = ECGame.EngineLib.Class.create(
 			aPercentPlayed = this.getPercentPlayed(inCurrentTime);
 			aSoundScreenLoc = this._myPosition.subtract(inCameraRect);
 							
-			ECGame.instance.graphics.drawDebugText(
+			ECGame.instance.getGraphics().drawDebugText(
 				'-' + /*this._getDebugPlayingString()*/this.Sound.prototype._getDebugPlayingString.call(this) + ': %' + Math.floor(aPercentPlayed * 100),
 				ECGame.Settings.Debug.Sound_Area_DrawColor
 			);
-			ECGame.instance.graphics.drawDebugText(
+			ECGame.instance.getGraphics().drawDebugText(
 				"----Pos:(" + Math.floor(this._myPosition.myX) + ', ' + Math.floor(this._myPosition.myY) + "), Radius:" + this._myRadius,
 				ECGame.Settings.Debug.Sound_Area_DrawColor
 			);
-			ECGame.instance.graphics.drawDebugText(
+			ECGame.instance.getGraphics().drawDebugText(
 				"----Vel:(" + Math.floor(this._myVelocity.myX) + ', ' + Math.floor(this._myVelocity.myY) + ')',
 				ECGame.Settings.Debug.Sound_Area_DrawColor
 			);
@@ -110,8 +110,8 @@ ECGame.EngineLib.Sound2D = ECGame.EngineLib.Class.create(
 				aSoundScreenLoc.myY
 			);
 			inCanvas2DContext.lineTo(
-				aSoundScreenLoc.myX + (this._myVelocity.myX * ECGame.instance.soundSystem.getSoundHardwareTimeUpdateDelta()),
-				aSoundScreenLoc.myY + (this._myVelocity.myY * ECGame.instance.soundSystem.getSoundHardwareTimeUpdateDelta())
+				aSoundScreenLoc.myX + (this._myVelocity.myX * ECGame.instance.getSoundSystem().getSoundHardwareTimeUpdateDelta()),
+				aSoundScreenLoc.myY + (this._myVelocity.myY * ECGame.instance.getSoundSystem().getSoundHardwareTimeUpdateDelta())
 			);
 			inCanvas2DContext.closePath();
 			inCanvas2DContext.stroke();

@@ -107,6 +107,8 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 						,'engine/sounds/placeholder.mp3')
 				]
 			);
+			
+			ECGame.instance.getUpdater("MasterUpdater").addUpdate(this);
 		}
 		catch(error)
 		{
@@ -120,6 +122,15 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
+		getName : function getName()
+		{
+			return 'SoundSystem';
+		},
+		getUpdatePriority : function getUpdatePriority()
+		{
+			return ECGame.Settings.UpdateOrder.SOUND;
+		},
+		
 		//noAudio : function noAudio
 		generateNextAssetID : function generateNextAssetID()
 		{
@@ -147,7 +158,7 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 			{
 				aSoundAsset = inSoundAssets[i];
 				this._mySoundAssetLib[aSoundAsset._myID] = aSoundAsset;
-				ECGame.instance.assetManager.loadSound(aSoundAsset._myFileName, aSoundAsset);
+				ECGame.instance.getAssetManager().loadSound(aSoundAsset._myFileName, aSoundAsset);
 			}
 		},
 		
@@ -322,7 +333,7 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect)
 		{
 			var aCurrentTime, i;
-			ECGame.instance.graphics.drawDebugText("Debug Drawing Sounds", ECGame.Settings.Debug.Sound_Area_DrawColor);
+			ECGame.instance.getGraphics().drawDebugText("Debug Drawing Sounds", ECGame.Settings.Debug.Sound_Area_DrawColor);
 			
 			inCanvas2DContext.strokeStyle = ECGame.Settings.Debug.Sound_Area_DrawColor;
 			inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Sound_Area_DrawColor;

@@ -128,7 +128,7 @@ ECGame.EngineLib.AssetManager = ECGame.EngineLib.Class.create({
 				//Decode asynchronously
 				request.onload = function()
 				{
-					ECGame.instance.soundSystem._myContext.decodeAudioData(
+					ECGame.instance.getSoundSystem()._myContext.decodeAudioData(
 						request.response,
 						function decodedCallback(buffer)
 						{

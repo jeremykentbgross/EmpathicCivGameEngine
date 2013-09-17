@@ -32,7 +32,7 @@ ECGame.EngineLib.SoundDescription = ECGame.EngineLib.Class.create({
 	{
 		var i, aTotal, aSample, aAudioSystem;
 		
-		aAudioSystem = ECGame.instance.soundSystem;
+		aAudioSystem = ECGame.instance.getSoundSystem();
 
 		this._myID = inID;
 		this._mySamples = [];
@@ -102,7 +102,7 @@ ECGame.EngineLib.SoundDescription = ECGame.EngineLib.Class.create({
 					aSourceBuffer = aSample.createSourceBuffer();
 					aSourceBuffer.connect(inDestination);
 					aSourceBuffer.noteOn(0);
-					aSourceBuffer._myStartTime = ECGame.instance.soundSystem._myContext.currentTime;
+					aSourceBuffer._myStartTime = ECGame.instance.getSoundSystem()._myContext.currentTime;
 					aSourceBuffer._mySoundDescriptionID = this._myID;
 					//TODO add description name
 					return aSourceBuffer;

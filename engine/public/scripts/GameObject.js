@@ -49,11 +49,11 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		//TODO or add manually when netRep is added to instances? (including during clone)
 		if(ECGame.Settings.Network.isMultiplayer
 			&& ECGame.instance
-			&& ECGame.instance.network
+			&& ECGame.instance.getNetwork()
 			&& ECGame.Settings.Network.isServer//TODO ((server || thisClass._flags.clientCreatable) && netReplicated??)
 			)
 		{
-			ECGame.instance.network.addNewObject(this);
+			ECGame.instance.getNetwork().addNewObject(this);
 			this._myNetDirty = true;
 		}
 	},
@@ -152,15 +152,20 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		
 		canUserModifyNet : function canUserModifyNet()
 		{
+			var aLocalUser;
+			
 			if(!ECGame.Settings.Network.isMultiplayer || !this.getClass()._flags.net)//TODO get rid of this net flag I think
 			{
 				return false;
 			}
-			if(this._myNetOwnerID !== ECGame.instance.localUser.userID
-				&& ECGame.instance.localUser.userID !== ECGame.EngineLib.User.USER_IDS.SERVER)
+			
+			aLocalUser = ECGame.instance.getLocalUser();
+			if(this._myNetOwnerID !== aLocalUser.userID
+				&& aLocalUser.userID !== ECGame.EngineLib.User.USER_IDS.SERVER)
 			{
 				return false;
 			}
+			
 			return true;
 		},
 		
@@ -175,7 +180,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			{
 				if(!this._myNetDirty)
 				{
-					ECGame.instance.network.addNetDirtyObject(this);//TODO event instead
+					ECGame.instance.getNetwork().addNetDirtyObject(this);//TODO event instead
 					this._myNetDirty = true;
 				}
 				this.onEvent(new ECGame.EngineLib.Events.GameObjectNetDirty(this, inUserID));

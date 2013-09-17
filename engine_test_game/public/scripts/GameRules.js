@@ -87,19 +87,19 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			//setup event listeners
 			if(!ECGame.Settings.Network.isServer)
 			{
-				ECGame.instance.input.registerListener('Input', this);
+				ECGame.instance.getInput().registerListener('Input', this);
 			}
 			if(ECGame.Settings.Network.isMultiplayer)
 			{
-				ECGame.instance.network.registerListener(
+				ECGame.instance.getNetwork().registerListener(
 					'IdentifiedUser',//TODO use actual event class to de/register listener(s)
 					this
 				);
-				ECGame.instance.network.registerListener(
+				ECGame.instance.getNetwork().registerListener(
 					'ClientDisconnected',//TODO use actual event class to de/register listener(s)
 					this
 				);
-				this._myMasterNetGroup = ECGame.instance.network.getNetGroup('master_netgroup');
+				this._myMasterNetGroup = ECGame.instance.getNetwork().getNetGroup('master_netgroup');
 			}
 			//setup event listeners
 			/////////////////////////////////////////////////////////
@@ -189,20 +189,20 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			//create audio assets
 			if(ECGame.Settings.Caps.Audio)
 			{
-				ECGame.instance.soundSystem.loadSoundAssets(
+				ECGame.instance.getSoundSystem().loadSoundAssets(
 					[
-						new ECGame.EngineLib.SoundAsset(ECGame.instance.soundSystem.generateNextAssetID()
+						new ECGame.EngineLib.SoundAsset(ECGame.instance.getSoundSystem().generateNextAssetID()
 							,'game/sounds/Step1_Gravel.wav')
-						,new ECGame.EngineLib.SoundAsset(ECGame.instance.soundSystem.generateNextAssetID()
+						,new ECGame.EngineLib.SoundAsset(ECGame.instance.getSoundSystem().generateNextAssetID()
 							,'game/sounds/Step2_Gravel.wav')
-						,new ECGame.EngineLib.SoundAsset(ECGame.instance.soundSystem.generateNextAssetID()
+						,new ECGame.EngineLib.SoundAsset(ECGame.instance.getSoundSystem().generateNextAssetID()
 							,'game/sounds/Step2b_Gravel.wav')
 					]
 				);
-				ECGame.instance.soundSystem.setSoundSamples(
+				ECGame.instance.getSoundSystem().setSoundSamples(
 					[
 						new ECGame.EngineLib.SoundSample(
-							ECGame.instance.soundSystem.generateNextSampleID()	//inID
+							ECGame.instance.getSoundSystem().generateNextSampleID()	//inID
 							,1		//inAssetID
 							,0.4	//inProbability
 							,1		//inVolume			//base volume %
@@ -210,7 +210,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 							,2		//inPitchShift	//optional +/- random range (in semitones)
 						)
 						,new ECGame.EngineLib.SoundSample(
-							ECGame.instance.soundSystem.generateNextSampleID()		//inID
+							ECGame.instance.getSoundSystem().generateNextSampleID()		//inID
 							,2		//inAssetID
 							,0.3	//inProbability
 							,1		//inVolume			//base volume %
@@ -218,7 +218,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 							,2		//inPitchShift	//optional +/- random range (in semitones)
 						)
 						,new ECGame.EngineLib.SoundSample(
-							ECGame.instance.soundSystem.generateNextSampleID()		//inID
+							ECGame.instance.getSoundSystem().generateNextSampleID()		//inID
 							,3		//inAssetID
 							,0.3	//inProbability
 							,1		//inVolume			//base volume %
@@ -227,10 +227,10 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						)
 					]
 				);
-				ECGame.instance.soundSystem.setSoundDescriptions(
+				ECGame.instance.getSoundSystem().setSoundDescriptions(
 					[
 						new ECGame.EngineLib.SoundDescription(
-							ECGame.instance.soundSystem.generateNextSoundDescriptionID()	//inID
+							ECGame.instance.getSoundSystem().generateNextSoundDescriptionID()	//inID
 							,[0, 1, 2]	//inSoundSampleIDs
 					//		,inRepeat		//[0,?) || -1 for infinite
 					//		,inRepeatDelay	//time between repeats
@@ -239,15 +239,15 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					]
 				);
 				/*
-				ECGame.instance.timer.clearTimerCallback(
-				ECGame.instance.timer.setTimerCallback(
+				ECGame.instance.getTimer().clearTimerCallback(
+				ECGame.instance.getTimer().setTimerCallback(
 					2000,
-					function(){	ECGame.instance.soundSystem.playSoundEffect(0);	return true;}
+					function(){	ECGame.instance.getSoundSystem().playSoundEffect(0);	return true;}
 				)
 				);
-				ECGame.instance.timer.setTimerCallback(
+				ECGame.instance.getTimer().setTimerCallback(
 					1500,
-					function(){	ECGame.instance.soundSystem.playSoundEffect(0);	return false;}
+					function(){	ECGame.instance.getSoundSystem().playSoundEffect(0);	return false;}
 				);*/
 			}
 			//create audio assets
@@ -323,7 +323,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			/////////////////////////////////////////////////////////
 			
 			//HACK TODO subscribe to timer updates!!!
-			ECGame.instance.getUpdater("MiscUpdater").addUpdate(this);
+	//		ECGame.instance.getUpdater("MiscUpdater").addUpdate(this);
 
 			
 			return true;
@@ -347,7 +347,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				{
 					if(ECGame.Settings.Network.isServer)
 					{
-						ECGame.instance.network.sendMessage(
+						ECGame.instance.getNetwork().sendMessage(
 							"Server Reboot in " + (60 - second) + " seconds."
 							//,this//sentListener
 						);
@@ -357,7 +357,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				{
 					if(ECGame.Settings.Network.isServer)
 					{
-						ECGame.instance.network.sendMessage(
+						ECGame.instance.getNetwork().sendMessage(
 							"Server Reboot in " + (serverRebootTime - minute) + " minutes."
 							//,this//sentListener
 						);
@@ -464,18 +464,18 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			mouseWorldPosition = inInputEvent.mouseLoc.add(cameraLeftTop);
 			
 			//TODO should be in component (and/or world)
-			ECGame.instance.soundSystem.setListenerPosition(cameraAABB.getCenter());
+			ECGame.instance.getSoundSystem().setListenerPosition(cameraAABB.getCenter());
 		
 			/////////////////////////////////////////////////////////
 			//Handle input:
 			
 			if(inInputEvent.keysPressed['\x67'])//g
 			{
-				this._lastSoundPlayed = ECGame.instance.soundSystem.playSoundEffect(0);
+				this._lastSoundPlayed = ECGame.instance.getSoundSystem().playSoundEffect(0);
 			}
 			if(inInputEvent.keysPressed['\x68'])//h
 			{
-				this._lastSoundPlayed = ECGame.instance.soundSystem.playPositionalSoundEffect2D(
+				this._lastSoundPlayed = ECGame.instance.getSoundSystem().playPositionalSoundEffect2D(
 					0,
 					new ECGame.EngineLib.Point2(
 						mouseWorldPosition.myX,
@@ -492,15 +492,15 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			}
 			if(inInputEvent.keysPressed['\x6c'])//l
 			{
-				ECGame.instance.soundSystem.setMasterVolume(0.1);
+				ECGame.instance.getSoundSystem().setMasterVolume(0.1);
 			}
 			if(inInputEvent.keysPressed['\x6b'])//k
 			{
-				ECGame.instance.soundSystem.setMasterVolume(0.5);
+				ECGame.instance.getSoundSystem().setMasterVolume(0.5);
 			}
 			if(inInputEvent.keysPressed['\x6a'])//j
 			{
-				ECGame.instance.soundSystem.setMasterVolume(1.0);
+				ECGame.instance.getSoundSystem().setMasterVolume(1.0);
 			}
 			if(this._lastSoundPlayed && this._lastSoundPlayed.setPosition)
 			{
@@ -510,7 +510,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					this._lastSoundPlayed.setVelocity(
 						mouseWorldPosition
 							.subtract(this._lastMouseWorldPosition)
-							.scale( 1 / ECGame.instance.soundSystem.getSoundHardwareTimeUpdateDelta() )
+							.scale( 1 / ECGame.instance.getSoundSystem().getSoundHardwareTimeUpdateDelta() )
 					);
 				}
 			}

@@ -78,7 +78,7 @@ ECGame.EngineLib.EntityComponent_SoundPlayer = ECGame.EngineLib.Class.create(
 				return;
 			}
 			
-			aSoundSystem = ECGame.instance.soundSystem;
+			aSoundSystem = ECGame.instance.getSoundSystem();
 			
 			//TODO insert to spacial partitioning culling in the world!!!!!!
 			
