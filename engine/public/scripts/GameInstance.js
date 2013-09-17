@@ -19,9 +19,6 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//TODO naming convention (which will touch a LOT of files probably)
-//TODO rename this file/class to just Game
-
 ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 	Constructor : function GameInstance()
 	{
