@@ -175,7 +175,7 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			ECGame.EngineLib.EntityComponent_Input.registerClass();
 			ECGame.EngineLib.EntityComponent_Sprite.registerClass();
 			ECGame.EngineLib.EntityComponent_SoundPlayer.registerClass();
-			ECGame.EngineLib.Game2DMap.registerClass();
+			ECGame.EngineLib.TileMap2D.registerClass();
 			ECGame.EngineLib.Game2DTileSet.registerClass();
 			ECGame.EngineLib.Game2DWorld.registerClass();
 			//TODO thinnking EventSystem maybe should not be a gameobject ??? WTF is this??

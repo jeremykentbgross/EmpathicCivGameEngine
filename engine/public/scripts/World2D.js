@@ -76,7 +76,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 				]
 			);
 			
-			this._map = ECGame.EngineLib.Game2DMap.create();
+			this._map = ECGame.EngineLib.TileMap2D.create();
 			this._map.init(inMapSizeInTiles, inTileSize, tileset);
 			this._map.addedToWorld(this);
 			

@@ -49,7 +49,6 @@ Final NameSpace:	Events
 Final NameSpace:	Func1
 Final NameSpace:	Func2
 Final NameSpace:	Game2DGraphics
-Final NameSpace:	Game2DMap
 Final NameSpace:	Game2DSceneGraph
 Final NameSpace:	Game2DTileSet
 Final NameSpace:	Game2DWorld
@@ -105,6 +104,7 @@ Final NameSpace:	TestClass2
 Final NameSpace:	TestComponent
 Final NameSpace:	TestObjectClass1
 Final NameSpace:	TestObjectClass2
+Final NameSpace:	TileMap2D
 Final NameSpace:	Timer
 Final NameSpace:	UnitTestFramework
 Final NameSpace:	UpdateChildren
@@ -483,7 +483,6 @@ Function Name:	Events
 Function Name:	Func1
 Function Name:	Func2
 Function Name:	Game2DGraphics
-Function Name:	Game2DMap
 Function Name:	Game2DSceneGraph
 Function Name:	Game2DTileSet
 Function Name:	Game2DWorld
@@ -536,6 +535,7 @@ Function Name:	TestClass2
 Function Name:	TestComponent
 Function Name:	TestObjectClass1
 Function Name:	TestObjectClass2
+Function Name:	TileMap2D
 Function Name:	Timer
 Function Name:	UnitTestFramework
 Function Name:	UpdateChildren
@@ -1393,7 +1393,6 @@ Member Variable:	Func1Called			*****
 Member Variable:	Func2			*****
 Member Variable:	Func2Called			*****
 Member Variable:	Game2DGraphics			*****
-Member Variable:	Game2DMap			*****
 Member Variable:	Game2DSceneGraph			*****
 Member Variable:	Game2DTileSet			*****
 Member Variable:	Game2DWorld			*****
@@ -1498,6 +1497,7 @@ Member Variable:	TextBackground_DrawColor			*****
 Member Variable:	TextDefault_DrawColor			*****
 Member Variable:	TextMessages_Draw			*****
 Member Variable:	Text_Size			*****
+Member Variable:	TileMap2D			*****
 Member Variable:	Timer			*****
 Member Variable:	UNUSED			*****
 Member Variable:	USER_IDS			*****
@@ -2251,7 +2251,6 @@ Included Word:	Func1Called
 Included Word:	Func2
 Included Word:	Func2Called
 Included Word:	Game2DGraphics
-Included Word:	Game2DMap
 Included Word:	Game2DSceneGraph
 Included Word:	Game2DTileSet
 Included Word:	Game2DWorld
@@ -2364,6 +2363,7 @@ Included Word:	TextBackground_DrawColor
 Included Word:	TextDefault_DrawColor
 Included Word:	TextMessages_Draw
 Included Word:	Text_Size
+Included Word:	TileMap2D
 Included Word:	Timer
 Included Word:	UNUSED
 Included Word:	USER_IDS

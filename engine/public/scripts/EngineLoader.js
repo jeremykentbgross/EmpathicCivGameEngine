@@ -223,8 +223,8 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	include(inPublicEnginePath + "scripts/Physics2D.js");
 	include(inPublicEnginePath + "scripts/Ray2D.js");
 	include(inPublicEnginePath + "scripts/RayTracer2D.js");
-	include(inPublicEnginePath + "scripts/Game2DTileSet.js");
-	include(inPublicEnginePath + "scripts/Game2DWorld.js");
+	include(inPublicEnginePath + "scripts/TileSet2D.js");
+	include(inPublicEnginePath + "scripts/World2D.js");
 	include(inPublicEnginePath + "scripts/GameRulesBase.js");
 	//////////////////////////////// ENGINE SCRIPTS //////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////

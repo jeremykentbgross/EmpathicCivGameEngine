@@ -19,11 +19,21 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-ECGame.EngineLib.Game2DMap = ECGame.EngineLib.Class.create(
+ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 {
-	Constructor : function Game2DMap()
+	Constructor : function TileMap2D()
 	{
 		this.GameObject();
+		
+		this._mapSizeInTiles = null;	//should be rounded up to power of 2
+		this._tileSize = null;
+		this._mapSize = null;
+		
+		this._mapAABB = null;
+		
+		this._tileMapTree = null;
+		
+		this._myTileSet = null;
 	},
 	Parents : [ECGame.EngineLib.GameObject],
 	flags : {},
