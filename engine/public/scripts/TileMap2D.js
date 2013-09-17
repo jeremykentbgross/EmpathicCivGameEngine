@@ -25,15 +25,14 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 	{
 		this.GameObject();
 		
-		this._mapSizeInTiles = null;	//should be rounded up to power of 2
-		this._tileSize = null;
-		this._mapSize = null;
-		
-		this._mapAABB = null;
-		
-		this._tileMapTree = null;
-		
+		this._myWorld = null;
 		this._myTileSet = null;
+		
+		this._myMapSizeInTiles = null;	//should be rounded up to power of 2
+		this._myTileSize = null;
+		this._myAABB = null;
+		
+		this._myTileInstanceTree = null;
 	},
 	Parents : [ECGame.EngineLib.GameObject],
 	flags : {},
@@ -41,163 +40,175 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 	ChainDown : [],
 	Definition :
 	{
-		//TODO should get owner world
 		//TODO TileDescription struct/class
-		init : function init(inMapSizeInTiles, inTileSize, inTileSet)
+		init : function init(inWorld, inTileSet, inMapSizeInTiles, inTileSize)
 		{
-			this._mapSizeInTiles = inMapSizeInTiles;	//TODO round up to power of 2?
-			this._tileSize = inTileSize;
-			this._mapSize = this._mapSizeInTiles * this._tileSize;
+			var aMapSize;
 			
-			this._mapAABB = new ECGame.EngineLib.AABB2(0, 0, this._mapSize, this._mapSize);
-			
-			this._tileMapTree = ECGame.EngineLib.QuadTree.create();
-			this._tileMapTree.init(this._mapAABB, this._tileSize);
-			
+			this._myWorld = inWorld;
 			this._myTileSet = inTileSet;
+			
+			this._myMapSizeInTiles = inMapSizeInTiles;	//TODO round up to power of 2?
+			this._myTileSize = inTileSize;
+			
+			aMapSize = this._myMapSizeInTiles * this._myTileSize;
+			this._myAABB = new ECGame.EngineLib.AABB2(0, 0, aMapSize, aMapSize);
+			
+			this._myTileInstanceTree = ECGame.EngineLib.QuadTree.create();
+			this._myTileInstanceTree.init(this._myAABB, this._myTileSize);
 		},
 
-		
-		
-		//////////TODO maybe depreicated
 		setTileSet : function setTileSet(inTileSet)
 		{
 			//TODO clean current tilesets physics and scenegraph info
+			
 			this._myTileSet = inTileSet;
+			
 			//TODO walk new tiles tiles and reinsert to physics and scenegraph
 		},
-		//TODO this should be an event? Actually map should not exist without a world mostly i bet!
-		addedToWorld : function addedToWorld(inWorld)
-		{
-			this._myWorld = inWorld;
-			//TODO add physics stuff and renderables
-		},
-		//TODO removed from world? and add remove physics stuff from world?
-		//////////TODO maybe depreicated
 		
-		
-
 		
 		setTile : function setTile(inTilePosition, inTileValue)
 		{
-			var tile, tileAABB, duplicate = false, physicsRect, position;
+			var aTileInstance
+				,aTileInstanceAABB
+				,aTileWorldPosition
+				,aTilePhysicsRect
+				,aTileAlreadySet = false
+				;
 			
-			if(inTilePosition.myX < 0 || this._mapSizeInTiles <= inTilePosition.myX
-				|| inTilePosition.myY < 0 || this._mapSizeInTiles <= inTilePosition.myY
-				//TODO inTileValue is in range too
+			
+			if(inTilePosition.myX < 0 || this._myMapSizeInTiles <= inTilePosition.myX
+				|| inTilePosition.myY < 0 || this._myMapSizeInTiles <= inTilePosition.myY
+				//TODO inTileValue is in not in range of valid tiles
 				)
 			{
+				//if the location or tile is invalid return
 				return;
 			}
 			
-			tileAABB = new ECGame.EngineLib.AABB2(
-				inTilePosition.myX * this._tileSize,
-				inTilePosition.myY * this._tileSize,
-				this._tileSize,
-				this._tileSize
+			//bounding box containing this tile instance
+			aTileInstanceAABB = new ECGame.EngineLib.AABB2(
+				inTilePosition.myX * this._myTileSize,
+				inTilePosition.myY * this._myTileSize,
+				this._myTileSize,
+				this._myTileSize
 			);
-			position = tileAABB.getLeftTop();
+			
 
-			//if the tile is the same as what is there, don't delete it and return
-			this._tileMapTree.walk(
+			//TODO this is an easier check using the TypeArray...
+			//see if the tile is the same as what is there, don't delete it and return
+			this._myTileInstanceTree.walk(
 				function walkCallback(item)
 				{
 					if(item.tileValue === inTileValue)
 					{
-						duplicate = true;
+						aTileAlreadySet = true;
 					}
 				},
-				tileAABB
+				aTileInstanceAABB
 			);
-			if(duplicate)
+			if(aTileAlreadySet)
 			{
 				return;
 			}
 			
-			//insert exclusively! So delete the old one first
-			this.clearTilesInRect(tileAABB);
+			//insert exclusively! So delete the old tile first
+			this._clearTileInRect(aTileInstanceAABB);
 			
-			//the tiles physics rect (if any) //TODO may also have other physics properties later (ie not solid but slippery or something)
-			physicsRect = this._myTileSet.getPhysicsRect(inTileValue, position);
+			//the world position of the tile instance:
+			aTileWorldPosition = aTileInstanceAABB.getLeftTop();
+			
+			//TODO may also have other physics properties later (ie not solid but slippery or something)
+			//the physics rect of the tile (if any)
+			aTilePhysicsRect = this._myTileSet.getPhysicsRect(inTileValue, aTileWorldPosition);
 			
 			//create a map time
-			tile = new ECGame.EngineLib.QuadTreeItem(tileAABB);
-			tile.tileValue = inTileValue;
-			if(physicsRect)
+			aTileInstance = new ECGame.EngineLib.QuadTreeItem(aTileInstanceAABB);
+			aTileInstance.tileValue = inTileValue;
+			if(aTilePhysicsRect)
 			{
 				//note if need be, could use a tree to merge physics objects to nearest squares for optimization
-				tile.physicsObject = this._myWorld.getPhysics().createNewPhysicsObject();
-				tile.physicsObject.setAABB(physicsRect);
+				aTileInstance.physicsObject = this._myWorld.getPhysics().createNewPhysicsObject();
+				aTileInstance.physicsObject.setAABB(aTilePhysicsRect);
 			}	
 			
 			//setup for scenegraph
-			tile.sceneGraphRenderable = new ECGame.EngineLib.RenderableTile2D();
-			tile.sceneGraphRenderable.layer = this._myTileSet.getTileLayer(inTileValue);
-			tile.sceneGraphRenderable.anchorPosition = position;
-			tile.sceneGraphRenderable._myAABB = this._myTileSet.getTileRect(inTileValue, position);
-			tile.sceneGraphRenderable.tileValue = inTileValue;
-			tile.sceneGraphRenderable.ownerMap = this;
+			aTileInstance.sceneGraphRenderable = new ECGame.EngineLib.RenderableTile2D();
+			aTileInstance.sceneGraphRenderable.layer = this._myTileSet.getTileLayer(inTileValue);
+			aTileInstance.sceneGraphRenderable.anchorPosition = aTileWorldPosition;
+			aTileInstance.sceneGraphRenderable._myAABB = this._myTileSet.getTileRect(inTileValue, aTileWorldPosition);
+			aTileInstance.sceneGraphRenderable.tileValue = inTileValue;
+			aTileInstance.sceneGraphRenderable.ownerMap = this;
 			//insert to scenegraph
-			this._myWorld.getSceneGraph().insertItem(tile.sceneGraphRenderable);
+			this._myWorld.getSceneGraph().insertItem(aTileInstance.sceneGraphRenderable);
 
 			//insert to tilemap
-			this._tileMapTree.insertToSmallestContaining(tile);			
+			this._myTileInstanceTree.insertToSmallestContaining(aTileInstance);			
 		},
 
-		
-		
-		clearTilesInRect : function clearTilesInRect(inRect)
-		{
-			var deletedTiles = [], i;
-			
-			//delete from the tilemap tree
-			this._tileMapTree.deleteContained(inRect, deletedTiles);
-			if(ECGame.Settings.DEBUG)
-			{
-				if(deletedTiles.length > 1)
-				{
-					ECGame.log.error("Deleted too many tiles " + deletedTiles.length);
-				}
-			}
-			
-			for(i in deletedTiles)
-			{
-				//remove from scenegraph
-				this._myWorld.getSceneGraph().removeItem(deletedTiles[i].sceneGraphRenderable);
-				
-				//remove from physics
-				if(deletedTiles[i].physicsObject)
-				{
-					deletedTiles[i].physicsObject.release();
-				}
-			}
-		},
-
-		
-		
 		clearTile : function clearTile(inTilePosition)
 		{
-			if(inTilePosition.myX < 0 || this._mapSizeInTiles <= inTilePosition.myX
-				|| inTilePosition.myY < 0 || this._mapSizeInTiles <= inTilePosition.myY)
+			if(inTilePosition.myX < 0 || this._myMapSizeInTiles <= inTilePosition.myX
+				|| inTilePosition.myY < 0 || this._myMapSizeInTiles <= inTilePosition.myY)
 			{
 				return;
 			}
 			
-			this.clearTilesInRect(
+			this._clearTileInRect(
 				new ECGame.EngineLib.AABB2(
-					inTilePosition.myX * this._tileSize,
-					inTilePosition.myY * this._tileSize,
-					this._tileSize,
-					this._tileSize
+					inTilePosition.myX * this._myTileSize,
+					inTilePosition.myY * this._myTileSize,
+					this._myTileSize,
+					this._myTileSize
 				)
 			);
 		},
+		
+		
+		
+		
+		
+		_clearTileInRect : function _clearTileInRect(inRect)
+		{
+			var aDeletedTilesArray
+				,i
+				;
+			
+			aDeletedTilesArray = [];
+			
+			//delete from the tilemap tree
+			this._myTileInstanceTree.deleteContained(inRect, aDeletedTilesArray);
+			if(ECGame.Settings.DEBUG)
+			{
+				if(aDeletedTilesArray.length > 1)
+				{
+					ECGame.log.error("Deleted too many tiles " + aDeletedTilesArray.length);
+				}
+			}
+			
+			for(i in aDeletedTilesArray)
+			{
+				//remove from scenegraph
+				this._myWorld.getSceneGraph().removeItem(aDeletedTilesArray[i].sceneGraphRenderable);
+				
+				//remove from physics
+				if(aDeletedTilesArray[i].physicsObject)
+				{
+					aDeletedTilesArray[i].physicsObject.release();
+				}
+			}
+		},
+
+		
+		
+		
 		
 		
 		
 		getMapLowerRight : function getMapLowerRight()
 		{
-			return this._mapAABB.getRightBottom();
+			return this._myAABB.getRightBottom();
 		},
 
 		
@@ -205,8 +216,8 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 		toTileCoordinate : function toTileCoordinate(inWorldCoordinate)
 		{
 			return new ECGame.EngineLib.Point2(
-				Math.floor(inWorldCoordinate.myX / this._tileSize),
-				Math.floor(inWorldCoordinate.myY / this._tileSize)
+				Math.floor(inWorldCoordinate.myX / this._myTileSize),
+				Math.floor(inWorldCoordinate.myY / this._myTileSize)
 			);
 		},
 		
@@ -230,7 +241,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			var aThis = this;
 			ECGame.instance.getGraphics().drawDebugText("Debug Drawing Tile Map");
 			
-			this._tileMapTree.walk(
+			this._myTileInstanceTree.walk(
 				function walkCallback(item)
 				{
 					var itemRect = item.getAABB();
@@ -240,15 +251,15 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 						ECGame.EngineLib.AABB2.create(
 							itemRect.myX - inCameraRect.myX,
 							itemRect.myY - inCameraRect.myY,
-							aThis._tileSize,
-							aThis._tileSize
+							aThis._myTileSize,
+							aThis._myTileSize
 						)
 					);
 				},
 				inCameraRect
 			);
 			
-			this._tileMapTree.debugDraw(inCanvas2DContext, inCameraRect);//TODO map colors?
+			this._myTileInstanceTree.debugDraw(inCanvas2DContext, inCameraRect);//TODO map colors?
 		}
 
 	}

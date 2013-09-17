@@ -108,12 +108,12 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			
 			/////////////////////////////////////////////////////////
 			//create and initialize a game world
-			this._gameWorld = ECGame.EngineLib.Game2DWorld.create(
+			this._gameWorld = ECGame.EngineLib.World2D.create(
 				this._mapSizeInTiles
 				,this._tileSize
 				,this._minPhysicsPartitionSize
 			);
-			this._tileset = ECGame.EngineLib.Game2DTileSet.create(
+			this._tileset = ECGame.EngineLib.TileSet2D.create(
 				[
 					{
 						fileName : 'game/images/grass.png'

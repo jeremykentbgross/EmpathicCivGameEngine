@@ -169,7 +169,7 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 		},
 		
 		/*
-		TODO serialize and postserialize are exactly the same in Game2DWorld and GameEntity, abstract!
+		TODO serialize and postserialize are exactly the same in World2D and GameEntity, abstract!
 			TODO should be done as map I think (like the array)??
 		*/
 		serialize : function serialize(inSerializer)

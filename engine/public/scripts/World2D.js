@@ -19,9 +19,9 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
+ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 {
-	Constructor : function Game2DWorld()
+	Constructor : function World2D()
 	{
 		this.GameObject();
 	},
@@ -64,7 +64,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 			ECGame.instance.getUpdater("PhysicsUpdater").addUpdate(this._physics);//TODO move this to physics system itself?
 			
 			//setup default tileset consisting of nothing but the placeholder
-			var tileset = ECGame.EngineLib.Game2DTileSet.create();
+			var tileset = ECGame.EngineLib.TileSet2D.create();
 			tileset.init(
 				[
 					{
@@ -77,8 +77,7 @@ ECGame.EngineLib.Game2DWorld = ECGame.EngineLib.Class.create(
 			);
 			
 			this._map = ECGame.EngineLib.TileMap2D.create();
-			this._map.init(inMapSizeInTiles, inTileSize, tileset);
-			this._map.addedToWorld(this);
+			this._map.init(this, tileset, inMapSizeInTiles, inTileSize);
 			
 			this._entityMap = {};
 			

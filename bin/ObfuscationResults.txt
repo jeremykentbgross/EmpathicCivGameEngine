@@ -50,8 +50,6 @@ Final NameSpace:	Func1
 Final NameSpace:	Func2
 Final NameSpace:	Game2DGraphics
 Final NameSpace:	Game2DSceneGraph
-Final NameSpace:	Game2DTileSet
-Final NameSpace:	Game2DWorld
 Final NameSpace:	GameCircularDoublyLinkedListNode
 Final NameSpace:	GameEntity
 Final NameSpace:	GameEntityComponent
@@ -105,6 +103,7 @@ Final NameSpace:	TestComponent
 Final NameSpace:	TestObjectClass1
 Final NameSpace:	TestObjectClass2
 Final NameSpace:	TileMap2D
+Final NameSpace:	TileSet2D
 Final NameSpace:	Timer
 Final NameSpace:	UnitTestFramework
 Final NameSpace:	UpdateChildren
@@ -112,6 +111,8 @@ Final NameSpace:	UpdatePosition
 Final NameSpace:	Updater
 Final NameSpace:	User
 Final NameSpace:	WebServerTools
+Final NameSpace:	World2D
+Final NameSpace:	_clearTileInRect
 Final NameSpace:	_createChainDownFunction
 Final NameSpace:	_createChainUpFunction
 Final NameSpace:	_createChildren
@@ -155,7 +156,6 @@ Final NameSpace:	checkFinished
 Final NameSpace:	cleanup
 Final NameSpace:	clearNetDirty
 Final NameSpace:	clearTile
-Final NameSpace:	clearTilesInRect
 Final NameSpace:	clearTimerCallback
 Final NameSpace:	clone
 Final NameSpace:	close
@@ -484,8 +484,6 @@ Function Name:	Func1
 Function Name:	Func2
 Function Name:	Game2DGraphics
 Function Name:	Game2DSceneGraph
-Function Name:	Game2DTileSet
-Function Name:	Game2DWorld
 Function Name:	GameCircularDoublyLinkedListNode
 Function Name:	GameEntity
 Function Name:	GameEntityComponent
@@ -536,12 +534,15 @@ Function Name:	TestComponent
 Function Name:	TestObjectClass1
 Function Name:	TestObjectClass2
 Function Name:	TileMap2D
+Function Name:	TileSet2D
 Function Name:	Timer
 Function Name:	UnitTestFramework
 Function Name:	UpdateChildren
 Function Name:	UpdatePosition
 Function Name:	Updater
 Function Name:	User
+Function Name:	World2D
+Function Name:	_clearTileInRect
 Function Name:	_createChainDownFunction
 Function Name:	_createChainUpFunction
 Function Name:	_createChildren
@@ -585,7 +586,6 @@ Function Name:	checkFinished
 Function Name:	cleanup
 Function Name:	clearNetDirty
 Function Name:	clearTile
-Function Name:	clearTilesInRect
 Function Name:	clearTimerCallback
 Function Name:	clone
 Function Name:	close
@@ -1087,6 +1087,7 @@ Local Variable:	aCurrentUser
 Local Variable:	aCurrentUserIndex
 Local Variable:	aD123
 Local Variable:	aD456
+Local Variable:	aDeletedTilesArray
 Local Variable:	aDeltaTime
 Local Variable:	aDestroyInstanceList
 Local Variable:	aDirtyInstanceList
@@ -1117,6 +1118,7 @@ Local Variable:	aListToDraw
 Local Variable:	aListeners
 Local Variable:	aLocalUser
 Local Variable:	aLow
+Local Variable:	aMapSize
 Local Variable:	aMaxSize
 Local Variable:	aMessageHeader
 Local Variable:	aModels
@@ -1168,6 +1170,11 @@ Local Variable:	aTestResultsFunction
 Local Variable:	aTextEncoder
 Local Variable:	aThis
 Local Variable:	aThisNodesSize
+Local Variable:	aTileAlreadySet
+Local Variable:	aTileInstance
+Local Variable:	aTileInstanceAABB
+Local Variable:	aTilePhysicsRect
+Local Variable:	aTileWorldPosition
 Local Variable:	aTimerNode
 Local Variable:	aTotal
 Local Variable:	aUserID
@@ -1222,12 +1229,10 @@ Local Variable:	currentDateTime			*****
 Local Variable:	currentRenderable			*****
 Local Variable:	defaultImageName			*****
 Local Variable:	defaultSoundName			*****
-Local Variable:	deletedTiles			*****
 Local Variable:	dest			*****
 Local Variable:	direction			*****
 Local Variable:	directions			*****
 Local Variable:	domGraphicsContainer			*****
-Local Variable:	duplicate			*****
 Local Variable:	encodeRange			*****
 Local Variable:	entity			*****
 Local Variable:	entityObject			*****
@@ -1305,7 +1310,6 @@ Local Variable:	passedTest			*****
 Local Variable:	path			*****
 Local Variable:	pathTokens			*****
 Local Variable:	physicsRect			*****
-Local Variable:	position			*****
 Local Variable:	probability			*****
 Local Variable:	property			*****
 Local Variable:	propertyName			*****
@@ -1333,7 +1337,6 @@ Local Variable:	testObjectClass1			*****
 Local Variable:	theClass			*****
 Local Variable:	thisClass			*****
 Local Variable:	tile			*****
-Local Variable:	tileAABB			*****
 Local Variable:	tileset			*****
 Local Variable:	value			*****
 Local Variable:	valueHigh			*****
@@ -1394,8 +1397,6 @@ Member Variable:	Func2			*****
 Member Variable:	Func2Called			*****
 Member Variable:	Game2DGraphics			*****
 Member Variable:	Game2DSceneGraph			*****
-Member Variable:	Game2DTileSet			*****
-Member Variable:	Game2DWorld			*****
 Member Variable:	GameCircularDoublyLinkedListNode			*****
 Member Variable:	GameEntity			*****
 Member Variable:	GameEntityComponent			*****
@@ -1498,6 +1499,7 @@ Member Variable:	TextDefault_DrawColor			*****
 Member Variable:	TextMessages_Draw			*****
 Member Variable:	Text_Size			*****
 Member Variable:	TileMap2D			*****
+Member Variable:	TileSet2D			*****
 Member Variable:	Timer			*****
 Member Variable:	UNUSED			*****
 Member Variable:	USER_IDS			*****
@@ -1511,6 +1513,7 @@ Member Variable:	Updater_Print			*****
 Member Variable:	User			*****
 Member Variable:	WebServer			*****
 Member Variable:	WebServerTools			*****
+Member Variable:	World2D			*****
 Member Variable:	X			*****
 Member Variable:	Y			*****
 Member Variable:	_BITCAP			*****
@@ -1540,6 +1543,7 @@ Member Variable:	_chainDownMethods			*****
 Member Variable:	_chainUpMethods			*****
 Member Variable:	_childClasses			*****
 Member Variable:	_classID			*****
+Member Variable:	_clearTileInRect			*****
 Member Variable:	_clicked			*****
 Member Variable:	_constructor			*****
 Member Variable:	_containingWorld			*****
@@ -1593,8 +1597,6 @@ Member Variable:	_lastUpdateSec			*****
 Member Variable:	_left			*****
 Member Variable:	_low			*****
 Member Variable:	_map			*****
-Member Variable:	_mapAABB			*****
-Member Variable:	_mapSize			*****
 Member Variable:	_mapSizeInTiles			*****
 Member Variable:	_mapsize			*****
 Member Variable:	_maxID			*****
@@ -1655,6 +1657,7 @@ Member Variable:	_myListenerPosition2D
 Member Variable:	_myLocalUser
 Member Variable:	_myMap
 Member Variable:	_myMapSize
+Member Variable:	_myMapSizeInTiles
 Member Variable:	_myMasterNetGroup
 Member Variable:	_myMasterUpdater
 Member Variable:	_myMasterVolume
@@ -1705,7 +1708,9 @@ Member Variable:	_mySource
 Member Variable:	_myStatus
 Member Variable:	_myT
 Member Variable:	_myTests
+Member Variable:	_myTileInstanceTree
 Member Variable:	_myTileSet
+Member Variable:	_myTileSize
 Member Variable:	_myTiles
 Member Variable:	_myTimeDelay
 Member Variable:	_myTimeStepInMilliSeconds
@@ -1770,7 +1775,6 @@ Member Variable:	_sourceRect			*****
 Member Variable:	_specialChars			*****
 Member Variable:	_speed			*****
 Member Variable:	_supressKeyboardEvents			*****
-Member Variable:	_tileMapTree			*****
 Member Variable:	_tileSize			*****
 Member Variable:	_tileset			*****
 Member Variable:	_timeAccumulator			*****
@@ -1811,7 +1815,6 @@ Member Variable:	classID			*****
 Member Variable:	cleanup			*****
 Member Variable:	clearNetDirty			*****
 Member Variable:	clearTile			*****
-Member Variable:	clearTilesInRect			*****
 Member Variable:	clearTimerCallback			*****
 Member Variable:	clicked			*****
 Member Variable:	clone			*****
@@ -2252,8 +2255,6 @@ Included Word:	Func2
 Included Word:	Func2Called
 Included Word:	Game2DGraphics
 Included Word:	Game2DSceneGraph
-Included Word:	Game2DTileSet
-Included Word:	Game2DWorld
 Included Word:	GameCircularDoublyLinkedListNode
 Included Word:	GameEntity
 Included Word:	GameEntityComponent
@@ -2364,6 +2365,7 @@ Included Word:	TextDefault_DrawColor
 Included Word:	TextMessages_Draw
 Included Word:	Text_Size
 Included Word:	TileMap2D
+Included Word:	TileSet2D
 Included Word:	Timer
 Included Word:	UNUSED
 Included Word:	USER_IDS
@@ -2378,6 +2380,7 @@ Included Word:	Updater_Print
 Included Word:	User
 Included Word:	WebServer
 Included Word:	WebServerTools
+Included Word:	World2D
 Included Word:	X
 Included Word:	Y
 Included Word:	_BITCAP
@@ -2407,6 +2410,7 @@ Included Word:	_chainDownMethods
 Included Word:	_chainUpMethods
 Included Word:	_childClasses
 Included Word:	_classID
+Included Word:	_clearTileInRect
 Included Word:	_clicked
 Included Word:	_constructor
 Included Word:	_containingWorld
@@ -2460,8 +2464,6 @@ Included Word:	_lastUpdateSec
 Included Word:	_left
 Included Word:	_low
 Included Word:	_map
-Included Word:	_mapAABB
-Included Word:	_mapSize
 Included Word:	_mapSizeInTiles
 Included Word:	_mapsize
 Included Word:	_maxID
@@ -2522,6 +2524,7 @@ Included Word:	_myListenerPosition2D
 Included Word:	_myLocalUser
 Included Word:	_myMap
 Included Word:	_myMapSize
+Included Word:	_myMapSizeInTiles
 Included Word:	_myMasterNetGroup
 Included Word:	_myMasterUpdater
 Included Word:	_myMasterVolume
@@ -2572,7 +2575,9 @@ Included Word:	_mySource
 Included Word:	_myStatus
 Included Word:	_myT
 Included Word:	_myTests
+Included Word:	_myTileInstanceTree
 Included Word:	_myTileSet
+Included Word:	_myTileSize
 Included Word:	_myTiles
 Included Word:	_myTimeDelay
 Included Word:	_myTimeStepInMilliSeconds
@@ -2637,7 +2642,6 @@ Included Word:	_sourceRect
 Included Word:	_specialChars
 Included Word:	_speed
 Included Word:	_supressKeyboardEvents
-Included Word:	_tileMapTree
 Included Word:	_tileSize
 Included Word:	_tileset
 Included Word:	_timeAccumulator
@@ -2669,6 +2673,7 @@ Included Word:	aCurrentUser
 Included Word:	aCurrentUserIndex
 Included Word:	aD123
 Included Word:	aD456
+Included Word:	aDeletedTilesArray
 Included Word:	aDeltaTime
 Included Word:	aDestroyInstanceList
 Included Word:	aDirtyInstanceList
@@ -2699,6 +2704,7 @@ Included Word:	aListToDraw
 Included Word:	aListeners
 Included Word:	aLocalUser
 Included Word:	aLow
+Included Word:	aMapSize
 Included Word:	aMaxSize
 Included Word:	aMessageHeader
 Included Word:	aModels
@@ -2750,6 +2756,11 @@ Included Word:	aTestResultsFunction
 Included Word:	aTextEncoder
 Included Word:	aThis
 Included Word:	aThisNodesSize
+Included Word:	aTileAlreadySet
+Included Word:	aTileInstance
+Included Word:	aTileInstanceAABB
+Included Word:	aTilePhysicsRect
+Included Word:	aTileWorldPosition
 Included Word:	aTimerNode
 Included Word:	aTotal
 Included Word:	aUserID
@@ -2818,7 +2829,6 @@ Included Word:	classRegistry
 Included Word:	cleanup
 Included Word:	clearNetDirty
 Included Word:	clearTile
-Included Word:	clearTilesInRect
 Included Word:	clearTimerCallback
 Included Word:	clicked
 Included Word:	clone
@@ -2866,7 +2876,6 @@ Included Word:	defaultSoundName
 Included Word:	delayNetworkMessage
 Included Word:	deleteContained
 Included Word:	deleteItem
-Included Word:	deletedTiles
 Included Word:	deltaTime
 Included Word:	deref
 Included Word:	deregister
@@ -2883,7 +2892,6 @@ Included Word:	down1
 Included Word:	down2
 Included Word:	drawDebugText
 Included Word:	drawOrderHelper
-Included Word:	duplicate
 Included Word:	effectsVolume
 Included Word:	encode
 Included Word:	encodeRange
@@ -3453,7 +3461,6 @@ Included Word:	testObjectClass1
 Included Word:	theClass
 Included Word:	thisClass
 Included Word:	tile
-Included Word:	tileAABB
 Included Word:	tileValue
 Included Word:	tileset
 Included Word:	toBinary

@@ -21,9 +21,9 @@
 
 
 //TODO should be merged with Map class
-ECGame.EngineLib.Game2DTileSet = ECGame.EngineLib.Class.create(
+ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(
 {
-	Constructor : function Game2DTileSet()
+	Constructor : function TileSet2D()
 	{
 		this.GameObject();
 		
