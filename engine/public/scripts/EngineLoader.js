@@ -213,8 +213,8 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	include(inPublicEnginePath + "scripts/Timer.js");
 	include(inPublicEnginePath + "scripts/GameInstance.js");
 	include(inPublicEnginePath + "scripts/QuadTree.js");
-	include(inPublicEnginePath + "scripts/GameRenderable2D.js");
-	include(inPublicEnginePath + "scripts/GameRenderableTile2D.js");
+	include(inPublicEnginePath + "scripts/Renderable2D.js");
+	include(inPublicEnginePath + "scripts/Tile2DRenderable.js");
 	include(inPublicEnginePath + "scripts/Animation2DFrame.js");
 	include(inPublicEnginePath + "scripts/Animation2D.js");
 	include(inPublicEnginePath + "scripts/Animation2DInstance.js");
