@@ -28,6 +28,28 @@ var express = require("express");
 //http://stackoverflow.com/questions/15839253/express-3-0-https/15839596#15839596
 //https://github.com/nodejitsu/node-http-proxy
 
+/*
+http://blog.argteam.com/coding/hardening-nodejs-production-process-supervisor/
+ 
+http://blog.argteam.com/coding/hardening-node-js-for-production-part-2-using-nginx-to-avoid-node-js-load/
+ 
+https://www.google.com/search?q=nodejs+hardening&oq=nodejs+hardening&aqs=chrome..69i57j0l3.3989j0&sourceid=chrome&ie=UTF-8
+ 
+Search:
+hardening:
+ubuntu server
+nodejs
+expressjs
+wsjs
+etc..
+ 
+http://www.thefanclub.co.za/how-to/how-secure-ubuntu-1204-lts-server-part-1-basics
+ 
+http://www.thefanclub.co.za/how-to/how-secure-ubuntu-1204-lts-server-part-2-gui-installer-script
+ 
+http://nginx.org/en/docs/http/websocket.html
+*/
+
 ECGame.WebServerTools.WebServer = function WebServer()//TODO WebServer
 {
 	//Path/Setup

@@ -30,6 +30,20 @@ https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html
 
 **
 https://hacks.mozilla.org/2012/04/html5-audio-and-audio-sprites-this-should-be-simple/
+
+http://www.html5rocks.com/en/tutorials/webaudio/intro/
+ 
+http://www.html5rocks.com/en/tutorials/webaudio/games/
+ 
+http://www.html5rocks.com/en/tutorials/webaudio/positional_audio/
+ 
+http://www.youtube.com/watch?v=FDL39J-i0yQ
+ 
+https://ccrma.stanford.edu/~dattorro/EffectDesignPart1.pdf
+ 
+http://udn.epicgames.com/Three/UsingAmbientZones.html
+ 
+http://mitpress.mit.edu/books/designing-sound
 */
 
 
