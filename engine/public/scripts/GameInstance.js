@@ -205,7 +205,7 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 				);
 				
 				//Init graphics
-				this._myGraphics = ECGame.EngineLib.Game2DGraphics.create();
+				this._myGraphics = ECGame.EngineLib.Graphics2D.create();
 				if(!this._myGraphics.init())
 				{
 					return false;

@@ -1,0 +1,149 @@
+﻿<!DOCTYPE html>
+<html in='myhtml'>
+	<header>
+		<style>
+			div
+			{
+				position : relative;
+				//overflow: hidden;
+				white-space: nowrap;
+				width : 100%;
+				height : 100%;
+			}
+			body
+			{
+				border : 0px;
+				margin : 0px;
+				padding : 0px;
+				background-image : url("ivy.jpg");
+				background-size:20%;
+				//background-repeat:repeat-y;
+				//background-position:center;
+			}
+			
+			canvas
+			{
+				vertical-align : top;
+			}
+			
+			#num1
+			{
+				background : red;
+				width : 50%;
+				height : 100%;
+			}
+			#num2
+			{
+				background : green;
+				width : 50%;
+				height : 100%;
+			}
+			
+			#num3
+			{
+				background : blue;
+				width : 50%;
+				height : 50%;
+			}
+			#num4
+			{
+				background : yellow;
+				width : 50%;
+				height : 50%;
+			}
+			
+			#num5
+			{
+				background : orange;
+				position : fixed;
+				//position : absolute;
+				bottom : 0px;
+				left : 0;
+				width : 50%;
+				height : 25%;
+				//z-index:10;
+				opacity: 0.5;
+			}
+		</style>
+	</header>
+	
+	<body id='mybody'>
+
+		<div id='container'>
+		
+			<!-- no newline between canvas prevents extra whitespace -->
+			<canvas id='num1'>No support</canvas><canvas id='num2'>No support</canvas>
+			
+			<!-- no newline between canvas prevents extra whitespace -->
+			<!-- 
+			<br/>
+			<canvas id='num3'>
+				No support
+			</canvas><canvas id='num4'>
+				No support
+			</canvas>
+			-->
+			
+			<canvas id='num5'>
+				No support
+			</canvas>
+		</div>
+
+		<script>
+			//for resizes
+			//http://www.html5rocks.com/en/tutorials/casestudies/gopherwoord-studios-resizing-html5-games/
+			
+			//http://johndyer.name/native-fullscreen-javascript-api-plus-jquery-plugin/
+			//http://andrew.hedges.name/experiments/fullscreen/
+			
+			window.addEventListener('resize', resizeSpace, false);
+			window.addEventListener('orientationchange', resizeSpace, false);
+			window.addEventListener('load', resizeSpace, false);
+			
+			function resizeSpace()
+			{
+				var aContainer = document.getElementById('container');
+				
+				var maxWidth = 512 * 2;
+				var maxHeight = 512;
+				var widthToHeight = maxWidth / maxHeight;
+
+				var newWidth = window.innerWidth;
+				var newHeight = window.innerHeight;
+				var newWidthToHeight = newWidth / newHeight;
+				
+				if(newWidthToHeight > widthToHeight)
+				{
+					newWidth = newHeight * widthToHeight;
+					
+				}
+				else
+				{
+					newHeight = newWidth / widthToHeight;
+				}
+				newHeight = Math.min(newHeight, maxHeight);
+				newWidth = Math.min(newWidth, maxWidth);
+				if(false)//no resize
+				{
+					newHeight = maxHeight;
+					newWidth = maxWidth;
+				}
+				
+				aContainer.style.height = newHeight + 'px';
+				aContainer.style.width = newWidth + 'px';
+				aContainer.style.marginTop = Math.max((window.innerHeight-newHeight) / 2, 0) + 'px';
+				aContainer.style.marginLeft = Math.max((window.innerWidth-newWidth) / 2, 0) + 'px';
+			}
+			
+			/*document.getElementById('mybody').addEventListener(
+				'click'
+				,function (evt)
+				{
+					this.webkitRequestFullScreen();
+					//resizeSpace();
+				}
+			);*/
+		</script>
+
+	</body>
+</html>

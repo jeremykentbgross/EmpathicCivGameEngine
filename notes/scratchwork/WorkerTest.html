@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<html>
+	<body>
+
+	<p>Count numbers: <output id="result"></output></p>
+	<button onclick="startWorker()">Start Worker</button> 
+	<button onclick="stopWorker()">Stop Worker</button>
+	<br><br>
+
+	<script>
+		//http://www.html5rocks.com/en/tutorials/workers/basics/
+		//http://updates.html5rocks.com/2011/12/Transferable-Objects-Lightning-Fast	//SIZE MATTERS BIG AND SMALL!!!
+		//https://developer.mozilla.org/en-US/docs/Web/Guide/Performance/Using_web_workers
+		
+		//https://github.com/audreyt/node-webworker-threads	?????
+		
+		//TODO look at these ones too:
+		//http://www.html5rocks.com/en/tutorials/offline/storage/
+		//http://www.html5rocks.com/en/tutorials/appcache/beginner/
+		
+		var aWorker;
+		
+		function workerCode()
+		{
+			//importScripts('foo.js');
+			setInterval(
+				function()
+				{
+					self.postMessage("tick");
+					//self.close();
+				}
+				,1500
+			);
+			self.onmessage = function onmessage(inEvent)
+			{
+				var aProperty
+				for(aProperty in inEvent)
+				{
+					if(!inEvent.hasOwnProperty(aProperty))
+					{
+						continue;
+					}
+					self.postMessage('PROPERTY from worker: inEvent.' + aProperty + "===" + inEvent[aProperty]);
+					if(typeof inEvent[aProperty] === 'object')
+					{
+						try
+						{
+							self.postMessage('==>OBJECT from worker: inEvent.' + aProperty + "===" + JSON.stringify(inEvent[aProperty]));
+						}
+						catch(e)
+						{
+							self.postMessage('ERROR from worker:' + e);
+						}
+					}
+					if(typeof inEvent[aProperty] === 'object' && inEvent[aProperty] instanceof ArrayBuffer)
+					{
+						self.postMessage("Float Array:" + JSON.stringify(new Float32Array(inEvent[aProperty])));
+					}
+				}
+				try
+				{
+					var aBuffer = new ArrayBuffer(150);
+					var anArray = new Uint8Array/*ArrayBuffer*/(aBuffer);
+					self.postMessage("Worker Lengths: " + anArray.length + "//" + aBuffer.byteLength);
+					for(var i = 0; i < anArray.length; ++i)
+					{
+						anArray[i] = i;
+					}
+					self.postMessage(aBuffer, [aBuffer]);
+					self.postMessage("Worker Lengths: " + anArray.length + "//" + aBuffer.byteLength);
+					//self.postMessage({myArray : anArray}/*, [anArray]*/);
+				}
+				catch(e)
+				{
+					self.postMessage('ERROR from worker:' + e +'<br>');
+				}
+				self.postMessage('<br><br><br><br><br>');
+			}
+		}
+		//console.log(workerCode.toString());
+		var blob = new Blob(
+			[
+				workerCode.toString() + "\nworkerCode();"
+				//"onmessage = function(e) { postMessage('msg from worker' + e); }"
+			]
+		);
+		// Obtain a blob URL reference to our worker 'file'.
+		var blobURL = window.URL.createObjectURL(blob);
+		//window.URL.revokeObjectURL(blobURL);
+		
+		function startWorker()
+		{
+			if(typeof(Worker)!=="undefined")
+			{
+				if(typeof(aWorker)=="undefined")
+				{
+					aWorker = new Worker(/*"demo_workers.js"*/blobURL);
+				}
+				aWorker.onmessage = function (inEvent)
+				{
+					document.getElementById("result").innerHTML += inEvent.data + (typeof inEvent.data === 'object'? '::::' + JSON.stringify(inEvent.data) : "") + "<br>";
+					if(typeof inEvent.data === 'object' && inEvent.data instanceof ArrayBuffer)
+					{
+						document.getElementById("result").innerHTML += JSON.stringify(new Uint8Array(inEvent.data));
+					}
+				};
+				var buffer = new ArrayBuffer(200 * 4);
+				var aTransferArray = new Float32Array(buffer);
+				console.log(aTransferArray.length + ' ** ' + buffer.byteLength);
+				for(var i = 0; i<aTransferArray.length; ++i)
+				{
+					aTransferArray[i] = Math.random();
+				}
+				aWorker.postMessage(
+					{
+						msg : 'Msg from main page'
+						,anArray : aTransferArray
+					}
+					,[buffer]
+				);
+				console.log(aTransferArray.length + ' ** ' + buffer.byteLength);
+				buffer = new ArrayBuffer(12 * 4);
+				aTransferArray = new Float32Array(buffer);
+				console.log(aTransferArray.length + ' ** ' + buffer.byteLength);
+				for(var i = 0; i<aTransferArray.length; ++i)
+				{
+					aTransferArray[i] = Math.random();
+				}
+				try
+				{
+					aWorker.postMessage(
+						buffer
+						,[buffer]
+					);
+				}
+				catch(error)
+				{
+					console.log(error);
+				}
+				console.log(aTransferArray.length + ' ** ' + buffer.byteLength);
+				//aWorker.postMessage({msg:'Msg from main page'});
+				
+				
+				
+				aTransferArray = new Float32Array(11);
+				console.log(aTransferArray.length);
+				for(var i = 0; i<aTransferArray.length; ++i)
+				{
+					aTransferArray[i] = Math.random();
+				}
+				aWorker.postMessage(
+					aTransferArray.buffer
+					,[aTransferArray.buffer]
+				);
+				console.log(aTransferArray.length);
+				
+				
+			}
+			else
+			{
+				document.getElementById("result").innerHTML="Sorry, your browser does not support Web Workers...";
+			}
+		}
+
+		function stopWorker()
+		{ 
+			aWorker.terminate();
+		}
+		
+		startWorker();
+	</script>
+
+	</body>
+</html>
