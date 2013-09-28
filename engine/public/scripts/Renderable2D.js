@@ -21,17 +21,20 @@
 
 
 //This is actually almost more of an interface!
-ECGame.EngineLib.GameRenderable2D = ECGame.EngineLib.Class.create({
-	Constructor : function GameRenderable2D()
+ECGame.EngineLib.Renderable2D = ECGame.EngineLib.Class.create({
+	Constructor : function Renderable2D()
 	{
-		this.QuadTreeItem(/*aabb*/);
-		//TODO maybe should have get functions for all these instead?
-		this.sceneGraphOwningNodes = null;	//array of nodes containing this renderable in the scene graph
-		this.lastFrameDrawn = -1;
-		this.layer = 0;
-		this.anchorPosition = new ECGame.EngineLib.Point2();
-		this.screenPos = new ECGame.EngineLib.Point2();
-		this.drawOrderHelper = null;
+		this.QuadTreeItem(null/*aabb*/);
+		
+		//TODO maybe should have get functions for all these?
+		
+		//array of nodes that contain this renderable in the scene graph
+		this._mySceneGraphOwningNodes = null;					//accessed only by the scenegraph
+		this._myLastFrameDrawn = -1;							//accessed only by the scenegraph
+		this._myLayer = 0;										//accessed many places (should it be private or smthg?)
+		this._myAnchorPosition = new ECGame.EngineLib.Point2();
+		this._myScreenPos = new ECGame.EngineLib.Point2();		//accessed only by the scenegraph
+		this._myDrawOrderHelper = null;							//accessed only by the scenegraph
 	},
 	Parents : [ECGame.EngineLib.QuadTreeItem],
 	flags : {},
@@ -39,6 +42,13 @@ ECGame.EngineLib.GameRenderable2D = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
+		init : function init(inAABB2D, inLayer, inAnchorPosition)
+		{
+			this._myAABB = inAABB2D;
+			this._myLayer = inLayer;
+			this._myAnchorPosition = inAnchorPosition;
+		},
+		
 		render : function render(inCanvas2DContext, inCameraRect)//abstract!!
 		{
 			ECGame.log.assert(false, "This method must be overridden");

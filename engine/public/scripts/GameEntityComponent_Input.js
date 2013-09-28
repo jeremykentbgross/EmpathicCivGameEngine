@@ -41,7 +41,7 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 	
 	Parents : [ECGame.EngineLib.GameEntityComponent],
 	
-	flags : { net : true },
+	flags : { netDynamic : true },
 	
 	ChainUp : [],
 	ChainDown : [],

@@ -27,8 +27,11 @@ ECGame.EngineLib.Class.create({
 	Constructor : ,
 	Parents : [],
 	flags : {},
+		//netDynamic: sends dynamic messages over the network
+		//TODO clientOnly??(<-how), serverOnly, clientCreatable??
 	ChainUp : [],
 	ChainDown : [],
+	//TODO? mustOverride //pure virtual
 	Definition :
 	{
 		

@@ -104,13 +104,13 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 				case 'keyup':
 					key = String.fromCharCode(inEvent.keyCode);
 					this._keys[key] = (eventType === 'keydown');
-					this._keys[inEvent.keyCode] = (eventType === 'keydown');
+					this._keys[inEvent.keyCode] = (eventType === 'keydown');//TODO this causes debugdraw errors, revisit
 					break;
 					
 				case 'keypress':
 					key = String.fromCharCode(inEvent.keyCode);
 					this._keysPressed[key] = true;
-					this._keysPressed[inEvent.keyCode] = true;
+					this._keysPressed[inEvent.keyCode] = true;//TODO this causes debugdraw errors, revisit
 					break;
 					
 				case 'mousedown':
@@ -172,26 +172,26 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 			{
 				inputString = "Input: " +
 					(this._active ? "Active" : "Inactive" ) + 
-					' X:' + this._mouseLoc.myX + ' Y:' + this._mouseLoc.myY + ' ';
+					" X:" + this._mouseLoc.myX + " Y:" + this._mouseLoc.myY + ' ';
 				for(i in this._buttons)
 				{
 					if(this._buttons[i])
 					{
-						inputString += 'MB' + i + ' ';
+						inputString += "Mouse:" + i + ' ';
 					}
 				}
 				for(i in this._keys)
 				{
 					if(this._keys[i])
 					{
-						inputString += '\'' + i + '\' (' + i.charCodeAt(0) + ') ';
+						inputString += "Down:" + '\'' + i + '\' (' + i.charCodeAt(0) + ') ';
 					}
 				}
 				for(i in this._keysPressed)
 				{
 					if(this._keysPressed[i])
 					{
-						inputString += '\'' + i + '\' (' + i.charCodeAt(0) + ') ';
+						inputString += "Pressed:" + '\'' + i + '\' (' + i.charCodeAt(0) + ') ';
 					}
 				}
 				//todo clicks and wheel

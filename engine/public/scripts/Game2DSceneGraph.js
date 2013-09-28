@@ -55,10 +55,10 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.init = function init(inMapSize, inMi
 //TODO more like physics handles? maybe?***************************
 ECGame.EngineLib.Game2DSceneGraph.prototype.insertItem = function insertItem(inRenderableItem)
 {
-	inRenderableItem.sceneGraphOwningNodes = [];
-	this._mySceneTree.insertToAllBestFitting(inRenderableItem, inRenderableItem.sceneGraphOwningNodes);
+	inRenderableItem._mySceneGraphOwningNodes = [];
+	this._mySceneTree.insertToAllBestFitting(inRenderableItem, inRenderableItem._mySceneGraphOwningNodes);
 
-	inRenderableItem.lastFrameDrawn = inRenderableItem.lastFrameDrawn || 0;
+	inRenderableItem._myLastFrameDrawn = inRenderableItem._myLastFrameDrawn || 0;
 };
 
 
@@ -66,12 +66,12 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.insertItem = function insertItem(inR
 ECGame.EngineLib.Game2DSceneGraph.prototype.removeItem = function removeItem(inRenderableItem)
 {
 	var nodeIndex;
-	var nodeArray = inRenderableItem.sceneGraphOwningNodes;
+	var nodeArray = inRenderableItem._mySceneGraphOwningNodes;
 	for(nodeIndex in nodeArray)
 	{
 		nodeArray[nodeIndex].deleteItem(inRenderableItem);//todo optimize this to deleteItemFromNode
 	}
-	inRenderableItem.sceneGraphOwningNodes = [];
+	inRenderableItem._mySceneGraphOwningNodes = [];
 };
 
 
@@ -86,16 +86,16 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DC
 		{
 			var frameCount = ECGame.instance.getTimer().getFrameCount();
 			
-			if(frameCount > item.lastFrameDrawn)
+			if(frameCount > item._myLastFrameDrawn)
 			{
 				//calculate depth sorting position for this frame
-				item.screenPos = item.anchorPosition.subtract(inCameraRect.getLeftTop());
-				item.drawOrderHelper = ECGame.EngineLib.Point2.create(
-					item.screenPos.dot(aThis._rotMatrixRow1),
-					item.screenPos.dot(aThis._rotMatrixRow2)
+				item._myScreenPos = item._myAnchorPosition.subtract(inCameraRect.getLeftTop());
+				item._myDrawOrderHelper = ECGame.EngineLib.Point2.create(
+					item._myScreenPos.dot(aThis._rotMatrixRow1),
+					item._myScreenPos.dot(aThis._rotMatrixRow2)
 				);
 			
-				item.lastFrameDrawn = frameCount;
+				item._myLastFrameDrawn = frameCount;
 				renderables.push(item);
 			}
 		},
@@ -105,10 +105,10 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DC
 	renderables.sort(
 		function sortRenderables(inLeft, inRight)
 		{				
-			var vec = inLeft.drawOrderHelper.subtract(inRight.drawOrderHelper);
+			var vec = inLeft._myDrawOrderHelper.subtract(inRight._myDrawOrderHelper);
 			
 			return (vec.myY * aThis._myMapSize * aThis._cos + vec.myX) +
-				(aThis._myMapSize * aThis._myMapSize) * (inLeft.layer - inRight.layer);
+				(aThis._myMapSize * aThis._myMapSize) * (inLeft._myLayer - inRight._myLayer);
 		}
 	);
 	
@@ -128,15 +128,15 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DC
 		for(i in renderables)
 		{
 			var currentRenderable = renderables[i];
-			var screenPos = currentRenderable.screenPos;
+			var screenPos = currentRenderable._myScreenPos;
 			
 			var stringDrawOrder = String(i);
 			var stringDistance = String('');
 			/*
 			TODO?? include this or not with a flag??
 			stringDistance =
-				currentRenderable.drawOrderHelper.myX.toFixed(2) + ', ' +
-				currentRenderable.drawOrderHelper.myY.toFixed(2);
+				currentRenderable._myDrawOrderHelper.myX.toFixed(2) + ', ' +
+				currentRenderable._myDrawOrderHelper.myY.toFixed(2);
 			*/
 			var width = Math.max(
 				inCanvas2DContext.measureText(stringDrawOrder).width,

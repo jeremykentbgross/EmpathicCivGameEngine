@@ -28,7 +28,7 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 	
 	Parents : [ECGame.EngineLib.GameObject],
 	
-	flags : {net:true},
+	flags : { netDynamic : true },
 	
 	ChainUp : [],
 	ChainDown : [],
@@ -70,7 +70,7 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 					{
 						fileName : 'engine/images/placeholder.png'//TODO have this listed in systemvars
 						,anchor : ECGame.EngineLib.Point2.create()
-						,layer : 0
+						,_myLayer : 0
 					}
 					//,{}
 				]

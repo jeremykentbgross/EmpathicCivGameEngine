@@ -19,30 +19,41 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-ECGame.EngineLib.RenderableTile2D = ECGame.EngineLib.Class.create({
-	Constructor : function RenderableTile2D()
+ECGame.EngineLib.Tile2DRenderable = ECGame.EngineLib.Class.create({
+	Constructor : function Tile2DRenderable()
 	{
-		this.GameRenderable2D();
-		this.tileValue = 0;
-		this.ownerMap = null;
+		this.Renderable2D();
+		this._myTileValue = 0;
+		this._myOwnerMap = null;	//TODO get rid of this and have the TileDescription instead
 	},
-	Parents : [ECGame.EngineLib.GameRenderable2D],
+	Parents : [ECGame.EngineLib.Renderable2D],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
 	Definition :
 	{
+		init : function init(inAABB2D, inLayer, inAnchorPosition, inTileValue, inOwnerMap)
+		{
+			this._myAABB = inAABB2D;
+			this._myLayer = inLayer;
+			this._myAnchorPosition = inAnchorPosition;
+			this._myTileValue = inTileValue;
+			this._myOwnerMap = inOwnerMap;
+		},
+		
 		render : function render(inCanvas2DContext, inCameraRect)
 		{
 			if(ECGame.Settings.isDebugDraw_Map())
 			{
 				return;
 			}
-			this.ownerMap._myTileSet.renderTile(
+			this._myOwnerMap._myTileSet.renderTile(
 				inCanvas2DContext,
-				this.tileValue,
-				this.anchorPosition.subtract(inCameraRect)
+				this._myTileValue,
+				this._myAnchorPosition.subtract(inCameraRect)
 			);
 		}
+		
+		//TODO debug draw
 	}
 });

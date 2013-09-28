@@ -19,6 +19,45 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*
+TODOs
+
+TODOs thru this file
+
+tiles.length + 1 === empty
+animated tiles
+multi image tiles
+map wrapping
+event: mapchange
+
+see notebook for refactor on tile and tileset related stuff
+	note: shared stuff between tiles still probably wanted (ex animation from)
+	-Tile2DRenderable render/debugdraw (moved from map + tileset)
+	-Tile2DInstance cleanup (moved from map)
+	-TileDescription class?
+	-Tileset functionality redistribution
+	
+Renderable init chain down (first params go first)?
+
+net
+	world views
+	server privately creates
+	serialize flag: full (ie not net)
+
+Graphics related:
+	rendering float error
+	split screen / multi buffers?
+	
+other todos
+	obfuscator: functions are not member vars
+	_... should only be accessed: this._...
+	class function callParentMethod()
+	{
+		call/apply(this, this.getClass().parent.prototype[functionName], arguments );
+	}
+	events: ownerAddedToNetGroup, ownerChangedNetOwner //for components
+*/
+
 ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 {
 	Constructor : function TileMap2D()
@@ -32,15 +71,30 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 		this._myTileSize = null;
 		this._myAABB = null;
 		
+		this._myTileIndexArray = null;
+		this._myChangedTiles = [];
+		
+		//TODO optimization: if debug, use array instead!
 		this._myTileInstanceTree = null;
 	},
 	Parents : [ECGame.EngineLib.GameObject],
-	flags : {},
+	flags : { netDynamic : true },
 	ChainUp : [],
 	ChainDown : [],
 	Definition :
 	{
-		//TODO TileDescription struct/class
+		_serializeFormat :
+		[
+			{
+				name : '_myMapSizeInTiles',
+				type : 'int',
+				net : false,
+				min : 0,
+				max : 1024,	//TODO should have a constant somewhere to check against!!
+			}
+			//TODO world, tileset, etc
+		],
+
 		init : function init(inWorld, inTileSet, inMapSizeInTiles, inTileSize)
 		{
 			var aMapSize;
@@ -54,12 +108,24 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			aMapSize = this._myMapSizeInTiles * this._myTileSize;
 			this._myAABB = new ECGame.EngineLib.AABB2(0, 0, aMapSize, aMapSize);
 			
+			ECGame.log.assert(inTileSet.getNumberOfTiles() < 256, "Currently unsupported number of tiles");
+			if(inTileSet.getNumberOfTiles() < 256)
+			{
+				this._myTileIndexArray = new Uint8Array(inMapSizeInTiles * inMapSizeInTiles);
+			}
+			else
+			{
+				//this._myTileIndexArray = new Uint16Array(inMapSizeInTiles * inMapSizeInTiles);
+			}
+			
 			this._myTileInstanceTree = ECGame.EngineLib.QuadTree.create();
 			this._myTileInstanceTree.init(this._myAABB, this._myTileSize);
 		},
 
 		setTileSet : function setTileSet(inTileSet)
 		{
+			ECGame.log.assert(inTileSet.getNumberOfTiles() < 256, "Currently unsupported number of tiles");
+			
 			//TODO clean current tilesets physics and scenegraph info
 			
 			this._myTileSet = inTileSet;
@@ -74,20 +140,21 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 				,aTileInstanceAABB
 				,aTileWorldPosition
 				,aTilePhysicsRect
-				,aTileAlreadySet = false
+				,aTileRenderable
+				,aPhysicsObject
+				,anIndex
 				;
-			
 			
 			if(inTilePosition.myX < 0 || this._myMapSizeInTiles <= inTilePosition.myX
 				|| inTilePosition.myY < 0 || this._myMapSizeInTiles <= inTilePosition.myY
-				//TODO inTileValue is in not in range of valid tiles
+				|| inTileValue < 0 || this._myTileSet.getNumberOfTiles() <= inTileValue
 				)
 			{
 				//if the location or tile is invalid return
 				return;
 			}
 			
-			//bounding box containing this tile instance
+			//bounding box containing this tile instance in the map
 			aTileInstanceAABB = new ECGame.EngineLib.AABB2(
 				inTilePosition.myX * this._myTileSize,
 				inTilePosition.myY * this._myTileSize,
@@ -95,56 +162,70 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 				this._myTileSize
 			);
 			
-
-			//TODO this is an easier check using the TypeArray...
-			//see if the tile is the same as what is there, don't delete it and return
-			this._myTileInstanceTree.walk(
-				function walkCallback(item)
-				{
-					if(item.tileValue === inTileValue)
-					{
-						aTileAlreadySet = true;
-					}
-				},
-				aTileInstanceAABB
-			);
-			if(aTileAlreadySet)
+			anIndex = inTilePosition.myY * this._myMapSizeInTiles + inTilePosition.myX;
+			//see if the tile is the same as what is there, if so, don't delete the current instance, just return
+			if(this._myTileIndexArray[anIndex] === inTileValue)
 			{
 				return;
 			}
-			
+			//set the value in the index array
+			this._myTileIndexArray[anIndex] = inTileValue;
+						
 			//insert exclusively! So delete the old tile first
 			this._clearTileInRect(aTileInstanceAABB);
 			
 			//the world position of the tile instance:
 			aTileWorldPosition = aTileInstanceAABB.getLeftTop();
 			
-			//TODO may also have other physics properties later (ie not solid but slippery or something)
-			//the physics rect of the tile (if any)
+			//get the physics object of the tile (if any)
 			aTilePhysicsRect = this._myTileSet.getPhysicsRect(inTileValue, aTileWorldPosition);
-			
-			//create a map time
-			aTileInstance = new ECGame.EngineLib.QuadTreeItem(aTileInstanceAABB);
-			aTileInstance.tileValue = inTileValue;
 			if(aTilePhysicsRect)
 			{
 				//note if need be, could use a tree to merge physics objects to nearest squares for optimization
-				aTileInstance.physicsObject = this._myWorld.getPhysics().createNewPhysicsObject();
-				aTileInstance.physicsObject.setAABB(aTilePhysicsRect);
-			}	
+				aPhysicsObject = this._myWorld.getPhysics().createNewPhysicsObject();
+				aPhysicsObject.setAABB(aTilePhysicsRect);
+				//TODO may also have other physics properties later (ie not solid but slippery or something)
+			}
+			else
+			{
+				aPhysicsObject = null;
+			}
 			
-			//setup for scenegraph
-			aTileInstance.sceneGraphRenderable = new ECGame.EngineLib.RenderableTile2D();
-			aTileInstance.sceneGraphRenderable.layer = this._myTileSet.getTileLayer(inTileValue);
-			aTileInstance.sceneGraphRenderable.anchorPosition = aTileWorldPosition;
-			aTileInstance.sceneGraphRenderable._myAABB = this._myTileSet.getTileRect(inTileValue, aTileWorldPosition);
-			aTileInstance.sceneGraphRenderable.tileValue = inTileValue;
-			aTileInstance.sceneGraphRenderable.ownerMap = this;
+			//setup renderable for scenegraph
+			aTileRenderable = ECGame.EngineLib.Tile2DRenderable.create(
+				this._myTileSet.getTileRenderRect(inTileValue, aTileWorldPosition)
+				,this._myTileSet.getTileLayer(inTileValue)
+				,aTileWorldPosition
+				,inTileValue
+				,this
+			);
+			
+			//create tile instance
+			aTileInstance = ECGame.EngineLib.Tile2DInstance.create(
+				aTileInstanceAABB
+				,inTileValue
+				,aTileRenderable
+				,aPhysicsObject
+			);
+			
 			//insert to scenegraph
-			this._myWorld.getSceneGraph().insertItem(aTileInstance.sceneGraphRenderable);
+			this._myWorld.getSceneGraph().insertItem(aTileInstance._mySceneGraphRenderable);
 
 			//insert to tilemap
-			this._myTileInstanceTree.insertToSmallestContaining(aTileInstance);			
+			this._myTileInstanceTree.insertToSmallestContaining(aTileInstance);
+
+			//if we can modify the map for the net, then remember this change.
+			if(this.canUserModifyNet())
+			{
+				this._myChangedTiles.push(
+					{
+						X : inTilePosition.myX,
+						Y : inTilePosition.myY,
+						Value : inTileValue
+					}
+				);
+				this.setNetDirty();
+			}
 		},
 
 		clearTile : function clearTile(inTilePosition)
@@ -165,11 +246,8 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			);
 		},
 		
-		
-		
-		
-		
-		_clearTileInRect : function _clearTileInRect(inRect)
+		//used to remove a specific tile
+		_clearTileInRect : function _clearTileInRect(inRect)//TODO could take a param to skip error if we really want to delete many
 		{
 			var aDeletedTilesArray
 				,i
@@ -190,20 +268,15 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			for(i in aDeletedTilesArray)
 			{
 				//remove from scenegraph
-				this._myWorld.getSceneGraph().removeItem(aDeletedTilesArray[i].sceneGraphRenderable);
+				this._myWorld.getSceneGraph().removeItem(aDeletedTilesArray[i]._mySceneGraphRenderable);
 				
 				//remove from physics
-				if(aDeletedTilesArray[i].physicsObject)
+				if(aDeletedTilesArray[i]._myPhysicsObject)
 				{
-					aDeletedTilesArray[i].physicsObject.release();
+					aDeletedTilesArray[i]._myPhysicsObject.release();
 				}
 			}
 		},
-
-		
-		
-		
-		
 		
 		
 		getMapLowerRight : function getMapLowerRight()
@@ -213,15 +286,13 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 
 		
 		
-		toTileCoordinate : function toTileCoordinate(inWorldCoordinate)
+		toTileCoordinate : function toTileCoordinate(inWorldCoordinate)//TODO rename worldPositionToTileCoord..
 		{
 			return new ECGame.EngineLib.Point2(
 				Math.floor(inWorldCoordinate.myX / this._myTileSize),
 				Math.floor(inWorldCoordinate.myY / this._myTileSize)
 			);
 		},
-		
-		
 		
 		isWrappable : function isWrappable()
 		{
@@ -230,11 +301,104 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 		},
 		
 		//set<classname>NetDirty
-		clearNetDirty : function clearNetDirty(){},
-		cleanup : function cleanup(){},//TODO
-		serialize : function serialize(){},//TODO
-		copyFrom : function copyFrom(inOther){},//TODO
+		clearNetDirty : function clearNetDirty()
+		{
+			this._myChangedTiles = [];
+		},
 		
+		cleanup : function cleanup(){},//TODO
+		
+		serialize : function serialize(inSerializer)
+		{
+			var anIndex
+				,aTileValue
+				,aNumChangedTiles
+				,i, j
+				;
+			
+			if(inSerializer.isNetMode())//TODO AND this._myChangedTiles.length < 1/3 the size of the map???
+			{
+				aNumChangedTiles = inSerializer.serializeInt(
+					this._myChangedTiles.length,
+					1,
+					100	//TODO should not have a magic number here
+				);
+				
+				if(inSerializer.isReading())
+				{
+					for(anIndex = 0; anIndex < aNumChangedTiles; ++anIndex)
+					{
+						i = inSerializer.serializeInt(
+							i,
+							0,
+							this._myMapSizeInTiles
+						);
+						j = inSerializer.serializeInt(
+							j,
+							0,
+							this._myMapSizeInTiles
+						);
+						aTileValue = inSerializer.serializeInt(
+							aTileValue,
+							0,
+							this._myTileSet.getNumberOfTiles()
+						);
+						this.setTile(
+							ECGame.EngineLib.Point2.create(i, j),
+							aTileValue
+						);
+					}
+				}
+				else
+				{
+					for(anIndex = 0; anIndex < aNumChangedTiles; ++anIndex)
+					{
+						inSerializer.serializeInt(
+							this._myChangedTiles[anIndex].X,
+							0,
+							this._myMapSizeInTiles
+						);
+						inSerializer.serializeInt(
+							this._myChangedTiles[anIndex].Y,
+							0,
+							this._myMapSizeInTiles
+						);
+						inSerializer.serializeInt(
+							this._myChangedTiles[anIndex].Value,
+							0,
+							this._myTileSet.getNumberOfTiles()
+						);
+					}
+				}
+			}
+			else
+			{
+				inSerializer.serializeObject(this, this.TileMap2D._serializeFormat);
+				//TODO if(reading){this.cleanup(); this.init(...);}
+				
+				for(j = 0; j < this._myMapSizeInTiles; ++j)
+				{
+					for(i = 0; i < this._myMapSizeInTiles; ++i)
+					{
+						anIndex = j * this._myMapSizeInTiles + i;
+						aTileValue = inSerializer.serializeInt(
+							this._myTileIndexArray[anIndex],
+							0,
+							this._myTileSet.getNumberOfTiles()//TODO serialize this in a temp var or something
+						);
+						if(inSerializer.isReading())
+						{
+							this.setTile(
+								ECGame.EngineLib.Point2.create(i, j),
+								aTileValue
+							);
+						}
+					}
+				}
+			}
+		},
+		
+		copyFrom : function copyFrom(inOther){},//TODO
 		
 		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect)
 		{
@@ -245,9 +409,9 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 				function walkCallback(item)
 				{
 					var itemRect = item.getAABB();
-					aThis._myTileSet.renderTileInRect(
+					aThis._myTileSet.renderTileInRect(//TODO should be debug draw for tile
 						inCanvas2DContext,
-						item.tileValue,
+						item._myTileValue,
 						ECGame.EngineLib.AABB2.create(
 							itemRect.myX - inCameraRect.myX,
 							itemRect.myY - inCameraRect.myY,

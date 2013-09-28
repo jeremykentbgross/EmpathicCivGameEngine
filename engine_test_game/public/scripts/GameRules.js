@@ -118,32 +118,32 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					{
 						fileName : 'game/images/grass.png'
 						,anchor : ECGame.EngineLib.Point2.create()
-						,layer : 0
+						,_myLayer : 0
 						,size : ECGame.EngineLib.Point2.create(64,64)
 					},
 					{
 						fileName : 'game/images/test/waterSub.png' //'images/water.png'
 						,anchor : ECGame.EngineLib.Point2.create()
-						,layer : 0
+						,_myLayer : 0
 						,size : ECGame.EngineLib.Point2.create(/*64,64*/96,96)
 						,physics : ECGame.EngineLib.AABB2.create(0, 0, 64, 64)
 					},
 					{
 						fileName : 'game/images/ground_256.png'//'images/test/groundSub5.png' // 'images/ground_level01_01.png' //'images/dirt.png',
 						,anchor : ECGame.EngineLib.Point2.create()
-						,layer : 0
+						,_myLayer : 0
 						,size : ECGame.EngineLib.Point2.create(96,96)//64,64)
 					},
 					{
 						fileName : 'game/images/dirt.png2'//HACK 'images/wall_level01_01__.png'
 						,anchor : ECGame.EngineLib.Point2.create()
-						,layer : 0
+						,_myLayer : 0
 						,size : ECGame.EngineLib.Point2.create(64,64)
 					},
 					{
 						fileName : 'game/images/wall_256.png'//'images/test/wall.png' //'images/wall_level01_01.png'
 						,anchor : ECGame.EngineLib.Point2.create(32, 32)
-						,layer : 1
+						,_myLayer : 1
 						,physics : ECGame.EngineLib.AABB2.create(0, 0, 64, 64)
 						,size : ECGame.EngineLib.Point2.create(96,96)
 					}
@@ -159,24 +159,53 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			
 			/////////////////////////////////////////////
 			//HACK put something in the map to start with
-			for(i = 0; i < this._mapSizeInTiles; ++i)
+			if(ECGame.Settings.Network.isServer)
 			{
-				for(j = 0; j < this._mapSizeInTiles; ++j)
+				for(i = 0; i < this._mapSizeInTiles; ++i)
 				{
-					if(i === 0 || j === 0 || i === this._mapSizeInTiles - 1 || j === this._mapSizeInTiles - 1)
+					for(j = 0; j < this._mapSizeInTiles; ++j)
 					{
-						this._map.setTile(new ECGame.EngineLib.Point2(i, j), /*(i+j)%5*/4);
-					}
-					else
-					{
-						this._map.setTile(new ECGame.EngineLib.Point2(i, j), /*(i+j)%5*/2);
+						if(i === 0 || j === 0 || i === this._mapSizeInTiles - 1 || j === this._mapSizeInTiles - 1)
+						{
+							this._map.setTile(
+								new ECGame.EngineLib.Point2(i, j), 
+								4//(i+j)%5
+							);
+						}
+						else
+						{
+							this._map.setTile(
+								new ECGame.EngineLib.Point2(i, j),
+								2//(i+j)%5
+							);
+						}
 					}
 				}
+				this._myMasterNetGroup.addObject(this._map);
 			}
 			/*for(i = 0; i < 64; ++i)
 			{
 				this._map.setTile(new ECGame.EngineLib.Point2(i, Math.floor(Math.random()*this._mapSizeInTiles)), 4);
 			}*/
+			if(ECGame.Settings.Network.isServer)
+			{
+				var aMap = this._map;
+				var aIndex = 0;
+				//console.log("SETTING TIMER TO TRY TO SET MAP TILE");
+				ECGame.instance.getTimer().setTimerCallback(
+					2000,
+					function()
+					{
+						//console.log("TRYING TO SET MAP TILE");
+						aMap.setTile(
+							new ECGame.EngineLib.Point2(6, ++aIndex), 
+							4
+						);
+						//console.log("SHOULD HAVE SET MAP TILE");
+						return aIndex < 32;
+					}
+				);
+			}
 			//HACK put something in the map to start with
 			/////////////////////////////////////////////
 			
@@ -238,6 +267,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						)
 					]
 				);
+				
 				/*
 				ECGame.instance.getTimer().clearTimerCallback(
 				ECGame.instance.getTimer().setTimerCallback(

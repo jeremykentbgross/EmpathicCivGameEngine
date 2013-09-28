@@ -336,7 +336,9 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				
 				if(ECGame.Settings.isDebugPrint_NetworkMessages())
 				{
-					ECGame.log.info("Net create remote on " + inUser.userName + ':' + JSON.stringify(anObjectHeader));
+					ECGame.log.info("Net create remote on " + inUser.userName + ':' + JSON.stringify(anObjectHeader)
+						+ '=>(' + anObject.getClass().getName() + ':' + anObjectHeader.instanceID + ')'
+					);
 				}
 				
 				aClassName = anObject.getClass().getName();

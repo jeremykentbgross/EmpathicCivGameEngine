@@ -22,7 +22,7 @@
 ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 	Constructor : function Animation2DInstance()
 	{
-		this.GameRenderable2D();
+		this.Renderable2D();
 		this._animation = null;
 		this._currentFrame = 0;
 		this._timeAccumulator = 0;
@@ -30,7 +30,7 @@ ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 		//TODO finished callback
 		
 	},
-	Parents : [ECGame.EngineLib.GameRenderable2D],
+	Parents : [ECGame.EngineLib.Renderable2D],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],
@@ -58,11 +58,11 @@ ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 		
 		getAABB : function getAABB()
 		{
-			//TODO make set function for anchorPosition so this can be updated ONLY when it is needed!
+			//TODO make set function for _myAnchorPosition so this can be updated ONLY when it is needed!
 			//OPT: This is SUPER inoptimal
 			return new ECGame.EngineLib.AABB2(
-				this._myAABB.myX + this.anchorPosition.myX,
-				this._myAABB.myY + this.anchorPosition.myY,
+				this._myAABB.myX + this._myAnchorPosition.myX,
+				this._myAABB.myY + this._myAnchorPosition.myY,
 				this._myAABB.myWidth,
 				this._myAABB.myHeight
 			);
@@ -78,7 +78,7 @@ ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 		
 		render : function render(inCanvas2DContext, inCameraRect)
 		{
-			this._animation.render(inCanvas2DContext, inCameraRect, this._currentFrame, this.anchorPosition);
+			this._animation.render(inCanvas2DContext, inCameraRect, this._currentFrame, this._myAnchorPosition);
 			if(ECGame.Settings.isDebugDraw_Sprite())
 			{
 				this.debugDraw(inCanvas2DContext, inCameraRect);
@@ -86,7 +86,7 @@ ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 		},
 		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect)
 		{
-			this._animation.debugDraw(inCanvas2DContext, inCameraRect, this._currentFrame, this.anchorPosition);
+			this._animation.debugDraw(inCanvas2DContext, inCameraRect, this._currentFrame, this._myAnchorPosition);
 		}
 	}
 });

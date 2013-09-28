@@ -32,7 +32,7 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 	
 	Parents : [ECGame.EngineLib.GameEntityComponent],
 	
-	flags : { net : true },//TODO should I get rid of this class flag?  Is it really needed?
+	flags : { netDynamic : true },
 	
 	ChainUp : [],
 	ChainDown : [],

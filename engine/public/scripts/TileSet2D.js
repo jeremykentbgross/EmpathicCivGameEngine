@@ -20,8 +20,8 @@
 */
 
 
-//TODO should be merged with Map class
-ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(
+//TODO should be depricted => functions moved to Tile2DInstance/Description or map class
+ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(//TODO TileDesc/Animation/multi-layers??
 {
 	Constructor : function TileSet2D()
 	{
@@ -63,6 +63,7 @@ ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(
 	
 	Definition :
 	{
+		//TODO TileDescription struct/class
 		init : function init(inTiles)
 		{
 			var i;
@@ -75,8 +76,13 @@ ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(
 				{
 					ECGame.instance.getAssetManager().loadImage(tile.fileName, tile);
 				}
-				this._maxLayers = tile.layer;//TODO is this needed? maybe for map floors vs tileset layer (not used atm I think)
+				this._maxLayers = tile._myLayer;//TODO is this needed? maybe for map floors vs tileset layer (not used atm I think)
 			}
+		},
+		
+		getNumberOfTiles : function getNumberOfTiles()
+		{
+			return this._myTiles.length;
 		},
 
 		renderTile : function renderTile(inCanvasContext, inID, inTargetPoint)
@@ -96,6 +102,7 @@ ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(
 			);
 		},
 
+		//TODO depricate, should be debugdraw for the tile
 		renderTileInRect : function renderTileInRect(inCanvasContext, inID, inTargetRect)
 		{
 			inCanvasContext.drawImage(
@@ -107,7 +114,7 @@ ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(
 			);
 		},
 
-		getTileRect : function getTileRect(inID, inPosition)
+		getTileRenderRect : function getTileRenderRect(inID, inPosition)
 		{
 			var tile = this._myTiles[inID];
 			inPosition = inPosition || ECGame.EngineLib.Point2.create();
@@ -122,7 +129,7 @@ ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(
 
 		getTileLayer : function getTileLayer(inID)
 		{
-			return this._myTiles[inID].layer;
+			return this._myTiles[inID]._myLayer;
 		},
 		
 		getPhysicsRect : function getPhysicsRect(inID, inPosition)

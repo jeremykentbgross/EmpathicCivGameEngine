@@ -31,7 +31,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 		this._currentAnimation = 8;//TODO why 8?
 		this._myAnimationInstance = new ECGame.EngineLib.Animation2DInstance();
 /*TODO should be commented out?*/this._myAnimationInstance.setAnimation(this._animations[0]);//TODO should be a null/default object
-		this._myAnimationInstance.layer = 1;		
+		this._myAnimationInstance._myLayer = 1;		
 		
 		//TODO frame knows filename, offset, collision rects, (sound?) events, etc //TODO move this note to the frame class?
 		//TODO ^^^ same kind of thing for map tiles?
@@ -106,7 +106,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			}
 			
 			this._position = inEvent.position;
-			this._myAnimationInstance.anchorPosition = inEvent.boundingRect.getLeftTop();//inEvent.position;
+			this._myAnimationInstance._myAnchorPosition = inEvent.boundingRect.getLeftTop();//inEvent.position;
 			
 			if(inEvent.velocity.length() < 0.9)
 			{
@@ -179,7 +179,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			
 			this._myAnimationInstance = new ECGame.EngineLib.Animation2DInstance();
 			this._myAnimationInstance.setAnimation(this._animations[0]);
-			this._myAnimationInstance.layer = inOther._myAnimationInstance.layer;
+			this._myAnimationInstance._myLayer = inOther._myAnimationInstance._myLayer;
 		}
 	}
 });

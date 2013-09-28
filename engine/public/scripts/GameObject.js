@@ -154,7 +154,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		{
 			var aLocalUser;
 			
-			if(!ECGame.Settings.Network.isMultiplayer || !this.getClass()._flags.net)//TODO get rid of this net flag I think
+			if(!ECGame.Settings.Network.isMultiplayer || !this.getClass()._flags.netDynamic)
 			{
 				return false;
 			}

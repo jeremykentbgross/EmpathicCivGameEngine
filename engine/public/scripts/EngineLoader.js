@@ -203,6 +203,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	include(inPublicEnginePath + "scripts/ArithmeticCompressionModels.js");//TODO if multiplayer?
 	include(inPublicEnginePath + "scripts/BinarySerializer.js");//TODO if multiplayer?
 	include(inPublicEnginePath + "scripts/GameEvent.js");
+
 	include(inPublicEnginePath + "scripts/GameEntity.js");
 	include(inPublicEnginePath + "scripts/GameEntityComponent.js");
 	include(inPublicEnginePath + "scripts/GameEntityComponent_2DCamera.js");
@@ -210,15 +211,22 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	include(inPublicEnginePath + "scripts/GameEntityComponent_Sprite.js");
 	include(inPublicEnginePath + "scripts/GameEntityComponent_2DPhysics.js");
 	include(inPublicEnginePath + "scripts/GameEntityComponent_SoundPlayer.js");
+
 	include(inPublicEnginePath + "scripts/Timer.js");
 	include(inPublicEnginePath + "scripts/GameInstance.js");
 	include(inPublicEnginePath + "scripts/QuadTree.js");
+	
 	include(inPublicEnginePath + "scripts/Renderable2D.js");
+	
+	include(inPublicEnginePath + "scripts/Tile2DInstance.js");
 	include(inPublicEnginePath + "scripts/Tile2DRenderable.js");
+	
 	include(inPublicEnginePath + "scripts/Animation2DFrame.js");
 	include(inPublicEnginePath + "scripts/Animation2D.js");
 	include(inPublicEnginePath + "scripts/Animation2DInstance.js");
+	
 	include(inPublicEnginePath + "scripts/Game2DSceneGraph.js");
+	
 	include(inPublicEnginePath + "scripts/TileMap2D.js");
 	include(inPublicEnginePath + "scripts/Physics2D.js");
 	include(inPublicEnginePath + "scripts/Ray2D.js");
