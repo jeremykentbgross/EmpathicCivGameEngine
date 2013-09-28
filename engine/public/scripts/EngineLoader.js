@@ -169,7 +169,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 		{
 			include(inPublicEnginePath + "scripts/GameChatSystem.js");
 		}
-		include(inPublicEnginePath + "scripts/Game2DGraphics.js");
+		include(inPublicEnginePath + "scripts/Graphics2D.js");
 		include(inPublicEnginePath + "scripts/SoundAsset.js");
 		include(inPublicEnginePath + "scripts/SoundSample.js");
 		include(inPublicEnginePath + "scripts/SoundDescription.js");
