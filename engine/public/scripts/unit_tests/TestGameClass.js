@@ -27,7 +27,7 @@ ECGame.unitTests.registerTest(
 		ECGame.EngineLib.Class.createInstanceRegistry();
 		
 		ClassNamespace.TestClass1 = ECGame.EngineLib.Class.create({
-			Constructor : function TestClass1(){},
+			Constructor : function TestClass1(){return;},
 			Parents : null,
 			flags : {},
 			Definition :
@@ -84,10 +84,10 @@ ECGame.unitTests.registerTest(
 			Definition :
 			{
 				//set<classname>NetDirty
-				clearNetDirty : function clearNetDirty(){},
-				cleanup : function cleanup(){},
-				serialize : function serialize(){},
-				copyFrom : function copyFrom(inOther){},
+				clearNetDirty : function clearNetDirty(){return;},
+				cleanup : function cleanup(){return;},
+				serialize : function serialize(){return;},
+				copyFrom : function copyFrom(/*inOther*/){return;},
 				chainUp : function chainUp()
 				{
 					this.up1 = ++this.counter;
@@ -123,10 +123,10 @@ ECGame.unitTests.registerTest(
 			Definition :
 			{
 				//set<classname>NetDirty
-				clearNetDirty : function clearNetDirty(){},
-				cleanup : function cleanup(){},
-				serialize : function serialize(){},
-				copyFrom : function copyFrom(inOther){},
+				clearNetDirty : function clearNetDirty(){return;},
+				cleanup : function cleanup(){return;},
+				serialize : function serialize(){return;},
+				copyFrom : function copyFrom(/*inOther*/){return;},
 				chainUp : function chainUp()
 				{
 					this.up2 = ++this.counter;

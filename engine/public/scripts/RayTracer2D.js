@@ -100,7 +100,7 @@ ECGame.EngineLib.RayTracer2D = ECGame.EngineLib.Class.create({
 			return aCollisionList;
 		},
 		
-		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect)
+		debugDraw : function debugDraw(inGraphics)
 		{
 			var i,
 				aCurrent,
@@ -126,90 +126,79 @@ ECGame.EngineLib.RayTracer2D = ECGame.EngineLib.Class.create({
 			//HACK TODO get all these from settings file
 			////////////////////////////////////////////
 			
-			ECGame.instance.getGraphics().drawDebugText("Debug Drawing Rays", 'rgba(255, 128, 128, 1.0)'/*HACK color goes in settings*/);
-			ECGame.instance.getGraphics().drawDebugText("Node Intersection Count:" + this._myNodeCollisionPoints.length, 'rgba(255, 128, 128, 1.0)'/*HACK color goes in settings*/);
-			ECGame.instance.getGraphics().drawDebugText("Item Intersection Count:" + this._myItemCollisionPoints.length, 'rgba(255, 128, 128, 1.0)'/*HACK color goes in settings*/);
+			inGraphics.drawDebugText("Debug Drawing Rays", 'rgba(255, 128, 128, 1.0)'/*HACK color goes in settings*/);
+			inGraphics.drawDebugText("Node Intersection Count:" + this._myNodeCollisionPoints.length, 'rgba(255, 128, 128, 1.0)'/*HACK color goes in settings*/);
+			inGraphics.drawDebugText("Item Intersection Count:" + this._myItemCollisionPoints.length, 'rgba(255, 128, 128, 1.0)'/*HACK color goes in settings*/);
 			
 			this._myTree.debugDraw(
-				inCanvas2DContext
-				,inCameraRect
+				inGraphics
 				,'rgba(255, 0, 0, 1.0)'//HACK TODO put colors in the settings file
 				,'rgba(0, 0, 0, 0.0)'//HACK TODO put colors in the settings file
 				,'rgba(255, 0, 255, 1.0)'//HACK TODO put colors in the settings file
 			);
 			
-			inCanvas2DContext.fillStyle = 'rgba(255, 255, 255, 1.0)';//HACK TODO put colors in the settings file
+			inGraphics.setFillStyle('rgba(255, 255, 255, 1.0)');//HACK TODO put colors in the settings file
 			aCurrent = this._myRay.getStartPoint();
-			inCanvas2DContext.fillRect(
-				aCurrent.myX - aHalfEndPointDrawSize - inCameraRect.myX,
-				aCurrent.myY - aHalfEndPointDrawSize - inCameraRect.myY,
+			inGraphics.fillRectXYWH(
+				aCurrent.myX - aHalfEndPointDrawSize,
+				aCurrent.myY - aHalfEndPointDrawSize,
 				aEndPointDrawSize,
 				aEndPointDrawSize
 			);
 			aCurrent = this._myRay.getEndPoint();
-			inCanvas2DContext.fillRect(
-				aCurrent.myX - aHalfEndPointDrawSize - inCameraRect.myX,
-				aCurrent.myY - aHalfEndPointDrawSize - inCameraRect.myY,
+			inGraphics.fillRectXYWH(
+				aCurrent.myX - aHalfEndPointDrawSize,
+				aCurrent.myY - aHalfEndPointDrawSize,
 				aEndPointDrawSize,
 				aEndPointDrawSize
 			);
-			inCanvas2DContext.strokeStyle = 'rgba(255, 255, 255, 1.0)';//HACK TODO put colors in the settings file;
-			inCanvas2DContext.beginPath();
-			aCurrent = this._myRay.getStartPoint();
-			inCanvas2DContext.moveTo(aCurrent.myX - inCameraRect.myX, aCurrent.myY - inCameraRect.myY);
-			aCurrent = this._myRay.getEndPoint();
-			inCanvas2DContext.lineTo(aCurrent.myX - inCameraRect.myX, aCurrent.myY - inCameraRect.myY);
-			inCanvas2DContext.stroke();
+			inGraphics.setStrokeStyle('rgba(255, 255, 255, 1.0)');//HACK TODO put colors in the settings file;
+			inGraphics.beginPath();
+			inGraphics.moveTo(this._myRay.getStartPoint());
+			inGraphics.lineTo(this._myRay.getEndPoint());
+			inGraphics.stroke();
 			
-			inCanvas2DContext.strokeStyle = 'rgba(0, 0, 255, 1.0)';//HACK TODO put colors in the settings file;
-			inCanvas2DContext.beginPath();
-			aCurrent = this._myRay.getStartPoint();
-			inCanvas2DContext.moveTo(aCurrent.myX - inCameraRect.myX, aCurrent.myY - inCameraRect.myY);
-			aCurrent = this._myRay.getCurrentPoint();
-			inCanvas2DContext.lineTo(aCurrent.myX - inCameraRect.myX, aCurrent.myY - inCameraRect.myY);
-			inCanvas2DContext.stroke();
+			inGraphics.setStrokeStyle('rgba(0, 0, 255, 1.0)');//HACK TODO put colors in the settings file;
+			inGraphics.beginPath();
+			inGraphics.moveTo(this._myRay.getStartPoint());
+			inGraphics.lineTo(this._myRay.getCurrentPoint());
+			inGraphics.stroke();
 			
-			inCanvas2DContext.strokeStyle = 'rgba(0, 255, 0, 1.0)';//HACK TODO put colors in the settings file
+			inGraphics.setStrokeStyle('rgba(0, 255, 0, 1.0)');//HACK TODO put colors in the settings file
 			for(i = 0; i < this._myVisitedNodes.length; ++i)
 			{
-				aCurrent = this._myVisitedNodes[i].getAABB();
-				inCanvas2DContext.strokeRect(
-					aCurrent.myX - inCameraRect.myX,
-					aCurrent.myY - inCameraRect.myY,
-					aCurrent.myWidth,
-					aCurrent.myHeight
-				);
+				inGraphics.strokeRect(this._myVisitedNodes[i].getAABB());
 			}
 			
-			inCanvas2DContext.fillStyle = 'rgba(255, 255, 0, 1.0)';//HACK TODO put colors in the settings file
+			inGraphics.setFillStyle('rgba(255, 255, 0, 1.0)');//HACK TODO put colors in the settings file
 			for(i = 0; i < this._myNodeCollisionPoints.length; ++i)
 			{
 				aCurrent = this._myNodeCollisionPoints[i];
-				inCanvas2DContext.fillRect(
-					aCurrent.myX - aHalfDrawSize - inCameraRect.myX,
-					aCurrent.myY - aHalfDrawSize - inCameraRect.myY,
+				inGraphics.fillRectXYWH(
+					aCurrent.myX - aHalfDrawSize,
+					aCurrent.myY - aHalfDrawSize,
 					aDrawSize,
 					aDrawSize
 				);
 			}
 			
-			inCanvas2DContext.fillStyle = 'rgba(255, 0, 0, 1.0)';//HACK TODO put colors in the settings file
+			inGraphics.setFillStyle('rgba(255, 0, 0, 1.0)');//HACK TODO put colors in the settings file
 			for(i = 0; i < this._myItemCollisionPoints.length; ++i)
 			{
 				aCurrent = this._myItemCollisionPoints[i];
-				inCanvas2DContext.fillRect(
-					aCurrent.myX - aHalfItemCollisionPointSize - inCameraRect.myX,
-					aCurrent.myY - aHalfItemCollisionPointSize - inCameraRect.myY,
+				inGraphics.fillRectXYWH(
+					aCurrent.myX - aHalfItemCollisionPointSize,
+					aCurrent.myY - aHalfItemCollisionPointSize,
 					aItemCollisionPointSize,
 					aItemCollisionPointSize
 				);
 			}
 			
-			inCanvas2DContext.fillStyle = 'rgba(0, 0, 255, 1.0)';//HACK TODO put colors in the settings file
+			inGraphics.setFillStyle('rgba(0, 0, 255, 1.0)');//HACK TODO put colors in the settings file
 			aCurrent = this._myRay.getCurrentPoint();
-			inCanvas2DContext.fillRect(
-				aCurrent.myX - aHalfCurrentPointDrawSize - inCameraRect.myX,
-				aCurrent.myY - aHalfCurrentPointDrawSize - inCameraRect.myY,
+			inGraphics.fillRectXYWH(
+				aCurrent.myX - aHalfCurrentPointDrawSize,
+				aCurrent.myY - aHalfCurrentPointDrawSize,
 				aCurrentPointDrawSize,
 				aCurrentPointDrawSize
 			);

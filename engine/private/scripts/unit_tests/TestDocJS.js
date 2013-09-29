@@ -54,7 +54,7 @@ ECGame.unitTests.registerTest(
 				/description: Testing namespaced scoped methods
 				/parentNamespace: TestNamespace.TestChildNamespace
 			*/
-			TestNamespace.TestChildNamespace.someMethod = function someMethod(){};
+			TestNamespace.TestChildNamespace.someMethod = function someMethod(){return;};
 			
 			/**!
 				@class: TestClass
@@ -62,7 +62,7 @@ ECGame.unitTests.registerTest(
 				/description: Testing namespaced scoped class
 			*/
 			TestNamespace.TestChildNamespace.TestClass = ECGame.EngineLib.Class.create({
-				Constructor : function TestClass(){},
+				Constructor : function TestClass(){return;},
 				Parents : [],
 				flags : {},
 				ChainUp : [],

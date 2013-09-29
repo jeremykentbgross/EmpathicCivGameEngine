@@ -168,7 +168,7 @@ ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 			this._myOwner = inOwner;
 		},
 		
-		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect)
+		debugDraw : function debugDraw(inGraphics)
 		{
 			//Defaults are:
 			//	static - black
@@ -179,28 +179,23 @@ ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 			switch(this._myStatus)
 			{
 				case this.PhysicsObject2D.STATUS__STATIC:
-					inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Physics_StaticObject_DrawColor;
+					inGraphics.setFillStyle(ECGame.Settings.Debug.Physics_StaticObject_DrawColor);
 					break;
 				case this.PhysicsObject2D.STATUS__SLEEPING:
-					inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Physics_SleepingObject_DrawColor;
+					inGraphics.setFillStyle(ECGame.Settings.Debug.Physics_SleepingObject_DrawColor);
 					break;
 				case this.PhysicsObject2D.STATUS__ACTIVE:
-					inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Physics_ActiveObject_DrawColor;
+					inGraphics.setFillStyle(ECGame.Settings.Debug.Physics_ActiveObject_DrawColor);
 					break;
 				case this.PhysicsObject2D.STATUS__ALWAYS_ACTIVE:
-					inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Physics_AlwaysActiveObject_DrawColor;
+					inGraphics.setFillStyle(ECGame.Settings.Debug.Physics_AlwaysActiveObject_DrawColor);
 					break;
 				default://WTF?
 					ECGame.log.assert(false, "Unknown Physics object status!");
-					inCanvas2DContext.fillStyle = 'rgba(255, 0, 255, 1)';//TODO needed??
+					inGraphics.setFillStyle('rgba(255, 0, 255, 1)');//TODO needed??
 					break;
 			}
-			inCanvas2DContext.fillRect(
-				/*Math.round*/(this._myAABB.myX - inCameraRect.myX),//TODO rounding everywhere??
-				/*Math.round*/(this._myAABB.myY - inCameraRect.myY),
-				/*Math.round*/(this._myAABB.myWidth),
-				/*Math.round*/(this._myAABB.myHeight)
-			);
+			inGraphics.fillRect(this._myAABB);
 		}
 	}
 });
@@ -466,19 +461,21 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 			}
 		},
 		
-		//TODO Round for drawing!!!!!!!!!!!!!!!!!!!!!!! (EVERYWHERE!!!!!!)
-		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect)
+		debugDraw : function debugDraw(inGraphics)
 		{
 			var i,
 				aCollisionRect,
 				aPhysicsObject,
 				aCurrentNode,
-				aListToDraw;
+				aListToDraw,
+				aCameraRect;
 			
-			ECGame.instance.getGraphics().drawDebugText("Debug Drawing Physics");
-			ECGame.instance.getGraphics().drawDebugText("Frame Update Count:" + this._myFrameUpdateCount);
+			inGraphics.drawDebugText("Debug Drawing Physics");
+			inGraphics.drawDebugText("Frame Update Count:" + this._myFrameUpdateCount);
 			//TODO print (and notify) collisions this frame
 
+			aCameraRect = inGraphics.getCamera2D().getRect();
+			
 			//make a map of them and draw them.
 			//	Note: The map will automatically filter the object from being drawn more than once if it is in more than one node
 			aListToDraw = {};
@@ -487,43 +484,33 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 				{
 					aListToDraw[item._myID] = item;
 				},
-				inCameraRect
+				aCameraRect
 			);
 			for(i in aListToDraw)
 			{
-				aListToDraw[i].debugDraw(inCanvas2DContext, inCameraRect);
+				aListToDraw[i].debugDraw(inGraphics);
 			}
 			
-			this._myDetectionTree.debugDraw(inCanvas2DContext, inCameraRect);//TODO 3 colors here from settings
+			this._myDetectionTree.debugDraw(inGraphics);//TODO 3 colors here from settings
 			
 			//draw collisions
-			inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Physics_ObjectCollision_DrawColor;
+			inGraphics.setFillStyle(ECGame.Settings.Debug.Physics_ObjectCollision_DrawColor);
 			for(i in this._myCollisionsRenderList)
 			{
 				aCollisionRect = this._myCollisionsRenderList[i].myAABB;
-				if(aCollisionRect.intersectsRect(inCameraRect))
+				if(aCollisionRect.intersectsRect(aCameraRect))
 				{
-					inCanvas2DContext.fillRect(
-						aCollisionRect.myX - inCameraRect.myX,
-						aCollisionRect.myY - inCameraRect.myY,
-						aCollisionRect.myWidth,
-						aCollisionRect.myHeight
-					);
+					inGraphics.fillRect(aCollisionRect);
 				}
 			}
 			
 			//mark the active ones
-			inCanvas2DContext.strokeStyle = ECGame.Settings.Debug.Physics_ActiveObjectBorder_DrawColor;
+			inGraphics.setStrokeStyle(ECGame.Settings.Debug.Physics_ActiveObjectBorder_DrawColor);
 			aCurrentNode = this._myActiveObjectsList.myNext;
 			while(aCurrentNode !== this._myActiveObjectsList)
 			{
 				aPhysicsObject = aCurrentNode.item;
-				inCanvas2DContext.strokeRect(
-					aPhysicsObject._myAABB.myX - inCameraRect.myX,
-					aPhysicsObject._myAABB.myY - inCameraRect.myY,
-					aPhysicsObject._myAABB.myWidth,
-					aPhysicsObject._myAABB.myHeight
-				);
+				inGraphics.strokeRect(aPhysicsObject._myAABB);
 				aCurrentNode = aCurrentNode.myNext;
 			}
 		}

@@ -124,6 +124,18 @@ ECGame.WebServerTools.CodeCompressor.prototype.makeCompactGameLoader = function 
 	obfuscator.addIgnore('setTimeout');
 	obfuscator.addIgnore('require');
 	
+	//canvas related functions
+	obfuscator.addIgnore('beginPath');
+	obfuscator.addIgnore('closePath');
+	obfuscator.addIgnore('moveTo');
+	obfuscator.addIgnore('lineTo');
+	obfuscator.addIgnore('arc');
+	obfuscator.addIgnore('fillRect');
+	obfuscator.addIgnore('strokeRect');
+	obfuscator.addIgnore('stroke');
+	obfuscator.addIgnore('measureText');
+	obfuscator.addIgnore('drawImage');
+	
 	//TODO probably should be in the obfuscator itself!
 	//TODO have switch to turn off auto adding globals so I can find items in my code that are named the same as globals
 	//TODO figure out how to add: window, document, and browser controls, etc

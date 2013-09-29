@@ -805,7 +805,7 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 				,fileTail
 				;
 			
-			fs.mkdirSync('../docs/generated', function doNothing(){});
+			fs.mkdirSync('../docs/generated', function doNothing(){return;});
 			
 			fileHead =
 				"<!DOCTYPE html>\n" +

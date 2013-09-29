@@ -94,9 +94,10 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 		},
 		
 		_handleInput : function _handleInput(inEvent)
-		{		
-			var eventType = inEvent.type;
-			var key;
+		{
+			var eventType, key;
+			
+			eventType = inEvent.type;
 					
 			switch(eventType)
 			{
@@ -164,9 +165,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 				
 		update : function update()
 		{
-			var i;
-			var inputString;
-			var inputEvent;
+			var i, inputString, inputEvent;
 			
 			if(ECGame.Settings.DEBUG && !ECGame.Settings.Network.isServer)
 			{

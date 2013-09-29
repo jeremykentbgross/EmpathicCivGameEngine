@@ -63,28 +63,28 @@ ECGame.EngineLib.Sound2D = ECGame.EngineLib.Class.create(
 		},
 		
 		
-		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect, inCurrentTime)
+		debugDraw : function debugDraw(inGraphics, inCurrentTime)
 		{
 			var aPercentPlayed, aSoundScreenLoc;
 			
 			aPercentPlayed = this.getPercentPlayed(inCurrentTime);
-			aSoundScreenLoc = this._myPosition.subtract(inCameraRect);
+			aSoundScreenLoc = this._myPosition.clone();
 							
-			ECGame.instance.getGraphics().drawDebugText(
+			inGraphics.drawDebugText(
 				'-' + /*this._getDebugPlayingString()*/this.Sound.prototype._getDebugPlayingString.call(this) + ': %' + Math.floor(aPercentPlayed * 100),
 				ECGame.Settings.Debug.Sound_Area_DrawColor
 			);
-			ECGame.instance.getGraphics().drawDebugText(
+			inGraphics.drawDebugText(
 				"----Pos:(" + Math.floor(this._myPosition.myX) + ', ' + Math.floor(this._myPosition.myY) + "), Radius:" + this._myRadius,
 				ECGame.Settings.Debug.Sound_Area_DrawColor
 			);
-			ECGame.instance.getGraphics().drawDebugText(
+			inGraphics.drawDebugText(
 				"----Vel:(" + Math.floor(this._myVelocity.myX) + ', ' + Math.floor(this._myVelocity.myY) + ')',
 				ECGame.Settings.Debug.Sound_Area_DrawColor
 			);
 			
 			//draw source position
-			inCanvas2DContext.fillRect(
+			inGraphics.fillRectXYWH(
 				aSoundScreenLoc.myX - (ECGame.Settings.Debug.Sound_Source_Size / 2),
 				aSoundScreenLoc.myY - (ECGame.Settings.Debug.Sound_Source_Size / 2),
 				ECGame.Settings.Debug.Sound_Source_Size,
@@ -93,39 +93,34 @@ ECGame.EngineLib.Sound2D = ECGame.EngineLib.Class.create(
 			//TODO draw facing cone
 				
 			//draw circle of sound
-			inCanvas2DContext.beginPath();
-			inCanvas2DContext.arc(
-				aSoundScreenLoc.myX,
-				aSoundScreenLoc.myY,
+			inGraphics.beginPath();
+			inGraphics.arc(
+				aSoundScreenLoc,
 				this._myRadius,
 				0,
 				2*Math.PI
 			);
-			inCanvas2DContext.stroke();
+			inGraphics.stroke();
 			
 			//draw velocity of sound
-			inCanvas2DContext.beginPath();
-			inCanvas2DContext.moveTo(
-				aSoundScreenLoc.myX,
-				aSoundScreenLoc.myY
-			);
-			inCanvas2DContext.lineTo(
+			inGraphics.beginPath();
+			inGraphics.moveTo(aSoundScreenLoc);
+			inGraphics.lineToXY(
 				aSoundScreenLoc.myX + (this._myVelocity.myX * ECGame.instance.getSoundSystem().getSoundHardwareTimeUpdateDelta()),
 				aSoundScreenLoc.myY + (this._myVelocity.myY * ECGame.instance.getSoundSystem().getSoundHardwareTimeUpdateDelta())
 			);
-			inCanvas2DContext.closePath();
-			inCanvas2DContext.stroke();
+			inGraphics.closePath();
+			inGraphics.stroke();
 			
 			//draw playback percent as expanding circle
-			inCanvas2DContext.beginPath();
-			inCanvas2DContext.arc(
-				aSoundScreenLoc.myX,
-				aSoundScreenLoc.myY,
+			inGraphics.beginPath();
+			inGraphics.arc(
+				aSoundScreenLoc,
 				Math.floor(this._myRadius * aPercentPlayed),
 				0,
 				2*Math.PI
 			);
-			inCanvas2DContext.stroke();
+			inGraphics.stroke();
 		}
 	}
 });

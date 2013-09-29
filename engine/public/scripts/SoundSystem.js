@@ -344,18 +344,18 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 		*/
 		
 		
-		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect)
+		debugDraw : function debugDraw(inGraphics)
 		{
-			var aCurrentTime, i;
-			ECGame.instance.getGraphics().drawDebugText("Debug Drawing Sounds", ECGame.Settings.Debug.Sound_Area_DrawColor);
+			var aCurrentTime;
+			inGraphics.drawDebugText("Debug Drawing Sounds", ECGame.Settings.Debug.Sound_Area_DrawColor);
 			
-			inCanvas2DContext.strokeStyle = ECGame.Settings.Debug.Sound_Area_DrawColor;
-			inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Sound_Area_DrawColor;
+			inGraphics.setStrokeStyle(ECGame.Settings.Debug.Sound_Area_DrawColor);
+			inGraphics.setFillStyle(ECGame.Settings.Debug.Sound_Area_DrawColor);
 			
 			//draw listener position
-			inCanvas2DContext.fillRect(
-				this._myListenerPosition2D.myX - inCameraRect.myX - (ECGame.Settings.Debug.Sound_Listener_Size / 2),
-				this._myListenerPosition2D.myY - inCameraRect.myY - (ECGame.Settings.Debug.Sound_Listener_Size / 2),
+			inGraphics.fillRectXYWH(
+				this._myListenerPosition2D.myX - (ECGame.Settings.Debug.Sound_Listener_Size / 2),
+				this._myListenerPosition2D.myY - (ECGame.Settings.Debug.Sound_Listener_Size / 2),
 				ECGame.Settings.Debug.Sound_Listener_Size,
 				ECGame.Settings.Debug.Sound_Listener_Size
 			);
@@ -367,7 +367,7 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 			this._myPlayingSounds.forAll(
 				function debugDrawCallback(inItem)
 				{					
-					inItem.debugDraw(inCanvas2DContext, inCameraRect, aCurrentTime);
+					inItem.debugDraw(inGraphics, aCurrentTime);
 				},
 				true
 			);

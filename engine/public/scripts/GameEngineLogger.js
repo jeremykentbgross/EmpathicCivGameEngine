@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-ECGame.log = new (function ECGameLog(){})();//TODO make a real object or something
+ECGame.log = new function ECGameLog(){return;}();//TODO make a real object or something
 
 //TODO rename this?
 ECGame.log.assert = function ECGameAssert(expression, message)
@@ -49,11 +49,14 @@ ECGame.EngineLib.logger.createMsgType = function TODOrealFunctionName(inType, in
 {
 	return function log(inMsg, inFullPath)
 	{
-		var stackPath;
-		var index = 0;
-		var index2;
+		var stackPath
+			,index
+			,index2
+			;
 		
 		inFullPath = inFullPath || inFullPathDefault;
+		
+		index = 0;
 		
 		try
 		{

@@ -21,7 +21,7 @@
 
 
 ECGame.EngineLib.GameRulesBase = ECGame.EngineLib.Class.create({
-	Constructor : function GameRulesBase(){},
+	Constructor : function GameRulesBase(){return;},
 	Parents : [],
 	flags : {},
 	ChainUp : [],
@@ -33,35 +33,41 @@ ECGame.EngineLib.GameRulesBase = ECGame.EngineLib.Class.create({
 			return true;
 		},
 		
-		render : function render(inCanvas2DContext)
+		render : function render(inGraphics)	//TODO make this some kind of full screen msg function?
 		{
-			var x, y, message;
-			
-			inCanvas2DContext.fillStyle = 'rgba(128, 128, 128, 1)';
-			inCanvas2DContext.strokeStyle = 'rgba(64, 64, 64, 1)';
-			inCanvas2DContext.fillRect(0, 0,
-				inCanvas2DContext.canvas.width,
-				inCanvas2DContext.canvas.height
-			);
-			inCanvas2DContext.strokeRect(0, 0,
-				inCanvas2DContext.canvas.width,
-				inCanvas2DContext.canvas.height
-			);
-			
-			inCanvas2DContext.fillStyle = 'rgba(64, 64, 64, 1)';
-			
-			inCanvas2DContext.font = '30px Arial';
-			if(this.getClass() === ECGame.EngineLib.GameRulesBase)
+			var anX
+				,aY
+				,aMessage
+				,aBackBufferRect
+				;
+				
+			if(this.__proto__.constructor === ECGame.EngineLib.GameRulesBase)
 			{
-				message = "No GameRules.js found!";
+				aMessage = "No GameRules.js found!";
 			}
 			else
 			{
-				message = "No render code found in your GameRules.js!";
+				aMessage = "No render code found in your GameRules.js!";
 			}
-			x = (inCanvas2DContext.canvas.width - inCanvas2DContext.measureText(message).width) / 2;
-			y = (inCanvas2DContext.canvas.height - 30) / 2;
-			inCanvas2DContext.fillText(message, x, y);
+			
+			//get the size of the Back buffer
+			aBackBufferRect = inGraphics.getBackBufferRect();
+			
+			//fill the back buffer
+			inGraphics.setFillStyle('rgba(128, 128, 128, 1)');
+			inGraphics.fillRect(aBackBufferRect);
+			
+			//outline it too in case we need an outline from the background.
+			inGraphics.setStrokeStyle('rgba(64, 64, 64, 1)');
+			inGraphics.strokeRect(aBackBufferRect);
+			
+			//etup to draw message
+			inGraphics.setFillStyle('rgba(64, 64, 64, 1)');
+			inGraphics.setFont('30px Arial');
+			anX = (aBackBufferRect.myWidth - inGraphics.measureText(aMessage).width) / 2;
+			aY = (aBackBufferRect.myHeight - 30) / 2;
+			//draw message
+			inGraphics.fillTextXY(aMessage, anX, aY);
 		}
 	}
 });

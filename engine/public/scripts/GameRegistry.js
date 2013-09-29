@@ -19,11 +19,14 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//TODO depricated
+//TODO depricated!!!!!!!!!!!!!!!!!!!
 ECGame.EngineLib.createGameRegistry = function(instance)
 {
-	var property;
-	var temp = new ECGame.EngineLib.GameRegistry();
+	var property
+		,temp
+		;
+	
+	temp = new ECGame.EngineLib.GameRegistry();
 	instance = instance || {};
 	
 	for(property in temp)
@@ -60,8 +63,10 @@ ECGame.EngineLib.GameRegistry.prototype.getMaxID = function getMaxID()
 //todo take name parameter as well so it is not always assuming the object is named?
 ECGame.EngineLib.GameRegistry.prototype.register = function register(inObject)
 {
-	var id = inObject.getID();
-	var name = inObject.getName();
+	var id, name;
+	
+	id = inObject.getID();
+	name = inObject.getName();
 	
 	this._maxID = Math.max(this._maxID, id);
 	
@@ -85,8 +90,10 @@ ECGame.EngineLib.GameRegistry.prototype.register = function register(inObject)
 //todo take name parameter as well so it is not always assuming the object is named?
 ECGame.EngineLib.GameRegistry.prototype.deregister = function deregister(inObject)
 {
-	var id = inObject.getID();
-	var name = inObject.getName();
+	var id, name;
+	
+	id = inObject.getID();
+	name = inObject.getName();
 	
 	delete this._instancesByName[name];
 	delete this._instancesByID[id];

@@ -118,31 +118,34 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 		},
 
 		//if(!ECGame.Settings.Network.isServer)//TODO axe if?
-		render : function render(inCanvas2DContext)
+		render : function render(inGraphics)
 		{
-			var camera = this.getCurrentCamera();
-			var target;
+			var target
+				,camera
+				;
+			
+			camera = this.getCurrentCamera();
+			inGraphics.setCamera2D(camera);
 			
 			//debug draw the map		
 			if(ECGame.Settings.isDebugDraw_Map())
 			{
-				this._map.debugDraw(inCanvas2DContext, camera.getRect());
+				this._map.debugDraw(inGraphics);
 			}
 			
-			//render scene graph (note it will ommit map if map is debug drawn)
-			//TODO maybe should do that ^^^ here with an iff instead of inside for clarity / consistency? (why didnt I before? seperate sprites etc?)
-			this._sceneGraph.render(inCanvas2DContext, camera.getRect());		
+			//render scene graph (note: it will ommit map tiles if map is debug drawn)
+			this._sceneGraph.render(inGraphics);
 			
 			//debug draw scenegraph
 			if(ECGame.Settings.isDebugDraw_SceneGraph())
 			{
-				this._sceneGraph.debugDraw(inCanvas2DContext, camera.getRect());
+				this._sceneGraph.debugDraw(inGraphics);
 			}
 			
 			//debug draw physics
 			if(ECGame.Settings.isDebugDraw_Physics())
 			{
-				this._physics.debugDraw(inCanvas2DContext, camera.getRect());
+				this._physics.debugDraw(inGraphics);
 			}
 			
 			//debug draw camera target point
@@ -159,20 +162,16 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 					//center target rect on camera target by subtracting half its width/height
 					camera.getTargetPosition().subtract(
 						target.getWidthHeight().scale(0.5)
-					).
-					//now account for the cameras actual world location
-					subtract(
-						camera.getRect().getLeftTop()
 					)
 				);
 							
 				//setup the color
-				inCanvas2DContext.fillStyle = ECGame.Settings.Debug.CameraTarget_DrawColor;
+				inGraphics.setFillStyle(ECGame.Settings.Debug.CameraTarget_DrawColor);
 				//draw the target
-				inCanvas2DContext.fillRect(target.myX, target.myY, target.myWidth, target.myHeight);
+				inGraphics.fillRect(target);
 			}
 			
-			//debugdraw cursor
+			//debugdraw cursor //TODO move the code into inputsystem.debugdraw/render and call it from here!
 			if(ECGame.Settings.isDebugDraw_MouseCursor())//TODO need to draw a real cursor, and NOT here!!
 			{
 				target = ECGame.EngineLib.AABB2.create(
@@ -187,17 +186,20 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 					this._mouseLoc.subtract(
 						target.getWidthHeight().scale(0.5)
 					)
+					.add(//add the camera offset because the fill rect below will subtract it off again
+						this.getCurrentCamera().getRect().getLeftTop()
+					)
 				);
 				
 				//setup the color
-				inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Input_MouseCursor_DrawColor;
+				inGraphics.setFillStyle(ECGame.Settings.Debug.Input_MouseCursor_DrawColor);
 				//debug draw it
-				inCanvas2DContext.fillRect(target.myX, target.myY, target.myWidth, target.myHeight);
+				inGraphics.fillRect(target);
 			}
 			
 			if(ECGame.Settings.isDebugDraw_Sound())
 			{
-				ECGame.instance.getSoundSystem().debugDraw(inCanvas2DContext, camera.getRect(), this);
+				ECGame.instance.getSoundSystem().debugDraw(inGraphics, this);
 			}
 		},
 
@@ -206,10 +208,10 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			return ECGame.EngineLib.AABB2.create(0, 0, this._mapsize, this._mapsize);
 		},
 
-		cleanup : function cleanup(){},//TODO
+		cleanup : function cleanup(){return;},//TODO
 		
 		//set<classname>NetDirty
-		clearNetDirty : function clearNetDirty(){},
+		clearNetDirty : function clearNetDirty(){return;},
 		serialize : function serialize(inSerializer)//TODO serialize maps somehow GameEntity has identical post/serialize for components!
 		{
 			var entity, ref;
@@ -284,7 +286,7 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			}
 		},
 		
-		copyFrom : function copyFrom(inOther){},//TODO
+		copyFrom : function copyFrom(/*inOther*/){return;},//TODO
 		
 		//TODO should cursor drawing be here? probably not, maybe move to GameFrameWork (instance)
 		//if(!ECGame.Settings.Network.isServer)//TODO axe if?

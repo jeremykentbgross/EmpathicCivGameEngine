@@ -33,7 +33,7 @@ ECGame.EngineLib.QuadTreeItem.prototype.getAABB = function getAABB()
 
 
 
-ECGame.EngineLib.QuadTree = function QuadTree(){};
+ECGame.EngineLib.QuadTree = function QuadTree(){return;};
 ECGame.EngineLib.QuadTree.prototype.constructor = ECGame.EngineLib.QuadTree;
 ECGame.EngineLib.QuadTree.create = function create()
 {
@@ -365,55 +365,44 @@ ECGame.EngineLib.QuadTree.prototype.walk = function walk(inFunction, inAABB)
 
 
 
-ECGame.EngineLib.QuadTree.prototype.debugDraw = function debugDraw(inCanvas2DContext, inCameraRect, inNodeColor, inFullNodeColor, inItemColor)
+ECGame.EngineLib.QuadTree.prototype.debugDraw = function debugDraw(inGraphics, inNodeColor, inFullNodeColor, inItemColor)
 {
 	var i;
 	
 	inNodeColor = inNodeColor || ECGame.Settings.Debug.QuadTree_Node_DrawColor;
 	inFullNodeColor = inFullNodeColor || ECGame.Settings.Debug.QuadTree_OccupiedNode_DrawColor;
 	inItemColor = inItemColor || ECGame.Settings.Debug.QuadTree_Item_DrawColor;
-	//inCameraRect = inCameraRect || this._myAABB;
 	
-	if(!this._myAABB.intersectsRect(inCameraRect))
+	if(!this._myAABB.intersectsRect(inGraphics.getCamera2D().getRect()))
 	{
 		return;
 	}
 	
 	if(this._myItems.length !== 0)
 	{
-		inCanvas2DContext.strokeStyle = inItemColor;
+		inGraphics.setStrokeStyle(inItemColor);
 		for(i in this._myItems)
 		{
-			inCanvas2DContext.strokeRect(
-				this._myItems[i].getAABB().myX - inCameraRect.myX,
-				this._myItems[i].getAABB().myY - inCameraRect.myY,
-				this._myItems[i].getAABB().myWidth,
-				this._myItems[i].getAABB().myHeight
-			);
+			inGraphics.strokeRect(this._myItems[i].getAABB());
 		}
 		
-		inCanvas2DContext.strokeStyle = inFullNodeColor;
-		inCanvas2DContext.strokeRect(
-			this._myAABB.myX - inCameraRect.myX + 1,
-			this._myAABB.myY - inCameraRect.myY + 1,
+		inGraphics.setStrokeStyle(inFullNodeColor);
+		inGraphics.strokeRectXYWH(
+			this._myAABB.myX + 1,
+			this._myAABB.myY + 1,
 			this._myAABB.myWidth - 2,
 			this._myAABB.myHeight - 2
 		);
 	}
 
-	inCanvas2DContext.strokeStyle = inNodeColor;
-	inCanvas2DContext.strokeRect(
-		this._myAABB.myX - inCameraRect.myX,
-		this._myAABB.myY - inCameraRect.myY,
-		this._myAABB.myWidth,
-		this._myAABB.myHeight
-	);
+	inGraphics.setStrokeStyle(inNodeColor);
+	inGraphics.strokeRect(this._myAABB);
 			
 	if(this._myChildren !== null)
 	{
 		for(i = 0; i < this._myChildren.length; ++i)
 		{
-			this._myChildren[i].debugDraw(inCanvas2DContext, inCameraRect, inNodeColor, inFullNodeColor, inItemColor);
+			this._myChildren[i].debugDraw(inGraphics, inNodeColor, inFullNodeColor, inItemColor);
 		}
 	}
 };

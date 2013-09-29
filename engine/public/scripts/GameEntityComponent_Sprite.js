@@ -167,10 +167,10 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 		},
 		
 		//set<classname>NetDirty
-		clearNetDirty : function clearNetDirty(){},
+		clearNetDirty : function clearNetDirty(){return;},
 		
-		cleanup : function cleanup(){},//TODO
-		serialize : function serialize(){},//TODO
+		cleanup : function cleanup(){return;},//TODO
+		serialize : function serialize(){return;},//TODO
 		
 		copyFrom : function copyFrom(inOther)
 		{

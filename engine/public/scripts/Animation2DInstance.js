@@ -76,17 +76,17 @@ ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 		
 		//TODO getFrameEvents(frameNum)
 		
-		render : function render(inCanvas2DContext, inCameraRect)
+		render : function render(inGraphics)
 		{
-			this._animation.render(inCanvas2DContext, inCameraRect, this._currentFrame, this._myAnchorPosition);
+			this._animation.render(inGraphics, this._currentFrame, this._myAnchorPosition);
 			if(ECGame.Settings.isDebugDraw_Sprite())
 			{
-				this.debugDraw(inCanvas2DContext, inCameraRect);
+				this.debugDraw(inGraphics);
 			}
 		},
-		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect)
+		debugDraw : function debugDraw(inGraphics)
 		{
-			this._animation.debugDraw(inCanvas2DContext, inCameraRect, this._currentFrame, this._myAnchorPosition);
+			this._animation.debugDraw(inGraphics, this._currentFrame, this._myAnchorPosition);
 		}
 	}
 });

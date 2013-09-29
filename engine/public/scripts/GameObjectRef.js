@@ -46,8 +46,7 @@ ECGame.EngineLib.GameObjectRef.prototype.constructor = ECGame.EngineLib.GameObje
 
 ECGame.EngineLib.GameObjectRef.prototype.deref = function deref()
 {
-	var objectClass;
-	var pathTokens;
+	var objectClass, pathTokens;
 			
 	if(this._value)
 	{

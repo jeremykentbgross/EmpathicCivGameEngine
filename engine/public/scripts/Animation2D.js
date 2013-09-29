@@ -68,9 +68,9 @@ ECGame.EngineLib.Animation2D = ECGame.EngineLib.Class.create({
 		
 		//TODO getFrameEvents(frameNum)
 		
-		render : function render(inCanvas2DContext, inCameraRect, inFrame, inPosition)
+		render : function render(inGraphics, inFrame, inPosition)
 		{
-			this._animFrames[inFrame].render(inCanvas2DContext, inCameraRect, this.image, inPosition);
+			this._animFrames[inFrame].render(inGraphics, this.image, inPosition);
 		},
 		
 		getFrameRate : function getFrameRate()
@@ -82,20 +82,20 @@ ECGame.EngineLib.Animation2D = ECGame.EngineLib.Class.create({
 			return this._animFrames.length;
 		},
 		
-		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect, inFrame, inPosition)
+		debugDraw : function debugDraw(inGraphics, inFrame, inPosition)
 		{
-			var dest = this._myAABB.getLeftTop().add(inPosition).subtract(inCameraRect.getLeftTop());
+			var aDestination = this._myAABB.getLeftTop().add(inPosition);
 			
 			//draw AABB
-			inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Sprite_AABB_DrawColor;
-			inCanvas2DContext.strokeRect(
-				dest.myX,
-				dest.myY,
+			inGraphics.setFillStyle(ECGame.Settings.Debug.Sprite_AABB_DrawColor);
+			inGraphics.strokeRectXYWH(
+				aDestination.myX,
+				aDestination.myY,
 				this._myAABB.myWidth,
 				this._myAABB.myHeight
 			);
 			
-			this._animFrames[inFrame].debugDraw(inCanvas2DContext, inCameraRect, inPosition);
+			this._animFrames[inFrame].debugDraw(inGraphics, inPosition);
 		}
 	}
 });

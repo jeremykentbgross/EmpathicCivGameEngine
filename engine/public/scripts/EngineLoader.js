@@ -31,21 +31,21 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 		@namespace: ECGame
 		/description: This is the master namespace for the entire game / engine
 	*/
-	ECGame = new (function ECGame(){})();
+	ECGame = new function ECGame(){return;}();
 	
 	/**!
 		@namespace: EngineLib
 		/parentNamespace: ECGame
 		/description: This is the engine namespace
 	*/
-	ECGame.EngineLib = new (function ECGameEngineLib(){})();
+	ECGame.EngineLib = new function ECGameEngineLib(){return;}();
 	
 	/**!
 		@namespace: Lib
 		/parentNamespace: ECGame
 		/description: This is the game specific namespace
 	*/
-	ECGame.Lib =  new (function ECGameLib(){})();
+	ECGame.Lib =  new function ECGameLib(){return;}();
 	
 	//ECGame.Settings TODO refactor/change how settings work?
 	//ECGame.instance
@@ -59,7 +59,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 			/parentNamespace: ECGame
 			/description: This is the namespace for all webserver related tools
 		*/
-		ECGame.WebServerTools = new (function ECGameWebServerTools(){})();
+		ECGame.WebServerTools = new function ECGameWebServerTools(){return;}();
 	}
 	///////////////////////////////Global Namespaces//////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////
@@ -252,10 +252,10 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 		include(inPublicEnginePath + "scripts/unit_tests/TestBinarySerializer.js");
 		include(inPublicEnginePath + "scripts/unit_tests/TestGameEntity.js");
 		
-		if(inIsServer)
+		/*if(inIsServer)
 		{
 			
-		}
+		}*/
 		
 		//TEMP UNIT TESTS:
 		//include(inPublicEnginePath + "LangTests.js");

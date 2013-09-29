@@ -177,13 +177,13 @@ ECGame.EngineLib.ChatSystem = ECGame.EngineLib.Class.create({
 		
 		/////////////////////////////////////////////////////////
 		//network event listeners
-		onConnectedToServer : function onConnectedToServer(inEvent)
+		onConnectedToServer : function onConnectedToServer(/*inEvent*/)
 		{
 			this._domNetworkStatus.className = 'netConnected';
 			this._domNetworkStatus.innerHTML = "Connected to Server";
 		},
 		
-		onDisconnectedFromServer : function onDisconnectedFromServer(inEvent)
+		onDisconnectedFromServer : function onDisconnectedFromServer(/*inEvent*/)
 		{
 			this._domNetworkStatus.className = 'netDisconnected';
 			this._domNetworkStatus.innerHTML = "Not connected to Server";

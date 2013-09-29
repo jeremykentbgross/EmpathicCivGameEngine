@@ -66,12 +66,12 @@ ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(//TODO TileDesc/Anima
 		//TODO TileDescription struct/class
 		init : function init(inTiles)
 		{
-			var i;
+			var i, tile;
 			this._myTiles = inTiles || this._myTiles;
 			
 			for(i = 0; i < this._myTiles.length; ++i)
 			{
-				var tile = this._myTiles[i];
+				tile = this._myTiles[i];
 				if(!ECGame.Settings.Network.isServer)//TODO should the function return strait away?
 				{
 					ECGame.instance.getAssetManager().loadImage(tile.fileName, tile);
@@ -85,7 +85,7 @@ ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(//TODO TileDesc/Anima
 			return this._myTiles.length;
 		},
 
-		renderTile : function renderTile(inCanvasContext, inID, inTargetPoint)
+		renderTile : function renderTile(inGraphics, inID, inTargetPoint)
 		{
 			/*
 			//TODO Allow scaling?
@@ -95,23 +95,17 @@ ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(//TODO TileDesc/Anima
 			=>tile.scaledRect
 			*/
 			var tile = this._myTiles[inID];
-			inCanvasContext.drawImage(
+			inGraphics.drawImage(
 				tile.image,
-				inTargetPoint.myX - tile.anchor.myX,//todo consider possible =>tile.scaledRect
-				inTargetPoint.myY - tile.anchor.myY
+				inTargetPoint.subtract(tile.anchor)//TODO consider possible =>tile.scaledRect
 			);
 		},
 
 		//TODO depricate, should be debugdraw for the tile
-		renderTileInRect : function renderTileInRect(inCanvasContext, inID, inTargetRect)
+		renderTileInRect : function renderTileInRect(inGraphics, inID, inTargetRect)
 		{
-			inCanvasContext.drawImage(
-				this._myTiles[inID].image,
-				inTargetRect.myX,
-				inTargetRect.myY,
-				inTargetRect.myWidth,
-				inTargetRect.myHeight
-			);
+			//TODO should be src/dest rect draw
+			inGraphics.drawImageInRect(this._myTiles[inID].image, inTargetRect);
 		},
 
 		getTileRenderRect : function getTileRenderRect(inID, inPosition)
@@ -149,9 +143,9 @@ ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(//TODO TileDesc/Anima
 			);
 		},
 		//set<classname>NetDirty
-		clearNetDirty : function clearNetDirty(){},
-		cleanup : function cleanup(){},//TODO
-		serialize : function serialize(){},//TODO
-		copyFrom : function copyFrom(inOther){}//TODO
+		clearNetDirty : function clearNetDirty(){return;},
+		cleanup : function cleanup(){return;},//TODO
+		serialize : function serialize(){return;},//TODO
+		copyFrom : function copyFrom(/*inOther*/){return;}//TODO
 	}
 });

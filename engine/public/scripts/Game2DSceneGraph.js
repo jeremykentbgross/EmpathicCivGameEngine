@@ -21,7 +21,7 @@
 
 
 //TODO make this class pluggable with other 2d scene graphs?  Or just the sorting part?
-ECGame.EngineLib.Game2DSceneGraph = function Game2DSceneGraph(){};//TODO put init in here?
+ECGame.EngineLib.Game2DSceneGraph = function Game2DSceneGraph(){return;};//TODO put init in here?
 ECGame.EngineLib.Game2DSceneGraph.prototype.constructor = ECGame.EngineLib.Game2DSceneGraph;
 
 
@@ -65,8 +65,11 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.insertItem = function insertItem(inR
 
 ECGame.EngineLib.Game2DSceneGraph.prototype.removeItem = function removeItem(inRenderableItem)
 {
-	var nodeIndex;
-	var nodeArray = inRenderableItem._mySceneGraphOwningNodes;
+	var nodeIndex
+		,nodeArray
+		;
+	
+	nodeArray = inRenderableItem._mySceneGraphOwningNodes;
 	for(nodeIndex in nodeArray)
 	{
 		nodeArray[nodeIndex].deleteItem(inRenderableItem);//todo optimize this to deleteItemFromNode
@@ -75,11 +78,14 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.removeItem = function removeItem(inR
 };
 
 
-ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DContext, inCameraRect)
+ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inGraphics)
 {
 	var renderables = [];
 	var aThis = this;
 	var i;
+	var aCameraRect;
+	
+	aCameraRect = inGraphics.getCamera2D().getRect();
 			
 	this._mySceneTree.walk(
 		function walkCallback(item)//TODO find/fix all unnamed functions; ie: function(
@@ -89,7 +95,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DC
 			if(frameCount > item._myLastFrameDrawn)
 			{
 				//calculate depth sorting position for this frame
-				item._myScreenPos = item._myAnchorPosition.subtract(inCameraRect.getLeftTop());
+				item._myScreenPos = item._myAnchorPosition.subtract(aCameraRect.getLeftTop());
 				item._myDrawOrderHelper = ECGame.EngineLib.Point2.create(
 					item._myScreenPos.dot(aThis._rotMatrixRow1),
 					item._myScreenPos.dot(aThis._rotMatrixRow2)
@@ -99,7 +105,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DC
 				renderables.push(item);
 			}
 		},
-		inCameraRect
+		aCameraRect
 	);
 	
 	renderables.sort(
@@ -114,63 +120,71 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inCanvas2DC
 	
 	for(i in renderables)
 	{
-		renderables[i].render(inCanvas2DContext, inCameraRect);
+		renderables[i].render(inGraphics);
 	}
 	
 	
 	if(ECGame.Settings.isDebugDraw_SceneGraph())
 	{
-		var fontSize = ECGame.Settings.Debug.Text_Size;
+		var fontSize
+			,currentRenderable
+			,screenPos
+			,stringDrawOrder
+			,stringDistance
+			,width
+			;
+			
+		fontSize = ECGame.Settings.Debug.Text_Size;
 		
-		ECGame.instance.getGraphics().drawDebugText("Debug Drawing SceneGraph");
+		inGraphics.drawDebugText("Debug Drawing SceneGraph");
 		
-		inCanvas2DContext.font = fontSize + 'px Arial';
+		inGraphics.setFont(fontSize + 'px Arial');
 		for(i in renderables)
 		{
-			var currentRenderable = renderables[i];
-			var screenPos = currentRenderable._myScreenPos;
+			currentRenderable = renderables[i];
+			screenPos = currentRenderable._myAnchorPosition;
 			
-			var stringDrawOrder = String(i);
-			var stringDistance = String('');
+			stringDrawOrder = String(i);
+			stringDistance = '';
 			/*
 			TODO?? include this or not with a flag??
 			stringDistance =
 				currentRenderable._myDrawOrderHelper.myX.toFixed(2) + ', ' +
 				currentRenderable._myDrawOrderHelper.myY.toFixed(2);
 			*/
-			var width = Math.max(
-				inCanvas2DContext.measureText(stringDrawOrder).width,
-				inCanvas2DContext.measureText(stringDistance).width
+			width = Math.max(
+				inGraphics.measureText(stringDrawOrder).width,
+				inGraphics.measureText(stringDistance).width
 			);
 			
-			inCanvas2DContext.fillStyle = ECGame.Settings.Debug.QuadTree_Item_DrawColor;
-			inCanvas2DContext.fillRect(
+			inGraphics.setFillStyle(ECGame.Settings.Debug.QuadTree_Item_DrawColor);
+			inGraphics.fillRectXYWH(
 				screenPos.myX,
 				screenPos.myY,
 				width,
 				fontSize * (stringDistance !== '' ? 2 : 1)
 			);
 			
-			inCanvas2DContext.fillStyle = ECGame.Settings.Debug.TextDefault_DrawColor;
-			inCanvas2DContext.fillText(
+			inGraphics.setFillStyle(ECGame.Settings.Debug.TextDefault_DrawColor);
+			inGraphics.fillTextXY(
 				stringDrawOrder,
 				screenPos.myX,
 				screenPos.myY + fontSize
 			);
 			if(stringDistance !== '')
 			{
-				inCanvas2DContext.fillText(
+				inGraphics.fillTextXY(
 					stringDistance,
 					screenPos.myX,
 					screenPos.myY + fontSize * 2
 				);
 			}
 		}
-		ECGame.instance.getGraphics().drawDebugText("SceneGraph Draw calls:" + renderables.length);
+		inGraphics.drawDebugText("SceneGraph Draw calls:" + renderables.length);
 	}
 };
 
-ECGame.EngineLib.Game2DSceneGraph.prototype.debugDraw = function debugDraw(inCanvas2DContext, inCameraRect)
+ECGame.EngineLib.Game2DSceneGraph.prototype.debugDraw = function debugDraw(inGraphics)
 {
-	this._mySceneTree.debugDraw(inCanvas2DContext, inCameraRect);//TODO scenegraph colors here
+	this._mySceneTree.debugDraw(inGraphics);//TODO scenegraph colors here
 };

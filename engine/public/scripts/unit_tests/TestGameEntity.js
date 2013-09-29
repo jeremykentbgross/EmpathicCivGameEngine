@@ -69,10 +69,10 @@ ECGame.unitTests.registerTest(
 					this._containingWorld = null;
 				},
 				//set<classname>NetDirty
-				clearNetDirty : function clearNetDirty(){},
-				serialize : function serialize(){},
-				cleanup : function cleanup(){},
-				copyFrom : function copyFrom(inOther){}
+				clearNetDirty : function clearNetDirty(){return;},
+				serialize : function serialize(){return;},
+				cleanup : function cleanup(){return;},
+				copyFrom : function copyFrom(/*inOther*/){return;}
 			}
 		});
 		

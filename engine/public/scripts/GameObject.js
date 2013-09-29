@@ -119,7 +119,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			//TODO event to all listeners: ID changed!
 		},
 		
-		cleanup : function cleanup(){},
+		cleanup : function cleanup(){return;},
 		destroy : function destroy()
 		{
 			var aProperty;

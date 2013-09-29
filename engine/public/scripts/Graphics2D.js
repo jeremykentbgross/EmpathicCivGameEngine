@@ -36,6 +36,10 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 		
 		this._myDebugTextArray = null;
 		this._myDebugTextAssociatedColorsArray = null;
+		
+		this._myCurrentCamera = null;
+		this._myDrawOffsetX = 0;
+		this._myDrawOffsetY = 0;
 	},
 	Parents : [],
 	flags : {},
@@ -86,57 +90,23 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 			return true;
 		},
 		
-		render : function render(inRenderer)//TODO rename renderRules
+		render : function render(inRenderer)
 		{
-			var x = 0;
-			var y = 0;
-			var fontSize = ECGame.Settings.Debug.Text_Size;
-			
-			//clear canvas
-			this._myBackBufferCanvas2DContext.clearRect(0, 0, this._myCanvas.width, this._myCanvas.height);
+			//clear front/back canvas buffers
+			this._myBackBufferCanvas2DContext.clearRect(0, 0, this._myBackBufferCanvas.width, this._myBackBufferCanvas.height);
 			this._myCanvas2DContext.clearRect(0, 0, this._myCanvas.width, this._myCanvas.height);
 			
-			//draw map to buffer
-			inRenderer.render(this._myBackBufferCanvas2DContext);
+			//render to back buffer
+			inRenderer.render(this);
 			
-			//draw frame counters
+			//debug draw stats
 			if(ECGame.Settings.DEBUG)
 			{
-				this._myBackBufferCanvas2DContext.font = fontSize + 'px Arial';
-
-				var maxWidth = 0;
-				var i;
-				for(i = 0; i < this._myDebugTextArray.length; ++i)
-				{
-					var metrics = this._myBackBufferCanvas2DContext.measureText(this._myDebugTextArray[i]);
-					maxWidth = Math.max(maxWidth, metrics.width);
-				}
-				this._myBackBufferCanvas2DContext.fillStyle = ECGame.Settings.Debug.TextBackground_DrawColor;
-				this._myBackBufferCanvas2DContext.fillRect(
-					x,
-					y,
-					maxWidth,
-					fontSize * (this._myDebugTextArray.length + 0.5)
-				);
-				
-				for(i = 0; i < this._myDebugTextArray.length; ++i)
-				{
-					this._myBackBufferCanvas2DContext.fillStyle = this._myDebugTextAssociatedColorsArray[i];
-					this._myBackBufferCanvas2DContext.fillText(this._myDebugTextArray[i], x, y+=fontSize);
-				}
-				
-				this._myDebugTextArray = [];
-				this._myDebugTextAssociatedColorsArray = [];
+				this._debugDrawStats();
 			}
 			
 			//draw buffer on screen
 			this._myCanvas2DContext.drawImage(this._myBackBufferCanvas, 0, 0);
-		},
-		
-		//TODO needed?
-		getDomTarget : function getDomTarget()
-		{
-			return this._myCanvas;
 		},
 		
 		drawDebugText : function drawDebugText(inText, inColor)
@@ -150,7 +120,16 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 			}
 		},
 		
+		
+		
+		
+		//TODO needed?
+		getDomTarget : function getDomTarget()
+		{
+			return this._myCanvas;
+		},
 		//TODO resize canvas listeners (like cameras)
+		//TODO rename final/frontbuffer/??getW/H
 		getWidth : function getWidth()
 		{
 			return this._myCanvas.width;
@@ -158,8 +137,247 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 		getHeight : function getHeight()
 		{
 			return this._myCanvas.height;
-		}
+		},
 		
+		
+		
+		
+		
+		setCamera2D : function setCamera2D(inCamera)
+		{
+			this._myCurrentCamera = inCamera;
+			if(inCamera)
+			{
+				this._myDrawOffsetX = inCamera.getRect().myX;
+				this._myDrawOffsetY = inCamera.getRect().myY;
+			}
+			else
+			{
+				this._myDrawOffsetX = 0;
+				this._myDrawOffsetY = 0;
+			}
+		},
+		getCamera2D : function getCamera2D()
+		{
+			return this._myCurrentCamera;
+		},
+		
+		///////////////////////////////////////////////////////////////////////
+		//context wrapper functions////////////////////////////////////////////
+		
+		beginPath : function beginPath()
+		{
+			this._myBackBufferCanvas2DContext.beginPath();
+		},
+		closePath : function closePath()
+		{
+			this._myBackBufferCanvas2DContext.closePath();
+		},
+		moveTo : function moveTo(inPoint2D)
+		{
+			this._myBackBufferCanvas2DContext.moveTo(
+				Math.round(inPoint2D.myX - this._myDrawOffsetX),
+				Math.round(inPoint2D.myY - this._myDrawOffsetY)
+			);
+		},
+		lineTo : function lineTo(inPoint2D)
+		{
+			this._myBackBufferCanvas2DContext.lineTo(
+				Math.round(inPoint2D.myX - this._myDrawOffsetX),
+				Math.round(inPoint2D.myY - this._myDrawOffsetY)
+			);
+		},
+		lineToXY : function lineToXY(inX, inY)
+		{
+			this._myBackBufferCanvas2DContext.lineTo(
+				Math.round(inX - this._myDrawOffsetX),
+				Math.round(inY - this._myDrawOffsetY)
+			);
+		},
+		arc : function arc(inCenter, inRadius, inStartAngle, inEndAngle /*inCounterClockwise*/)
+		{
+			this._myBackBufferCanvas2DContext.arc(
+				Math.round(inCenter.myX - this._myDrawOffsetX),
+				Math.round(inCenter.myY - this._myDrawOffsetY),
+				Math.round(inRadius),
+				inStartAngle,
+				inEndAngle
+				/*inCounterClockwise*/
+			);
+		},
+		
+		//fill funtions
+		setFillStyle : function setFillStyle(inFillStyle)
+		{
+			this._myBackBufferCanvas2DContext.fillStyle = inFillStyle;
+		},
+		fillRect : function fillRect(inAABB2D)
+		{
+			this._myBackBufferCanvas2DContext.fillRect(
+				Math.round(inAABB2D.myX - this._myDrawOffsetX),
+				Math.round(inAABB2D.myY - this._myDrawOffsetY),
+				Math.round(inAABB2D.myWidth),
+				Math.round(inAABB2D.myHeight)
+			);
+		},
+		fillRectXYWH : function fillRectXYWH(inX, inY, inWidth, inHeight)
+		{
+			this._myBackBufferCanvas2DContext.fillRect(
+				Math.round(inX - this._myDrawOffsetX),
+				Math.round(inY - this._myDrawOffsetY),
+				Math.round(inWidth),
+				Math.round(inHeight)
+			);
+		},
+		
+		//stroke functions
+		setStrokeStyle : function setStrokeStyle(inStrokeStyle)
+		{
+			this._myBackBufferCanvas2DContext.strokeStyle = inStrokeStyle;
+		},
+		strokeRect : function strokeRect(inAABB2D)
+		{
+			this._myBackBufferCanvas2DContext.strokeRect(
+				Math.round(inAABB2D.myX - this._myDrawOffsetX),
+				Math.round(inAABB2D.myY - this._myDrawOffsetY),
+				Math.round(inAABB2D.myWidth),
+				Math.round(inAABB2D.myHeight)
+			);
+		},
+		strokeRectXYWH : function strokeRectXYWH(inX, inY, inWidth, inHeight)
+		{
+			this._myBackBufferCanvas2DContext.strokeRect(
+				Math.round(inX - this._myDrawOffsetX),
+				Math.round(inY - this._myDrawOffsetY),
+				Math.round(inWidth),
+				Math.round(inHeight)
+			);
+		},
+		stroke : function stroke()
+		{
+			this._myBackBufferCanvas2DContext.stroke();
+		},
+		
+		//text functions
+		setFont : function setFont(inFont)
+		{
+			this._myBackBufferCanvas2DContext.font = inFont;
+		},
+		fillTextXY : function fillTextXY(inText, inX, inY)//TODO better with Point2D/Vector2D?
+		{
+			this._myBackBufferCanvas2DContext.fillText(
+				inText,
+				Math.round(inX - this._myDrawOffsetX),
+				Math.round(inY - this._myDrawOffsetY)
+			);
+		},
+		fillCenteredText : function fillCenteredText(inText)
+		{
+			var anX
+				,aY
+				;
+				
+			anX = (this._myBackBufferCanvas.width - this._myBackBufferCanvas2DContext.measureText(inText).width) / 2;
+			aY = this._myBackBufferCanvas.height / 2;
+			this._myBackBufferCanvas2DContext.fillText(inText, anX, aY);
+		},
+		measureText : function measureText(inText)
+		{
+			return this._myBackBufferCanvas2DContext.measureText(inText);
+		},
+		
+		//image functions
+		drawImage : function drawImage(inImage, inLocation)
+		{
+			this._myBackBufferCanvas2DContext.drawImage(
+				inImage,
+				Math.round(inLocation.myX - this._myDrawOffsetX),
+				Math.round(inLocation.myY - this._myDrawOffsetY)
+			);
+		},
+		drawImageInRect : function drawImageInRect(inImage, inRect)
+		{
+			this._myBackBufferCanvas2DContext.drawImage(
+				inImage,
+				Math.round(inRect.myX - this._myDrawOffsetX),
+				Math.round(inRect.myY - this._myDrawOffsetY),
+				Math.round(inRect.myWidth),
+				Math.round(inRect.myHeight)
+			);
+		},
+		drawImageSection : function drawImageSection(inImage, inSrcRect, inPosition)
+		{
+			this._myBackBufferCanvas2DContext.drawImage(
+				inImage,
+				Math.round(inSrcRect.myX),
+				Math.round(inSrcRect.myY),
+				Math.round(inSrcRect.myWidth),
+				Math.round(inSrcRect.myHeight),
+				Math.round(inPosition.myX - this._myDrawOffsetX),
+				Math.round(inPosition.myY - this._myDrawOffsetY),
+				Math.round(inSrcRect.myWidth),
+				Math.round(inSrcRect.myHeight)
+			);
+		},
+
+		
+		getBackBufferRect : function getBackBufferRect()
+		{
+			return ECGame.EngineLib.AABB2.create(
+				0,
+				0,
+				this._myBackBufferCanvas.width,
+				this._myBackBufferCanvas.height
+			);
+		},
+		//context wrapper functions////////////////////////////////////////////
+		///////////////////////////////////////////////////////////////////////
+		
+		
+		_debugDrawStats : function _debugDrawStats()
+		{
+			var x
+				,y
+				,fontSize
+				,maxWidth
+				,metrics
+				,i
+				;
+				
+			x = 0;
+			y = 0;
+			fontSize = ECGame.Settings.Debug.Text_Size;
+			
+			//set font
+			this._myBackBufferCanvas2DContext.font = fontSize + 'px Arial';
+
+			//figure out a backdrop box size to draw text in and draw it
+			maxWidth = 0;
+			for(i = 0; i < this._myDebugTextArray.length; ++i)
+			{
+				metrics = this._myBackBufferCanvas2DContext.measureText(this._myDebugTextArray[i]);
+				maxWidth = Math.max(maxWidth, metrics.width);
+			}
+			this._myBackBufferCanvas2DContext.fillStyle = ECGame.Settings.Debug.TextBackground_DrawColor;
+			this._myBackBufferCanvas2DContext.fillRect(
+				x,
+				y,
+				maxWidth,
+				fontSize * (this._myDebugTextArray.length + 0.5)
+			);
+			
+			//draw all the text in the correct color
+			for(i = 0; i < this._myDebugTextArray.length; ++i)
+			{
+				this._myBackBufferCanvas2DContext.fillStyle = this._myDebugTextAssociatedColorsArray[i];
+				y += fontSize;
+				this._myBackBufferCanvas2DContext.fillText(this._myDebugTextArray[i], x, y);
+			}
+			
+			//release the old debug draw messages
+			this._myDebugTextArray = [];
+			this._myDebugTextAssociatedColorsArray = [];
+		}
 	}
 });
 

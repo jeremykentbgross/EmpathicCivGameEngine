@@ -90,7 +90,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 				type : 'int',
 				net : false,
 				min : 0,
-				max : 1024,	//TODO should have a constant somewhere to check against!!
+				max : 1024	//TODO should have a constant somewhere to check against!!
 			}
 			//TODO world, tileset, etc
 		],
@@ -230,6 +230,8 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 
 		clearTile : function clearTile(inTilePosition)
 		{
+			var anIndex;
+			
 			if(inTilePosition.myX < 0 || this._myMapSizeInTiles <= inTilePosition.myX
 				|| inTilePosition.myY < 0 || this._myMapSizeInTiles <= inTilePosition.myY)
 			{
@@ -244,6 +246,9 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 					this._myTileSize
 				)
 			);
+			
+			anIndex = inTilePosition.myY * this._myMapSizeInTiles + inTilePosition.myX;
+			this._myTileIndexArray[anIndex] = this._myTileSet.getNumberOfTiles() + 1;
 		},
 		
 		//used to remove a specific tile
@@ -306,7 +311,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			this._myChangedTiles = [];
 		},
 		
-		cleanup : function cleanup(){},//TODO
+		cleanup : function cleanup(){return;},//TODO
 		
 		serialize : function serialize(inSerializer)
 		{
@@ -398,32 +403,26 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			}
 		},
 		
-		copyFrom : function copyFrom(inOther){},//TODO
+		copyFrom : function copyFrom(/*inOther*/){return;},//TODO
 		
-		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect)
+		debugDraw : function debugDraw(inGraphics)
 		{
 			var aThis = this;
-			ECGame.instance.getGraphics().drawDebugText("Debug Drawing Tile Map");
+			inGraphics.drawDebugText("Debug Drawing Tile Map");
 			
 			this._myTileInstanceTree.walk(
 				function walkCallback(item)
 				{
-					var itemRect = item.getAABB();
 					aThis._myTileSet.renderTileInRect(//TODO should be debug draw for tile
-						inCanvas2DContext,
+						inGraphics,
 						item._myTileValue,
-						ECGame.EngineLib.AABB2.create(
-							itemRect.myX - inCameraRect.myX,
-							itemRect.myY - inCameraRect.myY,
-							aThis._myTileSize,
-							aThis._myTileSize
-						)
+						item.getAABB()
 					);
 				},
-				inCameraRect
+				inGraphics.getCamera2D().getRect()
 			);
 			
-			this._myTileInstanceTree.debugDraw(inCanvas2DContext, inCameraRect);//TODO map colors?
+			this._myTileInstanceTree.debugDraw(inGraphics);//TODO map colors?
 		}
 
 	}

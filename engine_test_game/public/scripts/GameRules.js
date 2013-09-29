@@ -129,7 +129,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						,physics : ECGame.EngineLib.AABB2.create(0, 0, 64, 64)
 					},
 					{
-						fileName : 'game/images/ground_256.png'//'images/test/groundSub5.png' // 'images/ground_level01_01.png' //'images/dirt.png',
+						fileName : 'game/images/ground_256.png'//'game/images/ground_level01_01.png' //'images/test/groundSub5.png' // 'images/dirt.png',
 						,anchor : ECGame.EngineLib.Point2.create()
 						,_myLayer : 0
 						,size : ECGame.EngineLib.Point2.create(96,96)//64,64)
@@ -141,7 +141,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						,size : ECGame.EngineLib.Point2.create(64,64)
 					},
 					{
-						fileName : 'game/images/wall_256.png'//'images/test/wall.png' //'images/wall_level01_01.png'
+						fileName : 'game/images/wall_256.png'//'game/images/wall_level01_01.png'//'images/test/wall.png' //
 						,anchor : ECGame.EngineLib.Point2.create(32, 32)
 						,_myLayer : 1
 						,physics : ECGame.EngineLib.AABB2.create(0, 0, 64, 64)
@@ -438,47 +438,37 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 		},
 		
 		
-		render : function render(inCanvas2DContext)
+		render : function render(inGraphics)
 		{
 			if(ECGame.instance.isRunning())
 			{
-				this._gameWorld.render(inCanvas2DContext);
+				this._gameWorld.render(inGraphics);
 				
 				if(this._isRayTestMode)
 				{
 					var rayTrace = new ECGame.EngineLib.RayTracer2D.create();
 					rayTrace.fireRay(
 						this._gameWorld.getPhysics()._myDetectionTree
-						,this._rayStart.clone()//ECGame.EngineLib.Point2.create(32 + 64 * 2, 32 + 64 * 3)
-						,this._rayEnd.clone()//ECGame.EngineLib.Point2.create(32 + 64 * 7, 32 + 64 * 8)
+						,this._rayStart.clone()
+						,this._rayEnd.clone()
 					);
-					rayTrace.debugDraw(inCanvas2DContext, this._gameWorld.getCurrentCamera().getRect());//TODO rename getRect, gameRect, etc etc..
+					rayTrace.debugDraw(inGraphics);
 				}
 			}
 			else
 			{
 				////////////////////////////////////////////////////////////////////////////
 				//TODO HACK this should probably be an alternate render in the base class!!!
-				var x, y, message;
+				inGraphics.setCamera2D(null);
 			
-				inCanvas2DContext.fillStyle = 'rgba(128, 128, 128, 1)';
-				inCanvas2DContext.strokeStyle = 'rgba(64, 64, 64, 1)';
-				inCanvas2DContext.fillRect(0, 0,
-					inCanvas2DContext.canvas.width,
-					inCanvas2DContext.canvas.height
-				);
-				inCanvas2DContext.strokeRect(0, 0,
-					inCanvas2DContext.canvas.width,
-					inCanvas2DContext.canvas.height
-				);
+				inGraphics.setFillStyle('rgba(128, 128, 128, 1)');
+				inGraphics.setStrokeStyle('rgba(64, 64, 64, 1)');
+				inGraphics.fillRect(inGraphics.getBackBufferRect());
+				inGraphics.strokeRect(inGraphics.getBackBufferRect());
 				
-				inCanvas2DContext.fillStyle = 'rgba(64, 64, 64, 1)';
-				
-				inCanvas2DContext.font = '30px Arial';
-				message = "Game Over! Server Restarting!!!";//TODO real message as to why game is over (may not be server restart)
-				x = (inCanvas2DContext.canvas.width - inCanvas2DContext.measureText(message).width) / 2;
-				y = (inCanvas2DContext.canvas.height - 30) / 2;
-				inCanvas2DContext.fillText(message, x, y);
+				inGraphics.setFillStyle('rgba(64, 64, 64, 1)');
+				inGraphics.setFont('30px Arial');
+				inGraphics.fillCenteredText("Game Over! Server Restarting!!!");//TODO real message as to why game is over (may not be server restart)
 				//TODO HACK this should probably be an alternate render in the base class!!!
 				////////////////////////////////////////////////////////////////////////////
 			}

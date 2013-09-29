@@ -142,7 +142,7 @@ ECGame.EngineLib.AssetManager = ECGame.EngineLib.Class.create({
 							}
 							delete soundInfo.listeners;
 						},
-						function onError(inWhatParam)//??
+						function onError(/*inWhatParam??*/)
 						{
 							ECGame.log.error("Failed to load " + inFileName);
 						}

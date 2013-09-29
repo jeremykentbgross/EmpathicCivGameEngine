@@ -48,8 +48,7 @@ ECGame.EngineLib.GameEventSystem.prototype.registerListener = function registerL
 
 ECGame.EngineLib.GameEventSystem.prototype.deregisterListener = function deregisterListener(inEventName, inListener)
 {
-	var head;
-	var current;
+	var head, current;
 	
 	head = this._myEventListeners[inEventName];
 	if(!head)

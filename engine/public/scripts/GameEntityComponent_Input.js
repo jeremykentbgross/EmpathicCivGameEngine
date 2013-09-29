@@ -152,7 +152,7 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 		
 		//TODO
 		//set<classname>NetDirty
-		clearNetDirty : function clearNetDirty(){},
+		clearNetDirty : function clearNetDirty(){return;},
 
 		serialize : function serialize(inSerializer)
 		{

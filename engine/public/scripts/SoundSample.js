@@ -46,7 +46,7 @@ ECGame.EngineLib.SoundSample = ECGame.EngineLib.Class.create({
 	{
 		createSourceBuffer : function createSourceBuffer()
 		{
-			var aSound, aSourceBuffer;
+			var aSourceBuffer;
 			
 			aSourceBuffer = ECGame.instance.getSoundSystem()._myContext.createBufferSource();
 			aSourceBuffer.buffer = this._mySoundAsset._mySoundBuffer;

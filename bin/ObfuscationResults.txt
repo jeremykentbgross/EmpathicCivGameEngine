@@ -117,6 +117,7 @@ Final NameSpace:	_clearTileInRect
 Final NameSpace:	_createChainDownFunction
 Final NameSpace:	_createChainUpFunction
 Final NameSpace:	_createChildren
+Final NameSpace:	_debugDrawStats
 Final NameSpace:	_getDebugPlayingString
 Final NameSpace:	_getLeadingString
 Final NameSpace:	_handleInput
@@ -147,6 +148,8 @@ Final NameSpace:	addToRenderMap
 Final NameSpace:	addUpdate
 Final NameSpace:	addUser
 Final NameSpace:	addedToWorld
+Final NameSpace:	arc
+Final NameSpace:	beginPath
 Final NameSpace:	blockContextMenu
 Final NameSpace:	canUserModifyNet
 Final NameSpace:	centerOn
@@ -160,6 +163,7 @@ Final NameSpace:	clearTile
 Final NameSpace:	clearTimerCallback
 Final NameSpace:	clone
 Final NameSpace:	close
+Final NameSpace:	closePath
 Final NameSpace:	compare
 Final NameSpace:	componentMax
 Final NameSpace:	componentMin
@@ -189,9 +193,16 @@ Final NameSpace:	destroy
 Final NameSpace:	divide
 Final NameSpace:	dot
 Final NameSpace:	drawDebugText
+Final NameSpace:	drawImage
+Final NameSpace:	drawImageInRect
+Final NameSpace:	drawImageSection
 Final NameSpace:	encode
 Final NameSpace:	equal
 Final NameSpace:	exit
+Final NameSpace:	fillCenteredText
+Final NameSpace:	fillRect
+Final NameSpace:	fillRectXYWH
+Final NameSpace:	fillTextXY
 Final NameSpace:	findByID
 Final NameSpace:	findByName
 Final NameSpace:	findItem
@@ -209,9 +220,11 @@ Final NameSpace:	generateNextSoundDescriptionID
 Final NameSpace:	getAABB
 Final NameSpace:	getArea
 Final NameSpace:	getAssetManager
+Final NameSpace:	getBackBufferRect
 Final NameSpace:	getBottom
 Final NameSpace:	getBoundingBox
 Final NameSpace:	getCallbackName
+Final NameSpace:	getCamera2D
 Final NameSpace:	getCenter
 Final NameSpace:	getClass
 Final NameSpace:	getComponentByType
@@ -329,10 +342,14 @@ Final NameSpace:	isStatic
 Final NameSpace:	isWrappable
 Final NameSpace:	lenSq
 Final NameSpace:	length
+Final NameSpace:	lineTo
+Final NameSpace:	lineToXY
 Final NameSpace:	loadImage
 Final NameSpace:	loadSound
 Final NameSpace:	loadSoundAssets
 Final NameSpace:	log
+Final NameSpace:	measureText
+Final NameSpace:	moveTo
 Final NameSpace:	multiply
 Final NameSpace:	normalize
 Final NameSpace:	numItems
@@ -405,8 +422,11 @@ Final NameSpace:	setActive
 Final NameSpace:	setAlwaysActive
 Final NameSpace:	setAnimation
 Final NameSpace:	setCamera
+Final NameSpace:	setCamera2D
 Final NameSpace:	setDummyMode
 Final NameSpace:	setEffectsVolume
+Final NameSpace:	setFillStyle
+Final NameSpace:	setFont
 Final NameSpace:	setGameObjectNetDirty
 Final NameSpace:	setID
 Final NameSpace:	setLeftTop
@@ -424,6 +444,7 @@ Final NameSpace:	setSoundDescriptions
 Final NameSpace:	setSoundSamples
 Final NameSpace:	setStatic
 Final NameSpace:	setString
+Final NameSpace:	setStrokeStyle
 Final NameSpace:	setSupressKeyboardEvents
 Final NameSpace:	setTile
 Final NameSpace:	setTileSet
@@ -436,6 +457,9 @@ Final NameSpace:	sortCollisions
 Final NameSpace:	sortRenderables
 Final NameSpace:	start
 Final NameSpace:	stop
+Final NameSpace:	stroke
+Final NameSpace:	strokeRect
+Final NameSpace:	strokeRectXYWH
 Final NameSpace:	subtract
 Final NameSpace:	this
 Final NameSpace:	toBinary
@@ -549,6 +573,7 @@ Function Name:	_clearTileInRect
 Function Name:	_createChainDownFunction
 Function Name:	_createChainUpFunction
 Function Name:	_createChildren
+Function Name:	_debugDrawStats
 Function Name:	_getDebugPlayingString
 Function Name:	_getLeadingString
 Function Name:	_handleInput
@@ -579,6 +604,8 @@ Function Name:	addToRenderMap
 Function Name:	addUpdate
 Function Name:	addUser
 Function Name:	addedToWorld
+Function Name:	arc
+Function Name:	beginPath
 Function Name:	blockContextMenu
 Function Name:	canUserModifyNet
 Function Name:	centerOn
@@ -592,6 +619,7 @@ Function Name:	clearTile
 Function Name:	clearTimerCallback
 Function Name:	clone
 Function Name:	close
+Function Name:	closePath
 Function Name:	compare
 Function Name:	componentMax
 Function Name:	componentMin
@@ -621,9 +649,16 @@ Function Name:	destroy
 Function Name:	divide
 Function Name:	dot
 Function Name:	drawDebugText
+Function Name:	drawImage
+Function Name:	drawImageInRect
+Function Name:	drawImageSection
 Function Name:	encode
 Function Name:	equal
 Function Name:	exit
+Function Name:	fillCenteredText
+Function Name:	fillRect
+Function Name:	fillRectXYWH
+Function Name:	fillTextXY
 Function Name:	findByID
 Function Name:	findByName
 Function Name:	findItem
@@ -641,9 +676,11 @@ Function Name:	generateNextSoundDescriptionID
 Function Name:	getAABB
 Function Name:	getArea
 Function Name:	getAssetManager
+Function Name:	getBackBufferRect
 Function Name:	getBottom
 Function Name:	getBoundingBox
 Function Name:	getCallbackName
+Function Name:	getCamera2D
 Function Name:	getCenter
 Function Name:	getClass
 Function Name:	getComponentByType
@@ -760,10 +797,14 @@ Function Name:	isStatic
 Function Name:	isWrappable
 Function Name:	lenSq
 Function Name:	length
+Function Name:	lineTo
+Function Name:	lineToXY
 Function Name:	loadImage
 Function Name:	loadSound
 Function Name:	loadSoundAssets
 Function Name:	log
+Function Name:	measureText
+Function Name:	moveTo
 Function Name:	multiply
 Function Name:	normalize
 Function Name:	numItems
@@ -835,8 +876,11 @@ Function Name:	setActive
 Function Name:	setAlwaysActive
 Function Name:	setAnimation
 Function Name:	setCamera
+Function Name:	setCamera2D
 Function Name:	setDummyMode
 Function Name:	setEffectsVolume
+Function Name:	setFillStyle
+Function Name:	setFont
 Function Name:	setGameObjectNetDirty
 Function Name:	setID
 Function Name:	setLeftTop
@@ -854,6 +898,7 @@ Function Name:	setSoundDescriptions
 Function Name:	setSoundSamples
 Function Name:	setStatic
 Function Name:	setString
+Function Name:	setStrokeStyle
 Function Name:	setSupressKeyboardEvents
 Function Name:	setTile
 Function Name:	setTileSet
@@ -866,6 +911,9 @@ Function Name:	sortCollisions
 Function Name:	sortRenderables
 Function Name:	start
 Function Name:	stop
+Function Name:	stroke
+Function Name:	strokeRect
+Function Name:	strokeRectXYWH
 Function Name:	subtract
 Function Name:	toBinary
 Function Name:	toTileCoordinate
@@ -899,10 +947,9 @@ Parameter Variable:	inButtons
 Parameter Variable:	inCallback
 Parameter Variable:	inCallbackHandle
 Parameter Variable:	inCallbackName
-Parameter Variable:	inCameraRect
+Parameter Variable:	inCamera
 Parameter Variable:	inCanvas
-Parameter Variable:	inCanvas2DContext
-Parameter Variable:	inCanvasContext
+Parameter Variable:	inCenter
 Parameter Variable:	inClass
 Parameter Variable:	inCode
 Parameter Variable:	inColor
@@ -925,13 +972,16 @@ Parameter Variable:	inDom
 Parameter Variable:	inDomConstruct
 Parameter Variable:	inDt
 Parameter Variable:	inEncodeToText
+Parameter Variable:	inEndAngle
 Parameter Variable:	inEndingPoint
 Parameter Variable:	inEntity
 Parameter Variable:	inEvent
 Parameter Variable:	inEventName
 Parameter Variable:	inFileName
+Parameter Variable:	inFillStyle
 Parameter Variable:	inFindItem
 Parameter Variable:	inFlags
+Parameter Variable:	inFont
 Parameter Variable:	inFrame
 Parameter Variable:	inFrameEvents
 Parameter Variable:	inFrameRate
@@ -940,6 +990,7 @@ Parameter Variable:	inFullNodeColor
 Parameter Variable:	inFullPath
 Parameter Variable:	inFullPathDefault
 Parameter Variable:	inFunction
+Parameter Variable:	inGraphics
 Parameter Variable:	inHeight
 Parameter Variable:	inID
 Parameter Variable:	inImage
@@ -958,6 +1009,7 @@ Parameter Variable:	inLHS
 Parameter Variable:	inLayer
 Parameter Variable:	inLeft
 Parameter Variable:	inListener
+Parameter Variable:	inLocation
 Parameter Variable:	inMap
 Parameter Variable:	inMapSize
 Parameter Variable:	inMapSizeInTiles
@@ -994,6 +1046,7 @@ Parameter Variable:	inPhysicsObject
 Parameter Variable:	inPhysicsSystem
 Parameter Variable:	inPitchShift
 Parameter Variable:	inPoint
+Parameter Variable:	inPoint2D
 Parameter Variable:	inPos
 Parameter Variable:	inPosition
 Parameter Variable:	inPrecision
@@ -1020,8 +1073,10 @@ Parameter Variable:	inSoundDescription
 Parameter Variable:	inSoundDescriptionID
 Parameter Variable:	inSoundSampleIDs
 Parameter Variable:	inSrcRect
+Parameter Variable:	inStartAngle
 Parameter Variable:	inStartingPoint
 Parameter Variable:	inString
+Parameter Variable:	inStrokeStyle
 Parameter Variable:	inSupress
 Parameter Variable:	inT
 Parameter Variable:	inTargetCenter
@@ -1050,7 +1105,6 @@ Parameter Variable:	inVel
 Parameter Variable:	inVelocity
 Parameter Variable:	inVolume
 Parameter Variable:	inVolumeVariation
-Parameter Variable:	inWhatParam
 Parameter Variable:	inWidth
 Parameter Variable:	inWorld
 Parameter Variable:	inWorldCoordinate
@@ -1077,10 +1131,12 @@ Local Variable:	GameLocalization			*****
 Local Variable:	LoadEngine			*****
 Local Variable:	TestComponent			*****
 Local Variable:	aAudioSystem
+Local Variable:	aBackBufferRect
 Local Variable:	aBinaryBuffer
 Local Variable:	aBinaryEncoder
 Local Variable:	aBits
 Local Variable:	aBreakPointLocation
+Local Variable:	aCameraRect
 Local Variable:	aCharIndex
 Local Variable:	aChild
 Local Variable:	aClassName
@@ -1099,6 +1155,7 @@ Local Variable:	aD123
 Local Variable:	aD456
 Local Variable:	aDeletedTilesArray
 Local Variable:	aDeltaTime
+Local Variable:	aDestination
 Local Variable:	aDestroyInstanceList
 Local Variable:	aDirtyInstanceList
 Local Variable:	aDrawSize
@@ -1114,6 +1171,7 @@ Local Variable:	aHalfDrawSize
 Local Variable:	aHalfEndPointDrawSize
 Local Variable:	aHalfHeight
 Local Variable:	aHalfItemCollisionPointSize
+Local Variable:	aHalfSize
 Local Variable:	aHalfWidth
 Local Variable:	aHigh
 Local Variable:	aHitItemsMap
@@ -1132,6 +1190,7 @@ Local Variable:	aLow
 Local Variable:	aMap
 Local Variable:	aMapSize
 Local Variable:	aMaxSize
+Local Variable:	aMessage
 Local Variable:	aMessageHeader
 Local Variable:	aModels
 Local Variable:	aMovedObjectsThisFrame
@@ -1162,6 +1221,7 @@ Local Variable:	aRecievedObj
 Local Variable:	aSample
 Local Variable:	aSerializeData
 Local Variable:	aSerializer
+Local Variable:	aSize
 Local Variable:	aSmallestNode
 Local Variable:	aSound
 Local Variable:	aSoundAsset
@@ -1197,6 +1257,7 @@ Local Variable:	aValue
 Local Variable:	aValues
 Local Variable:	aWholePart
 Local Variable:	aWriteObject
+Local Variable:	aY
 Local Variable:	acceleration			*****
 Local Variable:	anAABB
 Local Variable:	anArray
@@ -1218,6 +1279,7 @@ Local Variable:	anObjectHeaderFormat
 Local Variable:	anOldDirection
 Local Variable:	anOwner
 Local Variable:	anUpdateArray
+Local Variable:	anX
 Local Variable:	angle			*****
 Local Variable:	animProb			*****
 Local Variable:	animation			*****
@@ -1243,7 +1305,6 @@ Local Variable:	currentDateTime			*****
 Local Variable:	currentRenderable			*****
 Local Variable:	defaultImageName			*****
 Local Variable:	defaultSoundName			*****
-Local Variable:	dest			*****
 Local Variable:	direction			*****
 Local Variable:	directions			*****
 Local Variable:	domGraphicsContainer			*****
@@ -1266,7 +1327,6 @@ Local Variable:	frameStats			*****
 Local Variable:	frames			*****
 Local Variable:	funcArray			*****
 Local Variable:	funcIndex			*****
-Local Variable:	halfSize			*****
 Local Variable:	head			*****
 Local Variable:	i			*****
 Local Variable:	id			*****
@@ -1281,7 +1341,6 @@ Local Variable:	inputEvent			*****
 Local Variable:	inputString			*****
 Local Variable:	instanceID			*****
 Local Variable:	instanceName			*****
-Local Variable:	itemRect			*****
 Local Variable:	j			*****
 Local Variable:	key			*****
 Local Variable:	len			*****
@@ -1291,7 +1350,6 @@ Local Variable:	listenerNode			*****
 Local Variable:	loops			*****
 Local Variable:	managed			*****
 Local Variable:	maxWidth			*****
-Local Variable:	message			*****
 Local Variable:	methodIndex			*****
 Local Variable:	methodName			*****
 Local Variable:	methods			*****
@@ -1338,7 +1396,6 @@ Local Variable:	screenPos			*****
 Local Variable:	second			*****
 Local Variable:	serverRebootTime			*****
 Local Variable:	sin			*****
-Local Variable:	size			*****
 Local Variable:	soundInfo			*****
 Local Variable:	stackPath			*****
 Local Variable:	stringDistance			*****
@@ -1570,6 +1627,7 @@ Member Variable:	_createChildren			*****
 Member Variable:	_currentAnimation			*****
 Member Variable:	_currentFrame			*****
 Member Variable:	_data			*****
+Member Variable:	_debugDrawStats			*****
 Member Variable:	_defaultCamera			*****
 Member Variable:	_direction			*****
 Member Variable:	_domChatContainer			*****
@@ -1637,6 +1695,7 @@ Member Variable:	_myCollisionsRenderList
 Member Variable:	_myComponentMap
 Member Variable:	_myCompresser
 Member Variable:	_myContext
+Member Variable:	_myCurrentCamera
 Member Variable:	_myCurrentNode
 Member Variable:	_myCurrentPoint
 Member Variable:	_myDebugTextArray
@@ -1646,6 +1705,8 @@ Member Variable:	_myDescription
 Member Variable:	_myDestination
 Member Variable:	_myDestroyInstances
 Member Variable:	_myDetectionTree
+Member Variable:	_myDrawOffsetX
+Member Variable:	_myDrawOffsetY
 Member Variable:	_myDrawOrderHelper
 Member Variable:	_myDynamicCompressor
 Member Variable:	_myEffectsVolume
@@ -1827,7 +1888,9 @@ Member Variable:	added			*****
 Member Variable:	addedToWorld			*****
 Member Variable:	anchor			*****
 Member Variable:	apply			*****
+Member Variable:	arc			*****
 Member Variable:	assert			*****
+Member Variable:	beginPath			*****
 Member Variable:	blur			*****
 Member Variable:	boundingRect			*****
 Member Variable:	buffer			*****
@@ -1846,6 +1909,7 @@ Member Variable:	clearTimerCallback			*****
 Member Variable:	clicked			*****
 Member Variable:	clone			*****
 Member Variable:	close			*****
+Member Variable:	closePath			*****
 Member Variable:	componentArray			*****
 Member Variable:	componentArrayBefore			*****
 Member Variable:	componentMax			*****
@@ -1885,6 +1949,9 @@ Member Variable:	dot			*****
 Member Variable:	down1			*****
 Member Variable:	down2			*****
 Member Variable:	drawDebugText			*****
+Member Variable:	drawImage			*****
+Member Variable:	drawImageInRect			*****
+Member Variable:	drawImageSection			*****
 Member Variable:	effectsVolume			*****
 Member Variable:	encode			*****
 Member Variable:	entity			*****
@@ -1894,6 +1961,10 @@ Member Variable:	equal			*****
 Member Variable:	error			*****
 Member Variable:	exit			*****
 Member Variable:	fileName			*****
+Member Variable:	fillCenteredText			*****
+Member Variable:	fillRect			*****
+Member Variable:	fillRectXYWH			*****
+Member Variable:	fillTextXY			*****
 Member Variable:	findByID			*****
 Member Variable:	findByName			*****
 Member Variable:	findItem			*****
@@ -1914,9 +1985,11 @@ Member Variable:	generateNextSoundDescriptionID			*****
 Member Variable:	getAABB			*****
 Member Variable:	getArea			*****
 Member Variable:	getAssetManager			*****
+Member Variable:	getBackBufferRect			*****
 Member Variable:	getBottom			*****
 Member Variable:	getBoundingBox			*****
 Member Variable:	getCallbackName			*****
+Member Variable:	getCamera2D			*****
 Member Variable:	getCenter			*****
 Member Variable:	getClass			*****
 Member Variable:	getComponentByType			*****
@@ -2045,6 +2118,8 @@ Member Variable:	keys			*****
 Member Variable:	keysPressed			*****
 Member Variable:	lenSq			*****
 Member Variable:	length			*****
+Member Variable:	lineTo			*****
+Member Variable:	lineToXY			*****
 Member Variable:	loadImage			*****
 Member Variable:	loadSound			*****
 Member Variable:	loadSoundAssets			*****
@@ -2055,8 +2130,10 @@ Member Variable:	masterVolume			*****
 Member Variable:	max			*****
 Member Variable:	maxArrayLength			*****
 Member Variable:	maxlength			*****
+Member Variable:	measureText			*****
 Member Variable:	min			*****
 Member Variable:	mouseLoc			*****
+Member Variable:	moveTo			*****
 Member Variable:	msg			*****
 Member Variable:	multiply			*****
 Member Variable:	myAABB
@@ -2162,8 +2239,11 @@ Member Variable:	setActive			*****
 Member Variable:	setAlwaysActive			*****
 Member Variable:	setAnimation			*****
 Member Variable:	setCamera			*****
+Member Variable:	setCamera2D			*****
 Member Variable:	setDummyMode			*****
 Member Variable:	setEffectsVolume			*****
+Member Variable:	setFillStyle			*****
+Member Variable:	setFont			*****
 Member Variable:	setGameObjectNetDirty			*****
 Member Variable:	setID			*****
 Member Variable:	setLeftTop			*****
@@ -2182,6 +2262,7 @@ Member Variable:	setSoundDescriptions			*****
 Member Variable:	setSoundSamples			*****
 Member Variable:	setStatic			*****
 Member Variable:	setString			*****
+Member Variable:	setStrokeStyle			*****
 Member Variable:	setSupressKeyboardEvents			*****
 Member Variable:	setTile			*****
 Member Variable:	setTileSet			*****
@@ -2193,6 +2274,9 @@ Member Variable:	size			*****
 Member Variable:	speedOfSound			*****
 Member Variable:	start			*****
 Member Variable:	stop			*****
+Member Variable:	stroke			*****
+Member Variable:	strokeRect			*****
+Member Variable:	strokeRectXYWH			*****
 Member Variable:	subtract			*****
 Member Variable:	toBinary			*****
 Member Variable:	toTileCoordinate			*****
@@ -2445,6 +2529,7 @@ Included Word:	_createChildren
 Included Word:	_currentAnimation
 Included Word:	_currentFrame
 Included Word:	_data
+Included Word:	_debugDrawStats
 Included Word:	_defaultCamera
 Included Word:	_direction
 Included Word:	_domChatContainer
@@ -2512,6 +2597,7 @@ Included Word:	_myCollisionsRenderList
 Included Word:	_myComponentMap
 Included Word:	_myCompresser
 Included Word:	_myContext
+Included Word:	_myCurrentCamera
 Included Word:	_myCurrentNode
 Included Word:	_myCurrentPoint
 Included Word:	_myDebugTextArray
@@ -2521,6 +2607,8 @@ Included Word:	_myDescription
 Included Word:	_myDestination
 Included Word:	_myDestroyInstances
 Included Word:	_myDetectionTree
+Included Word:	_myDrawOffsetX
+Included Word:	_myDrawOffsetY
 Included Word:	_myDrawOrderHelper
 Included Word:	_myDynamicCompressor
 Included Word:	_myEffectsVolume
@@ -2687,12 +2775,14 @@ Included Word:	_up
 Included Word:	_value
 Included Word:	_velocity
 Included Word:	aAudioSystem
+Included Word:	aBackBufferRect
 Included Word:	aBinaryBuffer
 Included Word:	aBinaryEncoder
 Included Word:	aBits
 Included Word:	aBool1
 Included Word:	aBool2
 Included Word:	aBreakPointLocation
+Included Word:	aCameraRect
 Included Word:	aCharIndex
 Included Word:	aChild
 Included Word:	aClassName
@@ -2711,6 +2801,7 @@ Included Word:	aD123
 Included Word:	aD456
 Included Word:	aDeletedTilesArray
 Included Word:	aDeltaTime
+Included Word:	aDestination
 Included Word:	aDestroyInstanceList
 Included Word:	aDirtyInstanceList
 Included Word:	aDrawSize
@@ -2726,6 +2817,7 @@ Included Word:	aHalfDrawSize
 Included Word:	aHalfEndPointDrawSize
 Included Word:	aHalfHeight
 Included Word:	aHalfItemCollisionPointSize
+Included Word:	aHalfSize
 Included Word:	aHalfWidth
 Included Word:	aHigh
 Included Word:	aHitItemsMap
@@ -2744,6 +2836,7 @@ Included Word:	aLow
 Included Word:	aMap
 Included Word:	aMapSize
 Included Word:	aMaxSize
+Included Word:	aMessage
 Included Word:	aMessageHeader
 Included Word:	aModels
 Included Word:	aMovedObjectsThisFrame
@@ -2774,6 +2867,7 @@ Included Word:	aRecievedObj
 Included Word:	aSample
 Included Word:	aSerializeData
 Included Word:	aSerializer
+Included Word:	aSize
 Included Word:	aSmallestNode
 Included Word:	aSound
 Included Word:	aSoundAsset
@@ -2809,6 +2903,7 @@ Included Word:	aValue
 Included Word:	aValues
 Included Word:	aWholePart
 Included Word:	aWriteObject
+Included Word:	aY
 Included Word:	acceleration
 Included Word:	add
 Included Word:	addComponent
@@ -2843,6 +2938,7 @@ Included Word:	anObjectHeaderFormat
 Included Word:	anOldDirection
 Included Word:	anOwner
 Included Word:	anUpdateArray
+Included Word:	anX
 Included Word:	angle
 Included Word:	animProb
 Included Word:	animation
@@ -2919,7 +3015,6 @@ Included Word:	deltaTime
 Included Word:	deref
 Included Word:	deregister
 Included Word:	deregisterListener
-Included Word:	dest
 Included Word:	destroy
 Included Word:	direction
 Included Word:	directions
@@ -2930,6 +3025,8 @@ Included Word:	dot
 Included Word:	down1
 Included Word:	down2
 Included Word:	drawDebugText
+Included Word:	drawImageInRect
+Included Word:	drawImageSection
 Included Word:	effectsVolume
 Included Word:	encode
 Included Word:	encodeRange
@@ -2948,6 +3045,9 @@ Included Word:	exit
 Included Word:	expression
 Included Word:	fileName
 Included Word:	filename
+Included Word:	fillCenteredText
+Included Word:	fillRectXYWH
+Included Word:	fillTextXY
 Included Word:	findByID
 Included Word:	findByName
 Included Word:	findItem
@@ -2977,9 +3077,11 @@ Included Word:	generateNextSoundDescriptionID
 Included Word:	getAABB
 Included Word:	getArea
 Included Word:	getAssetManager
+Included Word:	getBackBufferRect
 Included Word:	getBottom
 Included Word:	getBoundingBox
 Included Word:	getCallbackName
+Included Word:	getCamera2D
 Included Word:	getCenter
 Included Word:	getClass
 Included Word:	getComponentByType
@@ -3047,7 +3149,6 @@ Included Word:	getValueFromProbability
 Included Word:	getWidth
 Included Word:	getWidthHeight
 Included Word:	getWorld
-Included Word:	halfSize
 Included Word:	head
 Included Word:	high
 Included Word:	image
@@ -3067,10 +3168,9 @@ Included Word:	inButtons
 Included Word:	inCallback
 Included Word:	inCallbackHandle
 Included Word:	inCallbackName
-Included Word:	inCameraRect
+Included Word:	inCamera
 Included Word:	inCanvas
-Included Word:	inCanvas2DContext
-Included Word:	inCanvasContext
+Included Word:	inCenter
 Included Word:	inClass
 Included Word:	inCode
 Included Word:	inColor
@@ -3094,13 +3194,16 @@ Included Word:	inDom
 Included Word:	inDomConstruct
 Included Word:	inDt
 Included Word:	inEncodeToText
+Included Word:	inEndAngle
 Included Word:	inEndingPoint
 Included Word:	inEntity
 Included Word:	inEvent
 Included Word:	inEventName
 Included Word:	inFileName
+Included Word:	inFillStyle
 Included Word:	inFindItem
 Included Word:	inFlags
+Included Word:	inFont
 Included Word:	inFrame
 Included Word:	inFrameEvents
 Included Word:	inFrameRate
@@ -3109,6 +3212,7 @@ Included Word:	inFullNodeColor
 Included Word:	inFullPath
 Included Word:	inFullPathDefault
 Included Word:	inFunction
+Included Word:	inGraphics
 Included Word:	inHeight
 Included Word:	inID
 Included Word:	inImage
@@ -3127,6 +3231,7 @@ Included Word:	inLHS
 Included Word:	inLayer
 Included Word:	inLeft
 Included Word:	inListener
+Included Word:	inLocation
 Included Word:	inMap
 Included Word:	inMapSize
 Included Word:	inMapSizeInTiles
@@ -3163,6 +3268,7 @@ Included Word:	inPhysicsObject
 Included Word:	inPhysicsSystem
 Included Word:	inPitchShift
 Included Word:	inPoint
+Included Word:	inPoint2D
 Included Word:	inPos
 Included Word:	inPosition
 Included Word:	inPrecision
@@ -3189,8 +3295,10 @@ Included Word:	inSoundDescription
 Included Word:	inSoundDescriptionID
 Included Word:	inSoundSampleIDs
 Included Word:	inSrcRect
+Included Word:	inStartAngle
 Included Word:	inStartingPoint
 Included Word:	inString
+Included Word:	inStrokeStyle
 Included Word:	inSupress
 Included Word:	inT
 Included Word:	inTargetCenter
@@ -3219,7 +3327,6 @@ Included Word:	inVel
 Included Word:	inVelocity
 Included Word:	inVolume
 Included Word:	inVolumeVariation
-Included Word:	inWhatParam
 Included Word:	inWidth
 Included Word:	inWorld
 Included Word:	inWorldCoordinate
@@ -3285,12 +3392,12 @@ Included Word:	isSleeping
 Included Word:	isStatic
 Included Word:	isWrappable
 Included Word:	item
-Included Word:	itemRect
 Included Word:	j
 Included Word:	key
 Included Word:	keysPressed
 Included Word:	len
 Included Word:	lenSq
+Included Word:	lineToXY
 Included Word:	listener1
 Included Word:	listener2
 Included Word:	listenerNode
@@ -3460,8 +3567,11 @@ Included Word:	setActive
 Included Word:	setAlwaysActive
 Included Word:	setAnimation
 Included Word:	setCamera
+Included Word:	setCamera2D
 Included Word:	setDummyMode
 Included Word:	setEffectsVolume
+Included Word:	setFillStyle
+Included Word:	setFont
 Included Word:	setGameObjectNetDirty
 Included Word:	setID
 Included Word:	setLeftTop
@@ -3479,6 +3589,7 @@ Included Word:	setSoundDescriptions
 Included Word:	setSoundSamples
 Included Word:	setStatic
 Included Word:	setString
+Included Word:	setStrokeStyle
 Included Word:	setSupressKeyboardEvents
 Included Word:	setTile
 Included Word:	setTileSet
@@ -3494,6 +3605,7 @@ Included Word:	start
 Included Word:	stop
 Included Word:	stringDistance
 Included Word:	stringDrawOrder
+Included Word:	strokeRectXYWH
 Included Word:	subtract
 Included Word:	target
 Included Word:	temp
@@ -3617,11 +3729,13 @@ Ignored Word:	abs
 Ignored Word:	acos
 Ignored Word:	anchor
 Ignored Word:	apply
+Ignored Word:	arc
 Ignored Word:	arguments
 Ignored Word:	asin
 Ignored Word:	assert
 Ignored Word:	atan
 Ignored Word:	atan2
+Ignored Word:	beginPath
 Ignored Word:	big
 Ignored Word:	bind
 Ignored Word:	blink
@@ -3642,6 +3756,7 @@ Ignored Word:	className
 Ignored Word:	clearImmediate
 Ignored Word:	clearInterval
 Ignored Word:	clearTimeout
+Ignored Word:	closePath
 Ignored Word:	color
 Ignored Word:	compile
 Ignored Word:	concat
@@ -3662,6 +3777,7 @@ Ignored Word:	do
 Ignored Word:	document
 Ignored Word:	dom
 Ignored Word:	dopplerFactor
+Ignored Word:	drawImage
 Ignored Word:	else
 Ignored Word:	emit
 Ignored Word:	encodeURI
@@ -3674,6 +3790,7 @@ Ignored Word:	exec
 Ignored Word:	exp
 Ignored Word:	export
 Ignored Word:	false
+Ignored Word:	fillRect
 Ignored Word:	filter
 Ignored Word:	fixed
 Ignored Word:	floor
@@ -3741,13 +3858,16 @@ Ignored Word:	lastParen
 Ignored Word:	leftContext
 Ignored Word:	length
 Ignored Word:	let
+Ignored Word:	lineTo
 Ignored Word:	link
 Ignored Word:	localeCompare
 Ignored Word:	log
 Ignored Word:	map
 Ignored Word:	match
 Ignored Word:	max
+Ignored Word:	measureText
 Ignored Word:	min
+Ignored Word:	moveTo
 Ignored Word:	mozRequestAnimationFrame
 Ignored Word:	msRequestAnimationFrame
 Ignored Word:	msg
@@ -3822,6 +3942,8 @@ Ignored Word:	sqrt
 Ignored Word:	src
 Ignored Word:	strike
 Ignored Word:	string
+Ignored Word:	stroke
+Ignored Word:	strokeRect
 Ignored Word:	sub
 Ignored Word:	subElement
 Ignored Word:	substr
@@ -3905,10 +4027,8 @@ Unmapped Word:	_mySoundDescriptionID
 Unmapped Word:	_myStartTime
 Unmapped Word:	alert
 Unmapped Word:	amp
-Unmapped Word:	arc
 Unmapped Word:	arraybuffer
 Unmapped Word:	at
-Unmapped Word:	beginPath
 Unmapped Word:	binaryType
 Unmapped Word:	bool
 Unmapped Word:	border
@@ -3922,7 +4042,6 @@ Unmapped Word:	chatLog
 Unmapped Word:	chatNetworkStatus
 Unmapped Word:	clearRect
 Unmapped Word:	click
-Unmapped Word:	closePath
 Unmapped Word:	connect
 Unmapped Word:	construct
 Unmapped Word:	contextmenu
@@ -3945,11 +4064,9 @@ Unmapped Word:	distanceModel
 Unmapped Word:	div
 Unmapped Word:	dojo
 Unmapped Word:	domReady
-Unmapped Word:	drawImage
 Unmapped Word:	duration
 Unmapped Word:	engine
 Unmapped Word:	events
-Unmapped Word:	fillRect
 Unmapped Word:	fillStyle
 Unmapped Word:	fillText
 Unmapped Word:	float
@@ -3973,20 +4090,17 @@ Unmapped Word:	keyCode
 Unmapped Word:	keydown
 Unmapped Word:	keypress
 Unmapped Word:	keyup
-Unmapped Word:	lineTo
 Unmapped Word:	listener
 Unmapped Word:	listeners
 Unmapped Word:	location
 Unmapped Word:	lt
 Unmapped Word:	master_netgroup
 Unmapped Word:	maxDistance
-Unmapped Word:	measureText
 Unmapped Word:	mousedown
 Unmapped Word:	mousemove
 Unmapped Word:	mouseout
 Unmapped Word:	mouseover
 Unmapped Word:	mouseup
-Unmapped Word:	moveTo
 Unmapped Word:	mp3
 Unmapped Word:	mySoundBuffer
 Unmapped Word:	n
@@ -4025,8 +4139,6 @@ Unmapped Word:	set
 Unmapped Word:	sounds
 Unmapped Word:	stack
 Unmapped Word:	stringify
-Unmapped Word:	stroke
-Unmapped Word:	strokeRect
 Unmapped Word:	strokeStyle
 Unmapped Word:	style
 Unmapped Word:	submit

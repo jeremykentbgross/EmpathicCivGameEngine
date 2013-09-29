@@ -74,47 +74,43 @@ ECGame.EngineLib.Animation2DFrame = ECGame.EngineLib.Class.create({
 			return this._myAABB;
 		},
 		
-		render : function render(inCanvas2DContext, inCameraRect, inImage, inPosition)
+		render : function render(inGraphics, inImage, inPosition)
 		{
-			var dest = inPosition.subtract(this._origin).subtract(inCameraRect.getLeftTop());
-			inCanvas2DContext.drawImage(
+			inGraphics.drawImageSection(
 				inImage,
-				this._sourceRect.myX,
-				this._sourceRect.myY,
-				this._sourceRect.myWidth,
-				this._sourceRect.myHeight,
-				dest.myX,
-				dest.myY,
-				this._sourceRect.myWidth,
-				this._sourceRect.myHeight
+				this._sourceRect,
+				inPosition.subtract(this._origin)
 			);
 		},
 		
-		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect, inPosition)
+		debugDraw : function debugDraw(inGraphics, inPosition)
 		{
-			var dest, size, halfSize;
+			var aDestination
+				,aSize
+				,aHalfSize
+				;
 			
-			dest = inPosition.subtract(this._origin).subtract(inCameraRect.getLeftTop());
-			size = ECGame.Settings.Debug.Sprite_Origin_Size;
-			halfSize = ECGame.Settings.Debug.Sprite_Origin_Size / 2;
+			aDestination = inPosition.subtract(this._origin);
+			aSize = ECGame.Settings.Debug.Sprite_Origin_Size;
+			aHalfSize = aSize / 2;
 			
 			//draw AABB
-			inCanvas2DContext.strokeStyle = ECGame.Settings.Debug.Sprite_AABB_DrawColor;
-			inCanvas2DContext.strokeRect(
-				dest.myX,
-				dest.myY,
+			inGraphics.setStrokeStyle(ECGame.Settings.Debug.Sprite_AABB_DrawColor);
+			inGraphics.strokeRectXYWH(
+				aDestination.myX,
+				aDestination.myY,
 				this._sourceRect.myWidth,
 				this._sourceRect.myHeight
 			);
 			
 			//draw Origin
-			inCanvas2DContext.fillStyle = ECGame.Settings.Debug.Sprite_Origin_DrawColor;
-			dest = dest.add(this._origin);
-			inCanvas2DContext.fillRect(
-				dest.myX - halfSize,
-				dest.myY - halfSize,
-				size,
-				size
+			inGraphics.setFillStyle(ECGame.Settings.Debug.Sprite_Origin_DrawColor);
+			aDestination = aDestination.add(this._origin);
+			inGraphics.fillRectXYWH(
+				aDestination.myX - aHalfSize,
+				aDestination.myY - aHalfSize,
+				aSize,
+				aSize
 			);
 		}
 	}

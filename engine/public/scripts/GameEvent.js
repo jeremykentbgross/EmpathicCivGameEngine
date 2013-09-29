@@ -20,7 +20,7 @@
 */
 
 //namespace:
-ECGame.EngineLib.Events = new (function Events(){});
+ECGame.EngineLib.Events = new function Events(){return;}();
 
 
 
@@ -76,10 +76,7 @@ ECGame.EngineLib.Events.GameObjectNetDirty = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition : 
 	{
-		copyFrom : function copyFrom(inOther)
-		{
-			//TODO
-		}
+		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
 ECGame.EngineLib.Events.GameObjectDestroyed = ECGame.EngineLib.Class.create({
@@ -94,10 +91,7 @@ ECGame.EngineLib.Events.GameObjectDestroyed = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition : 
 	{
-		copyFrom : function copyFrom(inOther)
-		{
-			//TODO
-		}
+		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
 
@@ -117,10 +111,7 @@ ECGame.EngineLib.Events.AddedToEntity = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition : 
 	{
-		copyFrom : function copyFrom(inOther)
-		{
-			//TODO
-		}
+		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
 
@@ -139,10 +130,7 @@ ECGame.EngineLib.Events.RemovedFromEntity = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition : 
 	{
-		copyFrom : function copyFrom(inOther)
-		{
-			//TODO
-		}
+		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
 
@@ -161,10 +149,7 @@ ECGame.EngineLib.Events.AddedToWorld = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition : 
 	{
-		copyFrom : function copyFrom(inOther)
-		{
-			//TODO
-		}
+		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
 
@@ -182,10 +167,7 @@ ECGame.EngineLib.Events.RemovedFromWorld = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition : 
 	{
-		copyFrom : function copyFrom(inOther)
-		{
-			//TODO
-		}
+		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
 
@@ -214,10 +196,7 @@ ECGame.EngineLib.Events.Input = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition : 
 	{
-		copyFrom : function copyFrom(inOther)
-		{
-			//TODO
-		}
+		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
 
@@ -237,10 +216,7 @@ ECGame.EngineLib.Events.ConnectedToServer = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition : 
 	{
-		copyFrom : function copyFrom(inOther)
-		{
-			//TODO
-		}
+		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
 
@@ -262,10 +238,7 @@ ECGame.EngineLib.Events.DisconnectedFromServer = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition : 
 	{
-		copyFrom : function copyFrom(inOther)
-		{
-			//TODO
-		}
+		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
 
@@ -285,10 +258,7 @@ ECGame.EngineLib.Events.IdentifiedUser = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition : 
 	{
-		copyFrom : function copyFrom(inOther)
-		{
-			//TODO
-		}
+		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
 
@@ -307,10 +277,7 @@ ECGame.EngineLib.Events.ClientDisconnected = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition : 
 	{
-		copyFrom : function copyFrom(inOther)
-		{
-			//TODO
-		}
+		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
 
@@ -331,10 +298,7 @@ ECGame.EngineLib.Events.Msg = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition : 
 	{
-		copyFrom : function copyFrom(inOther)
-		{
-			//TODO
-		}
+		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
 
@@ -354,10 +318,7 @@ ECGame.EngineLib.Events.Data = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition : 
 	{
-		copyFrom : function copyFrom(inOther)
-		{
-			//TODO
-		}
+		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
 
@@ -375,10 +336,7 @@ ECGame.EngineLib.Events.NetObjects = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition : 
 	{
-		copyFrom : function copyFrom(inOther)
-		{
-			//TODO
-		}
+		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
 
@@ -396,10 +354,7 @@ ECGame.EngineLib.Events.RequestVelocity = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition : 
 	{
-		copyFrom : function copyFrom(inOther)
-		{
-			//TODO
-		}
+		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
 
@@ -419,10 +374,7 @@ ECGame.EngineLib.Events.UpdatePosition = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
-		copyFrom : function copyFrom(inOther)
-		{
-			//TODO
-		}
+		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
 
@@ -469,9 +421,6 @@ ECGame.EngineLib.Events.PhysObjectUpdate = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
-		copyFrom : function copyFrom(inOther)
-		{
-			//TODO
-		}
+		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });

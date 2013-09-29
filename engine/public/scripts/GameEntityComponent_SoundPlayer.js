@@ -124,10 +124,10 @@ ECGame.EngineLib.EntityComponent_SoundPlayer = ECGame.EngineLib.Class.create(
 		},
 
 		//set<classname>NetDirty
-		clearNetDirty : function clearNetDirty(){},
+		clearNetDirty : function clearNetDirty(){return;},
 		
-		cleanup : function cleanup(){},//TODO
-		serialize : function serialize(){},//TODO
-		copyFrom : function copyFrom(inOther){}
+		cleanup : function cleanup(){return;},//TODO
+		serialize : function serialize(){return;},//TODO
+		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });

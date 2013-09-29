@@ -339,9 +339,9 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 		/*
 		this._myWebSocketServer.close([code], [data]);//closes server and all client sockets
 		this._myWebSocketServer.handleUpgrade(request, socket, upgradeHead, callback)??????????????????
-		this._myWebSocketServer.on('error', function ?name?(inError){});
-		this._myWebSocketServer.on('headers', function ?name?(inHeaders){});
-		this._myWebSocketServer.on('connection', function ?name?(inSocket){});
+		this._myWebSocketServer.on('error', function ?name?(inError){return;});
+		this._myWebSocketServer.on('headers', function ?name?(inHeaders){return;});
+		this._myWebSocketServer.on('connection', function ?name?(inSocket){return;});
 		*/
 		this._myWebSocketServer.on('error', this._onError);
 		this._myWebSocketServer.on('headers', this._onHeaders);

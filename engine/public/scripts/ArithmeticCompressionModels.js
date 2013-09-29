@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-ECGame.EngineLib.ArithmeticCompressionModels = function ArithmeticCompressionModels(){};
+ECGame.EngineLib.ArithmeticCompressionModels = function ArithmeticCompressionModels(){return;};
 
 
 

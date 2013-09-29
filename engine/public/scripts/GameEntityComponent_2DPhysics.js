@@ -99,7 +99,7 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 		},
 		
 		//set<classname>NetDirty
-		clearNetDirty : function clearNetDirty(){},
+		clearNetDirty : function clearNetDirty(){return;},
 		
 		serialize : function serialize(inSerializer)
 		{

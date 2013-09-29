@@ -53,10 +53,10 @@ ECGame.EngineLib.EntityComponent_2DCamera = ECGame.EngineLib.Class.create({
 		},
 		
 		//set<classname>NetDirty
-		clearNetDirty : function clearNetDirty(){},
+		clearNetDirty : function clearNetDirty(){return;},
 		
-		cleanup : function cleanup(){},
-		serialize : function serialize(){},
+		cleanup : function cleanup(){return;},
+		serialize : function serialize(){return;},
 		
 		onAddedToWorld : function onAddedToWorld(inEvent)
 		{
@@ -87,9 +87,6 @@ ECGame.EngineLib.EntityComponent_2DCamera = ECGame.EngineLib.Class.create({
 			this.centerOn(this._position, this._myMap);
 		},
 		
-		copyFrom : function copyFrom(inOther)
-		{
-			//TODO copy parent classes rect?
-		}
+		copyFrom : function copyFrom(/*inOther*/){return;}//TODO copy parent classes rect?
 	}
 });

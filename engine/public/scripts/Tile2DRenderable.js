@@ -41,16 +41,16 @@ ECGame.EngineLib.Tile2DRenderable = ECGame.EngineLib.Class.create({
 			this._myOwnerMap = inOwnerMap;
 		},
 		
-		render : function render(inCanvas2DContext, inCameraRect)
+		render : function render(inGraphics)
 		{
 			if(ECGame.Settings.isDebugDraw_Map())
 			{
 				return;
 			}
-			this._myOwnerMap._myTileSet.renderTile(
-				inCanvas2DContext,
+			this._myOwnerMap._myTileSet.renderTile(//THIS IS ALL WRONG!!
+				inGraphics,
 				this._myTileValue,
-				this._myAnchorPosition.subtract(inCameraRect)
+				this._myAnchorPosition
 			);
 		}
 		

@@ -83,12 +83,14 @@ ECGame.EngineLib.Sound = ECGame.EngineLib.Class.create(
 		
 		_getDebugPlayingString : function _getDebugPlayingString()//TODO overload this as well!!
 		{
-			return ''//TODO add description name
-					+ '(' + this._mySource._mySoundDescriptionID + '):'
-					//TODO sample name?
-					+ '(' + this._mySource._mySampleID + '):'
-					+ this._mySource._myFileName
-					+ '(' + this._mySource._myAssetID + ')';
+			return (
+				/*''//TODO add description name
+				+*/ '(' + this._mySource._mySoundDescriptionID + '):'
+				//TODO sample name?
+				+ '(' + this._mySource._mySampleID + '):'
+				+ this._mySource._myFileName
+				+ '(' + this._mySource._myAssetID + ')'
+			);
 		},
 		
 		getPercentPlayed : function getPercentPlayed(inCurrentTime)
@@ -96,9 +98,9 @@ ECGame.EngineLib.Sound = ECGame.EngineLib.Class.create(
 			return (inCurrentTime - this._mySource._myStartTime) / this._mySource.buffer.duration;
 		},
 		
-		debugDraw : function debugDraw(inCanvas2DContext, inCameraRect, inCurrentTime)
+		debugDraw : function debugDraw(inGraphics, inCurrentTime)
 		{
-			ECGame.instance.getGraphics().drawDebugText(
+			inGraphics.drawDebugText(
 				'-' + this._getDebugPlayingString() + ': %' + Math.floor(this.getPercentPlayed(inCurrentTime) * 100),
 				ECGame.Settings.Debug.Sound_Area_DrawColor
 			);

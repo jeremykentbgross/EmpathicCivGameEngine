@@ -54,7 +54,7 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			this._myWebsocket.myECGameSocket = this;
 		},
 		
-		_onOpen : function _onOpen(inEvent)//_onConnectedToServer
+		_onOpen : function _onOpen(/*inEvent*/)//_onConnectedToServer
 		{
 			var aThis;	//var i, binary;//HACK
 			
@@ -90,7 +90,7 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			aThis.send(binary);*/
 		},
 		
-		_onClose : function _onClose(inEvent)//_onDisconnectedFromServer
+		_onClose : function _onClose(/*inEvent*/)//_onDisconnectedFromServer
 		{
 			//https://developer.mozilla.org/en-US/docs/Web/API/CloseEvent
 			//http://www.iana.org/assignments/websocket/websocket.xml#subprotocol-name

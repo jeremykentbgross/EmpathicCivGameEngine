@@ -119,17 +119,29 @@ ECGame.EngineLib.Ray2D = ECGame.EngineLib.Class.create({
 			//	that is also > t_old (meaning skipping plane intersection that happened before reaching this node as t_old is last intersection)
 			aNewT = Number.MAX_VALUE;
 			if(aT123.myX < aNewT && aT123.myX > this._myT)
+			{
 				aNewT = aT123.myX;
+			}
 			if(aT123.myY < aNewT && aT123.myY > this._myT)
+			{
 				aNewT = aT123.myY;
+			}
 //			if(aT123.myZ < aNewT && aT123.myZ > this._myT)
+//			{
 //				aNewT = aT123.myZ;
+//			}
 			if(aT456.myX < aNewT && aT456.myX > this._myT)
+			{
 				aNewT = aT456.myX;
+			}
 			if(aT456.myY < aNewT && aT456.myY > this._myT)
+			{
 				aNewT = aT456.myY;
+			}
 //			if(aT456.myZ < aNewT && aT456.myZ > this._myT)
+//			{
 //				aNewT = aT456.myZ;
+//			}
 
 			//if we are past the end of the ray, quit!
 			if(aNewT > this._myMaxT)
@@ -203,15 +215,23 @@ ECGame.EngineLib.Ray2D = ECGame.EngineLib.Class.create({
 			//	that is also > t_old (meaning skipping plane intersection that happened before reaching this node as t_old is last intersection)
 			aNewT = this._myMaxT;
 			if(aT123.myX < aNewT && aT123.myX > 0 && inAABB.containsPoint(this.getPoint(aT123.myX + 0.001)))
+			{
 				aNewT = aT123.myX;
+			}
 			if(aT123.myY < aNewT && aT123.myY > 0 && inAABB.containsPoint(this.getPoint(aT123.myY + 0.001)))
+			{
 				aNewT = aT123.myY;
+			}
 //			if(aT123.myZ < aNewT && aT123.myZ > 0)
 //				aNewT = aT123.myZ;
 			if(aT456.myX < aNewT && aT456.myX > 0 && inAABB.containsPoint(this.getPoint(aT456.myX + 0.001)))
+			{
 				aNewT = aT456.myX;
+			}
 			if(aT456.myY < aNewT && aT456.myY > 0 && inAABB.containsPoint(this.getPoint(aT456.myY + 0.001)))
+			{
 				aNewT = aT456.myY;
+			}
 //			if(aT456.myZ < aNewT && aT456.myZ > 0)
 //				aNewT = aT456.myZ;
 
@@ -257,6 +277,6 @@ ECGame.EngineLib.Ray2D = ECGame.EngineLib.Class.create({
 		getMaxLength : function getMaxLength()
 		{
 			return this._myMaxT;
-		},
+		}
 	}
 });

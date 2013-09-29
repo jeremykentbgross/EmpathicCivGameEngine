@@ -49,7 +49,7 @@ ECGame.Settings =
 		,effectsVolume : 1.0//TODO save user changes in their local settings
 		
 		//Note this should be roughly the renderspace radius (or a bit more to hear off screen)
-		,default2DRadius : 512
+		,default2DRadius : 543	//~sqrt(768^2 + 768^2) / 2, or half the diagnal of the screen
 		
 		/*
 		Note: should instead probably convert pixels to meters,
