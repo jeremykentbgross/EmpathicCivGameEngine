@@ -30,6 +30,8 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 		this._clicked = {};
 		this._active = false;
 		
+		this._myGraphics = null;
+		
 		ECGame.instance.getUpdater("MasterUpdater").addUpdate(this);
 	},
 	Parents : [ECGame.EngineLib.GameEventSystem],
@@ -47,33 +49,42 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 			return ECGame.Settings.UpdateOrder.INPUT;
 		},
 		
-		initClient : function initClient(inCanvas)
+		init : function init(inGraphics, inCanvas)
 		{
-			var aThis = this;
-			
+			var aThis,
+				aOnInput;
+
 			if(ECGame.Settings.Network.isServer)
 			{
 				return;
 			}
+			
+			aThis = this;
+			this._myGraphics = inGraphics;
+			
+			aOnInput = function onInput(inEvent)
+			{
+				aThis._myGraphics.getInput()._handleInput(inEvent);
+			};
 				
 			require(
 				['dojo/on'],
 				function importDojoCallback(inOn)
 				{
 					//keys:
-					inOn(document, 'keydown', aThis._onInput);
-					inOn(document, 'keyup', aThis._onInput);
-					inOn(document, 'keypress', aThis._onInput);
+					inOn(document, 'keydown', aOnInput);
+					inOn(document, 'keyup', aOnInput);
+					inOn(document, 'keypress', aOnInput);
 									
 					//mouse:
-					inOn(inCanvas, 'mousedown', aThis._onInput);
-					inOn(inCanvas, 'mouseup', aThis._onInput);
-					inOn(inCanvas, 'mousemove', aThis._onInput);
-					//inOn(inCanvas, 'mousewheel', aThis._onInput);
-					inOn(inCanvas, 'click', aThis._onInput);
-					//inOn(inCanvas, 'dblclick', aThis._onInput);
-					inOn(inCanvas, 'mouseout', aThis._onInput);
-					inOn(inCanvas, 'mouseover', aThis._onInput);
+					inOn(inCanvas, 'mousedown', aOnInput);
+					inOn(inCanvas, 'mouseup', aOnInput);
+					inOn(inCanvas, 'mousemove', aOnInput);
+					//inOn(inCanvas, 'mousewheel', aOnInput);
+					inOn(inCanvas, 'click', aOnInput);
+					//inOn(inCanvas, 'dblclick', aOnInput);
+					inOn(inCanvas, 'mouseout', aOnInput);
+					inOn(inCanvas, 'mouseover', aOnInput);
 									
 					//prevent right click menu on the render area
 					inOn(inCanvas, 'contextmenu', function blockContextMenu(event){ event.preventDefault(); } );
@@ -88,16 +99,12 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 			this._supressKeyboardEvents = inSupress;
 		},
 		
-		_onInput : function _onInput(inEvent)
-		{
-			ECGame.instance.getInput()._handleInput(inEvent);
-		},
-		
 		_handleInput : function _handleInput(inEvent)
 		{
-			var eventType, key;
+			var eventType, key, mouseRatio;
 			
 			eventType = inEvent.type;
+			mouseRatio = this._myGraphics.getBackBufferToFrontBufferRatio();
 					
 			switch(eventType)
 			{
@@ -118,14 +125,14 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 				case 'mouseup':
 					this._buttons[inEvent.button] = (eventType === 'mousedown');
 					this._clicked[inEvent.button] = (eventType === 'mouseup');//Needed because right mouse doesn't get click event
-					this._mouseLoc.myX = inEvent.offsetX;
-					this._mouseLoc.myY = inEvent.offsetY;
+					this._mouseLoc.myX = Math.round(inEvent.offsetX * mouseRatio);
+					this._mouseLoc.myY = Math.round(inEvent.offsetY * mouseRatio);
 					break;
 					
 				case 'mousemove':
 					//TODO firefox doesn't like offset, but it is needed.  jquery can fix this.  Need to go back to it from jodo i think.
-					this._mouseLoc.myX = inEvent.offsetX /*|| inEvent.layerX*/;// Firefox hack:  || inEvent.layer
-					this._mouseLoc.myY = inEvent.offsetY /*|| inEvent.layerY*/;// Firefox hack:  || inEvent.layer
+					this._mouseLoc.myX = Math.round(inEvent.offsetX * mouseRatio) /*|| inEvent.layerX*/;// Firefox hack:  || inEvent.layer
+					this._mouseLoc.myY = Math.round(inEvent.offsetY * mouseRatio) /*|| inEvent.layerY*/;// Firefox hack:  || inEvent.layer
 					break;
 				/*
 				case 'mousewheel':
@@ -134,8 +141,8 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 				*/
 				case 'click':
 					this._clicked[inEvent.button] = true;
-					this._mouseLoc.myX = inEvent.offsetX;
-					this._mouseLoc.myY = inEvent.offsetY;
+					this._mouseLoc.myX = Math.round(inEvent.offsetX * mouseRatio);
+					this._mouseLoc.myY = Math.round(inEvent.offsetY * mouseRatio);
 					break;
 				/*
 				case 'dblclick':
@@ -201,7 +208,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 				}
 				if(ECGame.Settings.isDebugDraw_Input())
 				{
-					ECGame.instance.getGraphics().drawDebugText(
+					this._myGraphics.drawDebugText(
 						inputString,
 						(this._active ?
 							ECGame.Settings.Debug.Input_Active_DrawColor :

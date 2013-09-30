@@ -28,8 +28,8 @@ ECGame.EngineLib.Camera2 = function Camera2()
 		this._myRect = ECGame.EngineLib.AABB2.create(
 			0,
 			0,
-			ECGame.instance.getGraphics().getWidth(),
-			ECGame.instance.getGraphics().getHeight()
+			ECGame.instance.getGraphics().getBackBufferWidth(),
+			ECGame.instance.getGraphics().getBackBufferHeight()
 		);
 	}
 	else
@@ -37,8 +37,8 @@ ECGame.EngineLib.Camera2 = function Camera2()
 		this._myRect = ECGame.EngineLib.AABB2.create(
 			0,
 			0,
-			ECGame.Settings.Graphics.initWidth,
-			ECGame.Settings.Graphics.initHeight
+			ECGame.Settings.Graphics.backBufferWidth,
+			ECGame.Settings.Graphics.backBufferHeight
 		);
 	}
 };

@@ -25,6 +25,8 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 	{
 		this.GameRulesBase();
 		
+		ECGame.Settings.Graphics.mode = ECGame.Settings.Graphics.MODES.SPLIT_HORIZONTAL;
+		
 		//constants:
 		this._mapSizeInTiles = 64;
 		this._tileSize = 64;

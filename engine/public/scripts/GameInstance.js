@@ -22,6 +22,10 @@
 ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 	Constructor : function GameInstance()
 	{
+		var aThis;
+		
+		aThis = this;
+		
 		this._myIsRunning = false;
 		
 		this._myGameRules = null;
@@ -30,8 +34,8 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 		this._myMasterUpdater = null;
 		
 		this._myTimer = null;
-		this._myInput = null;
-		this._myGraphics = null;
+		this._myInput = [];
+		this._myGraphics = [];
 		this._mySoundSystem = null;
 		this._myNetwork = null;
 		
@@ -40,6 +44,27 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 		this._myChatSystem = null;
 		
 		this._myLocalUser = null;
+		
+		this._myRenderSpaceWidth = 0;
+		this._myRenderSpaceHeight = 0;
+		
+		this._myNoCanvasSupportedMessage =
+			"Sorry your browser does not support Canvas. Please use different browser:<br/>" +
+			"<a href=\"http:\x2f\x2fwww.google.com/chrome\">Get Chrome (**recommended!**) </a><br/>" +
+			"or<br/>" +
+			"<a href=\"http:\x2f\x2fwww.mozilla-europe.org/en/firefox/\">Get Firefox</a>";
+		
+		this._myGraphicsContainer = null;
+		if(!ECGame.Settings.Network.isServer)
+		{
+			require(
+				['dojo/dom'],
+				function importDojoCallback(dom)
+				{
+					aThis._myGraphicsContainer = dom.byId('graphicsContainer');
+				}
+			);
+		}
 	},
 	Parents : [],
 	flags : {},
@@ -89,13 +114,15 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 		{
 			return this._myTimer;
 		},
-		getInput : function getInput()
+		getInput : function getInput(inIndex)
 		{
-			return this._myInput;
+			inIndex = inIndex || 0;
+			return this._myInput[inIndex];
 		},
-		getGraphics : function getGraphics()
+		getGraphics : function getGraphics(inIndex)
 		{
-			return this._myGraphics;
+			inIndex = inIndex || 0;
+			return this._myGraphics[inIndex];
 		},
 		getSoundSystem : function getSoundSystem()
 		{
@@ -114,11 +141,113 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			return this._myLocalUser;
 		},
 		
+		_setupSinglePaneGraphics : function _setupSinglePaneGraphics()
+		{
+			var aGraphics
+				,aSucceeded
+				;
+			
+			this._myRenderSpaceWidth = ECGame.Settings.Graphics.backBufferWidth;
+			this._myRenderSpaceHeight = ECGame.Settings.Graphics.backBufferHeight;
+			
+			this._myGraphicsContainer.innerHTML +=
+				"<canvas id='canvasSingle'>" +
+				this._myNoCanvasSupportedMessage +
+				"</canvas>";
+			
+			aGraphics = ECGame.EngineLib.Graphics2D.create();
+			this._myGraphics.push(aGraphics);
+			aSucceeded = aGraphics.init(0, 'canvasSingle');
+			this._myInput.push(aGraphics.getInput());
+			
+			return aSucceeded;
+		},
 		
+		_setupSplitHorizontalGraphics : function _setupSplitHorizontalGraphics()
+		{
+			var aGraphics
+				,aSucceeded
+				;
+				
+			aSucceeded = true;
+			
+			this._myRenderSpaceWidth = ECGame.Settings.Graphics.backBufferWidth * 2;
+			this._myRenderSpaceHeight = ECGame.Settings.Graphics.backBufferHeight;
+			
+			this._myGraphicsContainer.innerHTML +=
+				"<canvas id='canvasSplitHorizontalLeft'>" +
+				this._myNoCanvasSupportedMessage +
+				"</canvas>" +
+				"<canvas id='canvasSplitHorizontalRight'>" +
+				this._myNoCanvasSupportedMessage +
+				"</canvas>";
+			
+			aGraphics = ECGame.EngineLib.Graphics2D.create();
+			this._myGraphics.push(aGraphics);
+			aSucceeded = aSucceeded && aGraphics.init(0, 'canvasSplitHorizontalLeft');
+			this._myInput.push(aGraphics.getInput());
+			
+			aGraphics = ECGame.EngineLib.Graphics2D.create();
+			this._myGraphics.push(aGraphics);
+			aSucceeded = aSucceeded && aGraphics.init(1, 'canvasSplitHorizontalRight');
+			this._myInput.push(aGraphics.getInput());
+			
+			return aSucceeded;
+		},
+		
+		_setupSplit4WayGraphics : function _setupSplit4WayGraphics()
+		{
+			var aGraphics
+				,aSucceeded
+				;
+				
+			aSucceeded = true;
+			
+			this._myRenderSpaceWidth = ECGame.Settings.Graphics.backBufferWidth * 2;
+			this._myRenderSpaceHeight = ECGame.Settings.Graphics.backBufferHeight * 2;
+			
+			this._myGraphicsContainer.innerHTML +=
+				"<canvas id='canvas4WayTopLeft'>" +
+				this._myNoCanvasSupportedMessage +
+				"</canvas>" +
+				"<canvas id='canvas4WayTopRight'>" +
+				this._myNoCanvasSupportedMessage +
+				"</canvas><br/>" +
+				"<canvas id='canvas4WayBottomLeft'>" +
+				this._myNoCanvasSupportedMessage +
+				"</canvas>" +
+				"<canvas id='canvas4WayBottomRight'>" +
+				this._myNoCanvasSupportedMessage +
+				"</canvas>";
+			
+			aGraphics = ECGame.EngineLib.Graphics2D.create();
+			this._myGraphics.push(aGraphics);
+			aSucceeded = aSucceeded && aGraphics.init(0, 'canvas4WayTopLeft');
+			this._myInput.push(aGraphics.getInput());
+			
+			aGraphics = ECGame.EngineLib.Graphics2D.create();
+			this._myGraphics.push(aGraphics);
+			aSucceeded = aSucceeded && aGraphics.init(1, 'canvas4WayTopRight');
+			this._myInput.push(aGraphics.getInput());
+			
+			aGraphics = ECGame.EngineLib.Graphics2D.create();
+			this._myGraphics.push(aGraphics);
+			aSucceeded = aSucceeded && aGraphics.init(2, 'canvas4WayBottomLeft');
+			this._myInput.push(aGraphics.getInput());
+			
+			aGraphics = ECGame.EngineLib.Graphics2D.create();
+			this._myGraphics.push(aGraphics);
+			aSucceeded = aSucceeded && aGraphics.init(3, 'canvas4WayBottomRight');
+			this._myInput.push(aGraphics.getInput());
+			
+			return aSucceeded;
+		},
 		
 		
 		update : function update(inDt)
 		{
+			var i;
+			
 			try
 			{
 				//TODO pass update struct instead
@@ -126,8 +255,10 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 				
 				if(!ECGame.Settings.Network.isServer)
 				{
-					//TODO pass graphics/struct to stuff and not just the back buffer
-					this._myGraphics.render(this._myGameRules);
+					for(i = 0; i < this._myGraphics.length; ++i)
+					{
+						this._myGraphics[i].render(this._myGameRules);
+					}
 				}
 			}
 			catch(error)
@@ -150,9 +281,59 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 				}
 			}
 		},
+
+		
+		_resizeSpace : function _resizeSpace()
+		{
+			var aContainer
+				,aMaxWidth
+				,aMaxHeight
+				,aWidthToHeight
+				,aNewWidth
+				,aNewHeight
+				,aNewWidthToHeight
+				,aThis
+				;
+			
+			aThis = ECGame.instance;
+			
+			aContainer = aThis._myGraphicsContainer;
+			aMaxWidth = ECGame.instance._myRenderSpaceWidth;
+			aMaxHeight = ECGame.instance._myRenderSpaceHeight;
+			aWidthToHeight = aMaxWidth / aMaxHeight;
+
+			aNewWidth = window.innerWidth;
+			aNewHeight = window.innerHeight;
+			aNewWidthToHeight = aNewWidth / aNewHeight;
+			
+			if(aNewWidthToHeight > aWidthToHeight)
+			{
+				aNewWidth = aNewHeight * aWidthToHeight;
+			}
+			else
+			{
+				aNewHeight = aNewWidth / aWidthToHeight;
+			}
+			aNewHeight = Math.min(aNewHeight, aMaxHeight);
+			aNewWidth = Math.min(aNewWidth, aMaxWidth);
+			if(false)//no resize
+			{
+				aNewHeight = aMaxHeight;
+				aNewWidth = aMaxWidth;
+			}
+			
+			aContainer.style.height = aNewHeight + 'px';
+			aContainer.style.width = aNewWidth + 'px';
+			aContainer.style.marginTop = Math.max((window.innerHeight-aNewHeight) / 2, 0) + 'px';
+			aContainer.style.marginLeft = Math.max((window.innerWidth-aNewWidth) / 2, 0) + 'px';
+		},
 		
 		_init : function _init()
 		{
+			var aThis;
+
+			aThis = this;
+			
 			//the app is running or not
 			this._myIsRunning = true;
 			
@@ -195,9 +376,25 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			if(ECGame.Settings.Network.isServer)
 			{
 				this._myLocalUser = new ECGame.EngineLib.User("Server", ECGame.EngineLib.User.USER_IDS.SERVER);
+				
+				//create input TODO input(s) on server so input components can get updates.
+				this._myInput.push(ECGame.EngineLib.Input.create());
 			}
 			else
 			{
+				/*window.addEventListener('resize', this._resizeSpace, false);
+				window.addEventListener('orientationchange', this._resizeSpace, false);
+				window.addEventListener('load', this._resizeSpace, false);*/
+				require(
+					['dojo/on'],
+					function importDojoCallback(inOn)
+					{
+						inOn(window, 'resize', aThis._resizeSpace);
+						inOn(window, 'orientationchange', aThis._resizeSpace);
+						inOn(window, 'load', aThis._resizeSpace);
+					}
+				);
+				
 				//TODO use FB id or something in the future
 				this._myLocalUser = new ECGame.EngineLib.User(
 					"NewUser" + Math.floor(Math.random()*65536)
@@ -205,10 +402,37 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 				);
 				
 				//Init graphics
-				this._myGraphics = ECGame.EngineLib.Graphics2D.create();
-				if(!this._myGraphics.init())
+				switch(ECGame.Settings.Graphics.mode)
 				{
-					return false;
+					case ECGame.Settings.Graphics.MODES.SINGLE_PANE:
+					{
+						if(!this._setupSinglePaneGraphics())
+						{
+							return false;
+						}
+					}
+					break;
+					case ECGame.Settings.Graphics.MODES.SPLIT_HORIZONTAL:
+					{
+						if(!this._setupSplitHorizontalGraphics())
+						{
+							return false;
+						}
+					}
+					break;
+					/*case ECGame.Settings.Graphics.MODES.SPLIT_VERTICAL:
+					{
+						return false;
+					}
+					break;*/
+					case ECGame.Settings.Graphics.MODES.SPLIT_4WAY:
+					{
+						if(!this._setupSplit4WayGraphics())
+						{
+							return false;
+						}
+					}
+					break;
 				}
 			
 				//Init Asset Manager
@@ -216,13 +440,6 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 				
 				//Init Sound
 				this._mySoundSystem = ECGame.EngineLib.SoundSystem.create();
-			}
-			
-			//Init Input
-			this._myInput = ECGame.EngineLib.Input.create();
-			if(!ECGame.Settings.Network.isServer)
-			{
-				this._myInput.initClient(this._myGraphics.getDomTarget());
 			}
 			
 			//setup network and chat

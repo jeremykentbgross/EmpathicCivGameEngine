@@ -37,8 +37,17 @@ ECGame.Settings =
 		
 	Graphics :
 	{
-		initWidth : 768,	//TODO back buffer size, presentation size!
-		initHeight : 768
+		MODES :
+		{
+			SINGLE_PANE : 0,
+			SPLIT_HORIZONTAL : 1,
+			//SPLIT_VERTICAL : 2,
+			SPLIT_4WAY : 3
+			
+		},
+		backBufferWidth : 768,	//TODO back buffer size, presentation size!
+		backBufferHeight : 768,
+		mode : 0	//MODES.SINGLE_PANE
 		//use 3d?
 		//canvas (2d), webgl (3d), threejs (3d), noDefault (none)
 	},
@@ -343,5 +352,5 @@ ECGame.Settings =
 ///////////////////////////////////////////////////////////////////
 
 //ECGame.Settings.Debug.Text_Size = 10;
-//ECGame.Settings.Graphics.initWidth = 1024;
-//ECGame.Settings.Graphics.initHeight = 512;
+//ECGame.Settings.Graphics.backBufferWidth = 1024;
+//ECGame.Settings.Graphics.backBufferHeight = 512;

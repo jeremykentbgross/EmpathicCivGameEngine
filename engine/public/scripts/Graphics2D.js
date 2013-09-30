@@ -28,6 +28,7 @@
 ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 	Constructor : function Graphics2D()
 	{
+		this._myIndex = -1;
 		this._myCanvas = null;
 		this._myCanvas2DContext = null;
 		
@@ -40,6 +41,8 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 		this._myCurrentCamera = null;
 		this._myDrawOffsetX = 0;
 		this._myDrawOffsetY = 0;
+		
+		this._myInput = null;
 	},
 	Parents : [],
 	flags : {},
@@ -49,27 +52,17 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 
 	Definition :
 	{
-		init : function init()
+		init : function init(inGraphicsIndex, inCanvasID)
 		{
 			var aThis = this;
+			
+			this._myIndex = inGraphicsIndex;
+			
 			require(
-				['dojo/dom', 'dojo/dom-construct'],
-				function importDojoCallback(dom, domConstruct)
+				['dojo/dom'],
+				function importDojoCallback(dom)
 				{
-					var domGraphicsContainer = dom.byId('graphicsContainer');
-					aThis._myCanvas = domConstruct.create(
-						'canvas',
-						{
-							id : 'canvas',//TODO different id here!
-							width : ECGame.Settings.Graphics.initWidth,
-							height : ECGame.Settings.Graphics.initHeight,
-							//TODO localize this:
-							innerHTML: "Sorry your browser does not support Canvas. Please use different browser:" +
-											"<a href=\"http:\\x2f\\x2fwww.google.com/chrome\">Get Chrome (**recommended!**) </a> or" +
-											"<a href=\"http:\\x2f\\x2fwww.mozilla-europe.org/en/firefox/\">Get Firefox</a>"
-						},
-						domGraphicsContainer
-					);
+					aThis._myCanvas = dom.byId(inCanvasID);
 				}
 			);
 			
@@ -80,12 +73,14 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 			this._myCanvas2DContext = this._myCanvas.getContext('2d');
 			
 			this._myBackBufferCanvas = document.createElement('canvas');	//TODO create another way, with dojo maybe?
-			this._myBackBufferCanvas.width = this._myCanvas.width;
-			this._myBackBufferCanvas.height = this._myCanvas.height;
+			this._myBackBufferCanvas.width = this._myCanvas.width = ECGame.Settings.Graphics.backBufferWidth;
+			this._myBackBufferCanvas.height = this._myCanvas.height = ECGame.Settings.Graphics.backBufferHeight;
 			this._myBackBufferCanvas2DContext = this._myBackBufferCanvas.getContext('2d');
 			
 			this._myDebugTextArray = [];
 			this._myDebugTextAssociatedColorsArray = [];
+			
+			this._myInput = ECGame.EngineLib.Input.create(this, this._myCanvas);
 			
 			return true;
 		},
@@ -120,23 +115,35 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 			}
 		},
 		
-		
-		
-		
-		//TODO needed?
-		getDomTarget : function getDomTarget()
+		getInput : function getInput()
 		{
-			return this._myCanvas;
+			return this._myInput;
 		},
-		//TODO resize canvas listeners (like cameras)
+		getIndex : function getIndex()
+		{
+			return this._myIndex;
+		},
+		
 		//TODO rename final/frontbuffer/??getW/H
-		getWidth : function getWidth()
+		/*getWidth : function getWidth()
 		{
 			return this._myCanvas.width;
 		},
 		getHeight : function getHeight()
 		{
 			return this._myCanvas.height;
+		},*/
+		getBackBufferWidth : function getBackBufferWidth()
+		{
+			return this._myBackBufferCanvas.width;
+		},
+		getBackBufferHeight : function getBackBufferHeight()
+		{
+			return this._myBackBufferCanvas.height;
+		},
+		getBackBufferToFrontBufferRatio : function getBackBufferToFrontBufferRatio()
+		{
+			return this._myBackBufferCanvas.width / this._myCanvas.clientWidth;
 		},
 		
 		
