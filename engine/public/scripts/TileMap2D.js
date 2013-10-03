@@ -136,6 +136,9 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			
 			if(!ECGame.Settings.Network.isServer)
 			{
+				//HACK:
+				this._myMiniMapNativeTileResolution = ECGame.Settings.Graphics.backBufferWidth / inMapSizeInTiles;
+
 				//setup minimap
 				this._myMiniMapCanvas = document.createElement('canvas');	//TODO create another way, with dojo maybe?
 				this._myMiniMapCanvas.width = this._myMapSizeInTiles * this._myMiniMapNativeTileResolution;

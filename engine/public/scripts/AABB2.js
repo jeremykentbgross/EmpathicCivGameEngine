@@ -234,7 +234,7 @@ ECGame.EngineLib.AABB2.prototype.getRightBottom = function getRightBottom()
 
 
 
-ECGame.EngineLib.AABB2.prototype.setRightBottom = function getRightBottom(inPoint)
+ECGame.EngineLib.AABB2.prototype.setRightBottom = function setRightBottom(inPoint)
 {
 	this.myWidth = Math.max(inPoint.myX - this.myX, 0);
 	this.myHeight = Math.max(inPoint.myY - this.myY, 0);
@@ -252,6 +252,11 @@ ECGame.EngineLib.AABB2.prototype.getLeftBottom = function getLeftBottom()
 ECGame.EngineLib.AABB2.prototype.getWidthHeight = function getWidthHeight()
 {
 	return ECGame.EngineLib.Point2.create(this.myWidth, this.myHeight);
+};
+ECGame.EngineLib.AABB2.prototype.setWidthHeight = function setWidthHeight(inWidthHeight)
+{
+	this.myWidth = inWidthHeight.myX;
+	this.myHeight = inWidthHeight.myY;
 };
 
 

@@ -169,7 +169,25 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 		
 		renderMiniMap : function renderMiniMap(inGraphics, inTargetSpaceRect)
 		{
+			var aCameraRect
+				,aScale
+				;
+			
+			inTargetSpaceRect = inTargetSpaceRect || inGraphics.getBackBufferRect();
 			this._map.render(inGraphics, inTargetSpaceRect);
+			
+			aScale = inTargetSpaceRect.myWidth / this._mapsize;
+			//&? = inTargetSpaceRect.myHeight / this._mapsize
+			
+			aCameraRect = this.getCurrentCamera().getRect();
+			aCameraRect.setLeftTop(
+				aCameraRect.getLeftTop().scale(aScale)
+			);
+			aCameraRect.setWidthHeight(
+				aCameraRect.getWidthHeight().scale(aScale)
+			);
+			inGraphics.setStrokeStyle('rgba(255, 255, 255, 1)');
+			inGraphics.strokeRect(aCameraRect);
 		},
 
 		getBoundingBox : function getBoundingBox()

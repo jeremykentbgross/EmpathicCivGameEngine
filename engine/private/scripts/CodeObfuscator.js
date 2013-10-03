@@ -57,6 +57,7 @@ ECGame.WebServerTools.Obfuscator = function Obfuscator()
 	
 	this.addIgnore('this');
 	this.addIgnore('prototype');
+	this.addIgnore('constructor');
 	this.addIgnore('break');
 	this.addIgnore('const');
 	this.addIgnore('continue');
@@ -251,7 +252,7 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	}
 	
 	aReorderingArray = [];
-	logData += "Final NameSpaces:" + '\n';
+	logData += "\n\n\nFinal NameSpaces:" + '\n';
 	for(name in this._nameSpaces)
 	{
 		aReorderingArray.push(name);
@@ -263,7 +264,7 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	}
 	
 	aReorderingArray = [];
-	logData += "Function Names:" + '\n';
+	logData += "\n\n\nFunction Names:" + '\n';
 	for(name in this._functionNames)
 	{
 		aReorderingArray.push(name);
@@ -275,7 +276,7 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	}
 	
 	aReorderingArray = [];
-	logData += "Parameter Variables:" + '\n';
+	logData += "\n\n\nParameter Variables:" + '\n';
 	for(name in this._parameterNames)
 	{
 		aReorderingArray.push(name);
@@ -289,7 +290,7 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	}
 	
 	aReorderingArray = [];
-	logData += "Local Variables:" + '\n';
+	logData += "\n\n\nLocal Variables:" + '\n';
 	for(name in this._variableNames)
 	{
 		aReorderingArray.push(name);
@@ -307,7 +308,7 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	}
 	
 	aReorderingArray = [];
-	logData += "Member Variables:" + '\n';
+	logData += "\n\n\nMember Variables:" + '\n';
 	for(name in this._memberNames)
 	{
 		aReorderingArray.push(name);
@@ -325,7 +326,7 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	}
 	
 	aReorderingArray = [];
-	logData += "\n\n\nIncluded Words:" + '\n';
+	logData += "\n\n\n\n\n\nIncluded Words:" + '\n';
 	for(name in this._wordMap)
 	{
 		aReorderingArray.push(name);
@@ -337,7 +338,7 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	}
 	
 	aReorderingArray = [];
-	logData += "Ignored Words:" + '\n';
+	logData += "\n\n\nIgnored Words:" + '\n';
 	for(name in this._ignoreMap)
 	{
 		aReorderingArray.push(name);
@@ -349,7 +350,7 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	}
 	
 	aReorderingArray = [];
-	logData += "Unmapped Words:" + '\n';
+	logData += "\n\n\nUnmapped Words:" + '\n';
 	for(name in this._unmappedWordsMap)
 	{
 		aReorderingArray.push(name);
@@ -361,7 +362,7 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	}
 	
 	aReorderingArray = [];
-	logData += "Localized Strings:" + '\n';
+	logData += "\n\n\nLocalized Strings:" + '\n';
 	for(i = 0; i < this._localizationStrings.length; ++i)
 	{
 		logData += 'Localized String:\t' + this._localizationStrings[i] + '\n';
@@ -530,6 +531,11 @@ ECGame.WebServerTools.Obfuscator.prototype._addVariableName = function _addVaria
 
 ECGame.WebServerTools.Obfuscator.prototype._addMemberName = function _addMemberName(inMemberName)
 {
+		//if this member is also a function then its already covered!
+	if(this._functionNames[inMemberName])
+	{
+		return;
+	}
 	this._memberNames[inMemberName] = true;
 	this._addWord(inMemberName);
 };

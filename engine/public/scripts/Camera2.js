@@ -91,5 +91,5 @@ ECGame.EngineLib.Camera2.prototype.getTargetPosition = function getTargetPositio
 
 ECGame.EngineLib.Camera2.prototype.getRect = function getRect()
 {
-	return this._myRect;
+	return this._myRect.clone();
 };
