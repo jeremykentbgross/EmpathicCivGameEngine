@@ -143,6 +143,15 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 		{
 			return this._myBackBufferCanvas.height;
 		},
+		getBackBufferRect : function getBackBufferRect()
+		{
+			return ECGame.EngineLib.AABB2.create(
+				0,
+				0,
+				this._myBackBufferCanvas.width,
+				this._myBackBufferCanvas.height
+			);
+		},
 		getBackBufferToFrontBufferRatio : function getBackBufferToFrontBufferRatio()
 		{
 			return this._myBackBufferCanvas.width / this._myCanvas.clientWidth;
@@ -326,17 +335,6 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 				Math.round(inPosition.myY - this._myDrawOffsetY),
 				Math.round(inSrcRect.myWidth),
 				Math.round(inSrcRect.myHeight)
-			);
-		},
-
-		
-		getBackBufferRect : function getBackBufferRect()
-		{
-			return ECGame.EngineLib.AABB2.create(
-				0,
-				0,
-				this._myBackBufferCanvas.width,
-				this._myBackBufferCanvas.height
 			);
 		},
 		//context wrapper functions////////////////////////////////////////////

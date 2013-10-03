@@ -126,6 +126,11 @@ ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(//TODO TileDesc/Anima
 			return this._myTiles[inID]._myLayer;
 		},
 		
+		getTileMiniMapColor : function getTileMiniMapColor(inID)
+		{
+			return this._myTiles[inID].miniMapColor;
+		},
+		
 		getPhysicsRect : function getPhysicsRect(inID, inPosition)
 		{
 			var physicsRect = this._myTiles[inID].physics;

@@ -76,6 +76,10 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 		
 		//TODO optimization: if debug, use array instead!
 		this._myTileInstanceTree = null;
+		
+		//minimap
+		this._myMiniMapCanvas = null;
+		this._myMiniMapCanvas2DContext = null;
 	},
 	Parents : [ECGame.EngineLib.GameObject],
 	flags : { netDynamic : true },
@@ -97,7 +101,9 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 
 		init : function init(inWorld, inTileSet, inMapSizeInTiles, inTileSize)
 		{
-			var aMapSize;
+			var aMapSize
+				,i
+				;
 			
 			this._myWorld = inWorld;
 			this._myTileSet = inTileSet;
@@ -112,6 +118,12 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			if(inTileSet.getNumberOfTiles() < 256)
 			{
 				this._myTileIndexArray = new Uint8Array(inMapSizeInTiles * inMapSizeInTiles);
+				//TODO may should reserve zero for no tile instead?
+				//fill with max value because we do not allow writing the same tile over itself for performance reasons and 0 will be valid
+				for(i = 0; i < this._myTileIndexArray.length; ++i)
+				{
+					this._myTileIndexArray[i] = 255;
+				}
 			}
 			else
 			{
@@ -120,6 +132,21 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			
 			this._myTileInstanceTree = ECGame.EngineLib.QuadTree.create();
 			this._myTileInstanceTree.init(this._myAABB, this._myTileSize);
+			
+			if(!ECGame.Settings.Network.isServer)
+			{
+				//setup minimap
+				this._myMiniMapCanvas = document.createElement('canvas');	//TODO create another way, with dojo maybe?
+				this._myMiniMapCanvas.width = this._myMapSizeInTiles;
+				this._myMiniMapCanvas.height = this._myMapSizeInTiles;
+				this._myMiniMapCanvas2DContext = this._myMiniMapCanvas.getContext('2d');
+			}
+		},
+		
+		render : function render(inGraphics, inTargetSpaceRect)
+		{
+			inTargetSpaceRect = inTargetSpaceRect || inGraphics.getBackBufferRect();
+			inGraphics.drawImageInRect(this._myMiniMapCanvas, inTargetSpaceRect);
 		},
 
 		setTileSet : function setTileSet(inTileSet)
@@ -147,10 +174,15 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			
 			if(inTilePosition.myX < 0 || this._myMapSizeInTiles <= inTilePosition.myX
 				|| inTilePosition.myY < 0 || this._myMapSizeInTiles <= inTilePosition.myY
-				|| inTileValue < 0 || this._myTileSet.getNumberOfTiles() <= inTileValue
+				//|| inTileValue < 0 || this._myTileSet.getNumberOfTiles() <= inTileValue
 				)
 			{
 				//if the location or tile is invalid return
+				return;
+			}
+			if(inTileValue < 0 || this._myTileSet.getNumberOfTiles() <= inTileValue)
+			{
+				this.clearTile(inTilePosition);
 				return;
 			}
 			
@@ -213,6 +245,18 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 
 			//insert to tilemap
 			this._myTileInstanceTree.insertToSmallestContaining(aTileInstance);
+			
+			if(!ECGame.Settings.Network.isServer)
+			{
+				//write to minimap
+				this._myMiniMapCanvas2DContext.fillStyle = this._myTileSet.getTileMiniMapColor(inTileValue);
+				this._myMiniMapCanvas2DContext.fillRect(
+					inTilePosition.myX,
+					inTilePosition.myY,
+					1,
+					1
+				);//TODO clear rect on clearTile
+			}
 
 			//if we can modify the map for the net, then remember this change.
 			if(this.canUserModifyNet())
@@ -230,13 +274,17 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 
 		clearTile : function clearTile(inTilePosition)
 		{
-			var anIndex;
+			var anIndex
+				,aClearTileValue
+				;
 			
 			if(inTilePosition.myX < 0 || this._myMapSizeInTiles <= inTilePosition.myX
 				|| inTilePosition.myY < 0 || this._myMapSizeInTiles <= inTilePosition.myY)
 			{
 				return;
 			}
+			
+			aClearTileValue = this._myTileSet.getNumberOfTiles();
 			
 			this._clearTileInRect(
 				new ECGame.EngineLib.AABB2(
@@ -248,7 +296,31 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			);
 			
 			anIndex = inTilePosition.myY * this._myMapSizeInTiles + inTilePosition.myX;
-			this._myTileIndexArray[anIndex] = this._myTileSet.getNumberOfTiles() + 1;
+			this._myTileIndexArray[anIndex] = aClearTileValue;
+			
+			if(!ECGame.Settings.Network.isServer)
+			{
+				//write to minimap
+				this._myMiniMapCanvas2DContext.clearRect(
+					inTilePosition.myX,
+					inTilePosition.myY,
+					1,
+					1
+				);
+			}
+			
+			//if we can modify the map for the net, then remember this change.
+			if(this.canUserModifyNet())
+			{
+				this._myChangedTiles.push(
+					{
+						X : inTilePosition.myX,
+						Y : inTilePosition.myY,
+						Value : aClearTileValue
+					}
+				);
+				this.setNetDirty();
+			}
 		},
 		
 		//used to remove a specific tile
@@ -380,7 +452,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			{
 				inSerializer.serializeObject(this, this.TileMap2D._serializeFormat);
 				//TODO if(reading){this.cleanup(); this.init(...);}
-				
+
 				for(j = 0; j < this._myMapSizeInTiles; ++j)
 				{
 					for(i = 0; i < this._myMapSizeInTiles; ++i)

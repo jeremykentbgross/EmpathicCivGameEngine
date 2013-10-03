@@ -122,6 +122,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						,anchor : ECGame.EngineLib.Point2.create()
 						,_myLayer : 0
 						,size : ECGame.EngineLib.Point2.create(64,64)
+						,miniMapColor : 'rgba(0, 255, 0, 1)'
 					},
 					{
 						fileName : 'game/images/test/waterSub.png' //'images/water.png'
@@ -129,18 +130,21 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						,_myLayer : 0
 						,size : ECGame.EngineLib.Point2.create(/*64,64*/96,96)
 						,physics : ECGame.EngineLib.AABB2.create(0, 0, 64, 64)
+						,miniMapColor : 'rgba(0, 0, 255, 1)'
 					},
 					{
 						fileName : 'game/images/ground_256.png'//'game/images/ground_level01_01.png' //'images/test/groundSub5.png' // 'images/dirt.png',
 						,anchor : ECGame.EngineLib.Point2.create()
 						,_myLayer : 0
 						,size : ECGame.EngineLib.Point2.create(96,96)//64,64)
+						,miniMapColor : 'rgba(128, 64, 0, 1)'
 					},
 					{
 						fileName : 'game/images/dirt.png2'//HACK 'images/wall_level01_01__.png'
 						,anchor : ECGame.EngineLib.Point2.create()
 						,_myLayer : 0
 						,size : ECGame.EngineLib.Point2.create(64,64)
+						,miniMapColor : 'rgba(255, 0, 255, 1)'
 					},
 					{
 						fileName : 'game/images/wall_256.png'//'game/images/wall_level01_01.png'//'images/test/wall.png' //
@@ -148,6 +152,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						,_myLayer : 1
 						,physics : ECGame.EngineLib.AABB2.create(0, 0, 64, 64)
 						,size : ECGame.EngineLib.Point2.create(96,96)
+						,miniMapColor : 'rgba(64, 32, 0, 1)'
 					}
 					//,
 				]
@@ -201,7 +206,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						//console.log("TRYING TO SET MAP TILE");
 						aMap.setTile(
 							new ECGame.EngineLib.Point2(6, ++aIndex), 
-							4
+							Math.floor(Math.random()*6)//4
 						);
 						//console.log("SHOULD HAVE SET MAP TILE");
 						return aIndex < 32;
@@ -444,17 +449,24 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 		{
 			if(ECGame.instance.isRunning())
 			{
-				this._gameWorld.render(inGraphics);
-				
-				if(this._isRayTestMode)
+				if(inGraphics.getIndex() === 0)
 				{
-					var rayTrace = new ECGame.EngineLib.RayTracer2D.create();
-					rayTrace.fireRay(
-						this._gameWorld.getPhysics()._myDetectionTree
-						,this._rayStart.clone()
-						,this._rayEnd.clone()
-					);
-					rayTrace.debugDraw(inGraphics);
+					this._gameWorld.render(inGraphics);
+					
+					if(this._isRayTestMode)
+					{
+						var rayTrace = new ECGame.EngineLib.RayTracer2D.create();
+						rayTrace.fireRay(
+							this._gameWorld.getPhysics()._myDetectionTree
+							,this._rayStart.clone()
+							,this._rayEnd.clone()
+						);
+						rayTrace.debugDraw(inGraphics);
+					}
+				}
+				if(inGraphics.getIndex() === 1)
+				{
+					this._gameWorld.renderMiniMap(inGraphics);
 				}
 			}
 			else

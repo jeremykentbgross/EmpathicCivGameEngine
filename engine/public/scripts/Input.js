@@ -192,7 +192,10 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 					aCursorPosition.getWidthHeight().scale(0.5)
 				)
 				.add(//add the camera offset because the fill rect below will subtract it off again
-					inGraphics.getCamera2D().getRect().getLeftTop()
+					(inGraphics.getCamera2D() ?
+						inGraphics.getCamera2D().getRect().getLeftTop()
+						: ECGame.EngineLib.Point2.create()
+					)
 				)
 			);
 			

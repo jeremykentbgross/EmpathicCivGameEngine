@@ -285,6 +285,7 @@ Final NameSpace:	getStartPoint
 Final NameSpace:	getString
 Final NameSpace:	getTargetPosition
 Final NameSpace:	getTileLayer
+Final NameSpace:	getTileMiniMapColor
 Final NameSpace:	getTileRenderRect
 Final NameSpace:	getTimer
 Final NameSpace:	getTop
@@ -401,6 +402,7 @@ Final NameSpace:	removeUpdate
 Final NameSpace:	removeUser
 Final NameSpace:	removedFromWorld
 Final NameSpace:	render
+Final NameSpace:	renderMiniMap
 Final NameSpace:	renderTile
 Final NameSpace:	renderTileInRect
 Final NameSpace:	replaceCallback
@@ -745,6 +747,7 @@ Function Name:	getStartPoint
 Function Name:	getString
 Function Name:	getTargetPosition
 Function Name:	getTileLayer
+Function Name:	getTileMiniMapColor
 Function Name:	getTileRenderRect
 Function Name:	getTimer
 Function Name:	getTop
@@ -859,6 +862,7 @@ Function Name:	removeUpdate
 Function Name:	removeUser
 Function Name:	removedFromWorld
 Function Name:	render
+Function Name:	renderMiniMap
 Function Name:	renderTile
 Function Name:	renderTileInRect
 Function Name:	replaceCallback
@@ -1092,6 +1096,7 @@ Parameter Variable:	inTargetCenter
 Parameter Variable:	inTargetNodesMinSize
 Parameter Variable:	inTargetPoint
 Parameter Variable:	inTargetRect
+Parameter Variable:	inTargetSpaceRect
 Parameter Variable:	inTest
 Parameter Variable:	inTestName
 Parameter Variable:	inText
@@ -1149,6 +1154,7 @@ Local Variable:	aCameraRect
 Local Variable:	aCharIndex
 Local Variable:	aChild
 Local Variable:	aClassName
+Local Variable:	aClearTileValue
 Local Variable:	aCollisionList
 Local Variable:	aCollisionRect
 Local Variable:	aContainer
@@ -1773,6 +1779,8 @@ Member Variable:	_myMasterVolume
 Member Variable:	_myMasterVolumeUserValue
 Member Variable:	_myMaxT
 Member Variable:	_myMinSize
+Member Variable:	_myMiniMapCanvas
+Member Variable:	_myMiniMapCanvas2DContext
 Member Variable:	_myName
 Member Variable:	_myNetDirty
 Member Variable:	_myNetDirtyInstances
@@ -2082,6 +2090,7 @@ Member Variable:	getStartPoint			*****
 Member Variable:	getString			*****
 Member Variable:	getTargetPosition			*****
 Member Variable:	getTileLayer			*****
+Member Variable:	getTileMiniMapColor			*****
 Member Variable:	getTileRenderRect			*****
 Member Variable:	getTimer			*****
 Member Variable:	getTop			*****
@@ -2165,6 +2174,7 @@ Member Variable:	maxArrayLength			*****
 Member Variable:	maxlength			*****
 Member Variable:	measureText			*****
 Member Variable:	min			*****
+Member Variable:	miniMapColor			*****
 Member Variable:	mode			*****
 Member Variable:	mouseLoc			*****
 Member Variable:	moveTo			*****
@@ -2250,6 +2260,7 @@ Member Variable:	removeUpdate			*****
 Member Variable:	removeUser			*****
 Member Variable:	removedFromWorld			*****
 Member Variable:	render			*****
+Member Variable:	renderMiniMap			*****
 Member Variable:	renderTile			*****
 Member Variable:	renderTileInRect			*****
 Member Variable:	requestVelocity			*****
@@ -2689,6 +2700,8 @@ Included Word:	_myMasterVolume
 Included Word:	_myMasterVolumeUserValue
 Included Word:	_myMaxT
 Included Word:	_myMinSize
+Included Word:	_myMiniMapCanvas
+Included Word:	_myMiniMapCanvas2DContext
 Included Word:	_myName
 Included Word:	_myNetDirty
 Included Word:	_myNetDirtyInstances
@@ -2833,6 +2846,7 @@ Included Word:	aCameraRect
 Included Word:	aCharIndex
 Included Word:	aChild
 Included Word:	aClassName
+Included Word:	aClearTileValue
 Included Word:	aCollisionList
 Included Word:	aCollisionRect
 Included Word:	aContainer
@@ -3197,6 +3211,7 @@ Included Word:	getStartPoint
 Included Word:	getString
 Included Word:	getTargetPosition
 Included Word:	getTileLayer
+Included Word:	getTileMiniMapColor
 Included Word:	getTileRenderRect
 Included Word:	getTimer
 Included Word:	getTop
@@ -3367,6 +3382,7 @@ Included Word:	inTargetCenter
 Included Word:	inTargetNodesMinSize
 Included Word:	inTargetPoint
 Included Word:	inTargetRect
+Included Word:	inTargetSpaceRect
 Included Word:	inTest
 Included Word:	inTestName
 Included Word:	inText
@@ -3476,6 +3492,7 @@ Included Word:	methodIndex
 Included Word:	methodName
 Included Word:	methods
 Included Word:	metrics
+Included Word:	miniMapColor
 Included Word:	minute
 Included Word:	mode
 Included Word:	mouseLoc
@@ -3596,6 +3613,7 @@ Included Word:	removeUpdate
 Included Word:	removeUser
 Included Word:	removedFromWorld
 Included Word:	render
+Included Word:	renderMiniMap
 Included Word:	renderTile
 Included Word:	renderTileInRect
 Included Word:	renderables

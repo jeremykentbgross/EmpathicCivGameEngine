@@ -166,6 +166,11 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 				ECGame.instance.getSoundSystem().debugDraw(inGraphics, this);
 			}
 		},
+		
+		renderMiniMap : function renderMiniMap(inGraphics, inTargetSpaceRect)
+		{
+			this._map.render(inGraphics, inTargetSpaceRect);
+		},
 
 		getBoundingBox : function getBoundingBox()
 		{
