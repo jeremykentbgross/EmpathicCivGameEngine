@@ -80,6 +80,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 		//minimap
 		this._myMiniMapCanvas = null;
 		this._myMiniMapCanvas2DContext = null;
+		this._myMiniMapNativeTileResolution = 10;
 	},
 	Parents : [ECGame.EngineLib.GameObject],
 	flags : { netDynamic : true },
@@ -137,8 +138,8 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			{
 				//setup minimap
 				this._myMiniMapCanvas = document.createElement('canvas');	//TODO create another way, with dojo maybe?
-				this._myMiniMapCanvas.width = this._myMapSizeInTiles;
-				this._myMiniMapCanvas.height = this._myMapSizeInTiles;
+				this._myMiniMapCanvas.width = this._myMapSizeInTiles * this._myMiniMapNativeTileResolution;
+				this._myMiniMapCanvas.height = this._myMapSizeInTiles * this._myMiniMapNativeTileResolution;
 				this._myMiniMapCanvas2DContext = this._myMiniMapCanvas.getContext('2d');
 			}
 		},
@@ -251,10 +252,10 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 				//write to minimap
 				this._myMiniMapCanvas2DContext.fillStyle = this._myTileSet.getTileMiniMapColor(inTileValue);
 				this._myMiniMapCanvas2DContext.fillRect(
-					inTilePosition.myX,
-					inTilePosition.myY,
-					1,
-					1
+					inTilePosition.myX * this._myMiniMapNativeTileResolution,
+					inTilePosition.myY * this._myMiniMapNativeTileResolution,
+					this._myMiniMapNativeTileResolution,
+					this._myMiniMapNativeTileResolution
 				);//TODO clear rect on clearTile
 			}
 
@@ -302,10 +303,10 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			{
 				//write to minimap
 				this._myMiniMapCanvas2DContext.clearRect(
-					inTilePosition.myX,
-					inTilePosition.myY,
-					1,
-					1
+					inTilePosition.myX * this._myMiniMapNativeTileResolution,
+					inTilePosition.myY * this._myMiniMapNativeTileResolution,
+					this._myMiniMapNativeTileResolution,
+					this._myMiniMapNativeTileResolution
 				);
 			}
 			

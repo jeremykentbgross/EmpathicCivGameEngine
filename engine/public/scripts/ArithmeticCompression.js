@@ -118,7 +118,7 @@ ECGame.EngineLib.ArithmeticCompresser = ECGame.EngineLib.Class.create({
 			}
 			
 			//ECGame.log.error("Encode failed!");
-			ECGame.log.assert(false, "Encode failed!");
+			ECGame.log.assert(false, "Encode failed!" + value + inModel.getString());
 		},
 		
 		decode : function decode(inModel)

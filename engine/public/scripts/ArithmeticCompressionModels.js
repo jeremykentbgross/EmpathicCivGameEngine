@@ -41,6 +41,11 @@ ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel.cr
 };
 
 
+ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel.prototype.getString = function getString()
+{
+	return ':[' + this.myMin + ',' + this.myMax + ')';
+};
+
 
 ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel.prototype.setMinMax = function setMinMax(inMin, inMax)
 {

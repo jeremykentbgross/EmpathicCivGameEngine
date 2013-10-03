@@ -1781,6 +1781,7 @@ Member Variable:	_myMaxT
 Member Variable:	_myMinSize
 Member Variable:	_myMiniMapCanvas
 Member Variable:	_myMiniMapCanvas2DContext
+Member Variable:	_myMiniMapNativeTileResolution
 Member Variable:	_myName
 Member Variable:	_myNetDirty
 Member Variable:	_myNetDirtyInstances
@@ -2702,6 +2703,7 @@ Included Word:	_myMaxT
 Included Word:	_myMinSize
 Included Word:	_myMiniMapCanvas
 Included Word:	_myMiniMapCanvas2DContext
+Included Word:	_myMiniMapNativeTileResolution
 Included Word:	_myName
 Included Word:	_myNetDirty
 Included Word:	_myNetDirtyInstances
