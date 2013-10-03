@@ -169,6 +169,43 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 				this._clicked = {};
 			}
 		},
+		
+		render : function render(inGraphics)
+		{
+			var aCursorPosition;
+			
+			if(!this._active)
+			{
+				return;
+			}
+			
+			aCursorPosition = ECGame.EngineLib.AABB2.create(
+				0,
+				0,
+				ECGame.Settings.Debug.Input_MouseCursor_Size,
+				ECGame.Settings.Debug.Input_MouseCursor_Size
+			);
+			
+			//center on mouse position by subtracting half the cursor size
+			aCursorPosition.setLeftTop(
+				this._mouseLoc.subtract(
+					aCursorPosition.getWidthHeight().scale(0.5)
+				)
+				.add(//add the camera offset because the fill rect below will subtract it off again
+					inGraphics.getCamera2D().getRect().getLeftTop()
+				)
+			);
+			
+			if(ECGame.Settings.isDebugDraw_MouseCursor())
+			{
+				//setup the color
+				inGraphics.setFillStyle(ECGame.Settings.Debug.Input_MouseCursor_DrawColor);
+				//debug draw it
+				inGraphics.fillRect(aCursorPosition);
+			}
+			
+			//TODO need to draw a real cursor
+		},
 				
 		update : function update()
 		{

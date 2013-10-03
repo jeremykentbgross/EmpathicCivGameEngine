@@ -117,7 +117,7 @@ Final NameSpace:	_clearTileInRect
 Final NameSpace:	_createChainDownFunction
 Final NameSpace:	_createChainUpFunction
 Final NameSpace:	_createChildren
-Final NameSpace:	_debugDrawStats
+Final NameSpace:	_drawDebugText
 Final NameSpace:	_getDebugPlayingString
 Final NameSpace:	_getLeadingString
 Final NameSpace:	_handleInput
@@ -264,6 +264,7 @@ Final NameSpace:	getName
 Final NameSpace:	getNetGroup
 Final NameSpace:	getNetOwnerID
 Final NameSpace:	getNetwork
+Final NameSpace:	getNumberOfGraphicsDisplays
 Final NameSpace:	getNumberOfTiles
 Final NameSpace:	getParent
 Final NameSpace:	getPath
@@ -576,7 +577,7 @@ Function Name:	_clearTileInRect
 Function Name:	_createChainDownFunction
 Function Name:	_createChainUpFunction
 Function Name:	_createChildren
-Function Name:	_debugDrawStats
+Function Name:	_drawDebugText
 Function Name:	_getDebugPlayingString
 Function Name:	_getLeadingString
 Function Name:	_handleInput
@@ -723,6 +724,7 @@ Function Name:	getName
 Function Name:	getNetGroup
 Function Name:	getNetOwnerID
 Function Name:	getNetwork
+Function Name:	getNumberOfGraphicsDisplays
 Function Name:	getNumberOfTiles
 Function Name:	getParent
 Function Name:	getPath
@@ -1159,6 +1161,7 @@ Local Variable:	aCurrentPointDrawSize
 Local Variable:	aCurrentTime
 Local Variable:	aCurrentUser
 Local Variable:	aCurrentUserIndex
+Local Variable:	aCursorPosition
 Local Variable:	aD123
 Local Variable:	aD456
 Local Variable:	aDeletedTilesArray
@@ -1173,6 +1176,7 @@ Local Variable:	aFailedLoopsList
 Local Variable:	aFinishedSounds
 Local Variable:	aFinishedTimerNodes
 Local Variable:	aFractionalPart
+Local Variable:	aFrameCount
 Local Variable:	aFrameEvents
 Local Variable:	aGraphics
 Local Variable:	aHalfCurrentPointDrawSize
@@ -1338,7 +1342,6 @@ Local Variable:	force			*****
 Local Variable:	format			*****
 Local Variable:	found			*****
 Local Variable:	foundClass			*****
-Local Variable:	frameCount			*****
 Local Variable:	frameStats			*****
 Local Variable:	frames			*****
 Local Variable:	funcArray			*****
@@ -1449,6 +1452,7 @@ Member Variable:	BINARY_MODE			*****
 Member Variable:	BinarySerializer			*****
 Member Variable:	BitPacker			*****
 Member Variable:	CURRENT_MAX			*****
+Member Variable:	CUSTOM_SCREEN_LAYOUT			*****
 Member Variable:	Camera2			*****
 Member Variable:	CameraTarget_Draw			*****
 Member Variable:	CameraTarget_DrawColor			*****
@@ -1648,7 +1652,6 @@ Member Variable:	_createChildren			*****
 Member Variable:	_currentAnimation			*****
 Member Variable:	_currentFrame			*****
 Member Variable:	_data			*****
-Member Variable:	_debugDrawStats			*****
 Member Variable:	_defaultCamera			*****
 Member Variable:	_direction			*****
 Member Variable:	_domChatContainer			*****
@@ -1657,6 +1660,7 @@ Member Variable:	_domChatInput			*****
 Member Variable:	_domChatLog			*****
 Member Variable:	_domNetworkStatus			*****
 Member Variable:	_down			*****
+Member Variable:	_drawDebugText			*****
 Member Variable:	_drawTile			*****
 Member Variable:	_encoded			*****
 Member Variable:	_entities			*****
@@ -2057,6 +2061,7 @@ Member Variable:	getName			*****
 Member Variable:	getNetGroup			*****
 Member Variable:	getNetOwnerID			*****
 Member Variable:	getNetwork			*****
+Member Variable:	getNumberOfGraphicsDisplays			*****
 Member Variable:	getNumberOfTiles			*****
 Member Variable:	getParent			*****
 Member Variable:	getPath			*****
@@ -2347,6 +2352,7 @@ Included Word:	BINARY_MODE
 Included Word:	BinarySerializer
 Included Word:	BitPacker
 Included Word:	CURRENT_MAX
+Included Word:	CUSTOM_SCREEN_LAYOUT
 Included Word:	Camera2
 Included Word:	CameraTarget_Draw
 Included Word:	CameraTarget_DrawColor
@@ -2562,7 +2568,6 @@ Included Word:	_createChildren
 Included Word:	_currentAnimation
 Included Word:	_currentFrame
 Included Word:	_data
-Included Word:	_debugDrawStats
 Included Word:	_defaultCamera
 Included Word:	_direction
 Included Word:	_domChatContainer
@@ -2571,6 +2576,7 @@ Included Word:	_domChatInput
 Included Word:	_domChatLog
 Included Word:	_domNetworkStatus
 Included Word:	_down
+Included Word:	_drawDebugText
 Included Word:	_drawTile
 Included Word:	_encoded
 Included Word:	_entities
@@ -2839,6 +2845,7 @@ Included Word:	aCurrentPointDrawSize
 Included Word:	aCurrentTime
 Included Word:	aCurrentUser
 Included Word:	aCurrentUserIndex
+Included Word:	aCursorPosition
 Included Word:	aD123
 Included Word:	aD456
 Included Word:	aDeletedTilesArray
@@ -2853,6 +2860,7 @@ Included Word:	aFailedLoopsList
 Included Word:	aFinishedSounds
 Included Word:	aFinishedTimerNodes
 Included Word:	aFractionalPart
+Included Word:	aFrameCount
 Included Word:	aFrameEvents
 Included Word:	aGraphics
 Included Word:	aHalfCurrentPointDrawSize
@@ -3116,7 +3124,6 @@ Included Word:	force
 Included Word:	format
 Included Word:	found
 Included Word:	foundClass
-Included Word:	frameCount
 Included Word:	frameStats
 Included Word:	frames
 Included Word:	funcArray
@@ -3169,6 +3176,7 @@ Included Word:	getName
 Included Word:	getNetGroup
 Included Word:	getNetOwnerID
 Included Word:	getNetwork
+Included Word:	getNumberOfGraphicsDisplays
 Included Word:	getNumberOfTiles
 Included Word:	getParent
 Included Word:	getPath

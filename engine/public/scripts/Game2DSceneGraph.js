@@ -84,15 +84,15 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inGraphics)
 	var aThis = this;
 	var i;
 	var aCameraRect;
+	var aFrameCount;
 	
 	aCameraRect = inGraphics.getCamera2D().getRect();
-			
+	aFrameCount = ECGame.instance.getTimer().getFrameCount() * ECGame.instance.getNumberOfGraphicsDisplays() + inGraphics.getIndex();
+	
 	this._mySceneTree.walk(
 		function walkCallback(item)//TODO find/fix all unnamed functions; ie: function(
 		{
-			var frameCount = ECGame.instance.getTimer().getFrameCount();
-			
-			if(frameCount > item._myLastFrameDrawn)
+			if(aFrameCount > item._myLastFrameDrawn)
 			{
 				//calculate depth sorting position for this frame
 				item._myScreenPos = item._myAnchorPosition.subtract(aCameraRect.getLeftTop());
@@ -101,7 +101,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inGraphics)
 					item._myScreenPos.dot(aThis._rotMatrixRow2)
 				);
 			
-				item._myLastFrameDrawn = frameCount;
+				item._myLastFrameDrawn = aFrameCount;
 				renderables.push(item);
 			}
 		},

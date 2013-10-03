@@ -42,8 +42,8 @@ ECGame.Settings =
 			SINGLE_PANE : 0,
 			SPLIT_HORIZONTAL : 1,
 			//SPLIT_VERTICAL : 2,
-			SPLIT_4WAY : 3
-			
+			SPLIT_4WAY : 3,
+			CUSTOM_SCREEN_LAYOUT : 4
 		},
 		backBufferWidth : 768,	//TODO back buffer size, presentation size!
 		backBufferHeight : 768,

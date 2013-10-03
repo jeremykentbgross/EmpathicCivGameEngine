@@ -124,6 +124,10 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			inIndex = inIndex || 0;
 			return this._myGraphics[inIndex];
 		},
+		getNumberOfGraphicsDisplays : function getNumberOfGraphicsDisplays()
+		{
+			return this._myGraphics.length;
+		},
 		getSoundSystem : function getSoundSystem()
 		{
 			return this._mySoundSystem;
@@ -433,6 +437,11 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 						}
 					}
 					break;
+					/*case ECGame.Settings.Graphics.MODES.CUSTOM_SCREEN_LAYOUT:
+					{
+						//TODO
+					}
+					break;*/
 				}
 			
 				//Init Asset Manager

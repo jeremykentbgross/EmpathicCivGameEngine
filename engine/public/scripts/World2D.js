@@ -52,9 +52,6 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 
 		init : function init(inMapSizeInTiles, inTileSize, inMinPhysicsPartitionSize)
 		{
-			//TODO if??
-			this._mouseLoc = ECGame.EngineLib.Point2.create();
-			
 			this._mapsize = inMapSizeInTiles * inTileSize;
 			this._sceneGraph = new ECGame.EngineLib.Game2DSceneGraph();
 			this._sceneGraph.init(this._mapsize, inTileSize);
@@ -83,13 +80,6 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			
 			this._defaultCamera = ECGame.EngineLib.Camera2.create();
 			this._camera = null;
-			
-			//for listening to cursor position.
-			//TODO Only needed to debug draw cursor which should likely be elsewhere?
-			if(!ECGame.Settings.Network.isServer)
-			{
-				ECGame.instance.getInput().registerListener('Input', this);
-			}
 		},
 
 		addEntity : function addEntity(inEntity)
@@ -171,33 +161,7 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 				inGraphics.fillRect(target);
 			}
 			
-			//debugdraw cursor //TODO move the code into inputsystem.debugdraw/render and call it from here!
-			if(ECGame.Settings.isDebugDraw_MouseCursor())//TODO need to draw a real cursor, and NOT here!!
-			{
-				target = ECGame.EngineLib.AABB2.create(
-					0,
-					0,
-					ECGame.Settings.Debug.Input_MouseCursor_Size,
-					ECGame.Settings.Debug.Input_MouseCursor_Size
-				);
-				
-				//center on mouse position by subtracting half the cursor size
-				target.setLeftTop(
-					this._mouseLoc.subtract(
-						target.getWidthHeight().scale(0.5)
-					)
-					.add(//add the camera offset because the fill rect below will subtract it off again
-						this.getCurrentCamera().getRect().getLeftTop()
-					)
-				);
-				
-				//setup the color
-				inGraphics.setFillStyle(ECGame.Settings.Debug.Input_MouseCursor_DrawColor);
-				//debug draw it
-				inGraphics.fillRect(target);
-			}
-			
-			if(ECGame.Settings.isDebugDraw_Sound())
+			if(ECGame.Settings.isDebugDraw_Sound())//TODO world sound partitioning/occulsion
 			{
 				ECGame.instance.getSoundSystem().debugDraw(inGraphics, this);
 			}
@@ -287,12 +251,5 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 		},
 		
 		copyFrom : function copyFrom(/*inOther*/){return;},//TODO
-		
-		//TODO should cursor drawing be here? probably not, maybe move to GameFrameWork (instance)
-		//if(!ECGame.Settings.Network.isServer)//TODO axe if?
-		onInput : function onInput(inInputEvent)
-		{
-			this._mouseLoc = inInputEvent.mouseLoc;
-		}
 	}
 });

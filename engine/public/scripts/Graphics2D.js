@@ -97,8 +97,10 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 			//debug draw stats
 			if(ECGame.Settings.DEBUG)
 			{
-				this._debugDrawStats();
+				this._drawDebugText();
 			}
+			
+			this._myInput.render(this);
 			
 			//draw buffer on screen
 			this._myCanvas2DContext.drawImage(this._myBackBufferCanvas, 0, 0);
@@ -341,7 +343,7 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 		///////////////////////////////////////////////////////////////////////
 		
 		
-		_debugDrawStats : function _debugDrawStats()
+		_drawDebugText : function _drawDebugText()
 		{
 			var x
 				,y
