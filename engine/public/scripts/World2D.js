@@ -141,7 +141,7 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			//debug draw camera target point
 			if(ECGame.Settings.isDebugDraw_CameraTarget())
 			{
-				target = ECGame.EngineLib.AABB2.create(
+				target = ECGame.EngineLib.AABB2D.create(
 					0,
 					0,
 					ECGame.Settings.Debug.CameraTarget_Size,
@@ -196,7 +196,7 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 		},
 		getBoundingBox : function getBoundingBox()
 		{
-			return ECGame.EngineLib.AABB2.create(0, 0, this._mapsize, this._mapsize);
+			return ECGame.EngineLib.AABB2D.create(0, 0, this._mapsize, this._mapsize);
 		},
 
 		cleanup : function cleanup(){return;},//TODO

@@ -130,7 +130,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						,anchor : ECGame.EngineLib.Point2.create()
 						,_myLayer : 0
 						,size : ECGame.EngineLib.Point2.create(/*64,64*/96,96)
-						,physics : ECGame.EngineLib.AABB2.create(0, 0, 64, 64)
+						,physics : ECGame.EngineLib.AABB2D.create(0, 0, 64, 64)
 						,miniMapColor : 'rgba(0, 0, 255, 1)'
 					},
 					{
@@ -151,7 +151,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						fileName : 'game/images/wall_256.png'//'game/images/wall_level01_01.png'//'images/test/wall.png' //
 						,anchor : ECGame.EngineLib.Point2.create(32, 32)
 						,_myLayer : 1
-						,physics : ECGame.EngineLib.AABB2.create(0, 0, 64, 64)
+						,physics : ECGame.EngineLib.AABB2D.create(0, 0, 64, 64)
 						,size : ECGame.EngineLib.Point2.create(96,96)
 						,miniMapColor : 'rgba(64, 32, 0, 1)'
 					}
@@ -306,7 +306,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				{
 					frames.push(
 						ECGame.EngineLib.Animation2DFrame.create().init(
-							new ECGame.EngineLib.AABB2(96 * (i + 1), 96 * j, 96, 96),
+							ECGame.EngineLib.AABB2D.create(96 * (i + 1), 96 * j, 96, 96),
 							new ECGame.EngineLib.Point2(32, 32),
 							((i === 3 || i === 7) ? [new ECGame.EngineLib.Events.PlaySound(0, true, false/*, inRadius*/)] : null)
 						)
@@ -321,7 +321,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				frames = [];
 				frames.push(
 					ECGame.EngineLib.Animation2DFrame.create().init(
-						new ECGame.EngineLib.AABB2(0, 96 * j, 96, 96),
+						ECGame.EngineLib.AABB2D.create(0, 96 * j, 96, 96),
 						new ECGame.EngineLib.Point2(32, 32)
 					)
 				);
@@ -623,7 +623,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				{
 					var temp = this._gameWorld.getPhysics().createNewPhysicsObject();
 					temp.setAABB(
-						ECGame.EngineLib.AABB2.create(
+						ECGame.EngineLib.AABB2D.create(
 							mouseWorldPosition.myX
 							,mouseWorldPosition.myY
 							,Math.random() * 200
@@ -635,7 +635,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				{
 					var temp = this._gameWorld.getPhysics().createNewPhysicsObject();
 					temp.setAABB(
-						ECGame.EngineLib.AABB2.create(
+						ECGame.EngineLib.AABB2D.create(
 							mouseWorldPosition.myX
 							,mouseWorldPosition.myY
 							,Math.random() * 200
@@ -648,7 +648,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				{
 					var temp = this._gameWorld.getPhysics().createNewPhysicsObject();
 					temp.setAABB(
-						ECGame.EngineLib.AABB2.create(
+						ECGame.EngineLib.AABB2D.create(
 							mouseWorldPosition.myX
 							,mouseWorldPosition.myY
 							,Math.random() * 200

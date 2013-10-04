@@ -145,7 +145,7 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 		},
 		getBackBufferRect : function getBackBufferRect()
 		{
-			return ECGame.EngineLib.AABB2.create(
+			return ECGame.EngineLib.AABB2D.create(
 				0,
 				0,
 				this._myBackBufferCanvas.width,

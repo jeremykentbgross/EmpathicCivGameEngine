@@ -22,9 +22,9 @@
 ECGame.EngineLib.Animation2DFrame = ECGame.EngineLib.Class.create({
 	Constructor : function Animation2DFrame()
 	{
-		this._sourceRect = new ECGame.EngineLib.AABB2();
+		this._sourceRect = ECGame.EngineLib.AABB2D.create();
 		this._origin = new ECGame.EngineLib.Point2();
-		this._myAABB = new ECGame.EngineLib.AABB2(
+		this._myAABB = ECGame.EngineLib.AABB2D.create(
 			-this._origin.myX,
 			-this._origin.myY,
 			this._sourceRect.myWidth,
@@ -45,7 +45,7 @@ ECGame.EngineLib.Animation2DFrame = ECGame.EngineLib.Class.create({
 		{
 			this._sourceRect.copyFrom(inSrcRect);
 			this._origin.copyFrom(inOrigin);
-			this._myAABB = new ECGame.EngineLib.AABB2(
+			this._myAABB = ECGame.EngineLib.AABB2D.create(
 				-this._origin.myX,
 				-this._origin.myY,
 				this._sourceRect.myWidth,

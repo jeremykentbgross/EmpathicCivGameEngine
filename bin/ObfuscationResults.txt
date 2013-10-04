@@ -16,7 +16,7 @@ Base NameSpace:	webServer
 
 
 Final NameSpaces:
-Final NameSpace:	AABB2
+Final NameSpace:	AABB2D
 Final NameSpace:	AddedToEntity
 Final NameSpace:	AddedToWorld
 Final NameSpace:	Animation2D
@@ -173,9 +173,9 @@ Final NameSpace:	closePath
 Final NameSpace:	compare
 Final NameSpace:	componentMax
 Final NameSpace:	componentMin
+Final NameSpace:	containsAABB2D
 Final NameSpace:	containsItems
 Final NameSpace:	containsPoint
-Final NameSpace:	containsRect
 Final NameSpace:	copyFrom
 Final NameSpace:	create
 Final NameSpace:	createAndPlaySourceBuffer
@@ -254,7 +254,6 @@ Final NameSpace:	getInput
 Final NameSpace:	getInstanceRegistry
 Final NameSpace:	getIntersection
 Final NameSpace:	getLeft
-Final NameSpace:	getLeftBottom
 Final NameSpace:	getLeftTop
 Final NameSpace:	getLocalUser
 Final NameSpace:	getMap
@@ -314,7 +313,7 @@ Final NameSpace:	insertToAllBestFitting
 Final NameSpace:	insertToSmallestContaining
 Final NameSpace:	instance
 Final NameSpace:	intersectAABB
-Final NameSpace:	intersectsRect
+Final NameSpace:	intersectsAABB2D
 Final NameSpace:	isA
 Final NameSpace:	isActive
 Final NameSpace:	isAlwaysActive
@@ -490,7 +489,7 @@ Final NameSpace:	webServer
 
 
 Function Names:
-Function Name:	AABB2
+Function Name:	AABB2D
 Function Name:	AddedToEntity
 Function Name:	AddedToWorld
 Function Name:	Animation2D
@@ -642,9 +641,9 @@ Function Name:	closePath
 Function Name:	compare
 Function Name:	componentMax
 Function Name:	componentMin
+Function Name:	containsAABB2D
 Function Name:	containsItems
 Function Name:	containsPoint
-Function Name:	containsRect
 Function Name:	copyFrom
 Function Name:	create
 Function Name:	createAndPlaySourceBuffer
@@ -723,7 +722,6 @@ Function Name:	getInput
 Function Name:	getInstanceRegistry
 Function Name:	getIntersection
 Function Name:	getLeft
-Function Name:	getLeftBottom
 Function Name:	getLeftTop
 Function Name:	getLocalUser
 Function Name:	getMap
@@ -782,7 +780,7 @@ Function Name:	insertItemBack
 Function Name:	insertToAllBestFitting
 Function Name:	insertToSmallestContaining
 Function Name:	intersectAABB
-Function Name:	intersectsRect
+Function Name:	intersectsAABB2D
 Function Name:	isA
 Function Name:	isActive
 Function Name:	isAlwaysActive
@@ -1065,7 +1063,7 @@ Parameter Variable:	inObject
 Parameter Variable:	inOn
 Parameter Variable:	inOrigin
 Parameter Variable:	inOther
-Parameter Variable:	inOtherRect
+Parameter Variable:	inOtherAABB2D
 Parameter Variable:	inOwner
 Parameter Variable:	inOwnerMap
 Parameter Variable:	inParams
@@ -1265,6 +1263,7 @@ Local Variable:	aReadObject
 Local Variable:	aReadObjectsList
 Local Variable:	aReadResult
 Local Variable:	aRecievedObj
+Local Variable:	aReturnAABB2D
 Local Variable:	aSample
 Local Variable:	aScale
 Local Variable:	aSerializeData
@@ -1320,6 +1319,7 @@ Local Variable:	anIndex
 Local Variable:	anInstanceID
 Local Variable:	anInstanceList
 Local Variable:	anInstanceMap
+Local Variable:	anIntersection
 Local Variable:	anItem
 Local Variable:	anObject
 Local Variable:	anObjectClass
@@ -1419,7 +1419,6 @@ Local Variable:	objCenter			*****
 Local Variable:	objectClass			*****
 Local Variable:	outArray			*****
 Local Variable:	outEvents			*****
-Local Variable:	outIntersection			*****
 Local Variable:	outString			*****
 Local Variable:	outValue			*****
 Local Variable:	output			*****
@@ -1440,7 +1439,6 @@ Local Variable:	ref			*****
 Local Variable:	registry			*****
 Local Variable:	renderables			*****
 Local Variable:	request			*****
-Local Variable:	returnRect			*****
 Local Variable:	screenPos			*****
 Local Variable:	second			*****
 Local Variable:	serverRebootTime			*****
@@ -1958,7 +1956,7 @@ Member Variable:	world			*****
 
 
 Included Words:
-Included Word:	AABB2
+Included Word:	AABB2D
 Included Word:	AddedToEntity
 Included Word:	AddedToWorld
 Included Word:	Animation2D
@@ -2545,6 +2543,7 @@ Included Word:	aReadObject
 Included Word:	aReadObjectsList
 Included Word:	aReadResult
 Included Word:	aRecievedObj
+Included Word:	aReturnAABB2D
 Included Word:	aSample
 Included Word:	aScale
 Included Word:	aSerializeData
@@ -2613,6 +2612,7 @@ Included Word:	anIndex
 Included Word:	anInstanceID
 Included Word:	anInstanceList
 Included Word:	anInstanceMap
+Included Word:	anIntersection
 Included Word:	anItem
 Included Word:	anObject
 Included Word:	anObjectClass
@@ -2669,9 +2669,9 @@ Included Word:	componentRef
 Included Word:	compressClientCode
 Included Word:	condition
 Included Word:	constructorSrc
+Included Word:	containsAABB2D
 Included Word:	containsItems
 Included Word:	containsPoint
-Included Word:	containsRect
 Included Word:	copyFrom
 Included Word:	counter
 Included Word:	createAABB
@@ -2788,7 +2788,6 @@ Included Word:	getInput
 Included Word:	getInstanceRegistry
 Included Word:	getIntersection
 Included Word:	getLeft
-Included Word:	getLeftBottom
 Included Word:	getLeftTop
 Included Word:	getLocalUser
 Included Word:	getMap
@@ -2946,7 +2945,7 @@ Included Word:	inObject
 Included Word:	inOn
 Included Word:	inOrigin
 Included Word:	inOther
-Included Word:	inOtherRect
+Included Word:	inOtherAABB2D
 Included Word:	inOwner
 Included Word:	inOwnerMap
 Included Word:	inParams
@@ -3043,7 +3042,7 @@ Included Word:	instance
 Included Word:	instanceID
 Included Word:	instanceName
 Included Word:	intersectAABB
-Included Word:	intersectsRect
+Included Word:	intersectsAABB2D
 Included Word:	isA
 Included Word:	isActive
 Included Word:	isAlwaysActive
@@ -3178,7 +3177,6 @@ Included Word:	outArray
 Included Word:	outContainingNodes
 Included Word:	outDeletedItems
 Included Word:	outEvents
-Included Word:	outIntersection
 Included Word:	outLoadTarget
 Included Word:	outString
 Included Word:	outValue
@@ -3236,7 +3234,6 @@ Included Word:	replaceCallback
 Included Word:	request
 Included Word:	requestAnimFrame
 Included Word:	requestVelocity
-Included Word:	returnRect
 Included Word:	run
 Included Word:	runTests
 Included Word:	saveResultsNotesToFile

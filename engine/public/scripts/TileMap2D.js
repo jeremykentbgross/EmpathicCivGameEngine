@@ -113,7 +113,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			this._myTileSize = inTileSize;
 			
 			aMapSize = this._myMapSizeInTiles * this._myTileSize;
-			this._myAABB = new ECGame.EngineLib.AABB2(0, 0, aMapSize, aMapSize);
+			this._myAABB = ECGame.EngineLib.AABB2D.create(0, 0, aMapSize, aMapSize);
 			
 			ECGame.log.assert(inTileSet.getNumberOfTiles() < 256, "Currently unsupported number of tiles");
 			if(inTileSet.getNumberOfTiles() < 256)
@@ -191,7 +191,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			}
 			
 			//bounding box containing this tile instance in the map
-			aTileInstanceAABB = new ECGame.EngineLib.AABB2(
+			aTileInstanceAABB = ECGame.EngineLib.AABB2D.create(
 				inTilePosition.myX * this._myTileSize,
 				inTilePosition.myY * this._myTileSize,
 				this._myTileSize,
@@ -291,7 +291,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			aClearTileValue = this._myTileSet.getNumberOfTiles();
 			
 			this._clearTileInRect(
-				new ECGame.EngineLib.AABB2(
+				ECGame.EngineLib.AABB2D.create(
 					inTilePosition.myX * this._myTileSize,
 					inTilePosition.myY * this._myTileSize,
 					this._myTileSize,

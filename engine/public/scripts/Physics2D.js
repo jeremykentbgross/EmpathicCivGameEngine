@@ -32,7 +32,7 @@
 ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 	Constructor : function PhysicsObject2D()
 	{
-		this.QuadTreeItem(new ECGame.EngineLib.AABB2());
+		this.QuadTreeItem(ECGame.EngineLib.AABB2D.create());
 
 		this._myPhysicsSystemRef = null;
 		this._myStatus = null;
@@ -231,7 +231,7 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 		{
 			this._myDetectionTree = ECGame.EngineLib.QuadTree.create();
 			this._myDetectionTree.init(
-				ECGame.EngineLib.AABB2.create(0, 0, inWorldSize, inWorldSize),
+				ECGame.EngineLib.AABB2D.create(0, 0, inWorldSize, inWorldSize),
 				inMinSize
 			);
 			
@@ -498,7 +498,7 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 			for(i in this._myCollisionsRenderList)
 			{
 				aCollisionRect = this._myCollisionsRenderList[i].myAABB;
-				if(aCollisionRect.intersectsRect(aCameraRect))
+				if(aCollisionRect.intersectsAABB2D(aCameraRect))
 				{
 					inGraphics.fillRect(aCollisionRect);
 				}

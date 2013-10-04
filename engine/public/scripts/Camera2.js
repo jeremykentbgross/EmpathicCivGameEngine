@@ -25,7 +25,7 @@ ECGame.EngineLib.Camera2 = function Camera2()
 {
 	if(!ECGame.Settings.Network.isServer)
 	{
-		this._myRect = ECGame.EngineLib.AABB2.create(
+		this._myRect = ECGame.EngineLib.AABB2D.create(
 			0,
 			0,
 			ECGame.instance.getGraphics().getBackBufferWidth(),
@@ -34,7 +34,7 @@ ECGame.EngineLib.Camera2 = function Camera2()
 	}
 	else
 	{
-		this._myRect = ECGame.EngineLib.AABB2.create(
+		this._myRect = ECGame.EngineLib.AABB2D.create(
 			0,
 			0,
 			ECGame.Settings.Graphics.backBufferWidth,
@@ -57,7 +57,7 @@ ECGame.EngineLib.Camera2.prototype.init = function init(inWidth, inHeight)
 {
 	if(inWidth &&inHeight)
 	{
-		this._myRect = ECGame.EngineLib.AABB2.create(0, 0, inWidth, inHeight);
+		this._myRect = ECGame.EngineLib.AABB2D.create(0, 0, inWidth, inHeight);
 	}
 };
 

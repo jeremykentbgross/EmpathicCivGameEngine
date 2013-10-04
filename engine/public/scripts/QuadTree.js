@@ -44,7 +44,7 @@ ECGame.EngineLib.QuadTree.create = function create()
 //TODO get rid of init and create and just new this mother fucker
 ECGame.EngineLib.QuadTree.prototype.init = function init(inAABB, inMinSize, inParent)
 {
-	this._myAABB = inAABB || ECGame.EngineLib.AABB2.create(0,0,1,1);
+	this._myAABB = inAABB || ECGame.EngineLib.AABB2D.create(0,0,1,1);
 	this._myChildren = null;
 	this._myMinSize = inMinSize || 1;	//TODO find a way to have this in shared data or something
 	this._myItems = [];
@@ -74,7 +74,7 @@ ECGame.EngineLib.QuadTree.prototype._createChildren = function _createChildren()
 {
 	var aHalfWidth,
 		aHalfHeight,
-		createAABB = ECGame.EngineLib.AABB2.create;
+		createAABB = ECGame.EngineLib.AABB2D.create;
 	
 	if(this._myChildren === null)
 	{
@@ -122,7 +122,7 @@ ECGame.EngineLib.QuadTree.prototype.insertToSmallestContaining = function insert
 {
 	var i, aThisNodesSize;
 	
-	if(this._myAABB.containsRect(inItem.getAABB()))
+	if(this._myAABB.containsAABB2D(inItem.getAABB()))
 	{
 		inTargetNodesMinSize = inTargetNodesMinSize || Math.max(inItem.getAABB().myWidth, inItem.getAABB().myHeight);
 		aThisNodesSize = Math.max(this._myAABB.myWidth, this._myAABB.myHeight);
@@ -170,7 +170,7 @@ ECGame.EngineLib.QuadTree.prototype.insertToAllBestFitting = function insertToAl
 		return;
 	}
 	
-	if(this._myAABB.intersectsRect(inItem.getAABB()))
+	if(this._myAABB.intersectsAABB2D(inItem.getAABB()))
 	{
 		if(aThisNodesSize / 2 < Math.max(inTargetNodesMinSize, this._myMinSize))
 		{
@@ -206,7 +206,7 @@ ECGame.EngineLib.QuadTree.prototype.deleteItem = function deleteItem(inItem, inT
 {
 	var i, aThisNodesSize;
 	
-	if(this._myAABB.intersectsRect(inItem.getAABB()))
+	if(this._myAABB.intersectsAABB2D(inItem.getAABB()))
 	{
 		inTargetNodesMinSize = inTargetNodesMinSize || Math.max(inItem.getAABB().myWidth, inItem.getAABB().myHeight);
 		aThisNodesSize = Math.max(this._myAABB.myWidth, this._myAABB.myHeight);
@@ -239,13 +239,13 @@ ECGame.EngineLib.QuadTree.prototype.deleteIntersecting = function deleteIntersec
 		i,
 		keepChild = false;
 	
-	if(inAABB.containsRect(this._myAABB))
+	if(inAABB.containsAABB2D(this._myAABB))
 	{
 		this._myChildren = null;
 		this._myItems = [];
 		return false;
 	}
-	else if(this._myAABB.intersectsRect(inAABB))
+	else if(this._myAABB.intersectsAABB2D(inAABB))
 	{
 		if(this._myChildren !== null)
 		{
@@ -266,7 +266,7 @@ ECGame.EngineLib.QuadTree.prototype.deleteIntersecting = function deleteIntersec
 		loops = this._myItems.length;
 		for(i = 0; i < loops; ++i)
 		{
-			if(inAABB.intersectsRect(this._myItems[i].getAABB()))
+			if(inAABB.intersectsAABB2D(this._myItems[i].getAABB()))
 			{
 				//delete it
 				this._myItems.splice(i,1);
@@ -288,7 +288,7 @@ ECGame.EngineLib.QuadTree.prototype.deleteContained = function deleteContained(i
 	outDeletedItems = outDeletedItems || [];
 	aKeepChildren = false;
 	
-	if(inAABB.containsRect(this._myAABB))
+	if(inAABB.containsAABB2D(this._myAABB))
 	{
 		//delete everything
 		for(i in this._myItems)
@@ -305,7 +305,7 @@ ECGame.EngineLib.QuadTree.prototype.deleteContained = function deleteContained(i
 		this._myChildren = null;
 		this._myItems = [];
 	}
-	else if(this._myAABB.intersectsRect(inAABB))
+	else if(this._myAABB.intersectsAABB2D(inAABB))
 	{
 		if(this._myChildren !== null)
 		{
@@ -323,7 +323,7 @@ ECGame.EngineLib.QuadTree.prototype.deleteContained = function deleteContained(i
 	
 		for(i = 0; i < this._myItems.length; ++i)
 		{
-			if(inAABB.containsRect(this._myItems[i].getAABB()))
+			if(inAABB.containsAABB2D(this._myItems[i].getAABB()))
 			{
 				//delete it
 				outDeletedItems.push(this._myItems[i]);
@@ -343,12 +343,12 @@ ECGame.EngineLib.QuadTree.prototype.walk = function walk(inFunction, inAABB)
 	//if nothing is specified walk the whole tree
 	inAABB = inAABB || this._myAABB;
 	
-	if(this._myAABB.intersectsRect(inAABB))
+	if(this._myAABB.intersectsAABB2D(inAABB))
 	{
 		for(i = 0; i < this._myItems.length; ++i)
 		{
 			aItem = this._myItems[i];
-			if(aItem.getAABB().intersectsRect(inAABB))
+			if(aItem.getAABB().intersectsAABB2D(inAABB))
 			{
 				inFunction(aItem);
 			}
@@ -373,7 +373,7 @@ ECGame.EngineLib.QuadTree.prototype.debugDraw = function debugDraw(inGraphics, i
 	inFullNodeColor = inFullNodeColor || ECGame.Settings.Debug.QuadTree_OccupiedNode_DrawColor;
 	inItemColor = inItemColor || ECGame.Settings.Debug.QuadTree_Item_DrawColor;
 	
-	if(!this._myAABB.intersectsRect(inGraphics.getCamera2D().getRect()))
+	if(!this._myAABB.intersectsAABB2D(inGraphics.getCamera2D().getRect()))
 	{
 		return;
 	}

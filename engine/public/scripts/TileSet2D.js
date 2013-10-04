@@ -113,7 +113,7 @@ ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(//TODO TileDesc/Anima
 			var tile = this._myTiles[inID];
 			inPosition = inPosition || ECGame.EngineLib.Point2.create();
 			
-			return ECGame.EngineLib.AABB2.create(
+			return ECGame.EngineLib.AABB2D.create(
 				inPosition.myX - tile.anchor.myX,
 				inPosition.myY - tile.anchor.myY,
 				tile.size.myX,//image.width,//todo consider possible =>tile.scaledRect
@@ -140,7 +140,7 @@ ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(//TODO TileDesc/Anima
 				return null;
 			}
 			
-			return ECGame.EngineLib.AABB2.create(
+			return ECGame.EngineLib.AABB2D.create(
 				inPosition.myX + physicsRect.myX,
 				inPosition.myY + physicsRect.myY,
 				physicsRect.myWidth,//todo consider possible =>tile.scaledRect

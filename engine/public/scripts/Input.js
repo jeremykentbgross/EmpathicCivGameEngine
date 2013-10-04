@@ -186,7 +186,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 				return;
 			}
 			
-			aCursorPosition = ECGame.EngineLib.AABB2.create(
+			aCursorPosition = ECGame.EngineLib.AABB2D.create(
 				0,
 				0,
 				ECGame.Settings.Debug.Input_MouseCursor_Size,
