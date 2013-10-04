@@ -25,7 +25,7 @@ ECGame.EngineLib.QuadTreeItem = function QuadTreeItem(inAABB)
 };
 ECGame.EngineLib.QuadTreeItem.prototype.constructor = ECGame.EngineLib.QuadTreeItem;
 
-ECGame.EngineLib.QuadTreeItem.prototype.getAABB = function getAABB()
+ECGame.EngineLib.QuadTreeItem.prototype.getAABB2D = function getAABB2D()
 {
 	return this._myAABB;
 };
@@ -56,7 +56,7 @@ ECGame.EngineLib.QuadTree.prototype.init = function init(inAABB, inMinSize, inPa
 
 
 
-ECGame.EngineLib.QuadTree.prototype.getAABB = function getAABB()
+ECGame.EngineLib.QuadTree.prototype.getAABB2D = function getAABB2D()
 {
 	return this._myAABB;//Note not cloned because it **should be** faster for ray tracer
 };
@@ -122,9 +122,9 @@ ECGame.EngineLib.QuadTree.prototype.insertToSmallestContaining = function insert
 {
 	var i, aThisNodesSize;
 	
-	if(this._myAABB.containsAABB2D(inItem.getAABB()))
+	if(this._myAABB.containsAABB2D(inItem.getAABB2D()))
 	{
-		inTargetNodesMinSize = inTargetNodesMinSize || Math.max(inItem.getAABB().myWidth, inItem.getAABB().myHeight);
+		inTargetNodesMinSize = inTargetNodesMinSize || Math.max(inItem.getAABB2D().myWidth, inItem.getAABB2D().myHeight);
 		aThisNodesSize = Math.max(this._myAABB.myWidth, this._myAABB.myHeight);
 
 		if(aThisNodesSize / 2 < Math.max(inTargetNodesMinSize, this._myMinSize))
@@ -162,7 +162,7 @@ ECGame.EngineLib.QuadTree.prototype.insertToAllBestFitting = function insertToAl
 {
 	var i, aThisNodesSize;
 	
-	inTargetNodesMinSize = inTargetNodesMinSize || Math.max(inItem.getAABB().myWidth, inItem.getAABB().myHeight);
+	inTargetNodesMinSize = inTargetNodesMinSize || Math.max(inItem.getAABB2D().myWidth, inItem.getAABB2D().myHeight);
 	aThisNodesSize = Math.max(this._myAABB.myWidth, this._myAABB.myHeight);
 	
 	if(aThisNodesSize < inTargetNodesMinSize)
@@ -170,7 +170,7 @@ ECGame.EngineLib.QuadTree.prototype.insertToAllBestFitting = function insertToAl
 		return;
 	}
 	
-	if(this._myAABB.intersectsAABB2D(inItem.getAABB()))
+	if(this._myAABB.intersectsAABB2D(inItem.getAABB2D()))
 	{
 		if(aThisNodesSize / 2 < Math.max(inTargetNodesMinSize, this._myMinSize))
 		{
@@ -206,9 +206,9 @@ ECGame.EngineLib.QuadTree.prototype.deleteItem = function deleteItem(inItem, inT
 {
 	var i, aThisNodesSize;
 	
-	if(this._myAABB.intersectsAABB2D(inItem.getAABB()))
+	if(this._myAABB.intersectsAABB2D(inItem.getAABB2D()))
 	{
-		inTargetNodesMinSize = inTargetNodesMinSize || Math.max(inItem.getAABB().myWidth, inItem.getAABB().myHeight);
+		inTargetNodesMinSize = inTargetNodesMinSize || Math.max(inItem.getAABB2D().myWidth, inItem.getAABB2D().myHeight);
 		aThisNodesSize = Math.max(this._myAABB.myWidth, this._myAABB.myHeight);
 		
 		//if there are children and the children are not to small to contain the item:
@@ -266,7 +266,7 @@ ECGame.EngineLib.QuadTree.prototype.deleteIntersecting = function deleteIntersec
 		loops = this._myItems.length;
 		for(i = 0; i < loops; ++i)
 		{
-			if(inAABB.intersectsAABB2D(this._myItems[i].getAABB()))
+			if(inAABB.intersectsAABB2D(this._myItems[i].getAABB2D()))
 			{
 				//delete it
 				this._myItems.splice(i,1);
@@ -323,7 +323,7 @@ ECGame.EngineLib.QuadTree.prototype.deleteContained = function deleteContained(i
 	
 		for(i = 0; i < this._myItems.length; ++i)
 		{
-			if(inAABB.containsAABB2D(this._myItems[i].getAABB()))
+			if(inAABB.containsAABB2D(this._myItems[i].getAABB2D()))
 			{
 				//delete it
 				outDeletedItems.push(this._myItems[i]);
@@ -348,7 +348,7 @@ ECGame.EngineLib.QuadTree.prototype.walk = function walk(inFunction, inAABB)
 		for(i = 0; i < this._myItems.length; ++i)
 		{
 			aItem = this._myItems[i];
-			if(aItem.getAABB().intersectsAABB2D(inAABB))
+			if(aItem.getAABB2D().intersectsAABB2D(inAABB))
 			{
 				inFunction(aItem);
 			}
@@ -383,7 +383,7 @@ ECGame.EngineLib.QuadTree.prototype.debugDraw = function debugDraw(inGraphics, i
 		inGraphics.setStrokeStyle(inItemColor);
 		for(i in this._myItems)
 		{
-			inGraphics.strokeRect(this._myItems[i].getAABB());
+			inGraphics.strokeRect(this._myItems[i].getAABB2D());
 		}
 		
 		inGraphics.setStrokeStyle(inFullNodeColor);

@@ -45,7 +45,7 @@ ECGame.EngineLib.AssetManager = ECGame.EngineLib.Class.create({
 			{
 				if(imageInfo.isLoaded)
 				{
-					outLoadTarget.image = imageInfo.image;
+					outLoadTarget._myImage = imageInfo._myImage;
 				}
 				else
 				{
@@ -53,7 +53,7 @@ ECGame.EngineLib.AssetManager = ECGame.EngineLib.Class.create({
 					imageInfo.listeners.push(outLoadTarget);
 					
 					//set the default image
-					outLoadTarget.image = document.images[defaultImageName];//TODO query this with dojo
+					outLoadTarget._myImage = document.images[defaultImageName];//TODO query this with dojo
 				}
 			}
 			else
@@ -64,16 +64,16 @@ ECGame.EngineLib.AssetManager = ECGame.EngineLib.Class.create({
 				
 				imageInfo.listeners[0] = outLoadTarget;
 				
-				imageInfo.image = new Image();
-				imageInfo.image.src = inFileName;
-				imageInfo.image.onload = function()
+				imageInfo._myImage = new Image();
+				imageInfo._myImage.src = inFileName;
+				imageInfo._myImage.onload = function()
 				{
 					imageInfo.isLoaded = true;
 					
 					//set targets to have the loaded image
 					for(i = 0; i < imageInfo.listeners.length; ++i)
 					{
-						imageInfo.listeners[i].image = imageInfo.image;
+						imageInfo.listeners[i]._myImage = imageInfo._myImage;
 					}
 					delete imageInfo.listeners;
 				};
@@ -82,7 +82,7 @@ ECGame.EngineLib.AssetManager = ECGame.EngineLib.Class.create({
 				this._images[inFileName] = imageInfo;
 				
 				//set the default image
-				outLoadTarget.image = document.images[defaultImageName];//TODO query this with dojo
+				outLoadTarget._myImage = document.images[defaultImageName];//TODO query this with dojo
 			}
 		},
 		

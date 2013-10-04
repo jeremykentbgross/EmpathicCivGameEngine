@@ -223,7 +223,7 @@ Final NameSpace:	forAllReverse
 Final NameSpace:	generateNextAssetID
 Final NameSpace:	generateNextSampleID
 Final NameSpace:	generateNextSoundDescriptionID
-Final NameSpace:	getAABB
+Final NameSpace:	getAABB2D
 Final NameSpace:	getArea
 Final NameSpace:	getAssetManager
 Final NameSpace:	getBackBufferHeight
@@ -691,7 +691,7 @@ Function Name:	forAllReverse
 Function Name:	generateNextAssetID
 Function Name:	generateNextSampleID
 Function Name:	generateNextSoundDescriptionID
-Function Name:	getAABB
+Function Name:	getAABB2D
 Function Name:	getArea
 Function Name:	getAssetManager
 Function Name:	getBackBufferHeight
@@ -1577,7 +1577,6 @@ Member Variable:	_QUARTER			*****
 Member Variable:	_THREEQUARTERS			*****
 Member Variable:	_active			*****
 Member Variable:	_activeInput			*****
-Member Variable:	_animFrames			*****
 Member Variable:	_animation			*****
 Member Variable:	_animations			*****
 Member Variable:	_bitPacker			*****
@@ -1610,7 +1609,6 @@ Member Variable:	_encoded			*****
 Member Variable:	_entities			*****
 Member Variable:	_entityMap			*****
 Member Variable:	_flags			*****
-Member Variable:	_frameRate			*****
 Member Variable:	_gameWorld			*****
 Member Variable:	_high			*****
 Member Variable:	_images			*****
@@ -1640,10 +1638,12 @@ Member Variable:	_maxLayers			*****
 Member Variable:	_minPhysicsPartitionSize			*****
 Member Variable:	_mouseLoc			*****
 Member Variable:	_myAABB
+Member Variable:	_myAABB2D
 Member Variable:	_myAccumulatedTime
 Member Variable:	_myActiveLinkedListNode
 Member Variable:	_myActiveObjectsList
 Member Variable:	_myAnchorPosition
+Member Variable:	_myAnimationFrames
 Member Variable:	_myAnimationInstance
 Member Variable:	_myAssetManager
 Member Variable:	_myBackBufferCanvas
@@ -1680,6 +1680,7 @@ Member Variable:	_myFileName
 Member Variable:	_myForwardDirtyObjects
 Member Variable:	_myFrameCount
 Member Variable:	_myFrameEvents
+Member Variable:	_myFrameRate
 Member Variable:	_myFrameTimes
 Member Variable:	_myFrameUpdateCount
 Member Variable:	_myGameObjectNetDirty
@@ -1687,6 +1688,7 @@ Member Variable:	_myGameRules
 Member Variable:	_myGraphics
 Member Variable:	_myGraphicsContainer
 Member Variable:	_myID
+Member Variable:	_myImage
 Member Variable:	_myIndex
 Member Variable:	_myInput
 Member Variable:	_myIntegerRangeModel
@@ -1873,7 +1875,6 @@ Member Variable:	focus			*****
 Member Variable:	generateDocumentation			*****
 Member Variable:	high			*****
 Member Variable:	id			*****
-Member Variable:	image			*****
 Member Variable:	info			*****
 Member Variable:	innerHTML			*****
 Member Variable:	instance			*****
@@ -2162,7 +2163,6 @@ Included Word:	_QUARTER
 Included Word:	_THREEQUARTERS
 Included Word:	_active
 Included Word:	_activeInput
-Included Word:	_animFrames
 Included Word:	_animation
 Included Word:	_animations
 Included Word:	_bitPacker
@@ -2200,7 +2200,6 @@ Included Word:	_encoded
 Included Word:	_entities
 Included Word:	_entityMap
 Included Word:	_flags
-Included Word:	_frameRate
 Included Word:	_gameWorld
 Included Word:	_getDebugPlayingString
 Included Word:	_getLeadingString
@@ -2235,10 +2234,12 @@ Included Word:	_maxLayers
 Included Word:	_minPhysicsPartitionSize
 Included Word:	_mouseLoc
 Included Word:	_myAABB
+Included Word:	_myAABB2D
 Included Word:	_myAccumulatedTime
 Included Word:	_myActiveLinkedListNode
 Included Word:	_myActiveObjectsList
 Included Word:	_myAnchorPosition
+Included Word:	_myAnimationFrames
 Included Word:	_myAnimationInstance
 Included Word:	_myAssetManager
 Included Word:	_myBackBufferCanvas
@@ -2275,6 +2276,7 @@ Included Word:	_myFileName
 Included Word:	_myForwardDirtyObjects
 Included Word:	_myFrameCount
 Included Word:	_myFrameEvents
+Included Word:	_myFrameRate
 Included Word:	_myFrameTimes
 Included Word:	_myFrameUpdateCount
 Included Word:	_myGameObjectNetDirty
@@ -2282,6 +2284,7 @@ Included Word:	_myGameRules
 Included Word:	_myGraphics
 Included Word:	_myGraphicsContainer
 Included Word:	_myID
+Included Word:	_myImage
 Included Word:	_myIndex
 Included Word:	_myInput
 Included Word:	_myIntegerRangeModel
@@ -2757,7 +2760,7 @@ Included Word:	generateDocumentation
 Included Word:	generateNextAssetID
 Included Word:	generateNextSampleID
 Included Word:	generateNextSoundDescriptionID
-Included Word:	getAABB
+Included Word:	getAABB2D
 Included Word:	getArea
 Included Word:	getAssetManager
 Included Word:	getBackBufferHeight
@@ -2837,7 +2840,6 @@ Included Word:	getWidthHeight
 Included Word:	getWorld
 Included Word:	head
 Included Word:	high
-Included Word:	image
 Included Word:	imageInfo
 Included Word:	importDojoCallback
 Included Word:	in2DCamera

@@ -99,14 +99,14 @@ ECGame.EngineLib.Ray2D = ECGame.EngineLib.Class.create({
 			//			D3 = [0, 0, 1] * p0 + t * v		//only has z
 			//			=>	D123.xyz = p0 + t * v		//where t is vector, and t * v is per component mul
 			aD123 = new ECGame.EngineLib.Point2(
-				this._myCurrentNode.getAABB().getLeft()
-				,this._myCurrentNode.getAABB().getTop()
-				//,this._myCurrentNode.getAABB().getFront()
+				this._myCurrentNode.getAABB2D().getLeft()
+				,this._myCurrentNode.getAABB2D().getTop()
+				//,this._myCurrentNode.getAABB2D().getFront()
 			);
 			aD456 = new ECGame.EngineLib.Point2(
-				this._myCurrentNode.getAABB().getRight()
-				,this._myCurrentNode.getAABB().getBottom()
-				//,this._myCurrentNode.getAABB().getBack()
+				this._myCurrentNode.getAABB2D().getRight()
+				,this._myCurrentNode.getAABB2D().getBottom()
+				//,this._myCurrentNode.getAABB2D().getBack()
 			);
 			//	P = p0 + t * v
 			//	and P = D

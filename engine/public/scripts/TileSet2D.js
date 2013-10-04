@@ -96,7 +96,7 @@ ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(//TODO TileDesc/Anima
 			*/
 			var tile = this._myTiles[inID];
 			inGraphics.drawImage(
-				tile.image,
+				tile._myImage,
 				inTargetPoint.subtract(tile.anchor)//TODO consider possible =>tile.scaledRect
 			);
 		},
@@ -105,7 +105,7 @@ ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(//TODO TileDesc/Anima
 		renderTileInRect : function renderTileInRect(inGraphics, inID, inTargetRect)
 		{
 			//TODO should be src/dest rect draw
-			inGraphics.drawImageInRect(this._myTiles[inID].image, inTargetRect);
+			inGraphics.drawImageInRect(this._myTiles[inID]._myImage, inTargetRect);
 		},
 
 		getTileRenderRect : function getTileRenderRect(inID, inPosition)
@@ -116,8 +116,8 @@ ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(//TODO TileDesc/Anima
 			return ECGame.EngineLib.AABB2D.create(
 				inPosition.myX - tile.anchor.myX,
 				inPosition.myY - tile.anchor.myY,
-				tile.size.myX,//image.width,//todo consider possible =>tile.scaledRect
-				tile.size.myY//image.height
+				tile.size.myX,//_myImage.width,//todo consider possible =>tile.scaledRect
+				tile.size.myY//_myImage.height
 			);
 		},
 

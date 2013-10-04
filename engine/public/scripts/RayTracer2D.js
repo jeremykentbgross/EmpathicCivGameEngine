@@ -68,7 +68,7 @@ ECGame.EngineLib.RayTracer2D = ECGame.EngineLib.Class.create({
 						{
 							continue;
 						}
-						aT = this._myRay.intersectAABB(anItem.getAABB());
+						aT = this._myRay.intersectAABB(anItem.getAABB2D());
 						if(aT === -1)
 						{
 							continue;
@@ -167,7 +167,7 @@ ECGame.EngineLib.RayTracer2D = ECGame.EngineLib.Class.create({
 			inGraphics.setStrokeStyle('rgba(0, 255, 0, 1.0)');//HACK TODO put colors in the settings file
 			for(i = 0; i < this._myVisitedNodes.length; ++i)
 			{
-				inGraphics.strokeRect(this._myVisitedNodes[i].getAABB());
+				inGraphics.strokeRect(this._myVisitedNodes[i].getAABB2D());
 			}
 			
 			inGraphics.setFillStyle('rgba(255, 255, 0, 1.0)');//HACK TODO put colors in the settings file

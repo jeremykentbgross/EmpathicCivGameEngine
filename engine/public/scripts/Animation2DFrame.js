@@ -69,7 +69,7 @@ ECGame.EngineLib.Animation2DFrame = ECGame.EngineLib.Class.create({
 			return outEvents;
 		},
 		
-		getAABB : function getAABB()
+		getAABB2D : function getAABB2D()
 		{
 			return this._myAABB;
 		},

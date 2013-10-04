@@ -22,10 +22,10 @@
 ECGame.EngineLib.Animation2D = ECGame.EngineLib.Class.create({
 	Constructor : function Animation2D()
 	{
-		this.image = null;
-		this._animFrames = [];
-		this._frameRate = 30;
-		this._myAABB = ECGame.EngineLib.AABB2D.create(
+		this._myImage = null;
+		this._myAnimationFrames = [];
+		this._myFrameRate = 30;
+		this._myAABB2D = ECGame.EngineLib.AABB2D.create(
 			Number.MAX_VALUE,
 			Number.MAX_VALUE,
 			-Number.MAX_VALUE,
@@ -47,55 +47,52 @@ ECGame.EngineLib.Animation2D = ECGame.EngineLib.Class.create({
 				ECGame.instance.getAssetManager().loadImage(inImageName, this);
 			}
 			
-			this._frameRate = inFrameRate;
-			this._animFrames = inFrames;
+			this._myFrameRate = inFrameRate;
+			this._myAnimationFrames = inFrames;
 			
 			for(i = 0; i < inFrames.length; ++i)
 			{
-				this._myAABB = this._myAABB.getUnion(inFrames[i].getAABB());
+				this._myAABB2D = this._myAABB2D.getUnion(inFrames[i].getAABB2D());
 			}
 		},
 		
-		getFrameEvents : function getFrameEvents(inCurrentFrame)
-		{
-			return this._animFrames[inCurrentFrame].getFrameEvents();
-		},
-		
-		getAABB : function getAABB()
-		{
-			return this._myAABB;
-		},
-		
-		//TODO getFrameEvents(frameNum)
-		
 		render : function render(inGraphics, inFrame, inPosition)
 		{
-			this._animFrames[inFrame].render(inGraphics, this.image, inPosition);
+			this._myAnimationFrames[inFrame].render(inGraphics, this._myImage, inPosition);
 		},
 		
 		getFrameRate : function getFrameRate()
 		{
-			return this._frameRate;
+			return this._myFrameRate;
 		},
 		getFrameCount : function getFrameCount()
 		{
-			return this._animFrames.length;
+			return this._myAnimationFrames.length;
+		},
+		getFrameEvents : function getFrameEvents(inCurrentFrame)
+		{
+			return this._myAnimationFrames[inCurrentFrame].getFrameEvents();
+		},
+		
+		getAABB2D : function getAABB2D()
+		{
+			return this._myAABB2D;
 		},
 		
 		debugDraw : function debugDraw(inGraphics, inFrame, inPosition)
 		{
-			var aDestination = this._myAABB.getLeftTop().add(inPosition);
+			var aDestination = this._myAABB2D.getLeftTop().add(inPosition);
 			
 			//draw AABB
 			inGraphics.setFillStyle(ECGame.Settings.Debug.Sprite_AABB_DrawColor);
 			inGraphics.strokeRectXYWH(
 				aDestination.myX,
 				aDestination.myY,
-				this._myAABB.myWidth,
-				this._myAABB.myHeight
+				this._myAABB2D.myWidth,
+				this._myAABB2D.myHeight
 			);
 			
-			this._animFrames[inFrame].debugDraw(inGraphics, inPosition);
+			this._myAnimationFrames[inFrame].debugDraw(inGraphics, inPosition);
 		}
 	}
 });

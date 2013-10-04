@@ -492,7 +492,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 					aThis._myTileSet.renderTileInRect(//TODO should be debug draw for tile
 						inGraphics,
 						item._myTileValue,
-						item.getAABB()
+						item.getAABB2D()
 					);
 				},
 				inGraphics.getCamera2D().getRect()
