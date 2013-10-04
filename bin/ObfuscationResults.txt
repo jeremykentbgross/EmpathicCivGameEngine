@@ -1181,7 +1181,6 @@ Local Variable:	aContainer
 Local Variable:	aCount
 Local Variable:	aCurrent
 Local Variable:	aCurrentCollision
-Local Variable:	aCurrentFrame
 Local Variable:	aCurrentNode
 Local Variable:	aCurrentPointDrawSize
 Local Variable:	aCurrentTime
@@ -1329,6 +1328,7 @@ Local Variable:	anObjectHeaderFormat
 Local Variable:	anOldDirection
 Local Variable:	anOwner
 Local Variable:	anUpdateArray
+Local Variable:	anUpdateStartFrame
 Local Variable:	anX
 Local Variable:	angle			*****
 Local Variable:	animProb			*****
@@ -1577,7 +1577,6 @@ Member Variable:	_QUARTER			*****
 Member Variable:	_THREEQUARTERS			*****
 Member Variable:	_active			*****
 Member Variable:	_activeInput			*****
-Member Variable:	_animation			*****
 Member Variable:	_animations			*****
 Member Variable:	_bitPacker			*****
 Member Variable:	_bits			*****
@@ -1594,7 +1593,6 @@ Member Variable:	_constructor			*****
 Member Variable:	_containingWorld			*****
 Member Variable:	_cos			*****
 Member Variable:	_currentAnimation			*****
-Member Variable:	_currentFrame			*****
 Member Variable:	_data			*****
 Member Variable:	_defaultCamera			*****
 Member Variable:	_direction			*****
@@ -1643,6 +1641,7 @@ Member Variable:	_myAccumulatedTime
 Member Variable:	_myActiveLinkedListNode
 Member Variable:	_myActiveObjectsList
 Member Variable:	_myAnchorPosition
+Member Variable:	_myAnimation
 Member Variable:	_myAnimationFrames
 Member Variable:	_myAnimationInstance
 Member Variable:	_myAssetManager
@@ -1660,6 +1659,7 @@ Member Variable:	_myComponentMap
 Member Variable:	_myCompresser
 Member Variable:	_myContext
 Member Variable:	_myCurrentCamera
+Member Variable:	_myCurrentFrame
 Member Variable:	_myCurrentNode
 Member Variable:	_myCurrentPoint
 Member Variable:	_myDebugTextArray
@@ -1828,7 +1828,6 @@ Member Variable:	_speed			*****
 Member Variable:	_supressKeyboardEvents			*****
 Member Variable:	_tileSize			*****
 Member Variable:	_tileset			*****
-Member Variable:	_timeAccumulator			*****
 Member Variable:	_underflow_bits			*****
 Member Variable:	_unusedInstanceIDs			*****
 Member Variable:	_up			*****
@@ -2163,7 +2162,6 @@ Included Word:	_QUARTER
 Included Word:	_THREEQUARTERS
 Included Word:	_active
 Included Word:	_activeInput
-Included Word:	_animation
 Included Word:	_animations
 Included Word:	_bitPacker
 Included Word:	_bits
@@ -2184,7 +2182,6 @@ Included Word:	_createChainDownFunction
 Included Word:	_createChainUpFunction
 Included Word:	_createChildren
 Included Word:	_currentAnimation
-Included Word:	_currentFrame
 Included Word:	_data
 Included Word:	_defaultCamera
 Included Word:	_direction
@@ -2239,6 +2236,7 @@ Included Word:	_myAccumulatedTime
 Included Word:	_myActiveLinkedListNode
 Included Word:	_myActiveObjectsList
 Included Word:	_myAnchorPosition
+Included Word:	_myAnimation
 Included Word:	_myAnimationFrames
 Included Word:	_myAnimationInstance
 Included Word:	_myAssetManager
@@ -2256,6 +2254,7 @@ Included Word:	_myComponentMap
 Included Word:	_myCompresser
 Included Word:	_myContext
 Included Word:	_myCurrentCamera
+Included Word:	_myCurrentFrame
 Included Word:	_myCurrentNode
 Included Word:	_myCurrentPoint
 Included Word:	_myDebugTextArray
@@ -2439,7 +2438,6 @@ Included Word:	_speed
 Included Word:	_supressKeyboardEvents
 Included Word:	_tileSize
 Included Word:	_tileset
-Included Word:	_timeAccumulator
 Included Word:	_underflow_bits
 Included Word:	_unusedInstanceIDs
 Included Word:	_up
@@ -2464,7 +2462,6 @@ Included Word:	aContainer
 Included Word:	aCount
 Included Word:	aCurrent
 Included Word:	aCurrentCollision
-Included Word:	aCurrentFrame
 Included Word:	aCurrentNode
 Included Word:	aCurrentPointDrawSize
 Included Word:	aCurrentTime
@@ -2625,6 +2622,7 @@ Included Word:	anObjectHeaderFormat
 Included Word:	anOldDirection
 Included Word:	anOwner
 Included Word:	anUpdateArray
+Included Word:	anUpdateStartFrame
 Included Word:	anX
 Included Word:	angle
 Included Word:	animProb

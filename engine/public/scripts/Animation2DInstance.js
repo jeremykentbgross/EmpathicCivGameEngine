@@ -23,12 +23,14 @@ ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 	Constructor : function Animation2DInstance()
 	{
 		this.Renderable2D();
-		this._animation = null;
-		this._currentFrame = 0;
-		this._timeAccumulator = 0;
-		//TODO flags (pong, repeat, callback, etc)
-		//TODO finished callback
 		
+		this._myAnimation = null;
+		this._myCurrentFrame = 0;
+		this._myAccumulatedTime = 0;
+
+		//TODO flags (pong, repeat, callback, etc)
+
+		//TODO finished callback
 	},
 	Parents : [ECGame.EngineLib.Renderable2D],
 	flags : {},
@@ -38,28 +40,38 @@ ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 	{		
 		update : function update(inDT)
 		{
-			var aCurrentFrame;
+			var anUpdateStartFrame;
 			
-			aCurrentFrame = this._currentFrame;
+			anUpdateStartFrame = this._myCurrentFrame;
 			
-			this._timeAccumulator += inDT;
+			this._myAccumulatedTime += inDT;
+			
 			//Note: accum / 1000 => seconds; seconds * frameRate => frames
-			this._currentFrame = Math.floor((this._timeAccumulator / 1000) * this._animation.getFrameRate());
-			this._currentFrame = this._currentFrame % this._animation.getFrameCount();
+			this._myCurrentFrame = Math.floor((this._myAccumulatedTime / 1000) * this._myAnimation.getFrameRate());
+			this._myCurrentFrame = this._myCurrentFrame % this._myAnimation.getFrameCount();
+			
 			//TODO handle pinglong, loop or not, etc with callback(s)
 			
-			if(aCurrentFrame !== this._currentFrame)
+			if(anUpdateStartFrame !== this._myCurrentFrame)
 			{
-				return this._animation.getFrameEvents(this._currentFrame);
+				return this._myAnimation.getFrameEvents(this._myCurrentFrame);
 			}
 			
 			return null;
 		},
 		
+		render : function render(inGraphics)
+		{
+			this._myAnimation.render(inGraphics, this._myCurrentFrame, this._myAnchorPosition);
+			if(ECGame.Settings.isDebugDraw_Sprite())
+			{
+				this.debugDraw(inGraphics);
+			}
+		},
+		
 		getAABB2D : function getAABB2D()
 		{
-			//TODO make set function for _myAnchorPosition so this can be updated ONLY when it is needed!
-			//OPT: This is SUPER inoptimal
+			//TODO make set function for _myAnchorPosition so this can be updated ONLY when it is needed! This is SUPER unoptimal!
 			return ECGame.EngineLib.AABB2D.create(
 				this._myAABB.myX + this._myAnchorPosition.myX,
 				this._myAABB.myY + this._myAnchorPosition.myY,
@@ -70,23 +82,13 @@ ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 		
 		setAnimation : function setAnimation(inAnimation)
 		{
-			this._animation = inAnimation;
+			this._myAnimation = inAnimation;
 			this._myAABB = inAnimation.getAABB2D();
 		},
 		
-		//TODO getFrameEvents(frameNum)
-		
-		render : function render(inGraphics)
-		{
-			this._animation.render(inGraphics, this._currentFrame, this._myAnchorPosition);
-			if(ECGame.Settings.isDebugDraw_Sprite())
-			{
-				this.debugDraw(inGraphics);
-			}
-		},
 		debugDraw : function debugDraw(inGraphics)
 		{
-			this._animation.debugDraw(inGraphics, this._currentFrame, this._myAnchorPosition);
+			this._myAnimation.debugDraw(inGraphics, this._myCurrentFrame, this._myAnchorPosition);
 		}
 	}
 });
