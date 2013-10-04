@@ -31,6 +31,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 		this._active = false;
 		
 		this._myGraphics = null;
+		this._myIndex = 0;
 		
 		ECGame.instance.getUpdater("MasterUpdater").addUpdate(this);
 	},
@@ -49,6 +50,11 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 			return ECGame.Settings.UpdateOrder.INPUT;
 		},
 		
+		serverInit : function serverInit(inIndex)
+		{
+			this._myIndex = inIndex;
+		},
+		
 		init : function init(inGraphics, inCanvas)
 		{
 			var aThis,
@@ -61,6 +67,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 			
 			aThis = this;
 			this._myGraphics = inGraphics;
+			this._myIndex = inGraphics.getIndex();
 			
 			aOnInput = function onInput(inEvent)
 			{
@@ -258,7 +265,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 				}
 			}
 					
-			inputEvent = new ECGame.EngineLib.Events.Input(this._mouseLoc.clone());
+			inputEvent = new ECGame.EngineLib.Events.Input(this._myIndex, this._mouseLoc.clone());
 			
 			//copy the values from PRIVATE individually so my internal data cannot be changed by users
 			for(i in this._buttons)

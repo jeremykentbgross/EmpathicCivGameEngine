@@ -334,7 +334,9 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 		
 		_init : function _init()
 		{
-			var aThis;
+			var aThis
+				,i
+				;
 
 			aThis = this;
 			
@@ -381,8 +383,40 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			{
 				this._myLocalUser = new ECGame.EngineLib.User("Server", ECGame.EngineLib.User.USER_IDS.SERVER);
 				
-				//create input TODO input(s) on server so input components can get updates.
-				this._myInput.push(ECGame.EngineLib.Input.create());
+				switch(ECGame.Settings.Graphics.mode)
+				{
+					case ECGame.Settings.Graphics.MODES.SINGLE_PANE:
+					{
+						//create input(s) on server so input components can get proper updates.
+						this._myInput.push(ECGame.EngineLib.Input.create());
+					}
+					break;
+					case ECGame.Settings.Graphics.MODES.SPLIT_HORIZONTAL:
+					//case ECGame.Settings.Graphics.MODES.SPLIT_VERTICAL:
+					{
+						//create input(s) on server so input components can get proper updates.
+						this._myInput.push(ECGame.EngineLib.Input.create());
+						this._myInput.push(ECGame.EngineLib.Input.create());
+					}
+					break;
+					case ECGame.Settings.Graphics.MODES.SPLIT_4WAY:
+					{
+						//create input(s) on server so input components can get proper updates.
+						this._myInput.push(ECGame.EngineLib.Input.create());
+						this._myInput.push(ECGame.EngineLib.Input.create());
+						this._myInput.push(ECGame.EngineLib.Input.create());
+						this._myInput.push(ECGame.EngineLib.Input.create());
+					}
+					break;
+					/*case ECGame.Settings.Graphics.MODES.CUSTOM_SCREEN_LAYOUT:
+					{
+					}
+					break;*/
+				}
+				for(i = 0; i < this._myInput.length; ++i)
+				{
+					this._myInput[i].serverInit(i);
+				}
 			}
 			else
 			{

@@ -89,7 +89,8 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			//setup event listeners
 			if(!ECGame.Settings.Network.isServer)
 			{
-				ECGame.instance.getInput().registerListener('Input', this);
+				ECGame.instance.getInput(0).registerListener('Input', this);
+				ECGame.instance.getInput(1).registerListener('Input', this);
 			}
 			if(ECGame.Settings.Network.isMultiplayer)
 			{
@@ -492,6 +493,18 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 		onInput : function onInput(inInputEvent)
 		{
 			var cameraAABB, cameraLeftTop, mouseWorldPosition;
+			
+			if(inInputEvent.myInputID === 1)
+			{
+				if(inInputEvent.buttons[0])
+				{
+					this._gameWorld.getCurrentCamera().centerOn(
+						inInputEvent.mouseLoc.scale(this._gameWorld.getSize() / ECGame.Settings.Graphics.backBufferWidth)
+						,this._gameWorld._map
+					);
+				}
+				return;
+			}
 			
 			cameraAABB = this._gameWorld.getCurrentCamera().getRect();//TODO rename getAABB
 			cameraLeftTop = cameraAABB.getLeftTop();

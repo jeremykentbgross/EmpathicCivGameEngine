@@ -174,9 +174,12 @@ ECGame.EngineLib.Events.RemovedFromWorld = ECGame.EngineLib.Class.create({
 
 
 ECGame.EngineLib.Events.Input = ECGame.EngineLib.Class.create({
-	Constructor : function Input(inMousePosition, inButtons, inKeys, inKeysPressed)
+	Constructor : function Input(inInputID, inMousePosition, inButtons, inKeys, inKeysPressed)
 	{
 		this.GameEventBase('onInput');
+		
+		this.myInputID = inInputID;
+		
 		if(inMousePosition)
 		{
 			this.mouseLoc = inMousePosition.clone();//TODO rename mouseLoc to mousePos

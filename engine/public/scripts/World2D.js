@@ -190,6 +190,10 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			inGraphics.strokeRect(aCameraRect);
 		},
 
+		getSize : function getSize()
+		{
+			return this._mapsize;
+		},
 		getBoundingBox : function getBoundingBox()
 		{
 			return ECGame.EngineLib.AABB2.create(0, 0, this._mapsize, this._mapsize);

@@ -281,6 +281,7 @@ Final NameSpace:	getRef
 Final NameSpace:	getRight
 Final NameSpace:	getRightBottom
 Final NameSpace:	getSceneGraph
+Final NameSpace:	getSize
 Final NameSpace:	getSoundHardwareTime
 Final NameSpace:	getSoundHardwareTimeUpdateDelta
 Final NameSpace:	getSoundSystem
@@ -426,6 +427,7 @@ Final NameSpace:	serializeObject
 Final NameSpace:	serializeOut
 Final NameSpace:	serializePoint2D
 Final NameSpace:	serializeString
+Final NameSpace:	serverInit
 Final NameSpace:	setAABB
 Final NameSpace:	setActive
 Final NameSpace:	setAlwaysActive
@@ -748,6 +750,7 @@ Function Name:	getRef
 Function Name:	getRight
 Function Name:	getRightBottom
 Function Name:	getSceneGraph
+Function Name:	getSize
 Function Name:	getSoundHardwareTime
 Function Name:	getSoundHardwareTimeUpdateDelta
 Function Name:	getSoundSystem
@@ -891,6 +894,7 @@ Function Name:	serializeObject
 Function Name:	serializeOut
 Function Name:	serializePoint2D
 Function Name:	serializeString
+Function Name:	serverInit
 Function Name:	setAABB
 Function Name:	setActive
 Function Name:	setAlwaysActive
@@ -1023,6 +1027,7 @@ Parameter Variable:	inImage
 Parameter Variable:	inImageName
 Parameter Variable:	inIndex
 Parameter Variable:	inInputEvent
+Parameter Variable:	inInputID
 Parameter Variable:	inIsDummyMode
 Parameter Variable:	inIsFollowingSource
 Parameter Variable:	inIsPositional
@@ -1894,6 +1899,7 @@ Member Variable:	msg			*****
 Member Variable:	myAABB
 Member Variable:	myECGameSocket
 Member Variable:	myHeight
+Member Variable:	myInputID
 Member Variable:	myIsFollowingSource
 Member Variable:	myIsPositional
 Member Variable:	myItem
@@ -2809,6 +2815,7 @@ Included Word:	getRef
 Included Word:	getRight
 Included Word:	getRightBottom
 Included Word:	getSceneGraph
+Included Word:	getSize
 Included Word:	getSoundHardwareTime
 Included Word:	getSoundHardwareTimeUpdateDelta
 Included Word:	getSoundSystem
@@ -2901,6 +2908,7 @@ Included Word:	inImage
 Included Word:	inImageName
 Included Word:	inIndex
 Included Word:	inInputEvent
+Included Word:	inInputID
 Included Word:	inIsDummyMode
 Included Word:	inIsFollowingSource
 Included Word:	inIsPositional
@@ -3108,6 +3116,7 @@ Included Word:	multiply
 Included Word:	myAABB
 Included Word:	myECGameSocket
 Included Word:	myHeight
+Included Word:	myInputID
 Included Word:	myIsFollowingSource
 Included Word:	myIsPositional
 Included Word:	myItem
@@ -3246,6 +3255,7 @@ Included Word:	serializeOut
 Included Word:	serializePoint2D
 Included Word:	serializeString
 Included Word:	serializer
+Included Word:	serverInit
 Included Word:	serverRebootTime
 Included Word:	setAABB
 Included Word:	setActive
