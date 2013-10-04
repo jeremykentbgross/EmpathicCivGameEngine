@@ -1731,6 +1731,7 @@ Member Variable:	_myNextSoundDescriptionID
 Member Variable:	_myNoCanvasSupportedMessage
 Member Variable:	_myNodeCollisionPoints
 Member Variable:	_myObjectsMap
+Member Variable:	_myOrigin
 Member Variable:	_myOwner
 Member Variable:	_myOwnerMap
 Member Variable:	_myOwningNodes
@@ -1766,6 +1767,7 @@ Member Variable:	_mySoundHardwareUpdateTime
 Member Variable:	_mySoundSampleLib
 Member Variable:	_mySoundSystem
 Member Variable:	_mySource
+Member Variable:	_mySourceRect
 Member Variable:	_myStatus
 Member Variable:	_myT
 Member Variable:	_myTests
@@ -1794,7 +1796,6 @@ Member Variable:	_myVolumeVariation
 Member Variable:	_myWebsocket
 Member Variable:	_myWorld
 Member Variable:	_objectHeaderFormat			*****
-Member Variable:	_origin			*****
 Member Variable:	_ourMaxItemsPerMessage			*****
 Member Variable:	_ourMessageHeaderFormat			*****
 Member Variable:	_owner			*****
@@ -1822,7 +1823,6 @@ Member Variable:	_rotMatrixRow2			*****
 Member Variable:	_sceneGraph			*****
 Member Variable:	_serializeFormat			*****
 Member Variable:	_sounds			*****
-Member Variable:	_sourceRect			*****
 Member Variable:	_specialChars			*****
 Member Variable:	_speed			*****
 Member Variable:	_supressKeyboardEvents			*****
@@ -2327,6 +2327,7 @@ Included Word:	_myNextSoundDescriptionID
 Included Word:	_myNoCanvasSupportedMessage
 Included Word:	_myNodeCollisionPoints
 Included Word:	_myObjectsMap
+Included Word:	_myOrigin
 Included Word:	_myOwner
 Included Word:	_myOwnerMap
 Included Word:	_myOwningNodes
@@ -2362,6 +2363,7 @@ Included Word:	_mySoundHardwareUpdateTime
 Included Word:	_mySoundSampleLib
 Included Word:	_mySoundSystem
 Included Word:	_mySource
+Included Word:	_mySourceRect
 Included Word:	_myStatus
 Included Word:	_myT
 Included Word:	_myTests
@@ -2396,7 +2398,6 @@ Included Word:	_onClose
 Included Word:	_onError
 Included Word:	_onMessage
 Included Word:	_onOpen
-Included Word:	_origin
 Included Word:	_ourMaxItemsPerMessage
 Included Word:	_ourMessageHeaderFormat
 Included Word:	_owner
@@ -2433,7 +2434,6 @@ Included Word:	_setupSinglePaneGraphics
 Included Word:	_setupSplit4WayGraphics
 Included Word:	_setupSplitHorizontalGraphics
 Included Word:	_sounds
-Included Word:	_sourceRect
 Included Word:	_specialChars
 Included Word:	_speed
 Included Word:	_supressKeyboardEvents

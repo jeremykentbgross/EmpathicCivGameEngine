@@ -22,14 +22,9 @@
 ECGame.EngineLib.Animation2DFrame = ECGame.EngineLib.Class.create({
 	Constructor : function Animation2DFrame()
 	{
-		this._sourceRect = ECGame.EngineLib.AABB2D.create();
-		this._origin = new ECGame.EngineLib.Point2();
-		this._myAABB = ECGame.EngineLib.AABB2D.create(
-			-this._origin.myX,
-			-this._origin.myY,
-			this._sourceRect.myWidth,
-			this._sourceRect.myHeight
-		);
+		this._mySourceRect = ECGame.EngineLib.AABB2D.create();
+		this._myOrigin = new ECGame.EngineLib.Point2();//TODO rename origin anchor? have anchor and origin?	//note: anchor is a js global
+		this._myAABB2D = ECGame.EngineLib.AABB2D.create();
 		this._myFrameEvents = null;
 	},
 	Parents : [],
@@ -38,22 +33,28 @@ ECGame.EngineLib.Animation2DFrame = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
-		//TODO update()//fires frame events OR getEvents()
-		
-		//TODO rename origin anchor? have anchor and origin?	//rename anchor because it is the same as a js global
-		init : function init(inSrcRect, inOrigin, inFrameEvents /*TODO flags, other?*/)
+		init : function init(inSrcRect, inOrigin, inFrameEvents)
 		{
-			this._sourceRect.copyFrom(inSrcRect);
-			this._origin.copyFrom(inOrigin);
-			this._myAABB = ECGame.EngineLib.AABB2D.create(
-				-this._origin.myX,
-				-this._origin.myY,
-				this._sourceRect.myWidth,
-				this._sourceRect.myHeight
+			this._mySourceRect.copyFrom(inSrcRect);
+			this._myOrigin.copyFrom(inOrigin);
+			this._myAABB2D = ECGame.EngineLib.AABB2D.create(
+				-this._myOrigin.myX,
+				-this._myOrigin.myY,
+				this._mySourceRect.myWidth,
+				this._mySourceRect.myHeight
 			);
 			this._myFrameEvents = inFrameEvents || [];
 			
 			return this;
+		},
+		
+		render : function render(inGraphics, inImage, inPosition)
+		{
+			inGraphics.drawImageSection(
+				inImage,
+				this._mySourceRect,
+				inPosition.subtract(this._myOrigin)
+			);
 		},
 		
 		getFrameEvents : function getFrameEvents()
@@ -71,16 +72,7 @@ ECGame.EngineLib.Animation2DFrame = ECGame.EngineLib.Class.create({
 		
 		getAABB2D : function getAABB2D()
 		{
-			return this._myAABB;
-		},
-		
-		render : function render(inGraphics, inImage, inPosition)
-		{
-			inGraphics.drawImageSection(
-				inImage,
-				this._sourceRect,
-				inPosition.subtract(this._origin)
-			);
+			return this._myAABB2D;
 		},
 		
 		debugDraw : function debugDraw(inGraphics, inPosition)
@@ -90,7 +82,7 @@ ECGame.EngineLib.Animation2DFrame = ECGame.EngineLib.Class.create({
 				,aHalfSize
 				;
 			
-			aDestination = inPosition.subtract(this._origin);
+			aDestination = inPosition.subtract(this._myOrigin);
 			aSize = ECGame.Settings.Debug.Sprite_Origin_Size;
 			aHalfSize = aSize / 2;
 			
@@ -99,13 +91,13 @@ ECGame.EngineLib.Animation2DFrame = ECGame.EngineLib.Class.create({
 			inGraphics.strokeRectXYWH(
 				aDestination.myX,
 				aDestination.myY,
-				this._sourceRect.myWidth,
-				this._sourceRect.myHeight
+				this._mySourceRect.myWidth,
+				this._mySourceRect.myHeight
 			);
 			
 			//draw Origin
 			inGraphics.setFillStyle(ECGame.Settings.Debug.Sprite_Origin_DrawColor);
-			aDestination = aDestination.add(this._origin);
+			aDestination = aDestination.add(this._myOrigin);
 			inGraphics.fillRectXYWH(
 				aDestination.myX - aHalfSize,
 				aDestination.myY - aHalfSize,
