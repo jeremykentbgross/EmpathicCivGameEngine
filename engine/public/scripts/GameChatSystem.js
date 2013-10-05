@@ -207,7 +207,7 @@ ECGame.EngineLib.ChatSystem = ECGame.EngineLib.Class.create({
 		//Listen to main input
 		onInput : function onInput(inInputEvent)
 		{
-			if(inInputEvent.keysPressed['\x0d'])//return
+			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_RETURN])
 			{
 				this.toggleActiveInput();
 			}

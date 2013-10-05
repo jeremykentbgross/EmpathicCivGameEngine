@@ -67,7 +67,7 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 				inComponent.onRemovedFromEntity(new ECGame.EngineLib.Events.RemovedFromEntity(this));
 			}
 		},
-		getComponentByType : function getComponentByType(inType, inoutReturnValues)
+		getComponentByType : function getComponentByType(inType, inoutReturnValues)//TODO allow multiple components of same type?
 		{
 			var componentName,
 				component;

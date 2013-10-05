@@ -27,11 +27,11 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 		
 		this._position = ECGame.EngineLib.Point2.create();//TODO this isn't used, but shouldn't use topleft of aabb either
 		
-		this._animations = ECGame.instance._myGameRules._animations;//HACK!!!!!//TODO 'null'/default object!! (object ref?)
+		this._animations = ECGame.instance._myGameRules._myAnimations;//HACK!!!!!//TODO 'null'/default object!! (object ref?)
 		this._currentAnimation = 8;//TODO why 8?
 		this._myAnimationInstance = new ECGame.EngineLib.Animation2DInstance();
 /*TODO should be commented out?*/this._myAnimationInstance.setAnimation(this._animations[0]);//TODO should be a null/default object
-		this._myAnimationInstance._myLayer = 1;		
+		this._myAnimationInstance._myLayer = 1;		//HACK ALSO??
 		
 		//TODO frame knows filename, offset, collision rects, (sound?) events, etc //TODO move this note to the frame class?
 		//TODO ^^^ same kind of thing for map tiles?

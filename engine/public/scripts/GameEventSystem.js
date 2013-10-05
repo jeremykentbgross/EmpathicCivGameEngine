@@ -30,7 +30,7 @@ ECGame.EngineLib.GameEventSystem.create = function create()
 };
 
 
-
+//TODO use actual event class to de/register listener(s)
 //TODO add listener sorting (may need to be an array then and use custom sorting?)!
 ECGame.EngineLib.GameEventSystem.prototype.registerListener = function registerListener(inEventName, inListener)
 {

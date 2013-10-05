@@ -73,19 +73,19 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 				anOldDirection = this._direction;
 				this._direction = ECGame.EngineLib.Point2.create(0, 0);//TODO just set the fields, don't create a new one
 				
-				if(inInputEvent.keys[87]/*W*/)
+				if(inInputEvent.keys[inInputEvent.KEYBOARD.KEY_W])
 				{
 					this._direction = this._direction.add(this._up);
 				}
-				if(inInputEvent.keys[83]/*S*/)
+				if(inInputEvent.keys[inInputEvent.KEYBOARD.KEY_S])
 				{
 					this._direction = this._direction.add(this._down);
 				}
-				if(inInputEvent.keys[65]/*A*/)
+				if(inInputEvent.keys[inInputEvent.KEYBOARD.KEY_A])
 				{
 					this._direction = this._direction.add(this._left);
 				}
-				if(inInputEvent.keys[68]/*D*/)
+				if(inInputEvent.keys[inInputEvent.KEYBOARD.KEY_D])
 				{
 					this._direction = this._direction.add(this._right);
 				}

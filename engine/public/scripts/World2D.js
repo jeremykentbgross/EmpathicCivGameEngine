@@ -50,9 +50,10 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			return this._sceneGraph;
 		},
 
-		init : function init(inMapSizeInTiles, inTileSize, inMinPhysicsPartitionSize)
+		init : function init(inMapSizeInTiles, inTileset, inTileSize, inMinPhysicsPartitionSize)//TODO tilesize part of tileset?
 		{
 			this._mapsize = inMapSizeInTiles * inTileSize;
+			
 			this._sceneGraph = new ECGame.EngineLib.Game2DSceneGraph();
 			this._sceneGraph.init(this._mapsize, inTileSize);
 			
@@ -60,21 +61,8 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			this._physics.init(this._mapsize, inMinPhysicsPartitionSize);
 			ECGame.instance.getUpdater("PhysicsUpdater").addUpdate(this._physics);//TODO move this to physics system itself?
 			
-			//setup default tileset consisting of nothing but the placeholder
-			var tileset = ECGame.EngineLib.TileSet2D.create();
-			tileset.init(
-				[
-					{
-						fileName : 'engine/images/placeholder.png'//TODO have this listed in systemvars
-						,anchor : ECGame.EngineLib.Point2.create()
-						,_myLayer : 0
-					}
-					//,{}
-				]
-			);
-			
 			this._map = ECGame.EngineLib.TileMap2D.create();
-			this._map.init(this, tileset, inMapSizeInTiles, inTileSize);
+			this._map.init(this, inTileset, inMapSizeInTiles, inTileSize);
 			
 			this._entityMap = {};
 			

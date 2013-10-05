@@ -192,6 +192,8 @@ ECGame.EngineLib.Events.Input = ECGame.EngineLib.Class.create({
 		this.keys = inKeys || {};
 		this.keysPressed = inKeysPressed || {};
 		this.clicked = {};//TODO param?
+		
+		this.KEYBOARD = ECGame.EngineLib.Input.KEYBOARD;
 	},
 	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},
@@ -248,7 +250,7 @@ ECGame.EngineLib.Events.DisconnectedFromServer = ECGame.EngineLib.Class.create({
 
 
 
-
+//TODO should rename this Identified>Net<User
 ECGame.EngineLib.Events.IdentifiedUser = ECGame.EngineLib.Class.create({
 	Constructor : function IdentifiedUser(inUser)
 	{
