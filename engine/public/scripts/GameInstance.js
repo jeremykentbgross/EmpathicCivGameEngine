@@ -320,7 +320,7 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			}
 			aNewHeight = Math.min(aNewHeight, aMaxHeight);
 			aNewWidth = Math.min(aNewWidth, aMaxWidth);
-			if(false)//no resize
+			if(!ECGame.Settings.Graphics.resizable)
 			{
 				aNewHeight = aMaxHeight;
 				aNewWidth = aMaxWidth;

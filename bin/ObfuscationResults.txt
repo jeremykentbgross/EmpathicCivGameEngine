@@ -2003,6 +2003,7 @@ Member Variable:	reconnectKey			*****
 Member Variable:	removeNewlines			*****
 Member Variable:	removeNonNewlineWhiteSpace			*****
 Member Variable:	removeTextForLocalization			*****
+Member Variable:	resizable			*****
 Member Variable:	saveResultsNotesToFile			*****
 Member Variable:	speedOfSound			*****
 Member Variable:	type			*****
@@ -3372,6 +3373,7 @@ Included Word:	replaceCallback
 Included Word:	request
 Included Word:	requestAnimFrame
 Included Word:	requestVelocity
+Included Word:	resizable
 Included Word:	run
 Included Word:	runTests
 Included Word:	saveResultsNotesToFile

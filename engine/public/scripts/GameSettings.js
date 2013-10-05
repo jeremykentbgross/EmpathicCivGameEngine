@@ -44,10 +44,14 @@ ECGame.Settings =
 			//SPLIT_VERTICAL : 2,
 			SPLIT_4WAY : 3,
 			CUSTOM_SCREEN_LAYOUT : 4
-		},
-		backBufferWidth : 768,	//TODO back buffer size, presentation size!
-		backBufferHeight : 768,
-		mode : 0	//MODES.SINGLE_PANE
+		}
+		,mode : 0	//MODES.SINGLE_PANE
+		
+		,backBufferWidth : 768	//TODO back buffer size, presentation size!
+		,backBufferHeight : 768
+		
+		,resizable : true
+		
 		//use 3d?
 		//canvas (2d), webgl (3d), threejs (3d), noDefault (none)
 	},
