@@ -27,8 +27,8 @@ function ECGServer_Main()
 	LoadEngine(true,
 		"../",	//engine public parth
 		"../../private/",	//engine private path
-		"../../../engine_test_game/public/",/*TODO get some command line param or something!*/
-		"../../../engine_test_game/private/"/*TODO get some command line param or something!*/
+		"../../../_public_/game/",/*TODO get some command line param or something!*/
+		"../../../_private_/game/"/*TODO get some command line param or something!*/
 	);
 };
 ECGServer_Main();

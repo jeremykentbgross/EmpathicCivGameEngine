@@ -77,8 +77,9 @@ ECGame.WebServerTools.WebServer.prototype.run = function run()
 	if(ECGame.Settings.Server.generateDocumentation) /**! @todo: NOT in final release mode! */
 	{
 		var docJS = ECGame.WebServerTools.DocJS.create();
-		docJS.loadDirectory('../engine');
-		docJS.loadDirectory('../engine_test_game');/**! @todo: put real game name here! */
+		docJS.loadDirectory('../_unified_');
+		//docJS.loadDirectory('../engine');
+		//docJS.loadDirectory('../engine_test_game');/**! @todo: put real game name here! */
 		docJS.run();
 		this.expressApp.get(
 			'/docs/*.(js|css|html)'//TODO review file types (no waves!)
@@ -94,8 +95,8 @@ ECGame.WebServerTools.WebServer.prototype.run = function run()
 	if(ECGame.Settings.Server.compressClientCode)
 	{
 		this.codeCompressor = new ECGame.WebServerTools.CodeCompressor(
-			'../engine/public/',
-			'../engine_test_game/public/'/**! @todo: put real game name here! */
+			'../_public_/engine/',	/**! @todo: should now only need one path not two!?!? */
+			'../_public_/game/'/**! @todo: put real game name here! */
 		);
 		this.codeCompressor.makeCompactGameLoader();
 		
