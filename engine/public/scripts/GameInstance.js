@@ -362,9 +362,9 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			ECGame.EngineLib.EntityComponent_Input.registerClass();
 			ECGame.EngineLib.EntityComponent_Sprite.registerClass();
 			ECGame.EngineLib.EntityComponent_SoundPlayer.registerClass();
+			ECGame.EngineLib.World2D.registerClass();
 			ECGame.EngineLib.TileMap2D.registerClass();
 			ECGame.EngineLib.TileSet2D.registerClass();
-			ECGame.EngineLib.World2D.registerClass();
 			//TODO thinnking EventSystem maybe should not be a gameobject ??? WTF is this??
 			
 			//TODO also needs to manage prefabs?

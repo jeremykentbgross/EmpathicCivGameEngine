@@ -22,4 +22,9 @@
 ECGame.Lib.LoadGame = function LoadGame(include, inPublicGamePath, inPrivateGamePath)
 {
 	include(inPublicGamePath + "scripts/GameRules.js");
+	
+	if(ECGame.Settings.Network.isServer)
+	{
+		
+	}
 };

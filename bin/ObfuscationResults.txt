@@ -120,6 +120,7 @@ Final NameSpace:	_clearTileInRect
 Final NameSpace:	_createChainDownFunction
 Final NameSpace:	_createChainUpFunction
 Final NameSpace:	_createChildren
+Final NameSpace:	_debugDraw
 Final NameSpace:	_drawDebugText
 Final NameSpace:	_getDebugPlayingString
 Final NameSpace:	_getLeadingString
@@ -128,6 +129,7 @@ Final NameSpace:	_init
 Final NameSpace:	_initAnimations
 Final NameSpace:	_initAudioAssets
 Final NameSpace:	_initListeners
+Final NameSpace:	_initNonGameObjectMembers
 Final NameSpace:	_initReferenceEntities
 Final NameSpace:	_initWorld
 Final NameSpace:	_insertPhysicsObjectToTree
@@ -236,13 +238,12 @@ Final NameSpace:	getBackBufferRect
 Final NameSpace:	getBackBufferToFrontBufferRatio
 Final NameSpace:	getBackBufferWidth
 Final NameSpace:	getBottom
-Final NameSpace:	getBoundingBox
 Final NameSpace:	getCallbackName
+Final NameSpace:	getCamera
 Final NameSpace:	getCamera2D
 Final NameSpace:	getCenter
 Final NameSpace:	getClass
 Final NameSpace:	getComponentByType
-Final NameSpace:	getCurrentCamera
 Final NameSpace:	getCurrentLength
 Final NameSpace:	getCurrentNode
 Final NameSpace:	getCurrentPoint
@@ -471,6 +472,7 @@ Final NameSpace:	setVelocity
 Final NameSpace:	setWidthHeight
 Final NameSpace:	size
 Final NameSpace:	sortCollisions
+Final NameSpace:	sortReadObjects
 Final NameSpace:	sortRenderables
 Final NameSpace:	start
 Final NameSpace:	stop
@@ -593,6 +595,7 @@ Function Name:	_clearTileInRect
 Function Name:	_createChainDownFunction
 Function Name:	_createChainUpFunction
 Function Name:	_createChildren
+Function Name:	_debugDraw
 Function Name:	_drawDebugText
 Function Name:	_getDebugPlayingString
 Function Name:	_getLeadingString
@@ -601,6 +604,7 @@ Function Name:	_init
 Function Name:	_initAnimations
 Function Name:	_initAudioAssets
 Function Name:	_initListeners
+Function Name:	_initNonGameObjectMembers
 Function Name:	_initReferenceEntities
 Function Name:	_initWorld
 Function Name:	_insertPhysicsObjectToTree
@@ -709,13 +713,12 @@ Function Name:	getBackBufferRect
 Function Name:	getBackBufferToFrontBufferRatio
 Function Name:	getBackBufferWidth
 Function Name:	getBottom
-Function Name:	getBoundingBox
 Function Name:	getCallbackName
+Function Name:	getCamera
 Function Name:	getCamera2D
 Function Name:	getCenter
 Function Name:	getClass
 Function Name:	getComponentByType
-Function Name:	getCurrentCamera
 Function Name:	getCurrentLength
 Function Name:	getCurrentNode
 Function Name:	getCurrentPoint
@@ -942,6 +945,7 @@ Function Name:	setVelocity
 Function Name:	setWidthHeight
 Function Name:	size
 Function Name:	sortCollisions
+Function Name:	sortReadObjects
 Function Name:	sortRenderables
 Function Name:	start
 Function Name:	stop
@@ -1100,6 +1104,7 @@ Parameter Variable:	inRadius
 Parameter Variable:	inReason
 Parameter Variable:	inRect
 Parameter Variable:	inRenderableItem
+Parameter Variable:	inRenderables
 Parameter Variable:	inRenderer
 Parameter Variable:	inRight
 Parameter Variable:	inRootNode
@@ -1181,8 +1186,11 @@ Local Variable:	aBinaryBuffer
 Local Variable:	aBinaryEncoder
 Local Variable:	aBits
 Local Variable:	aBreakPointLocation
+Local Variable:	aCamera
 Local Variable:	aCameraAABB2D
 Local Variable:	aCameraRect
+Local Variable:	aCameraTarget
+Local Variable:	aChangedTile
 Local Variable:	aCharIndex
 Local Variable:	aChild
 Local Variable:	aClassName
@@ -1235,6 +1243,7 @@ Local Variable:	aItemsList
 Local Variable:	aKeepChildren
 Local Variable:	aLastNode
 Local Variable:	aLeadString
+Local Variable:	aLeftIndex
 Local Variable:	aLength
 Local Variable:	aListToDraw
 Local Variable:	aListeners
@@ -1281,6 +1290,7 @@ Local Variable:	aReadObjectsList
 Local Variable:	aReadResult
 Local Variable:	aRecievedObj
 Local Variable:	aReturnAABB2D
+Local Variable:	aRightIndex
 Local Variable:	aSample
 Local Variable:	aScale
 Local Variable:	aSecond
@@ -1325,6 +1335,7 @@ Local Variable:	aValue
 Local Variable:	aValues
 Local Variable:	aWholePart
 Local Variable:	aWidthToHeight
+Local Variable:	aWorld
 Local Variable:	aWriteObject
 Local Variable:	aY
 Local Variable:	acceleration			*****
@@ -1357,7 +1368,6 @@ Local Variable:	animProb			*****
 Local Variable:	bestAnimProb			*****
 Local Variable:	callbackName			*****
 Local Variable:	camPoint			*****
-Local Variable:	camera			*****
 Local Variable:	chainTestObject			*****
 Local Variable:	classRegistry			*****
 Local Variable:	colCenter			*****
@@ -1377,9 +1387,6 @@ Local Variable:	direction			*****
 Local Variable:	directions			*****
 Local Variable:	encodeRange			*****
 Local Variable:	entity			*****
-Local Variable:	entityObject			*****
-Local Variable:	entityPath			*****
-Local Variable:	entityRef			*****
 Local Variable:	eventName			*****
 Local Variable:	eventSystem			*****
 Local Variable:	eventType			*****
@@ -1423,7 +1430,6 @@ Local Variable:	mouseRatio			*****
 Local Variable:	msg			*****
 Local Variable:	name			*****
 Local Variable:	newComponentMap			*****
-Local Variable:	newEntityMap			*****
 Local Variable:	newInstance			*****
 Local Variable:	newItem			*****
 Local Variable:	nodeArray			*****
@@ -1460,7 +1466,6 @@ Local Variable:	soundInfo			*****
 Local Variable:	stackPath			*****
 Local Variable:	stringDistance			*****
 Local Variable:	stringDrawOrder			*****
-Local Variable:	target			*****
 Local Variable:	temp			*****
 Local Variable:	testClass1			*****
 Local Variable:	testClass2			*****
@@ -1581,6 +1586,10 @@ Member Variable:	Lib			*****
 Member Variable:	MAX_EVER			*****
 Member Variable:	MODES			*****
 Member Variable:	Map_Draw			*****
+Member Variable:	MaxMapSizeInTiles			*****
+Member Variable:	MaxNumberOfTiles			*****
+Member Variable:	MaxTileSize			*****
+Member Variable:	MinTileSize			*****
 Member Variable:	NETWORK			*****
 Member Variable:	NET_MODE			*****
 Member Variable:	NEW_USER			*****
@@ -1660,7 +1669,6 @@ Member Variable:	_bits			*****
 Member Variable:	_boundingRect			*****
 Member Variable:	_buttons			*****
 Member Variable:	_callbackName			*****
-Member Variable:	_camera			*****
 Member Variable:	_chainDownMethods			*****
 Member Variable:	_chainUpMethods			*****
 Member Variable:	_childClasses			*****
@@ -1671,7 +1679,6 @@ Member Variable:	_containingWorld			*****
 Member Variable:	_cos			*****
 Member Variable:	_currentAnimation			*****
 Member Variable:	_data			*****
-Member Variable:	_defaultCamera			*****
 Member Variable:	_direction			*****
 Member Variable:	_domChatContainer			*****
 Member Variable:	_domChatForm			*****
@@ -1680,7 +1687,6 @@ Member Variable:	_domChatLog			*****
 Member Variable:	_domNetworkStatus			*****
 Member Variable:	_down			*****
 Member Variable:	_encoded			*****
-Member Variable:	_entityMap			*****
 Member Variable:	_flags			*****
 Member Variable:	_high			*****
 Member Variable:	_images			*****
@@ -1699,8 +1705,6 @@ Member Variable:	_lastUpdateMin			*****
 Member Variable:	_lastUpdateSec			*****
 Member Variable:	_left			*****
 Member Variable:	_low			*****
-Member Variable:	_map			*****
-Member Variable:	_mapsize			*****
 Member Variable:	_maxID			*****
 Member Variable:	_maxLayers			*****
 Member Variable:	_mouseLoc			*****
@@ -1709,6 +1713,8 @@ Member Variable:	_myAABB2D
 Member Variable:	_myAccumulatedTime
 Member Variable:	_myActiveLinkedListNode
 Member Variable:	_myActiveObjectsList
+Member Variable:	_myAddedEntities
+Member Variable:	_myAddedEntityRefs
 Member Variable:	_myAnchorPosition
 Member Variable:	_myAnimation
 Member Variable:	_myAnimationFrames
@@ -1718,6 +1724,7 @@ Member Variable:	_myAssetManager
 Member Variable:	_myBackBufferCanvas
 Member Variable:	_myBackBufferCanvas2DContext
 Member Variable:	_myCallback
+Member Variable:	_myCamera
 Member Variable:	_myCanvas
 Member Variable:	_myCanvas2DContext
 Member Variable:	_myChangedTiles
@@ -1734,6 +1741,7 @@ Member Variable:	_myCurrentNode
 Member Variable:	_myCurrentPoint
 Member Variable:	_myDebugTextArray
 Member Variable:	_myDebugTextAssociatedColorsArray
+Member Variable:	_myDefaultCamera
 Member Variable:	_myDensity
 Member Variable:	_myDescription
 Member Variable:	_myDestination
@@ -1747,6 +1755,7 @@ Member Variable:	_myDynamicCompressor
 Member Variable:	_myEffectsVolume
 Member Variable:	_myEffectsVolumeUserValue
 Member Variable:	_myEntities
+Member Variable:	_myEntityRefs
 Member Variable:	_myEventListeners
 Member Variable:	_myFileName
 Member Variable:	_myForwardDirtyObjects
@@ -1782,6 +1791,7 @@ Member Variable:	_myLayer
 Member Variable:	_myListenerPosition2D
 Member Variable:	_myLocalUser
 Member Variable:	_myMap
+Member Variable:	_myMapRef
 Member Variable:	_myMapSize
 Member Variable:	_myMapSizeInTiles
 Member Variable:	_myMasterNetGroup
@@ -1807,6 +1817,7 @@ Member Variable:	_myNextSampleID
 Member Variable:	_myNextSoundDescriptionID
 Member Variable:	_myNoCanvasSupportedMessage
 Member Variable:	_myNodeCollisionPoints
+Member Variable:	_myNumberOfTiles
 Member Variable:	_myObjectsMap
 Member Variable:	_myOrigin
 Member Variable:	_myOwner
@@ -1816,6 +1827,7 @@ Member Variable:	_myP0
 Member Variable:	_myP1
 Member Variable:	_myPanner
 Member Variable:	_myParent
+Member Variable:	_myPhysics
 Member Variable:	_myPhysicsObject
 Member Variable:	_myPhysicsSystemRef
 Member Variable:	_myPitchVariation
@@ -1829,13 +1841,17 @@ Member Variable:	_myRayEnd
 Member Variable:	_myRayStart
 Member Variable:	_myRect
 Member Variable:	_myReferenceEntity
+Member Variable:	_myRemovedEntities
+Member Variable:	_myRemovedEntityRefs
 Member Variable:	_myRenderSpaceHeight
 Member Variable:	_myRenderSpaceWidth
 Member Variable:	_mySamples
+Member Variable:	_mySceneGraph
 Member Variable:	_mySceneGraphOwningNodes
 Member Variable:	_mySceneGraphRenderable
 Member Variable:	_mySceneTree
 Member Variable:	_myScreenPos
+Member Variable:	_mySerializeFormat
 Member Variable:	_mySerializedObjects
 Member Variable:	_mySerializer
 Member Variable:	_mySocket
@@ -1854,9 +1870,11 @@ Member Variable:	_myTests
 Member Variable:	_myTileIndexArray
 Member Variable:	_myTileInstanceTree
 Member Variable:	_myTileSet
+Member Variable:	_myTileSetRef
 Member Variable:	_myTileSize
 Member Variable:	_myTileValue
 Member Variable:	_myTiles
+Member Variable:	_myTileset
 Member Variable:	_myTimeDelay
 Member Variable:	_myTimeStepInMilliSeconds
 Member Variable:	_myTimeStepInSeconds
@@ -1875,6 +1893,8 @@ Member Variable:	_myVolume
 Member Variable:	_myVolumeVariation
 Member Variable:	_myWebsocket
 Member Variable:	_myWorld
+Member Variable:	_myWorldRef
+Member Variable:	_myWorldSize
 Member Variable:	_objectHeaderFormat			*****
 Member Variable:	_ourMaxItemsPerMessage			*****
 Member Variable:	_ourMessageHeaderFormat			*****
@@ -1882,7 +1902,6 @@ Member Variable:	_owner			*****
 Member Variable:	_parent			*****
 Member Variable:	_parents			*****
 Member Variable:	_path			*****
-Member Variable:	_physics			*****
 Member Variable:	_physicsObject			*****
 Member Variable:	_physicsSystem			*****
 Member Variable:	_position			*****
@@ -1892,7 +1911,6 @@ Member Variable:	_removedWorld			*****
 Member Variable:	_right			*****
 Member Variable:	_rotMatrixRow1			*****
 Member Variable:	_rotMatrixRow2			*****
-Member Variable:	_sceneGraph			*****
 Member Variable:	_serializeFormat			*****
 Member Variable:	_sounds			*****
 Member Variable:	_specialChars			*****
@@ -1935,8 +1953,6 @@ Member Variable:	down1			*****
 Member Variable:	down2			*****
 Member Variable:	effectsVolume			*****
 Member Variable:	entity			*****
-Member Variable:	entityArray			*****
-Member Variable:	entityArrayBefore			*****
 Member Variable:	error			*****
 Member Variable:	fileName			*****
 Member Variable:	flags			*****
@@ -1990,6 +2006,7 @@ Member Variable:	myY
 Member Variable:	name			*****
 Member Variable:	net			*****
 Member Variable:	netDynamic			*****
+Member Variable:	netOnly			*****
 Member Variable:	obfuscateNames			*****
 Member Variable:	ourFrameRayCounter			*****
 Member Variable:	physics			*****
@@ -2183,6 +2200,10 @@ Included Word:	LoadGame
 Included Word:	MAX_EVER
 Included Word:	MODES
 Included Word:	Map_Draw
+Included Word:	MaxMapSizeInTiles
+Included Word:	MaxNumberOfTiles
+Included Word:	MaxTileSize
+Included Word:	MinTileSize
 Included Word:	Msg
 Included Word:	NETWORK
 Included Word:	NET_MODE
@@ -2304,7 +2325,6 @@ Included Word:	_bits
 Included Word:	_boundingRect
 Included Word:	_buttons
 Included Word:	_callbackName
-Included Word:	_camera
 Included Word:	_chainDownMethods
 Included Word:	_chainUpMethods
 Included Word:	_childClasses
@@ -2319,7 +2339,7 @@ Included Word:	_createChainUpFunction
 Included Word:	_createChildren
 Included Word:	_currentAnimation
 Included Word:	_data
-Included Word:	_defaultCamera
+Included Word:	_debugDraw
 Included Word:	_direction
 Included Word:	_domChatContainer
 Included Word:	_domChatForm
@@ -2329,7 +2349,6 @@ Included Word:	_domNetworkStatus
 Included Word:	_down
 Included Word:	_drawDebugText
 Included Word:	_encoded
-Included Word:	_entityMap
 Included Word:	_flags
 Included Word:	_getDebugPlayingString
 Included Word:	_getLeadingString
@@ -2341,6 +2360,7 @@ Included Word:	_init
 Included Word:	_initAnimations
 Included Word:	_initAudioAssets
 Included Word:	_initListeners
+Included Word:	_initNonGameObjectMembers
 Included Word:	_initReferenceEntities
 Included Word:	_initWorld
 Included Word:	_insertPhysicsObjectToTree
@@ -2358,8 +2378,6 @@ Included Word:	_lastUpdateMin
 Included Word:	_lastUpdateSec
 Included Word:	_left
 Included Word:	_low
-Included Word:	_map
-Included Word:	_mapsize
 Included Word:	_maxID
 Included Word:	_maxLayers
 Included Word:	_mouseLoc
@@ -2368,6 +2386,8 @@ Included Word:	_myAABB2D
 Included Word:	_myAccumulatedTime
 Included Word:	_myActiveLinkedListNode
 Included Word:	_myActiveObjectsList
+Included Word:	_myAddedEntities
+Included Word:	_myAddedEntityRefs
 Included Word:	_myAnchorPosition
 Included Word:	_myAnimation
 Included Word:	_myAnimationFrames
@@ -2377,6 +2397,7 @@ Included Word:	_myAssetManager
 Included Word:	_myBackBufferCanvas
 Included Word:	_myBackBufferCanvas2DContext
 Included Word:	_myCallback
+Included Word:	_myCamera
 Included Word:	_myCanvas
 Included Word:	_myCanvas2DContext
 Included Word:	_myChangedTiles
@@ -2393,6 +2414,7 @@ Included Word:	_myCurrentNode
 Included Word:	_myCurrentPoint
 Included Word:	_myDebugTextArray
 Included Word:	_myDebugTextAssociatedColorsArray
+Included Word:	_myDefaultCamera
 Included Word:	_myDensity
 Included Word:	_myDescription
 Included Word:	_myDestination
@@ -2406,6 +2428,7 @@ Included Word:	_myDynamicCompressor
 Included Word:	_myEffectsVolume
 Included Word:	_myEffectsVolumeUserValue
 Included Word:	_myEntities
+Included Word:	_myEntityRefs
 Included Word:	_myEventListeners
 Included Word:	_myFileName
 Included Word:	_myForwardDirtyObjects
@@ -2441,6 +2464,7 @@ Included Word:	_myLayer
 Included Word:	_myListenerPosition2D
 Included Word:	_myLocalUser
 Included Word:	_myMap
+Included Word:	_myMapRef
 Included Word:	_myMapSize
 Included Word:	_myMapSizeInTiles
 Included Word:	_myMasterNetGroup
@@ -2466,6 +2490,7 @@ Included Word:	_myNextSampleID
 Included Word:	_myNextSoundDescriptionID
 Included Word:	_myNoCanvasSupportedMessage
 Included Word:	_myNodeCollisionPoints
+Included Word:	_myNumberOfTiles
 Included Word:	_myObjectsMap
 Included Word:	_myOrigin
 Included Word:	_myOwner
@@ -2475,6 +2500,7 @@ Included Word:	_myP0
 Included Word:	_myP1
 Included Word:	_myPanner
 Included Word:	_myParent
+Included Word:	_myPhysics
 Included Word:	_myPhysicsObject
 Included Word:	_myPhysicsSystemRef
 Included Word:	_myPitchVariation
@@ -2488,13 +2514,17 @@ Included Word:	_myRayEnd
 Included Word:	_myRayStart
 Included Word:	_myRect
 Included Word:	_myReferenceEntity
+Included Word:	_myRemovedEntities
+Included Word:	_myRemovedEntityRefs
 Included Word:	_myRenderSpaceHeight
 Included Word:	_myRenderSpaceWidth
 Included Word:	_mySamples
+Included Word:	_mySceneGraph
 Included Word:	_mySceneGraphOwningNodes
 Included Word:	_mySceneGraphRenderable
 Included Word:	_mySceneTree
 Included Word:	_myScreenPos
+Included Word:	_mySerializeFormat
 Included Word:	_mySerializedObjects
 Included Word:	_mySerializer
 Included Word:	_mySocket
@@ -2513,9 +2543,11 @@ Included Word:	_myTests
 Included Word:	_myTileIndexArray
 Included Word:	_myTileInstanceTree
 Included Word:	_myTileSet
+Included Word:	_myTileSetRef
 Included Word:	_myTileSize
 Included Word:	_myTileValue
 Included Word:	_myTiles
+Included Word:	_myTileset
 Included Word:	_myTimeDelay
 Included Word:	_myTimeStepInMilliSeconds
 Included Word:	_myTimeStepInSeconds
@@ -2534,6 +2566,8 @@ Included Word:	_myVolume
 Included Word:	_myVolumeVariation
 Included Word:	_myWebsocket
 Included Word:	_myWorld
+Included Word:	_myWorldRef
+Included Word:	_myWorldSize
 Included Word:	_objectHeaderFormat
 Included Word:	_onAnimFrame
 Included Word:	_onChatSubmit
@@ -2547,7 +2581,6 @@ Included Word:	_owner
 Included Word:	_parent
 Included Word:	_parents
 Included Word:	_path
-Included Word:	_physics
 Included Word:	_physicsObject
 Included Word:	_physicsSystem
 Included Word:	_position
@@ -2561,7 +2594,6 @@ Included Word:	_resizeSpace
 Included Word:	_right
 Included Word:	_rotMatrixRow1
 Included Word:	_rotMatrixRow2
-Included Word:	_sceneGraph
 Included Word:	_sendChatToChatLog
 Included Word:	_serializeFormat
 Included Word:	_setSleeping
@@ -2585,8 +2617,11 @@ Included Word:	aBits
 Included Word:	aBool1
 Included Word:	aBool2
 Included Word:	aBreakPointLocation
+Included Word:	aCamera
 Included Word:	aCameraAABB2D
 Included Word:	aCameraRect
+Included Word:	aCameraTarget
+Included Word:	aChangedTile
 Included Word:	aCharIndex
 Included Word:	aChild
 Included Word:	aClassName
@@ -2639,6 +2674,7 @@ Included Word:	aItemsList
 Included Word:	aKeepChildren
 Included Word:	aLastNode
 Included Word:	aLeadString
+Included Word:	aLeftIndex
 Included Word:	aLength
 Included Word:	aListToDraw
 Included Word:	aListeners
@@ -2685,6 +2721,7 @@ Included Word:	aReadObjectsList
 Included Word:	aReadResult
 Included Word:	aRecievedObj
 Included Word:	aReturnAABB2D
+Included Word:	aRightIndex
 Included Word:	aSample
 Included Word:	aScale
 Included Word:	aSecond
@@ -2729,6 +2766,7 @@ Included Word:	aValue
 Included Word:	aValues
 Included Word:	aWholePart
 Included Word:	aWidthToHeight
+Included Word:	aWorld
 Included Word:	aWriteObject
 Included Word:	aY
 Included Word:	acceleration
@@ -2780,7 +2818,6 @@ Included Word:	buttons
 Included Word:	callback
 Included Word:	callbackName
 Included Word:	camPoint
-Included Word:	camera
 Included Word:	canUserModifyNet
 Included Word:	centerOn
 Included Word:	chainDown
@@ -2857,11 +2894,6 @@ Included Word:	effectsVolume
 Included Word:	encode
 Included Word:	encodeRange
 Included Word:	entity
-Included Word:	entityArray
-Included Word:	entityArrayBefore
-Included Word:	entityObject
-Included Word:	entityPath
-Included Word:	entityRef
 Included Word:	equal
 Included Word:	event
 Included Word:	eventName
@@ -2906,13 +2938,12 @@ Included Word:	getBackBufferRect
 Included Word:	getBackBufferToFrontBufferRatio
 Included Word:	getBackBufferWidth
 Included Word:	getBottom
-Included Word:	getBoundingBox
 Included Word:	getCallbackName
+Included Word:	getCamera
 Included Word:	getCamera2D
 Included Word:	getCenter
 Included Word:	getClass
 Included Word:	getComponentByType
-Included Word:	getCurrentCamera
 Included Word:	getCurrentLength
 Included Word:	getCurrentNode
 Included Word:	getCurrentPoint
@@ -3112,6 +3143,7 @@ Included Word:	inRadius
 Included Word:	inReason
 Included Word:	inRect
 Included Word:	inRenderableItem
+Included Word:	inRenderables
 Included Word:	inRenderer
 Included Word:	inRight
 Included Word:	inRootNode
@@ -3276,8 +3308,8 @@ Included Word:	myX
 Included Word:	myY
 Included Word:	net
 Included Word:	netDynamic
+Included Word:	netOnly
 Included Word:	newComponentMap
-Included Word:	newEntityMap
 Included Word:	newInstance
 Included Word:	newItem
 Included Word:	node
@@ -3429,6 +3461,7 @@ Included Word:	setValue
 Included Word:	setWidthHeight
 Included Word:	size
 Included Word:	sortCollisions
+Included Word:	sortReadObjects
 Included Word:	sortRenderables
 Included Word:	soundInfo
 Included Word:	stackPath
@@ -3438,7 +3471,6 @@ Included Word:	stringDistance
 Included Word:	stringDrawOrder
 Included Word:	strokeRectXYWH
 Included Word:	subtract
-Included Word:	target
 Included Word:	temp
 Included Word:	testClass1
 Included Word:	testClass2
@@ -4052,6 +4084,8 @@ Localized String:	"), Radius:"
 Localized String:	"----Vel:("
 Localized String:	"Failed to load "
 Localized String:	"Guest"
+Localized String:	"Depricated!!!"
+Localized String:	"Depricated!!! ????"
 Localized String:	"Clear Net Dirty on:"
 Localized String:	"Cannot currently serialize so many objects!"
 Localized String:	"Net create remote on "
@@ -4103,6 +4137,7 @@ Localized String:	"Encode failed!"
 Localized String:	"Decompression out of range value detected!"
 Localized String:	"Did not resolve decoding a symbol before we exceeded the bits it could have fit in!"
 Localized String:	"Range is too large!"
+Localized String:	"Failed to encode message value: "
 Localized String:	"WTF!!!"
 Localized String:	"Should not be getting input updates right now."
 Localized String:	"SpritesUpdater"

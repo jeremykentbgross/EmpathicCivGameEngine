@@ -76,6 +76,12 @@ ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel.pr
 	//	high : valueHigh
 	//};
 	
+	ECGame.log.assert(
+		inValue <= this.myMax
+		&& inValue >= this.myMin,
+		"Failed to encode message value: " + inValue + ':[' + this.myMin + ',' + this.myMax + ']'
+	);
+	
 	range = (this.myMax - this.myMin + 1);
 	valueLow = ((inValue + this._LOW_OFFSET - this.myMin) / range);
 	valueHigh = ((inValue + this._HIGH_OFFSET - this.myMin) / range);

@@ -124,6 +124,7 @@ ECGame.EngineLib.BinarySerializer = ECGame.EngineLib.Class.create({
 			{
 				name : //variable name
 				net : true/false,
+				netOnly : true/false
 				min : //int or float
 				max : //int or float
 				precision : //float only
@@ -168,11 +169,15 @@ ECGame.EngineLib.BinarySerializer = ECGame.EngineLib.Class.create({
 				{
 					continue;
 				}
+				else if(!this._myIsNetMode && anEntry.netOnly)
+				{
+					continue;
+				}
 				
 				if(anEntry.condition && !inObject[anEntry.condition])
 				{
 					continue;
-				}
+				}//TODO serialize condition value in bool??
 				
 				if(anEntry.maxArrayLength)
 				{

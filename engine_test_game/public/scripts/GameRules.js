@@ -28,12 +28,13 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 		ECGame.Settings.Graphics.mode = ECGame.Settings.Graphics.MODES.SPLIT_HORIZONTAL;
 		
 		//constants:
-		this._myMapSizeInTiles = 64;
+		this._myMapSizeInTiles = 128;//64;
 		this._myTileSize = 64;
 		this._myMinPhysicsPartitionSize = 8;
 		
 		//game world
-		this._myGameWorld = null;
+		this._myGameWorld = null;	//ECGame.EngineLib.World2D.getClass().getInstanceRegistry().findByID(1)
+		this._myTileset = null;		//TODO serialize this and do not create it here but only on server!!!!!!!
 		
 		//entity stuff:
 		this._myAnimations = [];
@@ -69,49 +70,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			
 			//TODO create default objects
 			this._initListeners();
-			this._initWorld();
-			this._initAudioAssets();
-			this._initAnimations();
-			this._initReferenceEntities();
-			
-			return true;
-		},
-		
-		_initListeners : function _initListeners()
-		{
-			var aNetwork
-				;
-				
-			if(!ECGame.Settings.Network.isServer)
-			{
-				ECGame.instance.getInput(0).registerListener('Input', this);
-				ECGame.instance.getInput(1).registerListener('Input', this);
-			}
-			if(ECGame.Settings.Network.isMultiplayer)
-			{
-				aNetwork = ECGame.instance.getNetwork();
-				
-				aNetwork.registerListener(
-					'IdentifiedUser',
-					this
-				);
-				aNetwork.registerListener(
-					'ClientDisconnected',
-					this
-				);
-				this._myMasterNetGroup = aNetwork.getNetGroup('master_netgroup');
-			}
-		},
-		_initWorld : function _initWorld()
-		{
-			var i, j
-				,aMap
-				,aIndex
-				,aTileset
-				;
-			
-			//TODO tile index constants! (in tileset?)
-			aTileset = ECGame.EngineLib.TileSet2D.create(
+			this._myTileset = ECGame.EngineLib.TileSet2D.create(//TODO serialize this and do not create it here but only on server!!!!!!!
 				[
 					{
 						fileName : 'game/images/grass.png'
@@ -153,6 +112,55 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					//,
 				]
 			);
+			if(ECGame.Settings.Network.isServer || !ECGame.Settings.Network.isMultiplayer)
+			{
+				this._initWorld();
+			}
+			this._initAudioAssets();
+			this._initAnimations();
+			if(ECGame.Settings.Network.isServer || !ECGame.Settings.Network.isMultiplayer)
+			{
+				this._initReferenceEntities();
+			}
+			
+			return true;
+		},
+		
+		_initListeners : function _initListeners()
+		{
+			var aNetwork
+				;
+				
+			if(!ECGame.Settings.Network.isServer)
+			{
+				ECGame.instance.getInput(0).registerListener('Input', this);
+				ECGame.instance.getInput(1).registerListener('Input', this);
+			}
+			if(ECGame.Settings.Network.isMultiplayer)
+			{
+				aNetwork = ECGame.instance.getNetwork();
+				
+				aNetwork.registerListener(
+					'IdentifiedUser',
+					this
+				);
+				aNetwork.registerListener(
+					'ClientDisconnected',
+					this
+				);
+				this._myMasterNetGroup = aNetwork.getNetGroup('master_netgroup');
+			}
+		},
+		_initWorld : function _initWorld()
+		{
+			var i, j
+				,aMap
+				,aIndex
+				,aTileset
+				;
+			
+			//TODO tile index constants! (in tileset?)
+			aTileset = this._myTileset;
 			this._myGameWorld = ECGame.EngineLib.World2D.create(
 				this._myMapSizeInTiles
 				,aTileset
@@ -160,10 +168,6 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				,this._myMinPhysicsPartitionSize
 			);
 			aMap = this._myGameWorld.getMap();
-			if(ECGame.Settings.Network.isMultiplayer)
-			{
-				this._myMasterNetGroup.addObject(this._myGameWorld);
-			}
 			
 			/////////////////////////////////////////////
 			//HACK put something in the map to start with
@@ -189,7 +193,8 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						}
 					}
 				}
-				this._myMasterNetGroup.addObject(aMap);
+				this._myMasterNetGroup.addObject(aMap);/////////////////////////TODO: create event onAddedTo/RemovedFromNetGroup, then this line is in World (or entity, etc)
+				this._myMasterNetGroup.addObject(this._myGameWorld);
 			}
 			//dynamically change the map from the server
 			if(ECGame.Settings.Network.isServer)
@@ -455,17 +460,24 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 		
 		render : function render(inGraphics)
 		{
+			var aWorld;
+			
 			if(ECGame.instance.isRunning())
 			{
+				aWorld = ECGame.EngineLib.World2D.getClass().getInstanceRegistry().findByID(1);
+				if(!aWorld)
+				{
+					return;
+				}
 				if(inGraphics.getIndex() === 0)
 				{
-					this._myGameWorld.render(inGraphics);
+					aWorld.render(inGraphics);
 					
 					if(this._myIsRayTestMode)
 					{
 						var rayTrace = new ECGame.EngineLib.RayTracer2D.create();
 						rayTrace.fireRay(
-							this._myGameWorld.getPhysics()._myDetectionTree
+							aWorld.getPhysics()._myDetectionTree
 							,this._myRayStart.clone()
 							,this._myRayEnd.clone()
 						);
@@ -474,7 +486,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				}
 				if(inGraphics.getIndex() === 1)
 				{
-					this._myGameWorld.renderMiniMap(inGraphics);
+					aWorld.renderMiniMap(inGraphics);
 				}
 			}
 			else
@@ -503,17 +515,23 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				,aMouseWorldPosition
 				,aSoundSystem
 				,aPhysicsObject
+				,aWorld
 				,aMap
 				;
 			
-			aMap = this._myGameWorld.getMap();
+			aWorld = ECGame.EngineLib.World2D.getClass().getInstanceRegistry().findByID(1);
+			if(!aWorld)
+			{
+				return;
+			}
+			aMap = aWorld.getMap();
 			
 			if(inInputEvent.myInputID === 1)
 			{
 				if(inInputEvent.buttons[0])
 				{
-					this._myGameWorld.getCurrentCamera().centerOn(
-						inInputEvent.mouseLoc.scale(this._myGameWorld.getSize() / ECGame.Settings.Graphics.backBufferWidth)
+					aWorld.getCamera().centerOn(
+						inInputEvent.mouseLoc.scale(aWorld.getSize() / ECGame.Settings.Graphics.backBufferWidth)
 						,aMap
 					);
 				}
@@ -521,7 +539,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			}
 			
 			
-			aCameraAABB2D = this._myGameWorld.getCurrentCamera().getRect();
+			aCameraAABB2D = aWorld.getCamera().getRect();
 			aMouseWorldPosition = inInputEvent.mouseLoc.add(aCameraAABB2D.getLeftTop());
 			
 			
@@ -661,7 +679,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			{
 				if(inInputEvent.clicked[0])
 				{
-					aPhysicsObject = this._myGameWorld.getPhysics().createNewPhysicsObject();
+					aPhysicsObject = aWorld.getPhysics().createNewPhysicsObject();
 					aPhysicsObject.setAABB(
 						ECGame.EngineLib.AABB2D.create(
 							aMouseWorldPosition.myX
@@ -673,7 +691,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				}
 				if(inInputEvent.clicked[1])
 				{
-					aPhysicsObject = this._myGameWorld.getPhysics().createNewPhysicsObject();
+					aPhysicsObject = aWorld.getPhysics().createNewPhysicsObject();
 					aPhysicsObject.setAABB(
 						ECGame.EngineLib.AABB2D.create(
 							aMouseWorldPosition.myX
@@ -686,7 +704,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				}
 				if(inInputEvent.clicked[2])
 				{
-					aPhysicsObject = this._myGameWorld.getPhysics().createNewPhysicsObject();
+					aPhysicsObject = aWorld.getPhysics().createNewPhysicsObject();
 					aPhysicsObject.setAABB(
 						ECGame.EngineLib.AABB2D.create(
 							aMouseWorldPosition.myX

@@ -63,7 +63,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 	flags : {},
 	
 	ChainUp : ['cleanup'],
-	ChainDown : ['serialize', 'copyFrom', 'clearNetDirty'],
+	ChainDown : ['serialize', 'copyFrom', 'clearNetDirty', 'postSerialize'],
 	
 	Definition :
 	{
@@ -203,6 +203,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			this._myNetDirty = false;
 			this._myGameObjectNetDirty = false;
 		},
+		postSerialize : function postSerialize(){},
 		
 		setNetOwner : function setNetOwner(inOwner)
 		{

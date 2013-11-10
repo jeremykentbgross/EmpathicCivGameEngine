@@ -80,6 +80,14 @@ ECGame.Settings =
 		//TODO controls
 	},
 	
+	World2D :
+	{
+		MaxMapSizeInTiles : 256,
+		MinTileSize : 8,
+		MaxTileSize : 256,
+		MaxNumberOfTiles : 255	//TODO allow this to be 65535 with u16 type array option, etc
+	},
+	
 	Network :
 	{
 		isServer : false	//TODO consider function for this

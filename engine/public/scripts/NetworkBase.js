@@ -220,18 +220,18 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 		//TODO add objects to appropriate netgroups
 		addNewObject : function addNewObject()
 		{
-//			ECGame.log.warn("Depricated!!!");
+			ECGame.log.warn("Depricated!!!");
 		},
 		//TODO remove, for backwards compat..
 		addNetDirtyObject : function addNetDirtyObject()
 		{
-//			ECGame.log.warn("Depricated!!!");
+			ECGame.log.warn("Depricated!!!");
 		},
 		
 		//TODO send chat command to all
 		sendMessage : function sendMessage()
 		{
-//			ECGame.log.warn("Depricated!!! ????");
+			ECGame.log.warn("Depricated!!! ????");
 		},
 		
 		getUpdatePriority : function getUpdatePriority()
@@ -520,12 +520,30 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					aReadObjectsList.push(anObject);
 				}
 				
+				aReadObjectsList.sort(
+					function sortReadObjects(inLHS, inRHS)
+					{
+						var aLeftIndex
+							,aRightIndex
+							;
+						
+						//sort by class index
+						aLeftIndex = inLHS.getClass().getID();
+						aRightIndex = inRHS.getClass().getID();
+						if(aLeftIndex !== aRightIndex)
+						{
+							return aLeftIndex - aRightIndex;
+						}
+						
+						//sort by instance index
+						aLeftIndex = inLHS.getID();
+						aRightIndex = inRHS.getID();
+						return aLeftIndex - aRightIndex;
+					}
+				);
 				for(i = 0; i < aReadObjectsList.length; ++i)
 				{
-					if(aReadObjectsList[i].postSerialize)//TODO make this chain function so we don't have to check for it???
-					{
-						aReadObjectsList[i].postSerialize();
-					}
+					aReadObjectsList[i].postSerialize();
 				}
 				
 				ECGame.log.assert(

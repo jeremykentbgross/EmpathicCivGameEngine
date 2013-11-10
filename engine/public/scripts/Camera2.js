@@ -85,6 +85,30 @@ ECGame.EngineLib.Camera2.prototype.getTargetPosition = function getTargetPositio
 	return this._myRect.getCenter();
 };
 
+ECGame.EngineLib.Camera2.prototype.debugDraw = function debugDraw(inGraphics)
+{
+	var aCameraTarget;
+	
+	aCameraTarget = ECGame.EngineLib.AABB2D.create(
+		0,
+		0,
+		ECGame.Settings.Debug.CameraTarget_Size,
+		ECGame.Settings.Debug.CameraTarget_Size
+	);
+	
+	aCameraTarget.setLeftTop(
+		//center target rect on camera target by subtracting half its width/height
+		this.getTargetPosition().subtract(
+			aCameraTarget.getWidthHeight().scale(0.5)
+		)
+	);
+				
+	//setup the color
+	inGraphics.setFillStyle(ECGame.Settings.Debug.CameraTarget_DrawColor);
+	//draw the target
+	inGraphics.fillRect(aCameraTarget);
+};
+
 //TODO listen to graphics object for resizes?
 
 //TODO make this gameobject? with set target/map? then needs update.. eh?

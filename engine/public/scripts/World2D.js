@@ -24,6 +24,28 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 	Constructor : function World2D()
 	{
 		this.GameObject();
+		
+		this._myMapSizeInTiles = 0;
+		this._myTileSize = 0;
+		this._myMinPhysicsPartitionSize = 0;
+		this._myWorldSize = 0; // == _myMapSizeInTiles * _myTileSize	//TODO rename worldSize
+		
+		this._myMap = null;
+		this._myMapRef = null;	//for networking
+		this._myPhysics = null;
+		this._mySceneGraph = null;
+		
+		//entities:
+		this._myEntities = [];
+		this._myAddedEntities = [];
+		this._myRemovedEntities = [];
+		//network versions
+		this._myEntityRefs = [];
+		this._myAddedEntityRefs = [];
+		this._myRemovedEntityRefs = [];
+		
+		this._myDefaultCamera = ECGame.EngineLib.Camera2.create();
+		this._myCamera = null;
 	},
 	
 	Parents : [ECGame.EngineLib.GameObject],
@@ -35,118 +57,66 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 	
 	Definition :
 	{
-		getPhysics : function getPhysics()
-		{
-			return this._physics;
-		},
-
-		getMap : function getMap()
-		{
-			return this._map;
-		},
-
-		getSceneGraph : function getSceneGraph()
-		{
-			return this._sceneGraph;
-		},
-
 		init : function init(inMapSizeInTiles, inTileset, inTileSize, inMinPhysicsPartitionSize)//TODO tilesize part of tileset?
 		{
-			this._mapsize = inMapSizeInTiles * inTileSize;
+			this._initNonGameObjectMembers(inMapSizeInTiles, inTileSize, inMinPhysicsPartitionSize);
 			
-			this._sceneGraph = new ECGame.EngineLib.Game2DSceneGraph();
-			this._sceneGraph.init(this._mapsize, inTileSize);
-			
-			this._physics = ECGame.EngineLib.Physics2D.create();
-			this._physics.init(this._mapsize, inMinPhysicsPartitionSize);
-			ECGame.instance.getUpdater("PhysicsUpdater").addUpdate(this._physics);//TODO move this to physics system itself?
-			
-			this._map = ECGame.EngineLib.TileMap2D.create();
-			this._map.init(this, inTileset, inMapSizeInTiles, inTileSize);
-			
-			this._entityMap = {};
-			
-			this._defaultCamera = ECGame.EngineLib.Camera2.create();
-			this._camera = null;
+			this._myMap = ECGame.EngineLib.TileMap2D.create();
+			this._myMap.init(this, inTileset, inMapSizeInTiles, inTileSize);
+			this._myMapRef = this._myMap.getRef();
 		},
-
-		addEntity : function addEntity(inEntity)
+		
+		_initNonGameObjectMembers : function _initNonGameObjectMembers(inMapSizeInTiles, inTileSize, inMinPhysicsPartitionSize)
 		{
-			//TODO beware bug created by adding an entity by a name which could change, add this to namechange listener
-			this._entityMap[inEntity.getTxtPath()] = inEntity;
-			inEntity.addedToWorld(this);
-			this.setNetDirty();
+			this._myMapSizeInTiles = inMapSizeInTiles;
+			this._myTileSize = inTileSize;
+			this._myMinPhysicsPartitionSize = inMinPhysicsPartitionSize;
+			this._myWorldSize = inMapSizeInTiles * inTileSize;
+			
+			this._mySceneGraph = new ECGame.EngineLib.Game2DSceneGraph();
+			this._mySceneGraph.init(this._myWorldSize, inTileSize);
+			
+			this._myPhysics = ECGame.EngineLib.Physics2D.create();
+			this._myPhysics.init(this._myWorldSize, inMinPhysicsPartitionSize);
+			ECGame.instance.getUpdater("PhysicsUpdater").addUpdate(this._myPhysics);//TODO move this to physics system itself?
+			
+			this._myEntities = [];
+			this._myAddedEntities = [];
+			this._myRemovedEntities = [];
+			
+			this._myDefaultCamera = ECGame.EngineLib.Camera2.create();
+			this._myCamera = null;
 		},
-		removeEntity : function removeEntity(inEntity)
-		{
-			delete this._entityMap[inEntity.getTxtPath()];
-			inEntity.removedFromWorld(this);
-			this.setNetDirty();
-		},
-
-		setCamera : function setCamera(in2DCamera)
-		{
-			this._camera = in2DCamera;
-		},
-		//TODO get camera?
-
-		getCurrentCamera : function getCurrentCamera()//TODO maybe should be public?
-		{
-			return this._camera || this._defaultCamera;
-		},
-
-		//if(!ECGame.Settings.Network.isServer)//TODO axe if?
+		
+		copyFrom : function copyFrom(/*inOther*/){return;},//TODO
+		
 		render : function render(inGraphics)
 		{
-			var target
-				,camera
+			var aCamera
 				;
 			
-			camera = this.getCurrentCamera();
-			inGraphics.setCamera2D(camera);
+			aCamera = this.getCamera();
+			inGraphics.setCamera2D(aCamera);
 			
 			//debug draw the map		
 			if(ECGame.Settings.isDebugDraw_Map())
 			{
-				this._map.debugDraw(inGraphics);
+				this._myMap.debugDraw(inGraphics);
 			}
 			
 			//render scene graph (note: it will ommit map tiles if map is debug drawn)
-			this._sceneGraph.render(inGraphics);
-			
-			//debug draw scenegraph
-			if(ECGame.Settings.isDebugDraw_SceneGraph())
-			{
-				this._sceneGraph.debugDraw(inGraphics);
-			}
-			
+			this._mySceneGraph.render(inGraphics);
+						
 			//debug draw physics
 			if(ECGame.Settings.isDebugDraw_Physics())
 			{
-				this._physics.debugDraw(inGraphics);
+				this._myPhysics.debugDraw(inGraphics);
 			}
 			
 			//debug draw camera target point
 			if(ECGame.Settings.isDebugDraw_CameraTarget())
 			{
-				target = ECGame.EngineLib.AABB2D.create(
-					0,
-					0,
-					ECGame.Settings.Debug.CameraTarget_Size,
-					ECGame.Settings.Debug.CameraTarget_Size
-				);
-				
-				target.setLeftTop(
-					//center target rect on camera target by subtracting half its width/height
-					camera.getTargetPosition().subtract(
-						target.getWidthHeight().scale(0.5)
-					)
-				);
-							
-				//setup the color
-				inGraphics.setFillStyle(ECGame.Settings.Debug.CameraTarget_DrawColor);
-				//draw the target
-				inGraphics.fillRect(target);
+				aCamera.debugDraw(inGraphics);
 			}
 			
 			if(ECGame.Settings.isDebugDraw_Sound())//TODO world sound partitioning/occulsion
@@ -162,12 +132,12 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 				;
 			
 			inTargetSpaceRect = inTargetSpaceRect || inGraphics.getBackBufferRect();
-			this._map.render(inGraphics, inTargetSpaceRect);
+			this._myMap.render(inGraphics, inTargetSpaceRect);
 			
-			aScale = inTargetSpaceRect.myWidth / this._mapsize;
-			//&? = inTargetSpaceRect.myHeight / this._mapsize
+			aScale = inTargetSpaceRect.myWidth / this._myWorldSize;
+			//&? = inTargetSpaceRect.myHeight / this._myWorldSize
 			
-			aCameraRect = this.getCurrentCamera().getRect();
+			aCameraRect = this.getCamera().getRect();
 			aCameraRect.setLeftTop(
 				aCameraRect.getLeftTop().scale(aScale)
 			);
@@ -178,93 +148,229 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			inGraphics.strokeRect(aCameraRect);
 		},
 
+		addEntity : function addEntity(inEntity)
+		{
+			var anIndex;
+			
+			//if its already added, just return
+			if(this._myEntities.indexOf(inEntity) !== -1)
+			{
+				return;
+			}
+			
+			//add it
+			this._myEntities.push(inEntity);
+			//tell the entity it has been added //TODO this should be an event?
+			inEntity.addedToWorld(this);
+			
+			if(this.canUserModifyNet())
+			{
+				//add it to the list of newly added entities for the network
+				this._myAddedEntities.push(inEntity);
+				
+				//if it was previously removed, remove it from the removal list
+				anIndex = this._myRemovedEntities.indexOf(inEntity);
+				if(anIndex !== -1)
+				{
+					this._myRemovedEntities[anIndex] = this._myRemovedEntities[this._myRemovedEntities.length - 1];
+					this._myRemovedEntities.pop();
+				}
+				
+				this.setNetDirty();
+			}
+		},
+		removeEntity : function removeEntity(inEntity)
+		{
+			var anIndex;
+			
+			//find the entity
+			anIndex = this._myEntities.indexOf(inEntity);
+			
+			//if its not there, just return
+			if(anIndex === -1)
+			{
+				return;
+			}
+			
+			//remove it
+			this._myEntities[anIndex] = this._myEntities[this._myEntities.length - 1];
+			this._myEntities.pop();
+			
+			//tell the entity it has been removed //TODO this should be an event?
+			inEntity.removedFromWorld(this);
+			
+			if(this.canUserModifyNet())
+			{
+				//add it to the list of newly removed entities for the network
+				this._myRemovedEntities.push(inEntity);
+				
+				//if it was previously added, remove it from the add list
+				anIndex = this._myAddedEntities.indexOf(inEntity);
+				if(anIndex !== -1)
+				{
+					this._myAddedEntities[anIndex] = this._myAddedEntities[this._myAddedEntities.length - 1];
+					this._myAddedEntities.pop();
+				}
+				
+				this.setNetDirty();
+			}
+		},
+		
+		getPhysics : function getPhysics()
+		{
+			return this._myPhysics;
+		},
+		getMap : function getMap()
+		{
+			return this._myMap;
+		},
+		getSceneGraph : function getSceneGraph()
+		{
+			return this._mySceneGraph;
+		},
+
+		setCamera : function setCamera(in2DCamera)
+		{
+			this._myCamera = in2DCamera;
+		},
+		getCamera : function getCamera()
+		{
+			return this._myCamera || this._myDefaultCamera;
+		},
+		
 		getSize : function getSize()
 		{
-			return this._mapsize;
+			return this._myWorldSize;
 		},
-		getBoundingBox : function getBoundingBox()
+		getAABB2D : function getAABB2D()
 		{
-			return ECGame.EngineLib.AABB2D.create(0, 0, this._mapsize, this._mapsize);
+			return ECGame.EngineLib.AABB2D.create(0, 0, this._myWorldSize, this._myWorldSize);
 		},
 
 		cleanup : function cleanup(){return;},//TODO
 		
 		//set<classname>NetDirty
-		clearNetDirty : function clearNetDirty(){return;},
+		clearNetDirty : function clearNetDirty()
+		{
+			this._myAddedEntities = [];
+			this._myRemovedEntities = [];
+		},
+		
+		
+		_mySerializeFormat : 
+		[
+			{
+				name : '_myMapSizeInTiles',////////////////TODO GET FROM MAP INSTEAD
+				type : 'int',
+				net : false,
+				min : 0,
+				max : 256	//TODO consider sending 2^(*power*) instead! (smaller)
+			},
+			{
+				name : '_myTileSize',////////////////TODO GET FROM MAP INSTEAD
+				type : 'int',
+				net : false,
+				min : 8,
+				max : 256
+			},
+			{
+				name : '_myMinPhysicsPartitionSize',
+				type : 'int',
+				net : false,
+				min : 1,
+				max : 64
+			},
+			{
+				name : '_myMapRef',
+				type : 'objRef',
+				net : false
+			},
+			{
+				name : '_myEntityRefs',
+				type : 'objRef',
+				net : false,
+				maxArrayLength : 2	//TODO
+			},
+			{
+				name : '_myAddedEntityRefs',
+				type : 'objRef',
+				net : true,
+				netOnly : true,
+				maxArrayLength : 32	//TODO
+			},
+			{
+				name : '_myRemovedEntityRefs',
+				type : 'objRef',
+				net : true,
+				netOnly : true,
+				maxArrayLength : 32	//TODO
+			}
+		],
+		
 		serialize : function serialize(inSerializer)//TODO serialize maps somehow GameEntity has identical post/serialize for components!
 		{
-			var entity, ref;
+			var i
+				;
 			
-			//HACKS
-			this.entityArray = [];
-			this.entityArrayBefore = [];
-				
-			var format =	//TODO format should be static!
-			[
-				{
-					name : 'entityArray',
-					type : 'objRef',
-					net : true,
-					maxArrayLength : 32	//TODO global setting: maxPlayersPerWorld
-				}
-			];
-			
-			for(entity in this._entityMap)
+			if(inSerializer.isNetMode())
 			{
-				ref = this._entityMap[entity].getRef();
-				this.entityArray.push(ref);
-				this.entityArrayBefore.push(ref);
+				this._myAddedEntityRefs = [];
+				this._myRemovedEntityRefs = [];
+				for(i = 0; i < this._myAddedEntities.length; ++i)
+				{
+					this._myAddedEntityRefs.push(this._myAddedEntities[i].getRef());
+				}
+				for(i = 0; i < this._myRemovedEntities.length; ++i)
+				{
+					this._myRemovedEntityRefs.push(this._myRemovedEntities[i].getRef());
+				}
+			}
+			else
+			{
+				this._myEntityRefs = [];
+				for(i = 0; i < this._myEntities.length; ++i)
+				{
+					this._myEntityRefs.push(this._myEntities[i].getRef());
+				}
 			}
 			
-			inSerializer.serializeObject(this, format);
+			inSerializer.serializeObject(this, ECGame.EngineLib.World2D._mySerializeFormat);
 		},
 		
-		/*
-		TODO postSerialize chain from GameObject!
-		*/
 		postSerialize : function postSerialize()
 		{
-			var i,
-				entityRef,
-				newEntityMap,
-				entityPath,
-				entityObject;
-				
-			newEntityMap = {};
+			var anEntity
+				,i
+				;
 			
-			//if now && !before => add
-			for(i = 0; i < this.entityArray.length; ++i)
+			if(!this._myMap)//if we are not initialized
 			{
-				entityRef = this.entityArray[i];
+				this._initNonGameObjectMembers(this._myMapSizeInTiles, this._myTileSize, this._myMinPhysicsPartitionSize);
+				this._myMap = this._myMapRef.deref();
 				
-				entityObject = entityRef.deref();
-				ECGame.log.assert(entityObject, "Missing entity during serialization!");
-				entityPath = entityRef.getPath();
-				
-				newEntityMap[entityPath] = entityObject;
-				
-				if(!this._entityMap[entityPath])
+				for(i = 0; i < this._myEntityRefs.length; ++i)
 				{
-					this.addEntity(entityObject);
+					anEntity = this._myEntityRefs[i].deref();
+					ECGame.log.assert(anEntity, "Missing entity during serialization!");
+					this.addEntity(anEntity);
 				}
 			}
-			
-			//if before && !now => remove
-			for(i = 0; i < this.entityArrayBefore.length; ++i)
+			else
 			{
-				entityRef = this.entityArrayBefore[i];
-				
-				entityObject = entityRef.deref();
-				ECGame.log.assert(entityObject, "Missing entity during serialization!");
-				entityPath = entityRef.getPath();
-				
-				if(!newEntityMap[entityPath])
+				for(i = 0; i < this._myAddedEntityRefs.length; ++i)
 				{
-					this.removeEntity(entityObject);
+					anEntity = this._myAddedEntityRefs[i].deref();
+					ECGame.log.assert(anEntity, "Missing entity during serialization!");
+					this.addEntity(anEntity);
+					
+				}
+				for(i = 0; i < this._myRemovedEntityRefs.length; ++i)
+				{
+					anEntity = this._myRemovedEntityRefs[i].deref();
+					ECGame.log.assert(anEntity, "Missing entity during serialization!");
+					this.removeEntity(anEntity);
 				}
 			}
-		},
-		
-		copyFrom : function copyFrom(/*inOther*/){return;},//TODO
+		}
 	}
 });

@@ -100,6 +100,7 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 		
 		//set<classname>NetDirty
 		clearNetDirty : function clearNetDirty(){return;},
+		postSerialize : function postSerialize(){return;},
 		
 		serialize : function serialize(inSerializer)
 		{
@@ -147,7 +148,7 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 			*/
 		/*	if(this._myWorld)
 			{
-				this._range = this._myWorld.getBoundingBox();
+				this._range = this._myWorld.getAABB2D();
 			}*/
 		},
 		
@@ -170,7 +171,7 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 			
 			//TODO should have a position as part of the event?
 			//TODO can the range still be set by the world bounding box?? Atm it screws up compression and thus net serializes
-//			this._range = inEvent.world.getBoundingBox();
+//			this._range = inEvent.world.getAABB2D();
 		},
 		
 		onRemovedFromWorld : function onRemovedFromWorld(inEvent)

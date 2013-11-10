@@ -70,6 +70,7 @@ ECGame.unitTests.registerTest(
 				},
 				//set<classname>NetDirty
 				clearNetDirty : function clearNetDirty(){return;},
+				postSerialize : function postSerialize(){return;},
 				serialize : function serialize(){return;},
 				cleanup : function cleanup(){return;},
 				copyFrom : function copyFrom(/*inOther*/){return;}

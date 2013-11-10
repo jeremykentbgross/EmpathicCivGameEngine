@@ -149,6 +149,7 @@ ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(//TODO TileDesc/Anima
 		},
 		//set<classname>NetDirty
 		clearNetDirty : function clearNetDirty(){return;},
+		postSerialize : function postSerialize(){return;},
 		cleanup : function cleanup(){return;},//TODO
 		serialize : function serialize(){return;},//TODO
 		copyFrom : function copyFrom(/*inOther*/){return;}//TODO

@@ -65,11 +65,14 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 		this.GameObject();
 		
 		this._myWorld = null;
+		this._myWorldRef = null;//net serialization helper
 		this._myTileSet = null;
+		this._myTileSetRef = null;//net serialization helper
 		
 		this._myMapSizeInTiles = null;	//should be rounded up to power of 2
 		this._myTileSize = null;
 		this._myAABB = null;
+		this._myNumberOfTiles = 0;//net serialization helper
 		
 		this._myTileIndexArray = null;
 		this._myChangedTiles = [];
@@ -80,7 +83,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 		//minimap
 		this._myMiniMapCanvas = null;
 		this._myMiniMapCanvas2DContext = null;
-		this._myMiniMapNativeTileResolution = 10;
+		this._myMiniMapNativeTileResolution = 8;//< ?
 	},
 	Parents : [ECGame.EngineLib.GameObject],
 	flags : { netDynamic : true },
@@ -91,23 +94,48 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 		_serializeFormat :
 		[
 			{
+				name : '_myWorldRef',
+				type : 'objRef',
+				net : false
+			},
+			{
+				name : '_myTileSetRef',
+				type : 'objRef',
+				net : false
+			},
+			{
 				name : '_myMapSizeInTiles',
 				type : 'int',
 				net : false,
 				min : 0,
-				max : 1024	//TODO should have a constant somewhere to check against!!
+				max : ECGame.Settings.World2D.MaxMapSizeInTiles//TODO consider sending 2^(*power*) instead! (smaller)
+			},
+			{
+				name : '_myTileSize',
+				type : 'int',
+				net : false,
+				min : ECGame.Settings.World2D.MinTileSize,
+				max : ECGame.Settings.World2D.MaxTileSize
+			},
+			{
+				name : '_myNumberOfTiles',
+				type : 'int',
+				net : false,
+				min : 0,
+				max : ECGame.Settings.World2D.MaxNumberOfTiles
 			}
-			//TODO world, tileset, etc
 		],
 
-		init : function init(inWorld, inTileSet, inMapSizeInTiles, inTileSize)
+		init : function init(inWorld, inTileSet, inMapSizeInTiles, inTileSize)//TODO get tileSize from tileset!
 		{
 			var aMapSize
 				,i
 				;
 			
 			this._myWorld = inWorld;
+			this._myWorldRef = inWorld.getRef();
 			this._myTileSet = inTileSet;
+			this._myTileSetRef = this._myTileSet.getRef();
 			
 			this._myMapSizeInTiles = inMapSizeInTiles;	//TODO round up to power of 2?
 			this._myTileSize = inTileSize;
@@ -115,8 +143,9 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			aMapSize = this._myMapSizeInTiles * this._myTileSize;
 			this._myAABB = ECGame.EngineLib.AABB2D.create(0, 0, aMapSize, aMapSize);
 			
-			ECGame.log.assert(inTileSet.getNumberOfTiles() < 256, "Currently unsupported number of tiles");
-			if(inTileSet.getNumberOfTiles() < 256)
+			this._myNumberOfTiles = inTileSet.getNumberOfTiles();
+			ECGame.log.assert(this._myNumberOfTiles < 256, "Currently unsupported number of tiles");
+			if(this._myNumberOfTiles < 256)
 			{
 				this._myTileIndexArray = new Uint8Array(inMapSizeInTiles * inMapSizeInTiles);
 				//TODO may should reserve zero for no tile instead?
@@ -160,6 +189,8 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			//TODO clean current tilesets physics and scenegraph info
 			
 			this._myTileSet = inTileSet;
+			this._myTileSetRef = this._myTileSet.getRef();	//TODO serialize tileset change
+			this._myNumberOfTiles = inTileSet.getNumberOfTiles();
 			
 			//TODO walk new tiles tiles and reinsert to physics and scenegraph
 		},
@@ -178,13 +209,13 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			
 			if(inTilePosition.myX < 0 || this._myMapSizeInTiles <= inTilePosition.myX
 				|| inTilePosition.myY < 0 || this._myMapSizeInTiles <= inTilePosition.myY
-				//|| inTileValue < 0 || this._myTileSet.getNumberOfTiles() <= inTileValue
+				//|| inTileValue < 0 || this._myNumberOfTiles <= inTileValue
 				)
 			{
 				//if the location or tile is invalid return
 				return;
 			}
-			if(inTileValue < 0 || this._myTileSet.getNumberOfTiles() <= inTileValue)
+			if(inTileValue < 0 || this._myNumberOfTiles <= inTileValue)
 			{
 				this.clearTile(inTilePosition);
 				return;
@@ -288,7 +319,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 				return;
 			}
 			
-			aClearTileValue = this._myTileSet.getNumberOfTiles();
+			aClearTileValue = this._myNumberOfTiles;
 			
 			this._clearTileInRect(
 				ECGame.EngineLib.AABB2D.create(
@@ -386,6 +417,36 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 		{
 			this._myChangedTiles = [];
 		},
+		postSerialize : function postSerialize()
+		{
+			var aLength
+				,anIndex
+				,aChangedTile
+				;
+			
+			if(this._myWorld)//if this is already initialized
+			{
+				return;
+			}
+			
+			this.init(
+				this._myWorldRef.deref()
+				,this._myTileSetRef.deref()
+				,this._myMapSizeInTiles
+				,this._myTileSize
+			);
+			
+			aLength = this._myChangedTiles.length;
+			for(anIndex = 0; anIndex < aLength; ++anIndex)
+			{
+				aChangedTile = this._myChangedTiles[anIndex];
+				this.setTile(
+					ECGame.EngineLib.Point2.create(aChangedTile.X, aChangedTile.Y),
+					aChangedTile.Value
+				);
+			}
+			this._myChangedTiles = [];
+		},
 		
 		cleanup : function cleanup(){return;},//TODO
 		
@@ -422,7 +483,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 						aTileValue = inSerializer.serializeInt(
 							aTileValue,
 							0,
-							this._myTileSet.getNumberOfTiles()
+							this._myNumberOfTiles
 						);
 						this.setTile(
 							ECGame.EngineLib.Point2.create(i, j),
@@ -447,7 +508,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 						inSerializer.serializeInt(
 							this._myChangedTiles[anIndex].Value,
 							0,
-							this._myTileSet.getNumberOfTiles()
+							this._myNumberOfTiles
 						);
 					}
 				}
@@ -455,23 +516,34 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			else
 			{
 				inSerializer.serializeObject(this, this.TileMap2D._serializeFormat);
-				//TODO if(reading){this.cleanup(); this.init(...);}
+				
+				if(inSerializer.isReading())
+				{
+					this._myChangedTiles = [];
+				}
 
 				for(j = 0; j < this._myMapSizeInTiles; ++j)
 				{
 					for(i = 0; i < this._myMapSizeInTiles; ++i)
 					{
 						anIndex = j * this._myMapSizeInTiles + i;
+						if(!inSerializer.isReading())
+						{
+							aTileValue = this._myTileIndexArray[anIndex];
+						}
 						aTileValue = inSerializer.serializeInt(
-							this._myTileIndexArray[anIndex],
+							aTileValue,
 							0,
-							this._myTileSet.getNumberOfTiles()//TODO serialize this in a temp var or something
+							this._myNumberOfTiles
 						);
 						if(inSerializer.isReading())
 						{
-							this.setTile(
-								ECGame.EngineLib.Point2.create(i, j),
-								aTileValue
+							this._myChangedTiles.push(
+								{
+									X : i,
+									Y : j,
+									Value : aTileValue
+								}
 							);
 						}
 					}

@@ -123,68 +123,70 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inGraphics)
 		renderables[i].render(inGraphics);
 	}
 	
-	
 	if(ECGame.Settings.isDebugDraw_SceneGraph())
 	{
-		var fontSize
-			,currentRenderable
-			,screenPos
-			,stringDrawOrder
-			,stringDistance
-			,width
-			;
-			
-		fontSize = ECGame.Settings.Debug.Text_Size;
-		
-		inGraphics.drawDebugText("Debug Drawing SceneGraph");
-		
-		inGraphics.setFont(fontSize + 'px Arial');
-		for(i in renderables)
-		{
-			currentRenderable = renderables[i];
-			screenPos = currentRenderable._myAnchorPosition;
-			
-			stringDrawOrder = String(i);
-			stringDistance = '';
-			/*
-			TODO?? include this or not with a flag??
-			stringDistance =
-				currentRenderable._myDrawOrderHelper.myX.toFixed(2) + ', ' +
-				currentRenderable._myDrawOrderHelper.myY.toFixed(2);
-			*/
-			width = Math.max(
-				inGraphics.measureText(stringDrawOrder).width,
-				inGraphics.measureText(stringDistance).width
-			);
-			
-			inGraphics.setFillStyle(ECGame.Settings.Debug.QuadTree_Item_DrawColor);
-			inGraphics.fillRectXYWH(
-				screenPos.myX,
-				screenPos.myY,
-				width,
-				fontSize * (stringDistance !== '' ? 2 : 1)
-			);
-			
-			inGraphics.setFillStyle(ECGame.Settings.Debug.TextDefault_DrawColor);
-			inGraphics.fillTextXY(
-				stringDrawOrder,
-				screenPos.myX,
-				screenPos.myY + fontSize
-			);
-			if(stringDistance !== '')
-			{
-				inGraphics.fillTextXY(
-					stringDistance,
-					screenPos.myX,
-					screenPos.myY + fontSize * 2
-				);
-			}
-		}
-		inGraphics.drawDebugText("SceneGraph Draw calls:" + renderables.length);
+		this._debugDraw(inGraphics, renderables);
 	}
 };
 
-ECGame.EngineLib.Game2DSceneGraph.prototype.debugDraw = function debugDraw(inGraphics)
+ECGame.EngineLib.Game2DSceneGraph.prototype._debugDraw = function _debugDraw(inGraphics, inRenderables)
 {
+	var fontSize
+		,currentRenderable
+		,screenPos
+		,stringDrawOrder
+		,stringDistance
+		,width
+		,i
+		;
+		
+	fontSize = ECGame.Settings.Debug.Text_Size;
+	
+	inGraphics.drawDebugText("Debug Drawing SceneGraph");
+	
+	inGraphics.setFont(fontSize + 'px Arial');
+	for(i in inRenderables)
+	{
+		currentRenderable = inRenderables[i];
+		screenPos = currentRenderable._myAnchorPosition;
+		
+		stringDrawOrder = String(i);
+		stringDistance = '';
+		/*
+		TODO?? include this or not with a flag??
+		stringDistance =
+			currentRenderable._myDrawOrderHelper.myX.toFixed(2) + ', ' +
+			currentRenderable._myDrawOrderHelper.myY.toFixed(2);
+		*/
+		width = Math.max(
+			inGraphics.measureText(stringDrawOrder).width,
+			inGraphics.measureText(stringDistance).width
+		);
+		
+		inGraphics.setFillStyle(ECGame.Settings.Debug.QuadTree_Item_DrawColor);
+		inGraphics.fillRectXYWH(
+			screenPos.myX,
+			screenPos.myY,
+			width,
+			fontSize * (stringDistance !== '' ? 2 : 1)
+		);
+		
+		inGraphics.setFillStyle(ECGame.Settings.Debug.TextDefault_DrawColor);
+		inGraphics.fillTextXY(
+			stringDrawOrder,
+			screenPos.myX,
+			screenPos.myY + fontSize
+		);
+		if(stringDistance !== '')
+		{
+			inGraphics.fillTextXY(
+				stringDistance,
+				screenPos.myX,
+				screenPos.myY + fontSize * 2
+			);
+		}
+	}
+	inGraphics.drawDebugText("SceneGraph Draw calls:" + inRenderables.length);
+	
 	this._mySceneTree.debugDraw(inGraphics);//TODO scenegraph colors here
 };
