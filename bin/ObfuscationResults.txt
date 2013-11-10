@@ -153,8 +153,6 @@ Final NameSpace:	add
 Final NameSpace:	addComponent
 Final NameSpace:	addComponents
 Final NameSpace:	addEntity
-Final NameSpace:	addNetDirtyObject
-Final NameSpace:	addNewObject
 Final NameSpace:	addObject
 Final NameSpace:	addToNetGroup
 Final NameSpace:	addToRenderMap
@@ -443,7 +441,6 @@ Final NameSpace:	setDummyMode
 Final NameSpace:	setEffectsVolume
 Final NameSpace:	setFillStyle
 Final NameSpace:	setFont
-Final NameSpace:	setGameObjectNetDirty
 Final NameSpace:	setID
 Final NameSpace:	setLeftTop
 Final NameSpace:	setListenerPosition
@@ -628,8 +625,6 @@ Function Name:	add
 Function Name:	addComponent
 Function Name:	addComponents
 Function Name:	addEntity
-Function Name:	addNetDirtyObject
-Function Name:	addNewObject
 Function Name:	addObject
 Function Name:	addToNetGroup
 Function Name:	addToRenderMap
@@ -916,7 +911,6 @@ Function Name:	setDummyMode
 Function Name:	setEffectsVolume
 Function Name:	setFillStyle
 Function Name:	setFont
-Function Name:	setGameObjectNetDirty
 Function Name:	setID
 Function Name:	setLeftTop
 Function Name:	setListenerPosition
@@ -1289,6 +1283,7 @@ Local Variable:	aReadObject
 Local Variable:	aReadObjectsList
 Local Variable:	aReadResult
 Local Variable:	aRecievedObj
+Local Variable:	aRegistry
 Local Variable:	aReturnAABB2D
 Local Variable:	aRightIndex
 Local Variable:	aSample
@@ -1319,6 +1314,7 @@ Local Variable:	aTest
 Local Variable:	aTestResultsFunction
 Local Variable:	aTextEncoder
 Local Variable:	aThis
+Local Variable:	aThisClass
 Local Variable:	aThisNodesSize
 Local Variable:	aTileInstance
 Local Variable:	aTileInstanceAABB
@@ -1411,7 +1407,6 @@ Local Variable:	index			*****
 Local Variable:	index2			*****
 Local Variable:	inputEvent			*****
 Local Variable:	inputString			*****
-Local Variable:	instanceID			*****
 Local Variable:	instanceName			*****
 Local Variable:	j			*****
 Local Variable:	key			*****
@@ -1457,7 +1452,6 @@ Local Variable:	propertyName			*****
 Local Variable:	range			*****
 Local Variable:	rayTrace			*****
 Local Variable:	ref			*****
-Local Variable:	registry			*****
 Local Variable:	renderables			*****
 Local Variable:	request			*****
 Local Variable:	screenPos			*****
@@ -1471,7 +1465,6 @@ Local Variable:	testClass1			*****
 Local Variable:	testClass2			*****
 Local Variable:	testObjectClass1			*****
 Local Variable:	theClass			*****
-Local Variable:	thisClass			*****
 Local Variable:	tile			*****
 Local Variable:	value			*****
 Local Variable:	valueHigh			*****
@@ -2720,6 +2713,7 @@ Included Word:	aReadObject
 Included Word:	aReadObjectsList
 Included Word:	aReadResult
 Included Word:	aRecievedObj
+Included Word:	aRegistry
 Included Word:	aReturnAABB2D
 Included Word:	aRightIndex
 Included Word:	aSample
@@ -2750,6 +2744,7 @@ Included Word:	aTest
 Included Word:	aTestResultsFunction
 Included Word:	aTextEncoder
 Included Word:	aThis
+Included Word:	aThisClass
 Included Word:	aThisNodesSize
 Included Word:	aTileInstance
 Included Word:	aTileInstanceAABB
@@ -2774,8 +2769,6 @@ Included Word:	add
 Included Word:	addComponent
 Included Word:	addComponents
 Included Word:	addEntity
-Included Word:	addNetDirtyObject
-Included Word:	addNewObject
 Included Word:	addObject
 Included Word:	addToNetGroup
 Included Word:	addToRenderMap
@@ -3381,7 +3374,6 @@ Included Word:	register
 Included Word:	registerClass
 Included Word:	registerListener
 Included Word:	registerTest
-Included Word:	registry
 Included Word:	release
 Included Word:	remove
 Included Word:	removeComponent
@@ -3434,7 +3426,6 @@ Included Word:	setDummyMode
 Included Word:	setEffectsVolume
 Included Word:	setFillStyle
 Included Word:	setFont
-Included Word:	setGameObjectNetDirty
 Included Word:	setID
 Included Word:	setLeftTop
 Included Word:	setListenerPosition
@@ -3476,7 +3467,6 @@ Included Word:	testClass1
 Included Word:	testClass2
 Included Word:	testObjectClass1
 Included Word:	theClass
-Included Word:	thisClass
 Included Word:	tile
 Included Word:	toBinary
 Included Word:	toTileCoordinate
@@ -4084,8 +4074,7 @@ Localized String:	"), Radius:"
 Localized String:	"----Vel:("
 Localized String:	"Failed to load "
 Localized String:	"Guest"
-Localized String:	"Depricated!!!"
-Localized String:	"Depricated!!! ????"
+Localized String:	"Chat is Broken atm!!!"
 Localized String:	"Clear Net Dirty on:"
 Localized String:	"Cannot currently serialize so many objects!"
 Localized String:	"Net create remote on "

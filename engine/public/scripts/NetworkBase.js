@@ -217,21 +217,11 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 			this.createNetGroup('master_netgroup');
 			ECGame.instance.getUpdater("MasterUpdater").addUpdate(this);
 		},
-		//TODO add objects to appropriate netgroups
-		addNewObject : function addNewObject()
-		{
-			ECGame.log.warn("Depricated!!!");
-		},
-		//TODO remove, for backwards compat..
-		addNetDirtyObject : function addNetDirtyObject()
-		{
-			ECGame.log.warn("Depricated!!!");
-		},
 		
 		//TODO send chat command to all
 		sendMessage : function sendMessage()
 		{
-			ECGame.log.warn("Depricated!!! ????");
+			ECGame.log.warn("Chat is Broken atm!!!");
 		},
 		
 		getUpdatePriority : function getUpdatePriority()

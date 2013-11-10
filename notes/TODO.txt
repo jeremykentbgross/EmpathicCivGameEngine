@@ -1,25 +1,15 @@
-game -> engine_test_game
-
-Network:
--Refactor
--websockets
-//http://www.html5rocks.com/en/tutorials/websockets/basics/
--GameObjects
---Listeners
---object destroy
--GameObjectRefs
-
 Physics:
 -Triggers
--Rays
---Rays draw in physics
---Add ray keyboard to welcome.html
 
-TECH DEMO PUBLIC DEPLOY!
+O - Automate JSLint
+	http://af-design.com/blog/2011/01/04/automating-jslint-validation/
+O - GameEntity serialize (copy world)
+O - Class hold Serialization Format?
+O - add/Remove Netgroup event
 
-Start Actual Game!!!
+O - tileset ser
 
-
+warn unnamed functions
 
 
 NETWORK:

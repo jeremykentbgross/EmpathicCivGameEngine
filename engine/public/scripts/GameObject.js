@@ -22,40 +22,29 @@
 ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 	Constructor : function GameObject()
 	{
-		var thisClass,
-			registry,
-			instanceID;
+		var aThisClass,
+			aRegistry,
+			anInstanceID;
 		
 		//call parent constructor
 		this.GameEventSystem();
 			
-		thisClass = this.getClass();
-		registry = thisClass.getInstanceRegistry();
-		instanceID = registry.getUnusedID();
+		aThisClass = this.getClass();
+		aRegistry = aThisClass.getInstanceRegistry();
+		anInstanceID = aRegistry.getUnusedID();
 
-		this._myName = this.getClass().getName() + '_' + instanceID;
-		this._myID = instanceID;
-		registry.register(this);
+		this._myName = aThisClass.getName() + '_' + anInstanceID;
+		this._myID = anInstanceID;
+		aRegistry.register(this);
 		
 		if(ECGame.Settings.isDebugPrint_GameObject())
 		{
-			ECGame.log.info("New GameObject: " + this.getClass().getName() + ':' + this._myName + ':' + this._myID, true);
+			ECGame.log.info("New GameObject: " + aThisClass.getName() + ':' + this._myName + ':' + this._myID, true);
 		}
 		
 		this._myNetOwnerID = ECGame.EngineLib.User.USER_IDS.SERVER;
 		this._myNetDirty = false;
 		this._myGameObjectNetDirty = false;
-		
-		//TODO or add manually when netRep is added to instances? (including during clone)
-		if(ECGame.Settings.Network.isMultiplayer
-			&& ECGame.instance
-			&& ECGame.instance.getNetwork()
-			&& ECGame.Settings.Network.isServer//TODO ((server || thisClass._flags.clientCreatable) && netReplicated??)
-			)
-		{
-			ECGame.instance.getNetwork().addNewObject(this);
-			this._myNetDirty = true;
-		}
 	},
 	
 	Parents : [ECGame.EngineLib.GameEventSystem],
@@ -178,11 +167,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		{
 			if(this.canUserModifyNet())
 			{
-				if(!this._myNetDirty)
-				{
-					ECGame.instance.getNetwork().addNetDirtyObject(this);//TODO event instead
-					this._myNetDirty = true;
-				}
+				this._myNetDirty = true;
 				this.onEvent(new ECGame.EngineLib.Events.GameObjectNetDirty(this, inUserID));
 				
 				return true;
@@ -190,13 +175,13 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			return false;
 		},
 		
-		setGameObjectNetDirty : function setGameObjectNetDirty()//Never called? wtf?
+		/*setGameObjectNetDirty : function setGameObjectNetDirty()//Never called? wtf?
 		{
 			if(this.setNetDirty())
 			{
 				this._myGameObjectNetDirty = true;
 			}
-		},
+		},*/
 		
 		clearNetDirty : function clearNetDirty()
 		{
