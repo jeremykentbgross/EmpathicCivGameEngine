@@ -67,7 +67,7 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 		this._myNextSoundDescriptionID = -1;
 		
 		this._myPlayingSounds = new ECGame.EngineLib.GameCircularDoublyLinkedListNode(null);
-		this._myListenerPosition2D = new ECGame.EngineLib.Point2();
+		this._myListenerPosition2D = new ECGame.EngineLib.Point2D();
 		
 		if(!ECGame.Settings.Caps.Audio)
 		{

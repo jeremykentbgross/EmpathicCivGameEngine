@@ -26,7 +26,7 @@ ECGame.EngineLib.Sound2D = ECGame.EngineLib.Class.create(
 		inRadius = inRadius || ECGame.Settings.Sound.default2DRadius;
 		
 		this._myPosition = inPosition.clone();
-		this._myVelocity = new ECGame.EngineLib.Point2();
+		this._myVelocity = new ECGame.EngineLib.Point2D();
 		this._myRadius = inRadius;
 		
 		this._myPanner = ECGame.instance.getSoundSystem()._myContext.createPanner();

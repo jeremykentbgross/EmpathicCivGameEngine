@@ -51,8 +51,8 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 		
 		//testing rays:
 		this._myIsRayTestMode = true;
-		this._myRayStart = ECGame.EngineLib.Point2.create();
-		this._myRayEnd = ECGame.EngineLib.Point2.create();
+		this._myRayStart = ECGame.EngineLib.Point2D.create();
+		this._myRayEnd = ECGame.EngineLib.Point2D.create();
 	},
 	
 	Parents : [ECGame.EngineLib.GameRulesBase],
@@ -74,39 +74,39 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				[
 					{
 						fileName : 'game/images/grass.png'
-						,anchor : ECGame.EngineLib.Point2.create()
+						,anchor : ECGame.EngineLib.Point2D.create()
 						,_myLayer : 0
-						,size : ECGame.EngineLib.Point2.create(64,64)
+						,size : ECGame.EngineLib.Point2D.create(64,64)
 						,miniMapColor : 'rgba(0, 255, 0, 1)'
 					},
 					{
 						fileName : 'game/images/test/waterSub.png' //'images/water.png'
-						,anchor : ECGame.EngineLib.Point2.create()
+						,anchor : ECGame.EngineLib.Point2D.create()
 						,_myLayer : 0
-						,size : ECGame.EngineLib.Point2.create(/*64,64*/96,96)
+						,size : ECGame.EngineLib.Point2D.create(/*64,64*/96,96)
 						,physics : ECGame.EngineLib.AABB2D.create(0, 0, 64, 64)
 						,miniMapColor : 'rgba(0, 0, 255, 1)'
 					},
 					{
 						fileName : 'game/images/ground_256.png'//'game/images/ground_level01_01.png' //'images/test/groundSub5.png' // 'images/dirt.png',
-						,anchor : ECGame.EngineLib.Point2.create()
+						,anchor : ECGame.EngineLib.Point2D.create()
 						,_myLayer : 0
-						,size : ECGame.EngineLib.Point2.create(96,96)//64,64)
+						,size : ECGame.EngineLib.Point2D.create(96,96)//64,64)
 						,miniMapColor : 'rgba(128, 64, 0, 1)'
 					},
 					{
 						fileName : 'game/images/dirt.png2'//HACK 'images/wall_level01_01__.png'
-						,anchor : ECGame.EngineLib.Point2.create()
+						,anchor : ECGame.EngineLib.Point2D.create()
 						,_myLayer : 0
-						,size : ECGame.EngineLib.Point2.create(64,64)
+						,size : ECGame.EngineLib.Point2D.create(64,64)
 						,miniMapColor : 'rgba(255, 0, 255, 1)'
 					},
 					{
 						fileName : 'game/images/wall_256.png'//'game/images/wall_level01_01.png'//'images/test/wall.png' //
-						,anchor : ECGame.EngineLib.Point2.create(32, 32)
+						,anchor : ECGame.EngineLib.Point2D.create(32, 32)
 						,_myLayer : 1
 						,physics : ECGame.EngineLib.AABB2D.create(0, 0, 64, 64)
-						,size : ECGame.EngineLib.Point2.create(96,96)
+						,size : ECGame.EngineLib.Point2D.create(96,96)
 						,miniMapColor : 'rgba(64, 32, 0, 1)'
 					}
 					//,
@@ -180,14 +180,14 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						if(i === 0 || j === 0 || i === this._myMapSizeInTiles - 1 || j === this._myMapSizeInTiles - 1)
 						{
 							aMap.setTile(
-								new ECGame.EngineLib.Point2(i, j), 
+								new ECGame.EngineLib.Point2D(i, j), 
 								4//(i+j)%5
 							);
 						}
 						else
 						{
 							aMap.setTile(
-								new ECGame.EngineLib.Point2(i, j),
+								new ECGame.EngineLib.Point2D(i, j),
 								2//(i+j)%5
 							);
 						}
@@ -206,7 +206,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					function()
 					{
 						aMap.setTile(
-							new ECGame.EngineLib.Point2(6, ++aIndex), 
+							new ECGame.EngineLib.Point2D(6, ++aIndex), 
 							Math.floor(Math.random()*6)//4
 						);
 						return aIndex < 32;
@@ -321,7 +321,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					aFrameArray.push(
 						ECGame.EngineLib.Animation2DFrame.create().init(
 							ECGame.EngineLib.AABB2D.create(96 * (i + 1), 96 * j, 96, 96),
-							new ECGame.EngineLib.Point2(32, 32),
+							new ECGame.EngineLib.Point2D(32, 32),
 							((i === 3 || i === 7) ? [new ECGame.EngineLib.Events.PlaySound(0, true, false/*, inRadius*/)] : null)
 						)
 					);
@@ -336,7 +336,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				aFrameArray.push(
 					ECGame.EngineLib.Animation2DFrame.create().init(
 						ECGame.EngineLib.AABB2D.create(0, 96 * j, 96, 96),
-						new ECGame.EngineLib.Point2(32, 32)
+						new ECGame.EngineLib.Point2D(32, 32)
 					)
 				);
 				anAnimation = new ECGame.EngineLib.Animation2D();
@@ -569,7 +569,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			{
 				this._myLastSoundPlayed = aSoundSystem.playPositionalSoundEffect2D(	//TODO the beep sound here instead!!
 					1,
-					new ECGame.EngineLib.Point2(
+					new ECGame.EngineLib.Point2D(
 						aMouseWorldPosition.myX,
 						aMouseWorldPosition.myY
 					)

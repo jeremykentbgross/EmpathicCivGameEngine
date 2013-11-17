@@ -25,8 +25,8 @@ ECGame.EngineLib.EntityComponent_SoundPlayer = ECGame.EngineLib.Class.create(
 	{
 		this.GameEntityComponent();
 		
-		this._myPosition = new ECGame.EngineLib.Point2();
-		this._myVelocity = new ECGame.EngineLib.Point2();
+		this._myPosition = new ECGame.EngineLib.Point2D();
+		this._myVelocity = new ECGame.EngineLib.Point2D();
 	},
 	
 	Parents : [ECGame.EngineLib.GameEntityComponent],

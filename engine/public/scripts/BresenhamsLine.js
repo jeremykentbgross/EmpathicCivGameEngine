@@ -50,13 +50,13 @@ ECGame.EngineLib.BresenhamsLine = function BresenhamsLine(inPoint1, inPoint2, in
 		j = inPoint1.myY + 0.5;
 		for(i = inPoint1.myX; i !== inPoint2.myX; i += aSignX)
 		{
-			if(!inCallback(ECGame.EngineLib.Point2.create(i, Math.floor(j))))
+			if(!inCallback(ECGame.EngineLib.Point2D.create(i, Math.floor(j))))
 			{
 				return;
 			}
 			j += aSlope;
 		}
-		inCallback(ECGame.EngineLib.Point2.create(i, Math.floor(j)));
+		inCallback(ECGame.EngineLib.Point2D.create(i, Math.floor(j)));
 	}
 	else
 	{
@@ -64,12 +64,12 @@ ECGame.EngineLib.BresenhamsLine = function BresenhamsLine(inPoint1, inPoint2, in
 		i = inPoint1.myX + 0.5;
 		for(j = inPoint1.myY; j !== inPoint2.myY; j += aSignY)
 		{
-			if(!inCallback(ECGame.EngineLib.Point2.create(Math.floor(i), j)))
+			if(!inCallback(ECGame.EngineLib.Point2D.create(Math.floor(i), j)))
 			{
 				return;
 			}
 			i += aSlope;
 		}
-		inCallback(ECGame.EngineLib.Point2.create(Math.floor(i), j));
+		inCallback(ECGame.EngineLib.Point2D.create(Math.floor(i), j));
 	}
 };

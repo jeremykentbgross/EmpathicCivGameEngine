@@ -155,13 +155,13 @@ ECGame.EngineLib.AABB2D = ECGame.EngineLib.Class.create({
 			
 			aReturnAABB2D = new ECGame.EngineLib.AABB2D();
 			aReturnAABB2D.setLeftTop(
-				new ECGame.EngineLib.Point2(
+				new ECGame.EngineLib.Point2D(
 					Math.min(this.myX, inOtherAABB2D.myX),
 					Math.min(this.myY, inOtherAABB2D.myY)
 				)
 			);
 			aReturnAABB2D.setRightBottom(
-				new ECGame.EngineLib.Point2(
+				new ECGame.EngineLib.Point2D(
 					Math.max(this.myX + this.myWidth, inOtherAABB2D.myX + inOtherAABB2D.myWidth),
 					Math.max(this.myY + this.myHeight, inOtherAABB2D.myY + inOtherAABB2D.myHeight)
 				)
@@ -176,7 +176,7 @@ ECGame.EngineLib.AABB2D = ECGame.EngineLib.Class.create({
 		
 		getCenter : function getCenter()
 		{
-			return ECGame.EngineLib.Point2.create(
+			return ECGame.EngineLib.Point2D.create(
 				this.myX + this.myWidth / 2,
 				this.myY + this.myHeight / 2
 			);
@@ -184,7 +184,7 @@ ECGame.EngineLib.AABB2D = ECGame.EngineLib.Class.create({
 		
 		getLeftTop : function getLeftTop()
 		{
-			return ECGame.EngineLib.Point2.create(this.myX, this.myY);
+			return ECGame.EngineLib.Point2D.create(this.myX, this.myY);
 		},
 		setLeftTop : function setLeftTop(inPoint)
 		{
@@ -194,7 +194,7 @@ ECGame.EngineLib.AABB2D = ECGame.EngineLib.Class.create({
 		
 		getRightBottom : function getRightBottom()
 		{
-			return ECGame.EngineLib.Point2.create(this.myX + this.myWidth, this.myY + this.myHeight);
+			return ECGame.EngineLib.Point2D.create(this.myX + this.myWidth, this.myY + this.myHeight);
 		},
 		setRightBottom : function setRightBottom(inPoint)
 		{
@@ -204,7 +204,7 @@ ECGame.EngineLib.AABB2D = ECGame.EngineLib.Class.create({
 		
 		getWidthHeight : function getWidthHeight()
 		{
-			return ECGame.EngineLib.Point2.create(this.myWidth, this.myHeight);
+			return ECGame.EngineLib.Point2D.create(this.myWidth, this.myHeight);
 		},
 		setWidthHeight : function setWidthHeight(inWidthHeight)
 		{

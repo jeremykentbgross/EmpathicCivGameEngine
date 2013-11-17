@@ -23,7 +23,7 @@ ECGame.EngineLib.Animation2DFrame = ECGame.EngineLib.Class.create({
 	Constructor : function Animation2DFrame()
 	{
 		this._mySourceRect = ECGame.EngineLib.AABB2D.create();
-		this._myOrigin = new ECGame.EngineLib.Point2();//TODO rename origin anchor? have anchor and origin?	//note: anchor is a js global
+		this._myOrigin = new ECGame.EngineLib.Point2D();//TODO rename origin anchor? have anchor and origin?	//note: anchor is a js global
 		this._myAABB2D = ECGame.EngineLib.AABB2D.create();
 		this._myFrameEvents = null;
 	},

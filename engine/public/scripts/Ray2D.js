@@ -98,12 +98,12 @@ ECGame.EngineLib.Ray2D = ECGame.EngineLib.Class.create({
 			//			D2 = [0, 1, 0] * p0 + t * v		//only has y
 			//			D3 = [0, 0, 1] * p0 + t * v		//only has z
 			//			=>	D123.xyz = p0 + t * v		//where t is vector, and t * v is per component mul
-			aD123 = new ECGame.EngineLib.Point2(
+			aD123 = new ECGame.EngineLib.Point2D(
 				this._myCurrentNode.getAABB2D().getLeft()
 				,this._myCurrentNode.getAABB2D().getTop()
 				//,this._myCurrentNode.getAABB2D().getFront()
 			);
-			aD456 = new ECGame.EngineLib.Point2(
+			aD456 = new ECGame.EngineLib.Point2D(
 				this._myCurrentNode.getAABB2D().getRight()
 				,this._myCurrentNode.getAABB2D().getBottom()
 				//,this._myCurrentNode.getAABB2D().getBack()
@@ -194,12 +194,12 @@ ECGame.EngineLib.Ray2D = ECGame.EngineLib.Class.create({
 			//			D2 = [0, 1, 0] * p0 + t * v		//only has y
 			//			D3 = [0, 0, 1] * p0 + t * v		//only has z
 			//			=>	D123.xyz = p0 + t * v		//where t is vector, and t * v is per component mul
-			aD123 = new ECGame.EngineLib.Point2(
+			aD123 = new ECGame.EngineLib.Point2D(
 				inAABB.getLeft()
 				,inAABB.getTop()
 				//,inAABB.getFront()
 			);
-			aD456 = new ECGame.EngineLib.Point2(
+			aD456 = new ECGame.EngineLib.Point2D(
 				inAABB.getRight()
 				,inAABB.getBottom()
 				//,inAABB.getBack()

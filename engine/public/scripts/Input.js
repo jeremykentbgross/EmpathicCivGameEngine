@@ -23,7 +23,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 	Constructor : function Input()
 	{
 		this.GameEventSystem();
-		this._mouseLoc = ECGame.EngineLib.Point2.create(0, 0);
+		this._mouseLoc = ECGame.EngineLib.Point2D.create(0, 0);
 		this._keys = {};
 		this._keysPressed = {};
 		this._buttons = {};
@@ -268,7 +268,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 				.add(//add the camera offset because the fill rect below will subtract it off again
 					(inGraphics.getCamera2D() ?
 						inGraphics.getCamera2D().getRect().getLeftTop()
-						: ECGame.EngineLib.Point2.create()
+						: ECGame.EngineLib.Point2D.create()
 					)
 				)
 			);

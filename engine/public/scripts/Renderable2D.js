@@ -32,8 +32,8 @@ ECGame.EngineLib.Renderable2D = ECGame.EngineLib.Class.create({
 		this._mySceneGraphOwningNodes = null;					//accessed only by the scenegraph
 		this._myLastFrameDrawn = -1;							//accessed only by the scenegraph
 		this._myLayer = 0;										//accessed many places (should it be private or smthg?)
-		this._myAnchorPosition = new ECGame.EngineLib.Point2();
-		this._myScreenPos = new ECGame.EngineLib.Point2();		//accessed only by the scenegraph
+		this._myAnchorPosition = new ECGame.EngineLib.Point2D();
+		this._myScreenPos = new ECGame.EngineLib.Point2D();		//accessed only by the scenegraph
 		this._myDrawOrderHelper = null;							//accessed only by the scenegraph
 	},
 	Parents : [ECGame.EngineLib.QuadTreeItem],

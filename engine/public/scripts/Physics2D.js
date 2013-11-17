@@ -60,7 +60,7 @@ ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 			this._myPhysicsSystemRef = inPhysicsSystem;
 			this._myStatus = this.PhysicsObject2D.STATUS__STATIC;
 			this._myDensity = 1;
-			this._myVelocity = ECGame.EngineLib.Point2.create();
+			this._myVelocity = ECGame.EngineLib.Point2D.create();
 			this._myOwningNodes = [];
 			this._myActiveLinkedListNode = ECGame.EngineLib.createGameCircularDoublyLinkedListNode(this);			
 			this._myOwner = null;
@@ -107,7 +107,7 @@ ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 			{
 				//set sleeping:
 				this._myStatus = this.PhysicsObject2D.STATUS__SLEEPING;
-				this._myVelocity = ECGame.EngineLib.Point2.create();					
+				this._myVelocity = ECGame.EngineLib.Point2D.create();					
 				this._myActiveLinkedListNode.remove();
 			}
 		},

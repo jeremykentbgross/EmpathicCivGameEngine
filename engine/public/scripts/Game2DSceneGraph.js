@@ -46,8 +46,8 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.init = function init(inMapSize, inMi
 		|cos -sin| Transose	=>	| cos sin|
 		|sin  cos|			=>	|-sin cos|
 	*/
-	this._rotMatrixRow1 = ECGame.EngineLib.Point2.create(this._cos, sin);
-	this._rotMatrixRow2 = ECGame.EngineLib.Point2.create(-sin, this._cos);
+	this._rotMatrixRow1 = ECGame.EngineLib.Point2D.create(this._cos, sin);
+	this._rotMatrixRow2 = ECGame.EngineLib.Point2D.create(-sin, this._cos);
 };
 
 
@@ -96,7 +96,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inGraphics)
 			{
 				//calculate depth sorting position for this frame
 				item._myScreenPos = item._myAnchorPosition.subtract(aCameraRect.getLeftTop());
-				item._myDrawOrderHelper = ECGame.EngineLib.Point2.create(
+				item._myDrawOrderHelper = ECGame.EngineLib.Point2D.create(
 					item._myScreenPos.dot(aThis._rotMatrixRow1),
 					item._myScreenPos.dot(aThis._rotMatrixRow2)
 				);

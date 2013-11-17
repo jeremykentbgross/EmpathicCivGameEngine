@@ -111,7 +111,7 @@ ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(//TODO TileDesc/Anima
 		getTileRenderRect : function getTileRenderRect(inID, inPosition)
 		{
 			var tile = this._myTiles[inID];
-			inPosition = inPosition || ECGame.EngineLib.Point2.create();
+			inPosition = inPosition || ECGame.EngineLib.Point2D.create();
 			
 			return ECGame.EngineLib.AABB2D.create(
 				inPosition.myX - tile.anchor.myX,

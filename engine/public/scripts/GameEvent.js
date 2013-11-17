@@ -186,7 +186,7 @@ ECGame.EngineLib.Events.Input = ECGame.EngineLib.Class.create({
 		}
 		else
 		{
-			this.mouseLoc = new ECGame.EngineLib.Point2();
+			this.mouseLoc = new ECGame.EngineLib.Point2D();
 		}
 		this.buttons = inButtons || {};
 		this.keys = inKeys || {};

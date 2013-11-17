@@ -404,7 +404,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 		
 		toTileCoordinate : function toTileCoordinate(inWorldCoordinate)//TODO rename worldPositionToTileCoord..
 		{
-			return new ECGame.EngineLib.Point2(
+			return new ECGame.EngineLib.Point2D(
 				Math.floor(inWorldCoordinate.myX / this._myTileSize),
 				Math.floor(inWorldCoordinate.myY / this._myTileSize)
 			);
@@ -445,7 +445,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			{
 				aChangedTile = this._myChangedTiles[anIndex];
 				this.setTile(
-					ECGame.EngineLib.Point2.create(aChangedTile.X, aChangedTile.Y),
+					ECGame.EngineLib.Point2D.create(aChangedTile.X, aChangedTile.Y),
 					aChangedTile.Value
 				);
 			}
@@ -490,7 +490,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 							this._myNumberOfTiles
 						);
 						this.setTile(
-							ECGame.EngineLib.Point2.create(i, j),
+							ECGame.EngineLib.Point2D.create(i, j),
 							aTileValue
 						);
 					}

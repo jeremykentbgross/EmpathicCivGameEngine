@@ -25,7 +25,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 	{
 		this.GameEntityComponent();
 		
-		this._position = ECGame.EngineLib.Point2.create();//TODO this isn't used, but shouldn't use topleft of aabb either
+		this._position = ECGame.EngineLib.Point2D.create();//TODO this isn't used, but shouldn't use topleft of aabb either
 		
 		this._animations = ECGame.instance._myGameRules._myAnimations;//HACK!!!!!//TODO 'null'/default object!! (object ref?)
 		this._currentAnimation = 8;//TODO why 8?
@@ -122,14 +122,14 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 				var angle = 0;
 				var directions =	//TODO these should be class constants
 				[
-					new ECGame.EngineLib.Point2(Math.cos(angle), Math.sin(angle)),
-					new ECGame.EngineLib.Point2(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new ECGame.EngineLib.Point2(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new ECGame.EngineLib.Point2(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new ECGame.EngineLib.Point2(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new ECGame.EngineLib.Point2(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new ECGame.EngineLib.Point2(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new ECGame.EngineLib.Point2(Math.cos(angle+=2*Math.PI/8), Math.sin(angle))//,
+					new ECGame.EngineLib.Point2D(Math.cos(angle), Math.sin(angle)),
+					new ECGame.EngineLib.Point2D(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new ECGame.EngineLib.Point2D(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new ECGame.EngineLib.Point2D(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new ECGame.EngineLib.Point2D(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new ECGame.EngineLib.Point2D(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new ECGame.EngineLib.Point2D(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
+					new ECGame.EngineLib.Point2D(Math.cos(angle+=2*Math.PI/8), Math.sin(angle))//,
 				];
 				var animProb = 0;
 				var bestAnimProb = 0;
