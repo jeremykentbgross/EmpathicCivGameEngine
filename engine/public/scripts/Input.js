@@ -177,7 +177,9 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 		
 		_handleInput : function _handleInput(inEvent)
 		{
-			var eventType, key, mouseRatio;
+			var eventType
+				,mouseRatio
+				;
 			
 			eventType = inEvent.type;
 			mouseRatio = this._myGraphics.getBackBufferToFrontBufferRatio();

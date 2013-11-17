@@ -390,6 +390,10 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			}
 		},
 		
+		getAABB2D : function getAABB2D()
+		{
+			return this._myAABB.clone();
+		},
 		
 		getMapLowerRight : function getMapLowerRight()
 		{

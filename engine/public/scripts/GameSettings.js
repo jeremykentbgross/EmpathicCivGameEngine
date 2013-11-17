@@ -101,7 +101,7 @@ ECGame.Settings =
 		useRequestAnimFrame : false	//false -> requestAnimFrame is almost certainly less secure, and possibly slower
 	},
 	
-	Server :
+	Server :	//TODO move this to a private file
 	{
 		generateDocumentation : false//true
 		,compressClientCode : true//true	//TODO should also only be considered in debug.
@@ -115,6 +115,40 @@ ECGame.Settings =
 		,saveResultsNotesToFile : true//true
 		//:only working when compressing client code
 		////////////////////////////////////////////
+		
+		//TODO jshint also
+		,jslintCheckCode : true	//TODO disable in !DEBUG (looks like it adds some global vars that are ignored in obf)
+		,jslint_options :
+		{
+			ass : true,			//if assignment expressions should be allowed
+			bitwise : false,		//if bitwise operators should be allowed
+			browser : true,		//if the standard browser globals should be predefined
+			closure : false,		//if Google Closure idioms should be tolerated
+			'continue' : true,		//if the continuation statement should be tolerated
+			'debug' : true,			//if debugger statements should be allowed
+			devel : true,			//if logging should be allowed (console, alert, etc.)
+			eqeq : false,			//if == should be allowed
+			evil : false,			//if eval should be allowed
+			forin : true,			//if for in statements need not filter
+			//'indent' : 1,			//the indentation factor
+			//'maxerr' : 65535,		//the maximum number of errors to allow
+			//'maxlen' : 100,			//the maximum length of a source line
+			newcap : true,		//if constructor names capitalization is ignored
+			node : true,			//if Node.js globals should be predefined
+			nomen : true,			//if names may have dangling _
+			passfail : false,		//if the scan should stop on first error
+			plusplus : true,		//if increment/decrement should be allowed
+			properties : false,	//if all property names must be declared with /*properties*/
+			regexp : true,		//if the . should be allowed in regexp literals
+			rhino : false,		//if the Rhino environment globals should be predefined
+			unparam : false,		//if unused parameters should be tolerated
+			sloppy : true,		//if the 'use strict'; pragma is optional
+			stupid : false,		//if really stupid practices are tolerated
+			sub : false,			//if all forms of subscript notation are tolerated
+			todo : true,			//if TODO comments are tolerated
+			vars : false,			//if multiple var statements per function should be allowed
+			white : true			//if sloppy whitespace is tolerated
+		}
 	},
 	
 	UpdateOrder :
@@ -213,6 +247,11 @@ ECGame.Settings =
 		
 		//Object
 		GameObject_Print : false,
+		
+		Ray_NodeCollision_Size : 10,
+		Ray_ItemCollision_Size : 8,
+		Ray_EndPoint_Size : 12,
+		Ray_CurrentPoint_Size : 6,
 		
 		//Sound:
 		Sound_Print : false,

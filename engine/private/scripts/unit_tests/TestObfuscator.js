@@ -18,6 +18,9 @@
 	You should have received a copy of the GNU Lesser General Public License
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+/*jslint evil : true */
+
 var fs = require("fs");
 
 ECGame.unitTests.registerTest(

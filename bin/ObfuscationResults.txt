@@ -1210,7 +1210,6 @@ Local Variable:	aDeltaTime
 Local Variable:	aDestination
 Local Variable:	aDestroyInstanceList
 Local Variable:	aDirtyInstanceList
-Local Variable:	aDrawSize
 Local Variable:	aEndPointDrawSize
 Local Variable:	aExtraBits
 Local Variable:	aFailedLoopsList
@@ -1222,10 +1221,10 @@ Local Variable:	aFrameCount
 Local Variable:	aFrameEvents
 Local Variable:	aGraphics
 Local Variable:	aHalfCurrentPointDrawSize
-Local Variable:	aHalfDrawSize
 Local Variable:	aHalfEndPointDrawSize
 Local Variable:	aHalfHeight
 Local Variable:	aHalfItemCollisionPointSize
+Local Variable:	aHalfNodeCollisionSize
 Local Variable:	aHalfSize
 Local Variable:	aHalfWidth
 Local Variable:	aHigh
@@ -1240,6 +1239,8 @@ Local Variable:	aLeadString
 Local Variable:	aLeftIndex
 Local Variable:	aLength
 Local Variable:	aListToDraw
+Local Variable:	aListener1
+Local Variable:	aListener2
 Local Variable:	aListeners
 Local Variable:	aLocalUser
 Local Variable:	aLow
@@ -1264,6 +1265,7 @@ Local Variable:	aNewT
 Local Variable:	aNewWidth
 Local Variable:	aNewWidthToHeight
 Local Variable:	aNode
+Local Variable:	aNodeCollisionSize
 Local Variable:	aNumChangedTiles
 Local Variable:	aNumEncodedBytes
 Local Variable:	aNumValues
@@ -1343,6 +1345,7 @@ Local Variable:	anAverageDeltaTime
 Local Variable:	anEncodedSizeBytes
 Local Variable:	anEntity
 Local Variable:	anEntry
+Local Variable:	anEventSystem
 Local Variable:	anIndex
 Local Variable:	anInstanceID
 Local Variable:	anInstanceList
@@ -1384,7 +1387,6 @@ Local Variable:	directions			*****
 Local Variable:	encodeRange			*****
 Local Variable:	entity			*****
 Local Variable:	eventName			*****
-Local Variable:	eventSystem			*****
 Local Variable:	eventType			*****
 Local Variable:	flagIndex			*****
 Local Variable:	fontSize			*****
@@ -1409,10 +1411,7 @@ Local Variable:	inputEvent			*****
 Local Variable:	inputString			*****
 Local Variable:	instanceName			*****
 Local Variable:	j			*****
-Local Variable:	key			*****
 Local Variable:	len			*****
-Local Variable:	listener1			*****
-Local Variable:	listener2			*****
 Local Variable:	listenerNode			*****
 Local Variable:	loops			*****
 Local Variable:	managed			*****
@@ -1442,7 +1441,6 @@ Local Variable:	owner			*****
 Local Variable:	parent			*****
 Local Variable:	parentClass			*****
 Local Variable:	parentIndex			*****
-Local Variable:	passedTest			*****
 Local Variable:	path			*****
 Local Variable:	pathTokens			*****
 Local Variable:	physicsRect			*****
@@ -1488,6 +1486,7 @@ Member Variable:	CameraTarget_Size			*****
 Member Variable:	Caps			*****
 Member Variable:	ChainDown			*****
 Member Variable:	ChainUp			*****
+Member Variable:	CodeValidator			*****
 Member Variable:	Constructor			*****
 Member Variable:	DEBUG			*****
 Member Variable:	DELETED_OBJECT			*****
@@ -1604,6 +1603,10 @@ Member Variable:	QuadTree_Item_DrawColor			*****
 Member Variable:	QuadTree_Node_DrawColor			*****
 Member Variable:	QuadTree_OccupiedNode_DrawColor			*****
 Member Variable:	RUN_UNIT_TESTS			*****
+Member Variable:	Ray_CurrentPoint_Size			*****
+Member Variable:	Ray_EndPoint_Size			*****
+Member Variable:	Ray_ItemCollision_Size			*****
+Member Variable:	Ray_NodeCollision_Size			*****
 Member Variable:	SERVER			*****
 Member Variable:	SINGLE_PANE			*****
 Member Variable:	SOUND			*****
@@ -1920,17 +1923,21 @@ Member Variable:	aString			*****
 Member Variable:	added			*****
 Member Variable:	anchor			*****
 Member Variable:	apply			*****
+Member Variable:	ass			*****
 Member Variable:	assert			*****
 Member Variable:	backBufferHeight			*****
 Member Variable:	backBufferWidth			*****
+Member Variable:	bitwise			*****
 Member Variable:	blur			*****
 Member Variable:	boundingRect			*****
+Member Variable:	browser			*****
 Member Variable:	buffer			*****
 Member Variable:	buttons			*****
 Member Variable:	call			*****
 Member Variable:	class			*****
 Member Variable:	classID			*****
 Member Variable:	clicked			*****
+Member Variable:	closure			*****
 Member Variable:	componentArray			*****
 Member Variable:	componentArrayBefore			*****
 Member Variable:	compressClientCode			*****
@@ -1940,16 +1947,20 @@ Member Variable:	createGameCircularDoublyLinkedListNode			*****
 Member Variable:	createGameRegistry			*****
 Member Variable:	data			*****
 Member Variable:	default2DRadius			*****
+Member Variable:	devel			*****
 Member Variable:	direction			*****
 Member Variable:	dopplerFactor			*****
 Member Variable:	down1			*****
 Member Variable:	down2			*****
 Member Variable:	effectsVolume			*****
 Member Variable:	entity			*****
+Member Variable:	eqeq			*****
 Member Variable:	error			*****
+Member Variable:	evil			*****
 Member Variable:	fileName			*****
 Member Variable:	flags			*****
 Member Variable:	focus			*****
+Member Variable:	forin			*****
 Member Variable:	generateDocumentation			*****
 Member Variable:	high			*****
 Member Variable:	id			*****
@@ -1960,6 +1971,8 @@ Member Variable:	instanceID			*****
 Member Variable:	isMultiplayer			*****
 Member Variable:	isServer			*****
 Member Variable:	item			*****
+Member Variable:	jslintCheckCode			*****
+Member Variable:	jslint_options			*****
 Member Variable:	keys			*****
 Member Variable:	keysPressed			*****
 Member Variable:	logger			*****
@@ -2000,24 +2013,37 @@ Member Variable:	name			*****
 Member Variable:	net			*****
 Member Variable:	netDynamic			*****
 Member Variable:	netOnly			*****
+Member Variable:	newcap			*****
+Member Variable:	node			*****
+Member Variable:	nomen			*****
 Member Variable:	obfuscateNames			*****
 Member Variable:	ourFrameRayCounter			*****
+Member Variable:	passfail			*****
 Member Variable:	physics			*****
 Member Variable:	placeholder			*****
+Member Variable:	plusplus			*****
 Member Variable:	position			*****
 Member Variable:	precision			*****
+Member Variable:	properties			*****
 Member Variable:	prototype			*****
 Member Variable:	push			*****
 Member Variable:	recieved			*****
 Member Variable:	reconnectKey			*****
+Member Variable:	regexp			*****
 Member Variable:	removeNewlines			*****
 Member Variable:	removeNonNewlineWhiteSpace			*****
 Member Variable:	removeTextForLocalization			*****
 Member Variable:	resizable			*****
+Member Variable:	rhino			*****
 Member Variable:	saveResultsNotesToFile			*****
+Member Variable:	sloppy			*****
 Member Variable:	speedOfSound			*****
+Member Variable:	stupid			*****
+Member Variable:	sub			*****
+Member Variable:	todo			*****
 Member Variable:	type			*****
 Member Variable:	unitTests			*****
+Member Variable:	unparam			*****
 Member Variable:	up1			*****
 Member Variable:	up2			*****
 Member Variable:	useModifiedNamesNotPureObfuscate			*****
@@ -2026,9 +2052,11 @@ Member Variable:	user			*****
 Member Variable:	userID			*****
 Member Variable:	userName			*****
 Member Variable:	value			*****
+Member Variable:	vars			*****
 Member Variable:	velocity			*****
 Member Variable:	warn			*****
 Member Variable:	webServer			*****
+Member Variable:	white			*****
 Member Variable:	world			*****
 
 
@@ -2064,6 +2092,7 @@ Included Word:	Class
 Included Word:	ClassNamespace
 Included Word:	ClientDisconnected
 Included Word:	ClientSideWebSocket
+Included Word:	CodeValidator
 Included Word:	ConnectedToServer
 Included Word:	Constructor
 Included Word:	DEBUG
@@ -2232,6 +2261,10 @@ Included Word:	QuadTree_OccupiedNode_DrawColor
 Included Word:	RUN_UNIT_TESTS
 Included Word:	Ray2D
 Included Word:	RayTracer2D
+Included Word:	Ray_CurrentPoint_Size
+Included Word:	Ray_EndPoint_Size
+Included Word:	Ray_ItemCollision_Size
+Included Word:	Ray_NodeCollision_Size
 Included Word:	RemovedFromEntity
 Included Word:	RemovedFromWorld
 Included Word:	Renderable2D
@@ -2640,7 +2673,6 @@ Included Word:	aDeltaTime
 Included Word:	aDestination
 Included Word:	aDestroyInstanceList
 Included Word:	aDirtyInstanceList
-Included Word:	aDrawSize
 Included Word:	aEndPointDrawSize
 Included Word:	aExtraBits
 Included Word:	aFailedLoopsList
@@ -2652,10 +2684,10 @@ Included Word:	aFrameCount
 Included Word:	aFrameEvents
 Included Word:	aGraphics
 Included Word:	aHalfCurrentPointDrawSize
-Included Word:	aHalfDrawSize
 Included Word:	aHalfEndPointDrawSize
 Included Word:	aHalfHeight
 Included Word:	aHalfItemCollisionPointSize
+Included Word:	aHalfNodeCollisionSize
 Included Word:	aHalfSize
 Included Word:	aHalfWidth
 Included Word:	aHigh
@@ -2670,6 +2702,8 @@ Included Word:	aLeadString
 Included Word:	aLeftIndex
 Included Word:	aLength
 Included Word:	aListToDraw
+Included Word:	aListener1
+Included Word:	aListener2
 Included Word:	aListeners
 Included Word:	aLocalUser
 Included Word:	aLow
@@ -2694,6 +2728,7 @@ Included Word:	aNewT
 Included Word:	aNewWidth
 Included Word:	aNewWidthToHeight
 Included Word:	aNode
+Included Word:	aNodeCollisionSize
 Included Word:	aNumChangedTiles
 Included Word:	aNumEncodedBytes
 Included Word:	aNumValues
@@ -2784,6 +2819,7 @@ Included Word:	anAverageDeltaTime
 Included Word:	anEncodedSizeBytes
 Included Word:	anEntity
 Included Word:	anEntry
+Included Word:	anEventSystem
 Included Word:	anIndex
 Included Word:	anInstanceID
 Included Word:	anInstanceList
@@ -2802,11 +2838,14 @@ Included Word:	anUpdateStartFrame
 Included Word:	anX
 Included Word:	angle
 Included Word:	animProb
+Included Word:	ass
 Included Word:	backBufferHeight
 Included Word:	backBufferWidth
 Included Word:	bestAnimProb
+Included Word:	bitwise
 Included Word:	blockContextMenu
 Included Word:	boundingRect
+Included Word:	browser
 Included Word:	buttons
 Included Word:	callback
 Included Word:	callbackName
@@ -2827,6 +2866,7 @@ Included Word:	clearTimerCallback
 Included Word:	clicked
 Included Word:	clone
 Included Word:	close
+Included Word:	closure
 Included Word:	colCenter
 Included Word:	compare
 Included Word:	component
@@ -2874,6 +2914,7 @@ Included Word:	deref
 Included Word:	deregister
 Included Word:	deregisterListener
 Included Word:	destroy
+Included Word:	devel
 Included Word:	direction
 Included Word:	directions
 Included Word:	divide
@@ -2887,11 +2928,12 @@ Included Word:	effectsVolume
 Included Word:	encode
 Included Word:	encodeRange
 Included Word:	entity
+Included Word:	eqeq
 Included Word:	equal
 Included Word:	event
 Included Word:	eventName
-Included Word:	eventSystem
 Included Word:	eventType
+Included Word:	evil
 Included Word:	exit
 Included Word:	expression
 Included Word:	fileName
@@ -2913,6 +2955,7 @@ Included Word:	forAll
 Included Word:	forAllComponent
 Included Word:	forAllReverse
 Included Word:	force
+Included Word:	forin
 Included Word:	format
 Included Word:	found
 Included Word:	foundClass
@@ -3247,13 +3290,12 @@ Included Word:	isStatic
 Included Word:	isWrappable
 Included Word:	item
 Included Word:	j
-Included Word:	key
+Included Word:	jslintCheckCode
+Included Word:	jslint_options
 Included Word:	keysPressed
 Included Word:	len
 Included Word:	lenSq
 Included Word:	lineToXY
-Included Word:	listener1
-Included Word:	listener2
 Included Word:	listenerNode
 Included Word:	loadImage
 Included Word:	loadSound
@@ -3305,9 +3347,11 @@ Included Word:	netOnly
 Included Word:	newComponentMap
 Included Word:	newInstance
 Included Word:	newItem
+Included Word:	newcap
 Included Word:	node
 Included Word:	nodeArray
 Included Word:	nodeIndex
+Included Word:	nomen
 Included Word:	normalize
 Included Word:	numItems
 Included Word:	obfuscateNames
@@ -3350,7 +3394,7 @@ Included Word:	pack
 Included Word:	parent
 Included Word:	parentClass
 Included Word:	parentIndex
-Included Word:	passedTest
+Included Word:	passfail
 Included Word:	path
 Included Word:	pathTokens
 Included Word:	physics
@@ -3359,10 +3403,12 @@ Included Word:	physicsUpdateInfo
 Included Word:	play
 Included Word:	playPositionalSoundEffect2D
 Included Word:	playSoundEffect
+Included Word:	plusplus
 Included Word:	position
 Included Word:	postSerialize
 Included Word:	precision
 Included Word:	probability
+Included Word:	properties
 Included Word:	property
 Included Word:	propertyName
 Included Word:	pruneTowardsRoot
@@ -3370,6 +3416,7 @@ Included Word:	range
 Included Word:	rayTrace
 Included Word:	recieved
 Included Word:	ref
+Included Word:	regexp
 Included Word:	register
 Included Word:	registerClass
 Included Word:	registerListener
@@ -3398,6 +3445,7 @@ Included Word:	request
 Included Word:	requestAnimFrame
 Included Word:	requestVelocity
 Included Word:	resizable
+Included Word:	rhino
 Included Word:	run
 Included Word:	runTests
 Included Word:	saveResultsNotesToFile
@@ -3451,6 +3499,7 @@ Included Word:	setTypedArray
 Included Word:	setValue
 Included Word:	setWidthHeight
 Included Word:	size
+Included Word:	sloppy
 Included Word:	sortCollisions
 Included Word:	sortReadObjects
 Included Word:	sortRenderables
@@ -3461,6 +3510,7 @@ Included Word:	stop
 Included Word:	stringDistance
 Included Word:	stringDrawOrder
 Included Word:	strokeRectXYWH
+Included Word:	stupid
 Included Word:	subtract
 Included Word:	temp
 Included Word:	testClass1
@@ -3470,10 +3520,12 @@ Included Word:	theClass
 Included Word:	tile
 Included Word:	toBinary
 Included Word:	toTileCoordinate
+Included Word:	todo
 Included Word:	toggleActiveInput
 Included Word:	unit
 Included Word:	unitTests
 Included Word:	unpack
+Included Word:	unparam
 Included Word:	up1
 Included Word:	up2
 Included Word:	update
@@ -3484,11 +3536,13 @@ Included Word:	user
 Included Word:	valueHigh
 Included Word:	valueLow
 Included Word:	valueRange
+Included Word:	vars
 Included Word:	vec
 Included Word:	velocity
 Included Word:	walk
 Included Word:	walkCallback
 Included Word:	webServer
+Included Word:	white
 Included Word:	world
 Included Word:	x
 Included Word:	y
@@ -3637,6 +3691,7 @@ Ignored Word:	else
 Ignored Word:	emit
 Ignored Word:	encodeURI
 Ignored Word:	encodeURIComponent
+Ignored Word:	entityify
 Ignored Word:	error
 Ignored Word:	escape
 Ignored Word:	eval
@@ -3694,7 +3749,9 @@ Ignored Word:	innerHTML
 Ignored Word:	input
 Ignored Word:	instanceOf
 Ignored Word:	is
+Ignored Word:	isAlpha
 Ignored Word:	isArray
+Ignored Word:	isDigit
 Ignored Word:	isExtensible
 Ignored Word:	isFinite
 Ignored Word:	isFrozen
@@ -3804,6 +3861,7 @@ Ignored Word:	subElement
 Ignored Word:	substr
 Ignored Word:	substring
 Ignored Word:	sup
+Ignored Word:	supplant
 Ignored Word:	switch
 Ignored Word:	tan
 Ignored Word:	test
@@ -3883,6 +3941,7 @@ Unmapped Word:	_myAssetID
 Unmapped Word:	_mySampleID
 Unmapped Word:	_mySoundDescriptionID
 Unmapped Word:	_myStartTime
+Unmapped Word:	_unified_
 Unmapped Word:	alert
 Unmapped Word:	amp
 Unmapped Word:	arraybuffer
@@ -3918,6 +3977,7 @@ Unmapped Word:	createGainNode
 Unmapped Word:	createMsgType
 Unmapped Word:	createPanner
 Unmapped Word:	currentTime
+Unmapped Word:	debug
 Unmapped Word:	decodeAudioData
 Unmapped Word:	default
 Unmapped Word:	defaultImage
@@ -4018,6 +4078,7 @@ Unmapped Word:	submit
 Unmapped Word:	testName
 Unmapped Word:	test_anims_run
 Unmapped Word:	text
+Unmapped Word:	validateDirectoryTree
 Unmapped Word:	wall_256
 Unmapped Word:	waterSub
 Unmapped Word:	wav
@@ -4050,6 +4111,7 @@ Localized String:	"scripts/WebServer.js"
 Localized String:	"scripts/DocJS.js"
 Localized String:	"scripts/CodeObfuscator.js"
 Localized String:	"scripts/CodeCompressor.js"
+Localized String:	"scripts/CodeValidator.js"
 Localized String:	"scripts/unit_tests/TestObfuscator.js"
 Localized String:	"scripts/unit_tests/TestDocJS.js"
 Localized String:	"Trying to reregister '"

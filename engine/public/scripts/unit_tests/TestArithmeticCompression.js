@@ -40,6 +40,7 @@ ECGame.unitTests.registerTest(
 			,aNumEncodedBytes
 			,anEncodedSizeBytes
 			,i
+			,aBreakPointLocation//To help debug
 			;
 			
 		aPassedTest = true;
@@ -172,7 +173,7 @@ ECGame.unitTests.registerTest(
 			{
 				if(aFailedLoopsList[0] === i)
 				{
-					var aBreakPointLocation = 1;
+					aBreakPointLocation = 1;
 				}
 				aTextEncoder.encode(aValues[i], aModels[i]);
 				aBinaryEncoder.encode(aValues[i], aModels[i]);

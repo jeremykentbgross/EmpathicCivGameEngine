@@ -1,22 +1,22 @@
 /*
-© Copyright 2012 Jeremy Gross
+Â© Copyright 2012 Jeremy Gross
 	jeremykentbgross@gmail.com
 	Distributed under the terms of the GNU Lesser GPL (LGPL)
 		
-	This file is part of EmpathicCivGameEngine™.
+	This file is part of EmpathicCivGameEngineâ„¢.
 	
-	EmpathicCivGameEngine™ is free software: you can redistribute it and/or modify
+	EmpathicCivGameEngineâ„¢ is free software: you can redistribute it and/or modify
 	it under the terms of the GNU Lesser General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
 	
-	EmpathicCivGameEngine™ is distributed in the hope that it will be useful,
+	EmpathicCivGameEngineâ„¢ is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 	GNU Lesser General Public License for more details.
 	
 	You should have received a copy of the GNU Lesser General Public License
-	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
+	along with EmpathicCivGameEngineâ„¢.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 ECGame.EngineLib.RayTracer2D = ECGame.EngineLib.Class.create({
@@ -104,8 +104,8 @@ ECGame.EngineLib.RayTracer2D = ECGame.EngineLib.Class.create({
 		{
 			var i,
 				aCurrent,
-				aDrawSize,
-				aHalfDrawSize,
+				aNodeCollisionSize,
+				aHalfNodeCollisionSize,
 				aItemCollisionPointSize,
 				aHalfItemCollisionPointSize,
 				aEndPointDrawSize,
@@ -115,13 +115,13 @@ ECGame.EngineLib.RayTracer2D = ECGame.EngineLib.Class.create({
 			
 			////////////////////////////////////////////
 			//HACK TODO get all these from settings file
-			aDrawSize = 10;
-			aHalfDrawSize = aDrawSize / 2;
-			aItemCollisionPointSize = 8;
+			aNodeCollisionSize = ECGame.Settings.Debug.Ray_NodeCollision_Size;//10;
+			aHalfNodeCollisionSize = aNodeCollisionSize / 2;
+			aItemCollisionPointSize = ECGame.Settings.Debug.Ray_ItemCollision_Size;//8;
 			aHalfItemCollisionPointSize = aItemCollisionPointSize / 2;
-			aEndPointDrawSize = 12;
+			aEndPointDrawSize = ECGame.Settings.Debug.Ray_EndPoint_Size;//12;
 			aHalfEndPointDrawSize = aEndPointDrawSize / 2;
-			aCurrentPointDrawSize = 6;
+			aCurrentPointDrawSize = ECGame.Settings.Debug.Ray_CurrentPoint_Size;//6;
 			aHalfCurrentPointDrawSize = aCurrentPointDrawSize / 2;
 			//HACK TODO get all these from settings file
 			////////////////////////////////////////////
@@ -175,10 +175,10 @@ ECGame.EngineLib.RayTracer2D = ECGame.EngineLib.Class.create({
 			{
 				aCurrent = this._myNodeCollisionPoints[i];
 				inGraphics.fillRectXYWH(
-					aCurrent.myX - aHalfDrawSize,
-					aCurrent.myY - aHalfDrawSize,
-					aDrawSize,
-					aDrawSize
+					aCurrent.myX - aHalfNodeCollisionSize,
+					aCurrent.myY - aHalfNodeCollisionSize,
+					aNodeCollisionSize,
+					aNodeCollisionSize
 				);
 			}
 			

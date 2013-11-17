@@ -76,7 +76,7 @@ ECGame.WebServerTools.WebServer.prototype.run = function run()
 	
 	if(ECGame.Settings.Server.generateDocumentation) /**! @todo: NOT in final release mode! */
 	{
-		var docJS = ECGame.WebServerTools.DocJS.create();
+		docJS = ECGame.WebServerTools.DocJS.create();
 		docJS.loadDirectory('../_unified_');
 		//docJS.loadDirectory('../engine');
 		//docJS.loadDirectory('../engine_test_game');/**! @todo: put real game name here! */

@@ -131,6 +131,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 		include(inPrivateEnginePath + "scripts/DocJS.js");
 		include(inPrivateEnginePath + "scripts/CodeObfuscator.js"); /**! @todo: consider naming just Obfuscator*/
 		include(inPrivateEnginePath + "scripts/CodeCompressor.js"); /**! @todo: consider naming preprocessor or something*/
+		include(inPrivateEnginePath + "scripts/CodeValidator.js");
 		
 		if(ECGame.Settings.RUN_UNIT_TESTS)
 		{
@@ -140,6 +141,10 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 		
 		if(!ECGame.Settings.Network.isMultiplayer)
 		{
+			if(ECGame.Settings.Server.jslintCheckCode)
+			{
+				(new ECGame.WebServerTools.CodeValidator()).validateDirectoryTree('../_unified_');
+			}
 			if(ECGame.Settings.RUN_UNIT_TESTS)
 			{
 				ECGame.unitTests.runTests();
@@ -276,6 +281,10 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	
 	//////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////// RUN! ///////////////////////////////////
+	if(inIsServer && ECGame.Settings.Server.jslintCheckCode)
+	{
+		(new ECGame.WebServerTools.CodeValidator()).validateDirectoryTree('../_unified_');
+	}
 	if(ECGame.Settings.RUN_UNIT_TESTS)
 	{
 		ECGame.unitTests.runTests();

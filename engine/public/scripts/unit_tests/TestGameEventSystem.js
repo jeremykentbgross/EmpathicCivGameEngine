@@ -22,15 +22,16 @@ ECGame.unitTests.registerTest(
 	'GameEventSystem',
 	function()
 	{
-		var passedTest = true;
+		var aPassedTest
+			,anEventSystem
+			,aListener1
+			,aListener2
+			;
 		
-		var eventSystem;
-		var listener1;
-		var listener2;
+		aPassedTest = true;
+		anEventSystem = ECGame.EngineLib.GameEventSystem.create();
 		
-		eventSystem = ECGame.EngineLib.GameEventSystem.create();
-		
-		listener1 =
+		aListener1 =
 		{
 			onTestEvent :
 				function onTestEvent(inEvent)
@@ -40,7 +41,7 @@ ECGame.unitTests.registerTest(
 				}
 		};
 		
-		listener2 =
+		aListener2 =
 		{
 			onTestEvent :
 				function onTestEvent(inEvent)
@@ -50,10 +51,10 @@ ECGame.unitTests.registerTest(
 				}
 		};
 		
-		eventSystem.registerListener('TestEvent', listener1);
-		eventSystem.registerListener('TestEvent', listener2);
+		anEventSystem.registerListener('TestEvent', aListener1);
+		anEventSystem.registerListener('TestEvent', aListener2);
 		
-		eventSystem.onEvent(
+		anEventSystem.onEvent(
 			{
 				getName : function(){return 'TestEvent';},
 				getCallbackName : function(){return 'onTestEvent';},
@@ -61,19 +62,19 @@ ECGame.unitTests.registerTest(
 			}
 		);
 		
-		if(listener1.recieved !== 2)
+		if(aListener1.recieved !== 2)
 		{
 			ECGame.log.error("First event not recieved by first listener!");
-			passedTest = false;
+			aPassedTest = false;
 		}
-		if(listener2.recieved !== 1)
+		if(aListener2.recieved !== 1)
 		{
 			ECGame.log.error("First event not recieved by second listener!");
-			passedTest = false;
+			aPassedTest = false;
 		}
 		
-		eventSystem.deregisterListener('TestEvent', listener2);
-		eventSystem.onEvent(
+		anEventSystem.deregisterListener('TestEvent', aListener2);
+		anEventSystem.onEvent(
 			{
 				getName : function(){return 'TestEvent';},
 				getCallbackName : function(){return 'onTestEvent';},
@@ -81,17 +82,17 @@ ECGame.unitTests.registerTest(
 			}
 		);
 		
-		if(listener1.recieved !== 0)
+		if(aListener1.recieved !== 0)
 		{
 			ECGame.log.error("Second event not recieved by first listener!");
-			passedTest = false;
+			aPassedTest = false;
 		}
-		if(listener2.recieved === -1)
+		if(aListener2.recieved === -1)
 		{
 			ECGame.log.error("Second event recieved by second listener!");
-			passedTest = false;
+			aPassedTest = false;
 		}
 		
-		return passedTest;
+		return aPassedTest;
 	}
 );
