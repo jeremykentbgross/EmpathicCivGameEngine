@@ -114,7 +114,7 @@ ECGame.EngineLib.Point2.prototype.componentMin = function componentMin(inOther)
 
 
 
-ECGame.EngineLib.Point2.prototype.lenSq = function lenSq()
+ECGame.EngineLib.Point2.prototype.lengthSquared = function lengthSquared()
 {
 	return this.myX * this.myX + this.myY * this.myY;
 };
