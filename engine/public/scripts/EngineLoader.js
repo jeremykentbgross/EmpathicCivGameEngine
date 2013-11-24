@@ -215,7 +215,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	include(inPublicEnginePath + "scripts/GameEntityComponent_2DCamera.js");
 	include(inPublicEnginePath + "scripts/GameEntityComponent_Input.js");
 	include(inPublicEnginePath + "scripts/GameEntityComponent_Sprite.js");
-	include(inPublicEnginePath + "scripts/GameEntityComponent_2DPhysics.js");
+	include(inPublicEnginePath + "scripts/EntityComponent_Physics2D.js");
 	include(inPublicEnginePath + "scripts/GameEntityComponent_SoundPlayer.js");
 
 	include(inPublicEnginePath + "scripts/Timer.js");
