@@ -96,23 +96,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	
 	//Include the logger
 	include(inPublicEnginePath + "scripts/GameEngineLogger.js");//TODO consider https://developer.mozilla.org/en-US/docs/DOM/console#Stack_traces
-	
-	//TEMP HACK!! Should go somewhere else!! (but needs to load here)
-	ECGame.EngineLib.isNumber = function isNumber(inString)
-	{
-		return !isNaN(parseFloat(inString)) && isFinite(inString);
-	};
-	(function initPowerLookupTable()
-	{
-		var i;
-		ECGame.EngineLib.POWERS = [];
-		//make lookup to avoid calling Math.pow alot
-		for(i = 1; i <= 32/*this._BITCAP*/; ++i)
-		{
-			ECGame.EngineLib.POWERS[i] = Math.pow(2, i);
-		}
-	}());
-	
+		
 	if(ECGame.Settings.RUN_UNIT_TESTS)
 	{
 		include(inPublicEnginePath + "scripts/UnitTestFramework.js");
@@ -162,6 +146,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	//////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////// ENGINE SCRIPTS //////////////////////////////
 	//TODO order these better:
+	include(inPublicEnginePath + "scripts/JsNativeExtensions.js");
 	include(inPublicEnginePath + "scripts/AABB2D.js");
 	include(inPublicEnginePath + "scripts/Point2D.js");
 	include(inPublicEnginePath + "scripts/BresenhamsLine.js");

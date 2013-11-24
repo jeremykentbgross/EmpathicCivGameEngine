@@ -596,8 +596,8 @@ ECGame.WebServerTools.Obfuscator.prototype._findAllPotentialWords = function _fi
 	for(i = 0; i < potentialWords.length; ++i)
 	{
 		if(!this._wordMap[potentialWords[i]]
-			&& !ECGame.EngineLib.isNumber('0' + potentialWords[i])
-			//&& !ECGame.EngineLib.isNumber('0x' + potentialWords[i])
+			&& !('0' + potentialWords[i]).isNumber()
+			//&& !('0x' + potentialWords[i]).isNumber()
 		)
 		{
 			this._unmappedWordsMap[potentialWords[i]] = true;

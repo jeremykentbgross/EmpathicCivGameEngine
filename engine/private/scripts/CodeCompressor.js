@@ -173,6 +173,10 @@ ECGame.WebServerTools.CodeCompressor.prototype.makeCompactGameLoader = function 
 	}
 	
 	//TODO many of these should be in the obfuscator itself!
+	obfuscator.addIgnore('configurable');
+	obfuscator.addIgnore('enumerable');
+	obfuscator.addIgnore('writable');
+	
 	obfuscator.addIgnore('Math');//because for some reason doesn't have it's name property
 	obfuscator.addIgnore('console');//because for some reason doesn't have it's name property
 	obfuscator.addIgnore('window');//TODO remove unneeded

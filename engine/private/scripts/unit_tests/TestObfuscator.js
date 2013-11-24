@@ -19,7 +19,9 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*jslint evil : true */
+//In this file we want to allow sync methods because it is run at startup and needs to complete before the app runs.
+//So that means we set the following directive in our comments for the lint'er:
+/*jslint stupid : true, evil : true */
 
 var fs = require("fs");
 
@@ -31,6 +33,7 @@ ECGame.unitTests.registerTest(
 			obfuscator,
 			obfuscatorSrc,
 			obfuscatorObfuscatedSrc,
+			obfuscatorObfuscatedSrc2,
 			obfuscatedNameECGame,
 			obfuscatedNameECGameWebServerTools,
 			callObfuscatedObfuscatorSrc,
@@ -48,6 +51,7 @@ ECGame.unitTests.registerTest(
 		obfuscator.addSrc(obfuscatorSrc);
 		obfuscator.registerNamespace('ECGame');
 		obfuscator.registerNamespace('WebServerTools');
+		obfuscator.addIgnore('isNumber');
 		obfuscator.run();
 		obfuscatorObfuscatedSrc = obfuscator.getObfuscatedCode();
 		//console.log('\n\n' + obfuscatorObfuscatedSrc + '\n\n');
@@ -62,8 +66,6 @@ ECGame.unitTests.registerTest(
 			eval('var ' + obfuscatedNameECGame + ' = {};');
 			//create ECGame.WebServerTools
 			eval(obfuscatedNameECGameWebServerTools + ' = {};');
-			//create ECGame.EngineLib
-			eval(obfuscatedNameECGame + '.' + obfuscator.getObfuscatedName('EngineLib') + ' = {};');
 		}
 		//console.log(obfuscatorObfuscatedSrc);		
 		//console.log(obfuscator.getUnObfuscatedName(''));
@@ -73,15 +75,16 @@ ECGame.unitTests.registerTest(
 		
 		//make sure generated code knows about the system settings, and the helper function it needs
 		eval(obfuscatedNameECGame + '.' + obfuscator.getObfuscatedName('Settings') + '= ECGame.Settings;');
-		eval(obfuscatedNameECGame + '.' + obfuscator.getObfuscatedName('EngineLib') + '.isNumber = ECGame.EngineLib.isNumber;');
 		
+		obfuscatorObfuscatedSrc2 = null;
 		callObfuscatedObfuscatorSrc =
 			'var obfuscator2 = new ' + obfuscatedNameECGameWebServerTools + '.' + obfuscator.getObfuscatedName('Obfuscator') + '();\n' +
 			'obfuscator2.' + obfuscator.getObfuscatedName('addSrc') + '(obfuscatorSrc);\n' +
 			'obfuscator2.' + obfuscator.getObfuscatedName('registerNamespace') + '(\'ECGame\');\n' +
 			'obfuscator2.' + obfuscator.getObfuscatedName('registerNamespace') + '(\'WebServerTools\');\n' +
+			'obfuscator2.' + obfuscator.getObfuscatedName('addIgnore') + '(\'isNumber\');' +
 			'obfuscator2.' + obfuscator.getObfuscatedName('run') + '();\n' +
-			'var obfuscatorObfuscatedSrc2 = obfuscator2.' + obfuscator.getObfuscatedName('getObfuscatedCode') + '();\n'
+			'obfuscatorObfuscatedSrc2 = obfuscator2.' + obfuscator.getObfuscatedName('getObfuscatedCode') + '();\n'
 		;
 		//console.log("Executing code: \n" + callObfuscatedObfuscatorSrc);
 		

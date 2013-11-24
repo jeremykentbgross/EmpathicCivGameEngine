@@ -28,7 +28,7 @@ ECGame.EngineLib.BitPacker = ECGame.EngineLib.Class.create({
 		this._index = 0;
 		
 		//constants
-		this._POWERS = ECGame.EngineLib.POWERS;
+		this._POWERS = Math.POWER2_INT_TABLE;
 		this._BITCAP = 32;
 		this._ENCODE_TO_TEXT = true;
 		this._MAXBITS = 6;	//max bits per storage element
