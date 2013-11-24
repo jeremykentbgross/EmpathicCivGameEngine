@@ -292,6 +292,9 @@ else if(!this._myIsNetMode && anEntry.netOnly)
 Checking ../_unified_/engine/public/scripts/BitPacker.js
 No errors found
 
+Checking ../_unified_/engine/public/scripts/BresenhamsLine.js
+No errors found
+
 Checking ../_unified_/engine/public/scripts/Camera2.js
 No errors found
 
@@ -410,22 +413,7 @@ onRemovedFromWorld : function onRemovedFromWorld(inEvent)
 	@../_unified_/engine/public/scripts/GameEntityComponent_2DCamera.js::73:52
 
 Checking ../_unified_/engine/public/scripts/GameEntityComponent_2DPhysics.js
-5 errors found
-{
-	Empty block.
-	@../_unified_/engine/public/scripts/GameEntityComponent_2DPhysics.js::62:3
-onAddedToEntity : function onAddedToEntity(inEvent)
-	Unused 'inEvent'.
-	@../_unified_/engine/public/scripts/GameEntityComponent_2DPhysics.js::65:46
-onRemovedFromEntity : function onRemovedFromEntity(inEvent)
-	Unused 'inEvent'.
-	@../_unified_/engine/public/scripts/GameEntityComponent_2DPhysics.js::84:54
-{
-	Empty block.
-	@../_unified_/engine/public/scripts/GameEntityComponent_2DPhysics.js::97:3
-onRemovedFromWorld : function onRemovedFromWorld(inEvent)
-	Unused 'inEvent'.
-	@../_unified_/engine/public/scripts/GameEntityComponent_2DPhysics.js::177:52
+No errors found
 
 Checking ../_unified_/engine/public/scripts/GameEntityComponent_Input.js
 6 errors found
@@ -594,7 +582,7 @@ this._myWebsocket = new WebSocket('ws:\x2f\x2f' + location.hostname);
 Checking ../_unified_/engine/public/scripts/Physics2D.js
 No errors found
 
-Checking ../_unified_/engine/public/scripts/Point2.js
+Checking ../_unified_/engine/public/scripts/Point2D.js
 No errors found
 
 Checking ../_unified_/engine/public/scripts/QuadTree.js

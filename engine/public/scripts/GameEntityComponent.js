@@ -24,7 +24,7 @@ ECGame.EngineLib.GameEntityComponent = ECGame.EngineLib.Class.create({
 	{
 		this.GameObject();
 		
-		this._owner = null;//TODO rename owningEntity
+		this._myOwner = null;//TODO rename owningEntity
 	},
 	Parents : [ECGame.EngineLib.GameObject],
 	flags : {},
@@ -34,15 +34,15 @@ ECGame.EngineLib.GameEntityComponent = ECGame.EngineLib.Class.create({
 	{
 		onAddedToEntity : function onAddedToEntity(inEvent)
 		{
-			if(this._owner)
+			if(this._myOwner)
 			{
 				this.onRemovedFromEntity();
 			}
-			this._owner = inEvent.entity;
+			this._myOwner = inEvent.entity;
 		},
 		onRemovedFromEntity : function onRemovedFromEntity(inEvent)
 		{
-			this._owner = null;
+			this._myOwner = null;
 		},
 		
 		//set<classname>NetDirty

@@ -27,6 +27,7 @@ Final NameSpace:	ArithmeticCompressionModels
 Final NameSpace:	AssetManager
 Final NameSpace:	BinarySerializer
 Final NameSpace:	BitPacker
+Final NameSpace:	BresenhamsLine
 Final NameSpace:	Camera2
 Final NameSpace:	ChatSystem
 Final NameSpace:	Class
@@ -43,8 +44,8 @@ Final NameSpace:	ECGameLog
 Final NameSpace:	ECGameWebServerTools
 Final NameSpace:	EngineLib
 Final NameSpace:	EntityComponent_2DCamera
-Final NameSpace:	EntityComponent_2DPhysics
 Final NameSpace:	EntityComponent_Input
+Final NameSpace:	EntityComponent_Physics2D
 Final NameSpace:	EntityComponent_SoundPlayer
 Final NameSpace:	EntityComponent_Sprite
 Final NameSpace:	EvenProbabilityIntegerRangeModel
@@ -77,11 +78,11 @@ Final NameSpace:	NetGroup
 Final NameSpace:	NetObjects
 Final NameSpace:	NetworkBase
 Final NameSpace:	NetworkClient
-Final NameSpace:	PhysObjectUpdate
 Final NameSpace:	Physics2D
 Final NameSpace:	PhysicsObject2D
+Final NameSpace:	PhysicsObjectUpdated
 Final NameSpace:	PlaySound
-Final NameSpace:	Point2
+Final NameSpace:	Point2D
 Final NameSpace:	QuadTree
 Final NameSpace:	QuadTreeItem
 Final NameSpace:	Ray2D
@@ -90,6 +91,7 @@ Final NameSpace:	RemovedFromEntity
 Final NameSpace:	RemovedFromWorld
 Final NameSpace:	Renderable2D
 Final NameSpace:	RequestVelocity
+Final NameSpace:	SetPosition
 Final NameSpace:	Settings
 Final NameSpace:	Sound
 Final NameSpace:	Sound2D
@@ -352,8 +354,8 @@ Final NameSpace:	isRunning
 Final NameSpace:	isSleeping
 Final NameSpace:	isStatic
 Final NameSpace:	isWrappable
-Final NameSpace:	lenSq
 Final NameSpace:	length
+Final NameSpace:	lengthSquared
 Final NameSpace:	lineTo
 Final NameSpace:	lineToXY
 Final NameSpace:	loadImage
@@ -378,12 +380,13 @@ Final NameSpace:	onGameObjectNetDirty
 Final NameSpace:	onIdentifiedUser
 Final NameSpace:	onInput
 Final NameSpace:	onMsg
-Final NameSpace:	onPhysObjectUpdate
+Final NameSpace:	onPhysicsObjectUpdated
 Final NameSpace:	onPlaySound
 Final NameSpace:	onRemovedFromEntity
 Final NameSpace:	onRemovedFromWorld
 Final NameSpace:	onRequestVelocity
 Final NameSpace:	onSentMessage
+Final NameSpace:	onSetPosition
 Final NameSpace:	onTestEvent
 Final NameSpace:	onUpdatePosition
 Final NameSpace:	pack
@@ -437,6 +440,7 @@ Final NameSpace:	setAlwaysActive
 Final NameSpace:	setAnimation
 Final NameSpace:	setCamera
 Final NameSpace:	setCamera2D
+Final NameSpace:	setCenter
 Final NameSpace:	setDummyMode
 Final NameSpace:	setEffectsVolume
 Final NameSpace:	setFillStyle
@@ -481,6 +485,7 @@ Final NameSpace:	this
 Final NameSpace:	toBinary
 Final NameSpace:	toTileCoordinate
 Final NameSpace:	toggleActiveInput
+Final NameSpace:	touchesAABB2D
 Final NameSpace:	unit
 Final NameSpace:	unitTests
 Final NameSpace:	unpack
@@ -504,6 +509,7 @@ Function Name:	ArithmeticCompressionModels
 Function Name:	AssetManager
 Function Name:	BinarySerializer
 Function Name:	BitPacker
+Function Name:	BresenhamsLine
 Function Name:	Camera2
 Function Name:	ChatSystem
 Function Name:	Class
@@ -519,8 +525,8 @@ Function Name:	ECGameLib
 Function Name:	ECGameLog
 Function Name:	ECGameWebServerTools
 Function Name:	EntityComponent_2DCamera
-Function Name:	EntityComponent_2DPhysics
 Function Name:	EntityComponent_Input
+Function Name:	EntityComponent_Physics2D
 Function Name:	EntityComponent_SoundPlayer
 Function Name:	EntityComponent_Sprite
 Function Name:	EvenProbabilityIntegerRangeModel
@@ -551,11 +557,11 @@ Function Name:	NetGroup
 Function Name:	NetObjects
 Function Name:	NetworkBase
 Function Name:	NetworkClient
-Function Name:	PhysObjectUpdate
 Function Name:	Physics2D
 Function Name:	PhysicsObject2D
+Function Name:	PhysicsObjectUpdated
 Function Name:	PlaySound
-Function Name:	Point2
+Function Name:	Point2D
 Function Name:	QuadTree
 Function Name:	QuadTreeItem
 Function Name:	Ray2D
@@ -564,6 +570,7 @@ Function Name:	RemovedFromEntity
 Function Name:	RemovedFromWorld
 Function Name:	Renderable2D
 Function Name:	RequestVelocity
+Function Name:	SetPosition
 Function Name:	Sound
 Function Name:	Sound2D
 Function Name:	SoundAsset
@@ -823,8 +830,8 @@ Function Name:	isRunning
 Function Name:	isSleeping
 Function Name:	isStatic
 Function Name:	isWrappable
-Function Name:	lenSq
 Function Name:	length
+Function Name:	lengthSquared
 Function Name:	lineTo
 Function Name:	lineToXY
 Function Name:	loadImage
@@ -849,12 +856,13 @@ Function Name:	onGameObjectNetDirty
 Function Name:	onIdentifiedUser
 Function Name:	onInput
 Function Name:	onMsg
-Function Name:	onPhysObjectUpdate
+Function Name:	onPhysicsObjectUpdated
 Function Name:	onPlaySound
 Function Name:	onRemovedFromEntity
 Function Name:	onRemovedFromWorld
 Function Name:	onRequestVelocity
 Function Name:	onSentMessage
+Function Name:	onSetPosition
 Function Name:	onTestEvent
 Function Name:	onUpdatePosition
 Function Name:	pack
@@ -907,6 +915,7 @@ Function Name:	setAlwaysActive
 Function Name:	setAnimation
 Function Name:	setCamera
 Function Name:	setCamera2D
+Function Name:	setCenter
 Function Name:	setDummyMode
 Function Name:	setEffectsVolume
 Function Name:	setFillStyle
@@ -950,6 +959,7 @@ Function Name:	subtract
 Function Name:	toBinary
 Function Name:	toTileCoordinate
 Function Name:	toggleActiveInput
+Function Name:	touchesAABB2D
 Function Name:	unit
 Function Name:	unpack
 Function Name:	update
@@ -1083,6 +1093,8 @@ Parameter Variable:	inPhysicsObject
 Parameter Variable:	inPhysicsSystem
 Parameter Variable:	inPitchShift
 Parameter Variable:	inPoint
+Parameter Variable:	inPoint1
+Parameter Variable:	inPoint2
 Parameter Variable:	inPoint2D
 Parameter Variable:	inPos
 Parameter Variable:	inPosition
@@ -1161,7 +1173,6 @@ Parameter Variable:	node			*****
 Parameter Variable:	outContainingNodes			*****
 Parameter Variable:	outDeletedItems			*****
 Parameter Variable:	outLoadTarget			*****
-Parameter Variable:	physicsUpdateInfo			*****
 Parameter Variable:	serializer			*****
 Parameter Variable:	value			*****
 
@@ -1207,6 +1218,8 @@ Local Variable:	aD123
 Local Variable:	aD456
 Local Variable:	aDeletedTilesArray
 Local Variable:	aDeltaTime
+Local Variable:	aDeltaX
+Local Variable:	aDeltaY
 Local Variable:	aDestination
 Local Variable:	aDestroyInstanceList
 Local Variable:	aDirtyInstanceList
@@ -1215,6 +1228,7 @@ Local Variable:	aExtraBits
 Local Variable:	aFailedLoopsList
 Local Variable:	aFinishedSounds
 Local Variable:	aFinishedTimerNodes
+Local Variable:	aFormat
 Local Variable:	aFractionalPart
 Local Variable:	aFrameArray
 Local Variable:	aFrameCount
@@ -1294,7 +1308,10 @@ Local Variable:	aSecond
 Local Variable:	aSerializeData
 Local Variable:	aSerializer
 Local Variable:	aServerRebootTime
+Local Variable:	aSignX
+Local Variable:	aSignY
 Local Variable:	aSize
+Local Variable:	aSlope
 Local Variable:	aSmallestNode
 Local Variable:	aSound
 Local Variable:	aSoundAsset
@@ -1662,7 +1679,6 @@ Member Variable:	_activeInput			*****
 Member Variable:	_animations			*****
 Member Variable:	_bitPacker			*****
 Member Variable:	_bits			*****
-Member Variable:	_boundingRect			*****
 Member Variable:	_buttons			*****
 Member Variable:	_callbackName			*****
 Member Variable:	_chainDownMethods			*****
@@ -1832,6 +1848,7 @@ Member Variable:	_myPosition
 Member Variable:	_myPriority
 Member Variable:	_myProbablity
 Member Variable:	_myRadius
+Member Variable:	_myRange
 Member Variable:	_myRay
 Member Variable:	_myRayEnd
 Member Variable:	_myRayStart
@@ -1894,15 +1911,11 @@ Member Variable:	_myWorldSize
 Member Variable:	_objectHeaderFormat			*****
 Member Variable:	_ourMaxItemsPerMessage			*****
 Member Variable:	_ourMessageHeaderFormat			*****
-Member Variable:	_owner			*****
 Member Variable:	_parent			*****
 Member Variable:	_parents			*****
 Member Variable:	_path			*****
-Member Variable:	_physicsObject			*****
-Member Variable:	_physicsSystem			*****
 Member Variable:	_position			*****
 Member Variable:	_power			*****
-Member Variable:	_range			*****
 Member Variable:	_removedWorld			*****
 Member Variable:	_right			*****
 Member Variable:	_rotMatrixRow1			*****
@@ -1916,7 +1929,6 @@ Member Variable:	_underflow_bits			*****
 Member Variable:	_unusedInstanceIDs			*****
 Member Variable:	_up			*****
 Member Variable:	_value			*****
-Member Variable:	_velocity			*****
 Member Variable:	aBool1			*****
 Member Variable:	aBool2			*****
 Member Variable:	aString			*****
@@ -2000,6 +2012,7 @@ Member Variable:	myObj1
 Member Variable:	myObj2
 Member Variable:	myObject
 Member Variable:	myPoint
+Member Variable:	myPosition
 Member Variable:	myPrev
 Member Variable:	myRadius
 Member Variable:	mySocket
@@ -2078,6 +2091,7 @@ Included Word:	Audio
 Included Word:	BINARY_MODE
 Included Word:	BinarySerializer
 Included Word:	BitPacker
+Included Word:	BresenhamsLine
 Included Word:	CURRENT_MAX
 Included Word:	CUSTOM_SCREEN_LAYOUT
 Included Word:	Camera2
@@ -2109,8 +2123,8 @@ Included Word:	ECGameLog
 Included Word:	ECGameWebServerTools
 Included Word:	EngineLib
 Included Word:	EntityComponent_2DCamera
-Included Word:	EntityComponent_2DPhysics
 Included Word:	EntityComponent_Input
+Included Word:	EntityComponent_Physics2D
 Included Word:	EntityComponent_SoundPlayer
 Included Word:	EntityComponent_Sprite
 Included Word:	EvenProbabilityIntegerRangeModel
@@ -2241,9 +2255,9 @@ Included Word:	Obfuscation_Print
 Included Word:	PHYSICS
 Included Word:	POWERS
 Included Word:	Parents
-Included Word:	PhysObjectUpdate
 Included Word:	Physics2D
 Included Word:	PhysicsObject2D
+Included Word:	PhysicsObjectUpdated
 Included Word:	Physics_ActiveObjectBorder_DrawColor
 Included Word:	Physics_ActiveObject_DrawColor
 Included Word:	Physics_AlwaysActiveObject_DrawColor
@@ -2252,7 +2266,7 @@ Included Word:	Physics_ObjectCollision_DrawColor
 Included Word:	Physics_SleepingObject_DrawColor
 Included Word:	Physics_StaticObject_DrawColor
 Included Word:	PlaySound
-Included Word:	Point2
+Included Word:	Point2D
 Included Word:	QuadTree
 Included Word:	QuadTreeItem
 Included Word:	QuadTree_Item_DrawColor
@@ -2281,6 +2295,7 @@ Included Word:	STATUS__SLEEPING
 Included Word:	STATUS__STATIC
 Included Word:	SceneGraph_Draw
 Included Word:	Server
+Included Word:	SetPosition
 Included Word:	Settings
 Included Word:	Sound
 Included Word:	Sound2D
@@ -2348,7 +2363,6 @@ Included Word:	_activeInput
 Included Word:	_animations
 Included Word:	_bitPacker
 Included Word:	_bits
-Included Word:	_boundingRect
 Included Word:	_buttons
 Included Word:	_callbackName
 Included Word:	_chainDownMethods
@@ -2535,6 +2549,7 @@ Included Word:	_myPosition
 Included Word:	_myPriority
 Included Word:	_myProbablity
 Included Word:	_myRadius
+Included Word:	_myRange
 Included Word:	_myRay
 Included Word:	_myRayEnd
 Included Word:	_myRayStart
@@ -2603,17 +2618,13 @@ Included Word:	_onMessage
 Included Word:	_onOpen
 Included Word:	_ourMaxItemsPerMessage
 Included Word:	_ourMessageHeaderFormat
-Included Word:	_owner
 Included Word:	_parent
 Included Word:	_parents
 Included Word:	_path
-Included Word:	_physicsObject
-Included Word:	_physicsSystem
 Included Word:	_position
 Included Word:	_power
 Included Word:	_prepareGet
 Included Word:	_prepareSet
-Included Word:	_range
 Included Word:	_removePhysicsObjectFromTree
 Included Word:	_removedWorld
 Included Word:	_resizeSpace
@@ -2634,7 +2645,6 @@ Included Word:	_underflow_bits
 Included Word:	_unusedInstanceIDs
 Included Word:	_up
 Included Word:	_value
-Included Word:	_velocity
 Included Word:	aAudioSystem
 Included Word:	aBackBufferRect
 Included Word:	aBinaryBuffer
@@ -2670,6 +2680,8 @@ Included Word:	aD123
 Included Word:	aD456
 Included Word:	aDeletedTilesArray
 Included Word:	aDeltaTime
+Included Word:	aDeltaX
+Included Word:	aDeltaY
 Included Word:	aDestination
 Included Word:	aDestroyInstanceList
 Included Word:	aDirtyInstanceList
@@ -2678,6 +2690,7 @@ Included Word:	aExtraBits
 Included Word:	aFailedLoopsList
 Included Word:	aFinishedSounds
 Included Word:	aFinishedTimerNodes
+Included Word:	aFormat
 Included Word:	aFractionalPart
 Included Word:	aFrameArray
 Included Word:	aFrameCount
@@ -2757,7 +2770,10 @@ Included Word:	aSecond
 Included Word:	aSerializeData
 Included Word:	aSerializer
 Included Word:	aServerRebootTime
+Included Word:	aSignX
+Included Word:	aSignY
 Included Word:	aSize
+Included Word:	aSlope
 Included Word:	aSmallestNode
 Included Word:	aSound
 Included Word:	aSoundAsset
@@ -3164,6 +3180,8 @@ Included Word:	inPhysicsObject
 Included Word:	inPhysicsSystem
 Included Word:	inPitchShift
 Included Word:	inPoint
+Included Word:	inPoint1
+Included Word:	inPoint2
 Included Word:	inPoint2D
 Included Word:	inPos
 Included Word:	inPosition
@@ -3294,7 +3312,7 @@ Included Word:	jslintCheckCode
 Included Word:	jslint_options
 Included Word:	keysPressed
 Included Word:	len
-Included Word:	lenSq
+Included Word:	lengthSquared
 Included Word:	lineToXY
 Included Word:	listenerNode
 Included Word:	loadImage
@@ -3332,6 +3350,7 @@ Included Word:	myObj1
 Included Word:	myObj2
 Included Word:	myObject
 Included Word:	myPoint
+Included Word:	myPosition
 Included Word:	myPrev
 Included Word:	myRadius
 Included Word:	mySocket
@@ -3372,12 +3391,13 @@ Included Word:	onGameObjectNetDirty
 Included Word:	onIdentifiedUser
 Included Word:	onInput
 Included Word:	onMsg
-Included Word:	onPhysObjectUpdate
+Included Word:	onPhysicsObjectUpdated
 Included Word:	onPlaySound
 Included Word:	onRemovedFromEntity
 Included Word:	onRemovedFromWorld
 Included Word:	onRequestVelocity
 Included Word:	onSentMessage
+Included Word:	onSetPosition
 Included Word:	onTestEvent
 Included Word:	onUpdatePosition
 Included Word:	ourFrameRayCounter
@@ -3399,7 +3419,6 @@ Included Word:	path
 Included Word:	pathTokens
 Included Word:	physics
 Included Word:	physicsRect
-Included Word:	physicsUpdateInfo
 Included Word:	play
 Included Word:	playPositionalSoundEffect2D
 Included Word:	playSoundEffect
@@ -3470,6 +3489,7 @@ Included Word:	setAlwaysActive
 Included Word:	setAnimation
 Included Word:	setCamera
 Included Word:	setCamera2D
+Included Word:	setCenter
 Included Word:	setDummyMode
 Included Word:	setEffectsVolume
 Included Word:	setFillStyle
@@ -3522,6 +3542,7 @@ Included Word:	toBinary
 Included Word:	toTileCoordinate
 Included Word:	todo
 Included Word:	toggleActiveInput
+Included Word:	touchesAABB2D
 Included Word:	unit
 Included Word:	unitTests
 Included Word:	unpack

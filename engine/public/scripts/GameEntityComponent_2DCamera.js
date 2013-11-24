@@ -33,7 +33,7 @@ ECGame.EngineLib.EntityComponent_2DCamera = ECGame.EngineLib.Class.create({
 	{
 		onAddedToEntity : function onAddedToEntity(inEvent)
 		{
-			var owner = this._owner;//inEvent.entity;
+			var owner = this._myOwner;//inEvent.entity;
 			
 			//register for events
 			owner.registerListener('UpdatePosition', this);
@@ -44,7 +44,7 @@ ECGame.EngineLib.EntityComponent_2DCamera = ECGame.EngineLib.Class.create({
 		},
 		onRemovedFromEntity : function onRemovedFromEntity(inEvent)
 		{
-			var owner = this._owner;//inEvent.entity;
+			var owner = this._myOwner;//inEvent.entity;
 			
 			//unregister for events
 			owner.deregisterListener('UpdatePosition', this);

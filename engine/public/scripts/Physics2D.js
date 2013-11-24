@@ -448,10 +448,10 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 				aPhysicsObject._myVelocity =	//TODO isnt this one proper??
 					aPhysicsObject._myAABB.getLeftTop().subtract(aMovedObjectsThisFrame[i]).scale(1000 / deltaTime);
 				anOwner = aPhysicsObject._myOwner;
-				if(anOwner && anOwner.onPhysObjectUpdate)
+				if(anOwner && anOwner.onPhysicsObjectUpdated)
 				{
-					anOwner.onPhysObjectUpdate(
-						new ECGame.EngineLib.Events.PhysObjectUpdate(
+					anOwner.onPhysicsObjectUpdated(
+						new ECGame.EngineLib.Events.PhysicsObjectUpdated(
 							aPhysicsObject._myAABB.getCenter(),
 							aPhysicsObject._myVelocity.clone(),
 							aPhysicsObject._myAABB.clone()

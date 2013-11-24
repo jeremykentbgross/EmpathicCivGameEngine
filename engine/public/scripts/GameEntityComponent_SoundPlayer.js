@@ -44,7 +44,7 @@ ECGame.EngineLib.EntityComponent_SoundPlayer = ECGame.EngineLib.Class.create(
 
 		onAddedToEntity : function onAddedToEntity(inEvent)
 		{
-			var owner = this._owner;//inEvent.entity;
+			var owner = this._myOwner;//inEvent.entity;
 			
 			//register for events
 			owner.registerListener('PlaySound', this);
@@ -57,7 +57,7 @@ ECGame.EngineLib.EntityComponent_SoundPlayer = ECGame.EngineLib.Class.create(
 
 		onRemovedFromEntity : function()
 		{
-			var owner = this._owner;//inEvent.entity;
+			var owner = this._myOwner;//inEvent.entity;
 			
 			//unregister for events
 			owner.deregisterListener('PlaySound', this);
@@ -65,7 +65,7 @@ ECGame.EngineLib.EntityComponent_SoundPlayer = ECGame.EngineLib.Class.create(
 			owner.deregisterListener('AddedToWorld', this);
 			owner.deregisterListener('RemovedFromWorld', this);
 						
-			//this._owner = null;
+			//this._myOwner = null;
 		},
 		
 		onPlaySound : function onPlaySound(inEvent)

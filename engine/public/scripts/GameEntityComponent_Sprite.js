@@ -65,14 +65,14 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			{
 				for(i = 0; i < aFrameEvents.length; ++i)
 				{
-					this._owner.onEvent(aFrameEvents[i]);
+					this._myOwner.onEvent(aFrameEvents[i]);
 				}
 			}
 		},
 
 		onAddedToEntity : function onAddedToEntity(inEvent)
 		{
-			var owner = this._owner;//inEvent.entity;
+			var owner = this._myOwner;//inEvent.entity;
 			
 			//register for events
 			owner.registerListener('UpdatePosition', this);
@@ -85,7 +85,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 
 		onRemovedFromEntity : function()
 		{
-			var owner = this._owner;//inEvent.entity;
+			var owner = this._myOwner;//inEvent.entity;
 			
 			//unregister for events
 			owner.deregisterListener('UpdatePosition', this);
@@ -94,7 +94,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			
 			//todo remove from scenegraph
 			
-			//this._owner = null;
+			//this._myOwner = null;
 		},
 
 		onUpdatePosition : function onUpdatePosition(inEvent)

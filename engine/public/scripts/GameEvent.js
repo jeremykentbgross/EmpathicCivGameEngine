@@ -22,7 +22,7 @@
 //namespace:
 ECGame.EngineLib.Events = new function Events(){return;}();
 
-
+//TODO split to different files: entity events, net events, etc
 
 ECGame.EngineLib.Events.GameEventBase = ECGame.EngineLib.Class.create({
 	Constructor : function GameEventBase(inCallbackName)
@@ -364,14 +364,38 @@ ECGame.EngineLib.Events.RequestVelocity = ECGame.EngineLib.Class.create({
 });
 
 
-//TODO ECGame.EngineLib.Events.PhysObjectUpdate and this are the same
+
+ECGame.EngineLib.Events.SetPosition = ECGame.EngineLib.Class.create({
+	Constructor : function SetPosition(inPosition)
+	{
+		this.GameEventBase('onSetPosition');
+		this.myPosition = inPosition;
+		//TODO orientation?
+	},
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition :
+	{
+		init : function init(inPosition)
+		{
+			this.myPosition = inPosition;
+		},
+		
+		copyFrom : function copyFrom(/*inOther*/){return;}
+	}
+});
+
+
+//TODO ECGame.EngineLib.Events.PhysicsObjectUpdated and this are the same
 ECGame.EngineLib.Events.UpdatePosition = ECGame.EngineLib.Class.create({
 	Constructor : function UpdatePosition(inPos, inVel, inAABB)
 	{
 		this.GameEventBase('onUpdatePosition');
-		this.position = inPos;
-		this.velocity = inVel;
-		this.boundingRect = inAABB;//TODO rename boundingRect => aabb
+		this.position = inPos.clone();
+		this.velocity = inVel.clone();
+		this.boundingRect = inAABB.clone();//TODO rename boundingRect => aabb
 	},
 	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},
@@ -412,13 +436,13 @@ ECGame.EngineLib.Events.PlaySound = ECGame.EngineLib.Class.create({
 
 
 //TODO ECGame.EngineLib.Events.UpdatePosition and this are the same!!!
-ECGame.EngineLib.Events.PhysObjectUpdate = ECGame.EngineLib.Class.create({
-	Constructor : function PhysObjectUpdate(inPosition, inVelocity, inAABB)
+ECGame.EngineLib.Events.PhysicsObjectUpdated = ECGame.EngineLib.Class.create({
+	Constructor : function PhysicsObjectUpdated(inPosition, inVelocity, inAABB)
 	{
-		this.GameEventBase('onPhysObjectUpdate');//TODO rename (on)PhysicsObjectUpdate
-		this.position = inPosition;
-		this.velocity = inVelocity;
-		this.boundingRect = inAABB;//TODO rename AABB
+		this.GameEventBase('onPhysicsObjectUpdated');//TODO rename (on)PhysicsObjectUpdate
+		this.position = inPosition.clone();
+		this.velocity = inVelocity.clone();
+		this.boundingRect = inAABB.clone();//TODO rename AABB
 	},
 	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},

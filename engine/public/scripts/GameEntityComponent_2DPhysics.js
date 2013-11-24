@@ -19,15 +19,22 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
-	Constructor : function EntityComponent_2DPhysics()
+ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
+	Constructor : function EntityComponent_Physics2D()
 	{
 		this.GameEntityComponent();
 
-		this._position = ECGame.EngineLib.Point2D.create(256, 256);//??needed? use mid instead?
-		this._velocity = ECGame.EngineLib.Point2D.create();
-		this._boundingRect = ECGame.EngineLib.AABB2D.create(this._position.myX, this._position.myY, 64, 64);//TODO separate position from AABB in PhysicsSim2D
-		this._range = ECGame.EngineLib.AABB2D.create(0, 0, 65535, 65535);//TODO used? Set when added to world?
+		this._myPosition = ECGame.EngineLib.Point2D.create(256, 256);
+		this._myVelocity = ECGame.EngineLib.Point2D.create();
+		
+		//TODO separate position from AABB in PhysicsSim2D
+		this._myAABB = ECGame.EngineLib.AABB2D.create(0, 0, 64, 64);
+		this._myAABB.setCenter(this._myPosition);
+		
+		//TODO make static? ser on !net?? how to set when added to world? get rid of it?
+		this._myRange = ECGame.EngineLib.AABB2D.create(0, 0, 65535, 65535);
+		
+		this._myPhysicsObject = null;
 	},
 	
 	Parents : [ECGame.EngineLib.GameEntityComponent],
@@ -39,17 +46,17 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 	
 	Definition :
 	{
-		_serializeFormat :
+		_mySerializeFormat :	//TODO part of Class def?
 		[
 			{
-				name : '_position',//??TODO Target Position, can set velocity towards this instead of the position
+				name : '_myPosition',//??TODO Target Position, can set velocity towards this instead of the position
 				net : true,
 				type : 'position',
-				min : null,	//this._range.getLeftTop(),
-				max : null	//this._range.getRightBottom(),
+				min : null,	//this._myRange.getLeftTop(),
+				max : null	//this._myRange.getRightBottom(),
 			},
 			{
-				name : '_velocity',	//TODO not used atm????
+				name : '_myVelocity',	//TODO not used atm???? (yes, it allows proper animation to play)
 				net : true,
 				type : 'position',//TODO type should be vector2 instead
 				min : ECGame.EngineLib.Point2D.create(-512,-512),	//TODO replace hack numbers
@@ -58,45 +65,44 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 			//TODO rect NOT net!
 		],
 		
-		init : function init()//TODO needed?
-		{
-		},
+		init : function init(){	return;	},//TODO needed?
 		
-		onAddedToEntity : function onAddedToEntity(inEvent)
+		onAddedToEntity : function onAddedToEntity(/*inEvent*/)
 		{
-			var owner = this._owner;//inEntity.entity;
+			var anOwner = this._myOwner;//inEntity.entity;
 		
 			//register for events		
-			owner.registerListener('RequestVelocity', this);
-			owner.registerListener('AddedToWorld', this);
-			owner.registerListener('RemovedFromWorld', this);
-			//TODO owner.event(getposition, myPos);??
+			anOwner.registerListener('RequestVelocity', this);
+			anOwner.registerListener('AddedToWorld', this);
+			anOwner.registerListener('RemovedFromWorld', this);
 			
-			this._owner.onEvent(
+			anOwner.registerListener('SetPosition', this);
+			//TODO anOwner.event(getposition, myPos);??
+			
+			this._myOwner.onEvent(
 				new ECGame.EngineLib.Events.UpdatePosition(
-					this._position.clone(),
-					this._velocity.clone(),
-					this._boundingRect.clone()
+					this._myPosition,
+					this._myVelocity,
+					this._myAABB
 				)
 			);
 		},
 		
-		onRemovedFromEntity : function onRemovedFromEntity(inEvent)
+		onRemovedFromEntity : function onRemovedFromEntity(/*inEvent*/)
 		{
-			var owner = this._owner;//inEntity.entity;
+			var anOwner = this._myOwner;//inEntity.entity;
 			
 			//unregister for events
-			owner.deregisterListener('RequestVelocity', this);
-			owner.deregisterListener('AddedToWorld', this);
-			owner.deregisterListener('RemovedFromWorld', this);
+			anOwner.deregisterListener('RequestVelocity', this);
+			anOwner.deregisterListener('AddedToWorld', this);
+			anOwner.deregisterListener('RemovedFromWorld', this);
 			
-			//this._owner = null;
+			anOwner.deregisterListener('SetPosition', this);
+			
+			//this._myOwner = null;
 		},
 		
-		cleanup : function cleanup()
-		{
-			//TODO this.release??
-		},
+		cleanup : function cleanup(){return;},
 		
 		//set<classname>NetDirty
 		clearNetDirty : function clearNetDirty(){return;},
@@ -104,10 +110,13 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 		
 		serialize : function serialize(inSerializer)
 		{
-			var format = this.EntityComponent_2DPhysics._serializeFormat;
-			format[0].min = this._range.getLeftTop();
-			format[0].max = this._range.getRightBottom();
-			inSerializer.serializeObject(this, format);
+			var aFormat;
+			
+			//serialize
+			aFormat = this.EntityComponent_Physics2D._mySerializeFormat;
+			aFormat[0].min = this._myRange.getLeftTop();
+			aFormat[0].max = this._myRange.getRightBottom();
+			inSerializer.serializeObject(this, aFormat);
 			
 			//TODO serialize delta position 99% of time, and full position every so often
 			//TODO server side: make sure full position is within some reasonable range
@@ -116,101 +125,83 @@ ECGame.EngineLib.EntityComponent_2DPhysics = ECGame.EngineLib.Class.create({
 			
 			if(inSerializer.isReading())
 			{
-				this._boundingRect.myX = this._position.myX - this._boundingRect.myWidth / 2;
-				this._boundingRect.myY = this._position.myY - this._boundingRect.myHeight / 2;
-				//console.log(this._position.myX + ' ' + this._position.myY);
-				
-				if(this._physicsObject)
+				this._myAABB.setCenter(this._myPosition);
+				if(this._myPhysicsObject)
 				{
-					this._physicsObject.setAABB(this._boundingRect);
-					//this._physicsObject.requestVelocity(this._velocity);	//TODO sending input, physics master control, etc..
+					this._myPhysicsObject.setAABB(this._myAABB);
+					//this._myPhysicsObject.requestVelocity(this._myVelocity);	//TODO sending input, physics master control, etc..
 				}
 				
 				//set position and let everyone else know
-				if(this._owner)
+				if(this._myOwner)
 				{
-					this._owner.onEvent(
+					this._myOwner.onEvent(
 						new ECGame.EngineLib.Events.UpdatePosition(
-							this._position.clone(),
-							this._velocity.clone(),
-							this._boundingRect.clone()
+							this._myPosition.clone(),
+							this._myVelocity.clone(),
+							this._myAABB.clone()
 						)
 					);
 				}
 			}
-			//else console.log(this._position.myX + ' ' + this._position.myY);
-			
-			/*
-			HACK!!!!! TODO find better solution!
-			Note: this is here because we need to use the bounding box for compression,
-				BUT when added to a world we need to keep the OLD range until the other
-				client(s) know about the change of world.  Otherwise the compression min/max will be wrong
-			*/
-		/*	if(this._myWorld)
-			{
-				this._range = this._myWorld.getAABB2D();
-			}*/
 		},
 		
 		onRequestVelocity : function onRequestVelocity(inEvent)
 		{
-			//ECGame.log.info(inEvent.direction.myX + ' ' + inEvent.direction.myY);
-			this._physicsObject.requestVelocity(inEvent.direction);
+			this._myPhysicsObject.requestVelocity(inEvent.direction);
 		},
 		
 		onAddedToWorld : function onAddedToWorld(inEvent)
 		{
-			this._myWorld = inEvent.world;//TODO I dont think this is used..
-			this._physicsSystem = inEvent.world.getPhysics();
-			this._physicsObject = this._physicsSystem.createNewPhysicsObject();
-			this._physicsObject.setAABB(this._boundingRect);
-			this._physicsObject.setActive();
-			this._physicsObject.setOwner(this);
-			//TODO set the owner in the PhysObj for callbacks, triggers, etc?
-			//TODO somehow event the position when it changes
+			this._myPhysicsObject = inEvent.world.getPhysics().createNewPhysicsObject();
 			
-			//TODO should have a position as part of the event?
-			//TODO can the range still be set by the world bounding box?? Atm it screws up compression and thus net serializes
-//			this._range = inEvent.world.getAABB2D();
+			this._myPhysicsObject.setAABB(this._myAABB);
+			this._myPhysicsObject.setActive();
+			this._myPhysicsObject.setOwner(this);
+			//TODO set the owner in the PhysObj for callbacks, triggers, etc?
 		},
 		
-		onRemovedFromWorld : function onRemovedFromWorld(inEvent)
+		onRemovedFromWorld : function onRemovedFromWorld(/*inEvent*/)
 		{
-			this._physicsObject.release();
-			this._physicsSystem = null;
-			//this._range = ECGame.EngineLib.AABB2D.create(0, 0, 256, 256);//TODO clamp values in range (in serializer?)
-			//TODO clear position?
+			this._myPhysicsObject.release();
 		},
 		
-		onPhysObjectUpdate : function onPhysObjectUpdate(physicsUpdateInfo)//TODO maybe this should be the event!
+		//should not be used often
+		onSetPosition : function onSetPosition(inEvent)
 		{
-			//TODO use GameEvent! Make collection of known game events!
-			this._owner.onEvent(
+			this._myPosition = inEvent.myPosition;
+			this._myAABB.setCenter(this._myPosition);
+			if(this._myPhysicsObject)
+			{
+				this._myPhysicsObject.setAABB(this._myAABB);
+			}
+			
+			this.setNetDirty();
+		},
+		
+		onPhysicsObjectUpdated : function onPhysicsObjectUpdated(inEvent)
+		{
+			this._myOwner.onEvent(//TODO not have seperate event?
 				new ECGame.EngineLib.Events.UpdatePosition(
-					physicsUpdateInfo.position.clone(),
-					physicsUpdateInfo.velocity.clone(),
-					physicsUpdateInfo.boundingRect.clone()
+					inEvent.position,
+					inEvent.velocity,
+					inEvent.boundingRect
 				)
 			);
-			this._position = physicsUpdateInfo.position;
-			this._velocity = physicsUpdateInfo.velocity;
-			this.setNetDirty();
-			//TODO event velocity
 			
-			/*console.log(
-				physicsUpdateInfo.position.myX + ' ' +
-				physicsUpdateInfo.position.myY + ' ' +
-				physicsUpdateInfo.velocity.myX + ' ' +
-				physicsUpdateInfo.velocity.myY + ' '
-			);*/
+			this._myPosition.copyFrom(inEvent.position);
+			this._myVelocity.copyFrom(inEvent.velocity);
+			this._myAABB.copyFrom(inEvent.boundingRect);
+			
+			this.setNetDirty();
 		},
 		
 		copyFrom : function copyFrom(inOther)
 		{
-			this._position.copyFrom(inOther._position);
-			this._velocity.copyFrom(inOther._velocity);
-			this._boundingRect.copyFrom(inOther._boundingRect);
-			this._range.copyFrom(inOther._range);//TODO used? Set when added to world?
+			this._myPosition.copyFrom(inOther._myPosition);
+			this._myVelocity.copyFrom(inOther._myVelocity);
+			this._myAABB.copyFrom(inOther._myAABB);
+			//this._myRange.copyFrom(inOther._myRange);//TODO used? Set when added to world?
 		}
 	}
 });

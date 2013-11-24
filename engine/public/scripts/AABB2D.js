@@ -123,6 +123,28 @@ ECGame.EngineLib.AABB2D = ECGame.EngineLib.Class.create({
 			return true;
 		},
 		
+		touchesAABB2D : function touchesAABB2D(inOtherAABB2D)
+		{
+			if(inOtherAABB2D.myX + inOtherAABB2D.myWidth < this.myX)
+			{
+				return false;
+			}
+			if(inOtherAABB2D.myY + inOtherAABB2D.myHeight < this.myY)
+			{
+				return false;
+			}
+			if(this.myX + this.myWidth < inOtherAABB2D.myX)
+			{
+				return false;
+			}
+			if(this.myY + this.myHeight < inOtherAABB2D.myY)
+			{
+				return false;
+			}
+			
+			return true;
+		},
+		
 		getIntersection : function getIntersection(inOtherAABB2D)
 		{
 			var anX
@@ -179,6 +201,14 @@ ECGame.EngineLib.AABB2D = ECGame.EngineLib.Class.create({
 			return ECGame.EngineLib.Point2D.create(
 				this.myX + this.myWidth / 2,
 				this.myY + this.myHeight / 2
+			);
+		},
+		setCenter : function setCenter(inPoint)
+		{
+			this.setLeftTop(
+				inPoint.subtract(
+					this.getWidthHeight().scale(0.5)
+				)
 			);
 		},
 		

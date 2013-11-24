@@ -357,7 +357,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			aComponent = ECGame.EngineLib.EntityComponent_Sprite.create(this._myAnimations);
 			this._myReferenceEntity.addComponent(aComponent);
 			
-			aComponent = ECGame.EngineLib.EntityComponent_2DPhysics.create();
+			aComponent = ECGame.EngineLib.EntityComponent_Physics2D.create();
 			this._myReferenceEntity.addComponent(aComponent);
 			
 			aComponent = ECGame.EngineLib.EntityComponent_2DCamera.create(/*TODO params??*/);
@@ -437,7 +437,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				anEntity = this._myReferenceEntity.clone();
 				this._myEntities[inEvent.user.userID] = anEntity;
 				ECGame.log.info("Setting owner for physics and input component(s) => Name: " + inEvent.user.userName + " ID: " + inEvent.user.userID);
-				anEntity.getComponentByType(ECGame.EngineLib.EntityComponent_2DPhysics)[0].setNetOwner(inEvent.user.userID);
+				anEntity.getComponentByType(ECGame.EngineLib.EntityComponent_Physics2D)[0].setNetOwner(inEvent.user.userID);
 				anEntity.getComponentByType(ECGame.EngineLib.EntityComponent_Input)[0].setNetOwner(inEvent.user.userID);
 				anEntity.getComponentByType(ECGame.EngineLib.EntityComponent_2DCamera)[0].setNetOwner(inEvent.user.userID);
 			}

@@ -148,7 +148,7 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			inGraphics.strokeRect(aCameraRect);
 		},
 
-		addEntity : function addEntity(inEntity)
+		addEntity : function addEntity(inEntity, inPosition/*optional*/)
 		{
 			var anIndex;
 			
@@ -156,6 +156,11 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			if(this._myEntities.indexOf(inEntity) !== -1)
 			{
 				return;
+			}
+			
+			if(inPosition)
+			{
+				inEntity.onEvent(ECGame.EngineLib.Events.SetPosition.create(inPosition));
 			}
 			
 			//add it
@@ -289,7 +294,7 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 				name : '_myEntityRefs',
 				type : 'objRef',
 				net : false,
-				maxArrayLength : 2	//TODO
+				maxArrayLength : 32	//TODO
 			},
 			{
 				name : '_myAddedEntityRefs',
