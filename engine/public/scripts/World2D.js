@@ -35,6 +35,11 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 		this._myPhysics = null;
 		this._mySceneGraph = null;
 		
+		/*
+		TODO NOTE: the entities added/removed are the same as the components in the entity
+		It may be a good idea to somehow make a DeltaArrayObjectRef type or something...
+		NOTE: entity has more updated version
+		*/
 		//entities:
 		this._myEntities = [];
 		this._myAddedEntities = [];
@@ -57,12 +62,12 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 	
 	Definition :
 	{
-		init : function init(inMapSizeInTiles, inTileset, inTileSize, inMinPhysicsPartitionSize)//TODO tilesize part of tileset?
+		init : function init(inMapSizeInTiles, inTileset, inTileSize, inMinPhysicsPartitionSize, inUsingNetViews)//TODO tilesize part of tileset?
 		{
 			this._initNonGameObjectMembers(inMapSizeInTiles, inTileSize, inMinPhysicsPartitionSize);
 			
 			this._myMap = ECGame.EngineLib.TileMap2D.create();
-			this._myMap.init(this, inTileset, inMapSizeInTiles, inTileSize);
+			this._myMap.init(this, inTileset, inMapSizeInTiles, inTileSize, inUsingNetViews);
 			this._myMapRef = this._myMap.getRef();
 		},
 		
@@ -259,6 +264,10 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 		{
 			this._myAddedEntities = [];
 			this._myRemovedEntities = [];
+
+			this._myEntityRefs = [];
+			this._myAddedEntityRefs = [];
+			this._myRemovedEntityRefs = [];
 		},
 		
 		
@@ -352,30 +361,33 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			{
 				this._initNonGameObjectMembers(this._myMapSizeInTiles, this._myTileSize, this._myMinPhysicsPartitionSize);
 				this._myMap = this._myMapRef.deref();
-				
-				for(i = 0; i < this._myEntityRefs.length; ++i)
-				{
-					anEntity = this._myEntityRefs[i].deref();
-					ECGame.log.assert(anEntity, "Missing entity during serialization!");
-					this.addEntity(anEntity);
-				}
 			}
-			else
+			
+			for(i = 0; i < this._myEntityRefs.length; ++i)
 			{
-				for(i = 0; i < this._myAddedEntityRefs.length; ++i)
+				anEntity = this._myEntityRefs[i].deref();
+				ECGame.log.assert(anEntity, "Missing entity during serialization!");
+				this.addEntity(anEntity);
+			}
+			for(i = 0; i < this._myAddedEntityRefs.length; ++i)
+			{
+				anEntity = this._myAddedEntityRefs[i].deref();
+				ECGame.log.assert(anEntity, "Missing entity during serialization!");
+				this.addEntity(anEntity);
+			}
+			for(i = 0; i < this._myRemovedEntityRefs.length; ++i)
+			{
+				anEntity = this._myRemovedEntityRefs[i].deref();
+				//ECGame.log.assert(anEntity, "Missing entity during serialization!");
+				if(anEntity)
 				{
-					anEntity = this._myAddedEntityRefs[i].deref();
-					ECGame.log.assert(anEntity, "Missing entity during serialization!");
-					this.addEntity(anEntity);
-					
-				}
-				for(i = 0; i < this._myRemovedEntityRefs.length; ++i)
-				{
-					anEntity = this._myRemovedEntityRefs[i].deref();
-					ECGame.log.assert(anEntity, "Missing entity during serialization!");
 					this.removeEntity(anEntity);
 				}
 			}
+			
+			this._myEntityRefs = [];
+			this._myAddedEntityRefs = [];
+			this._myRemovedEntityRefs = [];
 		}
 	}
 });

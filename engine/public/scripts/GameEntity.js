@@ -25,7 +25,19 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 		this.GameObject();
 		
 		this._myWorld = null;
-		this._myComponentMap = {};//TODO listen to name changes from GameObject!!
+		
+		/*
+		TODO NOTE: the components added/removed are the same as the entities in the world
+		It may be a good idea to somehow make a DeltaArrayObjectRef type or something...
+		*/
+		//components:
+		this._myComponents = [];
+		this._myAddedComponents = [];
+		this._myRemovedComponents = [];
+		//network versions
+		this._myComponentsRefs = [];
+		this._myAddedComponentsRefs = [];
+		this._myRemovedComponentsRefs = [];
 	},
 	
 	Parents : [ECGame.EngineLib.GameObject],
@@ -39,47 +51,90 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 	{
 		addComponent : function addComponent(inComponent)
 		{
-			this._myComponentMap[inComponent.getTxtPath()] = inComponent;
-			inComponent.onAddedToEntity(new ECGame.EngineLib.Events.AddedToEntity(this));
+			var anIndex;
 			
+			//if its already added, just return
+			if(this._myComponents.indexOf(inComponent) !== -1)
+			{
+				return;
+			}
+			
+			//add it
+			this._myComponents.push(inComponent);
+			inComponent.onAddedToEntity(new ECGame.EngineLib.Events.AddedToEntity(this));
 			if(this._myWorld)
 			{
 				inComponent.onAddedToWorld(new ECGame.EngineLib.Events.AddedToWorld(this._myWorld));
 			}
+			
+			if(this.canUserModifyNet())
+			{
+				//add it to the list of newly added for the network
+				this._myAddedComponents.push(inComponent);
+				
+				//if it was previously removed, remove it from the removal list
+				anIndex = this._myRemovedComponents.indexOf(inComponent);
+				if(anIndex !== -1)
+				{
+					this._myRemovedComponents[anIndex] = this._myRemovedComponents[this._myRemovedComponents.length - 1];
+					this._myRemovedComponents.pop();
+				}
+				
+				this.setNetDirty();
+			}
 		},
 		removeComponent : function removeComponent(inComponent)
 		{
-			var component,
-				path;
+			var anIndex;
 			
-			path = inComponent.getTxtPath();
+			//find the entity
+			anIndex = this._myComponents.indexOf(inComponent);
 			
-			component = this._myComponentMap[path];
-			delete this._myComponentMap[path];
-			
-			if(component)
+			//if its not there, just return
+			if(anIndex === -1)
 			{
-				ECGame.log.assert(component === inComponent, "WTF!!!");
-				if(this._myWorld)
+				return;
+			}
+			
+			//remove it
+			this._myComponents[anIndex] = this._myComponents[this._myComponents.length - 1];
+			this._myComponents.pop();
+			if(this._myWorld)
+			{
+				inComponent.onRemovedFromWorld(new ECGame.EngineLib.Events.RemovedFromWorld(this._myWorld));
+			}
+			inComponent.onRemovedFromEntity(new ECGame.EngineLib.Events.RemovedFromEntity(this));
+			
+			if(this.canUserModifyNet())
+			{
+				//add it to the list of newly removed entities for the network
+				this._myRemovedComponents.push(inComponent);
+				
+				//if it was previously added, remove it from the add list
+				anIndex = this._myAddedComponents.indexOf(inComponent);
+				if(anIndex !== -1)
 				{
-					inComponent.onRemovedFromWorld(new ECGame.EngineLib.Events.RemovedFromWorld(this._myWorld));
+					this._myAddedComponents[anIndex] = this._myAddedComponents[this._myAddedComponents.length - 1];
+					this._myAddedComponents.pop();
 				}
-				inComponent.onRemovedFromEntity(new ECGame.EngineLib.Events.RemovedFromEntity(this));
+				
+				this.setNetDirty();
 			}
 		},
-		getComponentByType : function getComponentByType(inType, inoutReturnValues)//TODO allow multiple components of same type?
+		getComponentByType : function getComponentByType(inType, inoutReturnValues)
 		{
-			var componentName,
-				component;
+			var aComponent
+				,i
+				;
 			
 			inoutReturnValues = inoutReturnValues || [];
 			
-			for(componentName in this._myComponentMap)
+			for(i = 0; i < this._myComponents.length; ++i)
 			{
-				component = this._myComponentMap[componentName];
-				if(component && component.isA(inType))//TODO change forall to not pass nulls and get rid of gaurds all over the place
+				aComponent = this._myComponents[i];
+				if(aComponent.isA(inType))
 				{
-					inoutReturnValues.push(component);
+					inoutReturnValues.push(aComponent);
 				}
 			}
 			
@@ -88,32 +143,34 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 		
 		addToNetGroup : function addToNetGroup(inNetGroup)
 		{
+			var aComponent
+				,i
+				;
+			
 			inNetGroup.addObject(this);
-			this.forAllComponent(
-				function addComponents(inComponent)
-				{
-					inNetGroup.addObject(inComponent);
-				}
-			);
+			for(i = 0; i < this._myComponents.length; ++i)
+			{
+				aComponent = this._myComponents[i];
+				//if(!aComponent.isServerOnly())//TODO check in netgroup, not here!!
+				//{
+					inNetGroup.addObject(aComponent);
+				//}
+			}
 		},
 		removeFromNetGroup : function removeFromNetGroup(inNetGroup)
 		{
-			inNetGroup.removeObject(this);
-			this.forAllComponent(
-				function removeComponents(inComponent)
-				{
-					inNetGroup.removeObject(inComponent);
-				}
-			);
-		},
-		
-		forAllComponent : function forAllComponent(inFunction)
-		{
-			var componentName;
+			var aComponent
+				,i
+				;
 			
-			for(componentName in this._myComponentMap)
+			inNetGroup.removeObject(this);
+			for(i = 0; i < this._myComponents.length; ++i)
 			{
-				inFunction(this._myComponentMap[componentName]);
+				aComponent = this._myComponents[i];
+				//if(!aComponent.isServerOnly())//TODO check in netgroup, not here!!
+				//{
+					inNetGroup.removeObject(aComponent);
+				//}
 			}
 		},
 		
@@ -144,114 +201,143 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 		
 		cleanup : function cleanup()
 		{
-			var componentName,
-				component;
+			var aComponent
+				,i
+				;
 				
 			if(this._myWorld)
 			{
-				this.removedFromWorld();//TODO actually remove it from the world!!
+				this._myWorld.removeEntity(this);
 			}
-
-			for(componentName in this._myComponentMap)
+			
+			for(i = 0; i < this._myComponents.length; ++i)
 			{
-				component = this._myComponentMap[componentName];
-				//TODO remove from world also; instead make array of them and then removeComponent for each and then destroy them
-				component.onRemovedFromEntity(new ECGame.EngineLib.Events.RemovedFromEntity(this));
-				component.destroy();
+				aComponent = this._myComponents[i];
+				aComponent.onRemovedFromEntity(new ECGame.EngineLib.Events.RemovedFromEntity(this));
+				aComponent.destroy();
 			}
-			this._myComponentMap = null;
+			this._myComponents = null;
 		},
 		
-		//TODO setGameEntityNetDirty / setEntityNetDirty
-		//TODO note that this whole class doesn't serialize correctly, and cannot currently serialize dynamic changes on the net
 		clearNetDirty : function clearNetDirty()
 		{
+			this._myAddedComponents = [];
+			this._myRemovedComponents = [];
+			
+			this._myComponentsRefs = [];
+			this._myAddedComponentsRefs = [];
+			this._myRemovedComponentsRefs = [];
 		},
 		
-		/* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		TODO serialize and postserialize are exactly the same in World2D and GameEntity, abstract!
-			TODO should be done as map I think (like the array)??
-		*/
+		_mySerializeFormat : 
+		[
+			{
+				name : '_myComponentsRefs',
+				type : 'objRef',
+				net : false,
+				maxArrayLength : 32	//TODO
+			},
+			{
+				name : '_myAddedComponentsRefs',
+				type : 'objRef',
+				net : true,
+				netOnly : true,
+				maxArrayLength : 32	//TODO
+			},
+			{
+				name : '_myRemovedComponentsRefs',
+				type : 'objRef',
+				net : true,
+				netOnly : true,
+				maxArrayLength : 32	//TODO
+			}
+		],
+		
 		serialize : function serialize(inSerializer)
 		{
-			var component, ref;
+			var aComponent
+				,i
+				;
 			
-			//HACKS
-			this.componentArray = [];
-			this.componentArrayBefore = [];
-				
-			var format =	//TODO format should be static!
-			[
-				{
-					name : 'componentArray',
-					type : 'objRef',
-					net : true,
-					maxArrayLength : 32
-				}
-			];
-			
-			for(component in this._myComponentMap)
+			if(inSerializer.isNetMode())
 			{
-				ref = this._myComponentMap[component].getRef();
-				this.componentArray.push(ref);
-				this.componentArrayBefore.push(ref);
+				this._myAddedComponentsRefs = [];
+				this._myRemovedComponentsRefs = [];
+				for(i = 0; i < this._myAddedComponents.length; ++i)
+				{
+					aComponent = this._myAddedComponents[i];
+					//if(!aComponent.isServerOnly())
+					//{
+						this._myAddedComponentsRefs.push(aComponent.getRef());
+					//}
+				}
+				for(i = 0; i < this._myRemovedComponents.length; ++i)
+				{
+					aComponent = this._myRemovedComponents[i];
+					//if(!aComponent.isServerOnly())
+					//{
+						this._myRemovedComponentsRefs.push(aComponent.getRef());
+					//}
+				}
+			}
+			else
+			{
+				this._myComponentsRefs = [];
+				for(i = 0; i < this._myComponents.length; ++i)
+				{
+					aComponent = this._myComponents[i];
+					//if(!aComponent.isServerOnly())
+					//{
+						this._myComponentsRefs.push(aComponent.getRef());
+					//}
+				}
 			}
 			
-			inSerializer.serializeObject(this, format);
+			inSerializer.serializeObject(this, ECGame.EngineLib.GameEntity._mySerializeFormat);
 		},
 		
 		postSerialize : function postSerialize()
 		{
-			var i,
-				componentRef,
-				newComponentMap,
-				componentPath,
-				componentObject;
+			var aComponent
+				,i
+				;
 				
-			newComponentMap = {};
-			
-			//if now && !before => add
-			for(i = 0; i < this.componentArray.length; ++i)
+			for(i = 0; i < this._myComponentsRefs.length; ++i)
 			{
-				componentRef = this.componentArray[i];
-				
-				componentObject = componentRef.deref();
-				componentPath = componentRef.getPath();
-				
-				newComponentMap[componentPath] = componentObject;
-				
-				if(!this._myComponentMap[componentPath])
-				{
-					this.addComponent(componentObject);
-				}
+				aComponent = this._myComponentsRefs[i].deref();
+				ECGame.log.assert(aComponent, "Missing component during serialization!");
+				this.addComponent(aComponent);
 			}
-			
-			//if before && !now => remove
-			for(i = 0; i < this.componentArrayBefore.length; ++i)
+			for(i = 0; i < this._myAddedComponentsRefs.length; ++i)
 			{
-				componentRef = this.componentArrayBefore[i];
+				aComponent = this._myAddedComponentsRefs[i].deref();
+				ECGame.log.assert(aComponent, "Missing component during serialization!");
+				this.addComponent(aComponent);
 				
-				componentObject = componentRef.deref();
-				componentPath = componentRef.getPath();
-				
-				if(!newComponentMap[componentPath])
+			}
+			for(i = 0; i < this._myRemovedComponentsRefs.length; ++i)
+			{
+				aComponent = this._myRemovedComponentsRefs[i].deref();
+				//ECGame.log.assert(aComponent, "Missing component during serialization!");
+				if(aComponent)
 				{
-					this.removeComponent(componentObject);
+					this.removeComponent(aComponent);
 				}
 			}
 		},
 		
 		copyFrom : function copyFrom(inOther)
 		{
-			var componentName,
-				component;
+			var aComponent
+				,i
+				;
 			
 			//TODO properly remove all existing components
 			
-			for(componentName in inOther._myComponentMap)
+			for(i = 0; i < inOther._myComponents.length; ++i)
 			{
-				component = inOther._myComponentMap[componentName];
-				this.addComponent(component.clone());
+				aComponent = inOther._myComponents[i];
+				this.addComponent(aComponent.clone());
 			}
 		}
 	}

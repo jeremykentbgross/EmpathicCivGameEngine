@@ -61,6 +61,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
+		registerClasses : function registerClasses(){return;},
 		init : function init()
 		{
 			//TODO register ECGame.Lib GameObject classes
@@ -179,14 +180,14 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					{
 						if(i === 0 || j === 0 || i === this._myMapSizeInTiles - 1 || j === this._myMapSizeInTiles - 1)
 						{
-							aMap.setTile(
+							aMap.setTileIndex(
 								new ECGame.EngineLib.Point2D(i, j), 
 								4//(i+j)%5
 							);
 						}
 						else
 						{
-							aMap.setTile(
+							aMap.setTileIndex(
 								new ECGame.EngineLib.Point2D(i, j),
 								2//(i+j)%5
 							);
@@ -205,7 +206,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					2000,
 					function()
 					{
-						aMap.setTile(
+						aMap.setTileIndex(
 							new ECGame.EngineLib.Point2D(6, ++aIndex), 
 							Math.floor(Math.random()*6)//4
 						);
@@ -460,7 +461,9 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 		
 		render : function render(inGraphics)
 		{
-			var aWorld;
+			var aWorld
+				,aRayTracer
+				;
 			
 			if(ECGame.instance.isRunning())
 			{
@@ -475,13 +478,13 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					
 					if(this._myIsRayTestMode)
 					{
-						var rayTrace = new ECGame.EngineLib.RayTracer2D.create();
-						rayTrace.fireRay(
+						aRayTracer = new ECGame.EngineLib.RayTracer2D.create();
+						aRayTracer.fireRay(
 							aWorld.getPhysics()._myDetectionTree
 							,this._myRayStart.clone()
 							,this._myRayEnd.clone()
 						);
-						rayTrace.debugDraw(inGraphics);
+						aRayTracer.debugDraw(inGraphics);
 					}
 				}
 				if(inGraphics.getIndex() === 1)
@@ -733,7 +736,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				//MAP EDITING (mouse)////////////////////////////////////
 				if(inInputEvent.buttons[0])
 				{
-					aMap.setTile(aMap.toTileCoordinate(aMouseWorldPosition), this._myDrawTile);
+					aMap.setTileIndex(aMap.toTileCoordinate(aMouseWorldPosition), this._myDrawTile);
 				}
 				if(inInputEvent.buttons[2])
 				{

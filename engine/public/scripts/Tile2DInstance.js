@@ -34,11 +34,11 @@ ECGame.EngineLib.Tile2DInstance = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
-		init : function init(inTileRect, inTileValue, inTileRenderable, inPhysicsObject)
+		init : function init(inTileRect, inTileIndex, inTileRenderable, inPhysicsObject)
 		{
 			this._myAABB = inTileRect;
 			
-			this._myTileValue = inTileValue;
+			this._myTileValue = inTileIndex;
 			this._mySceneGraphRenderable = inTileRenderable;
 			this._myPhysicsObject = inPhysicsObject;
 		}

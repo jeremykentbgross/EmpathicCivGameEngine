@@ -33,6 +33,11 @@ ECGame.EngineLib.GameRulesBase = ECGame.EngineLib.Class.create({
 			return true;
 		},
 		
+		registerClasses : function registerClasses()//Note: this is called before init
+		{
+			ECGame.log.warn("Expected function overload!");
+		},
+		
 		render : function render(inGraphics)	//TODO make this some kind of full screen msg function?
 		{
 			var anX

@@ -236,19 +236,7 @@ var docJS = ECGame.WebServerTools.DocJS.create();
 	@../_unified_/engine/private/scripts/unit_tests/TestDocJS.js::123:7
 
 Checking ../_unified_/engine/private/scripts/unit_tests/TestObfuscator.js
-4 errors found
-obfuscatorSrc = fs.readFileSync('../engine/private/scripts/CodeObfuscator.js', /*encoding=*/'utf8');
-	Unexpected sync method: 'readFileSync'.
-	@../_unified_/engine/private/scripts/unit_tests/TestObfuscator.js::47:22
-if(obfuscatorObfuscatedSrc !== obfuscatorObfuscatedSrc2)
-	'obfuscatorObfuscatedSrc2' was used before it was defined.
-	@../_unified_/engine/private/scripts/unit_tests/TestObfuscator.js::94:34
-"\n\nSECONDARY GENERATED CODE:\n\n" + obfuscatorObfuscatedSrc2
-	'obfuscatorObfuscatedSrc2' was used before it was defined.
-	@../_unified_/engine/private/scripts/unit_tests/TestObfuscator.js::98:43
-obfuscatorObfuscatedSrc === obfuscatorObfuscatedSrc2,
-	'obfuscatorObfuscatedSrc2' was used before it was defined.
-	@../_unified_/engine/private/scripts/unit_tests/TestObfuscator.js::102:32
+No errors found
 
 Checking ../_unified_/engine/private/scripts/WebServer.js
 2 errors found
@@ -284,10 +272,7 @@ Checking ../_unified_/engine/public/scripts/AssetManager.js
 No errors found
 
 Checking ../_unified_/engine/public/scripts/BinarySerializer.js
-1 errors found
-else if(!this._myIsNetMode && anEntry.netOnly)
-	Unnecessary 'else' after disruption.
-	@../_unified_/engine/public/scripts/BinarySerializer.js::172:5
+No errors found
 
 Checking ../_unified_/engine/public/scripts/BitPacker.js
 No errors found
@@ -355,6 +340,9 @@ ECGame.WebServerTools = new function ECGameWebServerTools(){return;}();
 	Weird construction. Delete 'new'.
 	@../_unified_/engine/public/scripts/EngineLoader.js::62:27
 
+Checking ../_unified_/engine/public/scripts/EntityComponent_Physics2D.js
+No errors found
+
 Checking ../_unified_/engine/public/scripts/Game2DSceneGraph.js
 4 errors found
 var aThis = this;
@@ -386,19 +374,10 @@ ECGame.log = new function ECGameLog(){return;}();//TODO make a real object or so
 	@../_unified_/engine/public/scripts/GameEngineLogger.js::22:14
 
 Checking ../_unified_/engine/public/scripts/GameEntity.js
-2 errors found
-{
-	Empty block.
-	@../_unified_/engine/public/scripts/GameEntity.js::168:3
-var format =	//TODO format should be static!
-	Combine this with the previous 'var' statement.
-	@../_unified_/engine/public/scripts/GameEntity.js::183:8
+No errors found
 
 Checking ../_unified_/engine/public/scripts/GameEntityComponent.js
-1 errors found
-onRemovedFromEntity : function onRemovedFromEntity(inEvent)
-	Unused 'inEvent'.
-	@../_unified_/engine/public/scripts/GameEntityComponent.js::43:54
+No errors found
 
 Checking ../_unified_/engine/public/scripts/GameEntityComponent_2DCamera.js
 3 errors found
@@ -411,9 +390,6 @@ onRemovedFromEntity : function onRemovedFromEntity(inEvent)
 onRemovedFromWorld : function onRemovedFromWorld(inEvent)
 	Unused 'inEvent'.
 	@../_unified_/engine/public/scripts/GameEntityComponent_2DCamera.js::73:52
-
-Checking ../_unified_/engine/public/scripts/GameEntityComponent_2DPhysics.js
-No errors found
 
 Checking ../_unified_/engine/public/scripts/GameEntityComponent_Input.js
 6 errors found
@@ -515,10 +491,7 @@ if(!this._setupSplit4WayGraphics())
 	@../_unified_/engine/public/scripts/GameInstance.js::468:7
 
 Checking ../_unified_/engine/public/scripts/GameObject.js
-1 errors found
-postSerialize : function postSerialize(){},
-	Empty block.
-	@../_unified_/engine/public/scripts/GameObject.js::191:43
+No errors found
 
 Checking ../_unified_/engine/public/scripts/GameObjectRef.js
 No errors found
@@ -530,9 +503,9 @@ Checking ../_unified_/engine/public/scripts/GameRulesBase.js
 3 errors found
 if(this.__proto__.constructor === ECGame.EngineLib.GameRulesBase)
 	Reserved name '__proto__'.
-	@../_unified_/engine/public/scripts/GameRulesBase.js::44:12
-Stopping. (60% scanned).
-	@../_unified_/engine/public/scripts/GameRulesBase.js::44:12
+	@../_unified_/engine/public/scripts/GameRulesBase.js::49:12
+Stopping. (62% scanned).
+	@../_unified_/engine/public/scripts/GameRulesBase.js::49:12
 
 Checking ../_unified_/engine/public/scripts/GameSettings.js
 1 errors found
@@ -544,6 +517,9 @@ Checking ../_unified_/engine/public/scripts/Graphics2D.js
 No errors found
 
 Checking ../_unified_/engine/public/scripts/Input.js
+No errors found
+
+Checking ../_unified_/engine/public/scripts/JsNativeExtensions.js
 No errors found
 
 Checking ../_unified_/engine/public/scripts/NetGroup.js
@@ -631,10 +607,7 @@ Checking ../_unified_/engine/public/scripts/Tile2DRenderable.js
 No errors found
 
 Checking ../_unified_/engine/public/scripts/TileMap2D.js
-1 errors found
-{
-	Empty block.
-	@../_unified_/engine/public/scripts/TileMap2D.js::159:4
+No errors found
 
 Checking ../_unified_/engine/public/scripts/TileSet2D.js
 No errors found
@@ -739,10 +712,7 @@ ECGame.Lib.LoadGame = function LoadGame(include, inPublicGamePath, inPrivateGame
 	@../_unified_/game/public/scripts/GameLoader.js::22:68
 
 Checking ../_unified_/game/public/scripts/GameRules.js
-1 errors found
-var rayTrace = new ECGame.EngineLib.RayTracer2D.create();
-	Combine this with the previous 'var' statement.
-	@../_unified_/game/public/scripts/GameRules.js::478:11
+No errors found
 
 ***Finished JSLint***
 ************************

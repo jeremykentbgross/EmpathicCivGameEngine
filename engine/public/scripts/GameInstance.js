@@ -351,6 +351,15 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			this._myMasterUpdater.addUpdate(this.createUpdater("SpritesUpdater", ECGame.Settings.UpdateOrder.SPRITES));
 			this._myMasterUpdater.addUpdate(this.createUpdater("PhysicsUpdater", ECGame.Settings.UpdateOrder.PHYSICS));
 
+			//Create gamerules
+			if(ECGame.Lib.GameRules !== undefined)
+			{
+				this._myGameRules = ECGame.Lib.GameRules.create();
+			}
+			else
+			{
+				this._myGameRules = ECGame.EngineLib.GameRulesBase.create();
+			}
 			
 			//Init Native GameObject Classes
 			ECGame.EngineLib.Class.createInstanceRegistry();
@@ -365,19 +374,10 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			ECGame.EngineLib.World2D.registerClass();
 			ECGame.EngineLib.TileMap2D.registerClass();
 			ECGame.EngineLib.TileSet2D.registerClass();
-			//TODO thinnking EventSystem maybe should not be a gameobject ??? WTF is this??
+			this._myGameRules.registerClasses();
 			
 			//TODO also needs to manage prefabs?
 			
-			//Create gamerules
-			if(ECGame.Lib.GameRules !== undefined)
-			{
-				this._myGameRules = ECGame.Lib.GameRules.create();
-			}
-			else
-			{
-				this._myGameRules = ECGame.EngineLib.GameRulesBase.create();
-			}
 			
 			if(ECGame.Settings.Network.isServer)
 			{

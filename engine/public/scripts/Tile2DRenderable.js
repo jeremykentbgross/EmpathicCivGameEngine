@@ -32,12 +32,12 @@ ECGame.EngineLib.Tile2DRenderable = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
-		init : function init(inAABB2D, inLayer, inAnchorPosition, inTileValue, inOwnerMap)
+		init : function init(inAABB2D, inLayer, inAnchorPosition, inTileIndex, inOwnerMap)
 		{
 			this._myAABB = inAABB2D;
 			this._myLayer = inLayer;
 			this._myAnchorPosition = inAnchorPosition;
-			this._myTileValue = inTileValue;
+			this._myTileValue = inTileIndex;
 			this._myOwnerMap = inOwnerMap;
 		},
 		

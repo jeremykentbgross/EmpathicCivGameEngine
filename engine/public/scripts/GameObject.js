@@ -69,10 +69,15 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 				net : true,
 				min : 0,
 				max : ECGame.EngineLib.User.USER_IDS.MAX_EVER,
-				condition : '_myGameObjectNetDirty'
+				condition : 'isGameObjectNetDirty'
 			}
 			//TODO name/id (NOT net?)
 		],
+		
+		isGameObjectNetDirty : function isGameObjectNetDirty()
+		{
+			return this._myGameObjectNetDirty;
+		},
 				
 		getName : function getName()
 		{
@@ -188,7 +193,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			this._myNetDirty = false;
 			this._myGameObjectNetDirty = false;
 		},
-		postSerialize : function postSerialize(){},
+		postSerialize : function postSerialize(){return;},
 		
 		setNetOwner : function setNetOwner(inOwner)
 		{

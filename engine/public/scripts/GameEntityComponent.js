@@ -25,6 +25,7 @@ ECGame.EngineLib.GameEntityComponent = ECGame.EngineLib.Class.create({
 		this.GameObject();
 		
 		this._myOwner = null;//TODO rename owningEntity
+		//this._myServerOnly = false;//TODO at GameObject level!!
 	},
 	Parents : [ECGame.EngineLib.GameObject],
 	flags : {},
@@ -32,6 +33,11 @@ ECGame.EngineLib.GameEntityComponent = ECGame.EngineLib.Class.create({
 	ChainDown : ['onAddedToEntity'],
 	Definition :
 	{
+		/*isServerOnly : function isServerOnly()//TODO at GameObject level!!
+		{
+			return this._myServerOnly;
+		},*/
+		
 		onAddedToEntity : function onAddedToEntity(inEvent)
 		{
 			if(this._myOwner)
@@ -40,10 +46,12 @@ ECGame.EngineLib.GameEntityComponent = ECGame.EngineLib.Class.create({
 			}
 			this._myOwner = inEvent.entity;
 		},
-		onRemovedFromEntity : function onRemovedFromEntity(inEvent)
+		onRemovedFromEntity : function onRemovedFromEntity(/*inEvent*/)
 		{
 			this._myOwner = null;
 		},
+		
+		//TODO add/remove world functions (chain down)
 		
 		//set<classname>NetDirty
 		clearNetDirty : function clearNetDirty(){return;},
@@ -52,6 +60,10 @@ ECGame.EngineLib.GameEntityComponent = ECGame.EngineLib.Class.create({
 		cleanup : function cleanup(){return;},
 		serialize : function serialize(){return;},
 		
-		copyFrom : function copyFrom(){return;}
+		copyFrom : function copyFrom(/*inOther*/)
+		{
+			//this._myServerOnly = inOther._myServerOnly;
+			return;
+		}
 	}
 });
