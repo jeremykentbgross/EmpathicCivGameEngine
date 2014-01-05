@@ -86,7 +86,8 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	
 	
 	//Load the settings flags first:
-	include(inPublicEnginePath + "scripts/GameSettings.js");
+	include(inPublicEnginePath + "scripts/EngineSettings.js");
+	include(inPublicGamePath + "scripts/GameSettings.js");
 	//TODO include GameSettings from game folder? (or will be done by user?)
 	
 	//Set the server flag in the global system
