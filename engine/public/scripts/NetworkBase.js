@@ -443,9 +443,9 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 						//add network created objects to the master netgroup //TODO maybe it should go in the users netgroup also/instead..
 						this.getNetGroup('master_netgroup').addObject(anObject);
 					}
-					else if(ECGame.Settings.isDebugPrint_NetworkMessages())	//TODO this branch should not be possible in the future!
+					else// if(ECGame.Settings.isDebugPrint_NetworkMessages())	//TODO this branch should not be possible in the future!
 					{
-						ECGame.log.info("Network Changing (instead of creating): " + anObjectClass.getName() + ':' + anObjectHeader.instanceID);
+						ECGame.log.warn("Network Changing (instead of creating): " + anObjectClass.getName() + ':' + anObjectHeader.instanceID);
 					}
 					
 					anObject.serialize(this._mySerializer);

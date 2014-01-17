@@ -18,7 +18,6 @@ Base NameSpace:	webServer
 Final NameSpaces:
 Final NameSpace:	AABB2D
 Final NameSpace:	AddedToEntity
-Final NameSpace:	AddedToWorld
 Final NameSpace:	Animation2D
 Final NameSpace:	Animation2DFrame
 Final NameSpace:	Animation2DInstance
@@ -43,11 +42,13 @@ Final NameSpace:	ECGameLib
 Final NameSpace:	ECGameLog
 Final NameSpace:	ECGameWebServerTools
 Final NameSpace:	EngineLib
+Final NameSpace:	EntityAddedToWorld
 Final NameSpace:	EntityComponent_2DCamera
 Final NameSpace:	EntityComponent_Input
 Final NameSpace:	EntityComponent_Physics2D
 Final NameSpace:	EntityComponent_SoundPlayer
 Final NameSpace:	EntityComponent_Sprite
+Final NameSpace:	EntityRemovedFromWorld
 Final NameSpace:	EvenProbabilityIntegerRangeModel
 Final NameSpace:	Events
 Final NameSpace:	Func1
@@ -88,7 +89,6 @@ Final NameSpace:	QuadTreeItem
 Final NameSpace:	Ray2D
 Final NameSpace:	RayTracer2D
 Final NameSpace:	RemovedFromEntity
-Final NameSpace:	RemovedFromWorld
 Final NameSpace:	Renderable2D
 Final NameSpace:	RequestVelocity
 Final NameSpace:	SetPosition
@@ -374,11 +374,12 @@ Final NameSpace:	multiply
 Final NameSpace:	normalize
 Final NameSpace:	numItems
 Final NameSpace:	onAddedToEntity
-Final NameSpace:	onAddedToWorld
 Final NameSpace:	onChatSubmit
 Final NameSpace:	onClientDisconnected
 Final NameSpace:	onConnectedToServer
 Final NameSpace:	onDisconnectedFromServer
+Final NameSpace:	onEntityAddedToWorld
+Final NameSpace:	onEntityRemovedFromWorld
 Final NameSpace:	onError
 Final NameSpace:	onEvent
 Final NameSpace:	onGameObjectDestroyed
@@ -389,7 +390,6 @@ Final NameSpace:	onMsg
 Final NameSpace:	onPhysicsObjectUpdated
 Final NameSpace:	onPlaySound
 Final NameSpace:	onRemovedFromEntity
-Final NameSpace:	onRemovedFromWorld
 Final NameSpace:	onRequestVelocity
 Final NameSpace:	onSentMessage
 Final NameSpace:	onSetPosition
@@ -506,7 +506,6 @@ Final NameSpace:	webServer
 Function Names:
 Function Name:	AABB2D
 Function Name:	AddedToEntity
-Function Name:	AddedToWorld
 Function Name:	Animation2D
 Function Name:	Animation2DFrame
 Function Name:	Animation2DInstance
@@ -530,11 +529,13 @@ Function Name:	ECGameEngineLib
 Function Name:	ECGameLib
 Function Name:	ECGameLog
 Function Name:	ECGameWebServerTools
+Function Name:	EntityAddedToWorld
 Function Name:	EntityComponent_2DCamera
 Function Name:	EntityComponent_Input
 Function Name:	EntityComponent_Physics2D
 Function Name:	EntityComponent_SoundPlayer
 Function Name:	EntityComponent_Sprite
+Function Name:	EntityRemovedFromWorld
 Function Name:	EvenProbabilityIntegerRangeModel
 Function Name:	Events
 Function Name:	Func1
@@ -573,7 +574,6 @@ Function Name:	QuadTreeItem
 Function Name:	Ray2D
 Function Name:	RayTracer2D
 Function Name:	RemovedFromEntity
-Function Name:	RemovedFromWorld
 Function Name:	Renderable2D
 Function Name:	RequestVelocity
 Function Name:	SetPosition
@@ -856,11 +856,12 @@ Function Name:	multiply
 Function Name:	normalize
 Function Name:	numItems
 Function Name:	onAddedToEntity
-Function Name:	onAddedToWorld
 Function Name:	onChatSubmit
 Function Name:	onClientDisconnected
 Function Name:	onConnectedToServer
 Function Name:	onDisconnectedFromServer
+Function Name:	onEntityAddedToWorld
+Function Name:	onEntityRemovedFromWorld
 Function Name:	onError
 Function Name:	onEvent
 Function Name:	onGameObjectDestroyed
@@ -871,7 +872,6 @@ Function Name:	onMsg
 Function Name:	onPhysicsObjectUpdated
 Function Name:	onPlaySound
 Function Name:	onRemovedFromEntity
-Function Name:	onRemovedFromWorld
 Function Name:	onRequestVelocity
 Function Name:	onSentMessage
 Function Name:	onSetPosition
@@ -1098,6 +1098,7 @@ Parameter Variable:	inOwner
 Parameter Variable:	inOwnerMap
 Parameter Variable:	inParams
 Parameter Variable:	inParent
+Parameter Variable:	inParentUpdaterName
 Parameter Variable:	inParents
 Parameter Variable:	inPath
 Parameter Variable:	inPathOrValue
@@ -1200,6 +1201,7 @@ Local Variable:	LoadEngine			*****
 Local Variable:	TestComponent			*****
 Local Variable:	aAudioSystem
 Local Variable:	aBackBufferRect
+Local Variable:	aBestAnimProb
 Local Variable:	aBinaryBuffer
 Local Variable:	aBinaryEncoder
 Local Variable:	aBits
@@ -1235,6 +1237,8 @@ Local Variable:	aDeltaX
 Local Variable:	aDeltaY
 Local Variable:	aDestination
 Local Variable:	aDestroyInstanceList
+Local Variable:	aDirection
+Local Variable:	aDirections
 Local Variable:	aDirtyInstanceList
 Local Variable:	aEndPointDrawSize
 Local Variable:	aExtraBits
@@ -1369,6 +1373,7 @@ Local Variable:	aWriteObject
 Local Variable:	aY
 Local Variable:	acceleration			*****
 Local Variable:	anAABB
+Local Variable:	anAnimProbibility
 Local Variable:	anAnimation
 Local Variable:	anArray
 Local Variable:	anArrayLength
@@ -1388,14 +1393,11 @@ Local Variable:	anObjectClass
 Local Variable:	anObjectFormat
 Local Variable:	anObjectHeader
 Local Variable:	anObjectHeaderFormat
-Local Variable:	anOldDirection
 Local Variable:	anOwner
 Local Variable:	anUpdateArray
 Local Variable:	anUpdateStartFrame
 Local Variable:	anX
 Local Variable:	angle			*****
-Local Variable:	animProb			*****
-Local Variable:	bestAnimProb			*****
 Local Variable:	callbackName			*****
 Local Variable:	camPoint			*****
 Local Variable:	chainTestObject			*****
@@ -1409,7 +1411,6 @@ Local Variable:	currentRenderable			*****
 Local Variable:	defaultImageName			*****
 Local Variable:	defaultSoundName			*****
 Local Variable:	direction			*****
-Local Variable:	directions			*****
 Local Variable:	encodeRange			*****
 Local Variable:	entity			*****
 Local Variable:	eventName			*****
@@ -1695,13 +1696,11 @@ Member Variable:	_containingWorld			*****
 Member Variable:	_cos			*****
 Member Variable:	_currentAnimation			*****
 Member Variable:	_data			*****
-Member Variable:	_direction			*****
 Member Variable:	_domChatContainer			*****
 Member Variable:	_domChatForm			*****
 Member Variable:	_domChatInput			*****
 Member Variable:	_domChatLog			*****
 Member Variable:	_domNetworkStatus			*****
-Member Variable:	_down			*****
 Member Variable:	_encoded			*****
 Member Variable:	_flags			*****
 Member Variable:	_high			*****
@@ -1719,7 +1718,6 @@ Member Variable:	_keys			*****
 Member Variable:	_keysPressed			*****
 Member Variable:	_lastUpdateMin			*****
 Member Variable:	_lastUpdateSec			*****
-Member Variable:	_left			*****
 Member Variable:	_low			*****
 Member Variable:	_maxID			*****
 Member Variable:	_maxLayers			*****
@@ -1766,6 +1764,8 @@ Member Variable:	_myDescription
 Member Variable:	_myDestination
 Member Variable:	_myDestroyInstances
 Member Variable:	_myDetectionTree
+Member Variable:	_myDirection
+Member Variable:	_myDown
 Member Variable:	_myDrawOffsetX
 Member Variable:	_myDrawOffsetY
 Member Variable:	_myDrawOrderHelper
@@ -1807,6 +1807,7 @@ Member Variable:	_myLastMouseWorldPosition
 Member Variable:	_myLastSoundHardwareUpdateTime
 Member Variable:	_myLastSoundPlayed
 Member Variable:	_myLayer
+Member Variable:	_myLeft
 Member Variable:	_myListenerPosition2D
 Member Variable:	_myLocalUser
 Member Variable:	_myMap
@@ -1867,6 +1868,7 @@ Member Variable:	_myRemovedEntities
 Member Variable:	_myRemovedEntityRefs
 Member Variable:	_myRenderSpaceHeight
 Member Variable:	_myRenderSpaceWidth
+Member Variable:	_myRight
 Member Variable:	_mySamples
 Member Variable:	_mySceneGraph
 Member Variable:	_mySceneGraphOwningNodes
@@ -1886,6 +1888,7 @@ Member Variable:	_mySoundSampleLib
 Member Variable:	_mySoundSystem
 Member Variable:	_mySource
 Member Variable:	_mySourceRect
+Member Variable:	_mySpeed
 Member Variable:	_myStatus
 Member Variable:	_myT
 Member Variable:	_myTests
@@ -1904,6 +1907,7 @@ Member Variable:	_myTimer
 Member Variable:	_myTimerCallbacks
 Member Variable:	_myTrackedInstances
 Member Variable:	_myTree
+Member Variable:	_myUp
 Member Variable:	_myUpdateList
 Member Variable:	_myUpdaterMap
 Member Variable:	_myUser
@@ -1927,17 +1931,14 @@ Member Variable:	_path			*****
 Member Variable:	_position			*****
 Member Variable:	_power			*****
 Member Variable:	_removedWorld			*****
-Member Variable:	_right			*****
 Member Variable:	_rotMatrixRow1			*****
 Member Variable:	_rotMatrixRow2			*****
 Member Variable:	_serializeFormat			*****
 Member Variable:	_sounds			*****
 Member Variable:	_specialChars			*****
-Member Variable:	_speed			*****
 Member Variable:	_supressKeyboardEvents			*****
 Member Variable:	_underflow_bits			*****
 Member Variable:	_unusedInstanceIDs			*****
-Member Variable:	_up			*****
 Member Variable:	_value			*****
 Member Variable:	aBool1			*****
 Member Variable:	aBool2			*****
@@ -2011,6 +2012,7 @@ Member Variable:	mouseLoc			*****
 Member Variable:	msg			*****
 Member Variable:	myAABB
 Member Variable:	myECGameSocket
+Member Variable:	myEntity
 Member Variable:	myHeight
 Member Variable:	myInputID
 Member Variable:	myIsFollowingSource
@@ -2092,7 +2094,6 @@ Member Variable:	writable			*****
 Included Words:
 Included Word:	AABB2D
 Included Word:	AddedToEntity
-Included Word:	AddedToWorld
 Included Word:	Animation2D
 Included Word:	Animation2DFrame
 Included Word:	Animation2DInstance
@@ -2134,11 +2135,13 @@ Included Word:	ECGameLib
 Included Word:	ECGameLog
 Included Word:	ECGameWebServerTools
 Included Word:	EngineLib
+Included Word:	EntityAddedToWorld
 Included Word:	EntityComponent_2DCamera
 Included Word:	EntityComponent_Input
 Included Word:	EntityComponent_Physics2D
 Included Word:	EntityComponent_SoundPlayer
 Included Word:	EntityComponent_Sprite
+Included Word:	EntityRemovedFromWorld
 Included Word:	EvenProbabilityIntegerRangeModel
 Included Word:	Events
 Included Word:	FrameStats_Draw
@@ -2291,7 +2294,6 @@ Included Word:	Ray_EndPoint_Size
 Included Word:	Ray_ItemCollision_Size
 Included Word:	Ray_NodeCollision_Size
 Included Word:	RemovedFromEntity
-Included Word:	RemovedFromWorld
 Included Word:	Renderable2D
 Included Word:	RequestVelocity
 Included Word:	SERVER
@@ -2392,13 +2394,11 @@ Included Word:	_createChildren
 Included Word:	_currentAnimation
 Included Word:	_data
 Included Word:	_debugDraw
-Included Word:	_direction
 Included Word:	_domChatContainer
 Included Word:	_domChatForm
 Included Word:	_domChatInput
 Included Word:	_domChatLog
 Included Word:	_domNetworkStatus
-Included Word:	_down
 Included Word:	_drawDebugText
 Included Word:	_encoded
 Included Word:	_flags
@@ -2429,7 +2429,6 @@ Included Word:	_keys
 Included Word:	_keysPressed
 Included Word:	_lastUpdateMin
 Included Word:	_lastUpdateSec
-Included Word:	_left
 Included Word:	_low
 Included Word:	_maxID
 Included Word:	_maxLayers
@@ -2476,6 +2475,8 @@ Included Word:	_myDescription
 Included Word:	_myDestination
 Included Word:	_myDestroyInstances
 Included Word:	_myDetectionTree
+Included Word:	_myDirection
+Included Word:	_myDown
 Included Word:	_myDrawOffsetX
 Included Word:	_myDrawOffsetY
 Included Word:	_myDrawOrderHelper
@@ -2517,6 +2518,7 @@ Included Word:	_myLastMouseWorldPosition
 Included Word:	_myLastSoundHardwareUpdateTime
 Included Word:	_myLastSoundPlayed
 Included Word:	_myLayer
+Included Word:	_myLeft
 Included Word:	_myListenerPosition2D
 Included Word:	_myLocalUser
 Included Word:	_myMap
@@ -2577,6 +2579,7 @@ Included Word:	_myRemovedEntities
 Included Word:	_myRemovedEntityRefs
 Included Word:	_myRenderSpaceHeight
 Included Word:	_myRenderSpaceWidth
+Included Word:	_myRight
 Included Word:	_mySamples
 Included Word:	_mySceneGraph
 Included Word:	_mySceneGraphOwningNodes
@@ -2596,6 +2599,7 @@ Included Word:	_mySoundSampleLib
 Included Word:	_mySoundSystem
 Included Word:	_mySource
 Included Word:	_mySourceRect
+Included Word:	_mySpeed
 Included Word:	_myStatus
 Included Word:	_myT
 Included Word:	_myTests
@@ -2614,6 +2618,7 @@ Included Word:	_myTimer
 Included Word:	_myTimerCallbacks
 Included Word:	_myTrackedInstances
 Included Word:	_myTree
+Included Word:	_myUp
 Included Word:	_myUpdateList
 Included Word:	_myUpdaterMap
 Included Word:	_myUser
@@ -2647,7 +2652,6 @@ Included Word:	_prepareSet
 Included Word:	_removePhysicsObjectFromTree
 Included Word:	_removedWorld
 Included Word:	_resizeSpace
-Included Word:	_right
 Included Word:	_rotMatrixRow1
 Included Word:	_rotMatrixRow2
 Included Word:	_sendChatToChatLog
@@ -2658,14 +2662,13 @@ Included Word:	_setupSplit4WayGraphics
 Included Word:	_setupSplitHorizontalGraphics
 Included Word:	_sounds
 Included Word:	_specialChars
-Included Word:	_speed
 Included Word:	_supressKeyboardEvents
 Included Word:	_underflow_bits
 Included Word:	_unusedInstanceIDs
-Included Word:	_up
 Included Word:	_value
 Included Word:	aAudioSystem
 Included Word:	aBackBufferRect
+Included Word:	aBestAnimProb
 Included Word:	aBinaryBuffer
 Included Word:	aBinaryEncoder
 Included Word:	aBits
@@ -2703,6 +2706,8 @@ Included Word:	aDeltaX
 Included Word:	aDeltaY
 Included Word:	aDestination
 Included Word:	aDestroyInstanceList
+Included Word:	aDirection
+Included Word:	aDirections
 Included Word:	aDirtyInstanceList
 Included Word:	aEndPointDrawSize
 Included Word:	aExtraBits
@@ -2847,6 +2852,7 @@ Included Word:	addUser
 Included Word:	added
 Included Word:	addedToWorld
 Included Word:	anAABB
+Included Word:	anAnimProbibility
 Included Word:	anAnimation
 Included Word:	anArray
 Included Word:	anArrayLength
@@ -2866,17 +2872,14 @@ Included Word:	anObjectClass
 Included Word:	anObjectFormat
 Included Word:	anObjectHeader
 Included Word:	anObjectHeaderFormat
-Included Word:	anOldDirection
 Included Word:	anOwner
 Included Word:	anUpdateArray
 Included Word:	anUpdateStartFrame
 Included Word:	anX
 Included Word:	angle
-Included Word:	animProb
 Included Word:	ass
 Included Word:	backBufferHeight
 Included Word:	backBufferWidth
-Included Word:	bestAnimProb
 Included Word:	bitwise
 Included Word:	blockContextMenu
 Included Word:	boundingRect
@@ -2945,7 +2948,6 @@ Included Word:	deregisterListener
 Included Word:	destroy
 Included Word:	devel
 Included Word:	direction
-Included Word:	directions
 Included Word:	divide
 Included Word:	dot
 Included Word:	down1
@@ -3189,6 +3191,7 @@ Included Word:	inOwner
 Included Word:	inOwnerMap
 Included Word:	inParams
 Included Word:	inParent
+Included Word:	inParentUpdaterName
 Included Word:	inParents
 Included Word:	inPath
 Included Word:	inPathOrValue
@@ -3355,6 +3358,7 @@ Included Word:	mouseRatio
 Included Word:	multiply
 Included Word:	myAABB
 Included Word:	myECGameSocket
+Included Word:	myEntity
 Included Word:	myHeight
 Included Word:	myInputID
 Included Word:	myIsFollowingSource
@@ -3395,11 +3399,12 @@ Included Word:	obj2
 Included Word:	objCenter
 Included Word:	objectClass
 Included Word:	onAddedToEntity
-Included Word:	onAddedToWorld
 Included Word:	onChatSubmit
 Included Word:	onClientDisconnected
 Included Word:	onConnectedToServer
 Included Word:	onDisconnectedFromServer
+Included Word:	onEntityAddedToWorld
+Included Word:	onEntityRemovedFromWorld
 Included Word:	onError
 Included Word:	onEvent
 Included Word:	onGameObjectDestroyed
@@ -3410,7 +3415,6 @@ Included Word:	onMsg
 Included Word:	onPhysicsObjectUpdated
 Included Word:	onPlaySound
 Included Word:	onRemovedFromEntity
-Included Word:	onRemovedFromWorld
 Included Word:	onRequestVelocity
 Included Word:	onSentMessage
 Included Word:	onSetPosition

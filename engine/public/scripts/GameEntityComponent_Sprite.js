@@ -52,7 +52,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			this._myAnimationInstance.setAnimation(this._animations[0]);
 		},
 		
-		getUpdatePriority : function getUpdatePriority()
+		getUpdatePriority : function getUpdatePriority()//TODO move to GameObject?
 		{
 			return this.getID();
 		},
@@ -70,14 +70,14 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			}
 		},
 
-		onAddedToEntity : function onAddedToEntity(inEvent)
+		onAddedToEntity : function onAddedToEntity(/*inEvent*/)
 		{
 			var owner = this._myOwner;//inEvent.entity;
 			
 			//register for events
 			owner.registerListener('UpdatePosition', this);
-			owner.registerListener('AddedToWorld', this);
-			owner.registerListener('RemovedFromWorld', this);
+			owner.registerListener('EntityAddedToWorld', this);
+			owner.registerListener('EntityRemovedFromWorld', this);
 			
 			//TODO owner.event(getposition, myPos);
 			//todo add to scene graph
@@ -89,8 +89,8 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			
 			//unregister for events
 			owner.deregisterListener('UpdatePosition', this);
-			owner.deregisterListener('AddedToWorld', this);
-			owner.deregisterListener('RemovedFromWorld', this);
+			owner.deregisterListener('EntityAddedToWorld', this);
+			owner.deregisterListener('EntityRemovedFromWorld', this);
 			
 			//todo remove from scenegraph
 			
@@ -99,7 +99,14 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 
 		onUpdatePosition : function onUpdatePosition(inEvent)
 		{
-			var i;
+			var i
+				,anAnimProbibility
+				,aBestAnimProb
+				,aDirection
+				,angle
+				,aDirections
+				;
+				
 			if(this._myWorld)
 			{
 				this._myWorld.getSceneGraph().removeItem(this._myAnimationInstance);
@@ -118,9 +125,9 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			}
 			else
 			{
-				var direction = inEvent.velocity.unit();
-				var angle = 0;
-				var directions =	//TODO these should be class constants
+				aDirection = inEvent.velocity.unit();
+				angle = 0;
+				aDirections =	//TODO these should be class constants
 				[
 					new ECGame.EngineLib.Point2D(Math.cos(angle), Math.sin(angle)),
 					new ECGame.EngineLib.Point2D(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
@@ -131,14 +138,14 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 					new ECGame.EngineLib.Point2D(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
 					new ECGame.EngineLib.Point2D(Math.cos(angle+=2*Math.PI/8), Math.sin(angle))//,
 				];
-				var animProb = 0;
-				var bestAnimProb = 0;
+				anAnimProbibility = 0;
+				aBestAnimProb = 0;
 				for(i = 0; i < 8; ++i)
 				{
-					animProb = directions[i].dot(direction);
-					if(animProb > bestAnimProb)
+					anAnimProbibility = aDirections[i].dot(aDirection);
+					if(anAnimProbibility > aBestAnimProb)
 					{
-						bestAnimProb = animProb;
+						aBestAnimProb = anAnimProbibility;
 						this._currentAnimation = i;
 					}
 				}
@@ -152,14 +159,14 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			}
 		},
 
-		onAddedToWorld : function onAddedToWorld(inEvent)
+		onEntityAddedToWorld : function onEntityAddedToWorld(inEvent)
 		{
 			this._myWorld = inEvent.world;
 			this._myWorld.getSceneGraph().insertItem(this._myAnimationInstance);
 			ECGame.instance.getUpdater("SpritesUpdater").addUpdate(this);
 		},
 
-		onRemovedFromWorld : function onRemovedFromWorld(inEvent)
+		onEntityRemovedFromWorld : function onEntityRemovedFromWorld(/*inEvent*/)
 		{
 			this._myWorld.getSceneGraph().removeItem(this._myAnimationInstance);
 			this._myWorld = null;

@@ -73,8 +73,8 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 		
 			//register for events		
 			anOwner.registerListener('RequestVelocity', this);
-			anOwner.registerListener('AddedToWorld', this);
-			anOwner.registerListener('RemovedFromWorld', this);
+			anOwner.registerListener('EntityAddedToWorld', this);
+			anOwner.registerListener('EntityRemovedFromWorld', this);
 			
 			anOwner.registerListener('SetPosition', this);
 			//TODO anOwner.event(getposition, myPos);??
@@ -94,8 +94,8 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 			
 			//unregister for events
 			anOwner.deregisterListener('RequestVelocity', this);
-			anOwner.deregisterListener('AddedToWorld', this);
-			anOwner.deregisterListener('RemovedFromWorld', this);
+			anOwner.deregisterListener('EntityAddedToWorld', this);
+			anOwner.deregisterListener('EntityRemovedFromWorld', this);
 			
 			anOwner.deregisterListener('SetPosition', this);
 			
@@ -151,7 +151,7 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 			this._myPhysicsObject.requestVelocity(inEvent.direction);
 		},
 		
-		onAddedToWorld : function onAddedToWorld(inEvent)
+		onEntityAddedToWorld : function onEntityAddedToWorld(inEvent)
 		{
 			this._myPhysicsObject = inEvent.world.getPhysics().createNewPhysicsObject();
 			
@@ -161,7 +161,7 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 			//TODO set the owner in the PhysObj for callbacks, triggers, etc?
 		},
 		
-		onRemovedFromWorld : function onRemovedFromWorld(/*inEvent*/)
+		onEntityRemovedFromWorld : function onEntityRemovedFromWorld(/*inEvent*/)
 		{
 			this._myPhysicsObject.release();
 		},

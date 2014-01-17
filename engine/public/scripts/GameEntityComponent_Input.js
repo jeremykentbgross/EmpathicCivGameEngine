@@ -27,16 +27,16 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 		this.GameEntityComponent();
 		//this._keysEventMapper = [];//TODO make keys changable??
 		
-		this._direction = ECGame.EngineLib.Point2D.create(0, 0);
+		this._myDirection = ECGame.EngineLib.Point2D.create(0, 0);
 		
 		//TODO put this elsewhere??
-		this._speed = 128;
+		this._mySpeed = 128;
 		
 		//TODO these should go in a child class, like CharacterInput or something
-		this._up		= ECGame.EngineLib.Point2D.create( 0,-1);
-		this._down	= ECGame.EngineLib.Point2D.create( 0, 1);
-		this._left	= ECGame.EngineLib.Point2D.create(-1, 0);
-		this._right	= ECGame.EngineLib.Point2D.create( 1, 0);
+		this._myUp		= ECGame.EngineLib.Point2D.create( 0,-1);
+		this._myDown	= ECGame.EngineLib.Point2D.create( 0, 1);
+		this._myLeft	= ECGame.EngineLib.Point2D.create(-1, 0);
+		this._myRight	= ECGame.EngineLib.Point2D.create( 1, 0);
 	},
 	
 	Parents : [ECGame.EngineLib.GameEntityComponent],
@@ -51,57 +51,54 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 		_serializeFormat :
 		[
 			{
-				name : '_direction',
+				name : '_myDirection',
 				net : true,
 				type : 'position',
-				min : null,	//this._speed
-				max : null	//this._speed
+				min : null,	//this._mySpeed
+				max : null	//this._mySpeed
 			}
 		],
 		
 		
 		onInput : function onInput(inInputEvent)
 		{
-			var anOldDirection;
+			//var anOldDirection;
+			
 			//if multiplayer and not locally owned
-			if(ECGame.Settings.Network.isMultiplayer && this.getNetOwnerID() !== ECGame.instance.getLocalUser().userID)
+			if(!ECGame.Settings.Network.isMultiplayer || this.getNetOwnerID() === ECGame.instance.getLocalUser().userID)
 			{
-				//don't update using the local input data!
-			}
-			else
-			{
-				anOldDirection = this._direction;
-				this._direction = ECGame.EngineLib.Point2D.create(0, 0);//TODO just set the fields, don't create a new one
+				//anOldDirection = this._myDirection;
+				this._myDirection = ECGame.EngineLib.Point2D.create(0, 0);//TODO just set the fields, don't create a new one
 				
 				if(inInputEvent.keys[inInputEvent.KEYBOARD.KEY_W])
 				{
-					this._direction = this._direction.add(this._up);
+					this._myDirection = this._myDirection.add(this._myUp);
 				}
 				if(inInputEvent.keys[inInputEvent.KEYBOARD.KEY_S])
 				{
-					this._direction = this._direction.add(this._down);
+					this._myDirection = this._myDirection.add(this._myDown);
 				}
 				if(inInputEvent.keys[inInputEvent.KEYBOARD.KEY_A])
 				{
-					this._direction = this._direction.add(this._left);
+					this._myDirection = this._myDirection.add(this._myLeft);
 				}
 				if(inInputEvent.keys[inInputEvent.KEYBOARD.KEY_D])
 				{
-					this._direction = this._direction.add(this._right);
+					this._myDirection = this._myDirection.add(this._myRight);
 				}
 				
 				//unitize it, then scale by speed
-				this._direction = this._direction.unit().scale(this._speed);
+				this._myDirection = this._myDirection.unit().scale(this._mySpeed);
 				
-				if(!anOldDirection.equal(this._direction))
+				/*if(!anOldDirection.equal(this._myDirection))
 				{
 					//this.setNetDirty();	//TODO sending input, physics master control, etc..
-				}
+				}*/
 			}
 			
 			if(this._myOwner)
 			{
-				this._myOwner.onEvent(new ECGame.EngineLib.Events.RequestVelocity(this._direction));
+				this._myOwner.onEvent(new ECGame.EngineLib.Events.RequestVelocity(this._myDirection));
 			}
 			else
 			{
@@ -109,38 +106,38 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 			}
 		},
 		
-		onAddedToEntity : function onAddedToEntity(inEvent)
+		onAddedToEntity : function onAddedToEntity(/*inEvent*/)
 		{
 			var owner = this._myOwner;//inEntity.entity;
 		
 			//register for events
-			owner.registerListener('AddedToWorld', this);
-			owner.registerListener('RemovedFromWorld', this);
+			owner.registerListener('EntityAddedToWorld', this);
+			owner.registerListener('EntityRemovedFromWorld', this);
 			/*if(inEvent.entity.getWorld())	//should be done when added to world, which will happen next
 			{
 				ECGame.instance.getInput().registerListener('Input', this);
 			}*/
 		},
 
-		onRemovedFromEntity : function onRemovedFromEntity(inEvent)
+		onRemovedFromEntity : function onRemovedFromEntity(/*inEvent*/)
 		{
 			var owner = this._myOwner;//inEntity.entity;
 			
 			if(owner)
 			{
 				//unregister for events
-				owner.deregisterListener('AddedToWorld', this);
-				owner.deregisterListener('RemovedFromWorld', this);
+				owner.deregisterListener('EntityAddedToWorld', this);
+				owner.deregisterListener('EntityRemovedFromWorld', this);
 				//ECGame.instance.getInput().deregisterListener('Input', this);	//should be done when removed from world (which happens first)
 			}
 		},
 		
-		onAddedToWorld : function onAddedToWorld(inEvent)
+		onEntityAddedToWorld : function onEntityAddedToWorld(/*inEvent*/)
 		{
 			ECGame.instance.getInput().registerListener('Input', this);
 		},
 		
-		onRemovedFromWorld : function onRemovedFromWorld(inEvent)
+		onEntityRemovedFromWorld : function onEntityRemovedFromWorld(/*inEvent*/)
 		{
 			ECGame.instance.getInput().deregisterListener('Input', this);
 		},
@@ -158,19 +155,19 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 		serialize : function serialize(inSerializer)
 		{
 			var format = this.EntityComponent_Input._serializeFormat;
-			format[0].min = ECGame.EngineLib.Point2D.create(-this._speed,-this._speed);
-			format[0].max = ECGame.EngineLib.Point2D.create(this._speed,this._speed);
+			format[0].min = ECGame.EngineLib.Point2D.create(-this._mySpeed,-this._mySpeed);
+			format[0].max = ECGame.EngineLib.Point2D.create(this._mySpeed,this._mySpeed);
 			inSerializer.serializeObject(this, format);
 		},
 		
 		copyFrom : function copyFrom(inOther)
 		{
-			this._speed = inOther._speed;
+			this._mySpeed = inOther._mySpeed;
 		
-			/*this._up.copyFrom(inOther._up);
-			this._down.copyFrom(inOther._down);
-			this._left.copyFrom(inOther._left);
-			this._right.copyFrom(inOther._right);*/
+			/*this._myUp.copyFrom(inOther._myUp);
+			this._myDown.copyFrom(inOther._myDown);
+			this._myLeft.copyFrom(inOther._myLeft);
+			this._myRight.copyFrom(inOther._myRight);*/
 		}
 	}
 });

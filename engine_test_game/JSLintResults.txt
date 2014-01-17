@@ -340,6 +340,9 @@ ECGame.WebServerTools = new function ECGameWebServerTools(){return;}();
 	Weird construction. Delete 'new'.
 	@../_unified_/engine/public/scripts/EngineLoader.js::62:27
 
+Checking ../_unified_/engine/public/scripts/EngineSettings.js
+No errors found
+
 Checking ../_unified_/engine/public/scripts/EntityComponent_Physics2D.js
 No errors found
 
@@ -380,70 +383,16 @@ Checking ../_unified_/engine/public/scripts/GameEntityComponent.js
 No errors found
 
 Checking ../_unified_/engine/public/scripts/GameEntityComponent_2DCamera.js
-3 errors found
-onAddedToEntity : function onAddedToEntity(inEvent)
-	Unused 'inEvent'.
-	@../_unified_/engine/public/scripts/GameEntityComponent_2DCamera.js::34:46
-onRemovedFromEntity : function onRemovedFromEntity(inEvent)
-	Unused 'inEvent'.
-	@../_unified_/engine/public/scripts/GameEntityComponent_2DCamera.js::45:54
-onRemovedFromWorld : function onRemovedFromWorld(inEvent)
-	Unused 'inEvent'.
-	@../_unified_/engine/public/scripts/GameEntityComponent_2DCamera.js::73:52
+No errors found
 
 Checking ../_unified_/engine/public/scripts/GameEntityComponent_Input.js
-6 errors found
-{
-	Empty block.
-	@../_unified_/engine/public/scripts/GameEntityComponent_Input.js::68:4
-{
-	Empty block.
-	@../_unified_/engine/public/scripts/GameEntityComponent_Input.js::97:5
-onAddedToEntity : function onAddedToEntity(inEvent)
-	Unused 'inEvent'.
-	@../_unified_/engine/public/scripts/GameEntityComponent_Input.js::112:46
-onRemovedFromEntity : function onRemovedFromEntity(inEvent)
-	Unused 'inEvent'.
-	@../_unified_/engine/public/scripts/GameEntityComponent_Input.js::125:54
-onAddedToWorld : function onAddedToWorld(inEvent)
-	Unused 'inEvent'.
-	@../_unified_/engine/public/scripts/GameEntityComponent_Input.js::138:44
-onRemovedFromWorld : function onRemovedFromWorld(inEvent)
-	Unused 'inEvent'.
-	@../_unified_/engine/public/scripts/GameEntityComponent_Input.js::143:52
+No errors found
 
 Checking ../_unified_/engine/public/scripts/GameEntityComponent_SoundPlayer.js
-2 errors found
-onAddedToEntity : function onAddedToEntity(inEvent)
-	Unused 'inEvent'.
-	@../_unified_/engine/public/scripts/GameEntityComponent_SoundPlayer.js::45:46
-onRemovedFromWorld : function onRemovedFromWorld(inEvent)
-	Unused 'inEvent'.
-	@../_unified_/engine/public/scripts/GameEntityComponent_SoundPlayer.js::120:52
+No errors found
 
 Checking ../_unified_/engine/public/scripts/GameEntityComponent_Sprite.js
-7 errors found
-onAddedToEntity : function onAddedToEntity(inEvent)
-	Unused 'inEvent'.
-	@../_unified_/engine/public/scripts/GameEntityComponent_Sprite.js::73:46
-var direction = inEvent.velocity.unit();
-	Combine this with the previous 'var' statement.
-	@../_unified_/engine/public/scripts/GameEntityComponent_Sprite.js::121:9
-var angle = 0;
-	Combine this with the previous 'var' statement.
-	@../_unified_/engine/public/scripts/GameEntityComponent_Sprite.js::122:9
-var directions =	//TODO these should be class constants
-	Combine this with the previous 'var' statement.
-	@../_unified_/engine/public/scripts/GameEntityComponent_Sprite.js::123:9
-var animProb = 0;
-	Combine this with the previous 'var' statement.
-	@../_unified_/engine/public/scripts/GameEntityComponent_Sprite.js::134:9
-var bestAnimProb = 0;
-	Combine this with the previous 'var' statement.
-	@../_unified_/engine/public/scripts/GameEntityComponent_Sprite.js::135:9
-onRemovedFromWorld : function onRemovedFromWorld(inEvent)
-	Unused 'inEvent'.
-	@../_unified_/engine/public/scripts/GameEntityComponent_Sprite.js::162:52
+No errors found
 
 Checking ../_unified_/engine/public/scripts/GameEvent.js
 1 errors found
@@ -455,7 +404,7 @@ Checking ../_unified_/engine/public/scripts/GameEventSystem.js
 No errors found
 
 Checking ../_unified_/engine/public/scripts/GameInstance.js
-11 errors found
+10 errors found
 "<a href=\"http:\x2f\x2fwww.google.com/chrome\">Get Chrome (**recommended!**) </a><br/>" +
 	Unexpected '\'.
 	@../_unified_/engine/public/scripts/GameInstance.js::53:21
@@ -468,27 +417,24 @@ Checking ../_unified_/engine/public/scripts/GameInstance.js
 "<a href=\"http:\x2f\x2fwww.mozilla-europe.org/en/firefox/\">Get Firefox</a>";
 	Unexpected '\'.
 	@../_unified_/engine/public/scripts/GameInstance.js::55:25
-return this._myUpdaterMap[inUpdaterName] = ECGame.EngineLib.Updater.create(inUpdaterName, inPriority);
-	Unexpected '='.
-	@../_unified_/engine/public/scripts/GameInstance.js::106:45
-this._myInput.push(ECGame.EngineLib.Input.create());
-	Expected to see a statement and instead saw a block.
-	@../_unified_/engine/public/scripts/GameInstance.js::391:7
 this._myInput.push(ECGame.EngineLib.Input.create());
 	Expected to see a statement and instead saw a block.
 	@../_unified_/engine/public/scripts/GameInstance.js::398:7
 this._myInput.push(ECGame.EngineLib.Input.create());
 	Expected to see a statement and instead saw a block.
 	@../_unified_/engine/public/scripts/GameInstance.js::405:7
+this._myInput.push(ECGame.EngineLib.Input.create());
+	Expected to see a statement and instead saw a block.
+	@../_unified_/engine/public/scripts/GameInstance.js::412:7
 if(!this._setupSinglePaneGraphics())
 	Expected to see a statement and instead saw a block.
-	@../_unified_/engine/public/scripts/GameInstance.js::447:7
+	@../_unified_/engine/public/scripts/GameInstance.js::454:7
 if(!this._setupSplitHorizontalGraphics())
 	Expected to see a statement and instead saw a block.
-	@../_unified_/engine/public/scripts/GameInstance.js::455:7
+	@../_unified_/engine/public/scripts/GameInstance.js::462:7
 if(!this._setupSplit4WayGraphics())
 	Expected to see a statement and instead saw a block.
-	@../_unified_/engine/public/scripts/GameInstance.js::468:7
+	@../_unified_/engine/public/scripts/GameInstance.js::475:7
 
 Checking ../_unified_/engine/public/scripts/GameObject.js
 No errors found
@@ -506,12 +452,6 @@ if(this.__proto__.constructor === ECGame.EngineLib.GameRulesBase)
 	@../_unified_/engine/public/scripts/GameRulesBase.js::49:12
 Stopping. (62% scanned).
 	@../_unified_/engine/public/scripts/GameRulesBase.js::49:12
-
-Checking ../_unified_/engine/public/scripts/GameSettings.js
-1 errors found
-else
-	Unnecessary 'else' after disruption.
-	@../_unified_/engine/public/scripts/GameSettings.js::172:5
 
 Checking ../_unified_/engine/public/scripts/Graphics2D.js
 No errors found
@@ -712,6 +652,9 @@ ECGame.Lib.LoadGame = function LoadGame(include, inPublicGamePath, inPrivateGame
 	@../_unified_/game/public/scripts/GameLoader.js::22:68
 
 Checking ../_unified_/game/public/scripts/GameRules.js
+No errors found
+
+Checking ../_unified_/game/public/scripts/GameSettings.js
 No errors found
 
 ***Finished JSLint***

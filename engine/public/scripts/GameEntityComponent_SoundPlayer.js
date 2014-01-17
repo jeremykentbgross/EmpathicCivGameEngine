@@ -42,15 +42,15 @@ ECGame.EngineLib.EntityComponent_SoundPlayer = ECGame.EngineLib.Class.create(
 		{
 		},*/
 
-		onAddedToEntity : function onAddedToEntity(inEvent)
+		onAddedToEntity : function onAddedToEntity(/*inEvent*/)
 		{
 			var owner = this._myOwner;//inEvent.entity;
 			
 			//register for events
 			owner.registerListener('PlaySound', this);
 			owner.registerListener('UpdatePosition', this);
-			owner.registerListener('AddedToWorld', this);
-			owner.registerListener('RemovedFromWorld', this);
+			owner.registerListener('EntityAddedToWorld', this);
+			owner.registerListener('EntityRemovedFromWorld', this);
 			
 			//TODO owner.event(getposition, myPos);
 		},
@@ -62,8 +62,8 @@ ECGame.EngineLib.EntityComponent_SoundPlayer = ECGame.EngineLib.Class.create(
 			//unregister for events
 			owner.deregisterListener('PlaySound', this);
 			owner.deregisterListener('UpdatePosition', this);
-			owner.deregisterListener('AddedToWorld', this);
-			owner.deregisterListener('RemovedFromWorld', this);
+			owner.deregisterListener('EntityAddedToWorld', this);
+			owner.deregisterListener('EntityRemovedFromWorld', this);
 						
 			//this._myOwner = null;
 		},
@@ -111,13 +111,13 @@ ECGame.EngineLib.EntityComponent_SoundPlayer = ECGame.EngineLib.Class.create(
 			//TODO change location in spacial partitioning in the world!!
 		},
 
-		onAddedToWorld : function onAddedToWorld(inEvent)
+		onEntityAddedToWorld : function onEntityAddedToWorld(inEvent)
 		{
-			this._myWorld = inEvent.world;
+			this._myWorld = inEvent.world;//TODO move to parent??
 			//this._myWorld.getSceneGraph().insertItem(this._sceneGraphRenderable);
 		},
 
-		onRemovedFromWorld : function onRemovedFromWorld(inEvent)
+		onEntityRemovedFromWorld : function onEntityRemovedFromWorld(/*inEvent*/)
 		{
 			//this._myWorld.getSceneGraph().removeItem(this._sceneGraphRenderable);
 			this._myWorld = null;

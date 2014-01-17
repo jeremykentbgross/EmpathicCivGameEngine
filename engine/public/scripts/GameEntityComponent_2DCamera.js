@@ -31,25 +31,25 @@ ECGame.EngineLib.EntityComponent_2DCamera = ECGame.EngineLib.Class.create({
 	ChainDown : null,
 	Definition :
 	{
-		onAddedToEntity : function onAddedToEntity(inEvent)
+		onAddedToEntity : function onAddedToEntity(/*inEvent*/)
 		{
 			var owner = this._myOwner;//inEvent.entity;
 			
 			//register for events
 			owner.registerListener('UpdatePosition', this);
-			owner.registerListener('AddedToWorld', this);
-			owner.registerListener('RemovedFromWorld', this);
+			owner.registerListener('EntityAddedToWorld', this);
+			owner.registerListener('EntityRemovedFromWorld', this);
 			
 			//TODO owner.event(getposition, myPos);??
 		},
-		onRemovedFromEntity : function onRemovedFromEntity(inEvent)
+		onRemovedFromEntity : function onRemovedFromEntity(/*inEvent*/)
 		{
 			var owner = this._myOwner;//inEvent.entity;
 			
 			//unregister for events
 			owner.deregisterListener('UpdatePosition', this);
-			owner.deregisterListener('AddedToWorld', this);
-			owner.deregisterListener('RemovedFromWorld', this);
+			owner.deregisterListener('EntityAddedToWorld', this);
+			owner.deregisterListener('EntityRemovedFromWorld', this);
 		},
 		
 		//set<classname>NetDirty
@@ -59,7 +59,7 @@ ECGame.EngineLib.EntityComponent_2DCamera = ECGame.EngineLib.Class.create({
 		cleanup : function cleanup(){return;},
 		serialize : function serialize(){return;},
 		
-		onAddedToWorld : function onAddedToWorld(inEvent)
+		onEntityAddedToWorld : function onEntityAddedToWorld(inEvent)
 		{
 			this._myMap = inEvent.world.getMap();
 			//TODO register as a camera entity with the world
@@ -70,7 +70,7 @@ ECGame.EngineLib.EntityComponent_2DCamera = ECGame.EngineLib.Class.create({
 			}
 		},
 		
-		onRemovedFromWorld : function onRemovedFromWorld(inEvent)
+		onEntityRemovedFromWorld : function onEntityRemovedFromWorld(/*inEvent*/)
 		{
 			//TODO unregister as a camera entity with the world
 			this._myMap = null;

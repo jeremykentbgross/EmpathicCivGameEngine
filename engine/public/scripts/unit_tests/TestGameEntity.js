@@ -41,8 +41,8 @@ ECGame.unitTests.registerTest(
 				{
 					this.added = inEvent.entity;
 					
-					this._myOwner.registerListener('AddedToWorld', this);
-					this._myOwner.registerListener('RemovedFromWorld', this);
+					this._myOwner.registerListener('EntityAddedToWorld', this);
+					this._myOwner.registerListener('EntityRemovedFromWorld', this);
 				},
 				
 				onRemovedFromEntity : function onRemovedFromEntity(inEvent)
@@ -53,16 +53,16 @@ ECGame.unitTests.registerTest(
 					);
 					this.added = null;
 					
-					this._myOwner.deregisterListener('AddedToWorld', this);
-					this._myOwner.deregisterListener('RemovedFromWorld', this);
+					this._myOwner.deregisterListener('EntityAddedToWorld', this);
+					this._myOwner.deregisterListener('EntityRemovedFromWorld', this);
 				},
 				
-				onAddedToWorld : function onAddedToWorld(inEvent)
+				onEntityAddedToWorld : function onEntityAddedToWorld(inEvent)
 				{
 					this._containingWorld = inEvent.world;
 				},
 				
-				onRemovedFromWorld : function onRemovedFromWorld(inEvent)
+				onEntityRemovedFromWorld : function onEntityRemovedFromWorld(inEvent)
 				{
 					ECGame.log.assert(this._containingWorld === inEvent.world, "Removing from wrong world");
 					this._removedWorld = true;

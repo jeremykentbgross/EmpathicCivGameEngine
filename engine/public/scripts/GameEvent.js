@@ -137,11 +137,12 @@ ECGame.EngineLib.Events.RemovedFromEntity = ECGame.EngineLib.Class.create({
 
 
 //TODO move to own file
-ECGame.EngineLib.Events.AddedToWorld = ECGame.EngineLib.Class.create({
-	Constructor : function AddedToWorld(inWorld)
+ECGame.EngineLib.Events.EntityAddedToWorld = ECGame.EngineLib.Class.create({
+	Constructor : function EntityAddedToWorld(inWorld, inEntity)
 	{
-		this.GameEventBase('onAddedToWorld');
+		this.GameEventBase('onEntityAddedToWorld');
 		this.world = inWorld;
+		this.myEntity = inEntity;
 	},
 	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},
@@ -155,11 +156,12 @@ ECGame.EngineLib.Events.AddedToWorld = ECGame.EngineLib.Class.create({
 
 
 
-ECGame.EngineLib.Events.RemovedFromWorld = ECGame.EngineLib.Class.create({
-	Constructor : function RemovedFromWorld(inWorld)
+ECGame.EngineLib.Events.EntityRemovedFromWorld = ECGame.EngineLib.Class.create({
+	Constructor : function EntityRemovedFromWorld(inWorld, inEntity)
 	{
-		this.GameEventBase('onRemovedFromWorld');
+		this.GameEventBase('onEntityRemovedFromWorld');
 		this.world = inWorld;
+		this.myEntity = inEntity;
 	},
 	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},

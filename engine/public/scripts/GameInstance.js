@@ -101,9 +101,16 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			this._myIsRunning = false;
 		},
 		
-		createUpdater : function createUpdater(inUpdaterName, inPriority)
+		createUpdater : function createUpdater(inUpdaterName, inParentUpdaterName, inPriority)
 		{
-			return this._myUpdaterMap[inUpdaterName] = ECGame.EngineLib.Updater.create(inUpdaterName, inPriority);
+			this._myUpdaterMap[inUpdaterName] = ECGame.EngineLib.Updater.create(inUpdaterName, inPriority);
+			
+			if(inParentUpdaterName)
+			{
+				this._myUpdaterMap[inParentUpdaterName].addUpdate(this._myUpdaterMap[inUpdaterName]);
+			}
+			
+			return this._myUpdaterMap[inUpdaterName];
 		},
 		getUpdater : function getUpdater(inUpdaterName)
 		{
@@ -347,9 +354,9 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			this._myTimer = ECGame.EngineLib.Timer.create();
 			
 			this._myUpdaterMap = {};
-			this._myMasterUpdater = this.createUpdater("MasterUpdater", 0);
-			this._myMasterUpdater.addUpdate(this.createUpdater("SpritesUpdater", ECGame.Settings.UpdateOrder.SPRITES));
-			this._myMasterUpdater.addUpdate(this.createUpdater("PhysicsUpdater", ECGame.Settings.UpdateOrder.PHYSICS));
+			this._myMasterUpdater = this.createUpdater("MasterUpdater", null, 0);
+			this.createUpdater("SpritesUpdater", "MasterUpdater", ECGame.Settings.UpdateOrder.SPRITES);
+			this.createUpdater("PhysicsUpdater", "MasterUpdater", ECGame.Settings.UpdateOrder.PHYSICS);
 
 			//Create gamerules
 			if(ECGame.Lib.GameRules !== undefined)

@@ -164,18 +164,16 @@ ECGame.Settings =
 	{
 		Audio : (function isAudioAvailable()
 		{
-			try{
+			try
+			{
 				if(window === undefined)	//NOTE! This could be the test for the isServer!!
 				{
 					return false;
 				}
-				else
-				{
-					return (
-						window.AudioContext !== undefined ||
-						window.webkitAudioContext !== undefined
-					);
-				}
+				return (
+					window.AudioContext !== undefined ||
+					window.webkitAudioContext !== undefined
+				);
 			}
 			catch(inError)
 			{

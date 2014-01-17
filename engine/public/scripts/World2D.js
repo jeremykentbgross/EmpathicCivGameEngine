@@ -66,9 +66,15 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 		{
 			this._initNonGameObjectMembers(inMapSizeInTiles, inTileSize, inMinPhysicsPartitionSize);
 			
+			this._myUsingNetViews = inUsingNetViews;
 			this._myMap = ECGame.EngineLib.TileMap2D.create();
 			this._myMap.init(this, inTileset, inMapSizeInTiles, inTileSize, inUsingNetViews);
 			this._myMapRef = this._myMap.getRef();
+		},
+		
+		_isNotUsingNetViews : function _isNotUsingNetViews()
+		{
+			return !this._myUsingNetViews;
 		},
 		
 		_initNonGameObjectMembers : function _initNonGameObjectMembers(inMapSizeInTiles, inTileSize, inMinPhysicsPartitionSize)
@@ -300,10 +306,16 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 				net : false
 			},
 			{
+				name : '_myUsingNetViews',
+				type : 'bool',
+				net : false
+			},
+			{
 				name : '_myEntityRefs',
 				type : 'objRef',
 				net : false,
 				maxArrayLength : 32	//TODO
+				,condition : '_isNotUsingNetViews'
 			},
 			{
 				name : '_myAddedEntityRefs',
@@ -311,6 +323,7 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 				net : true,
 				netOnly : true,
 				maxArrayLength : 32	//TODO
+				,condition : '_isNotUsingNetViews'
 			},
 			{
 				name : '_myRemovedEntityRefs',
@@ -318,6 +331,7 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 				net : true,
 				netOnly : true,
 				maxArrayLength : 32	//TODO
+				,condition : '_isNotUsingNetViews'
 			}
 		],
 		

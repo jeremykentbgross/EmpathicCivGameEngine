@@ -64,7 +64,7 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 			inComponent.onAddedToEntity(new ECGame.EngineLib.Events.AddedToEntity(this));
 			if(this._myWorld)
 			{
-				inComponent.onAddedToWorld(new ECGame.EngineLib.Events.AddedToWorld(this._myWorld));
+				inComponent.onEntityAddedToWorld(new ECGame.EngineLib.Events.EntityAddedToWorld(this._myWorld, this));
 			}
 			
 			if(this.canUserModifyNet())
@@ -101,7 +101,7 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 			this._myComponents.pop();
 			if(this._myWorld)
 			{
-				inComponent.onRemovedFromWorld(new ECGame.EngineLib.Events.RemovedFromWorld(this._myWorld));
+				inComponent.onEntityRemovedFromWorld(new ECGame.EngineLib.Events.EntityRemovedFromWorld(this._myWorld, this));
 			}
 			inComponent.onRemovedFromEntity(new ECGame.EngineLib.Events.RemovedFromEntity(this));
 			
@@ -175,21 +175,21 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 		},
 		
 		//TODO maybe make added/removed+Entity/World NOT events (to save 'new' events that may not be needed)?
-		//TODO make onAddedTo/onRemovedFromWorld events so entity can set the world along with its components???
-		addedToWorld : function addedToWorld(inWorld)//TODO rename onAddedToWorld
+		//TODO make onAddedTo/onEntityRemovedFromWorld events so entity can set the world along with its components???
+		addedToWorld : function addedToWorld(inWorld)//TODO rename onEntityAddedToWorld
 		{
 			if(this._myWorld)
 			{
 				this.removedFromWorld(this._myWorld);//TODO should actually call the world object remove!!
 			}
 			this._myWorld = inWorld;
-			this.onEvent(new ECGame.EngineLib.Events.AddedToWorld(this._myWorld));
+			this.onEvent(new ECGame.EngineLib.Events.EntityAddedToWorld(this._myWorld, this));
 		},
-		removedFromWorld : function removedFromWorld(inWorld)//TODO rename onRemovedFromWorld
+		removedFromWorld : function removedFromWorld(inWorld)//TODO rename onEntityRemovedFromWorld
 		{
 			if(inWorld === this._myWorld)
 			{
-				this.onEvent(new ECGame.EngineLib.Events.RemovedFromWorld(this._myWorld));
+				this.onEvent(new ECGame.EngineLib.Events.EntityRemovedFromWorld(this._myWorld, this));
 				this._myWorld = null;
 			}
 		},
