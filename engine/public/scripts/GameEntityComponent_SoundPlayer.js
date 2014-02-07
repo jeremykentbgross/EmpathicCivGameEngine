@@ -48,7 +48,7 @@ ECGame.EngineLib.EntityComponent_SoundPlayer = ECGame.EngineLib.Class.create(
 			
 			//register for events
 			owner.registerListener('PlaySound', this);
-			owner.registerListener('UpdatePosition', this);
+			owner.registerListener('UpdatedPhysicsStatus', this);
 			owner.registerListener('EntityAddedToWorld', this);
 			owner.registerListener('EntityRemovedFromWorld', this);
 			
@@ -61,7 +61,7 @@ ECGame.EngineLib.EntityComponent_SoundPlayer = ECGame.EngineLib.Class.create(
 			
 			//unregister for events
 			owner.deregisterListener('PlaySound', this);
-			owner.deregisterListener('UpdatePosition', this);
+			owner.deregisterListener('UpdatedPhysicsStatus', this);
 			owner.deregisterListener('EntityAddedToWorld', this);
 			owner.deregisterListener('EntityRemovedFromWorld', this);
 						
@@ -103,7 +103,7 @@ ECGame.EngineLib.EntityComponent_SoundPlayer = ECGame.EngineLib.Class.create(
 			//TODO add to list to stop playing if it is removed from the world
 		},
 
-		onUpdatePosition : function onUpdatePosition(inEvent)
+		onUpdatedPhysicsStatus : function onUpdatedPhysicsStatus(inEvent)
 		{
 			this._myPosition.copyFrom(inEvent.position);
 			this._myVelocity.copyFrom(inEvent.velocity);

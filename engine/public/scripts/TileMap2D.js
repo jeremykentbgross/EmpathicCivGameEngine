@@ -470,11 +470,20 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 
 		
 		
-		toTileCoordinate : function toTileCoordinate(inWorldCoordinate)//TODO rename worldPositionToTileCoord..
+		worldPositionToTileCoordinate : function worldPositionToTileCoordinate(inWorldPosition)
 		{
 			return new ECGame.EngineLib.Point2D(
-				Math.floor(inWorldCoordinate.myX / this._myTileSize),
-				Math.floor(inWorldCoordinate.myY / this._myTileSize)
+				Math.floor(inWorldPosition.myX / this._myTileSize),
+				Math.floor(inWorldPosition.myY / this._myTileSize)
+			);
+		},
+		tileCoordinateToWorldAABB : function tileCoordinateToWorldAABB(inTileCoordinate)
+		{
+			return ECGame.EngineLib.AABB2D.create(
+				inTileCoordinate.myX * this._myTileSize,
+				inTileCoordinate.myY * this._myTileSize,
+				this._myTileSize,
+				this._myTileSize
 			);
 		},
 		

@@ -255,14 +255,14 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 		},
 		
 		
-		update : function update(inDt)
+		update : function update(inUpdateData)
 		{
 			var i;
 			
 			try
 			{
 				//TODO pass update struct instead
-				this._myMasterUpdater.update(inDt);
+				this._myMasterUpdater.update(inUpdateData);
 				
 				if(!ECGame.Settings.Network.isServer)
 				{

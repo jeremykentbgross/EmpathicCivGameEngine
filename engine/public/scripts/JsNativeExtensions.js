@@ -21,6 +21,7 @@
 
 //This file contains Extensions for: String, Array, Math, etc
 
+//TODO make sure these custom words are not on compression ignore list
 
 //////////////////////////////////////////////////////////////////////////
 //String functions////////////////////////////////////////////////////////
@@ -32,6 +33,12 @@ if(!String.prototype.isNumber)
 		,{
 			value : function isNumber()
 			{
+				/*var aParsedValue;
+				
+				aParsedValue = parseFloat(this);
+				
+				return !isNaN(aParsedValue) && isFinite(aParsedValue);*/
+				//console.trace();
 				return !isNaN(parseFloat(this)) && isFinite(this);
 			}
 			,writable : false
@@ -87,14 +94,45 @@ if(!Array.prototype.chooseRandom)
 		,'chooseRandom'
 		,{
 			value : function chooseRandom()
+			{
+				if(!this.length)
+				{
+					return undefined;
+				}
+				
+				return this[Math.floor(Math.random() * this.length)];
+			}
+			,writable : false
+			,configurable : false
+			,enumerable : false
+		}
+	);
+}
+
+if(!Array.prototype.findWhere)
+{
+	Object.defineProperty(
+		Array.prototype
+		,'findWhere'
+		,{
+			value : function findWhere(inFunction)
+			{
+				var aReturnList
+					,aCurrent
+					;
+					
+				aReturnList = [];
+				
+				for(aCurrent in this)
+				{
+					if(inFunction(this[aCurrent]))
 					{
-						if(!this.length)
-						{
-							return undefined;
-						}
-						
-						return this[Math.floor(Math.random() * this.length)];
+						aReturnList.push(this[aCurrent]);
 					}
+				}
+				//console.log('passed findWhere', aReturnList.length);
+				return aReturnList;
+			}
 			,writable : false
 			,configurable : false
 			,enumerable : false

@@ -208,7 +208,7 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 			}
 		},
 		
-		update : function update(/*??params??*/)	//TODO why is this not called on the server?
+		update : function update(/*inUpdateData*/)	//TODO why is this not called on the server?
 		{
 			var aFinishedSounds = [], i;
 			

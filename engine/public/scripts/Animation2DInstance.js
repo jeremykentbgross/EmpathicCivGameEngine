@@ -38,13 +38,13 @@ ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{		
-		update : function update(inDT)
+		update : function update(inUpdateData)
 		{
 			var anUpdateStartFrame;
 			
 			anUpdateStartFrame = this._myCurrentFrame;
 			
-			this._myAccumulatedTime += inDT;
+			this._myAccumulatedTime += inUpdateData.myAverageDeltaTime;
 			
 			//Note: accum / 1000 => seconds; seconds * frameRate => frames
 			this._myCurrentFrame = Math.floor((this._myAccumulatedTime / 1000) * this._myAnimation.getFrameRate());

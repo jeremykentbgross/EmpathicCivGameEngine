@@ -229,7 +229,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 			return ECGame.Settings.UpdateOrder.NETWORK;
 		},
 		
-		update : function update()//TODO onUpdate?
+		update : function update(inUpdateData)
 		{
 			var aNetGroupIndex,
 				aNetGroup,
@@ -240,7 +240,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 			for(aNetGroupIndex in this._myNetGroups)
 			{
 				aNetGroup = this._myNetGroups[aNetGroupIndex];
-				aNetGroup.update();//TODO params??
+				aNetGroup.update(inUpdateData);
 			}
 			
 			for(aClassName in this._mySerializedObjects)

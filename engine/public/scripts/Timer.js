@@ -19,10 +19,27 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*global requestAnimFrame: true */
+
+ECGame.EngineLib.TimerUpdateData = function TimerUpdateData(
+	inDeltaTime
+	,inAverageDeltaTime
+	,inFrameCount
+	,inFrameTime
+)
+{
+	this.myDeltaTime = inDeltaTime;
+	this.myAverageDeltaTime = inAverageDeltaTime;
+	this.myFrameCount = inFrameCount;
+	this.myFrameTime = inFrameTime;
+};
+
+
+
 ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 	Constructor : function Timer()
 	{
-		this._myLastFrameTimeStamp = 0;
+		this._myFrameTime = 0;
 		this._myFrameCount = 0;
 		this._myFrameTimes = [];
 		this._myIntervalHandle = null;
@@ -37,10 +54,13 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 		getFrameCount : function getFrameCount()
 		{
 			return this._myFrameCount;
-		},
-		//TODO getTimeStamp
+		}
+		,getFrameTime : function getFrameTime()
+		{
+			return this._myFrameTime;
+		}
 		
-		setTimerCallback : function setTimerCallback(inTimeDelay, inCallback)
+		,setTimerCallback : function setTimerCallback(inTimeDelay, inCallback)
 		{
 			var aTimerNode;
 
@@ -65,7 +85,7 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 		{
 			var i;
 				
-			this._myLastFrameTimeStamp = 0;
+			this._myFrameTime = 0;
 			this._myFrameCount = 0;
 			this._myFrameTimes = [];
 			
@@ -80,7 +100,7 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 				this._myFrameTimes[i] = 16;
 			}
 				
-			this._myLastFrameTimeStamp = (new Date()).getTime();
+			this._myFrameTime = (new Date()).getTime();
 			
 			if(ECGame.Settings.Timer.useRequestAnimFrame)
 			{
@@ -118,6 +138,7 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 				,anAverageDeltaTime
 				,aFinishedTimerNodes
 				,aTimerNode
+				,aFrameStats
 				,i
 				;
 			
@@ -128,13 +149,14 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 				inTime = (new Date()).getTime();//TODO use .now
 			}
 			
-			aDeltaTime = Math.max(0, inTime - this._myLastFrameTimeStamp);
-			this._myLastFrameTimeStamp = inTime;
+			aDeltaTime = Math.max(0, inTime - this._myFrameTime);
+			this._myFrameTime = inTime;
 			++this._myFrameCount;
 			
 			//TODO handle HUGE dt's (by pausing?)
 			
 			this._myFrameTimes[this._myFrameCount % this._myFrameTimes.length] = aDeltaTime;
+			
 			anAverageDeltaTime = 0;
 			for(i = 0; i < this._myFrameTimes.length; ++i)
 			{
@@ -142,9 +164,9 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 			}
 			anAverageDeltaTime /= this._myFrameTimes.length;
 				
-			//if(ECGame.Settings.DEBUG)//Not needed with the functions below
+			if(ECGame.Settings.DEBUG)
 			{
-				var frameStats = [
+				aFrameStats = [
 					"Average FPS: " + (1000 / anAverageDeltaTime).toFixed(3),
 					"Average MS/F: " + anAverageDeltaTime.toFixed(3),
 					"Last Frame Time: " + aDeltaTime,
@@ -152,18 +174,18 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 				];
 				if(ECGame.Settings.isDebugDraw_FrameStats())
 				{
-					ECGame.instance.getGraphics().drawDebugText(frameStats[0], ECGame.Settings.Debug.FrameStats_DrawColor);
-					ECGame.instance.getGraphics().drawDebugText(frameStats[1], ECGame.Settings.Debug.FrameStats_DrawColor);
-					ECGame.instance.getGraphics().drawDebugText(frameStats[2], ECGame.Settings.Debug.FrameStats_DrawColor);
-					ECGame.instance.getGraphics().drawDebugText(frameStats[3], ECGame.Settings.Debug.FrameStats_DrawColor);
+					ECGame.instance.getGraphics().drawDebugText(aFrameStats[0], ECGame.Settings.Debug.FrameStats_DrawColor);
+					ECGame.instance.getGraphics().drawDebugText(aFrameStats[1], ECGame.Settings.Debug.FrameStats_DrawColor);
+					ECGame.instance.getGraphics().drawDebugText(aFrameStats[2], ECGame.Settings.Debug.FrameStats_DrawColor);
+					ECGame.instance.getGraphics().drawDebugText(aFrameStats[3], ECGame.Settings.Debug.FrameStats_DrawColor);
 				}
 				if(ECGame.Settings.isDebugPrint_FrameStats())
 				{
 					console.log(
-						'\n' + frameStats[0] +
-						'\n' + frameStats[1] +
-						'\n' + frameStats[2] +
-						'\n' + frameStats[3]
+						'\n' + aFrameStats[0] +
+						'\n' + aFrameStats[1] +
+						'\n' + aFrameStats[2] +
+						'\n' + aFrameStats[3]
 					);
 				}
 			}
@@ -191,9 +213,18 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 				}
 			}
 			
-			
-			//TODO update event could have dt, aveDt, Date, etc
-			ECGame.instance.update(anAverageDeltaTime);
+			ECGame.instance.update(
+				new ECGame.EngineLib.TimerUpdateData(
+					aDeltaTime
+					,(
+						ECGame.Settings.Timer.averageDeltaTimes ?
+							anAverageDeltaTime
+							:aDeltaTime
+					)
+					,this._myFrameCount
+					,this._myFrameTime
+				)
+			);
 			
 			if(ECGame.Settings.Timer.useRequestAnimFrame && ECGame.instance.isRunning())//TODO higher fps likely if at start??
 			{

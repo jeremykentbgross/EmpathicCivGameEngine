@@ -36,7 +36,7 @@ ECGame.EngineLib.EntityComponent_2DCamera = ECGame.EngineLib.Class.create({
 			var owner = this._myOwner;//inEvent.entity;
 			
 			//register for events
-			owner.registerListener('UpdatePosition', this);
+			owner.registerListener('UpdatedPhysicsStatus', this);
 			owner.registerListener('EntityAddedToWorld', this);
 			owner.registerListener('EntityRemovedFromWorld', this);
 			
@@ -47,7 +47,7 @@ ECGame.EngineLib.EntityComponent_2DCamera = ECGame.EngineLib.Class.create({
 			var owner = this._myOwner;//inEvent.entity;
 			
 			//unregister for events
-			owner.deregisterListener('UpdatePosition', this);
+			owner.deregisterListener('UpdatedPhysicsStatus', this);
 			owner.deregisterListener('EntityAddedToWorld', this);
 			owner.deregisterListener('EntityRemovedFromWorld', this);
 		},
@@ -81,7 +81,7 @@ ECGame.EngineLib.EntityComponent_2DCamera = ECGame.EngineLib.Class.create({
 			return this._position;
 		},
 		
-		onUpdatePosition : function onUpdatePosition(inEvent)
+		onUpdatedPhysicsStatus : function onUpdatedPhysicsStatus(inEvent)
 		{
 			//TODO look into bug why camera lags behind entity (maybe due to event listener order?)
 			this._position = inEvent.position;

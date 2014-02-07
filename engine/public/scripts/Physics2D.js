@@ -34,14 +34,13 @@ ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 	{
 		this.QuadTreeItem(ECGame.EngineLib.AABB2D.create());
 
-		this._myPhysicsSystemRef = null;
+		this._myPhysicsSystem = null;
 		this._myStatus = null;
 		this._myDensity = null;
 		this._myVelocity = null;
 		this._myOwningNodes = null;
 		this._myActiveLinkedListNode = null;
 		this._myOwner = null;
-		this._myID = null;
 	},
 	Parents : [ECGame.EngineLib.QuadTreeItem],
 	flags : {},
@@ -57,20 +56,14 @@ ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 
 		init : function init(inPhysicsSystem)
 		{
-			this._myPhysicsSystemRef = inPhysicsSystem;
+			this._myPhysicsSystem = inPhysicsSystem;
 			this._myStatus = this.PhysicsObject2D.STATUS__STATIC;
 			this._myDensity = 1;
 			this._myVelocity = ECGame.EngineLib.Point2D.create();
 			this._myOwningNodes = [];
 			this._myActiveLinkedListNode = ECGame.EngineLib.createGameCircularDoublyLinkedListNode(this);			
 			this._myOwner = null;
-			this._myID = ++inPhysicsSystem._myNextPhysicsID;
-			inPhysicsSystem._myObjectsMap[this._myID] = this;
-		},
-		
-		getID : function getID()
-		{
-			return this._myID;
+			inPhysicsSystem._myObjectsMap[this.getID()] = this;
 		},
 		
 		getMass : function getMass()
@@ -81,8 +74,8 @@ ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 		release : function release()	//TODO names: create/destroy init/clean ??/release
 		{
 			this.setStatic();//removes from active list
-			this._myPhysicsSystemRef._removePhysicsObjectFromTree(this);
-			delete this._myPhysicsSystemRef._myObjectsMap[this._myID];
+			this._myPhysicsSystem._removePhysicsObjectFromTree(this);
+			delete this._myPhysicsSystem._myObjectsMap[this.getID()];
 		},
 				
 		setStatic : function setStatic()
@@ -122,7 +115,7 @@ ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 			{
 				return;
 			}
-			this._myPhysicsSystemRef._myActiveObjectsList.insert(this._myActiveLinkedListNode);
+			this._myPhysicsSystem._myActiveObjectsList.insert(this._myActiveLinkedListNode);
 			this._myStatus = this.PhysicsObject2D.STATUS__ACTIVE;
 		},
 		isActive : function isActive()
@@ -138,7 +131,7 @@ ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 			}
 			if(this._myStatus !== this.PhysicsObject2D.STATUS__ACTIVE)
 			{
-				this._myPhysicsSystemRef._myActiveObjectsList.insert(this._myActiveLinkedListNode);
+				this._myPhysicsSystem._myActiveObjectsList.insert(this._myActiveLinkedListNode);
 			}
 			this._myStatus = this.PhysicsObject2D.STATUS__ALWAYS_ACTIVE;
 		},
@@ -149,9 +142,9 @@ ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 				
 		setAABB : function setAABB(inAABB)
 		{
-			this._myPhysicsSystemRef._removePhysicsObjectFromTree(this);
+			this._myPhysicsSystem._removePhysicsObjectFromTree(this);
 			this._myAABB.copyFrom(inAABB);
-			this._myPhysicsSystemRef._insertPhysicsObjectToTree(this);
+			this._myPhysicsSystem._insertPhysicsObjectToTree(this);
 		},
 		
 		requestVelocity : function requestVelocity(inVelocity)
@@ -163,6 +156,10 @@ ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 			}
 		},
 		
+		getOwner : function setOwner()
+		{
+			return this._myOwner;
+		},
 		setOwner : function setOwner(inOwner)
 		{
 			this._myOwner = inOwner;
@@ -212,8 +209,6 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 		this._myCollisions = null;
 		this._myCollisionsRenderList = null;
 		
-		this._myNextPhysicsID = 0;//TODO make this static member of physics object/collidable?
-		
 		this._myFrameUpdateCount = 0;
 		this._myAccumulatedTime = 0;
 		
@@ -242,8 +237,6 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 			this._myCollisions = [];
 			this._myCollisionsRenderList = [];
 			
-			this._myNextPhysicsID = 0;
-		
 			this._myFrameUpdateCount = 0;
 			this._myAccumulatedTime = 0;
 		},
@@ -315,7 +308,7 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 			return ECGame.EngineLib.PhysicsObject2D.create(this);
 		},
 
-		update : function update(deltaTime)//TODO proper parameters for everyone here...
+		update : function update(inUpdateData)
 		{
 			var aPhysicsObject,
 				aCurrentNode,
@@ -329,15 +322,16 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 				colCenter,
 				direction,
 				force,
-				acceleration;
+				acceleration,
+				aDeltaTime;
 				
 			aMovedObjectsThisFrame = {};
 			
 			this._myFrameUpdateCount = 0;
 			
-			deltaTime = deltaTime || 1;//TODO needed??
+			aDeltaTime = inUpdateData.myAverageDeltaTime || 1;//TODO needed??
 			
-			this._myAccumulatedTime += deltaTime;
+			this._myAccumulatedTime += aDeltaTime;
 			
 			while(this._myAccumulatedTime > 1)
 			{
@@ -352,9 +346,9 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 					this._removePhysicsObjectFromTree(aPhysicsObject);			
 					
 					//remember the first location from which this object was active for this frame
-					if(!aMovedObjectsThisFrame[aPhysicsObject._myID])
+					if(!aMovedObjectsThisFrame[aPhysicsObject.getID()])
 					{
-						aMovedObjectsThisFrame[aPhysicsObject._myID] = aPhysicsObject._myAABB.getLeftTop();
+						aMovedObjectsThisFrame[aPhysicsObject.getID()] = aPhysicsObject._myAABB.getLeftTop();
 					}
 					
 					aCurrentNode = aCurrentNode.myNext;
@@ -446,7 +440,7 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 			{
 				aPhysicsObject = this._myObjectsMap[i];
 				aPhysicsObject._myVelocity =	//TODO isnt this one proper??
-					aPhysicsObject._myAABB.getLeftTop().subtract(aMovedObjectsThisFrame[i]).scale(1000 / deltaTime);
+					aPhysicsObject._myAABB.getLeftTop().subtract(aMovedObjectsThisFrame[i]).scale(1000 / aDeltaTime);
 				anOwner = aPhysicsObject._myOwner;
 				if(anOwner && anOwner.onPhysicsObjectUpdated)
 				{
@@ -482,7 +476,7 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 			this._myDetectionTree.walk(
 				function addToRenderMap(item)
 				{
-					aListToDraw[item._myID] = item;
+					aListToDraw[item.getID()] = item;
 				},
 				aCameraRect
 			);

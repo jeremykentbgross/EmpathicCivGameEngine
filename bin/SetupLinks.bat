@@ -1,0 +1,1 @@
+mklink /D ..\3rdParty\public\dojo-release-1.7.2\ ..\..\..\ECGame3rdParty\dojo-release-1.7.2\

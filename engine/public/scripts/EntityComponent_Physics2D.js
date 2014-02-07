@@ -80,7 +80,8 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 			//TODO anOwner.event(getposition, myPos);??
 			
 			this._myOwner.onEvent(
-				new ECGame.EngineLib.Events.UpdatePosition(
+				new ECGame.EngineLib.Events.UpdatedPhysicsStatus(
+					this._myOwner,
 					this._myPosition,
 					this._myVelocity,
 					this._myAABB
@@ -122,7 +123,7 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 			//TODO server side: make sure full position is within some reasonable range
 			
 			//TODO bool to serialize range (just like obj owner) so it can change to ideal size for its containing map
-			
+			//TODO examine client server feedback!!
 			if(inSerializer.isReading())
 			{
 				this._myAABB.setCenter(this._myPosition);
@@ -136,7 +137,8 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 				if(this._myOwner)
 				{
 					this._myOwner.onEvent(
-						new ECGame.EngineLib.Events.UpdatePosition(
+						new ECGame.EngineLib.Events.UpdatedPhysicsStatus(
+							this._myOwner,
 							this._myPosition.clone(),
 							this._myVelocity.clone(),
 							this._myAABB.clone()
@@ -159,6 +161,15 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 			this._myPhysicsObject.setActive();
 			this._myPhysicsObject.setOwner(this);
 			//TODO set the owner in the PhysObj for callbacks, triggers, etc?
+			
+			this._myOwner.onEvent(
+				new ECGame.EngineLib.Events.UpdatedPhysicsStatus(
+					this._myOwner,
+					this._myPosition,
+					this._myVelocity,
+					this._myAABB
+				)
+			);
 		},
 		
 		onEntityRemovedFromWorld : function onEntityRemovedFromWorld(/*inEvent*/)
@@ -182,7 +193,8 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 		onPhysicsObjectUpdated : function onPhysicsObjectUpdated(inEvent)
 		{
 			this._myOwner.onEvent(//TODO not have seperate event?
-				new ECGame.EngineLib.Events.UpdatePosition(
+				new ECGame.EngineLib.Events.UpdatedPhysicsStatus(
+					this._myOwner,
 					inEvent.position,
 					inEvent.velocity,
 					inEvent.boundingRect

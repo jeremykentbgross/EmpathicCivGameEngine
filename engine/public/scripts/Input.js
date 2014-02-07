@@ -284,7 +284,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 			//TODO need to draw a real cursor
 		},
 				
-		update : function update()
+		update : function update(/*inUpdateData*/)
 		{
 			var i, inputString, inputEvent;
 			

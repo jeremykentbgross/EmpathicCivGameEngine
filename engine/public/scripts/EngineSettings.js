@@ -99,6 +99,7 @@ ECGame.Settings =
 	Timer :
 	{
 		useRequestAnimFrame : false	//false -> requestAnimFrame is almost certainly less secure, and possibly slower
+		,averageDeltaTimes : false
 	},
 	
 	Server :	//TODO move this to a private file
@@ -272,6 +273,8 @@ ECGame.Settings =
 		//TODO NetworkDetailedMessages_Print
 		Network_SimulatedLag : 0,
 		
+		WorldSpacialHash_Draw : false,
+		
 		//default debug text color
 		TextDefault_DrawColor : 'rgba(255, 255, 255, 1)',
 		TextBackground_DrawColor : 'rgba(0, 0, 0, 0.5)',
@@ -378,6 +381,10 @@ ECGame.Settings =
 	isDebugDraw_Updater : function isDebugDraw_Updater()
 	{
 		return this.isDebugDraw() && this.Debug.Updater_Draw;
+	}
+	,isDebugDraw_WorldSpacialHash : function isDebugDraw_WorldSpacialHash()
+	{
+		return this.isDebugDraw() && this.Debug.WorldSpacialHash_Draw;
 	}
 	/*
 	isDebugDraw_ : function isDebugDraw_()

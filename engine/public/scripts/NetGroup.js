@@ -49,7 +49,7 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 			this._myNetwork = inNetwork;
 		},
 		
-		update : function update()//TODO onUpdate
+		update : function update(/*inUpdateData*/)
 		{
 			var
 				//user

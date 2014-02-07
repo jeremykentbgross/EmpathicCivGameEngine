@@ -27,6 +27,7 @@ ECGame.EngineLib.RayTracer2D = ECGame.EngineLib.Class.create({
 		this._myVisitedNodes = [];	//for debug rendering
 		this._myNodeCollisionPoints = [];	//for debug rendering
 		this._myItemCollisionPoints = [];	//for debug rendering
+		this._myID = ++ECGame.EngineLib.RayTracer2D._ourNextID;
 	},
 	Parents : [],
 	flags : {},
@@ -34,7 +35,9 @@ ECGame.EngineLib.RayTracer2D = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
-		fireRay : function fireRay(inRootNode, inStartingPoint, inEndingPoint)
+		_ourNextID : 0
+		
+		,fireRay : function fireRay(inRootNode, inStartingPoint, inEndingPoint, inSkipParentCheck)
 		{
 			var i,
 				aItemsList,
@@ -58,7 +61,7 @@ ECGame.EngineLib.RayTracer2D = ECGame.EngineLib.Class.create({
 				this._myNodeCollisionPoints.push(this._myRay.getCurrentPoint());
 				
 				//look at this nodes items, and that of all its parents:
-				while(aCurrentNode)
+				while(aCurrentNode && aCurrentNode.myLastRayToTouchMe !== this._myID)
 				{
 					aItemsList = aCurrentNode._myItems;
 					for(i = 0; i < aItemsList.length; ++i)
@@ -85,8 +88,9 @@ ECGame.EngineLib.RayTracer2D = ECGame.EngineLib.Class.create({
 							myT : aT
 						});
 					}
-					aCurrentNode = aCurrentNode.getParent();
-					//TODO if aCurrentNode (parent) already visited, break (need a speedy way to do it without adding data to nodes)
+					//mark aCurrentNode as already visited by this ray so we don't iterate over parents many times
+					aCurrentNode.myLastRayToTouchMe = this._myID;//TODO add variable to QuadTree item? or make map with id's as well?
+					aCurrentNode = inSkipParentCheck ? null : aCurrentNode.getParent();
 				}
 			} while(this._myRay.update());
 			

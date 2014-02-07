@@ -435,7 +435,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 			);*/
 		},
 		
-		_removeSocket : function _removeSocket(inSocket)
+		_removeSocket : function _removeSocket(inSocket)//TODO consider using ws built in clientTracking instead (which will close all of them automatically when the server closes
 		{
 			var anIndex, aLength;
 			

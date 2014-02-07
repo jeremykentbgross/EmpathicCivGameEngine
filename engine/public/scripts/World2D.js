@@ -28,7 +28,7 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 		this._myMapSizeInTiles = 0;
 		this._myTileSize = 0;
 		this._myMinPhysicsPartitionSize = 0;
-		this._myWorldSize = 0; // == _myMapSizeInTiles * _myTileSize	//TODO rename worldSize
+		this._myWorldSize = 0; // == _myMapSizeInTiles * _myTileSize
 		
 		this._myMap = null;
 		this._myMapRef = null;	//for networking
@@ -48,6 +48,9 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 		this._myEntityRefs = [];
 		this._myAddedEntityRefs = [];
 		this._myRemovedEntityRefs = [];
+		
+		this._myEntitySpacialHashMap = null;
+		this._myEntityHashByID = [];
 		
 		this._myDefaultCamera = ECGame.EngineLib.Camera2.create();
 		this._myCamera = null;
@@ -95,6 +98,13 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			this._myAddedEntities = [];
 			this._myRemovedEntities = [];
 			
+			this._myEntitySpacialHashMap = ECGame.EngineLib.QuadTree.create(
+				ECGame.EngineLib.AABB2D.create(0, 0, this._myWorldSize, this._myWorldSize)
+				,inMinPhysicsPartitionSize
+				,null
+			);
+			this._myEntityHashByID = [];
+			
 			this._myDefaultCamera = ECGame.EngineLib.Camera2.create();
 			this._myCamera = null;
 		},
@@ -134,12 +144,19 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			{
 				ECGame.instance.getSoundSystem().debugDraw(inGraphics, this);
 			}
+			
+			if(ECGame.Settings.isDebugDraw_WorldSpacialHash())
+			{
+				this._myEntitySpacialHashMap.debugDraw(inGraphics);//TODO spacial hashmap should maybe be part of the trigger system??
+			}
 		},
 		
 		renderMiniMap : function renderMiniMap(inGraphics, inTargetSpaceRect)
 		{
 			var aCameraRect
 				,aScale
+				,anAABB
+				,i
 				;
 			
 			inTargetSpaceRect = inTargetSpaceRect || inGraphics.getBackBufferRect();
@@ -147,6 +164,18 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			
 			aScale = inTargetSpaceRect.myWidth / this._myWorldSize;
 			//&? = inTargetSpaceRect.myHeight / this._myWorldSize
+			
+			//TODO extract the entity drawing into a function for override!
+			inGraphics.setFillStyle('rgba(0, 255, 0, 1)');
+			for(i in this._myEntityHashByID)
+			{
+				anAABB = this._myEntityHashByID[i].getAABB2D().clone();
+				anAABB.myX *= aScale;
+				anAABB.myY *= aScale;
+				anAABB.myWidth *= aScale;
+				anAABB.myHeight *= aScale;
+				inGraphics.fillRect(anAABB);
+			}
 			
 			aCameraRect = this.getCamera().getRect();
 			aCameraRect.setLeftTop(
@@ -161,7 +190,8 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 
 		addEntity : function addEntity(inEntity, inPosition/*optional*/)
 		{
-			var anIndex;
+			var anIndex
+				;
 			
 			//if its already added, just return
 			if(this._myEntities.indexOf(inEntity) !== -1)
@@ -173,6 +203,9 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			{
 				inEntity.onEvent(ECGame.EngineLib.Events.SetPosition.create(inPosition));
 			}
+
+			//Note: The first UpdatedPhysicsStatus event (when 'addedToWorld') should cause it to be added to the hash map
+			inEntity.registerListener('UpdatedPhysicsStatus', this);
 			
 			//add it
 			this._myEntities.push(inEntity);
@@ -197,7 +230,11 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 		},
 		removeEntity : function removeEntity(inEntity)
 		{
-			var anIndex;
+			var anIndex
+				,aCurrentEntityHash
+				,aNodeArray
+				,aNodeIndex
+				;
 			
 			//find the entity
 			anIndex = this._myEntities.indexOf(inEntity);
@@ -206,6 +243,22 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			if(anIndex === -1)
 			{
 				return;
+			}
+			
+			inEntity.deregisterListener('UpdatedPhysicsStatus', this);
+			
+			//unregisterfromhashmap
+			aCurrentEntityHash = this._myEntityHashByID[inEntity.getID()];
+			delete this._myEntityHashByID[inEntity.getID()];
+			if(aCurrentEntityHash)
+			{
+				//remove it
+				aNodeArray = aCurrentEntityHash.myContainingNodes;
+				for(aNodeIndex in aNodeArray)
+				{
+					aNodeArray[aNodeIndex].deleteItem(aCurrentEntityHash);
+				}
+				aCurrentEntityHash.myContainingNodes = [];
 			}
 			
 			//remove it
@@ -230,6 +283,60 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 				
 				this.setNetDirty();
 			}
+		},
+		queryEntitiesInAABB : function queryEntitiesInAABB(inAABB2D)
+		{
+			var anEntityList
+				;
+
+			anEntityList = [];
+			
+			this._myEntitySpacialHashMap.walk(
+				function queueItem(inEntityNode)
+				{
+					anEntityList.push(inEntityNode.myEntity);
+				},
+				inAABB2D
+			);
+			/*for(var i = 0; i < anEntityList.length; ++i)
+			{
+				console.log('seen in world:', anEntityList[i].getID(), inAABB2D);
+			}*/
+			return anEntityList;
+		},
+		
+		//get info when entities in the world move and need to change their queriable spacial hash location
+		onUpdatedPhysicsStatus : function onUpdatedPhysicsStatus(inEvent)
+		{
+			var aCurrentEntityHash
+				,aNodeIndex
+				,aNodeArray
+				;
+			
+			aCurrentEntityHash = this._myEntityHashByID[inEvent.myEntity.getID()];
+			if(aCurrentEntityHash)
+			{
+				//remove it
+				aNodeArray = aCurrentEntityHash.myContainingNodes;
+				for(aNodeIndex in aNodeArray)
+				{
+					aNodeArray[aNodeIndex].deleteItem(aCurrentEntityHash);
+				}
+				aCurrentEntityHash.myContainingNodes = [];
+			}
+			else
+			{
+				//create a new one
+				aCurrentEntityHash = ECGame.EngineLib.QuadTreeItem.create(inEvent.boundingRect.clone());//TODO subclass of QuadTreeItem
+				this._myEntityHashByID[inEvent.myEntity.getID()] = aCurrentEntityHash;
+				aCurrentEntityHash.myEntity = inEvent.myEntity;
+				aCurrentEntityHash.myContainingNodes = [];
+			}
+			aCurrentEntityHash.setAABB2D(inEvent.boundingRect);
+			this._myEntitySpacialHashMap.insertToAllBestFitting(
+				aCurrentEntityHash
+				,aCurrentEntityHash.myContainingNodes
+			);
 		},
 		
 		getPhysics : function getPhysics()

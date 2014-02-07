@@ -118,27 +118,27 @@ ECGame.EngineLib.Ray2D = ECGame.EngineLib.Class.create({
 			//now find the min aNewT (first plane intersection)
 			//	that is also > t_old (meaning skipping plane intersection that happened before reaching this node as t_old is last intersection)
 			aNewT = Number.MAX_VALUE;
-			if(aT123.myX < aNewT && aT123.myX > this._myT)
+			if(aT123.myX < aNewT && aT123.myX >= this._myT)
 			{
 				aNewT = aT123.myX;
 			}
-			if(aT123.myY < aNewT && aT123.myY > this._myT)
+			if(aT123.myY < aNewT && aT123.myY >= this._myT)
 			{
 				aNewT = aT123.myY;
 			}
-//			if(aT123.myZ < aNewT && aT123.myZ > this._myT)
+//			if(aT123.myZ < aNewT && aT123.myZ >= this._myT)
 //			{
 //				aNewT = aT123.myZ;
 //			}
-			if(aT456.myX < aNewT && aT456.myX > this._myT)
+			if(aT456.myX < aNewT && aT456.myX >= this._myT)
 			{
 				aNewT = aT456.myX;
 			}
-			if(aT456.myY < aNewT && aT456.myY > this._myT)
+			if(aT456.myY < aNewT && aT456.myY >= this._myT)
 			{
 				aNewT = aT456.myY;
 			}
-//			if(aT456.myZ < aNewT && aT456.myZ > this._myT)
+//			if(aT456.myZ < aNewT && aT456.myZ >= this._myT)
 //			{
 //				aNewT = aT456.myZ;
 //			}
@@ -177,7 +177,7 @@ ECGame.EngineLib.Ray2D = ECGame.EngineLib.Class.create({
 			
 			if(inAABB.containsPoint(this._myP0))
 			{
-				return this._myP0.clone();
+				return 0;
 			}
 
 			//collide ray vs box walls (which happen to be all axis aligned planes)

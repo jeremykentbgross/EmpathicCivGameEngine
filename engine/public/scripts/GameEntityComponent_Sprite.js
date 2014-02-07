@@ -56,11 +56,11 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 		{
 			return this.getID();
 		},
-		update : function update(inDT)
+		update : function update(inUpdateData)
 		{
 			var aFrameEvents, i;
 			
-			aFrameEvents = this._myAnimationInstance.update(inDT);
+			aFrameEvents = this._myAnimationInstance.update(inUpdateData);
 			if(aFrameEvents)
 			{
 				for(i = 0; i < aFrameEvents.length; ++i)
@@ -75,7 +75,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			var owner = this._myOwner;//inEvent.entity;
 			
 			//register for events
-			owner.registerListener('UpdatePosition', this);
+			owner.registerListener('UpdatedPhysicsStatus', this);
 			owner.registerListener('EntityAddedToWorld', this);
 			owner.registerListener('EntityRemovedFromWorld', this);
 			
@@ -88,7 +88,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			var owner = this._myOwner;//inEvent.entity;
 			
 			//unregister for events
-			owner.deregisterListener('UpdatePosition', this);
+			owner.deregisterListener('UpdatedPhysicsStatus', this);
 			owner.deregisterListener('EntityAddedToWorld', this);
 			owner.deregisterListener('EntityRemovedFromWorld', this);
 			
@@ -97,7 +97,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			//this._myOwner = null;
 		},
 
-		onUpdatePosition : function onUpdatePosition(inEvent)
+		onUpdatedPhysicsStatus : function onUpdatedPhysicsStatus(inEvent)
 		{
 			var i
 				,anAnimProbibility

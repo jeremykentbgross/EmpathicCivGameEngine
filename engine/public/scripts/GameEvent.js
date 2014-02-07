@@ -44,6 +44,7 @@ ECGame.EngineLib.Events.GameEventBase = ECGame.EngineLib.Class.create({
 		{
 			return this._callbackName;
 		},
+		//TODO function getPriority()
 		
 		clone : function clone()
 		{
@@ -62,7 +63,8 @@ ECGame.EngineLib.Events.GameEventBase = ECGame.EngineLib.Class.create({
 //TODO change function names (and the event listeners) to the full name (GameEvent_XXX)
 
 
-
+////////////////////////////////////////////////////////////////////////////////////////
+//GameObject Events/////////////////////////////////////////////////////////////////////
 ECGame.EngineLib.Events.GameObjectNetDirty = ECGame.EngineLib.Class.create({
 	Constructor : function GameObjectNetDirty(inObject, inUserID)
 	{
@@ -79,6 +81,7 @@ ECGame.EngineLib.Events.GameObjectNetDirty = ECGame.EngineLib.Class.create({
 		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
+
 ECGame.EngineLib.Events.GameObjectDestroyed = ECGame.EngineLib.Class.create({
 	Constructor : function GameObjectDestroyed(inObject)
 	{
@@ -94,11 +97,14 @@ ECGame.EngineLib.Events.GameObjectDestroyed = ECGame.EngineLib.Class.create({
 		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
+//GameObject Events/////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-
-
+////////////////////////////////////////////////////////////////////////////////////////
+//EntityComponent Events////////////////////////////////////////////////////////////////
+//TODO rename to Component<AddedTo/RemovedFrom>Entity
 ECGame.EngineLib.Events.AddedToEntity = ECGame.EngineLib.Class.create({
 	Constructor : function AddedToEntity(inEntity)
 	{
@@ -115,9 +121,6 @@ ECGame.EngineLib.Events.AddedToEntity = ECGame.EngineLib.Class.create({
 	}
 });
 
-
-
-//TODO move to own file
 ECGame.EngineLib.Events.RemovedFromEntity = ECGame.EngineLib.Class.create({
 	Constructor : function RemovedFromEntity(inEntity)
 	{
@@ -133,10 +136,13 @@ ECGame.EngineLib.Events.RemovedFromEntity = ECGame.EngineLib.Class.create({
 		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
+//EntityComponent Events////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
 
 
 
-//TODO move to own file
+////////////////////////////////////////////////////////////////////////////////////////
+//Entity Events/////////////////////////////////////////////////////////////////////////
 ECGame.EngineLib.Events.EntityAddedToWorld = ECGame.EngineLib.Class.create({
 	Constructor : function EntityAddedToWorld(inWorld, inEntity)
 	{
@@ -154,8 +160,6 @@ ECGame.EngineLib.Events.EntityAddedToWorld = ECGame.EngineLib.Class.create({
 	}
 });
 
-
-
 ECGame.EngineLib.Events.EntityRemovedFromWorld = ECGame.EngineLib.Class.create({
 	Constructor : function EntityRemovedFromWorld(inWorld, inEntity)
 	{
@@ -172,9 +176,13 @@ ECGame.EngineLib.Events.EntityRemovedFromWorld = ECGame.EngineLib.Class.create({
 		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
+//Entity Events/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
 
 
 
+////////////////////////////////////////////////////////////////////////////////////////
+//Input Events//////////////////////////////////////////////////////////////////////////
 ECGame.EngineLib.Events.Input = ECGame.EngineLib.Class.create({
 	Constructor : function Input(inInputID, inMousePosition, inButtons, inKeys, inKeysPressed)
 	{
@@ -196,6 +204,8 @@ ECGame.EngineLib.Events.Input = ECGame.EngineLib.Class.create({
 		this.clicked = {};//TODO param?
 		
 		this.KEYBOARD = ECGame.EngineLib.Input.KEYBOARD;
+		
+		//TODO: input source??
 	},
 	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},
@@ -206,11 +216,17 @@ ECGame.EngineLib.Events.Input = ECGame.EngineLib.Class.create({
 		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
+//Input Events//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
 
 
 
 
 
+
+////////////////////////////////////////////////////////////////////////////////////////
+//Network Events////////////////////////////////////////////////////////////////////////
+//TODO which of these are still used?
 
 ECGame.EngineLib.Events.ConnectedToServer = ECGame.EngineLib.Class.create({
 	Constructor : function ConnectedToServer()
@@ -227,13 +243,6 @@ ECGame.EngineLib.Events.ConnectedToServer = ECGame.EngineLib.Class.create({
 	}
 });
 
-
-
-
-
-
-
-
 ECGame.EngineLib.Events.DisconnectedFromServer = ECGame.EngineLib.Class.create({
 	Constructor : function DisconnectedFromServer()
 	{
@@ -248,9 +257,6 @@ ECGame.EngineLib.Events.DisconnectedFromServer = ECGame.EngineLib.Class.create({
 		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
-
-
-
 
 //TODO should rename this Identified>Net<User
 ECGame.EngineLib.Events.IdentifiedUser = ECGame.EngineLib.Class.create({
@@ -269,8 +275,6 @@ ECGame.EngineLib.Events.IdentifiedUser = ECGame.EngineLib.Class.create({
 	}
 });
 
-
-
 //Note: This is actually only fired if the user is identified TODO rename as such??
 ECGame.EngineLib.Events.ClientDisconnected = ECGame.EngineLib.Class.create({
 	Constructor : function ClientDisconnected(inUser)
@@ -287,10 +291,6 @@ ECGame.EngineLib.Events.ClientDisconnected = ECGame.EngineLib.Class.create({
 		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
-
-
-
-
 
 //TODO rename NetMsg
 ECGame.EngineLib.Events.Msg = ECGame.EngineLib.Class.create({
@@ -309,9 +309,6 @@ ECGame.EngineLib.Events.Msg = ECGame.EngineLib.Class.create({
 	}
 });
 
-
-
-
 //TODO rename NetData
 ECGame.EngineLib.Events.Data = ECGame.EngineLib.Class.create({
 	Constructor : function Data(inData)
@@ -329,8 +326,6 @@ ECGame.EngineLib.Events.Data = ECGame.EngineLib.Class.create({
 	}
 });
 
-
-
 ECGame.EngineLib.Events.NetObjects = ECGame.EngineLib.Class.create({
 	Constructor : function NetObjects(inData)
 	{
@@ -346,9 +341,13 @@ ECGame.EngineLib.Events.NetObjects = ECGame.EngineLib.Class.create({
 		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
+//Network Events////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
 
 
 
+////////////////////////////////////////////////////////////////////////////////////////
+//Physics Events////////////////////////////////////////////////////////////////////////
 ECGame.EngineLib.Events.RequestVelocity = ECGame.EngineLib.Class.create({
 	Constructor : function RequestVelocity(inVelocity)
 	{
@@ -364,8 +363,6 @@ ECGame.EngineLib.Events.RequestVelocity = ECGame.EngineLib.Class.create({
 		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
-
-
 
 ECGame.EngineLib.Events.SetPosition = ECGame.EngineLib.Class.create({
 	Constructor : function SetPosition(inPosition)
@@ -389,12 +386,30 @@ ECGame.EngineLib.Events.SetPosition = ECGame.EngineLib.Class.create({
 	}
 });
 
-
-//TODO ECGame.EngineLib.Events.PhysicsObjectUpdated and this are the same
-ECGame.EngineLib.Events.UpdatePosition = ECGame.EngineLib.Class.create({
-	Constructor : function UpdatePosition(inPos, inVel, inAABB)
+//TODO SetPhysicsStatus/GetPhysicsStatus (all valid fields)??
+/*ECGame.EngineLib.Events.GetPhysicsStatus = ECGame.EngineLib.Class.create({
+	Constructor : function GetPhysicsStatus()
 	{
-		this.GameEventBase('onUpdatePosition');
+		this.GameEventBase('onGetPhysicsStatus');
+		this.myPosition = null;
+		this.myVelocity = null;
+		this.myAABB = null;
+	},
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition :
+	{
+		copyFrom : function copyFrom(/ *inOther* /){return;}
+	}
+});*/
+
+ECGame.EngineLib.Events.UpdatedPhysicsStatus = ECGame.EngineLib.Class.create({
+	Constructor : function UpdatedPhysicsStatus(inEntity, inPos, inVel, inAABB)
+	{
+		this.GameEventBase('onUpdatedPhysicsStatus');
+		this.myEntity = inEntity;
 		this.position = inPos.clone();
 		this.velocity = inVel.clone();
 		this.boundingRect = inAABB.clone();//TODO rename boundingRect => aabb
@@ -409,8 +424,30 @@ ECGame.EngineLib.Events.UpdatePosition = ECGame.EngineLib.Class.create({
 	}
 });
 
+ECGame.EngineLib.Events.PhysicsObjectUpdated = ECGame.EngineLib.Class.create({
+	Constructor : function PhysicsObjectUpdated(inPosition, inVelocity, inAABB)
+	{
+		this.GameEventBase('onPhysicsObjectUpdated');//TODO rename (on)PhysicsObjectUpdate
+		this.position = inPosition.clone();
+		this.velocity = inVelocity.clone();
+		this.boundingRect = inAABB.clone();//TODO rename AABB
+	},
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition :
+	{
+		copyFrom : function copyFrom(/*inOther*/){return;}
+	}
+});
+//Physics Events////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
 
 
+
+////////////////////////////////////////////////////////////////////////////////////////
+//Sound Events//////////////////////////////////////////////////////////////////////////
 ECGame.EngineLib.Events.PlaySound = ECGame.EngineLib.Class.create({
 	Constructor : function PlaySound(inSoundDescriptionID, inIsPositional, inIsFollowingSource, inRadius)
 	{
@@ -435,23 +472,7 @@ ECGame.EngineLib.Events.PlaySound = ECGame.EngineLib.Class.create({
 		}
 	}
 });
+//Sound Events//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
 
 
-//TODO ECGame.EngineLib.Events.UpdatePosition and this are the same!!!
-ECGame.EngineLib.Events.PhysicsObjectUpdated = ECGame.EngineLib.Class.create({
-	Constructor : function PhysicsObjectUpdated(inPosition, inVelocity, inAABB)
-	{
-		this.GameEventBase('onPhysicsObjectUpdated');//TODO rename (on)PhysicsObjectUpdate
-		this.position = inPosition.clone();
-		this.velocity = inVelocity.clone();
-		this.boundingRect = inAABB.clone();//TODO rename AABB
-	},
-	Parents : [ECGame.EngineLib.Events.GameEventBase],
-	flags : {},
-	ChainUp : [],
-	ChainDown : [],
-	Definition :
-	{
-		copyFrom : function copyFrom(/*inOther*/){return;}
-	}
-});

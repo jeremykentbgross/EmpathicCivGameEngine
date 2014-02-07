@@ -41,6 +41,11 @@ ECGame.EngineLib.Tile2DInstance = ECGame.EngineLib.Class.create({
 			this._myTileValue = inTileIndex;
 			this._mySceneGraphRenderable = inTileRenderable;
 			this._myPhysicsObject = inPhysicsObject;
+			
+			if(inPhysicsObject)
+			{
+				inPhysicsObject.setOwner(this);
+			}
 		}
 	}
 });

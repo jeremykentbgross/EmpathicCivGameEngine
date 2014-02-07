@@ -736,11 +736,11 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				//MAP EDITING (mouse)////////////////////////////////////
 				if(inInputEvent.buttons[0])
 				{
-					aMap.setTileIndex(aMap.toTileCoordinate(aMouseWorldPosition), this._myDrawTile);
+					aMap.setTileIndex(aMap.worldPositionToTileCoordinate(aMouseWorldPosition), this._myDrawTile);
 				}
 				if(inInputEvent.buttons[2])
 				{
-					aMap.clearTile(aMap.toTileCoordinate(aMouseWorldPosition));
+					aMap.clearTile(aMap.worldPositionToTileCoordinate(aMouseWorldPosition));
 				}
 				//MAP EDITING (mouse)////////////////////////////////////
 				/////////////////////////////////////////////////////////
