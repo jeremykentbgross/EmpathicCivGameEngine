@@ -196,7 +196,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	{
 		if(ECGame.Settings.Network.isMultiplayer)
 		{
-			include(inPublicEnginePath + "scripts/GameChatSystem.js");
+			include(inPublicEnginePath + "scripts/ChatSystem.js");
 		}
 		include(inPublicEnginePath + "scripts/Graphics2D.js");
 		include(inPublicEnginePath + "scripts/SoundAsset.js");
@@ -248,14 +248,14 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	include(inPublicEnginePath + "scripts/Renderable2D.js");
 	
 	include(inPublicEnginePath + "scripts/TileDescription2D.js");
-	include(inPublicEnginePath + "scripts/Tile2DInstance.js");
-	include(inPublicEnginePath + "scripts/Tile2DRenderable.js");
+	include(inPublicEnginePath + "scripts/TileInstance2D.js");
+	include(inPublicEnginePath + "scripts/TileRenderable2D.js");
 	
 	include(inPublicEnginePath + "scripts/Animation2DFrame.js");
 	include(inPublicEnginePath + "scripts/Animation2D.js");
 	include(inPublicEnginePath + "scripts/Animation2DInstance.js");
 	
-	include(inPublicEnginePath + "scripts/Game2DSceneGraph.js");
+	include(inPublicEnginePath + "scripts/SceneGraph2D.js");
 	
 	include(inPublicEnginePath + "scripts/TileMap2D.js");
 	include(inPublicEnginePath + "scripts/Physics2D.js");
