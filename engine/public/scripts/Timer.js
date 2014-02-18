@@ -32,6 +32,8 @@ ECGame.EngineLib.TimerUpdateData = function TimerUpdateData(
 	this.myAverageDeltaTime = inAverageDeltaTime;
 	this.myFrameCount = inFrameCount;
 	this.myFrameTime = inFrameTime;
+	
+	this.myFPS = (1000 / inAverageDeltaTime).toFixed(3);
 };
 
 
@@ -113,14 +115,20 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 						window.oRequestAnimationFrame || 
 						window.msRequestAnimationFrame ||
 						function requestAnimFrame( callback ){
-							window.setTimeout(callback, 1000 / 60);
+							window.setTimeout(
+								callback
+								,1000 / ECGame.Settings.Timer.targetFPS
+							);
 						};
 				}
 				else
 				{
 					requestAnimFrame =
 						function requestAnimFrame( callback ){
-							setTimeout(callback, 1000 / 60);
+							setTimeout(
+								callback
+								,1000 / ECGame.Settings.Timer.targetFPS
+							);
 						};
 				}
 				
@@ -128,7 +136,10 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 			}
 			else
 			{
-				this._myIntervalHandle = setInterval(this._onAnimFrame, 1000 / 120);
+				this._myIntervalHandle = setInterval(
+					this._onAnimFrame
+					,1000 / ECGame.Settings.Timer.targetFPS
+				);
 			}
 		},
 		

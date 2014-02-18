@@ -140,34 +140,32 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 			
 			aOnInput = function onInput(inEvent)
 			{
-				aThis._myGraphics.getInput()._handleInput(inEvent);
+				aThis._handleInput(inEvent);
 			};
-				
-			require(
-				['dojo/on'],
-				function importDojoCallback(inOn)
-				{
-					//keys:
-					inOn(document, 'keydown', aOnInput);
-					inOn(document, 'keyup', aOnInput);
-					inOn(document, 'keypress', aOnInput);
-									
-					//mouse:
-					inOn(inCanvas, 'mousedown', aOnInput);
-					inOn(inCanvas, 'mouseup', aOnInput);
-					inOn(inCanvas, 'mousemove', aOnInput);
-					//inOn(inCanvas, 'mousewheel', aOnInput);
-					inOn(inCanvas, 'click', aOnInput);
-					//inOn(inCanvas, 'dblclick', aOnInput);
-					inOn(inCanvas, 'mouseout', aOnInput);
-					inOn(inCanvas, 'mouseover', aOnInput);
-									
-					//prevent right click menu on the render area
-					inOn(inCanvas, 'contextmenu', function blockContextMenu(event){ event.preventDefault(); } );
-					
-					//TODO can i turn off middle mouse button native effect
-				}
+			
+			//keys:
+			document.addEventListener('keydown', aOnInput, false);
+			document.addEventListener('keyup', aOnInput, false);
+			document.addEventListener('keypress', aOnInput, false);
+							
+			//mouse:
+			inCanvas.addEventListener('mousedown', aOnInput, false);
+			inCanvas.addEventListener('mouseup', aOnInput, false);
+			inCanvas.addEventListener('mousemove', aOnInput, false);
+			//inOn(inCanvas, 'mousewheel', aOnInput);
+			inCanvas.addEventListener('click', aOnInput, false);
+			//inOn(inCanvas, 'dblclick', aOnInput);
+			inCanvas.addEventListener('mouseout', aOnInput, false);
+			inCanvas.addEventListener('mouseover', aOnInput, false);
+							
+			//prevent right click menu on the render area
+			inCanvas.addEventListener(
+				'contextmenu'
+				,function blockContextMenu(inEvent){inEvent.preventDefault();}
+				,false
 			);
+			
+			//TODO can i turn off middle mouse button native effect
 		},
 		
 		setSupressKeyboardEvents : function setSupressKeyboardEvents(inSupress)
@@ -183,12 +181,17 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 			
 			eventType = inEvent.type;
 			mouseRatio = this._myGraphics.getBackBufferToFrontBufferRatio();
-					
+			
+			//calculate offset if it is not present (firefox limitation)
+			inEvent.offsetX = inEvent.offsetX !== undefined ? inEvent.offsetX : inEvent.layerX - inEvent.target.offsetLeft;
+			inEvent.offsetY = inEvent.offsetY !== undefined ? inEvent.offsetY : inEvent.layerY - inEvent.target.offsetTop;
+			
 			switch(eventType)
 			{
 				case 'keydown':
 				case 'keyup':
 					this._keys[inEvent.keyCode] = (eventType === 'keydown');
+					this._keysPressed[inEvent.keyCode] = (eventType === 'keyup');
 					break;
 					
 				case 'keypress':
@@ -204,9 +207,8 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 					break;
 					
 				case 'mousemove':
-					//TODO firefox doesn't like offset, but it is needed.  jquery can fix this.  Need to go back to it from jodo i think.
-					this._mouseLoc.myX = Math.round(inEvent.offsetX * mouseRatio) /*|| inEvent.layerX*/;// Firefox hack:  || inEvent.layer
-					this._mouseLoc.myY = Math.round(inEvent.offsetY * mouseRatio) /*|| inEvent.layerY*/;// Firefox hack:  || inEvent.layer
+					this._mouseLoc.myX = Math.round(inEvent.offsetX * mouseRatio);
+					this._mouseLoc.myY = Math.round(inEvent.offsetY * mouseRatio);
 					break;
 				/*
 				case 'mousewheel':

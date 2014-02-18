@@ -57,13 +57,7 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 		this._myGraphicsContainer = null;
 		if(!ECGame.Settings.Network.isServer)
 		{
-			require(
-				['dojo/dom'],
-				function importDojoCallback(dom)
-				{
-					aThis._myGraphicsContainer = dom.byId('graphicsContainer');
-				}
-			);
+			aThis._myGraphicsContainer = document.getElementById('graphicsContainer');
 		}
 	},
 	Parents : [],
@@ -341,11 +335,8 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 		
 		_init : function _init()
 		{
-			var aThis
-				,i
+			var i
 				;
-
-			aThis = this;
 			
 			//the app is running or not
 			this._myIsRunning = true;
@@ -393,31 +384,23 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 				switch(ECGame.Settings.Graphics.mode)
 				{
 					case ECGame.Settings.Graphics.MODES.SINGLE_PANE:
-					{
 						//create input(s) on server so input components can get proper updates.
 						this._myInput.push(ECGame.EngineLib.Input.create());
-					}
 					break;
 					case ECGame.Settings.Graphics.MODES.SPLIT_HORIZONTAL:
 					//case ECGame.Settings.Graphics.MODES.SPLIT_VERTICAL:
-					{
 						//create input(s) on server so input components can get proper updates.
 						this._myInput.push(ECGame.EngineLib.Input.create());
 						this._myInput.push(ECGame.EngineLib.Input.create());
-					}
 					break;
 					case ECGame.Settings.Graphics.MODES.SPLIT_4WAY:
-					{
 						//create input(s) on server so input components can get proper updates.
 						this._myInput.push(ECGame.EngineLib.Input.create());
 						this._myInput.push(ECGame.EngineLib.Input.create());
 						this._myInput.push(ECGame.EngineLib.Input.create());
 						this._myInput.push(ECGame.EngineLib.Input.create());
-					}
 					break;
 					/*case ECGame.Settings.Graphics.MODES.CUSTOM_SCREEN_LAYOUT:
-					{
-					}
 					break;*/
 				}
 				for(i = 0; i < this._myInput.length; ++i)
@@ -427,18 +410,9 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			}
 			else
 			{
-				/*window.addEventListener('resize', this._resizeSpace, false);
+				window.addEventListener('resize', this._resizeSpace, false);
 				window.addEventListener('orientationchange', this._resizeSpace, false);
-				window.addEventListener('load', this._resizeSpace, false);*/
-				require(
-					['dojo/on'],
-					function importDojoCallback(inOn)
-					{
-						inOn(window, 'resize', aThis._resizeSpace);
-						inOn(window, 'orientationchange', aThis._resizeSpace);
-						inOn(window, 'load', aThis._resizeSpace);
-					}
-				);
+				window.addEventListener('load', this._resizeSpace, false);
 				
 				//TODO use FB id or something in the future
 				this._myLocalUser = new ECGame.EngineLib.User(
@@ -450,38 +424,28 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 				switch(ECGame.Settings.Graphics.mode)
 				{
 					case ECGame.Settings.Graphics.MODES.SINGLE_PANE:
-					{
 						if(!this._setupSinglePaneGraphics())
 						{
 							return false;
 						}
-					}
 					break;
 					case ECGame.Settings.Graphics.MODES.SPLIT_HORIZONTAL:
-					{
 						if(!this._setupSplitHorizontalGraphics())
 						{
 							return false;
 						}
-					}
 					break;
 					/*case ECGame.Settings.Graphics.MODES.SPLIT_VERTICAL:
-					{
 						return false;
-					}
 					break;*/
 					case ECGame.Settings.Graphics.MODES.SPLIT_4WAY:
-					{
 						if(!this._setupSplit4WayGraphics())
 						{
 							return false;
 						}
-					}
 					break;
 					/*case ECGame.Settings.Graphics.MODES.CUSTOM_SCREEN_LAYOUT:
-					{
 						//TODO
-					}
 					break;*/
 				}
 			

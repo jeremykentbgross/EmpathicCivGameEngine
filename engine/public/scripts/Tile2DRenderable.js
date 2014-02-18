@@ -19,12 +19,12 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-ECGame.EngineLib.Tile2DRenderable = ECGame.EngineLib.Class.create({
-	Constructor : function Tile2DRenderable()
+ECGame.EngineLib.TileRenderable2D = ECGame.EngineLib.Class.create({
+	Constructor : function TileRenderable2D()
 	{
 		this.Renderable2D();
-		this._myTileValue = 0;
-		this._myOwnerMap = null;	//TODO get rid of this and have the TileDescription instead
+		
+		this._myTileDescription = null;
 	},
 	Parents : [ECGame.EngineLib.Renderable2D],
 	flags : {},
@@ -32,13 +32,15 @@ ECGame.EngineLib.Tile2DRenderable = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
-		init : function init(inAABB2D, inLayer, inAnchorPosition, inTileIndex, inOwnerMap)
+		init : function init(inAABB2D, inDepth, inAnchorPosition, inTileDescription)
 		{
+			//set in parent class init (not called from here)
 			this._myAABB = inAABB2D;
-			this._myLayer = inLayer;
+			this._myDepth = inDepth;
 			this._myAnchorPosition = inAnchorPosition;
-			this._myTileValue = inTileIndex;
-			this._myOwnerMap = inOwnerMap;
+			
+			//class specific
+			this._myTileDescription = inTileDescription;
 		},
 		
 		render : function render(inGraphics)
@@ -47,13 +49,19 @@ ECGame.EngineLib.Tile2DRenderable = ECGame.EngineLib.Class.create({
 			{
 				return;
 			}
-			this._myOwnerMap._myTileSet.renderTile(//THIS IS ALL WRONG!!
-				inGraphics,
-				this._myTileValue,
-				this._myAnchorPosition
+			
+			/*
+			//TODO Allow scaling?
+			context . drawImage(image, dx, dy)
+			context . drawImage(image, dx, dy, dw, dh)
+			context . drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
+			=>tile.scaledRect
+			*/
+			
+			inGraphics.drawImage(
+				this._myTileDescription.getImage(),
+				this._myAnchorPosition.subtract(this._myTileDescription.getAnchor())//TODO src rect??
 			);
 		}
-		
-		//TODO debug draw
 	}
 });

@@ -87,7 +87,7 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			this._myMinPhysicsPartitionSize = inMinPhysicsPartitionSize;
 			this._myWorldSize = inMapSizeInTiles * inTileSize;
 			
-			this._mySceneGraph = new ECGame.EngineLib.Game2DSceneGraph();
+			this._mySceneGraph = new ECGame.EngineLib.SceneGraph2D();
 			this._mySceneGraph.init(this._myWorldSize, inTileSize);
 			
 			this._myPhysics = ECGame.EngineLib.Physics2D.create();

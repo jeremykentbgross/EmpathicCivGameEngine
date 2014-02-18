@@ -215,6 +215,9 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 		logData = '',
 		aReorderingArray;
 	
+	//comment out all instances of eval
+	this._src = this._src.replace(/\x65val/g, '\/\/');
+	
 	this._removeComments();
 	
 	if(ECGame.Settings.Server.removeTextForLocalization)

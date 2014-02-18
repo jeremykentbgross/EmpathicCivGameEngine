@@ -24,13 +24,14 @@
 /*jslint stupid : true*/
 
 
+//TODO replace this with jshint as an npm package
 //See: http://af-design.com/blog/2011/01/04/automating-jslint-validation/
 
 	
 ECGame.WebServerTools.CodeValidator = ECGame.EngineLib.Class.create({
 	Constructor : function CodeValidator()
 	{
-		this._myFileSystem = require('fs');	//TODO put all such things into some namespace!! (including dojo)
+		this._myFileSystem = require('fs');	//TODO put all such things into some namespace!!
 		this._myJSlint = require('../../../3rdParty/private/jslint.js');
 	
 		this._myProperties =

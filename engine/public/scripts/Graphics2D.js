@@ -58,13 +58,7 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 			
 			this._myIndex = inGraphicsIndex;
 			
-			require(
-				['dojo/dom'],
-				function importDojoCallback(dom)
-				{
-					aThis._myCanvas = dom.byId(inCanvasID);
-				}
-			);
+			aThis._myCanvas = document.getElementById(inCanvasID);
 			
 			if(!(this._myCanvas && this._myCanvas.getContext))
 			{
@@ -72,7 +66,7 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 			}
 			this._myCanvas2DContext = this._myCanvas.getContext('2d');
 			
-			this._myBackBufferCanvas = document.createElement('canvas');	//TODO create another way, with dojo maybe?
+			this._myBackBufferCanvas = document.createElement('canvas');
 			this._myBackBufferCanvas.width = this._myCanvas.width = ECGame.Settings.Graphics.backBufferWidth;
 			this._myBackBufferCanvas.height = this._myCanvas.height = ECGame.Settings.Graphics.backBufferHeight;
 			this._myBackBufferCanvas2DContext = this._myBackBufferCanvas.getContext('2d');
@@ -222,6 +216,11 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 				inEndAngle
 				/*inCounterClockwise*/
 			);
+		},
+		
+		setAlpha : function setAlpha(inAlpha)
+		{
+			this._myBackBufferCanvas2DContext.globalAlpha = inAlpha;
 		},
 		
 		//fill funtions

@@ -98,20 +98,32 @@ ATM chat container is visible when it is not multiplayer!
 	opacity : 0.5;
 	border-style : outset;
 	border-color : #0000ff;
-	cursor : pointer;
+	cursor : auto;
 }
 
-#chatContainer p
+#chatContainer p, #chatContainer form
 {
 	margin : 0px;
+	margin-left : 5px;
 	//opacity : 1.0;
 }
 
 #chatLog
 {
+	margin-left: 10px;
+	white-space: normal;
+	word-wrap: break-word;
 	overflow-y: scroll;
 	overflow-x: hidden;
 	max-height : 100px;
+}
+
+#chatForm
+{
+	width : 100%;
+}
+#chatInput
+{
 }
 
 /*TODO classes for chat from team, enemy, general, etc*/

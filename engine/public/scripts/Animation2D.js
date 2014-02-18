@@ -56,6 +56,11 @@ ECGame.EngineLib.Animation2D = ECGame.EngineLib.Class.create({
 			}
 		},
 		
+		setImage : function setImage(inImage)
+		{
+			this._myImage = inImage;
+		},
+		
 		render : function render(inGraphics, inFrame, inPosition)
 		{
 			this._myAnimationFrames[inFrame].render(inGraphics, this._myImage, inPosition);

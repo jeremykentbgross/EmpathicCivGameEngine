@@ -71,9 +71,45 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	//Setup include
 	if(!inIsServer)
 	{
-		include = function include(filename)
+		include = function include(inFileName)
 		{
-			require([filename, 'dojo/domReady']);
+			var aRequest
+				,aScript
+				,aScriptSource
+				;
+			
+			//setup the full relative filename
+			inFileName = 
+				window.location.protocol + '\/\/'
+				+ window.location.host + '/'
+				+ inFileName;
+			
+			//synchronously get the code
+			aRequest = new XMLHttpRequest();
+			aRequest.open('GET', inFileName, false);
+			aRequest.send();
+			
+			//set the returned script text while adding special comment to 
+			// auto include in debugger source listing:
+			aScriptSource = aRequest.responseText
+				+ '\n\/\/\/\/# sourceURL=' + inFileName + '\n';
+			
+			if(true)
+			{
+				//create a dom element to hold the code
+				aScript = document.createElement('script');
+				aScript.type = 'text/javascript';
+				
+				//set the script tag text, including the debugger id at the end!!
+				aScript.text = aScriptSource;
+							
+				//append the code to the dom
+				document.getElementsByTagName('body')[0].appendChild(aScript);
+			}
+			else
+			{
+				eval(aScriptSource);
+			}
 		};
 	}
 	else
@@ -211,6 +247,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	
 	include(inPublicEnginePath + "scripts/Renderable2D.js");
 	
+	include(inPublicEnginePath + "scripts/TileDescription2D.js");
 	include(inPublicEnginePath + "scripts/Tile2DInstance.js");
 	include(inPublicEnginePath + "scripts/Tile2DRenderable.js");
 	

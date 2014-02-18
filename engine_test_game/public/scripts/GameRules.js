@@ -73,43 +73,46 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			this._initListeners();
 			this._myTileset = ECGame.EngineLib.TileSet2D.create(//TODO serialize this and do not create it here but only on server!!!!!!!
 				[
-					{
-						fileName : 'game/images/grass.png'
-						,anchor : ECGame.EngineLib.Point2D.create()
-						,_myLayer : 0
-						,size : ECGame.EngineLib.Point2D.create(64,64)
-						,miniMapColor : 'rgba(0, 255, 0, 1)'
-					},
-					{
-						fileName : 'game/images/test/waterSub.png' //'images/water.png'
-						,anchor : ECGame.EngineLib.Point2D.create()
-						,_myLayer : 0
-						,size : ECGame.EngineLib.Point2D.create(/*64,64*/96,96)
-						,physics : ECGame.EngineLib.AABB2D.create(0, 0, 64, 64)
-						,miniMapColor : 'rgba(0, 0, 255, 1)'
-					},
-					{
-						fileName : 'game/images/ground_256.png'//'game/images/ground_level01_01.png' //'images/test/groundSub5.png' // 'images/dirt.png',
-						,anchor : ECGame.EngineLib.Point2D.create()
-						,_myLayer : 0
-						,size : ECGame.EngineLib.Point2D.create(96,96)//64,64)
-						,miniMapColor : 'rgba(128, 64, 0, 1)'
-					},
-					{
-						fileName : 'game/images/dirt.png2'//HACK 'images/wall_level01_01__.png'
-						,anchor : ECGame.EngineLib.Point2D.create()
-						,_myLayer : 0
-						,size : ECGame.EngineLib.Point2D.create(64,64)
-						,miniMapColor : 'rgba(255, 0, 255, 1)'
-					},
-					{
-						fileName : 'game/images/wall_256.png'//'game/images/wall_level01_01.png'//'images/test/wall.png' //
-						,anchor : ECGame.EngineLib.Point2D.create(32, 32)
-						,_myLayer : 1
-						,physics : ECGame.EngineLib.AABB2D.create(0, 0, 64, 64)
-						,size : ECGame.EngineLib.Point2D.create(96,96)
-						,miniMapColor : 'rgba(64, 32, 0, 1)'
-					}
+					ECGame.EngineLib.TileDescription2D.create(
+						'game/images/grass.png'
+						,ECGame.EngineLib.Point2D.create(64,64)//inSize
+						,ECGame.EngineLib.Point2D.create()//inAnchorPoint
+						,0//inDepth
+						,'rgba(0, 255, 0, 1)'//inMiniMapColor
+						,null//inPhysicsAABB
+					),
+					ECGame.EngineLib.TileDescription2D.create(
+						'game/images/test/waterSub.png' //'images/water.png'
+						,ECGame.EngineLib.Point2D.create(/*64,64*/96,96)//inSize
+						,ECGame.EngineLib.Point2D.create()//inAnchorPoint
+						,0//inDepth
+						,'rgba(0, 0, 255, 1)'//inMiniMapColor
+						,ECGame.EngineLib.AABB2D.create(0, 0, 64, 64)//inPhysicsAABB
+					),
+					ECGame.EngineLib.TileDescription2D.create(
+						'game/images/ground_256.png'//'game/images/ground_level01_01.png' //'images/test/groundSub5.png' // 'images/dirt.png',
+						,ECGame.EngineLib.Point2D.create(/*64,64*/96,96)//inSize
+						,ECGame.EngineLib.Point2D.create()//inAnchorPoint
+						,0//inDepth
+						,'rgba(128, 64, 0, 1)'//inMiniMapColor
+						,null//inPhysicsAABB
+					),
+					ECGame.EngineLib.TileDescription2D.create(
+						'game/images/dirt.png2'//HACK 'images/wall_level01_01__.png'
+						,ECGame.EngineLib.Point2D.create(64,64)//inSize
+						,ECGame.EngineLib.Point2D.create()//inAnchorPoint
+						,0//inDepth
+						,'rgba(255, 0, 255, 1)'//inMiniMapColor
+						,null//inPhysicsAABB
+					),
+					ECGame.EngineLib.TileDescription2D.create(
+						'game/images/wall_256.png'//'game/images/wall_level01_01.png'//'images/test/wall.png' //
+						,ECGame.EngineLib.Point2D.create(96,96)//inSize
+						,ECGame.EngineLib.Point2D.create(32, 32)//inAnchorPoint
+						,0//inDepth
+						,'rgba(64, 32, 0, 1)'//inMiniMapColor
+						,ECGame.EngineLib.AABB2D.create(0, 0, 64, 64)//inPhysicsAABB
+					)
 					//,
 				]
 			);

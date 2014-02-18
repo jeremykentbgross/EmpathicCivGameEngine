@@ -53,10 +53,7 @@ event: mapchange
 
 see notebook for refactor on tile and tileset related stuff
 	note: shared stuff between tiles still probably wanted (ex animation from)
-	-Tile2DRenderable render/debugdraw (moved from map + tileset)
-	-Tile2DInstance cleanup (moved from map)
-	-TileDescription class?
-	-Tileset functionality redistribution
+	-TileInstance2D cleanup (moved from map)
 	
 Renderable init chain down (first params go first)?
 	
@@ -216,7 +213,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 				this._myMiniMapNativeTileResolution = ECGame.Settings.Graphics.backBufferWidth / inMapSizeInTiles;
 
 				//setup minimap
-				this._myMiniMapCanvas = document.createElement('canvas');	//TODO create another way, with dojo maybe?
+				this._myMiniMapCanvas = document.createElement('canvas');
 				this._myMiniMapCanvas.width = this._myMapSizeInTiles * this._myMiniMapNativeTileResolution;
 				this._myMiniMapCanvas.height = this._myMapSizeInTiles * this._myMiniMapNativeTileResolution;
 				this._myMiniMapCanvas2DContext = this._myMiniMapCanvas.getContext('2d');
@@ -227,6 +224,15 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 		{
 			inTargetSpaceRect = inTargetSpaceRect || inGraphics.getBackBufferRect();
 			inGraphics.drawImageInRect(this._myMiniMapCanvas, inTargetSpaceRect);
+		},
+		
+		getTileSize : function getTileSize()
+		{
+			return this._myTileSize;
+		},
+		getWorld : function getWorld()
+		{
+			return this._myWorld;
 		},
 
 		setTileSet : function setTileSet(inTileSet)
@@ -271,11 +277,8 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 		{
 			var aTileInstance
 				,aTileInstanceAABB
-				,aTileWorldPosition
-				,aTilePhysicsRect
-				,aTileRenderable
-				,aPhysicsObject
 				,anIndex
+				,aTileDescription
 				;
 			
 			if(inTilePosition.myX < 0 || this._myMapSizeInTiles <= inTilePosition.myX
@@ -292,14 +295,6 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 				return;
 			}
 			
-			//bounding box containing this tile instance in the map
-			aTileInstanceAABB = ECGame.EngineLib.AABB2D.create(
-				inTilePosition.myX * this._myTileSize,
-				inTilePosition.myY * this._myTileSize,
-				this._myTileSize,
-				this._myTileSize
-			);
-			
 			anIndex = inTilePosition.myY * this._myMapSizeInTiles + inTilePosition.myX;
 			//see if the tile is the same as what is there, if so, don't delete the current instance, just return
 			if(this._myTileIndexArray[anIndex] === inTileIndex)
@@ -308,54 +303,29 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			}
 			//set the value in the index array
 			this._myTileIndexArray[anIndex] = inTileIndex;
-						
+
+			
+			//bounding box containing this tile instance in the map
+			aTileInstanceAABB = ECGame.EngineLib.AABB2D.create(
+				inTilePosition.myX * this._myTileSize,
+				inTilePosition.myY * this._myTileSize,
+				this._myTileSize,
+				this._myTileSize
+			);
 			//insert exclusively! So delete the old tile first
 			this._clearTileInRect(aTileInstanceAABB);
 			
-			//the world position of the tile instance:
-			aTileWorldPosition = aTileInstanceAABB.getLeftTop();
 			
-			//get the physics object of the tile (if any)
-			aTilePhysicsRect = this._myTileSet.getPhysicsRect(inTileIndex, aTileWorldPosition);
-			if(aTilePhysicsRect)
-			{
-				//note if need be, could use a tree to merge physics objects to nearest squares for optimization
-				aPhysicsObject = this._myWorld.getPhysics().createNewPhysicsObject();
-				aPhysicsObject.setAABB(aTilePhysicsRect);
-				//TODO may also have other physics properties later (ie not solid but slippery or something)
-			}
-			else
-			{
-				aPhysicsObject = null;
-			}
-			
-			//setup renderable for scenegraph
-			aTileRenderable = ECGame.EngineLib.Tile2DRenderable.create(
-				this._myTileSet.getTileRenderRect(inTileIndex, aTileWorldPosition)
-				,this._myTileSet.getTileLayer(inTileIndex)
-				,aTileWorldPosition
-				,inTileIndex
-				,this
-			);
-			
-			//create tile instance
-			aTileInstance = ECGame.EngineLib.Tile2DInstance.create(
-				aTileInstanceAABB
-				,inTileIndex
-				,aTileRenderable
-				,aPhysicsObject
-			);
-			
-			//insert to scenegraph
-			this._myWorld.getSceneGraph().insertItem(aTileInstance._mySceneGraphRenderable);
-
+			//get the tile description for this index and create a new tile instance
+			aTileDescription = this._myTileSet.getTileDescription(inTileIndex);
+			aTileInstance = aTileDescription.createTileInstance2D(this, aTileInstanceAABB);
 			//insert to tilemap
 			this._myTileInstanceTree.insertToSmallestContaining(aTileInstance);
 			
 			if(!ECGame.Settings.Network.isServer)
 			{
 				//write to minimap
-				this._myMiniMapCanvas2DContext.fillStyle = this._myTileSet.getTileMiniMapColor(inTileIndex);
+				this._myMiniMapCanvas2DContext.fillStyle = aTileDescription.getTileMiniMapColor();
 				this._myMiniMapCanvas2DContext.fillRect(
 					inTilePosition.myX * this._myMiniMapNativeTileResolution,
 					inTilePosition.myY * this._myMiniMapNativeTileResolution,
@@ -415,7 +385,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			if(this.canUserModifyNet() && !this._myUsingNetViews)
 			{
 				this._myChangedTiles.push(
-					ECGame.EngineLib.TileIndexSerializationHelper.create(inTilePosition, aClearTileValue)
+					ECGame.EngineLib.TileIndexSerializationHelper.create(inTilePosition, aClearTileValue)//TODO do we double change this when removing to change tiles, I think so!!
 				);
 				this.setNetDirty();
 			}
@@ -443,7 +413,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			for(i in aDeletedTilesArray)
 			{
 				//remove from scenegraph
-				this._myWorld.getSceneGraph().removeItem(aDeletedTilesArray[i]._mySceneGraphRenderable);
+				this._myWorld.getSceneGraph().removeItem(aDeletedTilesArray[i]._myTileRenderable2D);
 				
 				//remove from physics
 				if(aDeletedTilesArray[i]._myPhysicsObject)
@@ -574,17 +544,12 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 		
 		debugDraw : function debugDraw(inGraphics)
 		{
-			var aThis = this;
 			inGraphics.drawDebugText("Debug Drawing Tile Map");
 			
 			this._myTileInstanceTree.walk(
 				function walkCallback(item)
 				{
-					aThis._myTileSet.renderTileInRect(//TODO should be debug draw for tile
-						inGraphics,
-						item._myTileValue,
-						item.getAABB2D()
-					);
+					item.debugDraw(inGraphics);
 				},
 				inGraphics.getCamera2D().getRect()
 			);

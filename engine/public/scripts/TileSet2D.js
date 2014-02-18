@@ -20,38 +20,14 @@
 */
 
 
-//TODO should be depricted => functions moved to Tile2DInstance/Description or map class
-ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(//TODO TileDesc/Animation/multi-layers??
+ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(
 {
 	Constructor : function TileSet2D()
 	{
 		this.GameObject();
 		
 		this._myTiles =	[];
-		/*
-		//TODO target impl:
-		animFrame =
-		{
-			filename
-			image
-			anchor	//unscaled
-			scaledRect //optional
-			layer
-			//triggers/events/physics object changes
-		}
-		animation =
-		{
-			animFrames
-			speed
-			bounding box	//THIS IS related 2 the ONE IN THE SCENE MANAGER TREE??
-		}
-		tileDesc =
-		{
-			animation(s)
-			physics + other properties (sound effects, etc)
-		}
-		tiles = tileDesc[];
-		*/
+		//TODO _myTilesRefs??
 	},
 	
 	Parents : [ECGame.EngineLib.GameObject],
@@ -63,90 +39,21 @@ ECGame.EngineLib.TileSet2D = ECGame.EngineLib.Class.create(//TODO TileDesc/Anima
 	
 	Definition :
 	{
-		//TODO TileDescription struct/class
 		init : function init(inTiles)
 		{
-			var i, tile;
 			this._myTiles = inTiles || this._myTiles;
-			
-			for(i = 0; i < this._myTiles.length; ++i)
-			{
-				tile = this._myTiles[i];
-				if(!ECGame.Settings.Network.isServer)//TODO should the function return strait away?
-				{
-					ECGame.instance.getAssetManager().loadImage(tile.fileName, tile);
-				}
-				this._maxLayers = tile._myLayer;//TODO is this needed? maybe for map floors vs tileset layer (not used atm I think)
-			}
 		},
 		
 		getNumberOfTiles : function getNumberOfTiles()
 		{
 			return this._myTiles.length;
 		},
-
-		renderTile : function renderTile(inGraphics, inID, inTargetPoint)
-		{
-			/*
-			//TODO Allow scaling?
-			context . drawImage(image, dx, dy)
-			context . drawImage(image, dx, dy, dw, dh)
-			context . drawImage(image, sx, sy, sw, sh, dx, dy, dw, dh)
-			=>tile.scaledRect
-			*/
-			var tile = this._myTiles[inID];
-			inGraphics.drawImage(
-				tile._myImage,
-				inTargetPoint.subtract(tile.anchor)//TODO consider possible =>tile.scaledRect
-			);
-		},
-
-		//TODO depricate, should be debugdraw for the tile
-		renderTileInRect : function renderTileInRect(inGraphics, inID, inTargetRect)
-		{
-			//TODO should be src/dest rect draw
-			inGraphics.drawImageInRect(this._myTiles[inID]._myImage, inTargetRect);
-		},
-
-		getTileRenderRect : function getTileRenderRect(inID, inPosition)
-		{
-			var tile = this._myTiles[inID];
-			inPosition = inPosition || ECGame.EngineLib.Point2D.create();
-			
-			return ECGame.EngineLib.AABB2D.create(
-				inPosition.myX - tile.anchor.myX,
-				inPosition.myY - tile.anchor.myY,
-				tile.size.myX,//_myImage.width,//todo consider possible =>tile.scaledRect
-				tile.size.myY//_myImage.height
-			);
-		},
-
-		getTileLayer : function getTileLayer(inID)
-		{
-			return this._myTiles[inID]._myLayer;
-		},
 		
-		getTileMiniMapColor : function getTileMiniMapColor(inID)
+		getTileDescription : function getTileDescription(inTileIndex)
 		{
-			return this._myTiles[inID].miniMapColor;
+			return this._myTiles[inTileIndex];
 		},
-		
-		getPhysicsRect : function getPhysicsRect(inID, inPosition)
-		{
-			var physicsRect = this._myTiles[inID].physics;
-			
-			if(!physicsRect)
-			{
-				return null;
-			}
-			
-			return ECGame.EngineLib.AABB2D.create(
-				inPosition.myX + physicsRect.myX,
-				inPosition.myY + physicsRect.myY,
-				physicsRect.myWidth,//todo consider possible =>tile.scaledRect
-				physicsRect.myHeight
-			);
-		},
+
 		//set<classname>NetDirty
 		clearNetDirty : function clearNetDirty(){return;},
 		postSerialize : function postSerialize(){return;},

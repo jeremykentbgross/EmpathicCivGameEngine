@@ -180,13 +180,15 @@ ECGame.WebServerTools.CodeCompressor.prototype.makeCompactGameLoader = function 
 	obfuscator.addIgnore('Math');//because for some reason doesn't have it's name property
 	obfuscator.addIgnore('console');//because for some reason doesn't have it's name property
 	obfuscator.addIgnore('window');//TODO remove unneeded
-	
+//TODO regex window.XXXX; document.XXXX etc and add those!
+
+	obfuscator.addIgnore('maxLength');//css property changed in code
 	obfuscator.addIgnore('dom');//TODO this is param, rename it so we dont need this
 	obfuscator.addIgnore('id');//TODO remove unneeded, used by dom.create
 	obfuscator.addIgnore('width');//TODO remove unneeded, used by dom.create
 	obfuscator.addIgnore('height');//TODO remove unneeded, used by dom.create
 	obfuscator.addIgnore('innerHTML');//TODO remove unneeded, used by dom.create
-	obfuscator.addIgnore('on');//TODO remove unneeded, used by dojo
+//	obfuscator.addIgnore('on');//TODO remove unneeded??
 	obfuscator.addIgnore('emit');//TODO remove unneeded
 	obfuscator.addIgnore('document');//TODO remove unneeded??
 	

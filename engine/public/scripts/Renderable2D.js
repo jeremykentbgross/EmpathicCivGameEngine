@@ -31,7 +31,7 @@ ECGame.EngineLib.Renderable2D = ECGame.EngineLib.Class.create({
 		//array of nodes that contain this renderable in the scene graph
 		this._mySceneGraphOwningNodes = null;					//accessed only by the scenegraph
 		this._myLastFrameDrawn = -1;							//accessed only by the scenegraph
-		this._myLayer = 0;										//accessed many places (should it be private or smthg?)
+		this._myDepth = 0;										//accessed many places (should it be private or smthg?)
 		this._myAnchorPosition = new ECGame.EngineLib.Point2D();
 		this._myScreenPos = new ECGame.EngineLib.Point2D();		//accessed only by the scenegraph
 		this._myDrawOrderHelper = null;							//accessed only by the scenegraph
@@ -42,10 +42,10 @@ ECGame.EngineLib.Renderable2D = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
-		init : function init(inAABB2D, inLayer, inAnchorPosition)
+		init : function init(inAABB2D, inDepth, inAnchorPosition)
 		{
 			this._myAABB = inAABB2D;
-			this._myLayer = inLayer;
+			this._myDepth = inDepth;
 			this._myAnchorPosition = inAnchorPosition;
 		},
 		

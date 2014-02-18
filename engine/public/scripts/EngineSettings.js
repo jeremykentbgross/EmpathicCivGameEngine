@@ -83,7 +83,7 @@ ECGame.Settings =
 	World2D :
 	{
 		MaxMapSizeInTiles : 256,
-		MinTileSize : 8,
+		MinTileSize : 8,	//TODO tune these for the game!!
 		MaxTileSize : 256,
 		MaxNumberOfTiles : 255	//TODO allow this to be 65535 with u16 type array option, etc
 	},
@@ -100,6 +100,7 @@ ECGame.Settings =
 	{
 		useRequestAnimFrame : false	//false -> requestAnimFrame is almost certainly less secure, and possibly slower
 		,averageDeltaTimes : false
+		,targetFPS : 120
 	},
 	
 	Server :	//TODO move this to a private file

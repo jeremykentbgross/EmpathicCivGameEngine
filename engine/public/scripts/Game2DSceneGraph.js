@@ -21,12 +21,12 @@
 
 
 //TODO make this class pluggable with other 2d scene graphs?  Or just the sorting part?
-ECGame.EngineLib.Game2DSceneGraph = function Game2DSceneGraph(){return;};//TODO put init in here?
-ECGame.EngineLib.Game2DSceneGraph.prototype.constructor = ECGame.EngineLib.Game2DSceneGraph;
+ECGame.EngineLib.SceneGraph2D = function SceneGraph2D(){return;};//TODO put init in here?
+ECGame.EngineLib.SceneGraph2D.prototype.constructor = ECGame.EngineLib.SceneGraph2D;
 
 
 
-ECGame.EngineLib.Game2DSceneGraph.prototype.init = function init(inMapSize, inMinNodeSize)
+ECGame.EngineLib.SceneGraph2D.prototype.init = function init(inMapSize, inMinNodeSize)
 {
 	this._mySceneTree = ECGame.EngineLib.QuadTree.create();
 	this._mySceneTree.init(
@@ -53,7 +53,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.init = function init(inMapSize, inMi
 
 
 //TODO more like physics handles? maybe?***************************
-ECGame.EngineLib.Game2DSceneGraph.prototype.insertItem = function insertItem(inRenderableItem)
+ECGame.EngineLib.SceneGraph2D.prototype.insertItem = function insertItem(inRenderableItem)
 {
 	inRenderableItem._mySceneGraphOwningNodes = [];
 	this._mySceneTree.insertToAllBestFitting(inRenderableItem, inRenderableItem._mySceneGraphOwningNodes);
@@ -63,7 +63,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.insertItem = function insertItem(inR
 
 
 
-ECGame.EngineLib.Game2DSceneGraph.prototype.removeItem = function removeItem(inRenderableItem)
+ECGame.EngineLib.SceneGraph2D.prototype.removeItem = function removeItem(inRenderableItem)
 {
 	var nodeIndex
 		,nodeArray
@@ -78,7 +78,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.removeItem = function removeItem(inR
 };
 
 
-ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inGraphics)
+ECGame.EngineLib.SceneGraph2D.prototype.render = function render(inGraphics)
 {
 	var renderables = [];
 	var aThis = this;
@@ -114,7 +114,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inGraphics)
 			var vec = inLeft._myDrawOrderHelper.subtract(inRight._myDrawOrderHelper);
 			
 			return (vec.myY * aThis._myMapSize * aThis._cos + vec.myX) +
-				(aThis._myMapSize * aThis._myMapSize) * (inLeft._myLayer - inRight._myLayer);
+				(aThis._myMapSize * aThis._myMapSize) * (inLeft._myDepth - inRight._myDepth);
 		}
 	);
 	
@@ -129,7 +129,7 @@ ECGame.EngineLib.Game2DSceneGraph.prototype.render = function render(inGraphics)
 	}
 };
 
-ECGame.EngineLib.Game2DSceneGraph.prototype._debugDraw = function _debugDraw(inGraphics, inRenderables)
+ECGame.EngineLib.SceneGraph2D.prototype._debugDraw = function _debugDraw(inGraphics, inRenderables)
 {
 	var fontSize
 		,currentRenderable

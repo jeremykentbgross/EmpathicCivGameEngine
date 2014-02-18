@@ -31,7 +31,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 		this._currentAnimation = 8;//TODO why 8?
 		this._myAnimationInstance = new ECGame.EngineLib.Animation2DInstance();
 /*TODO should be commented out?*/this._myAnimationInstance.setAnimation(this._animations[0]);//TODO should be a null/default object
-		this._myAnimationInstance._myLayer = 1;		//HACK ALSO??
+		this._myAnimationInstance._myDepth = 1;		//HACK ALSO??
 		
 		//TODO frame knows filename, offset, collision rects, (sound?) events, etc //TODO move this note to the frame class?
 		//TODO ^^^ same kind of thing for map tiles?
@@ -187,7 +187,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			
 			this._myAnimationInstance = new ECGame.EngineLib.Animation2DInstance();
 			this._myAnimationInstance.setAnimation(this._animations[0]);
-			this._myAnimationInstance._myLayer = inOther._myAnimationInstance._myLayer;
+			this._myAnimationInstance._myDepth = inOther._myAnimationInstance._myDepth;
 		}
 	}
 });
