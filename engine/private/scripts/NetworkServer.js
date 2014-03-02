@@ -120,6 +120,7 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 			if(ECGame.Settings.isDebugPrint_NetworkMessages())
 			{
 				ECGame.log.info("Lost Client! " + aThis._myUser);
+				console.log(inCode, inMessage);//Probably going to be annoying, but clears up JSLint for the moment
 			}
 			
 			//TODO broadcast chat command
@@ -133,7 +134,7 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 			aThis._myNetwork._removeSocket(aThis);
 		},
 		
-		_onMessage : function _onMessage(inMessage, inFlags)
+		_onMessage : function _onMessage(inMessage/*, inFlags*/)
 		{
 			var aThis
 				,aRecievedObj
@@ -160,13 +161,7 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 			
 			if(aThis._myUser.userID !== ECGame.EngineLib.User.USER_IDS.NEW_USER)
 			{
-				if(typeof inMessage === 'string')
-				{
-					//TODO inNetwork.event Msg
-					//aThis._myNetwork.serializeIn(aThis._myUser, inMessage);
-					//ECGame.log.info('Message:', inMessage);
-				}
-				else
+				if(typeof inMessage !== 'string')
 				{
 					if(!ECGame.Settings.getDebugSimulatedLagTime())
 					{
@@ -184,6 +179,12 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 						);
 					}
 				}
+				/*else
+				{
+					//TODO inNetwork.event Msg
+					//aThis._myNetwork.serializeIn(aThis._myUser, inMessage);
+					//ECGame.log.info('Message:', inMessage);
+				}*/
 			}
 			//handle connection handshake / ID
 			else
@@ -362,7 +363,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 		
 		_verifyClient : function _verifyClient(inInfo, inClientVerifiedFunction)//???????????????
 		{
-			var aUserID;
+			//var aUserID;
 			
 	//		console.trace();
 	//		console.log(arguments);
@@ -370,6 +371,10 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 			//TODO fb id? find user if they exist, otherwise create a new one or boot them.
 //			aUserID = ++(ECGame.EngineLib.User.USER_IDS.CURRENT_MAX);
 //			inInfo.req.myECGameUser = new ECGame.EngineLib.User("User" + aUserID, aUserID);
+			if(ECGame.Settings.isDebugPrint_NetworkMessages())
+			{
+				console.log(inInfo);
+			}
 			
 			inClientVerifiedFunction(true);
 		},

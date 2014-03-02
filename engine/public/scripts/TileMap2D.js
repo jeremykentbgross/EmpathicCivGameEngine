@@ -92,7 +92,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 		//minimap
 		this._myMiniMapCanvas = null;
 		this._myMiniMapCanvas2DContext = null;
-		this._myMiniMapNativeTileResolution = 8;//< ?
+		this._myMiniMapNativeTileResolution = ECGame.Settings.World2D.MinimapTileResolution;
 		
 		this._myUsingNetViews = false;
 	},
@@ -210,7 +210,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			if(!ECGame.Settings.Network.isServer)
 			{
 				//HACK:
-				this._myMiniMapNativeTileResolution = ECGame.Settings.Graphics.backBufferWidth / inMapSizeInTiles;
+				//this._myMiniMapNativeTileResolution = ECGame.Settings.Graphics.backBufferWidth / inMapSizeInTiles;
 
 				//setup minimap
 				this._myMiniMapCanvas = document.createElement('canvas');

@@ -19,10 +19,20 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 ECGame.unitTests.registerTest(
-	'GameClass',
+	"GameClass",
 	function()
 	{
-		var ClassNamespace = {};
+		var ClassNamespace
+			,testClass1
+			,testClass2
+			,foundClass
+			,testObjectClass1
+			,found
+			,instanceName
+			,chainTestObject
+			;
+		
+		ClassNamespace = {};
 		
 		ECGame.EngineLib.Class.createInstanceRegistry();
 		
@@ -58,13 +68,13 @@ ECGame.unitTests.registerTest(
 		
 		
 		
-		var testClass1 = new ClassNamespace.TestClass1();
+		testClass1 = new ClassNamespace.TestClass1();
 		testClass1.Func1();
 		ECGame.log.assert(testClass1.Func1Called, "Function failed from new'ed class instance!");
 		
 		
 		
-		var testClass2 = ClassNamespace.TestClass2.create();
+		testClass2 = ClassNamespace.TestClass2.create();
 		ECGame.log.assert(ClassNamespace.TestClass2.StaticThing === 'HaHa!', "Inherited functions failed from created class instance!");
 		
 		testClass2.Func1();
@@ -101,14 +111,14 @@ ECGame.unitTests.registerTest(
 		});
 		ClassNamespace.TestObjectClass1.registerClass();
 		
-		var foundClass = ECGame.EngineLib.Class.getInstanceRegistry().findByName('TestObjectClass1');
-		var testObjectClass1 = foundClass.create();
+		foundClass = ECGame.EngineLib.Class.getInstanceRegistry().findByName('TestObjectClass1');
+		testObjectClass1 = foundClass.create();
 		ECGame.log.assert(testObjectClass1.isA(ClassNamespace.TestObjectClass1), "isA() Failed on found created class!");
 		
-		var found = foundClass.getInstanceRegistry().findByName(testObjectClass1.getName());
+		found = foundClass.getInstanceRegistry().findByName(testObjectClass1.getName());
 		ECGame.log.assert(testObjectClass1 === found, "Failed to find class instance!");
 		
-		var instanceName = testObjectClass1.getName();
+		instanceName = testObjectClass1.getName();
 		testObjectClass1.destroy();
 		found = foundClass.getInstanceRegistry().findByName(instanceName);
 		ECGame.log.assert(!found, "Found destroyed object in registry!");
@@ -140,7 +150,7 @@ ECGame.unitTests.registerTest(
 			}
 		});
 		
-		var chainTestObject = ClassNamespace.TestObjectClass2.create();
+		chainTestObject = ClassNamespace.TestObjectClass2.create();
 		chainTestObject.chainUp();
 		chainTestObject.chainDown();
 		

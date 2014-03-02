@@ -86,6 +86,7 @@ ECGame.Settings =
 		MinTileSize : 8,	//TODO tune these for the game!!
 		MaxTileSize : 256,
 		MaxNumberOfTiles : 255	//TODO allow this to be 65535 with u16 type array option, etc
+		,MinimapTileResolution : 8
 	},
 	
 	Network :

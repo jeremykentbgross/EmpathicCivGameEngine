@@ -46,7 +46,7 @@ ECGame.EngineLib.GameRulesBase = ECGame.EngineLib.Class.create({
 				,aBackBufferRect
 				;
 				
-			if(this.__proto__.constructor === ECGame.EngineLib.GameRulesBase)
+			if(this instanceof ECGame.EngineLib.GameRulesBase)//TODO may have to do it different??
 			{
 				aMessage = "No GameRules.js found!";
 			}

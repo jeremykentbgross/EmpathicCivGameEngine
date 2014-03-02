@@ -65,14 +65,14 @@ ECGame.EngineLib.SceneGraph2D.prototype.insertItem = function insertItem(inRende
 
 ECGame.EngineLib.SceneGraph2D.prototype.removeItem = function removeItem(inRenderableItem)
 {
-	var nodeIndex
-		,nodeArray
+	var aNodeIndex
+		,aNodeArray
 		;
 	
-	nodeArray = inRenderableItem._mySceneGraphOwningNodes;
-	for(nodeIndex in nodeArray)
+	aNodeArray = inRenderableItem._mySceneGraphOwningNodes;
+	for(aNodeIndex in aNodeArray)
 	{
-		nodeArray[nodeIndex].deleteItem(inRenderableItem);//todo optimize this to deleteItemFromNode
+		aNodeArray[aNodeIndex].deleteItem(inRenderableItem);//todo optimize this to deleteItemFromNode
 	}
 	inRenderableItem._mySceneGraphOwningNodes = [];
 };
@@ -80,11 +80,15 @@ ECGame.EngineLib.SceneGraph2D.prototype.removeItem = function removeItem(inRende
 
 ECGame.EngineLib.SceneGraph2D.prototype.render = function render(inGraphics)
 {
-	var renderables = [];
-	var aThis = this;
-	var i;
-	var aCameraRect;
-	var aFrameCount;
+	var aThis
+		,aRenderablesArray
+		,aCameraRect
+		,aFrameCount
+		,i
+		;
+	
+	aThis = this;
+	aRenderablesArray = [];
 	
 	aCameraRect = inGraphics.getCamera2D().getRect();
 	aFrameCount = ECGame.instance.getTimer().getFrameCount() * ECGame.instance.getNumberOfGraphicsDisplays() + inGraphics.getIndex();
@@ -102,13 +106,13 @@ ECGame.EngineLib.SceneGraph2D.prototype.render = function render(inGraphics)
 				);
 			
 				item._myLastFrameDrawn = aFrameCount;
-				renderables.push(item);
+				aRenderablesArray.push(item);
 			}
 		},
 		aCameraRect
 	);
 	
-	renderables.sort(
+	aRenderablesArray.sort(
 		function sortRenderables(inLeft, inRight)
 		{				
 			var vec = inLeft._myDrawOrderHelper.subtract(inRight._myDrawOrderHelper);
@@ -118,71 +122,71 @@ ECGame.EngineLib.SceneGraph2D.prototype.render = function render(inGraphics)
 		}
 	);
 	
-	for(i in renderables)
+	for(i in aRenderablesArray)
 	{
-		renderables[i].render(inGraphics);
+		aRenderablesArray[i].render(inGraphics);
 	}
 	
 	if(ECGame.Settings.isDebugDraw_SceneGraph())
 	{
-		this._debugDraw(inGraphics, renderables);
+		this._debugDraw(inGraphics, aRenderablesArray);
 	}
 };
 
 ECGame.EngineLib.SceneGraph2D.prototype._debugDraw = function _debugDraw(inGraphics, inRenderables)
 {
-	var fontSize
-		,currentRenderable
-		,screenPos
-		,stringDrawOrder
-		,stringDistance
-		,width
+	var aFontSize
+		,aCurrentRenderable
+		,aScreenPosition
+		,aStringDrawOrder
+		,aStringDistance
+		,aWidth
 		,i
 		;
 		
-	fontSize = ECGame.Settings.Debug.Text_Size;
+	aFontSize = ECGame.Settings.Debug.Text_Size;
 	
 	inGraphics.drawDebugText("Debug Drawing SceneGraph");
 	
-	inGraphics.setFont(fontSize + 'px Arial');
+	inGraphics.setFont(aFontSize + 'px Arial');
 	for(i in inRenderables)
 	{
-		currentRenderable = inRenderables[i];
-		screenPos = currentRenderable._myAnchorPosition;
+		aCurrentRenderable = inRenderables[i];
+		aScreenPosition = aCurrentRenderable._myAnchorPosition;
 		
-		stringDrawOrder = String(i);
-		stringDistance = '';
+		aStringDrawOrder = String(i);
+		aStringDistance = '';
 		/*
 		TODO?? include this or not with a flag??
-		stringDistance =
-			currentRenderable._myDrawOrderHelper.myX.toFixed(2) + ', ' +
-			currentRenderable._myDrawOrderHelper.myY.toFixed(2);
+		aStringDistance =
+			aCurrentRenderable._myDrawOrderHelper.myX.toFixed(2) + ', ' +
+			aCurrentRenderable._myDrawOrderHelper.myY.toFixed(2);
 		*/
-		width = Math.max(
-			inGraphics.measureText(stringDrawOrder).width,
-			inGraphics.measureText(stringDistance).width
+		aWidth = Math.max(
+			inGraphics.measureText(aStringDrawOrder).width,
+			inGraphics.measureText(aStringDistance).width
 		);
 		
 		inGraphics.setFillStyle(ECGame.Settings.Debug.QuadTree_Item_DrawColor);
 		inGraphics.fillRectXYWH(
-			screenPos.myX,
-			screenPos.myY,
-			width,
-			fontSize * (stringDistance !== '' ? 2 : 1)
+			aScreenPosition.myX,
+			aScreenPosition.myY,
+			aWidth,
+			aFontSize * (aStringDistance !== '' ? 2 : 1)
 		);
 		
 		inGraphics.setFillStyle(ECGame.Settings.Debug.TextDefault_DrawColor);
 		inGraphics.fillTextXY(
-			stringDrawOrder,
-			screenPos.myX,
-			screenPos.myY + fontSize
+			aStringDrawOrder,
+			aScreenPosition.myX,
+			aScreenPosition.myY + aFontSize
 		);
-		if(stringDistance !== '')
+		if(aStringDistance !== '')
 		{
 			inGraphics.fillTextXY(
-				stringDistance,
-				screenPos.myX,
-				screenPos.myY + fontSize * 2
+				aStringDistance,
+				aScreenPosition.myX,
+				aScreenPosition.myY + aFontSize * 2
 			);
 		}
 	}

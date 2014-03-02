@@ -19,6 +19,8 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*global LoadEngine:true */
+
 LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEnginePath, inPublicGamePath, inPrivateGamePath)//TODO inAppLoaderPath
 {
 	var include;
@@ -31,21 +33,24 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 		@namespace: ECGame
 		/description: This is the master namespace for the entire game / engine
 	*/
-	ECGame = new function ECGame(){return;}();
+	ECGame = function ECGame() { return; };
+	ECGame = new ECGame();
 	
 	/**!
 		@namespace: EngineLib
 		/parentNamespace: ECGame
 		/description: This is the engine namespace
 	*/
-	ECGame.EngineLib = new function ECGameEngineLib(){return;}();
+	ECGame.EngineLib = function ECGameEngineLib() { return; };
+	ECGame.EngineLib = new ECGame.EngineLib();
 	
 	/**!
 		@namespace: Lib
 		/parentNamespace: ECGame
 		/description: This is the game specific namespace
 	*/
-	ECGame.Lib =  new function ECGameLib(){return;}();
+	ECGame.Lib = function ECGameLib() { return; };
+	ECGame.Lib = new ECGame.Lib();
 	
 	//ECGame.Settings TODO refactor/change how settings work?
 	//ECGame.instance
@@ -59,7 +64,8 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 			/parentNamespace: ECGame
 			/description: This is the namespace for all webserver related tools
 		*/
-		ECGame.WebServerTools = new function ECGameWebServerTools(){return;}();
+		ECGame.WebServerTools = function ECGameWebServerTools() { return; };
+		ECGame.WebServerTools = new ECGame.WebServerTools();
 	}
 	///////////////////////////////Global Namespaces//////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////
@@ -94,8 +100,8 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 			aScriptSource = aRequest.responseText
 				+ '\n\/\/\/\/# sourceURL=' + inFileName + '\n';
 			
-			if(true)
-			{
+			//if(true)
+			//{
 				//create a dom element to hold the code
 				aScript = document.createElement('script');
 				aScript.type = 'text/javascript';
@@ -105,11 +111,11 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 							
 				//append the code to the dom
 				document.getElementsByTagName('body')[0].appendChild(aScript);
-			}
-			else
+			//}
+			/*else
 			{
 				eval(aScriptSource);
-			}
+			}*/
 		};
 	}
 	else

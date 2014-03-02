@@ -52,12 +52,19 @@
 		<!-- LOAD GAME scripts -->
 		<script src="engine/scripts/EngineLoader.js" type="text/javascript">	</script>
 		<script type="text/javascript">
-			LoadEngine(
-				false,
-				"engine/",
-				"",		//reserved for server
-				"game/",
-				""		//reserved for server
+			window.addEventListener(
+				'load'
+				,function Startup()
+				{
+					LoadEngine(
+						false,
+						"engine/",
+						"",		//reserved for server
+						"game/",
+						""		//reserved for server
+					);
+				}
+				,false
 			);
 		</script>
 

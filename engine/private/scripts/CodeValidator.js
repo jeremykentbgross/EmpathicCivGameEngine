@@ -36,7 +36,7 @@ ECGame.WebServerTools.CodeValidator = ECGame.EngineLib.Class.create({
 	
 		this._myProperties =
 			"/*global "
-			+ "ECGame, Uint8Array "
+			+ "ECGame:true, Uint8Array "
 			+ "*/\t"
 		//	+ "/*properties "
 		//	+ "*/"
@@ -117,7 +117,7 @@ ECGame.WebServerTools.CodeValidator = ECGame.EngineLib.Class.create({
 				,i
 				;
 			
-			this._myReport += "Checking " + inFileName.replace(__dirname + '/', '') + '\n';
+			//this._myReport += "Checking " + inFileName.replace(__dirname + '/', '') + '\n';
 			
 			//note: we use sync versions here because this is startup code that we want to run before the rest of the app does!
 			aFileContent = this._myFileSystem.readFileSync(inFileName, 'utf8');
@@ -131,7 +131,7 @@ ECGame.WebServerTools.CodeValidator = ECGame.EngineLib.Class.create({
 				
 				//console.log(this._myJSlint.check);
 				//for(var propertyName in this._myJSlint.check){ console.log(propertyName + ' : ' + (typeof this._myJSlint.check[propertyName])); }
-				
+				this._myReport += "Checking " + inFileName.replace(__dirname + '/', '') + '\n';
 				this._myReport += anErrorsList.length + " errors found\n";
 				
 				for(i = 0; i<anErrorsList.length; ++i)
@@ -149,10 +149,10 @@ ECGame.WebServerTools.CodeValidator = ECGame.EngineLib.Class.create({
 				}
 				this._myReport += '\n';
 			}
-			else
+			/*else
 			{
 				this._myReport += "No errors found\n\n";
-			}
+			}*/
 		}
 	}
 });

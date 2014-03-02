@@ -19,8 +19,6 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-/*jslint plusplus: true */
-
 
 //TODO
 //separate broad/narrow/resolution

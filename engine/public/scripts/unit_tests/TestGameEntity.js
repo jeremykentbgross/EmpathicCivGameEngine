@@ -20,13 +20,18 @@
 */
 
 ECGame.unitTests.registerTest(
-	'GameEntity',
+	"GameEntity",
 	function()
 	{
-		var entity = ECGame.EngineLib.GameEntity.create();
-		entity.addedToWorld(6);
+		var anEntity
+			,TestComponent
+			,component1
+			;
+			
+		anEntity = ECGame.EngineLib.GameEntity.create();
+		anEntity.addedToWorld(6);
 		
-		var TestComponent = ECGame.EngineLib.Class.create({
+		TestComponent = ECGame.EngineLib.Class.create({
 			Constructor : function TestComponent()
 			{
 				this.GameEntityComponent();
@@ -77,24 +82,24 @@ ECGame.unitTests.registerTest(
 			}
 		});
 		
-		var component1 = TestComponent.create();
-		entity.addComponent(component1);
+		component1 = TestComponent.create();
+		anEntity.addComponent(component1);
 		
 		ECGame.log.assert(
-			component1.added === entity
-			&& entity === component1._myOwner
+			component1.added === anEntity
+			&& anEntity === component1._myOwner
 			&& component1._containingWorld === 6
 			,"Did not add component successfully"
 		);
 		
-		entity.addedToWorld(7);
+		anEntity.addedToWorld(7);
 		ECGame.log.assert(
 			component1._removedWorld
 			&& component1._containingWorld === 7,
 			"World not set correctly."
 		);
 		
-		entity.removeComponent(component1);
+		anEntity.removeComponent(component1);
 		ECGame.log.assert(
 			component1.added === null
 			&& null === component1._myOwner 

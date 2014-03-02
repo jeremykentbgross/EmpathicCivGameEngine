@@ -19,6 +19,9 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*global AudioContext:false */
+
+
 /*
 Some relevant web links:
 http://www.html5rocks.com/en/tutorials/webaudio/intro/

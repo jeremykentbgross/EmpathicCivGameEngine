@@ -152,7 +152,8 @@ ECGame.EngineLib.Ray2D = ECGame.EngineLib.Class.create({
 			}
 
 			//bump t into the next node, and remember this spot for next time.
-			this._myT = aNewT += 0.001;
+			aNewT += 0.001;
+			this._myT = aNewT;
 
 			this._myCurrentPoint = this.getPoint(this._myT);
 				

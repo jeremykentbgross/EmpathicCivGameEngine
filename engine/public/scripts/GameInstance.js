@@ -50,9 +50,9 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 		
 		this._myNoCanvasSupportedMessage =
 			"Sorry your browser does not support Canvas. Please use different browser:<br/>" +
-			"<a href=\"http:\x2f\x2fwww.google.com/chrome\">Get Chrome (**recommended!**) </a><br/>" +
+			"<a href=\"http:\/\/www.google.com/chrome\">Get Chrome (**recommended!**) </a><br/>" +
 			"or<br/>" +
-			"<a href=\"http:\x2f\x2fwww.mozilla-europe.org/en/firefox/\">Get Firefox</a>";
+			"<a href=\"http:\/\/www.mozilla-europe.org/en/firefox/\">Get Firefox</a>";
 		
 		this._myGraphicsContainer = null;
 		if(!ECGame.Settings.Network.isServer)
@@ -144,6 +144,10 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 		getLocalUser : function getLocalUser()
 		{
 			return this._myLocalUser;
+		},
+		getRules : function getRules()
+		{
+			return this._myGameRules;
 		},
 		
 		_setupSinglePaneGraphics : function _setupSinglePaneGraphics()
@@ -454,6 +458,9 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 				
 				//Init Sound
 				this._mySoundSystem = ECGame.EngineLib.SoundSystem.create();
+				
+				//with EngineLoad() called from window.onload in the HTML it canot fire again to resize at startup, do it manually
+				this._resizeSpace();
 			}
 			
 			//setup network and chat

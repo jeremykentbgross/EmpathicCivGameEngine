@@ -20,7 +20,8 @@
 */
 
 //namespace:
-ECGame.EngineLib.Events = new function Events(){return;}();
+ECGame.EngineLib.Events = function Events() { return; };
+ECGame.EngineLib.Events = new ECGame.EngineLib.Events();
 
 //TODO split to different files: entity events, net events, etc
 

@@ -18,7 +18,7 @@
 	You should have received a copy of the GNU Lesser General Public License
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
-
+/*global WebSocket */
 
 //http://www.w3.org/TR/websockets/#the-websocket-interface
 ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
@@ -39,11 +39,11 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			this._myNetwork = inNetwork;
 			if(ECGame.Settings.Network.GamePort !== null)
 			{
-				this._myWebsocket = new WebSocket('ws:\x2f\x2f' + location.hostname + ':' + ECGame.Settings.Network.GamePort);
+				this._myWebsocket = new WebSocket('ws:\/\/' + location.hostname + ':' + ECGame.Settings.Network.GamePort);
 			}
 			else
 			{
-				this._myWebsocket = new WebSocket('ws:\x2f\x2f' + location.hostname);
+				this._myWebsocket = new WebSocket('ws:\/\/' + location.hostname);
 			}
 			this._myWebsocket.binaryType = 'arraybuffer';
 			
@@ -144,13 +144,7 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			
 			if(aLocalUser.userID !== ECGame.EngineLib.User.USER_IDS.NEW_USER)
 			{
-				if(typeof inMessage === 'string')
-				{
-					//TODO inNetwork.event Msg
-					//aThis._myNetwork.serializeIn(aThis._myUser, inMessage);
-					//console.log(inMessage);
-				}
-				else
+				if(typeof inMessage !== 'string')
 				{
 					if(!ECGame.Settings.getDebugSimulatedLagTime())
 					{
@@ -169,6 +163,12 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 					}
 					//console.log(new Float32Array(inMessage));
 				}
+				/*else
+				{
+					//TODO inNetwork.event Msg
+					//aThis._myNetwork.serializeIn(aThis._myUser, inMessage);
+					//console.log(inMessage);
+				}*/
 			}
 			//if we are unidentified we should expect the server to id us before getting any other messages
 			else

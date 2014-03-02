@@ -19,6 +19,8 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+/*jslint stupid : true*/
+
 var fs = require("fs");
 
 /**! @TODO: optional warnings in obfuscate for unnamed functions and wrong naming conventions*/

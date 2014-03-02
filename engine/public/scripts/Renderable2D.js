@@ -49,7 +49,7 @@ ECGame.EngineLib.Renderable2D = ECGame.EngineLib.Class.create({
 			this._myAnchorPosition = inAnchorPosition;
 		},
 		
-		render : function render(inGraphics)//abstract!!
+		render : function render(/*inGraphics*/)//abstract!!
 		{
 			ECGame.log.assert(false, "This method must be overridden");
 		}

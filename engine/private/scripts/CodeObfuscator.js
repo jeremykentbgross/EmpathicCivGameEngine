@@ -19,6 +19,9 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+//Allows sync file method call(s)
+/*jslint stupid : true*/
+
 ///////////////////////////////////////////////////////////////////
 //Obfuscator///////////////////////////////////////////////////////
 /*
@@ -210,10 +213,14 @@ ECGame.WebServerTools.Obfuscator.prototype.getObfuscatedCode = function getObfus
 
 ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 {
-	var name,
-		i,
-		logData = '',
-		aReorderingArray;
+	var aName
+		,aLogString
+		,aReorderingArray
+		,aRespacedCode
+		,i
+		;
+	
+	aLogString = '';
 	
 	//comment out all instances of eval
 	this._src = this._src.replace(/\x65val/g, '\/\/');
@@ -222,23 +229,24 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	
 	if(ECGame.Settings.Server.removeTextForLocalization)
 	{
-		this.registerNamespace('\x47ameLocalization');//TODO rename registerNamespace to addNamespace??
-		this._src += '\n\x47ameLocalization=';
+		//the strings is split so that it will not be found when this file compresses itself.
+		this.registerNamespace('G' + 'ameLocalization');//TODO rename registerNamespace to addNamespace??
+		this._src += '\nG' + 'ameLocalization=';
 		this._removeTextForLocalization();
 	}
 	
 	this._findAllPotentialWords();
 	
 	aReorderingArray = [];
-	logData += "Base NameSpaces:" + '\n';
-	for(name in this._nameSpaces)
+	aLogString += "Base NameSpaces:" + '\n';
+	for(aName in this._nameSpaces)
 	{
-		aReorderingArray.push(name);
+		aReorderingArray.push(aName);
 	}
 	aReorderingArray.sort();
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
-		logData += 'Base NameSpace:\t' + aReorderingArray[i] + '\n';
+		aLogString += 'Base NameSpace:\t' + aReorderingArray[i] + '\n';
 	}
 	
 	this._findFunctionNames();
@@ -248,60 +256,60 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	this._findJSONFields();
 	
 	//remove the ignored words before processing:
-	for(name in this._ignoreMap)
+	for(aName in this._ignoreMap)
 	{
-		delete this._wordMap[name];
-		delete this._unmappedWordsMap[name];
+		delete this._wordMap[aName];
+		delete this._unmappedWordsMap[aName];
 	}
 	
 	aReorderingArray = [];
-	logData += "\n\n\nFinal NameSpaces:" + '\n';
-	for(name in this._nameSpaces)
+	aLogString += "\n\n\nFinal NameSpaces:" + '\n';
+	for(aName in this._nameSpaces)
 	{
-		aReorderingArray.push(name);
+		aReorderingArray.push(aName);
 	}
 	aReorderingArray.sort();
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
-		logData += 'Final NameSpace:\t' + aReorderingArray[i] + '\n';
+		aLogString += 'Final NameSpace:\t' + aReorderingArray[i] + '\n';
 	}
 	
 	aReorderingArray = [];
-	logData += "\n\n\nFunction Names:" + '\n';
-	for(name in this._functionNames)
+	aLogString += "\n\n\nFunction Names:" + '\n';
+	for(aName in this._functionNames)
 	{
-		aReorderingArray.push(name);
+		aReorderingArray.push(aName);
 	}
 	aReorderingArray.sort();
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
-		logData += 'Function Name:\t' + aReorderingArray[i] + '\n';
+		aLogString += 'Function Name:\t' + aReorderingArray[i] + '\n';
 	}
 	
 	aReorderingArray = [];
-	logData += "\n\n\nParameter Variables:" + '\n';
-	for(name in this._parameterNames)
+	aLogString += "\n\n\nParameter Variables:" + '\n';
+	for(aName in this._parameterNames)
 	{
-		aReorderingArray.push(name);
+		aReorderingArray.push(aName);
 	}
 	aReorderingArray.sort();
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
-		logData += 'Parameter Variable:\t' + aReorderingArray[i]
+		aLogString += 'Parameter Variable:\t' + aReorderingArray[i]
 			+ (aReorderingArray[i].indexOf('in') !== 0 ? '\t\t\t*****' : '')//highlight incorrectly named parameters
 			+ '\n';
 	}
 	
 	aReorderingArray = [];
-	logData += "\n\n\nLocal Variables:" + '\n';
-	for(name in this._variableNames)
+	aLogString += "\n\n\nLocal Variables:" + '\n';
+	for(aName in this._variableNames)
 	{
-		aReorderingArray.push(name);
+		aReorderingArray.push(aName);
 	}
 	aReorderingArray.sort();
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
-		logData += 'Local Variable:\t' + aReorderingArray[i]
+		aLogString += 'Local Variable:\t' + aReorderingArray[i]
 		+ (
 			(aReorderingArray[i].indexOf('a') !== 0 || aReorderingArray[i].charAt(1).toUpperCase() !== aReorderingArray[i].charAt(1))
 			&& (aReorderingArray[i].indexOf('an') !== 0 || aReorderingArray[i].charAt(2).toUpperCase() !== aReorderingArray[i].charAt(2))
@@ -311,15 +319,15 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	}
 	
 	aReorderingArray = [];
-	logData += "\n\n\nMember Variables:" + '\n';
-	for(name in this._memberNames)
+	aLogString += "\n\n\nMember Variables:" + '\n';
+	for(aName in this._memberNames)
 	{
-		aReorderingArray.push(name);
+		aReorderingArray.push(aName);
 	}
 	aReorderingArray.sort();
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
-		logData += 'Member Variable:\t' + aReorderingArray[i]
+		aLogString += 'Member Variable:\t' + aReorderingArray[i]
 		+ (
 			(aReorderingArray[i].indexOf('my') !== 0 || aReorderingArray[i].charAt(2).toUpperCase() !== aReorderingArray[i].charAt(2))
 			&& (aReorderingArray[i].indexOf('_my') !== 0 || aReorderingArray[i].charAt(3).toUpperCase() !== aReorderingArray[i].charAt(3))
@@ -329,51 +337,51 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	}
 	
 	aReorderingArray = [];
-	logData += "\n\n\n\n\n\nIncluded Words:" + '\n';
-	for(name in this._wordMap)
+	aLogString += "\n\n\n\n\n\nIncluded Words:" + '\n';
+	for(aName in this._wordMap)
 	{
-		aReorderingArray.push(name);
+		aReorderingArray.push(aName);
 	}
 	aReorderingArray.sort();
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
-		logData += 'Included Word:\t' + aReorderingArray[i] + '\n';
+		aLogString += 'Included Word:\t' + aReorderingArray[i] + '\n';
 	}
 	
 	aReorderingArray = [];
-	logData += "\n\n\nIgnored Words:" + '\n';
-	for(name in this._ignoreMap)
+	aLogString += "\n\n\nIgnored Words:" + '\n';
+	for(aName in this._ignoreMap)
 	{
-		aReorderingArray.push(name);
+		aReorderingArray.push(aName);
 	}
 	aReorderingArray.sort();
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
-		logData += 'Ignored Word:\t' + aReorderingArray[i] + '\n';
+		aLogString += 'Ignored Word:\t' + aReorderingArray[i] + '\n';
 	}
 	
 	aReorderingArray = [];
-	logData += "\n\n\nUnmapped Words:" + '\n';
-	for(name in this._unmappedWordsMap)
+	aLogString += "\n\n\nUnmapped Words:" + '\n';
+	for(aName in this._unmappedWordsMap)
 	{
-		aReorderingArray.push(name);
+		aReorderingArray.push(aName);
 	}
 	aReorderingArray.sort();
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
-		logData += 'Unmapped Word:\t' + aReorderingArray[i] + '\n';
+		aLogString += 'Unmapped Word:\t' + aReorderingArray[i] + '\n';
 	}
 	
 	aReorderingArray = [];
-	logData += "\n\n\nLocalized Strings:" + '\n';
+	aLogString += "\n\n\nLocalized Strings:" + '\n';
 	for(i = 0; i < this._localizationStrings.length; ++i)
 	{
-		logData += 'Localized String:\t' + this._localizationStrings[i] + '\n';
+		aLogString += 'Localized String:\t' + this._localizationStrings[i] + '\n';
 	}
 	
 	if(ECGame.Settings.isDebugPrint_Obfuscation())
 	{
-		console.log(logData);
+		console.log(aLogString);
 	}
 	
 	if(ECGame.Settings.Server.obfuscateNames)
@@ -394,12 +402,12 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	//Put *some* newlines back because it can't seem to deliver the file otherwise
 	if(ECGame.Settings.Server.removeNewlines)
 	{
-		var respacedCode = this._src.match(/[\s\S]{8192}[^\x3b]*\x3b/g);//TODO should size of lines be constant here? Or variable declared?
-		if(respacedCode !== null)
+		aRespacedCode = this._src.match(/[\s\S]{8192}[^\x3b]*\x3b/g);//TODO should size of lines be constant here? Or variable declared?
+		if(aRespacedCode !== null)
 		{
-			for(i = 0; i < respacedCode.length; ++i)
+			for(i = 0; i < aRespacedCode.length; ++i)
 			{
-				this._src = this._src.replace(respacedCode[i], respacedCode[i] + '\n');
+				this._src = this._src.replace(aRespacedCode[i], aRespacedCode[i] + '\n');
 			}
 		}
 		//TODO add custom game + engine copyright text
@@ -415,11 +423,11 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	
 	if(ECGame.Settings.Server.saveResultsNotesToFile)
 	{
-		//is really: logData = '/*\n' + logData + '*/\n\n\n' + this._src;
-		logData = '/\x2a\n' + logData + '\x2a/\n\n\n';// + this._src;
+		//is really: aLogString = '/*\n' + aLogString + '*/\n\n\n' + this._src;
+		//aLogString = '/\x2a\n' + aLogString + '\x2a/\n\n\n';// + this._src;
 		fileSystem.writeFileSync(//TODO make writeFileSync when I update my nodejs version
 			'../_unified_/game/ObfuscationResults.txt',
-			logData/*,
+			aLogString/*,
 			function ?funcname?(inError)
 			{
 				if(inError)
@@ -584,7 +592,7 @@ ECGame.WebServerTools.Obfuscator.prototype._removeTextForLocalization = function
 		while(this._src.indexOf(currentString) !== -1)
 		{
 			//this._src = this._src.replace(currentString, 'ECGame.instance.localization[' + i + ']');
-			this._src = this._src.replace(currentString, '\x47ameLocalization[' + i + ']');
+			this._src = this._src.replace(currentString, 'G' + 'ameLocalization[' + i + ']');//NOTE: string split on purpose!
 		}
 	}
 };
@@ -687,33 +695,37 @@ ECGame.WebServerTools.Obfuscator.prototype._findVariableNames = function _findVa
 
 ECGame.WebServerTools.Obfuscator.prototype._findValuesInNamespaces = function _findValuesInNamespaces()
 {
-	var valuesInNameSpaces = [],
-		regEx = new RegExp(),
-		i,
-		j,
-		nameSpace,
-		values,
-		loops;
+	var 
+		//,valuesInNameSpaces
+		aRegEx
+		,aNameSpace
+		,aValues
+		,aLoops
+		,i
+		;
 	
-	/*for(nameSpace in this._nameSpaces)
+	aRegEx = new RegExp();
+	/*
+	valuesInNameSpaces = [];
+	for(aNameSpace in this._nameSpaces)
 	{
-		valuesInNameSpaces.push(nameSpace);
+		valuesInNameSpaces.push(aNameSpace);
 	}*/
 	
-	/*for(j = 0; j < valuesInNameSpaces.length; ++j)//*/for(nameSpace in this._nameSpaces)
+	for(aNameSpace in this._nameSpaces)//for(j = 0; j < valuesInNameSpaces.length; ++j)
 	{
-		//nameSpace = valuesInNameSpaces[j];
-		regEx.compile(nameSpace + '\\x2e\\w+', 'g');
-		values = this._src.match(regEx);
-		loops = values ? values.length : 0;
-		for(i = 0; i < loops; ++i)
+		//aNameSpace = valuesInNameSpaces[j];
+		aRegEx.compile(aNameSpace + '\\x2e\\w+', 'g');
+		aValues = this._src.match(aRegEx);
+		aLoops = aValues ? aValues.length : 0;
+		for(i = 0; i < aLoops; ++i)
 		{
-			values[i] = values[i].match(/\x2e\w+/)[0].match(/\w+/)[0];
-			/*if(!this._wordMap[values[i]])
+			aValues[i] = aValues[i].match(/\x2e\w+/)[0].match(/\w+/)[0];
+			/*if(!this._wordMap[aValues[i]])
 			{
-				valuesInNameSpaces.push(values[i]);
+				valuesInNameSpaces.push(aValues[i]);
 			}*/
-			this._addMemberName(values[i]);
+			this._addMemberName(aValues[i]);
 		}
 	}
 };
@@ -787,7 +799,7 @@ ECGame.WebServerTools.Obfuscator.prototype._doWordReplacement = function _doWord
 		j,
 		instances,
 		moreInstances,
-		loops,
+		aLoops,
 		replacement;
 	
 	for(word in this._wordMap)
@@ -818,9 +830,9 @@ ECGame.WebServerTools.Obfuscator.prototype._doWordReplacement = function _doWord
 		regEx.compile('\\W' + word + '\\W' + word + '\\W', 'g');
 		moreInstances = this._src.match(regEx);
 		
-		loops = moreInstances ? moreInstances.length : 0;
+		aLoops = moreInstances ? moreInstances.length : 0;
 		//add the additional unique instances
-		for(i = 0; i < loops; ++i)
+		for(i = 0; i < aLoops; ++i)
 		{
 			moreInstances[i] = moreInstances[i].substr(word.length + 1);
 			wordData.uniqueInstances[moreInstances[i]] = true;
@@ -843,7 +855,7 @@ ECGame.WebServerTools.Obfuscator.prototype._doWordReplacement = function _doWord
 			{
 				return -1;
 			}
-			else if(LHV < RHV)
+			if(LHV < RHV)
 			{
 				return 1;
 			}
