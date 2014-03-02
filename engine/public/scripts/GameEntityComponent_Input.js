@@ -102,7 +102,7 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 			}
 			else
 			{
-				ECGame.log.warn("Should not be getting input updates right now.");
+				console.warn("Should not be getting input updates right now.");
 			}
 		},
 		

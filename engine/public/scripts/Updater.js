@@ -79,7 +79,7 @@ ECGame.EngineLib.Updater = ECGame.EngineLib.Class.create({
 				aString = this._getLeadingString(inDepth) + "Update: " + this.getName() + " (Priority:" + this.getUpdatePriority() + ')';
 				if(ECGame.Settings.isDebugPrint_Updater())
 				{
-					ECGame.log.info(aString);
+					console.info(aString);
 				}
 				if(ECGame.Settings.isDebugDraw_Updater())
 				{
@@ -122,7 +122,7 @@ ECGame.EngineLib.Updater = ECGame.EngineLib.Class.create({
 					);
 					if(ECGame.Settings.isDebugPrint_Updater())
 					{
-						ECGame.log.info(aString);
+						console.info(aString);
 					}
 					if(ECGame.Settings.isDebugDraw_Updater())
 					{

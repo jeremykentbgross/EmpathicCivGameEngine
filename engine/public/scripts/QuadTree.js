@@ -96,7 +96,7 @@ ECGame.EngineLib.QuadTree = ECGame.EngineLib.Class.create({
 			this._myParent = inParent || null;
 			//TODO solid space??
 			
-			ECGame.log.assert(this._myAABB.myWidth === this._myAABB.myHeight, "QuadTree Node is not a square.");
+			console.assert(this._myAABB.myWidth === this._myAABB.myHeight, "QuadTree Node is not a square.");
 		}
 		
 		,getAABB2D : function getAABB2D()
@@ -167,7 +167,7 @@ ECGame.EngineLib.QuadTree = ECGame.EngineLib.Class.create({
 
 				if(aThisNodesSize / 2 < Math.max(inTargetNodesMinSize, this._myMinSize))
 				{
-					//ECGame.log.assert(this._myItems.indexOf(inItem) === -1,"Multiple insertions!");
+					//console.assert(this._myItems.indexOf(inItem) === -1,"Multiple insertions!");
 					
 					//it doesn't fit in the children so it goes here
 					this._myItems.push(inItem);
@@ -211,7 +211,7 @@ ECGame.EngineLib.QuadTree = ECGame.EngineLib.Class.create({
 			{
 				if(aThisNodesSize / 2 < Math.max(inTargetNodesMinSize, this._myMinSize))
 				{
-					//ECGame.log.assert(this._myItems.indexOf(inItem) === -1,"Multiple insertions!");
+					//console.assert(this._myItems.indexOf(inItem) === -1,"Multiple insertions!");
 					
 					//it doesn't fit in the children so it goes here
 					this._myItems.push(inItem);

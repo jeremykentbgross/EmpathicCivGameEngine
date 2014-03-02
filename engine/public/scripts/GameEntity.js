@@ -305,20 +305,20 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 			for(i = 0; i < this._myComponentsRefs.length; ++i)
 			{
 				aComponent = this._myComponentsRefs[i].deref();
-				ECGame.log.assert(aComponent, "Missing component during serialization!");
+				console.assert(aComponent, "Missing component during serialization!");
 				this.addComponent(aComponent);
 			}
 			for(i = 0; i < this._myAddedComponentsRefs.length; ++i)
 			{
 				aComponent = this._myAddedComponentsRefs[i].deref();
-				ECGame.log.assert(aComponent, "Missing component during serialization!");
+				console.assert(aComponent, "Missing component during serialization!");
 				this.addComponent(aComponent);
 				
 			}
 			for(i = 0; i < this._myRemovedComponentsRefs.length; ++i)
 			{
 				aComponent = this._myRemovedComponentsRefs[i].deref();
-				//ECGame.log.assert(aComponent, "Missing component during serialization!");
+				//console.assert(aComponent, "Missing component during serialization!");
 				if(aComponent)
 				{
 					this.removeComponent(aComponent);

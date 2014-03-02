@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 ECGame.unitTests.registerTest(
-	'GameEventSystem',
+	"GameEventSystem",
 	function()
 	{
 		var aPassedTest
@@ -64,12 +64,12 @@ ECGame.unitTests.registerTest(
 		
 		if(aListener1.recieved !== 2)
 		{
-			ECGame.log.error("First event not recieved by first listener!");
+			console.error("First event not recieved by first listener!");
 			aPassedTest = false;
 		}
 		if(aListener2.recieved !== 1)
 		{
-			ECGame.log.error("First event not recieved by second listener!");
+			console.error("First event not recieved by second listener!");
 			aPassedTest = false;
 		}
 		
@@ -84,12 +84,12 @@ ECGame.unitTests.registerTest(
 		
 		if(aListener1.recieved !== 0)
 		{
-			ECGame.log.error("Second event not recieved by first listener!");
+			console.error("Second event not recieved by first listener!");
 			aPassedTest = false;
 		}
 		if(aListener2.recieved === -1)
 		{
-			ECGame.log.error("Second event recieved by second listener!");
+			console.error("Second event recieved by second listener!");
 			aPassedTest = false;
 		}
 		

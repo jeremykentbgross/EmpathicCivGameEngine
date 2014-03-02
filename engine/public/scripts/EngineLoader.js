@@ -23,7 +23,8 @@
 
 LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEnginePath, inPublicGamePath, inPrivateGamePath)//TODO inAppLoaderPath
 {
-	var include;
+	var include
+		;
 	
 	
 	//////////////////////////////////////////////////////////////////////////////
@@ -121,10 +122,11 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	else
 	{
 		include = require;
+		include(inPrivateEnginePath + "scripts/ServerConsoleMods.js");
 	}
 	///////////////////////////////INCLUDE SETUP//////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////
-	
+
 	//TODO: AssetPath("..."), Localize("...")
 	
 	
@@ -137,9 +139,6 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	ECGame.Settings.Network.isServer = inIsServer;	//TODO this should be parameters for creating it!
 	
 	//TODO make public and private loaders?
-	
-	//Include the logger
-	include(inPublicEnginePath + "scripts/GameEngineLogger.js");//TODO consider https://developer.mozilla.org/en-US/docs/DOM/console#Stack_traces
 		
 	if(ECGame.Settings.RUN_UNIT_TESTS)
 	{

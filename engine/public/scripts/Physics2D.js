@@ -186,7 +186,7 @@ ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 					inGraphics.setFillStyle(ECGame.Settings.Debug.Physics_AlwaysActiveObject_DrawColor);
 					break;
 				default://WTF?
-					ECGame.log.assert(false, "Unknown Physics object status!");
+					console.assert(false, "Unknown Physics object status!");
 					inGraphics.setFillStyle('rgba(255, 0, 255, 1)');//TODO needed??
 					break;
 			}
@@ -250,7 +250,7 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 				{
 					var anAABB;
 					
-					ECGame.log.assert(inPhysicsObject !== inItem, "Object collided with itself??");
+					console.assert(inPhysicsObject !== inItem, "Object collided with itself??");
 
 					anAABB = inPhysicsObject._myAABB.getIntersection(inItem._myAABB);
 					if(anAABB.getArea() > 0)
@@ -286,7 +286,7 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 				{
 					if(inPhysicsObject === item)
 					{
-						ECGame.log.error("Object collided with itself??");
+						console.error("Object collided with itself??");
 						
 						for(nodeIndex in nodeArray)///////////////////////////////////
 							nodeArray[nodeIndex].deleteItem(inPhysicsObject);

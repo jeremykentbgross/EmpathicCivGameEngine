@@ -74,7 +74,7 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 		
 		if(!ECGame.Settings.Caps.Audio)
 		{
-			ECGame.log.warn("Audio System not supported in your browser!");
+			console.warn("Audio System not supported in your browser!");
 			alert("Audio System not supported in your browser!");	//TODO detect/reuse duplicate strings in compression
 			return;
 		}
@@ -130,7 +130,7 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 		catch(error)
 		{
 			console.log(error.stack);
-			ECGame.log.warn("Audio System failed to start in your browser!");
+			console.warn("Audio System failed to start in your browser!");
 		}
 	},
 	Parents : null,

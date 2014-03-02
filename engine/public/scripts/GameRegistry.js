@@ -72,11 +72,11 @@ ECGame.EngineLib.GameRegistry.prototype.register = function register(inObject)
 	
 	if(this._instancesByName[name])
 	{
-		ECGame.log.warn("Trying to reregister '" + name + "' : '" + id + "' but '" + name + "' is in use.");
+		console.warn("Trying to reregister '" + name + "' : '" + id + "' but '" + name + "' is in use.");
 	}
 	if(this._instancesByID[id])
 	{
-		ECGame.log.warn("Trying to reregister '" + name + "' : '" + id + "' but '" + id + "' is in use.");
+		console.warn("Trying to reregister '" + name + "' : '" + id + "' but '" + id + "' is in use.");
 	}
 	
 	this._instancesByName[name] = inObject;

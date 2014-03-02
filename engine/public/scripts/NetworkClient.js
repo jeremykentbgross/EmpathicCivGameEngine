@@ -62,7 +62,7 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			
 			if(ECGame.Settings.isDebugPrint_NetworkMessages())
 			{
-				ECGame.log.info("Connected to Server, awaiting ID validation...");
+				console.info("Connected to Server, awaiting ID validation...");
 			}
 			
 			//Other side of the connection is the server.
@@ -107,7 +107,7 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			//	&& ECGame.Settings.Debug.NetworkMessages_Print
 			)
 			{
-				ECGame.log.info("Lost Server!");
+				console.info("Lost Server!");
 			}
 			aThis._myNetwork.onEvent(new ECGame.EngineLib.Events.DisconnectedFromServer());//TODO get rid of new
 			
@@ -134,11 +134,11 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			{
 				if(typeof inMessage === 'string')
 				{
-					ECGame.log.info("Net Message Recv (text):" + inMessage);
+					console.info("Net Message Recv (text):" + inMessage);
 				}
 				else
 				{
-					ECGame.log.info("Net Message Recv (binary):" + JSON.stringify(new Uint8Array(inMessage)));
+					console.info("Net Message Recv (binary):" + JSON.stringify(new Uint8Array(inMessage)));
 				}
 			}
 			
@@ -178,7 +178,7 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 					aRecievedObj = JSON.parse(inMessage);
 					if(ECGame.Settings.isDebugPrint_NetworkMessages())
 					{
-						ECGame.log.info("User ID Message:" + inMessage);
+						console.info("User ID Message:" + inMessage);
 					}
 					//verify the object is valid
 					if(typeof aRecievedObj.userName !== 'string'
@@ -186,7 +186,7 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 						|| typeof aRecievedObj.reconnectKey !== 'number'
 					)
 					{
-						ECGame.log.warn("Ill formed User Identification!");
+						console.warn("Ill formed User Identification!");
 						return;
 					}
 					
@@ -196,14 +196,14 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 					
 					if(ECGame.Settings.isDebugPrint_NetworkMessages())
 					{
-						ECGame.log.info("Connected to Server, ID validated!");
+						console.info("Connected to Server, ID validated!");
 					}
 					
 					aThis._myNetwork.onEvent(new ECGame.EngineLib.Events.ConnectedToServer());//TODO get rid of new
 				}
 				else
 				{
-					ECGame.log.warn("Recieved bad id data from server.");
+					console.warn("Recieved bad id data from server.");
 				}
 			}
 		},
@@ -219,11 +219,11 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			{
 				if(typeof inData === 'string')
 				{
-					ECGame.log.info("Net Send (text) to " + this._myUser.userName + ':' + inData);
+					console.info("Net Send (text) to " + this._myUser.userName + ':' + inData);
 				}
 				else
 				{
-					ECGame.log.info("Net Send (binary) to " + this._myUser.userName + ':' + JSON.stringify(inData));
+					console.info("Net Send (binary) to " + this._myUser.userName + ':' + JSON.stringify(inData));
 				}
 			}
 			

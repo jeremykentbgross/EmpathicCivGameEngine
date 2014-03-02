@@ -86,7 +86,7 @@ ECGame.unitTests.registerTest(
 				{
 					if(aWriteObject[anEntry.name] === aReadObject[anEntry.name])
 					{
-						ECGame.log.error(
+						console.error(
 							anEntry.scope + '.' + anEntry.name + " miss match: " +
 							aWriteObject[anEntry.name] + ' === ' + aReadObject[anEntry.name]);
 						aPassedTests = false;
@@ -96,7 +96,7 @@ ECGame.unitTests.registerTest(
 				{
 					if(aWriteObject[anEntry.name] !== aReadObject[anEntry.name])
 					{
-						ECGame.log.error(
+						console.error(
 							anEntry.scope + '.' + anEntry.name + " miss match: " +
 							aWriteObject[anEntry.name] + ' !== ' + aReadObject[anEntry.name]);
 						aPassedTests = false;

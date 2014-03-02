@@ -223,7 +223,7 @@ ECGame.WebServerTools.CodeCompressor.prototype.makeCompactGameLoader = function 
 	
 	obfuscator.addIgnore('send');//socket function
 	/*
-	ECGame.log.assert   AudioContext Image XMLHttpRequest io
+	console.assert   AudioContext Image XMLHttpRequest io
 	*/
 		
 	

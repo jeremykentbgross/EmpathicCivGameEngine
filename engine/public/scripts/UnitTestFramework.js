@@ -47,7 +47,7 @@ ECGame.EngineLib.UnitTestFramework.prototype.runTests = function runTests()
 		{
 			if(!aTest())
 			{
-				ECGame.log.error("Failed Test: " + aTest.testName);
+				console.error("Failed Test: " + aTest.testName);
 			}
 			else
 			{

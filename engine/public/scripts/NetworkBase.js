@@ -221,7 +221,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 		//TODO send chat command to all
 		sendMessage : function sendMessage()
 		{
-			ECGame.log.warn("Chat is Broken atm!!!");
+			console.warn("Chat is Broken atm!!!");
 		},
 		
 		getUpdatePriority : function getUpdatePriority()
@@ -250,7 +250,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				{
 					if(ECGame.Settings.isDebugPrint_NetworkMessages())
 					{
-						ECGame.log.info("Clear Net Dirty on:" + anInstanceMap[anInstanceID].getName());
+						console.info("Clear Net Dirty on:" + anInstanceMap[anInstanceID].getName());
 					}
 					anInstanceMap[anInstanceID].clearNetDirty();
 				}
@@ -301,9 +301,9 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 			aMessageHeader = {};
 			
 			//TODO I think there will be other bugs with postload if not all are present, so forget looping for multiple sends atm!
-			ECGame.log.assert(inNewInstanceList.length < this._ourMaxItemsPerMessage, "Cannot currently serialize so many objects!");
-			ECGame.log.assert(inDirtyInstanceList.length < this._ourMaxItemsPerMessage, "Cannot currently serialize so many objects!");
-			ECGame.log.assert(inDestroyInstanceList.length < this._ourMaxItemsPerMessage, "Cannot currently serialize so many objects!");
+			console.assert(inNewInstanceList.length < this._ourMaxItemsPerMessage, "Cannot currently serialize so many objects!");
+			console.assert(inDirtyInstanceList.length < this._ourMaxItemsPerMessage, "Cannot currently serialize so many objects!");
+			console.assert(inDestroyInstanceList.length < this._ourMaxItemsPerMessage, "Cannot currently serialize so many objects!");
 			
 			//TODO log what we are sending!
 			
@@ -326,7 +326,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				
 				if(ECGame.Settings.isDebugPrint_NetworkMessages())
 				{
-					ECGame.log.info("Net create remote on " + inUser.userName + ':' + JSON.stringify(anObjectHeader)
+					console.info("Net create remote on " + inUser.userName + ':' + JSON.stringify(anObjectHeader)
 						+ '=>(' + anObject.getClass().getName() + ':' + anObjectHeader.instanceID + ')'
 					);
 				}
@@ -347,7 +347,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				
 				if(ECGame.Settings.isDebugPrint_NetworkMessages())
 				{
-					ECGame.log.info("Net write to " + inUser.userName + ':' + JSON.stringify(anObjectHeader));
+					console.info("Net write to " + inUser.userName + ':' + JSON.stringify(anObjectHeader));
 				}
 				
 				aClassName = anObject.getClass().getName();
@@ -364,7 +364,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				
 				if(ECGame.Settings.isDebugPrint_NetworkMessages())
 				{
-					ECGame.log.info("Net Destroy on " + inUser.userName + ':' + JSON.stringify(anObjectHeader));
+					console.info("Net Destroy on " + inUser.userName + ':' + JSON.stringify(anObjectHeader));
 				}
 			}
 			
@@ -393,7 +393,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				this._mySerializer.serializeObject(aMessageHeader, this._ourMessageHeaderFormat);
 				
 				//check that the username matches the socket user
-				ECGame.log.assert(
+				console.assert(
 					(aMessageHeader.userID === inUser.userID
 					//|| inUser.userID === ECGame.EngineLib.User.USER_IDS.SERVER
 					)
@@ -408,7 +408,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					
 					if(ECGame.Settings.isDebugPrint_NetworkMessages())
 					{
-						ECGame.log.info("Net create remotely command from " + inUser.userName + ':' + JSON.stringify(anObjectHeader));
+						console.info("Net create remotely command from " + inUser.userName + ':' + JSON.stringify(anObjectHeader));
 					}
 					
 					//find the class
@@ -418,25 +418,25 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 						if(ECGame.Settings.isDebugPrint_NetworkMessages())
 						{
 							//TODO needs to be more than a warning here
-							ECGame.log.warn("Unknown classID " + anObjectHeader.classID);
+							console.warn("Unknown classID " + anObjectHeader.classID);
 						}
 					}
 					
-					ECGame.log.assert(
+					console.assert(
 						!ECGame.Settings.Network.isServer //TODO!!!: || client can create this type
 						,"Looks like we have a hacker!" + JSON.stringify(inUser.userID)
 					);
 
 					//find the instance
 					anObject = anObjectClass.getInstanceRegistry().findByID(anObjectHeader.instanceID);
-//TODO: ECGame.log.assert(!anObject ,"New Network Object already exists!:" + anObject.getTxtPath());
+//TODO: console.assert(!anObject ,"New Network Object already exists!:" + anObject.getTxtPath());
 					
 					//if not found, and not server, create it
 					if(!anObject)
 					{
 						if(ECGame.Settings.isDebugPrint_NetworkMessages())
 						{
-							ECGame.log.info("Network Creating: " + anObjectClass.getName() + ':' + anObjectHeader.instanceID);
+							console.info("Network Creating: " + anObjectClass.getName() + ':' + anObjectHeader.instanceID);
 						}
 						anObject = anObjectClass.create();
 						anObject.setID(anObjectHeader.instanceID);
@@ -445,7 +445,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					}
 					else// if(ECGame.Settings.isDebugPrint_NetworkMessages())	//TODO this branch should not be possible in the future!
 					{
-						ECGame.log.warn("Network Changing (instead of creating): " + anObjectClass.getName() + ':' + anObjectHeader.instanceID);
+						console.warn("Network Changing (instead of creating): " + anObjectClass.getName() + ':' + anObjectHeader.instanceID);
 					}
 					
 					anObject.serialize(this._mySerializer);
@@ -461,7 +461,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					
 					if(ECGame.Settings.isDebugPrint_NetworkMessages())
 					{
-						ECGame.log.info("Net reading from " + inUser.userName + ':' + JSON.stringify(anObjectHeader));
+						console.info("Net reading from " + inUser.userName + ':' + JSON.stringify(anObjectHeader));
 					}
 					
 					//find the class
@@ -470,13 +470,13 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					{
 						if(ECGame.Settings.isDebugPrint_NetworkMessages())
 						{
-							ECGame.log.warn("Unknown classID " + anObjectHeader.classID);
+							console.warn("Unknown classID " + anObjectHeader.classID);
 						}
 					}
 					
 					//find the instance
 					anObject = anObjectClass.getInstanceRegistry().findByID(anObjectHeader.instanceID);
-					ECGame.log.assert(
+					console.assert(
 						anObject,
 						//TODO use proper object path style
 						"Dirty Network Object doesn't exists!:" + anObjectClass.getName() + ':' + anObjectHeader.instanceID
@@ -484,7 +484,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					
 					if(ECGame.Settings.isDebugPrint_NetworkMessages())
 					{
-						ECGame.log.info("Network Changing: " + anObjectClass.getName() + ':' + anObjectHeader.instanceID);
+						console.info("Network Changing: " + anObjectClass.getName() + ':' + anObjectHeader.instanceID);
 					}
 					
 					//if from server or from owner serialize
@@ -501,7 +501,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					else //dummy serialize
 					{
 						//Note: could also maybe throw owner if !server && !owner && !recentOwnerQueue
-						ECGame.log.warn("Not the owner, skipping changes!: " + aMessageHeader.userID + ' != ' + anObject.getNetOwnerID());
+						console.warn("Not the owner, skipping changes!: " + aMessageHeader.userID + ' != ' + anObject.getNetOwnerID());
 						this._mySerializer.setDummyMode(true);
 						anObject.serialize(this._mySerializer);
 						this._mySerializer.setDummyMode(false);
@@ -536,7 +536,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					aReadObjectsList[i].postSerialize();
 				}
 				
-				ECGame.log.assert(
+				console.assert(
 					!aMessageHeader.destroyObjects || !ECGame.Settings.Network.isServer
 					,"Looks like we have a hacker!" + JSON.stringify(inUser.userID)
 				);
@@ -548,7 +548,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					
 					if(ECGame.Settings.isDebugPrint_NetworkMessages())
 					{
-						ECGame.log.info("Net destroy remotely order from " + inUser.userName + ':' + JSON.stringify(anObjectHeader));
+						console.info("Net destroy remotely order from " + inUser.userName + ':' + JSON.stringify(anObjectHeader));
 					}
 					
 					//find the class
@@ -557,7 +557,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					{
 						if(ECGame.Settings.isDebugPrint_NetworkMessages())
 						{
-							ECGame.log.warn("Unknown classID " + anObjectHeader.classID);
+							console.warn("Unknown classID " + anObjectHeader.classID);
 						}
 					}
 					//find the instance
@@ -567,7 +567,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					{
 						if(ECGame.Settings.isDebugPrint_NetworkMessages())
 						{
-							ECGame.log.info(
+							console.info(
 								"Network object to destroy doesn't exists!:" + anObjectClass.getName() + ':' + anObjectHeader.instanceID
 							);
 						}
@@ -576,7 +576,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					
 					if(ECGame.Settings.isDebugPrint_NetworkMessages())
 					{
-						ECGame.log.info("Network Destroying: " + anObjectClass.getName() + ':' + anObjectHeader.instanceID);
+						console.info("Network Destroying: " + anObjectClass.getName() + ':' + anObjectHeader.instanceID);
 					}
 
 					anObject.destroy();

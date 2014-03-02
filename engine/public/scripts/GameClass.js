@@ -125,7 +125,7 @@ ECGame.EngineLib.Class.create = function create(inParams)
 			//make sure the contructor has call to this parent constructor that is not commented out
 			if(constructorSrc.indexOf('this.' + parent.name) === -1)
 			{
-				ECGame.log.warn(
+				console.warn(
 					Constructor.name + " does not call parent constructor " + parent.name
 				);
 			}
@@ -142,7 +142,7 @@ ECGame.EngineLib.Class.create = function create(inParams)
 				{
 					if(Constructor.prototype._chainUpMethods[methodName])
 					{
-						ECGame.log.warn(Constructor.name + " trying to inherit chain function " + methodName + " from an additional parent: " + parent.name);
+						console.warn(Constructor.name + " trying to inherit chain function " + methodName + " from an additional parent: " + parent.name);
 						continue;
 					}
 					
@@ -155,7 +155,7 @@ ECGame.EngineLib.Class.create = function create(inParams)
 					
 					if(!inDefinition[methodName])
 					{
-						ECGame.log.warn(Constructor.name + " does not implement chain function " + methodName);
+						console.warn(Constructor.name + " does not implement chain function " + methodName);
 					}
 					else
 					{
@@ -169,7 +169,7 @@ ECGame.EngineLib.Class.create = function create(inParams)
 				{
 					if(Constructor.prototype._chainDownMethods[methodName])
 					{
-						ECGame.log.warn(Constructor.name + " trying to inherit chain function " + methodName + " from an additional parent: " + parent.name);
+						console.warn(Constructor.name + " trying to inherit chain function " + methodName + " from an additional parent: " + parent.name);
 						continue;
 					}
 					
@@ -182,7 +182,7 @@ ECGame.EngineLib.Class.create = function create(inParams)
 					
 					if(!inDefinition[methodName])
 					{
-						ECGame.log.warn(Constructor.name + " does not implement chain function " + methodName);
+						console.warn(Constructor.name + " does not implement chain function " + methodName);
 					}
 					else
 					{
@@ -192,7 +192,7 @@ ECGame.EngineLib.Class.create = function create(inParams)
 			}
 			else if(Constructor.prototype[propertyName])
 			{
-				ECGame.log.warn(Constructor.name + " trying to inherit function " + methodName + " from an additional parent: " + parent.name);
+				console.warn(Constructor.name + " trying to inherit function " + methodName + " from an additional parent: " + parent.name);
 			}
 			else
 			{
@@ -247,7 +247,7 @@ ECGame.EngineLib.Class.create = function create(inParams)
 		methodName = inParams.ChainUp[methodIndex];
 		if(Constructor.prototype._chainUpMethods[methodName])
 		{
-			ECGame.log.warn(Constructor.name + " redeclares " + methodName + " as a chain function.");
+			console.warn(Constructor.name + " redeclares " + methodName + " as a chain function.");
 			continue;
 		}
 		Constructor.prototype._chainUpMethods[methodName] = [];
@@ -260,7 +260,7 @@ ECGame.EngineLib.Class.create = function create(inParams)
 		methodName = inParams.ChainDown[methodIndex];
 		if(Constructor.prototype._chainDownMethods[methodName])
 		{
-			ECGame.log.warn(Constructor.name + " redeclares " + methodName + " as a chain function.");
+			console.warn(Constructor.name + " redeclares " + methodName + " as a chain function.");
 			continue;
 		}
 		Constructor.prototype._chainDownMethods[methodName] = [];
@@ -437,7 +437,7 @@ ECGame.EngineLib.Class.serializeAll = function serializeAll(inSerializer)
 			}
 		);
 		
-		ECGame.log.assert(dirtyObjects.length < maxItemsPerMessage, "Cannot currently serialize so many objects!");
+		console.assert(dirtyObjects.length < maxItemsPerMessage, "Cannot currently serialize so many objects!");
 		
 		serializeHeader.numObjects = Math.min(maxItemsPerMessage, dirtyObjects.length);
 		inSerializer.serializeObject(serializeHeader, serializeHeaderFormat);

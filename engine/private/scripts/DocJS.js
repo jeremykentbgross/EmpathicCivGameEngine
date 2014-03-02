@@ -74,19 +74,23 @@ var fs = require("fs");
 */
 ECGame.WebServerTools.rmdirRecursive = function rmdirRecursive(inPath)
 {
+	var aFileList
+		;
+	
 	/**! @todo: this function should go somewhere better */
-	var aFileList = [];
+	
+	aFileList = [];
 	if(fs.existsSync(inPath))
 	{
 		aFileList = fs.readdirSync(inPath);
 		aFileList.forEach(
-			function(inFile, inIndex)
+			function(inFile/*, inIndex*/)
 			{
 				var curPath = inPath + "/" + inFile;
 				if(fs.statSync(curPath).isDirectory())
 				{
 					// recurse
-					deleteFolderRecursive(curPath);
+					ECGame.WebServerTools.rmdirRecursive(curPath);
 				}
 				else
 				{
@@ -96,6 +100,10 @@ ECGame.WebServerTools.rmdirRecursive = function rmdirRecursive(inPath)
 			}
 		);
 		fs.rmdirSync(inPath);
+	}
+	else
+	{
+		console.error(inPath);
 	}
 };
 /**! @endmethod: rmdirRecursive */
@@ -271,7 +279,7 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 			{
 				aFileList = fs.readdirSync(inPath);
 				aFileList.forEach(
-					function(inFile, inIndex)
+					function(inFile/*, inIndex*/)
 					{
 						var curPath = inPath + "/" + inFile;
 						if(fs.statSync(curPath).isDirectory())
@@ -314,9 +322,9 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 		/**! @todo: document params*/
 		_addMissingFileHeader : function _addMissingFileHeader(inElements, inFileName)
 		{
-			inElements.unshift('\/\*\*! @todo: document file ' + inFileName + ' \*\/');
-			inElements.unshift('\/\*\*! @beginfile: ' + inFileName + ' /description: TODO document this file \*\/');
-			inElements.push('\/\*\*! @endfile: ' + inFileName + ' \*\/');
+			inElements.unshift('\/' + '**! @todo: document file ' + inFileName + ' *\/');
+			inElements.unshift('\/' + '**! @beginfile: ' + inFileName + ' /description: TODO document this file *\/');
+			inElements.push('\/' + '**! @endfile: ' + inFileName + ' *\/');
 		},
 		
 		/**!
@@ -340,7 +348,7 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 				aSource,
 				anIndex;
 			
-			ECGame.WebServerTools.rmdirRecursive('../docs/generated');
+			ECGame.WebServerTools.rmdirRecursive('../docs/generated');//TODO make real path with this from path object
 			
 			this._myGeneratedMetaData = '[';
 			
@@ -388,7 +396,7 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 					
 					//get the element type, make sure there is only one type
 					anElementType = anElement.match(/@\w*:/g);
-					ECGame.log.assert(
+					console.assert(
 						anElementType && anElementType.length === 1,
 						"Expected exactly one element type of the form '@type:'" + this._genErrorMessageLocation(aFile, aLineNumber) + '\n' + anElement
 					);
@@ -410,7 +418,7 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 					//cleanup anElementType to final form, make sure there is a function to parse it
 					anElementType = anElementType.toLowerCase();
 					anElementType = anElementType.substr(1, anElementType.length -2);
-					ECGame.log.assert(
+					console.assert(
 						this._myTagDescriptions['_' + anElementType] !== undefined,
 						"No tag type of " + anElementType + this._genErrorMessageLocation(aFile, aLineNumber)
 					);
@@ -422,12 +430,12 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 						if(anElementType === 'file')
 						{
 							anElementsList[i] = anElementsList[i].replace('file', 'beginfile');
-							anElementsList.push('\/\*\*! @endfile: ' + aFile + ' \*\/');
+							anElementsList.push('\/' + '**! @endfile: ' + aFile + ' *\/');
 							--i;
 							continue;
 						}
 						//if it isn't for the file, add one, and also a todo: document file
-						else if(anElementType !== 'beginfile')
+						if(anElementType !== 'beginfile')
 						{
 							this._addMissingFileHeader(anElementsList, aFile);
 							--i;
@@ -449,7 +457,7 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 				if(this._myStack.length !== 0)
 				{
 					anElement = this._myStack[this._myStack.length - 1];
-					ECGame.log.assert(
+					console.assert(
 						false,
 						"Expected end of " + anElement.type + ':' + anElement.name + 
 							this._genErrorMessageLocation(aFile, 'EOF')
@@ -523,7 +531,7 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 		*/
 		_includeTodosInAllAncestorElements : function _includeTodosInAllAncestorElements()
 		{
-			var i, j
+			var i
 				,anObject
 				,aParentObject
 				;
@@ -710,7 +718,7 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 			
 			//get the element type description
 			anElementTypeDescription = this._myTagDescriptions['_' + inElementData.elementType];
-			ECGame.log.assert(
+			console.assert(
 				anElementTypeDescription,
 				"Unknown element tag \'" + inElementData.elementType + '\'' + this._genErrorMessageLocationFromElementData(inElementData)
 			);
@@ -727,7 +735,7 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 					}
 				);
 				anElementTypeDescription = this._myTagDescriptions['_' + inElementData.elementType];
-				ECGame.log.assert(
+				console.assert(
 					anElementTypeDescription,
 					"Unknown element tag \'" + inElementData.elementType + '\'' + this._genErrorMessageLocationFromElementData(inElementData)
 				);
@@ -736,7 +744,7 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 			if(anElementTypeDescription.stackPop)
 			{
 				aStackElement = this._myStack.pop();
-				ECGame.log.assert(
+				console.assert(
 					aStackElement.type === anElementTypeDescription.stackPop && aStackElement.name === inElementData.elementName,
 					"Expected end of \'" + aStackElement.type + ':' + aStackElement.name + '\'' + this._genErrorMessageLocationFromElementData(inElementData)
 				);
@@ -763,14 +771,14 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 			aRequiredElements = anElementTypeDescription.requiredElements;
 			for(i = 0; i < inElementData.elementPropertyNames.length; ++i)
 			{
-				ECGame.log.assert(aPossibleElements.indexOf(inElementData.elementPropertyNames[i]) !== -1,
+				console.assert(aPossibleElements.indexOf(inElementData.elementPropertyNames[i]) !== -1,
 					"Unexpected element property: \'" + inElementData.elementPropertyNames[i] + "\'" + 
 						this._genErrorMessageLocationFromElementData(inElementData)
 				);
 			}
 			for(i = 0; i < aRequiredElements.length; ++i)
 			{
-				ECGame.log.assert(inElementData.elementPropertyNames.indexOf(aRequiredElements[i]) !== -1,
+				console.assert(inElementData.elementPropertyNames.indexOf(aRequiredElements[i]) !== -1,
 					"Expected element property: \'" + aRequiredElements[i] + "\' not found" + 
 						this._genErrorMessageLocationFromElementData(inElementData)
 				);
@@ -794,11 +802,9 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 				this._myGeneratedMetaData += ', \"members\" : [';
 				return false;
 			}
-			else
-			{
-				this._myGeneratedMetaData += '}';
-				return true;
-			}
+			
+			this._myGeneratedMetaData += '}';
+			return true;
 		},
 		
 		generateHtmlFiles : function generateHtmlFiles()
@@ -1012,6 +1018,10 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 		
 		_writeTodoIndex : function _writeTodoIndex(aStringForFile, anElement)
 		{
+			var i
+				,subElement
+				;
+			
 			aStringForFile += "<h3>Todo's:</h3>\n";
 			aStringForFile += "<ul>\n";
 			if(anElement.members)
@@ -1035,6 +1045,10 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 		},
 		_writeTodoList : function _writeTodoList(aStringForFile, anElement)
 		{
+			var i
+				,subElement
+				;
+			
 			//add a horizontal break before we show detailed versions
 			aStringForFile += "<hr/>\n";
 			aStringForFile += "<h3>Todo's:</h3>\n";
@@ -1064,6 +1078,10 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 		},
 		_writeMemberIndex : function _writeMemberIndex(aStringForFile, anElement)
 		{
+			var subElement
+				,i
+				;
+				
 			aStringForFile += "<h3>Members:</h3>\n";
 			aStringForFile += "<ul>\n";
 			if(anElement.members)
@@ -1085,6 +1103,9 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 		},
 		_writeMemberList : function _writeMemberList(aStringForFile, anElement)
 		{
+			var subElement
+				,i
+				;
 			//add a horizontal break before we show detailed versions
 			aStringForFile += "<hr/>\n";
 			aStringForFile += "<h3>Members:</h3>\n";
@@ -1113,6 +1134,10 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 		},
 		_writeMethodIndex : function _writeMethodIndex(aStringForFile, anElement)
 		{
+			var subElement
+				,i
+				;
+				
 			aStringForFile += "<h3>Methods:</h3>\n";
 			aStringForFile += "<ul>\n";
 			if(anElement.members)
@@ -1136,6 +1161,9 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 		},
 		_writeMethodList : function _writeMethodList(aStringForFile, anElement)
 		{
+			var subElement
+				,i
+				;
 			//add a horizontal break before we show detailed versions
 			aStringForFile += "<hr/>\n";
 			aStringForFile += "<h3>Methods:</h3>\n";
@@ -1173,8 +1201,6 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 			var aStringForFile
 				,aName
 				,anElement
-				,subName
-				,subElement
 				,i
 				;
 			
@@ -1247,6 +1273,7 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 				,aStartCommentIndex
 				,anEndCommentIndex
 				,isComment
+				,subElement
 				;
 				
 			/**! @todo: share keyword list with the obfuscator */
@@ -1398,9 +1425,9 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 				//write out each source line, and keep track if we are in comments or not
 				for(i = 0; i < aSource.length; ++i)
 				{
-					aSource[i] = aSource[i].replace(/\/\*/g, '<mark class="comment">\/\*');
+					aSource[i] = aSource[i].replace(/\/\*/g, '<mark class="comment">\/*');
 					aSource[i] = aSource[i].replace(/\/\//g, '<mark class="comment">\/\/');
-					aSource[i] = aSource[i].replace(/\*\//g, '\*\/</mark>');
+					aSource[i] = aSource[i].replace(/\*\//g, '*\/</mark>');
 
 					if(isComment)
 					{
@@ -1415,8 +1442,8 @@ ECGame.WebServerTools.DocJS = ECGame.EngineLib.Class.create({
 							+ '</li>';
 					}
 					
-					aStartCommentIndex = aSource[i].lastIndexOf('\/\*');
-					anEndCommentIndex = aSource[i].lastIndexOf('\*\/');
+					aStartCommentIndex = aSource[i].lastIndexOf('\/*');
+					anEndCommentIndex = aSource[i].lastIndexOf('*\/');
 					isComment = (isComment || (anEndCommentIndex < aStartCommentIndex))
 						&& !(anEndCommentIndex > aStartCommentIndex);
 				}

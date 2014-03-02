@@ -188,7 +188,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			this._myAABB = ECGame.EngineLib.AABB2D.create(0, 0, aMapSize, aMapSize);
 			
 			this._myNumberOfTiles = inTileSet.getNumberOfTiles();
-			ECGame.log.assert(this._myNumberOfTiles < 256, "Currently unsupported number of tiles");//TODO should be 255 since 256 is reserved
+			console.assert(this._myNumberOfTiles < 256, "Currently unsupported number of tiles");//TODO should be 255 since 256 is reserved
 			if(this._myNumberOfTiles < 256)
 			{
 				this._myTileIndexArray = new Uint8Array(inMapSizeInTiles * inMapSizeInTiles);
@@ -237,7 +237,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 
 		setTileSet : function setTileSet(inTileSet)
 		{
-			ECGame.log.assert(inTileSet.getNumberOfTiles() < 256, "Currently unsupported number of tiles");
+			console.assert(inTileSet.getNumberOfTiles() < 256, "Currently unsupported number of tiles");
 			
 			//TODO clean current tilesets physics and scenegraph info
 			
@@ -406,7 +406,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			{
 				if(aDeletedTilesArray.length > 1)
 				{
-					ECGame.log.error("Deleted too many tiles " + aDeletedTilesArray.length);
+					console.error("Deleted too many tiles " + aDeletedTilesArray.length);
 				}
 			}
 			

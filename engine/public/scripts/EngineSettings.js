@@ -116,6 +116,7 @@ ECGame.Settings =
 		,obfuscateNames : true//true
 		,useModifiedNamesNotPureObfuscate : false//false
 		,saveResultsNotesToFile : true//true
+		,logRequests : false
 		//:only working when compressing client code
 		////////////////////////////////////////////
 		

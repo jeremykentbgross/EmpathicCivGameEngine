@@ -82,10 +82,15 @@ ECGame.WebServerTools.WebServer.prototype.run = function run()
 		docJS.run();
 		this.expressApp.get(
 			'/docs/*.(js|css|html)'//TODO review file types (no waves!)
-			,function webGetDocs(req, res)
+			,function webGetDocs(inRequest, outResponse)
 			{
-				res.sendfile(
-					path.join(aThis.webHostDocsRoot, req.url)
+				if(ECGame.Settings.Server.logRequests)
+				{
+					console.log('Request: ', inRequest.originalUrl);
+				}
+				
+				outResponse.sendfile(
+					path.join(aThis.webHostDocsRoot, inRequest.url)
 				);
 			}
 		);
@@ -101,36 +106,51 @@ ECGame.WebServerTools.WebServer.prototype.run = function run()
 		
 		this.expressApp.get(
 			'/engine/scripts/EngineLoader.js'
-			,function webGetCompressedCode(req, res)
+			,function webGetCompressedCode(inRequest, outResponse)
 			{
 				var code = aThis.codeCompressor.getCompactCode();
 				
-				res.writeHead(
+				if(ECGame.Settings.Server.logRequests)
+				{
+					console.log('Request: ', inRequest.originalUrl);
+				}
+				
+				outResponse.writeHead(
 					200,
 					{
 						'Content-Length': code.length,
 						'Content-Type': 'text/javascript'
 					}
 				);
-				res.write(code);
-				res.end();
+				outResponse.write(code);
+				outResponse.end();
 			}
 		);
 		this.expressApp.get(
 			'/3rdParty/*.(js|css|html|png|jpg|mp3|wav)'//TODO review file types (no waves!)
-			,function webGet3rdParty(req, res)
+			,function webGet3rdParty(inRequest, outResponse)
 			{
-				res.sendfile(
-					path.join(aThis.webHostRoot, req.url)
+				if(ECGame.Settings.Server.logRequests)
+				{
+					console.log('Request: ', inRequest.originalUrl);
+				}
+				
+				outResponse.sendfile(
+					path.join(aThis.webHostRoot, inRequest.url)
 				);
 			}
 		);
 		this.expressApp.get(
 			'/*.(css|html|png|jpg|mp3|wav)'//TODO review file types (no waves!)
-			,function webGetCompressed(req, res)
+			,function webGetCompressed(inRequest, outResponse)
 			{
-				res.sendfile(
-					path.join(aThis.webHostRoot, req.url)
+				if(ECGame.Settings.Server.logRequests)
+				{
+					console.log('Request: ', inRequest.originalUrl);
+				}
+				
+				outResponse.sendfile(
+					path.join(aThis.webHostRoot, inRequest.url)
 				);
 			}
 		);
@@ -139,10 +159,15 @@ ECGame.WebServerTools.WebServer.prototype.run = function run()
 	{
 		this.expressApp.get(
 			'/*.(js|css|html|png|jpg|mp3|wav)'//TODO review file types (no waves!)
-			,function webGetAny(req, res)
+			,function webGetAny(inRequest, outResponse)
 			{
-				res.sendfile(
-					path.join(aThis.webHostRoot, req.url)
+				if(ECGame.Settings.Server.logRequests)
+				{
+					console.log('Request: ', inRequest.originalUrl);
+				}
+				
+				outResponse.sendfile(
+					path.join(aThis.webHostRoot, inRequest.url)
 				);
 			}
 		);
@@ -150,9 +175,14 @@ ECGame.WebServerTools.WebServer.prototype.run = function run()
 
 	this.expressApp.get(
 		'/'
-		,function webGetHome(req, res)
+		,function webGetHome(inRequest, outResponse)
 		{
-			res.sendfile(
+			if(ECGame.Settings.Server.logRequests)
+			{
+				console.log('Request: ', inRequest.originalUrl);
+			}
+			
+			outResponse.sendfile(
 				path.join(aThis.webHostRoot, 'welcome.html')
 			);
 		}

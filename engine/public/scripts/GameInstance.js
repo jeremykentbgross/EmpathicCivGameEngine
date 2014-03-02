@@ -76,7 +76,7 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 				}
 				else
 				{
-					ECGame.log.error("GameFrameWork Init failed!");
+					console.error("GameFrameWork Init failed!");
 				}
 			}
 			catch(error)

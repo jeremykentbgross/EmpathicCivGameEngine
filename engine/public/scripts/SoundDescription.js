@@ -49,7 +49,7 @@ ECGame.EngineLib.SoundDescription = ECGame.EngineLib.Class.create({
 			aTotal += aSample._myProbablity;
 		}
 		//assert that the total probablity of all samples is ~1.0
-		ECGame.log.assert(Math.abs(aTotal - 1) < 0.01);
+		console.assert(Math.abs(aTotal - 1) < 0.01);
 	},
 	Parents : [],
 	flags : {},

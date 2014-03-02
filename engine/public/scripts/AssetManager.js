@@ -140,7 +140,7 @@ ECGame.EngineLib.AssetManager = ECGame.EngineLib.Class.create({
 						},
 						function onError(/*inWhatParam??*/)
 						{
-							ECGame.log.error("Failed to load " + inFileName);
+							console.error("Failed to load " + inFileName);
 						}
 					);
 					//TODO onFailedLoad? set placeholder, else have a grey or clear sound for streaming

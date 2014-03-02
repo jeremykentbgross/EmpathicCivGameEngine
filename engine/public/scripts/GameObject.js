@@ -39,7 +39,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		
 		if(ECGame.Settings.isDebugPrint_GameObject())
 		{
-			ECGame.log.info("New GameObject: " + aThisClass.getName() + ':' + this._myName + ':' + this._myID, true);
+			console.info("New GameObject: " + aThisClass.getName() + ':' + this._myName + ':' + this._myID, true);
 		}
 		
 		this._myNetOwnerID = ECGame.EngineLib.User.USER_IDS.SERVER;
@@ -120,7 +120,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			
 			if(ECGame.Settings.isDebugPrint_GameObject())
 			{
-				ECGame.log.info("Destroying GameObject: " + this.getClass().getName() + ':' + this._myName + ':' + this._myID, true);
+				console.info("Destroying GameObject: " + this.getClass().getName() + ':' + this._myName + ':' + this._myID, true);
 			}
 				
 			//notify all listeners
@@ -254,8 +254,8 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			{
 				if(aStartingOwner !== this._myNetOwnerID)
 				{
-					ECGame.log.info(this.getTxtPath() + " start owner: " + aStartingOwner);
-					ECGame.log.info(this.getTxtPath() + " end owner: " + this._myNetOwnerID);
+					console.info(this.getTxtPath() + " start owner: " + aStartingOwner);
+					console.info(this.getTxtPath() + " end owner: " + this._myNetOwnerID);
 				}
 			}
 		},

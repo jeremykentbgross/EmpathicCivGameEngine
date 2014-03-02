@@ -70,16 +70,16 @@ ECGame.unitTests.registerTest(
 		
 		testClass1 = new ClassNamespace.TestClass1();
 		testClass1.Func1();
-		ECGame.log.assert(testClass1.Func1Called, "Function failed from new'ed class instance!");
+		console.assert(testClass1.Func1Called, "Function failed from new'ed class instance!");
 		
 		
 		
 		testClass2 = ClassNamespace.TestClass2.create();
-		ECGame.log.assert(ClassNamespace.TestClass2.StaticThing === 'HaHa!', "Inherited functions failed from created class instance!");
+		console.assert(ClassNamespace.TestClass2.StaticThing === 'HaHa!', "Inherited functions failed from created class instance!");
 		
 		testClass2.Func1();
 		testClass2.Func2();
-		ECGame.log.assert(testClass2.Func1Called && testClass2.Func2Called, "Inherited functions failed from created class instance!");
+		console.assert(testClass2.Func1Called && testClass2.Func2Called, "Inherited functions failed from created class instance!");
 
 		ClassNamespace.TestObjectClass1 = ECGame.EngineLib.Class.create({
 			Constructor : function TestObjectClass1()
@@ -113,15 +113,15 @@ ECGame.unitTests.registerTest(
 		
 		foundClass = ECGame.EngineLib.Class.getInstanceRegistry().findByName('TestObjectClass1');
 		testObjectClass1 = foundClass.create();
-		ECGame.log.assert(testObjectClass1.isA(ClassNamespace.TestObjectClass1), "isA() Failed on found created class!");
+		console.assert(testObjectClass1.isA(ClassNamespace.TestObjectClass1), "isA() Failed on found created class!");
 		
 		found = foundClass.getInstanceRegistry().findByName(testObjectClass1.getName());
-		ECGame.log.assert(testObjectClass1 === found, "Failed to find class instance!");
+		console.assert(testObjectClass1 === found, "Failed to find class instance!");
 		
 		instanceName = testObjectClass1.getName();
 		testObjectClass1.destroy();
 		found = foundClass.getInstanceRegistry().findByName(instanceName);
-		ECGame.log.assert(!found, "Found destroyed object in registry!");
+		console.assert(!found, "Found destroyed object in registry!");
 		
 		
 		ClassNamespace.TestObjectClass2 = ECGame.EngineLib.Class.create({
@@ -154,7 +154,7 @@ ECGame.unitTests.registerTest(
 		chainTestObject.chainUp();
 		chainTestObject.chainDown();
 		
-		ECGame.log.assert(
+		console.assert(
 			chainTestObject.up2 === 1 &&
 			chainTestObject.up1 === 2 &&
 			chainTestObject.down1 === 3 &&

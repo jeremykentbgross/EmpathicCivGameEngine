@@ -101,7 +101,7 @@ ECGame.unitTests.registerTest(
 				"\n\nSECONDARY GENERATED CODE:\n\n" + obfuscatorObfuscatedSrc2
 			);
 		}
-		ECGame.log.assert(
+		console.assert(
 			obfuscatorObfuscatedSrc === obfuscatorObfuscatedSrc2,
 			"Obfuscated Obfuscator did not produce same results as the original!"
 		);
@@ -126,7 +126,7 @@ ECGame.unitTests.registerTest(
 		obfuscator.run();
 		testSrc = obfuscator.getObfuscatedCode();
 		obfValue = obfuscator.getObfuscatedName('testMultipleInARow');
-		ECGame.log.assert(
+		console.assert(
 			testSrc === 'var ' + obfValue + '=1;' + obfValue + '=' + obfValue + '/' + obfValue + '/' + obfValue + '/' + obfValue + '/' + obfValue + '/' + obfValue + ';' + obfuscator.getObfuscatedName('GameLocalization') + '=[];',
 			"Cannot handle multiple of same var in a row!"
 		);
@@ -145,7 +145,7 @@ ECGame.unitTests.registerTest(
 			qwer : obfuscator.getObfuscatedName('qwer'),
 			GameLocalization : obfuscator.getObfuscatedName('GameLocalization')
 		};
-		ECGame.log.assert(
+		console.assert(
 			testSrc === 'var ' + obfValue.v1 + '={' + obfValue.asdf + ':[\'' + obfValue.asdf + '\',[{' + obfValue.asdf + ':[1,2,3]}],\'sdf\'],' + obfValue.qwer + ':{}},' + obfValue.v2 + '=String(\'fudge\'+String(\'fudge2\'));' + obfValue.GameLocalization + '=[];',
 			"Cannot handle nested brackets on variable declaration!"
 		);

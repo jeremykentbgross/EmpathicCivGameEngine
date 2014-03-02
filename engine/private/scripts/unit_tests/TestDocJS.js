@@ -23,10 +23,12 @@ ECGame.unitTests.registerTest(
 	"DocJS",
 	function()
 	{
-		var source,
-			theTestCode;
+		var aSourceCodeString
+			,aTestCodeFunction
+			,aDocJS
+			;
 			
-		theTestCode = function theTestCode()
+		aTestCodeFunction = function aTestCodeFunction()
 		{
 			/**!
 				@namespace: TestNamespace
@@ -112,19 +114,19 @@ ECGame.unitTests.registerTest(
 							/priority: 10
 							/example: something something
 						*/
-						return '';
+						return inParam1 + outParam2;
 					}/**! @endmethod: testMemberMethod */
 				}
 			});/**! @endclass: TestChildClass */
 		};
 		
-		source = '\t\t' + theTestCode.toString();
+		aSourceCodeString = '\t\t' + aTestCodeFunction.toString();
 		
-		var docJS = ECGame.WebServerTools.DocJS.create();
-		docJS.appendSource(source, "TEMPHACK.js");
-//		docJS.loadDirectory('../engine');
-//		docJS.loadDirectory('../engine_test_game');/**! @todo: put real game name here! */
-		docJS.run();
+		aDocJS = ECGame.WebServerTools.DocJS.create();
+		aDocJS.appendSource(aSourceCodeString, "TEMPHACK.js");
+//		aDocJS.loadDirectory('../engine');
+//		aDocJS.loadDirectory('../engine_test_game');/**! @todo: put real game name here! */
+		aDocJS.run();
 		
 //		return false;
 		

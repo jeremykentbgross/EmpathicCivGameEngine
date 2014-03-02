@@ -131,7 +131,7 @@ ECGame.unitTests.registerTest(
 			aValue = aTextEncoder.decode(aModels[i]);
 			if(aValue !== aValues[i])
 			{
-				ECGame.log.error("Text Parsing: Loop " + i + ' ' + aValue + '!==' + aValues[i] + " with (" + aModels[i].myMin + ', ' + aModels[i].myMax + ')');
+				console.error("Text Parsing: Loop " + i + ' ' + aValue + '!==' + aValues[i] + " with (" + aModels[i].myMin + ', ' + aModels[i].myMax + ')');
 				aPassedTest = false;
 				
 				aFailedLoopsList.push(i);
@@ -140,7 +140,7 @@ ECGame.unitTests.registerTest(
 			aValue = aBinaryEncoder.decode(aModels[i]);
 			if(aValue !== aValues[i])
 			{
-				ECGame.log.error("Binary Parsing: Loop " + i + ' ' + aValue + '!==' + aValues[i] + " with (" + aModels[i].myMin + ', ' + aModels[i].myMax + ')');
+				console.error("Binary Parsing: Loop " + i + ' ' + aValue + '!==' + aValues[i] + " with (" + aModels[i].myMin + ', ' + aModels[i].myMax + ')');
 				aPassedTest = false;
 				
 				aFailedLoopsList.push(i);

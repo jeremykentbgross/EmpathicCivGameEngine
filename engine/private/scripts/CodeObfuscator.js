@@ -186,7 +186,7 @@ ECGame.WebServerTools.Obfuscator.prototype.getObfuscatedName = function getObfus
 {
 	if(!this._wordMap[inWord])
 	{
-		ECGame.log.warn("WTF no word replacement? " + inWord);
+		console.warn("WTF no word replacement? " + inWord);
 	}
 	return this._wordMap[inWord].replacement;
 };
@@ -197,7 +197,7 @@ ECGame.WebServerTools.Obfuscator.prototype.getUnObfuscatedName = function getUnO
 {
 	if(!this._reverseWordMap[inWord])
 	{
-		ECGame.log.warn("WTF no original word? " + inWord);
+		console.warn("WTF no original word? " + inWord);
 	}
 	return this._reverseWordMap[inWord].word;
 };
@@ -434,7 +434,7 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 				{
 					throw inError;
 				}
-				ECGame.log.info('Saved ObfuscationResults.txt');
+				console.info('Saved ObfuscationResults.txt');
 			}*/
 		);
 	}
@@ -462,7 +462,7 @@ ECGame.WebServerTools.Obfuscator.prototype._checkForErrors = function _checkForE
 	{
 		for(i = 0; i < values.length; ++i)
 		{
-			ECGame.log.warn("Likely problem compressing code!: " + values[i]);//TODO change warning/assert?
+			console.warn("Likely problem compressing code!: " + values[i]);//TODO change warning/assert?
 		}
 	}
 	
@@ -473,7 +473,7 @@ ECGame.WebServerTools.Obfuscator.prototype._checkForErrors = function _checkForE
 	{
 		for(i = 0; i < values.length; ++i)
 		{
-			ECGame.log.warn("Likely problem compressing code!: " + values[i]);//TODO change warning/assert?
+			console.warn("Likely problem compressing code!: " + values[i]);//TODO change warning/assert?
 		}
 	}
 	
@@ -486,7 +486,7 @@ ECGame.WebServerTools.Obfuscator.prototype._checkForErrors = function _checkForE
 		{
 			if(values[i].indexOf('prototype') !== -1)
 			{
-				ECGame.log.warn("Missing ';' before member function definition: " + values[i]);//TODO change warning/assert?
+				console.warn("Missing ';' before member function definition: " + values[i]);//TODO change warning/assert?
 			}
 		}
 	}
@@ -498,7 +498,7 @@ ECGame.WebServerTools.Obfuscator.prototype._addWord = function _addWord(inWord)
 {
 	if(ECGame.Settings.DEBUG && typeof inWord !== 'string')
 	{
-		ECGame.log.warn("Error input is not a word!");//TODO this should be an exception!
+		console.warn("Error input is not a word!");//TODO this should be an exception!
 	}
 	if(!this._wordMap[inWord])
 	{
@@ -813,7 +813,7 @@ ECGame.WebServerTools.Obfuscator.prototype._doWordReplacement = function _doWord
 		
 		if(!instances)
 		{
-			ECGame.log.warn("No instances of " + word);
+			console.warn("No instances of " + word);
 			continue;
 		}
 		

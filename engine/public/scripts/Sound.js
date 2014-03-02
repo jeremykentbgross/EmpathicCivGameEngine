@@ -42,7 +42,7 @@ ECGame.EngineLib.Sound = ECGame.EngineLib.Class.create(
 			this._mySource = this._myDescription.createAndPlaySourceBuffer(this._myDestination);
 			if(ECGame.Settings.isDebugPrint_Sound())
 			{
-				ECGame.log.info("Played sound " + this._getDebugPlayingString());
+				console.info("Played sound " + this._getDebugPlayingString());
 			}
 		},
 		

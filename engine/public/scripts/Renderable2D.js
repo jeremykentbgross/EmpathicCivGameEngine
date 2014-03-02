@@ -51,7 +51,7 @@ ECGame.EngineLib.Renderable2D = ECGame.EngineLib.Class.create({
 		
 		render : function render(/*inGraphics*/)//abstract!!
 		{
-			ECGame.log.assert(false, "This method must be overridden");
+			console.assert(false, "This method must be overridden");
 		}
 	}
 });

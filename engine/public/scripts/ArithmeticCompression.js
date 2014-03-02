@@ -117,8 +117,8 @@ ECGame.EngineLib.ArithmeticCompresser = ECGame.EngineLib.Class.create({
 				this._high = (2 * this._high + 1) % this._ONE;
 			}
 			
-			//ECGame.log.error("Encode failed!");
-			ECGame.log.assert(false, "Encode failed!" + value + inModel.getString());
+			//console.error("Encode failed!");
+			console.assert(false, "Encode failed!" + value + inModel.getString());
 		},
 		
 		decode : function decode(inModel)
@@ -133,8 +133,8 @@ ECGame.EngineLib.ArithmeticCompresser = ECGame.EngineLib.Class.create({
 			
 			if((probability > 1 || probability < 0))
 			{
-				//ECGame.log.error("Decompression out of range value detected!");
-				ECGame.log.assert(false, "Decompression out of range value detected!");
+				//console.error("Decompression out of range value detected!");
+				console.assert(false, "Decompression out of range value detected!");
 				//TODO throw an error to be caught above and disconnect them
 			}
 			
@@ -178,8 +178,8 @@ ECGame.EngineLib.ArithmeticCompresser = ECGame.EngineLib.Class.create({
 				this._encoded = (2 * this._encoded + this._bitPacker.unpack(1)) % this._ONE;
 			}
 			
-			//ECGame.log.error("Did not resolve decoding a symbol before we exceeded the bits it could have fit in!");
-			ECGame.log.assert(false, "Did not resolve decoding a symbol before we exceeded the bits it could have fit in!");
+			//console.error("Did not resolve decoding a symbol before we exceeded the bits it could have fit in!");
+			console.assert(false, "Did not resolve decoding a symbol before we exceeded the bits it could have fit in!");
 			//return valueRange.value;
 			return inModel.myMin;//should prevent out of range values
 		},

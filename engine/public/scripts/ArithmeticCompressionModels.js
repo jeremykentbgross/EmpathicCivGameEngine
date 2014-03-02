@@ -51,8 +51,8 @@ ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel.pr
 {
 	if(inMax - inMin + 1 > 65536)//TODO ifdebug
 	{
-		//ECGame.log.error("Range is too large!");//TODO throw error from log, and move the log!
-		ECGame.log.assert(false, "Range is too large!");
+		//console.error("Range is too large!");//TODO throw error from log, and move the log!
+		console.assert(false, "Range is too large!");
 		return;
 	}
 	this.myMin = inMin;
@@ -76,7 +76,7 @@ ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel.pr
 	//	high : valueHigh
 	//};
 	
-	ECGame.log.assert(
+	console.assert(
 		inValue <= this.myMax
 		&& inValue >= this.myMin,
 		"Failed to encode message value: " + inValue + ':[' + this.myMin + ',' + this.myMax + ']'

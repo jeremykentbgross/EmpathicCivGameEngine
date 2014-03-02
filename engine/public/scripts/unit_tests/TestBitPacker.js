@@ -65,14 +65,14 @@ ECGame.unitTests.registerTest(
 			aValue = aPackerText.unpack(aBits[i]);
 			if(aValue !== aValues[i])
 			{
-				ECGame.log.error("Text Parsing: Loop " + i + ' ' + aValue + '!==' + aValues[i] + " in " + aBits[i] + " bits");
+				console.error("Text Parsing: Loop " + i + ' ' + aValue + '!==' + aValues[i] + " in " + aBits[i] + " bits");
 				aPassedTest = false;
 			}
 			
 			aValue = aPackerBinary.unpack(aBits[i]);
 			if(aValue !== aValues[i])
 			{
-				ECGame.log.error("Binary Parsing: Loop " + i + ' ' + aValue + '!==' + aValues[i] + " in " + aBits[i] + " bits");
+				console.error("Binary Parsing: Loop " + i + ' ' + aValue + '!==' + aValues[i] + " in " + aBits[i] + " bits");
 				aPassedTest = false;
 			}
 		}

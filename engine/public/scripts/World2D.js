@@ -487,19 +487,19 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			for(i = 0; i < this._myEntityRefs.length; ++i)
 			{
 				anEntity = this._myEntityRefs[i].deref();
-				ECGame.log.assert(anEntity, "Missing entity during serialization!");
+				console.assert(anEntity, "Missing entity during serialization!");
 				this.addEntity(anEntity);
 			}
 			for(i = 0; i < this._myAddedEntityRefs.length; ++i)
 			{
 				anEntity = this._myAddedEntityRefs[i].deref();
-				ECGame.log.assert(anEntity, "Missing entity during serialization!");
+				console.assert(anEntity, "Missing entity during serialization!");
 				this.addEntity(anEntity);
 			}
 			for(i = 0; i < this._myRemovedEntityRefs.length; ++i)
 			{
 				anEntity = this._myRemovedEntityRefs[i].deref();
-				//ECGame.log.assert(anEntity, "Missing entity during serialization!");
+				//console.assert(anEntity, "Missing entity during serialization!");
 				if(anEntity)
 				{
 					this.removeEntity(anEntity);

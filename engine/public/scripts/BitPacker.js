@@ -153,7 +153,7 @@ ECGame.EngineLib.BitPacker = ECGame.EngineLib.Class.create({
 				outString,
 				i;
 				
-			ECGame.log.assert(this._ENCODE_TO_TEXT, "Cannot get as text when not using text incoding.");
+			console.assert(this._ENCODE_TO_TEXT, "Cannot get as text when not using text incoding.");
 			
 			aLength = this._data.length;
 			outString = '';
@@ -171,7 +171,7 @@ ECGame.EngineLib.BitPacker = ECGame.EngineLib.Class.create({
 			var aLength,
 				i;
 			
-			ECGame.log.assert(this._ENCODE_TO_TEXT, "Cannot set as text when not using text incoding.");
+			console.assert(this._ENCODE_TO_TEXT, "Cannot set as text when not using text incoding.");
 			
 			aLength = inString.length;
 			
@@ -193,7 +193,7 @@ ECGame.EngineLib.BitPacker = ECGame.EngineLib.Class.create({
 				outArray,
 				i;
 			
-			ECGame.log.assert(!this._ENCODE_TO_TEXT, "Cannot get as TypedArray when using text incoding.");
+			console.assert(!this._ENCODE_TO_TEXT, "Cannot get as TypedArray when using text incoding.");
 			
 			aLength = this._data.length;
 			outArray = new Uint8Array(aLength);
@@ -211,7 +211,7 @@ ECGame.EngineLib.BitPacker = ECGame.EngineLib.Class.create({
 			var aLength,
 				i;
 				
-			ECGame.log.assert(!this._ENCODE_TO_TEXT, "Cannot set as TypedArray when using text incoding.");
+			console.assert(!this._ENCODE_TO_TEXT, "Cannot set as TypedArray when using text incoding.");
 			
 			aLength = inArray.length;
 			

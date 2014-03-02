@@ -52,7 +52,7 @@ ECGame.unitTests.registerTest(
 				
 				onRemovedFromEntity : function onRemovedFromEntity(inEvent)
 				{
-					ECGame.log.assert(
+					console.assert(
 						inEvent.entity === this._myOwner
 						,"Didn't belong to this entity!"
 					);
@@ -69,7 +69,7 @@ ECGame.unitTests.registerTest(
 				
 				onEntityRemovedFromWorld : function onEntityRemovedFromWorld(inEvent)
 				{
-					ECGame.log.assert(this._containingWorld === inEvent.world, "Removing from wrong world");
+					console.assert(this._containingWorld === inEvent.world, "Removing from wrong world");
 					this._removedWorld = true;
 					this._containingWorld = null;
 				},
@@ -85,7 +85,7 @@ ECGame.unitTests.registerTest(
 		component1 = TestComponent.create();
 		anEntity.addComponent(component1);
 		
-		ECGame.log.assert(
+		console.assert(
 			component1.added === anEntity
 			&& anEntity === component1._myOwner
 			&& component1._containingWorld === 6
@@ -93,14 +93,14 @@ ECGame.unitTests.registerTest(
 		);
 		
 		anEntity.addedToWorld(7);
-		ECGame.log.assert(
+		console.assert(
 			component1._removedWorld
 			&& component1._containingWorld === 7,
 			"World not set correctly."
 		);
 		
 		anEntity.removeComponent(component1);
-		ECGame.log.assert(
+		console.assert(
 			component1.added === null
 			&& null === component1._myOwner 
 			&& component1._containingWorld === null,
