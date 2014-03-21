@@ -107,6 +107,9 @@ ECGame.unitTests.registerTest(
 			"Did not remove component successfully"
 		);
 		
+		anEntity.removedFromWorld(7);
+		anEntity.destroy();
+		
 		return true;
 	}
 );
