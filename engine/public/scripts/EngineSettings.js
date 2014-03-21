@@ -52,6 +52,12 @@ ECGame.Settings =
 		
 		,resizable : true
 		
+		,NoCanvasSupportedMessage :
+			"Sorry your browser does not support Canvas. Please use different browser:<br/>" +
+			"<a href=\"http:\/\/www.google.com/chrome\">Get Chrome (**RECOMMENDED!**) </a><br/>" +
+			"or<br/>" +
+			"<a href=\"http:\/\/www.mozilla-europe.org/en/firefox/\">Get Firefox (**No Audio Support**) </a>"
+		
 		//use 3d?
 		//canvas (2d), webgl (3d), threejs (3d), noDefault (none)
 	},
@@ -185,6 +191,11 @@ ECGame.Settings =
 			}
 		}())//evaluate the function
 		//TODO audio formats: https://hacks.mozilla.org/2013/02/simplifying-audio-in-the-browser/
+	},
+	
+	Editor :
+	{
+		Enabled : false
 	},
 	
 	//TODO make the logger in global or instance space??????????

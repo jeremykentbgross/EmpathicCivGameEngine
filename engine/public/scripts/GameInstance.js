@@ -48,12 +48,6 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 		this._myRenderSpaceWidth = 0;
 		this._myRenderSpaceHeight = 0;
 		
-		this._myNoCanvasSupportedMessage =
-			"Sorry your browser does not support Canvas. Please use different browser:<br/>" +
-			"<a href=\"http:\/\/www.google.com/chrome\">Get Chrome (**recommended!**) </a><br/>" +
-			"or<br/>" +
-			"<a href=\"http:\/\/www.mozilla-europe.org/en/firefox/\">Get Firefox</a>";
-		
 		this._myGraphicsContainer = null;
 		if(!ECGame.Settings.Network.isServer)
 		{
@@ -161,12 +155,12 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			
 			this._myGraphicsContainer.innerHTML +=
 				"<canvas id='canvasSingle'>" +
-				this._myNoCanvasSupportedMessage +
+				ECGame.Settings.Graphics.NoCanvasSupportedMessage +
 				"</canvas>";
 			
 			aGraphics = ECGame.EngineLib.Graphics2D.create();
 			this._myGraphics.push(aGraphics);
-			aSucceeded = aGraphics.init(0, 'canvasSingle');
+			aSucceeded = aGraphics.init(0, document.getElementById('canvasSingle'));
 			this._myInput.push(aGraphics.getInput());
 			
 			return aSucceeded;
@@ -185,20 +179,20 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			
 			this._myGraphicsContainer.innerHTML +=
 				"<canvas id='canvasSplitHorizontalLeft'>" +
-				this._myNoCanvasSupportedMessage +
+				ECGame.Settings.Graphics.NoCanvasSupportedMessage +
 				"</canvas>" +
 				"<canvas id='canvasSplitHorizontalRight'>" +
-				this._myNoCanvasSupportedMessage +
+				ECGame.Settings.Graphics.NoCanvasSupportedMessage +
 				"</canvas>";
 			
 			aGraphics = ECGame.EngineLib.Graphics2D.create();
 			this._myGraphics.push(aGraphics);
-			aSucceeded = aSucceeded && aGraphics.init(0, 'canvasSplitHorizontalLeft');
+			aSucceeded = aSucceeded && aGraphics.init(0, document.getElementById('canvasSplitHorizontalLeft'));
 			this._myInput.push(aGraphics.getInput());
 			
 			aGraphics = ECGame.EngineLib.Graphics2D.create();
 			this._myGraphics.push(aGraphics);
-			aSucceeded = aSucceeded && aGraphics.init(1, 'canvasSplitHorizontalRight');
+			aSucceeded = aSucceeded && aGraphics.init(1, document.getElementById('canvasSplitHorizontalRight'));
 			this._myInput.push(aGraphics.getInput());
 			
 			return aSucceeded;
@@ -217,36 +211,36 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			
 			this._myGraphicsContainer.innerHTML +=
 				"<canvas id='canvas4WayTopLeft'>" +
-				this._myNoCanvasSupportedMessage +
+				ECGame.Settings.Graphics.NoCanvasSupportedMessage +
 				"</canvas>" +
 				"<canvas id='canvas4WayTopRight'>" +
-				this._myNoCanvasSupportedMessage +
+				ECGame.Settings.Graphics.NoCanvasSupportedMessage +
 				"</canvas><br/>" +
 				"<canvas id='canvas4WayBottomLeft'>" +
-				this._myNoCanvasSupportedMessage +
+				ECGame.Settings.Graphics.NoCanvasSupportedMessage +
 				"</canvas>" +
 				"<canvas id='canvas4WayBottomRight'>" +
-				this._myNoCanvasSupportedMessage +
+				ECGame.Settings.Graphics.NoCanvasSupportedMessage +
 				"</canvas>";
 			
 			aGraphics = ECGame.EngineLib.Graphics2D.create();
 			this._myGraphics.push(aGraphics);
-			aSucceeded = aSucceeded && aGraphics.init(0, 'canvas4WayTopLeft');
+			aSucceeded = aSucceeded && aGraphics.init(0, document.getElementById('canvas4WayTopLeft'));
 			this._myInput.push(aGraphics.getInput());
 			
 			aGraphics = ECGame.EngineLib.Graphics2D.create();
 			this._myGraphics.push(aGraphics);
-			aSucceeded = aSucceeded && aGraphics.init(1, 'canvas4WayTopRight');
+			aSucceeded = aSucceeded && aGraphics.init(1, document.getElementById('canvas4WayTopRight'));
 			this._myInput.push(aGraphics.getInput());
 			
 			aGraphics = ECGame.EngineLib.Graphics2D.create();
 			this._myGraphics.push(aGraphics);
-			aSucceeded = aSucceeded && aGraphics.init(2, 'canvas4WayBottomLeft');
+			aSucceeded = aSucceeded && aGraphics.init(2, document.getElementById('canvas4WayBottomLeft'));
 			this._myInput.push(aGraphics.getInput());
 			
 			aGraphics = ECGame.EngineLib.Graphics2D.create();
 			this._myGraphics.push(aGraphics);
-			aSucceeded = aSucceeded && aGraphics.init(3, 'canvas4WayBottomRight');
+			aSucceeded = aSucceeded && aGraphics.init(3, document.getElementById('canvas4WayBottomRight'));
 			this._myInput.push(aGraphics.getInput());
 			
 			return aSucceeded;
@@ -291,50 +285,14 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			}
 		},
 
-		
-		_resizeSpace : function _resizeSpace()
+		_windowResized : function _windowResized()
 		{
-			var aContainer
-				,aMaxWidth
-				,aMaxHeight
-				,aWidthToHeight
-				,aNewWidth
-				,aNewHeight
-				,aNewWidthToHeight
-				,aThis
-				;
-			
-			aThis = ECGame.instance;
-			
-			aContainer = aThis._myGraphicsContainer;
-			aMaxWidth = ECGame.instance._myRenderSpaceWidth;
-			aMaxHeight = ECGame.instance._myRenderSpaceHeight;
-			aWidthToHeight = aMaxWidth / aMaxHeight;
-
-			aNewWidth = window.innerWidth;
-			aNewHeight = window.innerHeight;
-			aNewWidthToHeight = aNewWidth / aNewHeight;
-			
-			if(aNewWidthToHeight > aWidthToHeight)
-			{
-				aNewWidth = aNewHeight * aWidthToHeight;
-			}
-			else
-			{
-				aNewHeight = aNewWidth / aWidthToHeight;
-			}
-			aNewHeight = Math.min(aNewHeight, aMaxHeight);
-			aNewWidth = Math.min(aNewWidth, aMaxWidth);
-			if(!ECGame.Settings.Graphics.resizable)
-			{
-				aNewHeight = aMaxHeight;
-				aNewWidth = aMaxWidth;
-			}
-			
-			aContainer.style.height = aNewHeight + 'px';
-			aContainer.style.width = aNewWidth + 'px';
-			aContainer.style.marginTop = Math.max((window.innerHeight-aNewHeight) / 2, 0) + 'px';
-			aContainer.style.marginLeft = Math.max((window.innerWidth-aNewWidth) / 2, 0) + 'px';
+			ECGame.EngineLib.HandleCanvasContainerResize(
+				ECGame.instance._myGraphicsContainer
+				,window
+				,ECGame.instance._myRenderSpaceWidth
+				,ECGame.instance._myRenderSpaceHeight
+			);
 		},
 		
 		_init : function _init()
@@ -414,9 +372,9 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			}
 			else
 			{
-				window.addEventListener('resize', this._resizeSpace, false);
-				window.addEventListener('orientationchange', this._resizeSpace, false);
-				window.addEventListener('load', this._resizeSpace, false);
+				window.addEventListener('resize', this._windowResized, false);
+				window.addEventListener('orientationchange', this._windowResized, false);
+				window.addEventListener('load', this._windowResized, false);
 				
 				//TODO use FB id or something in the future
 				this._myLocalUser = new ECGame.EngineLib.User(
@@ -460,7 +418,7 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 				this._mySoundSystem = ECGame.EngineLib.SoundSystem.create();
 				
 				//with EngineLoad() called from window.onload in the HTML it canot fire again to resize at startup, do it manually
-				this._resizeSpace();
+				this._windowResized();
 			}
 			
 			//setup network and chat

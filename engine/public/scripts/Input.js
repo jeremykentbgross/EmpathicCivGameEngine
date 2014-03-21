@@ -42,6 +42,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 	Definition :
 	{
 		KEYBOARD : {
+			KEY_TAB : 9,
 			KEY_RETURN : 13,
 			KEY_ESC : 27,
 			

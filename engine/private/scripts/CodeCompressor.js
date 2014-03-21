@@ -181,6 +181,7 @@ ECGame.WebServerTools.CodeCompressor.prototype.makeCompactGameLoader = function 
 	obfuscator.addIgnore('console');//because for some reason doesn't have it's name property
 	obfuscator.addIgnore('window');//TODO remove unneeded
 //TODO regex window.XXXX; document.XXXX etc and add those!
+	obfuscator.addIgnore('addEventListener');
 
 	obfuscator.addIgnore('maxLength');//css property changed in code
 	obfuscator.addIgnore('dom');//TODO this is param, rename it so we dont need this

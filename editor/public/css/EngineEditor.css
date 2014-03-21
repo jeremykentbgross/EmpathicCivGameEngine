@@ -1,0 +1,31 @@
+body
+{
+}
+
+#ParticleEditorPreviewCanvas
+{
+	background-color : #FF00FF;
+	width : 50%;
+	height : 100%;
+}
+
+#ParticleJSONText
+{
+	width : 50%;
+	height : 100%;
+	
+	padding : 0;
+	border : 0;
+	
+	resize : none;
+	wrap : off;
+//	white-space : nowrap;
+	overflow : auto;
+//	cols : 30;
+//	rows : 5;
+	tab-size:4;//doesnt seem to work
+	-moz-tab-size:4
+}
+#Execute
+{
+}

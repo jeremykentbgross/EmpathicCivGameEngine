@@ -124,6 +124,17 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 		include = require;
 		include(inPrivateEnginePath + "scripts/ServerConsoleMods.js");
 	}
+	
+	ECGame.EngineLib.LoadParameters = 
+	{
+		include : include
+		
+		,PublicEnginePath : inPublicEnginePath
+		,PrivateEnginePath : inPrivateEnginePath
+		
+		,PublicGamePath : inPublicGamePath
+		,PrivateGamePath : inPrivateGamePath
+	};
 	///////////////////////////////INCLUDE SETUP//////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////
 
@@ -189,6 +200,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	//////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////// ENGINE SCRIPTS //////////////////////////////
 	//TODO order these better:
+	include(inPublicEnginePath + "scripts/Helpers.js");
 	include(inPublicEnginePath + "scripts/JsNativeExtensions.js");
 	include(inPublicEnginePath + "scripts/AABB2D.js");
 	include(inPublicEnginePath + "scripts/Point2D.js");
@@ -231,6 +243,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	include(inPublicEnginePath + "scripts/Camera2.js");
 	include(inPublicEnginePath + "scripts/GameObject.js");
 	include(inPublicEnginePath + "scripts/GameObjectRef.js");
+	include(inPublicEnginePath + "scripts/GameObjectCollection.js");
 	include(inPublicEnginePath + "scripts/BitPacker.js");//TODO if multiplayer?
 	//include(inPublicEnginePath + "scripts/MultPacker.js");//TODO
 	include(inPublicEnginePath + "scripts/ArithmeticCompression.js");//TODO if multiplayer?
@@ -259,6 +272,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	include(inPublicEnginePath + "scripts/Animation2DFrame.js");
 	include(inPublicEnginePath + "scripts/Animation2D.js");
 	include(inPublicEnginePath + "scripts/Animation2DInstance.js");
+	include(inPublicEnginePath + "scripts/ParticleEffect.js");
 	
 	include(inPublicEnginePath + "scripts/SceneGraph2D.js");
 	
@@ -296,6 +310,28 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 		//include(inPublicEnginePath + "LangTests.js");
 	}
 	//////////////////////////////// ENGINE UNIT TEST ////////////////////////////
+	//////////////////////////////////////////////////////////////////////////////
+	
+	
+	
+	//////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////// GAME SCRIPTS ///////////////////////////////
+	if(ECGame.Settings.Editor.Enabled)
+	{
+		/**!
+			@namespace: EditorLib
+			/parentNamespace: ECGame
+			/description: This is the engine namespace
+		*/
+		ECGame.EditorLib = function ECGameEditorLib() { return; };
+		ECGame.EditorLib = new ECGame.EditorLib();
+		if(!inIsServer)
+		{
+			//TODO path for editor??
+			include("engine_editor/" + "scripts/ParticleEditor.js");
+		}
+	}
+	///////////////////////////////// GAME SCRIPTS ///////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////
 	
 	

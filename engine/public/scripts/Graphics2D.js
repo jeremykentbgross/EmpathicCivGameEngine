@@ -52,13 +52,13 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 
 	Definition :
 	{
-		init : function init(inGraphicsIndex, inCanvasID)
+		init : function init(inGraphicsIndex, inCanvas)
 		{
 			var aThis = this;
 			
 			this._myIndex = inGraphicsIndex;
 			
-			aThis._myCanvas = document.getElementById(inCanvasID);
+			aThis._myCanvas = inCanvas;
 			
 			if(!(this._myCanvas && this._myCanvas.getContext))
 			{
