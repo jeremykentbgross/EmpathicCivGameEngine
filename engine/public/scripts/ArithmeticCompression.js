@@ -148,6 +148,7 @@ ECGame.EngineLib.ArithmeticCompresser = ECGame.EngineLib.Class.create({
 				//if((high & 0x8000) == (low & 0x8000))
 				if(this._high < this._HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 0
 				{
+					//do nothing
 				}
 				else if(this._low >= this._HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 1
 				{

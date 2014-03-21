@@ -43,6 +43,7 @@ ECGame.EngineLib.User = function User(inName, inID)
 	//this.mySocket = null;	//this is added later..
 };
 ECGame.EngineLib.User.prototype.constructor = ECGame.EngineLib.User;
+
 ECGame.EngineLib.User.USER_IDS =
 {
 	UNUSED : 0

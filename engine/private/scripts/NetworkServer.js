@@ -395,8 +395,9 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 			}
 		},
 		
-		_onHeaders : function _onHeaders(inHeaders)
+		_onHeaders : function _onHeaders(/*inHeaders*/)
 		{
+			return;
 			//console.trace();
 			//console.log(inHeaders);
 		},

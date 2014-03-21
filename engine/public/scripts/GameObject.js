@@ -172,6 +172,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		{
 			if(this.canUserModifyNet())
 			{
+				//TODO inUserID || localuser
 				this._myNetDirty = true;
 				this.onEvent(new ECGame.EngineLib.Events.GameObjectNetDirty(this, inUserID));
 				
