@@ -107,17 +107,61 @@ ECGame.EngineLib.ChatSystem = ECGame.EngineLib.Class.create({
 			
 			
 			/////////////////////////////////////////////////////////
+			//handle all the input stuff
+			
 			//Capture form submits (is the user sending chat info)
 			this._domChatForm.addEventListener(
 				'submit'
 				,function onChatSubmit(inEvent)
 				{
 aThis._sendChatToChatLog("**CHAT IS BROKEN ATM**: " + aThis._domChatInput.value);//TODO remove hack send to log which doesnt go here
-					aThis._onChatSubmit(inEvent);
+					aThis._onChatSubmit();
+					inEvent.preventDefault();
 				}
 				,false//TODO should this be false??
 			);
-			//Capture form submits (is the user sending chat info)
+			
+			//disable tab key for the window
+			window.onkeydown = function disableTab(inEvent)
+			{
+				if(inEvent.keyCode === ECGame.EngineLib.Input.KEYBOARD.KEY_TAB)
+				{
+					inEvent.preventDefault();
+				}
+			};
+			
+			//if the chat lost focus, toggle off the input
+			this._domChatInput.addEventListener(
+				'blur'
+				,function onBlur(/*inEvent*/)
+				{
+					if(aThis._activeInput)
+					{
+						aThis.toggleActiveInput();
+					}
+				}
+			);
+			
+			//handle input for starting or finishing chat
+			document.addEventListener(
+				'keyup'
+				,function onInput(inEvent)
+				{
+					if(inEvent.keyCode === ECGame.EngineLib.Input.KEYBOARD.KEY_RETURN)
+					{
+						aThis.toggleActiveInput();
+					}
+					if(aThis._activeInput && inEvent.keyCode === ECGame.EngineLib.Input.KEYBOARD.KEY_TAB)
+					{
+						aThis.toggleActiveInput();
+						inEvent.preventDefault();
+						inEvent.stopPropagation();
+					}
+				}
+				,true
+			);
+			
+			//handle all the input stuff
 			/////////////////////////////////////////////////////////
 			
 			
@@ -138,15 +182,7 @@ aThis._sendChatToChatLog("**CHAT IS BROKEN ATM**: " + aThis._domChatInput.value)
 			);
 			//Register to listen to messages from the server
 			/////////////////////////////////////////////////////////
-			
-			
-			
-			/////////////////////////////////////////////////////////
-			//Listen to main input
-			ECGame.instance.getInput().registerListener('Input', this);
-			//Listen to main input
-			/////////////////////////////////////////////////////////
-			
+
 		},//End init
 		
 		
@@ -176,24 +212,6 @@ aThis._sendChatToChatLog("**CHAT IS BROKEN ATM**: " + aThis._domChatInput.value)
 		},
 		//network event listeners
 		/////////////////////////////////////////////////////////
-			
-			
-			
-		/////////////////////////////////////////////////////////
-		//Listen to main input
-		onInput : function onInput(inInputEvent)
-		{
-			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_RETURN])
-			{
-				this.toggleActiveInput();
-			}
-			if(inInputEvent.clicked[0] && this._activeInput)
-			{
-				this.toggleActiveInput();
-			}
-		},
-		//Listen to main input
-		/////////////////////////////////////////////////////////
 		
 		
 		
@@ -208,6 +226,7 @@ aThis._sendChatToChatLog("**CHAT IS BROKEN ATM**: " + aThis._domChatInput.value)
 				this._domChatContainer.style['pointer-events'] = '';
 				this._domChatContainer.style['border-color'] = '#00ff00';
 				this._domChatInput.focus();
+				//TODO for all inputs
 				ECGame.instance.getInput().setSupressKeyboardEvents(true);
 			}
 			else
@@ -215,14 +234,14 @@ aThis._sendChatToChatLog("**CHAT IS BROKEN ATM**: " + aThis._domChatInput.value)
 				this._domChatContainer.style['pointer-events'] = 'none';
 				this._domChatContainer.style['border-color'] = '#0000ff';
 				this._domChatInput.blur();
+				//TODO for all inputs
 				ECGame.instance.getInput().setSupressKeyboardEvents(false);
 			}
 		},
 		
 		//dom form submit:
-		_onChatSubmit : function _onChatSubmit(event)
+		_onChatSubmit : function _onChatSubmit()
 		{
-			event.preventDefault();
 			ECGame.instance.getNetwork().sendMessage(
 				this._domChatInput.value,
 				this//sentListener
