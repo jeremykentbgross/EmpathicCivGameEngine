@@ -384,7 +384,7 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 		},
 		
 		
-		_mySerializeFormat : 
+		SerializeFormat : 
 		[
 			{
 				name : '_myMapSizeInTiles',////////////////TODO GET FROM MAP INSTEAD
@@ -469,7 +469,7 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 				}
 			}
 			
-			inSerializer.serializeObject(this, ECGame.EngineLib.World2D._mySerializeFormat);
+			inSerializer.serializeObject(this, ECGame.EngineLib.World2D.SerializeFormat);
 		},
 		
 		postSerialize : function postSerialize()

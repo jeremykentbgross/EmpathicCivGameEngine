@@ -229,7 +229,7 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 			this._myRemovedComponentsRefs = [];
 		},
 		
-		_mySerializeFormat : 
+		SerializeFormat : 
 		[
 			{
 				name : '_myComponentsRefs',
@@ -293,7 +293,7 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 				}
 			}
 			
-			inSerializer.serializeObject(this, ECGame.EngineLib.GameEntity._mySerializeFormat);
+			inSerializer.serializeObject(this, ECGame.EngineLib.GameEntity.SerializeFormat);
 		},
 		
 		postSerialize : function postSerialize()

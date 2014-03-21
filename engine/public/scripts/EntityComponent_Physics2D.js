@@ -46,7 +46,7 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 	
 	Definition :
 	{
-		_mySerializeFormat :	//TODO part of Class def?
+		SerializeFormat :	//TODO part of Class def?
 		[
 			{
 				name : '_myPosition',//??TODO Target Position, can set velocity towards this instead of the position
@@ -114,7 +114,7 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 			var aFormat;
 			
 			//serialize
-			aFormat = this.EntityComponent_Physics2D._mySerializeFormat;
+			aFormat = this.EntityComponent_Physics2D.SerializeFormat;
 			aFormat[0].min = this._myRange.getLeftTop();
 			aFormat[0].max = this._myRange.getRightBottom();
 			inSerializer.serializeObject(this, aFormat);
