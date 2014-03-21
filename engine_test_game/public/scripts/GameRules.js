@@ -109,7 +109,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						'game/images/wall_256.png'//'game/images/wall_level01_01.png'//'images/test/wall.png' //
 						,ECGame.EngineLib.Point2D.create(96,96)//inSize
 						,ECGame.EngineLib.Point2D.create(32, 32)//inAnchorPoint
-						,0//inDepth
+						,1//inDepth
 						,'rgba(64, 32, 0, 1)'//inMiniMapColor
 						,ECGame.EngineLib.AABB2D.create(0, 0, 64, 64)//inPhysicsAABB
 					)
