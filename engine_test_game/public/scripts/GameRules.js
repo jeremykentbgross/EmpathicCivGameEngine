@@ -50,7 +50,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 		this._myLastMouseWorldPosition = null;
 		
 		//testing rays:
-		this._myIsRayTestMode = true;
+		this._myIsRayTestMode = false;
 		this._myRayStart = ECGame.EngineLib.Point2D.create();
 		this._myRayEnd = ECGame.EngineLib.Point2D.create();
 	},
@@ -432,6 +432,8 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 		{
 			var anEntity;
 			
+			this._myMasterNetGroup.addUser(inEvent.user);
+			
 			if(this._myEntities[inEvent.user.userID])
 			{
 				anEntity = this._myEntities[inEvent.user.userID];
@@ -447,8 +449,6 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			}
 			this._myGameWorld.addEntity(anEntity);
 			anEntity.addToNetGroup(this._myMasterNetGroup);
-			
-			this._myMasterNetGroup.addUser(inEvent.user);
 		},
 		
 		onClientDisconnected : function onClientDisconnected(inEvent)
@@ -567,11 +567,11 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			
 			/////////////////////////////////////////////////////////
 			//SOUND TESTING//////////////////////////////////////////
-			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_g])
+			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_G])
 			{
 				this._myLastSoundPlayed = aSoundSystem.playSoundEffect(0);
 			}
-			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_h])
+			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_H])
 			{
 				this._myLastSoundPlayed = aSoundSystem.playPositionalSoundEffect2D(	//TODO the beep sound here instead!!
 					1,
@@ -581,22 +581,22 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					)
 				);
 			}
-			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_t])
+			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_T])
 			{
 				if(!this._myLastSoundPlayed.isFinished())
 				{
 					this._myLastSoundPlayed.stop();
 				}
 			}
-			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_l])
+			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_L])
 			{
 				aSoundSystem.setMasterVolume(0.1);
 			}
-			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_k])
+			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_K])
 			{
 				aSoundSystem.setMasterVolume(0.5);
 			}
-			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_j])
+			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_J])
 			{
 				aSoundSystem.setMasterVolume(1.0);
 			}
@@ -619,33 +619,33 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			
 			/////////////////////////////////////////////////////////
 			//DEBUG DRAW/////////////////////////////////////////////
-			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_m])
+			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_M])
 			{
 				ECGame.Settings.Debug.Map_Draw = !ECGame.Settings.Debug.Map_Draw;
 			}
-			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_p])
+			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_P])
 			{
 				ECGame.Settings.Debug.Physics_Draw = !ECGame.Settings.Debug.Physics_Draw;
 			}
-			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_i])
+			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_I])
 			{
 				ECGame.Settings.Debug.SceneGraph_Draw = !ECGame.Settings.Debug.SceneGraph_Draw;
 			}
-			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_u])
+			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_U])
 			{
 				ECGame.Settings.Debug.Input_Draw = !ECGame.Settings.Debug.Input_Draw;
 			}
-			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_y])
+			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_Y])
 			{
 				ECGame.Settings.Debug.Sound_Draw = !ECGame.Settings.Debug.Sound_Draw;
 			}
-			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_o])
+			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_O])
 			{
 				ECGame.Settings.Debug.Sprite_Draw = !ECGame.Settings.Debug.Sprite_Draw;
 			}
 			
 			//HACK(y)
-			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_r])
+			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_R])
 			{
 				this._myIsRayTestMode = !this._myIsRayTestMode;
 			}

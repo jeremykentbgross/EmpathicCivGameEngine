@@ -42,12 +42,15 @@ ECGame.EngineLib.GameEntityComponent = ECGame.EngineLib.Class.create({
 		{
 			if(this._myOwner)
 			{
-				this.onRemovedFromEntity();
+				this.onRemovedFromEntity(
+					new ECGame.EngineLib.Events.RemovedFromEntity(inEvent.entity)
+				);
 			}
 			this._myOwner = inEvent.entity;
 		},
-		onRemovedFromEntity : function onRemovedFromEntity(/*inEvent*/)
+		onRemovedFromEntity : function onRemovedFromEntity(inEvent)
 		{
+			console.assert(inEvent.entity === this._myOwner);
 			this._myOwner = null;
 		},
 		

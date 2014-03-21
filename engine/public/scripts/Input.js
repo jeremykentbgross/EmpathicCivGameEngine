@@ -84,6 +84,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 			KEY_Y : 89,
 			KEY_Z : 90,
 			
+			//WARNING: all the lower case ones don't seem to be generated in firefox!!
 			KEY_a : 97,
 			KEY_b : 98,
 			KEY_c : 99,

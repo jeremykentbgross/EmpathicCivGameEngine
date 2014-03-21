@@ -142,6 +142,7 @@ ECGame.EngineLib.BinarySerializer = ECGame.EngineLib.Class.create({
 						//O - image?
 						//O - vector?
 						//X - custom
+						//X - GameObjectCollection
 				customType : //must have serialize(inSerializer, inMin, inMax), and create()
 				maxArrayLength : //undefined OR max length if this is an array
 				//classRefType : //class type for references?
@@ -224,6 +225,9 @@ ECGame.EngineLib.BinarySerializer = ECGame.EngineLib.Class.create({
 							break;
 						case 'objRef':
 							aValue = this.serializeGameObjectRef(aValue);
+							break;
+						case 'GameObjectCollection':
+							aValue.serialize(this);
 							break;
 						case 'custom':
 							if(this.isReading() && !this._myIsDummyMode)

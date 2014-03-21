@@ -65,7 +65,7 @@ ECGame.EngineLib.GameObjectCollection = ECGame.EngineLib.Class.create({
 	
 	Definition :
 	{
-		init : function init(inMaxTotal, inMaxAdded, inMaxRemoved)
+		init : function init(inMaxTotal, inMaxAdded, inMaxRemoved, inAddedListener, inRemovedListener)
 		{
 			this._mySerializeFormat[0].maxArrayLength = inMaxTotal;
 			this._mySerializeFormat[1].maxArrayLength = inMaxAdded;
@@ -78,6 +78,8 @@ ECGame.EngineLib.GameObjectCollection = ECGame.EngineLib.Class.create({
 			this._myGameObjectRefs = [];
 			this._myAddedGameObjectRefs = [];
 			this._myRemovedGameObjectRefs = [];
+			
+			this.addListeners(inAddedListener, inRemovedListener);
 		}
 		
 		//TODO make real even?
@@ -87,7 +89,7 @@ ECGame.EngineLib.GameObjectCollection = ECGame.EngineLib.Class.create({
 			this._myRemovedListener = inRemovedListener;
 		}
 		
-		,addGameObject : function addGameObject(inGameObject)
+		,add : function add(inGameObject, inDontDeltaTrack)
 		{
 			if(ECGame.Settings.DEBUG)
 			{
@@ -96,11 +98,15 @@ ECGame.EngineLib.GameObjectCollection = ECGame.EngineLib.Class.create({
 			
 			if(this._myGameObjects.indexOf(inGameObject) !== -1)
 			{
+				//console.info('already added', inGameObject);
 				return false;
 			}
 			
 			this._myGameObjects.push(inGameObject);
-			this._myAddedGameObjects.push(inGameObject);
+			if(!inDontDeltaTrack)
+			{
+				this._myAddedGameObjects.push(inGameObject);
+			}
 			
 			if(this._myAddedListener)
 			{
@@ -110,7 +116,7 @@ ECGame.EngineLib.GameObjectCollection = ECGame.EngineLib.Class.create({
 			return true;
 		}
 		
-		,removeGameObject : function removeGameObject(inGameObject)
+		,remove : function remove(inGameObject, inDontDeltaTrack)
 		{
 			var anIndex;
 			
@@ -122,12 +128,16 @@ ECGame.EngineLib.GameObjectCollection = ECGame.EngineLib.Class.create({
 			anIndex = this._myGameObjects.indexOf(inGameObject);
 			if(anIndex === -1)
 			{
+				//console.info('not present', inGameObject);
 				return false;
 			}
 			this._myGameObjects[anIndex] = this._myGameObjects[this._myGameObjects.length - 1];
 			this._myGameObjects.pop();
 			
-			this._myRemovedGameObjects.push(inGameObject);
+			if(!inDontDeltaTrack)
+			{
+				this._myRemovedGameObjects.push(inGameObject);
+			}
 			
 			if(this._myRemovedListener)
 			{
@@ -135,6 +145,11 @@ ECGame.EngineLib.GameObjectCollection = ECGame.EngineLib.Class.create({
 			}
 			
 			return true;
+		}
+		
+		,contains : function contains(inGameObject)
+		{
+			return this._myGameObjects.indexOf(inGameObject) !== -1;
 		}
 		
 		,serialize : function serialize(inSerializer)
@@ -177,13 +192,13 @@ ECGame.EngineLib.GameObjectCollection = ECGame.EngineLib.Class.create({
 			{
 				aGameObject = this._myGameObjectRefs[i].deref();
 				console.assert(aGameObject, "Missing GameObject during serialization!");
-				this.addGameObject(aGameObject);
+				this.add(aGameObject, true);
 			}
 			for(i = 0; i < this._myAddedGameObjectRefs.length; ++i)
 			{
 				aGameObject = this._myAddedGameObjectRefs[i].deref();
 				console.assert(aGameObject, "Missing GameObject during serialization!");
-				this.addGameObject(aGameObject);
+				this.add(aGameObject, true);
 			}
 			for(i = 0; i < this._myRemovedGameObjectRefs.length; ++i)
 			{
@@ -191,7 +206,7 @@ ECGame.EngineLib.GameObjectCollection = ECGame.EngineLib.Class.create({
 				//console.assert(aGameObject, "Missing GameObject during serialization!");
 				if(aGameObject)
 				{
-					this.removeGameObject(aGameObject);
+					this.remove(aGameObject, true);
 				}
 			}
 			
@@ -202,6 +217,29 @@ ECGame.EngineLib.GameObjectCollection = ECGame.EngineLib.Class.create({
 		
 		,clearNetDirty : function clearNetDirty()
 		{
+			this._myAddedGameObjects = [];
+			this._myRemovedGameObjects = [];
+			
+			this._myGameObjectRefs = [];
+			this._myAddedGameObjectRefs = [];
+			this._myRemovedGameObjectRefs = [];
+		}
+		
+		,forall : function forall(inCallback)
+		{
+			var i;
+			
+			for(i = 0; i < this._myGameObjects.length; ++i)
+			{
+				inCallback(this._myGameObjects[i]);
+			}
+		}
+		
+		,cleanup : function cleanup()
+		{
+			//TODO manual relase?
+			
+			this._myGameObjects = [];
 			this._myAddedGameObjects = [];
 			this._myRemovedGameObjects = [];
 			

@@ -99,6 +99,8 @@ ECGame.unitTests.registerTest(
 			"World not set correctly."
 		);
 		
+		anEntity.clearNetDirty();
+		
 		anEntity.removeComponent(component1);
 		console.assert(
 			component1.added === null

@@ -22,22 +22,25 @@
 ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 	Constructor : function GameEntity()
 	{
+		var aThis;
+		
+		aThis = this;
+		
 		this.GameObject();
 		
 		this._myWorld = null;
 		
-		/*
-		TODO NOTE: the components added/removed are the same as the entities in the world
-		It may be a good idea to somehow make a DeltaArrayObjectRef type or something...
-		*/
-		//components:
-		this._myComponents = [];
-		this._myAddedComponents = [];
-		this._myRemovedComponents = [];
-		//network versions
-		this._myComponentsRefs = [];
-		this._myAddedComponentsRefs = [];
-		this._myRemovedComponentsRefs = [];
+		this._myComponentCollection = ECGame.EngineLib.GameObjectCollection.create(
+			32, 32, 32
+			,function addedComponent(inComponent)
+			{
+				aThis._addedComponent(inComponent);
+			}
+			,function removedComponent(inComponent)
+			{
+				aThis._removedComponent(inComponent);
+			}
+		);
 	},
 	
 	Parents : [ECGame.EngineLib.GameObject],
@@ -51,130 +54,92 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 	{
 		addComponent : function addComponent(inComponent)
 		{
-			var anIndex;
-			
 			//if its already added, just return
-			if(this._myComponents.indexOf(inComponent) !== -1)
+			if(!this._myComponentCollection.add(inComponent))
 			{
 				return;
 			}
 			
-			//add it
-			this._myComponents.push(inComponent);
-			inComponent.onAddedToEntity(new ECGame.EngineLib.Events.AddedToEntity(this));
+			this.setNetDirty();
+		},
+		_addedComponent : function _addedComponent(inComponent)
+		{
+			inComponent.onAddedToEntity(
+				new ECGame.EngineLib.Events.AddedToEntity(this)
+			);
 			if(this._myWorld)
 			{
-				inComponent.onEntityAddedToWorld(new ECGame.EngineLib.Events.EntityAddedToWorld(this._myWorld, this));
-			}
-			
-			if(this.canUserModifyNet())
-			{
-				//add it to the list of newly added for the network
-				this._myAddedComponents.push(inComponent);
-				
-				//if it was previously removed, remove it from the removal list
-				anIndex = this._myRemovedComponents.indexOf(inComponent);
-				if(anIndex !== -1)
-				{
-					this._myRemovedComponents[anIndex] = this._myRemovedComponents[this._myRemovedComponents.length - 1];
-					this._myRemovedComponents.pop();
-				}
-				
-				this.setNetDirty();
+				inComponent.onEntityAddedToWorld(
+					new ECGame.EngineLib.Events.EntityAddedToWorld(this._myWorld, this)
+				);
 			}
 		},
+		
 		removeComponent : function removeComponent(inComponent)
 		{
-			var anIndex;
-			
-			//find the entity
-			anIndex = this._myComponents.indexOf(inComponent);
-			
-			//if its not there, just return
-			if(anIndex === -1)
+			if(!this._myComponentCollection.remove(inComponent))
 			{
 				return;
 			}
 			
-			//remove it
-			this._myComponents[anIndex] = this._myComponents[this._myComponents.length - 1];
-			this._myComponents.pop();
+			this.setNetDirty();
+		},
+		_removedComponent : function _removedComponent(inComponent)
+		{
 			if(this._myWorld)
 			{
-				inComponent.onEntityRemovedFromWorld(new ECGame.EngineLib.Events.EntityRemovedFromWorld(this._myWorld, this));
+				inComponent.onEntityRemovedFromWorld(
+					new ECGame.EngineLib.Events.EntityRemovedFromWorld(
+						this._myWorld
+						,this
+					)
+				);
 			}
-			inComponent.onRemovedFromEntity(new ECGame.EngineLib.Events.RemovedFromEntity(this));
-			
-			if(this.canUserModifyNet())
-			{
-				//add it to the list of newly removed entities for the network
-				this._myRemovedComponents.push(inComponent);
-				
-				//if it was previously added, remove it from the add list
-				anIndex = this._myAddedComponents.indexOf(inComponent);
-				if(anIndex !== -1)
-				{
-					this._myAddedComponents[anIndex] = this._myAddedComponents[this._myAddedComponents.length - 1];
-					this._myAddedComponents.pop();
-				}
-				
-				this.setNetDirty();
-			}
+			inComponent.onRemovedFromEntity(
+				new ECGame.EngineLib.Events.RemovedFromEntity(this)
+			);
 		},
+		
 		getComponentByType : function getComponentByType(inType, inoutReturnValues)
 		{
-			var aComponent
-				,i
-				;
-			
 			inoutReturnValues = inoutReturnValues || [];
 			
-			for(i = 0; i < this._myComponents.length; ++i)
-			{
-				aComponent = this._myComponents[i];
-				if(aComponent.isA(inType))
+			this._myComponentCollection.forall(
+				function callback(inComponent)
 				{
-					inoutReturnValues.push(aComponent);
+					if(inComponent.isA(inType))
+					{
+						inoutReturnValues.push(inComponent);
+					}
 				}
-			}
+			);
 			
 			return inoutReturnValues;
 		},
 		
+		//TODO make this event?
 		addToNetGroup : function addToNetGroup(inNetGroup)
 		{
-			var aComponent
-				,i
-				;
-			
 			inNetGroup.addObject(this);
-			for(i = 0; i < this._myComponents.length; ++i)
-			{
-				aComponent = this._myComponents[i];
-				//if(!aComponent.isServerOnly())//TODO check in netgroup, not here!!
-				//{
-					inNetGroup.addObject(aComponent);
-				//}
-			}
+			this._myComponentCollection.forall(
+				function callback(inComponent)
+				{
+					inNetGroup.addObject(inComponent);
+				}
+			);
 		},
+		//TODO make this event?
 		removeFromNetGroup : function removeFromNetGroup(inNetGroup)
 		{
-			var aComponent
-				,i
-				;
-			
 			inNetGroup.removeObject(this);
-			for(i = 0; i < this._myComponents.length; ++i)
-			{
-				aComponent = this._myComponents[i];
-				//if(!aComponent.isServerOnly())//TODO check in netgroup, not here!!
-				//{
-					inNetGroup.removeObject(aComponent);
-				//}
-			}
+			this._myComponentCollection.forall(
+				function callback(inComponent)
+				{
+					inNetGroup.removeObject(inComponent);
+				}
+			);
 		},
 		
-		//TODO maybe make added/removed+Entity/World NOT events (to save 'new' events that may not be needed)?
 		//TODO make onAddedTo/onEntityRemovedFromWorld events so entity can set the world along with its components???
 		addedToWorld : function addedToWorld(inWorld)//TODO rename onEntityAddedToWorld
 		{
@@ -201,144 +166,66 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 		
 		cleanup : function cleanup()
 		{
-			var aComponent
-				,i
-				;
-				
+			var aThis;
+			
+			aThis = this;
+			
 			if(this._myWorld)
 			{
 				this._myWorld.removeEntity(this);
 			}
 			
-			for(i = 0; i < this._myComponents.length; ++i)
-			{
-				aComponent = this._myComponents[i];
-				aComponent.onRemovedFromEntity(new ECGame.EngineLib.Events.RemovedFromEntity(this));
-				aComponent.destroy();
-			}
-			this._myComponents = null;
+			this._myComponentCollection.forall(
+				function callback(inComponent)
+				{
+					inComponent.onRemovedFromEntity(
+						new ECGame.EngineLib.Events.RemovedFromEntity(aThis)
+					);
+					inComponent.destroy();
+				}
+			);
+			this._myComponentCollection.cleanup();
 		},
 		
 		clearNetDirty : function clearNetDirty()
 		{
-			this._myAddedComponents = [];
-			this._myRemovedComponents = [];
-			
-			this._myComponentsRefs = [];
-			this._myAddedComponentsRefs = [];
-			this._myRemovedComponentsRefs = [];
+			this._myComponentCollection.clearNetDirty();
 		},
 		
 		SerializeFormat : 
 		[
 			{
-				name : '_myComponentsRefs',
-				type : 'objRef',
-				net : false,
-				maxArrayLength : 32	//TODO
-			},
-			{
-				name : '_myAddedComponentsRefs',
-				type : 'objRef',
-				net : true,
-				netOnly : true,
-				maxArrayLength : 32	//TODO
-			},
-			{
-				name : '_myRemovedComponentsRefs',
-				type : 'objRef',
-				net : true,
-				netOnly : true,
-				maxArrayLength : 32	//TODO
+				name : '_myComponentCollection'
+				,type : 'GameObjectCollection'
+				,net : true
 			}
 		],
 		
 		serialize : function serialize(inSerializer)
 		{
-			var aComponent
-				,i
-				;
-			
-			if(inSerializer.isNetMode())
-			{
-				this._myAddedComponentsRefs = [];
-				this._myRemovedComponentsRefs = [];
-				for(i = 0; i < this._myAddedComponents.length; ++i)
-				{
-					aComponent = this._myAddedComponents[i];
-					//if(!aComponent.isServerOnly())
-					//{
-						this._myAddedComponentsRefs.push(aComponent.getRef());
-					//}
-				}
-				for(i = 0; i < this._myRemovedComponents.length; ++i)
-				{
-					aComponent = this._myRemovedComponents[i];
-					//if(!aComponent.isServerOnly())
-					//{
-						this._myRemovedComponentsRefs.push(aComponent.getRef());
-					//}
-				}
-			}
-			else
-			{
-				this._myComponentsRefs = [];
-				for(i = 0; i < this._myComponents.length; ++i)
-				{
-					aComponent = this._myComponents[i];
-					//if(!aComponent.isServerOnly())
-					//{
-						this._myComponentsRefs.push(aComponent.getRef());
-					//}
-				}
-			}
-			
 			inSerializer.serializeObject(this, ECGame.EngineLib.GameEntity.SerializeFormat);
 		},
 		
 		postSerialize : function postSerialize()
 		{
-			var aComponent
-				,i
-				;
-				
-			for(i = 0; i < this._myComponentsRefs.length; ++i)
-			{
-				aComponent = this._myComponentsRefs[i].deref();
-				console.assert(aComponent, "Missing component during serialization!");
-				this.addComponent(aComponent);
-			}
-			for(i = 0; i < this._myAddedComponentsRefs.length; ++i)
-			{
-				aComponent = this._myAddedComponentsRefs[i].deref();
-				console.assert(aComponent, "Missing component during serialization!");
-				this.addComponent(aComponent);
-				
-			}
-			for(i = 0; i < this._myRemovedComponentsRefs.length; ++i)
-			{
-				aComponent = this._myRemovedComponentsRefs[i].deref();
-				//console.assert(aComponent, "Missing component during serialization!");
-				if(aComponent)
-				{
-					this.removeComponent(aComponent);
-				}
-			}
+			this._myComponentCollection.postSerialize();
 		},
 		
 		copyFrom : function copyFrom(inOther)
 		{
-			var aComponent
-				,i
+			var aThis
 				;
+				
+			aThis = this;
 			
 			//TODO properly remove all existing components
 			
-			for(i = 0; i < inOther._myComponents.length; ++i)
-			{
-				aComponent = inOther._myComponents[i];
-				this.addComponent(aComponent.clone());
-			}
+			inOther._myComponentCollection.forall(
+				function callback(inComponent)
+				{
+					aThis.addComponent(inComponent.clone());
+				}
+			);
 		}
 	}
 });

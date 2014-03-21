@@ -144,7 +144,8 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 		
 		cleanup : function cleanup()
 		{
-			this.onRemovedFromEntity();
+			return;
+			//this.onRemovedFromEntity();//WTF? Why was this there?
 		},
 		
 		//TODO

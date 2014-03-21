@@ -23,6 +23,10 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 {
 	Constructor : function World2D()
 	{
+		var aThis;
+		
+		aThis = this;
+		
 		this.GameObject();
 		
 		this._myMapSizeInTiles = 0;
@@ -35,19 +39,17 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 		this._myPhysics = null;
 		this._mySceneGraph = null;
 		
-		/*
-		TODO NOTE: the entities added/removed are the same as the components in the entity
-		It may be a good idea to somehow make a DeltaArrayObjectRef type or something...
-		NOTE: entity has more updated version
-		*/
-		//entities:
-		this._myEntities = [];
-		this._myAddedEntities = [];
-		this._myRemovedEntities = [];
-		//network versions
-		this._myEntityRefs = [];
-		this._myAddedEntityRefs = [];
-		this._myRemovedEntityRefs = [];
+		this._myEntityCollection = ECGame.EngineLib.GameObjectCollection.create(
+			32, 32, 32
+			,function addedEntity(inEntity)
+			{
+				aThis._addedEntity(inEntity);
+			}
+			,function removedEntity(inEntity)
+			{
+				aThis._removedEntity(inEntity);
+			}
+		);
 		
 		this._myEntitySpacialHashMap = null;
 		this._myEntityHashByID = [];
@@ -65,9 +67,19 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 	
 	Definition :
 	{
-		init : function init(inMapSizeInTiles, inTileset, inTileSize, inMinPhysicsPartitionSize, inUsingNetViews)//TODO tilesize part of tileset?
+		init : function init(
+			inMapSizeInTiles
+			,inTileset
+			,inTileSize
+			,inMinPhysicsPartitionSize
+			,inUsingNetViews
+		)//TODO tilesize part of tileset?
 		{
-			this._initNonGameObjectMembers(inMapSizeInTiles, inTileSize, inMinPhysicsPartitionSize);
+			this._initNonGameObjectMembers(
+				inMapSizeInTiles
+				,inTileSize
+				,inMinPhysicsPartitionSize
+			);
 			
 			this._myUsingNetViews = inUsingNetViews;
 			this._myMap = ECGame.EngineLib.TileMap2D.create();
@@ -80,7 +92,11 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			return !this._myUsingNetViews;
 		},
 		
-		_initNonGameObjectMembers : function _initNonGameObjectMembers(inMapSizeInTiles, inTileSize, inMinPhysicsPartitionSize)
+		_initNonGameObjectMembers : function _initNonGameObjectMembers(
+			inMapSizeInTiles
+			,inTileSize
+			,inMinPhysicsPartitionSize
+		)
 		{
 			this._myMapSizeInTiles = inMapSizeInTiles;
 			this._myTileSize = inTileSize;
@@ -93,10 +109,6 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			this._myPhysics = ECGame.EngineLib.Physics2D.create();
 			this._myPhysics.init(this._myWorldSize, inMinPhysicsPartitionSize);
 			ECGame.instance.getUpdater("PhysicsUpdater").addUpdate(this._myPhysics);//TODO move this to physics system itself?
-			
-			this._myEntities = [];
-			this._myAddedEntities = [];
-			this._myRemovedEntities = [];
 			
 			this._myEntitySpacialHashMap = ECGame.EngineLib.QuadTree.create(
 				ECGame.EngineLib.AABB2D.create(0, 0, this._myWorldSize, this._myWorldSize)
@@ -188,63 +200,48 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			inGraphics.strokeRect(aCameraRect);
 		},
 
-		addEntity : function addEntity(inEntity, inPosition/*optional*/)
+		addEntity : function addEntity(
+			inEntity
+			,inPosition//optional
+		)
 		{
-			var anIndex
-				;
-			
-			//if its already added, just return
-			if(this._myEntities.indexOf(inEntity) !== -1)
-			{
-				return;
-			}
-			
 			if(inPosition)
 			{
 				inEntity.onEvent(ECGame.EngineLib.Events.SetPosition.create(inPosition));
 			}
-
-			//Note: The first UpdatedPhysicsStatus event (when 'addedToWorld') should cause it to be added to the hash map
-			inEntity.registerListener('UpdatedPhysicsStatus', this);
 			
-			//add it
-			this._myEntities.push(inEntity);
-			//tell the entity it has been added //TODO this should be an event?
-			inEntity.addedToWorld(this);
-			
-			if(this.canUserModifyNet())
-			{
-				//add it to the list of newly added entities for the network
-				this._myAddedEntities.push(inEntity);
-				
-				//if it was previously removed, remove it from the removal list
-				anIndex = this._myRemovedEntities.indexOf(inEntity);
-				if(anIndex !== -1)
-				{
-					this._myRemovedEntities[anIndex] = this._myRemovedEntities[this._myRemovedEntities.length - 1];
-					this._myRemovedEntities.pop();
-				}
-				
-				this.setNetDirty();
-			}
-		},
-		removeEntity : function removeEntity(inEntity)
-		{
-			var anIndex
-				,aCurrentEntityHash
-				,aNodeArray
-				,aNodeIndex
-				;
-			
-			//find the entity
-			anIndex = this._myEntities.indexOf(inEntity);
-			
-			//if its not there, just return
-			if(anIndex === -1)
+			//if its already added, just return
+			if(!this._myEntityCollection.add(inEntity))
 			{
 				return;
 			}
 			
+			this.setNetDirty();
+		}
+		,_addedEntity : function _addedEntity(inEntity)
+		{
+			//Note: The first UpdatedPhysicsStatus event (when 'addedToWorld') should cause it to be added to the hash map
+			inEntity.registerListener('UpdatedPhysicsStatus', this);
+
+			//tell the entity it has been added //TODO this should be an event?
+			inEntity.addedToWorld(this);
+		}
+		,removeEntity : function removeEntity(inEntity)
+		{
+			if(!this._myEntityCollection.remove(inEntity))
+			{
+				return;
+			}
+			
+			this.setNetDirty();
+		}
+		,_removedEntity : function _removedEntity(inEntity)
+		{
+			var aCurrentEntityHash
+				,aNodeArray
+				,aNodeIndex
+				;
+				
 			inEntity.deregisterListener('UpdatedPhysicsStatus', this);
 			
 			//unregisterfromhashmap
@@ -261,30 +258,11 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 				aCurrentEntityHash.myContainingNodes = [];
 			}
 			
-			//remove it
-			this._myEntities[anIndex] = this._myEntities[this._myEntities.length - 1];
-			this._myEntities.pop();
-			
 			//tell the entity it has been removed //TODO this should be an event?
 			inEntity.removedFromWorld(this);
-			
-			if(this.canUserModifyNet())
-			{
-				//add it to the list of newly removed entities for the network
-				this._myRemovedEntities.push(inEntity);
-				
-				//if it was previously added, remove it from the add list
-				anIndex = this._myAddedEntities.indexOf(inEntity);
-				if(anIndex !== -1)
-				{
-					this._myAddedEntities[anIndex] = this._myAddedEntities[this._myAddedEntities.length - 1];
-					this._myAddedEntities.pop();
-				}
-				
-				this.setNetDirty();
-			}
-		},
-		queryEntitiesInAABB : function queryEntitiesInAABB(inAABB2D)
+		}
+		
+		,queryEntitiesInAABB : function queryEntitiesInAABB(inAABB2D)
 		{
 			var anEntityList
 				;
@@ -375,12 +353,7 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 		//set<classname>NetDirty
 		clearNetDirty : function clearNetDirty()
 		{
-			this._myAddedEntities = [];
-			this._myRemovedEntities = [];
-
-			this._myEntityRefs = [];
-			this._myAddedEntityRefs = [];
-			this._myRemovedEntityRefs = [];
+			this._myEntityCollection.clearNetDirty();
 		},
 		
 		
@@ -418,97 +391,27 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 				net : false
 			},
 			{
-				name : '_myEntityRefs',
-				type : 'objRef',
-				net : false,
-				maxArrayLength : 32	//TODO
-				,condition : '_isNotUsingNetViews'
-			},
-			{
-				name : '_myAddedEntityRefs',
-				type : 'objRef',
-				net : true,
-				netOnly : true,
-				maxArrayLength : 32	//TODO
-				,condition : '_isNotUsingNetViews'
-			},
-			{
-				name : '_myRemovedEntityRefs',
-				type : 'objRef',
-				net : true,
-				netOnly : true,
-				maxArrayLength : 32	//TODO
+				name : '_myEntityCollection'
+				,type : 'GameObjectCollection'
+				,net : true
 				,condition : '_isNotUsingNetViews'
 			}
 		],
 		
 		serialize : function serialize(inSerializer)//TODO serialize maps somehow GameEntity has identical post/serialize for components!
 		{
-			var i
-				;
-			
-			if(inSerializer.isNetMode())
-			{
-				this._myAddedEntityRefs = [];
-				this._myRemovedEntityRefs = [];
-				for(i = 0; i < this._myAddedEntities.length; ++i)
-				{
-					this._myAddedEntityRefs.push(this._myAddedEntities[i].getRef());
-				}
-				for(i = 0; i < this._myRemovedEntities.length; ++i)
-				{
-					this._myRemovedEntityRefs.push(this._myRemovedEntities[i].getRef());
-				}
-			}
-			else
-			{
-				this._myEntityRefs = [];
-				for(i = 0; i < this._myEntities.length; ++i)
-				{
-					this._myEntityRefs.push(this._myEntities[i].getRef());
-				}
-			}
-			
 			inSerializer.serializeObject(this, ECGame.EngineLib.World2D.SerializeFormat);
 		},
 		
 		postSerialize : function postSerialize()
 		{
-			var anEntity
-				,i
-				;
-			
 			if(!this._myMap)//if we are not initialized
 			{
 				this._initNonGameObjectMembers(this._myMapSizeInTiles, this._myTileSize, this._myMinPhysicsPartitionSize);
 				this._myMap = this._myMapRef.deref();
 			}
 			
-			for(i = 0; i < this._myEntityRefs.length; ++i)
-			{
-				anEntity = this._myEntityRefs[i].deref();
-				console.assert(anEntity, "Missing entity during serialization!");
-				this.addEntity(anEntity);
-			}
-			for(i = 0; i < this._myAddedEntityRefs.length; ++i)
-			{
-				anEntity = this._myAddedEntityRefs[i].deref();
-				console.assert(anEntity, "Missing entity during serialization!");
-				this.addEntity(anEntity);
-			}
-			for(i = 0; i < this._myRemovedEntityRefs.length; ++i)
-			{
-				anEntity = this._myRemovedEntityRefs[i].deref();
-				//console.assert(anEntity, "Missing entity during serialization!");
-				if(anEntity)
-				{
-					this.removeEntity(anEntity);
-				}
-			}
-			
-			this._myEntityRefs = [];
-			this._myAddedEntityRefs = [];
-			this._myRemovedEntityRefs = [];
+			this._myEntityCollection.postSerialize();
 		}
 	}
 });
