@@ -116,7 +116,7 @@ ECGame.EngineLib.Updater = ECGame.EngineLib.Class.create({
 						+ (
 							anUpdateArray[i].getUpdatePriority ?
 							anUpdateArray[i].getUpdatePriority()
-							:'?'
+							:'??????????????????????'
 						)
 						 + ')'
 					);

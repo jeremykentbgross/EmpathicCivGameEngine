@@ -273,5 +273,9 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			this.setName(this.getName() + '_(Copy_of_' + inOther.getName()+')');
 		}
 		
+		,getUpdatePriority : function getUpdatePriority()
+		{
+			return this.getID();
+		}
 	}
 });

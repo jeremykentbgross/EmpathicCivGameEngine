@@ -89,7 +89,7 @@ ECGame.EngineLib.GameObjectCollection = ECGame.EngineLib.Class.create({
 			this._myRemovedListener = inRemovedListener;
 		}
 		
-		,add : function add(inGameObject, inDontDeltaTrack)
+		,add : function add(inGameObject, inTrackDelta)
 		{
 			if(ECGame.Settings.DEBUG)
 			{
@@ -103,7 +103,7 @@ ECGame.EngineLib.GameObjectCollection = ECGame.EngineLib.Class.create({
 			}
 			
 			this._myGameObjects.push(inGameObject);
-			if(!inDontDeltaTrack)
+			if(inTrackDelta)
 			{
 				this._myAddedGameObjects.push(inGameObject);
 			}
@@ -116,7 +116,7 @@ ECGame.EngineLib.GameObjectCollection = ECGame.EngineLib.Class.create({
 			return true;
 		}
 		
-		,remove : function remove(inGameObject, inDontDeltaTrack)
+		,remove : function remove(inGameObject, inTrackDelta)
 		{
 			var anIndex;
 			
@@ -134,7 +134,7 @@ ECGame.EngineLib.GameObjectCollection = ECGame.EngineLib.Class.create({
 			this._myGameObjects[anIndex] = this._myGameObjects[this._myGameObjects.length - 1];
 			this._myGameObjects.pop();
 			
-			if(!inDontDeltaTrack)
+			if(inTrackDelta)
 			{
 				this._myRemovedGameObjects.push(inGameObject);
 			}
@@ -192,13 +192,13 @@ ECGame.EngineLib.GameObjectCollection = ECGame.EngineLib.Class.create({
 			{
 				aGameObject = this._myGameObjectRefs[i].deref();
 				console.assert(aGameObject, "Missing GameObject during serialization!");
-				this.add(aGameObject, true);
+				this.add(aGameObject, false/*?myOwner.canUserModifyNet()*/);
 			}
 			for(i = 0; i < this._myAddedGameObjectRefs.length; ++i)
 			{
 				aGameObject = this._myAddedGameObjectRefs[i].deref();
 				console.assert(aGameObject, "Missing GameObject during serialization!");
-				this.add(aGameObject, true);
+				this.add(aGameObject, false/*?myOwner.canUserModifyNet()*/);
 			}
 			for(i = 0; i < this._myRemovedGameObjectRefs.length; ++i)
 			{
@@ -206,7 +206,7 @@ ECGame.EngineLib.GameObjectCollection = ECGame.EngineLib.Class.create({
 				//console.assert(aGameObject, "Missing GameObject during serialization!");
 				if(aGameObject)
 				{
-					this.remove(aGameObject, true);
+					this.remove(aGameObject, false/*?myOwner.canUserModifyNet()*/);
 				}
 			}
 			

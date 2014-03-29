@@ -52,10 +52,6 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			this._myAnimationInstance.setAnimation(this._animations[0]);
 		},
 		
-		getUpdatePriority : function getUpdatePriority()//TODO move to GameObject?
-		{
-			return this.getID();
-		},
 		update : function update(inUpdateData)
 		{
 			var aFrameEvents, i;

@@ -210,13 +210,10 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 				inEntity.onEvent(ECGame.EngineLib.Events.SetPosition.create(inPosition));
 			}
 			
-			//if its already added, just return
-			if(!this._myEntityCollection.add(inEntity))
+			if(this._myEntityCollection.add(inEntity, this.canUserModifyNet()))
 			{
-				return;
+				this.setNetDirty();
 			}
-			
-			this.setNetDirty();
 		}
 		,_addedEntity : function _addedEntity(inEntity)
 		{
@@ -228,12 +225,10 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 		}
 		,removeEntity : function removeEntity(inEntity)
 		{
-			if(!this._myEntityCollection.remove(inEntity))
+			if(this._myEntityCollection.remove(inEntity, this.canUserModifyNet()))
 			{
-				return;
+				this.setNetDirty();
 			}
-			
-			this.setNetDirty();
 		}
 		,_removedEntity : function _removedEntity(inEntity)
 		{

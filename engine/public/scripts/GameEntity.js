@@ -54,13 +54,10 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 	{
 		addComponent : function addComponent(inComponent)
 		{
-			//if its already added, just return
-			if(!this._myComponentCollection.add(inComponent))
+			if(this._myComponentCollection.add(inComponent, this.canUserModifyNet()))
 			{
-				return;
+				this.setNetDirty();
 			}
-			
-			this.setNetDirty();
 		},
 		_addedComponent : function _addedComponent(inComponent)
 		{
@@ -77,12 +74,10 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 		
 		removeComponent : function removeComponent(inComponent)
 		{
-			if(!this._myComponentCollection.remove(inComponent))
+			if(this._myComponentCollection.remove(inComponent, this.canUserModifyNet()))
 			{
-				return;
+				this.setNetDirty();
 			}
-			
-			this.setNetDirty();
 		},
 		_removedComponent : function _removedComponent(inComponent)
 		{
