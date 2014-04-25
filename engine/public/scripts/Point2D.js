@@ -1,8 +1,8 @@
 /*
-© Copyright 2012 Jeremy Gross
+	© Copyright 2012 Jeremy Gross
 	jeremykentbgross@gmail.com
 	Distributed under the terms of the GNU Lesser GPL (LGPL)
-		
+	
 	This file is part of EmpathicCivGameEngine™.
 	
 	EmpathicCivGameEngine™ is free software: you can redistribute it and/or modify
@@ -18,8 +18,6 @@
 	You should have received a copy of the GNU Lesser General Public License
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
-
-
 
 ECGame.EngineLib.Point2D = function Point2D(inX, inY)
 {
@@ -130,17 +128,21 @@ ECGame.EngineLib.Point2D.prototype.length = function length()
 
 ECGame.EngineLib.Point2D.prototype.unit = function unit()
 {
-	var len = Math.sqrt(this.myX * this.myX + this.myY * this.myY);
-	return new ECGame.EngineLib.Point2D(this.myX / len, this.myY / len);
+	var aLength;
+	
+	aLength = Math.sqrt(this.myX * this.myX + this.myY * this.myY);
+	return new ECGame.EngineLib.Point2D(this.myX / aLength, this.myY / aLength);
 };
 
 
 
 ECGame.EngineLib.Point2D.prototype.normalize = function normalize()
 {
-	var len = Math.sqrt(this.myX * this.myX + this.myY * this.myY);
-	this.myX = this.myX / len;
-	this.myY = this.myY / len;
+	var aLength;
+	
+	aLength = Math.sqrt(this.myX * this.myX + this.myY * this.myY);
+	this.myX = this.myX / aLength;
+	this.myY = this.myY / aLength;
 	return this;
 };
 

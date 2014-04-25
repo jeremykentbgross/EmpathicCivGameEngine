@@ -1,8 +1,8 @@
 /*
-© Copyright 2012 Jeremy Gross
+	© Copyright 2012 Jeremy Gross
 	jeremykentbgross@gmail.com
 	Distributed under the terms of the GNU Lesser GPL (LGPL)
-		
+	
 	This file is part of EmpathicCivGameEngine™.
 	
 	EmpathicCivGameEngine™ is free software: you can redistribute it and/or modify
@@ -142,6 +142,8 @@ ECGame.EngineLib.AABB2D = ECGame.EngineLib.Class.create({
 				return false;
 			}
 			
+			//TODO edge touch vs corners.
+			
 			return true;
 		},
 		
@@ -149,13 +151,12 @@ ECGame.EngineLib.AABB2D = ECGame.EngineLib.Class.create({
 		{
 			var anX
 				,aY
-				,anIntersection
 				;
 			
 			anX = Math.max(this.myX, inOtherAABB2D.myX);
 			aY = Math.max(this.myY, inOtherAABB2D.myY);
 			
-			anIntersection = ECGame.EngineLib.AABB2D.create(
+			return ECGame.EngineLib.AABB2D.create(
 				anX,
 				aY,
 				Math.max(
@@ -167,8 +168,6 @@ ECGame.EngineLib.AABB2D = ECGame.EngineLib.Class.create({
 					0
 				)
 			);
-			
-			return anIntersection;
 		},
 		
 		getUnion : function getUnion(inOtherAABB2D)
@@ -190,6 +189,51 @@ ECGame.EngineLib.AABB2D = ECGame.EngineLib.Class.create({
 			);
 			return aReturnAABB2D;
 		},
+		
+		/*
+		TODO (when needed):
+		getInverse : function getInverse()
+		{
+			//top left
+			AABB2D(
+				Number.MIN_VALUE
+				,Number.MIN_VALUE
+				,this.getLeft() - Number.MIN_VALUE
+				,this.getTop() - Number.MIN_VALUE
+			)
+			//top center
+			AABB2D(
+				this.myX
+				,Number.MIN_VALUE
+				,this.myWidth
+				,this.getTop() - Number.MIN_VALUE
+			)
+			//top right
+			AABB2D(
+				this.getRight()
+				,Number.MIN_VALUE
+				,Number.MAX_VALUE - this.getRight()
+				,this.getTop() - Number.MIN_VALUE
+			)
+			
+			//left
+			AABB2D(
+				Number.MIN_VALUE
+				,this.getTop()
+				,this.getLeft() - Number.MIN_VALUE
+				,this.myHeight
+			)
+			//right
+			AABB2D(
+				this.getRight()
+				,this.getTop()
+				,Number.MAX_VALUE - this.getRight()
+				,this.myHeight
+			)
+			
+			...
+		}
+		*/
 		
 		getArea : function getArea()
 		{
