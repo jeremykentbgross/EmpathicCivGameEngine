@@ -1,8 +1,8 @@
 /*
-© Copyright 2012 Jeremy Gross
+	© Copyright 2012 Jeremy Gross
 	jeremykentbgross@gmail.com
 	Distributed under the terms of the GNU Lesser GPL (LGPL)
-		
+	
 	This file is part of EmpathicCivGameEngine™.
 	
 	EmpathicCivGameEngine™ is free software: you can redistribute it and/or modify
@@ -24,6 +24,7 @@ ECGame.EngineLib.Animation2DFrame = ECGame.EngineLib.Class.create({
 	{
 		this._mySourceRect = ECGame.EngineLib.AABB2D.create();
 		this._myOrigin = new ECGame.EngineLib.Point2D();//TODO rename origin anchor? have anchor and origin?	//note: anchor is a js global
+		//NOTE: origin would be the center of the base, while anchor is (currently) the top left of it.
 		this._myAABB2D = ECGame.EngineLib.AABB2D.create();
 		this._myFrameEvents = null;
 	},
