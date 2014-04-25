@@ -1,8 +1,8 @@
 /*
-© Copyright 2012 Jeremy Gross
+	© Copyright 2012 Jeremy Gross
 	jeremykentbgross@gmail.com
 	Distributed under the terms of the GNU Lesser GPL (LGPL)
-		
+	
 	This file is part of EmpathicCivGameEngine™.
 	
 	EmpathicCivGameEngine™ is free software: you can redistribute it and/or modify
