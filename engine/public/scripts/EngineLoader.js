@@ -298,7 +298,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 		include(inPublicEnginePath + "scripts/unit_tests/TestBitPacker.js");
 		include(inPublicEnginePath + "scripts/unit_tests/TestGameEventSystem.js");
 		//include(inPublicEnginePath + "scripts/unit_tests/TestMultPacker.js ");//TODO
-		include(inPublicEnginePath + "scripts/unit_tests/TestArithmeticCompression.js");
+		include(inPublicEnginePath + "scripts/Compression/UnitTests/TestArithmeticCompression.js");
 		include(inPublicEnginePath + "scripts/unit_tests/TestBinarySerializer.js");
 		include(inPublicEnginePath + "scripts/unit_tests/TestGameEntity.js");
 		
