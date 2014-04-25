@@ -131,8 +131,7 @@ ECGame.EngineLib.GameObjectCollection = ECGame.EngineLib.Class.create({
 				//console.info('not present', inGameObject);
 				return false;
 			}
-			this._myGameObjects[anIndex] = this._myGameObjects[this._myGameObjects.length - 1];
-			this._myGameObjects.pop();
+			this._myGameObjects.swapBackPop(anIndex);
 			
 			if(inTrackDelta)
 			{

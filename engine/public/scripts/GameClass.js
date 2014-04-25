@@ -326,7 +326,7 @@ ECGame.EngineLib.Class.prototype.getID = function getID()
 
 ECGame.EngineLib.Class.prototype.createInstanceRegistry = ECGame.EngineLib.Class.createInstanceRegistry = function createInstanceRegistry()//TODO rename reset?
 {
-	this._instanceRegistry = new ECGame.EngineLib.GameRegistry();
+	this._instanceRegistry = new ECGame.EngineLib.Registry();
 };
 
 

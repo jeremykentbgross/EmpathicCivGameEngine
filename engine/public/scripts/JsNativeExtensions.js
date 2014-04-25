@@ -139,6 +139,29 @@ if(!Array.prototype.findWhere)
 		}
 	);
 }
+
+if(!Array.prototype.swapBackPop)
+{
+	Object.defineProperty(
+		Array.prototype
+		,'swapBackPop'
+		,{
+			value : function swapBackPop(inIndex)
+			{
+				var aReturnValue;
+				
+				aReturnValue = this[inIndex];
+				this[inIndex] = this[this.length - 1];
+				this.pop();
+				
+				return aReturnValue;
+			}
+			,writable : false
+			,configurable : false
+			,enumerable : false
+		}
+	);
+}
 //Array functions/////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
