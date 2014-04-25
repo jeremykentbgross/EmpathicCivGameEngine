@@ -209,7 +209,10 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	include(inPublicEnginePath + "scripts/Registry.js");
 	include(inPublicEnginePath + "scripts/GameCircularDoublyLinkedListNode.js");
 	include(inPublicEnginePath + "scripts/GameEventSystem.js");
-	include(inPublicEnginePath + "scripts/Updater.js");
+	
+	include(inPublicEnginePath + "scripts/Utilities/Timer.js");
+	include(inPublicEnginePath + "scripts/Utilities/Updater.js");
+	
 	if(!inIsServer)
 	{
 		if(ECGame.Settings.Network.isMultiplayer)
@@ -261,7 +264,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	include(inPublicEnginePath + "scripts/EntityComponent_Physics2D.js");
 	include(inPublicEnginePath + "scripts/EntityComponent_SoundPlayer.js");
 
-	include(inPublicEnginePath + "scripts/Timer.js");
+	
 	include(inPublicEnginePath + "scripts/GameInstance.js");
 	include(inPublicEnginePath + "scripts/QuadTree.js");
 	
