@@ -23,7 +23,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 {
 	Constructor : function EntityComponent_Sprite()
 	{
-		this.GameEntityComponent();
+		this.EntityComponent();
 		
 		this._position = ECGame.EngineLib.Point2D.create();//TODO this isn't used, but shouldn't use topleft of aabb either
 		
@@ -37,7 +37,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 		//TODO ^^^ same kind of thing for map tiles?
 	},
 	
-	Parents : [ECGame.EngineLib.GameEntityComponent],
+	Parents : [ECGame.EngineLib.EntityComponent],
 	
 	flags : {},
 	

@@ -22,7 +22,7 @@
 ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 	Constructor : function EntityComponent_Physics2D()
 	{
-		this.GameEntityComponent();
+		this.EntityComponent();
 
 		this._myPosition = ECGame.EngineLib.Point2D.create(256, 256);
 		this._myVelocity = ECGame.EngineLib.Point2D.create();
@@ -37,7 +37,7 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 		this._myPhysicsObject = null;
 	},
 	
-	Parents : [ECGame.EngineLib.GameEntityComponent],
+	Parents : [ECGame.EngineLib.EntityComponent],
 	
 	flags : { netDynamic : true },
 	

@@ -19,8 +19,8 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-ECGame.EngineLib.GameEntityComponent = ECGame.EngineLib.Class.create({
-	Constructor : function GameEntityComponent()
+ECGame.EngineLib.EntityComponent = ECGame.EngineLib.Class.create({
+	Constructor : function EntityComponent()
 	{
 		this.GameObject();
 		

@@ -34,9 +34,9 @@ ECGame.unitTests.registerTest(
 		TestComponent = ECGame.EngineLib.Class.create({
 			Constructor : function TestComponent()
 			{
-				this.GameEntityComponent();
+				this.EntityComponent();
 			},
-			Parents : [ECGame.EngineLib.GameEntityComponent],
+			Parents : [ECGame.EngineLib.EntityComponent],
 			flags : {},
 			ChainUp : [],
 			ChainDown : [],

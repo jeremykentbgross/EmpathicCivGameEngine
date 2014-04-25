@@ -24,7 +24,7 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 {
 	Constructor : function EntityComponent_Input()
 	{
-		this.GameEntityComponent();
+		this.EntityComponent();
 		//this._keysEventMapper = [];//TODO make keys changable??
 		
 		this._myDirection = ECGame.EngineLib.Point2D.create(0, 0);
@@ -39,7 +39,7 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 		this._myRight	= ECGame.EngineLib.Point2D.create( 1, 0);
 	},
 	
-	Parents : [ECGame.EngineLib.GameEntityComponent],
+	Parents : [ECGame.EngineLib.EntityComponent],
 	
 	flags : { netDynamic : true },
 	

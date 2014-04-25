@@ -23,13 +23,13 @@ ECGame.EngineLib.EntityComponent_SoundPlayer = ECGame.EngineLib.Class.create(
 {
 	Constructor : function EntityComponent_SoundPlayer()
 	{
-		this.GameEntityComponent();
+		this.EntityComponent();
 		
 		this._myPosition = new ECGame.EngineLib.Point2D();
 		this._myVelocity = new ECGame.EngineLib.Point2D();
 	},
 	
-	Parents : [ECGame.EngineLib.GameEntityComponent],
+	Parents : [ECGame.EngineLib.EntityComponent],
 	
 	flags : {},
 	

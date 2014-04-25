@@ -1079,7 +1079,6 @@ Parameter Variable:	inDescriptions
 Parameter Variable:	inDestination
 Parameter Variable:	inDestroyInstanceList
 Parameter Variable:	inDirtyInstanceList
-Parameter Variable:	inDontDeltaTrack
 Parameter Variable:	inEncodeToText
 Parameter Variable:	inEndAngle
 Parameter Variable:	inEndingPoint
@@ -1223,6 +1222,7 @@ Parameter Variable:	inTiles
 Parameter Variable:	inTileset
 Parameter Variable:	inTime
 Parameter Variable:	inTimeDelay
+Parameter Variable:	inTrackDelta
 Parameter Variable:	inType
 Parameter Variable:	inUpdateData
 Parameter Variable:	inUpdaterName
@@ -3243,7 +3243,6 @@ Included Word:	inDescriptions
 Included Word:	inDestination
 Included Word:	inDestroyInstanceList
 Included Word:	inDirtyInstanceList
-Included Word:	inDontDeltaTrack
 Included Word:	inEncodeToText
 Included Word:	inEndAngle
 Included Word:	inEndingPoint
@@ -3387,6 +3386,7 @@ Included Word:	inTiles
 Included Word:	inTileset
 Included Word:	inTime
 Included Word:	inTimeDelay
+Included Word:	inTrackDelta
 Included Word:	inType
 Included Word:	inUpdateData
 Included Word:	inUpdaterName
