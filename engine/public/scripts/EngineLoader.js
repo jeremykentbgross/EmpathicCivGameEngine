@@ -153,7 +153,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 		
 	if(ECGame.Settings.RUN_UNIT_TESTS)
 	{
-		include(inPublicEnginePath + "scripts/UnitTestFramework.js");
+		include(inPublicEnginePath + "scripts/UnitTestFramework/UnitTestFramework.js");
 		ECGame.unitTests = ECGame.EngineLib.UnitTestFramework.create();
 	}
 	
