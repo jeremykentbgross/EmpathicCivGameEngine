@@ -1,8 +1,8 @@
 /*
-© Copyright 2012 Jeremy Gross
+	© Copyright 2012 Jeremy Gross
 	jeremykentbgross@gmail.com
 	Distributed under the terms of the GNU Lesser GPL (LGPL)
-		
+	
 	This file is part of EmpathicCivGameEngine™.
 	
 	EmpathicCivGameEngine™ is free software: you can redistribute it and/or modify
@@ -31,9 +31,9 @@ ECGame.EngineLib.ArithmeticCompresser = ECGame.EngineLib.Class.create({
 		
 		//constants
 		this._BITS = 32;//16;
-		this._ONE = Math.pow(2, this._BITS);				//(2^16bits) - 1 == 65535 == 0xffff:
-		this._QUARTER = (this._ONE) / 4;					//16384 == 0x4000://SMSB (Second most Significant bit)
-		this._HALF = 2 * this._QUARTER;						//32768 == 0x8000	//MSB (Most Significant bit)
+		this._ONE = Math.pow(2, this._BITS);			//(2^16bits) - 1 == 65535 == 0xffff:
+		this._QUARTER = (this._ONE) / 4;				//16384 == 0x4000://SMSB (Second most Significant bit)
+		this._HALF = 2 * this._QUARTER;				//32768 == 0x8000	//MSB (Most Significant bit)
 		this._THREEQUARTERS = this._HALF + this._QUARTER;	//49152 == 0xC000	//SMSB + MSB
 		
 		this._high = this._ONE - 1;
@@ -72,7 +72,6 @@ ECGame.EngineLib.ArithmeticCompresser = ECGame.EngineLib.Class.create({
 			
 			for(loops = 0; loops < this._BITS; ++loops)
 			{
-				
 				//The first two cases are a combination of one:
 				//if((high & 0x8000) == (low & 0x8000))
 				if(this._high < this._HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 0
@@ -117,7 +116,6 @@ ECGame.EngineLib.ArithmeticCompresser = ECGame.EngineLib.Class.create({
 				this._high = (2 * this._high + 1) % this._ONE;
 			}
 			
-			//console.error("Encode failed!");
 			console.assert(false, "Encode failed!" + value + inModel.getString());
 		},
 		
@@ -133,7 +131,6 @@ ECGame.EngineLib.ArithmeticCompresser = ECGame.EngineLib.Class.create({
 			
 			if((probability > 1 || probability < 0))
 			{
-				//console.error("Decompression out of range value detected!");
 				console.assert(false, "Decompression out of range value detected!");
 				//TODO throw an error to be caught above and disconnect them
 			}
@@ -146,11 +143,11 @@ ECGame.EngineLib.ArithmeticCompresser = ECGame.EngineLib.Class.create({
 			for(loops = 0; loops < this._BITS; ++loops)
 			{
 				//if((high & 0x8000) == (low & 0x8000))
-				if(this._high < this._HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 0
+				/*if(this._high < this._HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 0
 				{
 					//do nothing
-				}
-				else if(this._low >= this._HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 1
+				}*/if(!(this._high < this._HALF)){//this should be functionally the same as the commented out "do nothing block" above, but passes lint
+				/*else*/ if(this._low >= this._HALF)//(high & 0x8000) == (low & 0x8000)//MSB == 1
 				{
 					//remove MSB
 					this._encoded -= this._HALF;
@@ -168,7 +165,7 @@ ECGame.EngineLib.ArithmeticCompresser = ECGame.EngineLib.Class.create({
 				else
 				{
 					return valueRange.value;
-				}
+				}}//second } closes lint passing block above
 				
 				//low <<= 1;
 				this._low = (2 * this._low) % this._ONE;
@@ -179,7 +176,6 @@ ECGame.EngineLib.ArithmeticCompresser = ECGame.EngineLib.Class.create({
 				this._encoded = (2 * this._encoded + this._bitPacker.unpack(1)) % this._ONE;
 			}
 			
-			//console.error("Did not resolve decoding a symbol before we exceeded the bits it could have fit in!");
 			console.assert(false, "Did not resolve decoding a symbol before we exceeded the bits it could have fit in!");
 			//return valueRange.value;
 			return inModel.myMin;//should prevent out of range values
