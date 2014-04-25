@@ -202,8 +202,8 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	//TODO order these better:
 	include(inPublicEnginePath + "scripts/Helpers.js");
 	include(inPublicEnginePath + "scripts/JsNativeExtensions.js");
-	include(inPublicEnginePath + "scripts/AABB2D.js");
-	include(inPublicEnginePath + "scripts/Point2D.js");
+	include(inPublicEnginePath + "scripts/Math/AABB2D.js");
+	include(inPublicEnginePath + "scripts/Math/Point2D.js");
 	include(inPublicEnginePath + "scripts/BresenhamsLine.js");
 	include(inPublicEnginePath + "scripts/Registry.js");
 	include(inPublicEnginePath + "scripts/GameCircularDoublyLinkedListNode.js");
