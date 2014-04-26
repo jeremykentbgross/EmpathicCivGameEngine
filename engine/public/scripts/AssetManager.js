@@ -1,8 +1,8 @@
 /*
-© Copyright 2012 Jeremy Gross
+	© Copyright 2012 Jeremy Gross
 	jeremykentbgross@gmail.com
 	Distributed under the terms of the GNU Lesser GPL (LGPL)
-		
+	
 	This file is part of EmpathicCivGameEngine™.
 	
 	EmpathicCivGameEngine™ is free software: you can redistribute it and/or modify
@@ -64,7 +64,8 @@ ECGame.EngineLib.AssetManager = ECGame.EngineLib.Class.create({
 				anImageInfo.myListeners.push(outLoadTarget);
 				anImageInfo.myImage.onload = function()
 				{
-					var i;
+					var i
+						;
 					
 					anImageInfo.myIsLoaded = true;
 					
@@ -140,7 +141,7 @@ ECGame.EngineLib.AssetManager = ECGame.EngineLib.Class.create({
 						},
 						function onError(/*inWhatParam??*/)
 						{
-							console.error("Failed to load " + inFileName);
+							console.error("Failed to load " + inFileName, arguments);
 						}
 					);
 					//TODO onFailedLoad? set placeholder, else have a grey or clear sound for streaming
