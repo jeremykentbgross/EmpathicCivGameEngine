@@ -1,8 +1,8 @@
 /*
-© Copyright 2012 Jeremy Gross
+	© Copyright 2012 Jeremy Gross
 	jeremykentbgross@gmail.com
 	Distributed under the terms of the GNU Lesser GPL (LGPL)
-		
+	
 	This file is part of EmpathicCivGameEngine™.
 	
 	EmpathicCivGameEngine™ is free software: you can redistribute it and/or modify
@@ -19,15 +19,15 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
-	Constructor : function GameEntity()
+ECGame.EngineLib.Entity = ECGame.EngineLib.Class.create({
+	Constructor : function Entity()
 	{
-		var aThis;
-		
-		aThis = this;
+		var aThis
+			;
 		
 		this.GameObject();
 		
+		aThis = this;
 		this._myWorld = null;
 		
 		this._myComponentCollection = ECGame.EngineLib.GameObjectCollection.create(
@@ -161,7 +161,8 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 		
 		cleanup : function cleanup()
 		{
-			var aThis;
+			var aThis
+				;
 			
 			aThis = this;
 			
@@ -198,7 +199,7 @@ ECGame.EngineLib.GameEntity = ECGame.EngineLib.Class.create({
 		
 		serialize : function serialize(inSerializer)
 		{
-			inSerializer.serializeObject(this, ECGame.EngineLib.GameEntity.SerializeFormat);
+			inSerializer.serializeObject(this, ECGame.EngineLib.Entity.SerializeFormat);
 		},
 		
 		postSerialize : function postSerialize()

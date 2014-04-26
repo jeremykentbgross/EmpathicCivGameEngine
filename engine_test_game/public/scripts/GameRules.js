@@ -353,7 +353,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			var aComponent
 				;
 				
-			this._myReferenceEntity = ECGame.EngineLib.GameEntity.create();
+			this._myReferenceEntity = ECGame.EngineLib.Entity.create();
 			
 			aComponent = ECGame.EngineLib.EntityComponent_Input.create();
 			this._myReferenceEntity.addComponent(aComponent);

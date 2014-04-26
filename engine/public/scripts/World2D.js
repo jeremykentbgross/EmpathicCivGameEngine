@@ -393,7 +393,7 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			}
 		],
 		
-		serialize : function serialize(inSerializer)//TODO serialize maps somehow GameEntity has identical post/serialize for components!
+		serialize : function serialize(inSerializer)
 		{
 			inSerializer.serializeObject(this, ECGame.EngineLib.World2D.SerializeFormat);
 		},

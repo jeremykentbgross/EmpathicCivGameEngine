@@ -1,8 +1,8 @@
 /*
-© Copyright 2012 Jeremy Gross
+	© Copyright 2012 Jeremy Gross
 	jeremykentbgross@gmail.com
 	Distributed under the terms of the GNU Lesser GPL (LGPL)
-		
+	
 	This file is part of EmpathicCivGameEngine™.
 	
 	EmpathicCivGameEngine™ is free software: you can redistribute it and/or modify
@@ -20,15 +20,15 @@
 */
 
 ECGame.unitTests.registerTest(
-	"GameEntity",
+	"Entity",
 	function()
 	{
 		var anEntity
 			,TestComponent
-			,component1
+			,aComponent
 			;
-			
-		anEntity = ECGame.EngineLib.GameEntity.create();
+		
+		anEntity = ECGame.EngineLib.Entity.create();
 		anEntity.addedToWorld(6);
 		
 		TestComponent = ECGame.EngineLib.Class.create({
@@ -82,30 +82,30 @@ ECGame.unitTests.registerTest(
 			}
 		});
 		
-		component1 = TestComponent.create();
-		anEntity.addComponent(component1);
+		aComponent = TestComponent.create();
+		anEntity.addComponent(aComponent);
 		
 		console.assert(
-			component1.added === anEntity
-			&& anEntity === component1._myOwner
-			&& component1._containingWorld === 6
+			aComponent.added === anEntity
+			&& anEntity === aComponent._myOwner
+			&& aComponent._containingWorld === 6
 			,"Did not add component successfully"
 		);
 		
 		anEntity.addedToWorld(7);
 		console.assert(
-			component1._removedWorld
-			&& component1._containingWorld === 7,
+			aComponent._removedWorld
+			&& aComponent._containingWorld === 7,
 			"World not set correctly."
 		);
 		
 		anEntity.clearNetDirty();
 		
-		anEntity.removeComponent(component1);
+		anEntity.removeComponent(aComponent);
 		console.assert(
-			component1.added === null
-			&& null === component1._myOwner 
-			&& component1._containingWorld === null,
+			aComponent.added === null
+			&& null === aComponent._myOwner 
+			&& aComponent._containingWorld === null,
 			"Did not remove component successfully"
 		);
 		
