@@ -256,7 +256,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	
 	include(inPublicEnginePath + "scripts/GameEvent.js");
 
-	include(inPublicEnginePath + "scripts/GameEntity.js");
+	include(inPublicEnginePath + "scripts/Entity/Entity.js");
 	include(inPublicEnginePath + "scripts/EntityComponent.js");
 	include(inPublicEnginePath + "scripts/EntityComponent_2DCamera.js");
 	include(inPublicEnginePath + "scripts/EntityComponent_Input.js");
@@ -306,7 +306,8 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 		include(inPublicEnginePath + "scripts/Compression/UnitTests/TestArithmeticCompression.js");
 
 		include(inPublicEnginePath + "scripts/unit_tests/TestBinarySerializer.js");
-		include(inPublicEnginePath + "scripts/unit_tests/TestGameEntity.js");
+		
+		include(inPublicEnginePath + "scripts/Entity/UnitTests/TestEntity.js");
 		
 		/*if(inIsServer)
 		{
