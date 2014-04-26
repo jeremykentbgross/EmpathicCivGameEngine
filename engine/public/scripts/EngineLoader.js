@@ -138,8 +138,8 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	///////////////////////////////INCLUDE SETUP//////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////
 
-	//TODO: AssetPath("..."), Localize("...") + unmarked strings to obfuscate category
 	
+	//TODO: AssetPath("..."), Localize("...") + unmarked strings to obfuscate category
 	
 	//Load the settings flags first:
 	include(inPublicEnginePath + "scripts/EngineSettings.js");
@@ -205,6 +205,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	
 	include(inPublicEnginePath + "scripts/Math/AABB2D.js");
 	include(inPublicEnginePath + "scripts/Math/Point2D.js");
+	
 	include(inPublicEnginePath + "scripts/BresenhamsLine.js");
 	include(inPublicEnginePath + "scripts/Registry.js");
 	include(inPublicEnginePath + "scripts/GameCircularDoublyLinkedListNode.js");
@@ -215,6 +216,8 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	
 	if(!inIsServer)
 	{
+		include(inPublicEnginePath + "scripts/Utilities/AssetManager.js");
+		
 		if(ECGame.Settings.Network.isMultiplayer)
 		{
 			include(inPublicEnginePath + "scripts/ChatSystem.js");
@@ -226,7 +229,6 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 		include(inPublicEnginePath + "scripts/SoundSystem.js");
 		include(inPublicEnginePath + "scripts/Sound.js");
 		include(inPublicEnginePath + "scripts/Sound2D.js");
-		include(inPublicEnginePath + "scripts/AssetManager.js");
 	}
 	if(ECGame.Settings.Network.isMultiplayer)
 	{
