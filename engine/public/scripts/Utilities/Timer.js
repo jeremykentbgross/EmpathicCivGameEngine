@@ -45,7 +45,7 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 		this._myFrameCount = 0;
 		this._myFrameTimes = [];
 		this._myIntervalHandle = null;
-		this._myTimerCallbacks = new ECGame.EngineLib.createGameCircularDoublyLinkedListNode();
+		this._myTimerCallbacks = ECGame.EngineLib.LinkedListNode.create();
 	},
 	Parents : [],
 	flags : {},
@@ -64,21 +64,16 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 		
 		,setTimerCallback : function setTimerCallback(inTimeDelay, inCallback)
 		{
-			var aTimerNode;
-
-			this._myTimerCallbacks.insertBack(
-				aTimerNode = new ECGame.EngineLib.createGameCircularDoublyLinkedListNode(
-					{
-						_myCallback : inCallback,
-						_myTimeDelay : inTimeDelay,
-						_myAccumulatedTime : 0
-					}
-				)
+			//treat list item as the timer handle
+			return this._myTimerCallbacks.insertItem_ListBack(
+				{
+					_myCallback : inCallback,
+					_myTimeDelay : inTimeDelay,
+					_myAccumulatedTime : 0
+				}
 			);
-			
-			return aTimerNode;
 		},
-		clearTimerCallback : function clearTimerCallback(inCallbackHandle)
+		clearTimerCallback : function clearTimerCallback(inCallbackHandle)//TODO depricate!!
 		{
 			inCallbackHandle.remove();
 		},
@@ -212,13 +207,12 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 						inItem._myAccumulatedTime -= inItem._myTimeDelay;
 						aFinishedTimerNodes.push(inNode);
 					}
-				},
-				true
+				}
 			);
 			for(i = 0; i < aFinishedTimerNodes.length; ++i)
 			{
 				aTimerNode = aFinishedTimerNodes[i];
-				if(!aTimerNode.item._myCallback())
+				if(!aTimerNode.myItem._myCallback())
 				{
 					this.clearTimerCallback(aTimerNode);
 				}

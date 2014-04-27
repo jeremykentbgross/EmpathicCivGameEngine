@@ -22,7 +22,7 @@
 ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 	Constructor : function Input()
 	{
-		this.GameEventSystem();
+		this.EventSystem();
 		this._mouseLoc = ECGame.EngineLib.Point2D.create(0, 0);
 		this._keys = {};
 		this._keysPressed = {};
@@ -35,7 +35,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 		
 		ECGame.instance.getUpdater("MasterUpdater").addUpdate(this);
 	},
-	Parents : [ECGame.EngineLib.GameEventSystem],
+	Parents : [ECGame.EngineLib.EventSystem],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],

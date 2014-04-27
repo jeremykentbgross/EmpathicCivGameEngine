@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 ECGame.unitTests.registerTest(
-	"GameEventSystem",
+	"EventSystem",
 	function()
 	{
 		var aPassedTest
@@ -29,7 +29,7 @@ ECGame.unitTests.registerTest(
 			;
 		
 		aPassedTest = true;
-		anEventSystem = ECGame.EngineLib.GameEventSystem.create();
+		anEventSystem = ECGame.EngineLib.EventSystem.create();
 		
 		aListener1 =
 		{

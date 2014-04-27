@@ -36,7 +36,7 @@ ECGame.EngineLib.Updater = ECGame.EngineLib.Class.create({
 		{
 			this._myName = inName;
 			this._myPriority = inPriority;
-			this._myUpdateList = new ECGame.EngineLib.GameCircularDoublyLinkedListNode();
+			this._myUpdateList = ECGame.EngineLib.LinkedListNode.create();
 		},
 		
 		getName : function getName()
@@ -51,7 +51,7 @@ ECGame.EngineLib.Updater = ECGame.EngineLib.Class.create({
 		
 		addUpdate : function addUpdate(inObject)
 		{
-			this._myUpdateList.insertItemBack(
+			this._myUpdateList.insertItem_ListBack(
 				inObject
 				,function compare(inLeft, inRight)
 				{
@@ -98,7 +98,6 @@ ECGame.EngineLib.Updater = ECGame.EngineLib.Class.create({
 				{
 					anUpdateArray.push(inItem);
 				}
-				,true
 			);
 			
 			for(i = 0; i < anUpdateArray.length; ++i)

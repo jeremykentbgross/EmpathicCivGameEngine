@@ -145,7 +145,7 @@ Network
 ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 	Constructor : function NetworkBase()
 	{
-		this.GameEventSystem();
+		this.EventSystem();
 				
 		this._mySerializer = ECGame.EngineLib.BinarySerializer.create();
 		this._myNetGroups = {};
@@ -206,7 +206,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 		
 		
 	},
-	Parents : [ECGame.EngineLib.GameEventSystem],
+	Parents : [ECGame.EngineLib.EventSystem],
 	flags : {},
 	ChainUp : [],
 	ChainDown : [],

@@ -69,7 +69,7 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 		this._myNextSampleID = -1;
 		this._myNextSoundDescriptionID = -1;
 		
-		this._myPlayingSounds = new ECGame.EngineLib.GameCircularDoublyLinkedListNode(null);
+		this._myPlayingSounds = ECGame.EngineLib.LinkedListNode.create();
 		this._myListenerPosition2D = new ECGame.EngineLib.Point2D();
 		
 		if(!ECGame.Settings.Caps.Audio)
@@ -227,8 +227,7 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 					{
 						aFinishedSounds.push(inNode);
 					}
-				},
-				true
+				}
 			);
 			
 			//remove finished sounds from this._myPlayingSounds
@@ -288,7 +287,7 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 			
 			aSound = new ECGame.EngineLib.Sound(aSoundDescription, this._myEffectsVolume);
 			aSound.play();
-			this._myPlayingSounds.insert(new ECGame.EngineLib.GameCircularDoublyLinkedListNode(aSound));
+			this._myPlayingSounds.insertItem_ListBack(aSound);
 
 			return aSound;
 		},
@@ -330,7 +329,7 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 			
 			aSound = new ECGame.EngineLib.Sound2D(aSoundDescription, this._myEffectsVolume, inPosition, inRadius);
 			aSound.play();
-			this._myPlayingSounds.insert(new ECGame.EngineLib.GameCircularDoublyLinkedListNode(aSound));
+			this._myPlayingSounds.insertItem_ListBack(aSound);
 
 			return aSound;
 		},
@@ -371,8 +370,7 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 				function debugDrawCallback(inItem)
 				{					
 					inItem.debugDraw(inGraphics, aCurrentTime);
-				},
-				true
+				}
 			);
 		}
 	}

@@ -94,19 +94,19 @@ ECGame.EngineLib.SceneGraph2D.prototype.render = function render(inGraphics)
 	aFrameCount = ECGame.instance.getTimer().getFrameCount() * ECGame.instance.getNumberOfGraphicsDisplays() + inGraphics.getIndex();
 	
 	this._mySceneTree.walk(
-		function walkCallback(item)//TODO find/fix all unnamed functions; ie: function(
+		function walkCallback(inItem)//TODO find/fix all unnamed functions; ie: function(
 		{
-			if(aFrameCount > item._myLastFrameDrawn)
+			if(aFrameCount > inItem._myLastFrameDrawn)
 			{
 				//calculate depth sorting position for this frame
-				item._myScreenPos = item._myAnchorPosition.subtract(aCameraRect.getLeftTop());
-				item._myDrawOrderHelper = ECGame.EngineLib.Point2D.create(
-					item._myScreenPos.dot(aThis._rotMatrixRow1),
-					item._myScreenPos.dot(aThis._rotMatrixRow2)
+				inItem._myScreenPos = inItem._myAnchorPosition.subtract(aCameraRect.getLeftTop());
+				inItem._myDrawOrderHelper = ECGame.EngineLib.Point2D.create(
+					inItem._myScreenPos.dot(aThis._rotMatrixRow1),
+					inItem._myScreenPos.dot(aThis._rotMatrixRow2)
 				);
 			
-				item._myLastFrameDrawn = aFrameCount;
-				aRenderablesArray.push(item);
+				inItem._myLastFrameDrawn = aFrameCount;
+				aRenderablesArray.push(inItem);
 			}
 		},
 		aCameraRect

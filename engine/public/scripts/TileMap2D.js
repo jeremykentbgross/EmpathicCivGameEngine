@@ -547,9 +547,9 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			inGraphics.drawDebugText("Debug Drawing Tile Map");
 			
 			this._myTileInstanceTree.walk(
-				function walkCallback(item)
+				function walkCallback(inItem)
 				{
-					item.debugDraw(inGraphics);
+					inItem.debugDraw(inGraphics);
 				},
 				inGraphics.getCamera2D().getRect()
 			);

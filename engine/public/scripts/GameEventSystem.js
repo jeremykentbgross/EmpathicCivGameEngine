@@ -1,8 +1,8 @@
 /*
-© Copyright 2012 Jeremy Gross
+	© Copyright 2012 Jeremy Gross
 	jeremykentbgross@gmail.com
 	Distributed under the terms of the GNU Lesser GPL (LGPL)
-		
+	
 	This file is part of EmpathicCivGameEngine™.
 	
 	EmpathicCivGameEngine™ is free software: you can redistribute it and/or modify
@@ -19,73 +19,58 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-ECGame.EngineLib.GameEventSystem = function GameEventSystem()
+ECGame.EngineLib.EventSystem = function EventSystem()
 {
 	this._myEventListeners = {};
 };
-ECGame.EngineLib.GameEventSystem.prototype.constructor = ECGame.EngineLib.GameEventSystem;
-ECGame.EngineLib.GameEventSystem.create = function create()
+ECGame.EngineLib.EventSystem.prototype.constructor = ECGame.EngineLib.EventSystem;
+
+ECGame.EngineLib.EventSystem.create = function create()
 {
-	return new ECGame.EngineLib.GameEventSystem();
+	return new ECGame.EngineLib.EventSystem();
 };
 
 
 //TODO use actual event class to de/register listener(s)
-//TODO add listener sorting (may need to be an array then and use custom sorting?)!
-ECGame.EngineLib.GameEventSystem.prototype.registerListener = function registerListener(inEventName, inListener)
+ECGame.EngineLib.EventSystem.prototype.registerListener = function registerListener(inEventName, inListener)
 {
-	var listenerNode = ECGame.EngineLib.createGameCircularDoublyLinkedListNode();
-	listenerNode.item = inListener;
-	
 	this._myEventListeners[inEventName] = 
 		this._myEventListeners[inEventName] ||
-		ECGame.EngineLib.createGameCircularDoublyLinkedListNode();
+		ECGame.EngineLib.LinkedListNode.create();
 		
-	this._myEventListeners[inEventName].myPrev.insert(listenerNode);
+	this._myEventListeners[inEventName].insertItem_ListBack(
+		inListener
+		//TODO sort function
+	);
 };
 
-
-
-ECGame.EngineLib.GameEventSystem.prototype.deregisterListener = function deregisterListener(inEventName, inListener)
+ECGame.EngineLib.EventSystem.prototype.deregisterListener = function deregisterListener(inEventName, inListener)
 {
-	var head, current;
+	var aList
+		;
 	
-	head = this._myEventListeners[inEventName];
-	if(!head)
-	{
-		return;
-	}
-	current = head.myNext;
+	aList = this._myEventListeners[inEventName];
 	
-	while(current !== head)
+	if(aList)
 	{
-		if(current.item === inListener)
-		{
-			current.remove();
-			return;
-		}
-		
-		current = current.myNext;
+		aList.removeItem(inListener);
 	}
 };
 
 
 
-ECGame.EngineLib.GameEventSystem.prototype.onEvent = function onEvent(inEvent)
+ECGame.EngineLib.EventSystem.prototype.onEvent = function onEvent(inEvent)
 {
-	var head,
-		current,
-		eventName,
-		callbackName,
-		aListeners,
-		i;
-	
-	aListeners = [];
+	var anEventName
+		,aCallBackName
+		,aListeners
+		,i
+		;
 	
 	try
 	{
-		eventName = inEvent.getName();
-		callbackName = inEvent.getCallbackName();
+		anEventName = inEvent.getName();
+		aCallBackName = inEvent.getCallbackName();
 	}
 	catch(error)
 	{
@@ -93,25 +78,25 @@ ECGame.EngineLib.GameEventSystem.prototype.onEvent = function onEvent(inEvent)
 		return;
 	}
 	
-	head = this._myEventListeners[eventName];
-	if(!head)
+	if(!this._myEventListeners[anEventName])
 	{
-		//TODO should I print something here?
 		return;
 	}
-	current = head.myNext;
 	
-	while(current !== head)
-	{
-		aListeners.push(current.item);
-		current = current.myNext;
-	}
+	//accumulate in case event results in a listener being removed which would invalid the list iteration
+	aListeners = [];
+	this._myEventListeners[anEventName].forAll(
+		function CollectListeners(inListener)
+		{
+			aListeners.push(inListener);
+		}
+	);
 	
 	for(i = 0; i < aListeners.length; ++i)
 	{
 		try
 		{
-			aListeners[i][callbackName](inEvent);
+			aListeners[i][aCallBackName](inEvent);
 		}
 		catch(error)
 		{

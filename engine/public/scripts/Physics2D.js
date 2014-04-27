@@ -59,7 +59,7 @@ ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 			this._myDensity = 1;
 			this._myVelocity = ECGame.EngineLib.Point2D.create();
 			this._myOwningNodes = [];
-			this._myActiveLinkedListNode = ECGame.EngineLib.createGameCircularDoublyLinkedListNode(this);			
+			this._myActiveLinkedListNode = ECGame.EngineLib.LinkedListNode.create(this);			
 			this._myOwner = null;
 			inPhysicsSystem._myObjectsMap[this.getID()] = this;
 		},
@@ -113,7 +113,7 @@ ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 			{
 				return;
 			}
-			this._myPhysicsSystem._myActiveObjectsList.insert(this._myActiveLinkedListNode);
+			this._myPhysicsSystem._myActiveObjectsList.insertNode_ListFront(this._myActiveLinkedListNode);
 			this._myStatus = this.PhysicsObject2D.STATUS__ACTIVE;
 		},
 		isActive : function isActive()
@@ -129,7 +129,7 @@ ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 			}
 			if(this._myStatus !== this.PhysicsObject2D.STATUS__ACTIVE)
 			{
-				this._myPhysicsSystem._myActiveObjectsList.insert(this._myActiveLinkedListNode);
+				this._myPhysicsSystem._myActiveObjectsList.insertNode_ListFront(this._myActiveLinkedListNode);
 			}
 			this._myStatus = this.PhysicsObject2D.STATUS__ALWAYS_ACTIVE;
 		},
@@ -230,7 +230,7 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 			
 			this._myObjectsMap = {};
 			
-			this._myActiveObjectsList = ECGame.EngineLib.createGameCircularDoublyLinkedListNode();
+			this._myActiveObjectsList = ECGame.EngineLib.LinkedListNode.create();
 			
 			this._myCollisions = [];
 			this._myCollisionsRenderList = [];
@@ -282,9 +282,9 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 			}
 			/*	
 			this._myDetectionTree.walk(////////////////////TODO TEMP DEBUG CHECK?? or keep?
-				function ?funcname?(item)
+				function ?funcname?(inItem)
 				{
-					if(inPhysicsObject === item)
+					if(inPhysicsObject === inItem)
 					{
 						console.error("Object collided with itself??");
 						
@@ -340,7 +340,7 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 				aCurrentNode = this._myActiveObjectsList.myNext;
 				while(aCurrentNode !== this._myActiveObjectsList)
 				{
-					aPhysicsObject = aCurrentNode.item;
+					aPhysicsObject = aCurrentNode.myItem;
 					this._removePhysicsObjectFromTree(aPhysicsObject);			
 					
 					//remember the first location from which this object was active for this frame
@@ -356,7 +356,7 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 				aCurrentNode = this._myActiveObjectsList.myNext;
 				while(aCurrentNode !== this._myActiveObjectsList)
 				{
-					aPhysicsObject = aCurrentNode.item;
+					aPhysicsObject = aCurrentNode.myItem;
 					
 					//move:
 					anAABB = aPhysicsObject._myAABB;
@@ -422,7 +422,7 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 				aCurrentNode = this._myActiveObjectsList.myNext;
 				while(aCurrentNode !== this._myActiveObjectsList)
 				{
-					aPhysicsObject = aCurrentNode.item;
+					aPhysicsObject = aCurrentNode.myItem;
 					aCurrentNode = aCurrentNode.myNext;
 
 					if(aPhysicsObject.isActive()
@@ -472,9 +472,9 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 			//	Note: The map will automatically filter the object from being drawn more than once if it is in more than one node
 			aListToDraw = {};
 			this._myDetectionTree.walk(
-				function addToRenderMap(item)
+				function addToRenderMap(inItem)
 				{
-					aListToDraw[item.getID()] = item;
+					aListToDraw[inItem.getID()] = inItem;
 				},
 				aCameraRect
 			);
@@ -501,7 +501,7 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 			aCurrentNode = this._myActiveObjectsList.myNext;
 			while(aCurrentNode !== this._myActiveObjectsList)
 			{
-				aPhysicsObject = aCurrentNode.item;
+				aPhysicsObject = aCurrentNode.myItem;
 				inGraphics.strokeRect(aPhysicsObject._myAABB);
 				aCurrentNode = aCurrentNode.myNext;
 			}

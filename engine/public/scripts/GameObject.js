@@ -27,7 +27,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			anInstanceID;
 		
 		//call parent constructor
-		this.GameEventSystem();
+		this.EventSystem();
 			
 		aThisClass = this.getClass();
 		aRegistry = aThisClass.getInstanceRegistry();
@@ -47,7 +47,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		this._myGameObjectNetDirty = false;
 	},
 	
-	Parents : [ECGame.EngineLib.GameEventSystem],
+	Parents : [ECGame.EngineLib.EventSystem],
 	
 	flags : {},
 	
