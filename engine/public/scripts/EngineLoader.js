@@ -206,10 +206,12 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	include(inPublicEnginePath + "scripts/Math/AABB2D.js");
 	include(inPublicEnginePath + "scripts/Math/Point2D.js");
 	
-	include(inPublicEnginePath + "scripts/BresenhamsLine.js");
-	include(inPublicEnginePath + "scripts/Registry.js");
-	include(inPublicEnginePath + "scripts/GameCircularDoublyLinkedListNode.js");
-	include(inPublicEnginePath + "scripts/GameEventSystem.js");
+	include(inPublicEnginePath + "scripts/BresenhamsLine.js");/////
+	include(inPublicEnginePath + "scripts/Registry.js");////
+	
+	include(inPublicEnginePath + "scripts/DataStructures/LinkedListNode.js");
+	
+	include(inPublicEnginePath + "scripts/Events/EventSystem.js");
 	
 	include(inPublicEnginePath + "scripts/Utilities/Timer.js");
 	include(inPublicEnginePath + "scripts/Utilities/Updater.js");
@@ -301,13 +303,14 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	if(ECGame.Settings.RUN_UNIT_TESTS)
 	{			
 		//ENGINE UNIT TESTS:
-		include(inPublicEnginePath + "scripts/unit_tests/TestGameClass.js");
-		include(inPublicEnginePath + "scripts/unit_tests/TestGameEventSystem.js");
+		include(inPublicEnginePath + "scripts/unit_tests/TestGameClass.js");//////////
+		
+		include(inPublicEnginePath + "scripts/Events/UnitTests/TestEventSystem.js");
 		
 		include(inPublicEnginePath + "scripts/Compression/UnitTests/TestBitPacker.js");
 		include(inPublicEnginePath + "scripts/Compression/UnitTests/TestArithmeticCompression.js");
 
-		include(inPublicEnginePath + "scripts/unit_tests/TestBinarySerializer.js");
+		include(inPublicEnginePath + "scripts/unit_tests/TestBinarySerializer.js");/////
 		
 		include(inPublicEnginePath + "scripts/Entity/UnitTests/TestEntity.js");
 		
