@@ -303,14 +303,14 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	if(ECGame.Settings.RUN_UNIT_TESTS)
 	{			
 		//ENGINE UNIT TESTS:
-		include(inPublicEnginePath + "scripts/unit_tests/TestGameClass.js");//////////
+		include(inPublicEnginePath + "scripts/TestGameClass.js");//////////
 		
 		include(inPublicEnginePath + "scripts/Events/UnitTests/TestEventSystem.js");
 		
 		include(inPublicEnginePath + "scripts/Compression/UnitTests/TestBitPacker.js");
 		include(inPublicEnginePath + "scripts/Compression/UnitTests/TestArithmeticCompression.js");
 
-		include(inPublicEnginePath + "scripts/unit_tests/TestBinarySerializer.js");/////
+		include(inPublicEnginePath + "scripts/TestBinarySerializer.js");/////
 		
 		include(inPublicEnginePath + "scripts/Entity/UnitTests/TestEntity.js");
 		
