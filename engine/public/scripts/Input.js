@@ -271,7 +271,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 				)
 				.add(//add the camera offset because the fill rect below will subtract it off again
 					(inGraphics.getCamera2D() ?
-						inGraphics.getCamera2D().getRect().getLeftTop()
+						inGraphics.getCamera2D().getCaptureVolumeAABB2D().getLeftTop()
 						: ECGame.EngineLib.Point2D.create()
 					)
 				)

@@ -545,7 +545,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			}
 			
 			
-			aCameraAABB2D = aWorld.getCamera().getRect();
+			aCameraAABB2D = aWorld.getCamera().getCaptureVolumeAABB2D();
 			aMouseWorldPosition = inInputEvent.mouseLoc.add(aCameraAABB2D.getLeftTop());
 			
 			

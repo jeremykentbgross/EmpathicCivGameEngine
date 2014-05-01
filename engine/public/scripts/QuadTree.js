@@ -401,7 +401,7 @@ ECGame.EngineLib.QuadTree = ECGame.EngineLib.Class.create({
 			inFullNodeColor = inFullNodeColor || ECGame.Settings.Debug.QuadTree_OccupiedNode_DrawColor;
 			inItemColor = inItemColor || ECGame.Settings.Debug.QuadTree_Item_DrawColor;
 			
-			if(!this._myAABB.intersectsAABB2D(inGraphics.getCamera2D().getRect()))
+			if(!this._myAABB.intersectsAABB2D(inGraphics.getCamera2D().getCaptureVolumeAABB2D()))
 			{
 				return;
 			}

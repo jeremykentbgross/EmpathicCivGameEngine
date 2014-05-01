@@ -551,7 +551,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 				{
 					inItem.debugDraw(inGraphics);
 				},
-				inGraphics.getCamera2D().getRect()
+				inGraphics.getCamera2D().getCaptureVolumeAABB2D()
 			);
 			
 			this._myTileInstanceTree.debugDraw(inGraphics);//TODO map colors?

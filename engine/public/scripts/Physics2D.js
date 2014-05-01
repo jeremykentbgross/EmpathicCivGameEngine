@@ -466,7 +466,7 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 			inGraphics.drawDebugText("Frame Update Count:" + this._myFrameUpdateCount);
 			//TODO print (and notify) collisions this frame
 
-			aCameraRect = inGraphics.getCamera2D().getRect();
+			aCameraRect = inGraphics.getCamera2D().getCaptureVolumeAABB2D();
 			
 			//make a map of them and draw them.
 			//	Note: The map will automatically filter the object from being drawn more than once if it is in more than one node

@@ -92,7 +92,7 @@ ECGame.EngineLib.Point2D.prototype.scale = function scale(inScalar)
 
 
 
-ECGame.EngineLib.Point2D.prototype.componentMax = function componentMax(inOther)
+ECGame.EngineLib.Point2D.prototype.max = function max(inOther)
 {
 	return new ECGame.EngineLib.Point2D(
 		Math.max(this.myX, inOther.myX),
@@ -102,7 +102,7 @@ ECGame.EngineLib.Point2D.prototype.componentMax = function componentMax(inOther)
 
 
 
-ECGame.EngineLib.Point2D.prototype.componentMin = function componentMin(inOther)
+ECGame.EngineLib.Point2D.prototype.min = function min(inOther)
 {
 	return new ECGame.EngineLib.Point2D(
 		Math.min(this.myX, inOther.myX),

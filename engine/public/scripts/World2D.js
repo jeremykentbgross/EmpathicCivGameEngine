@@ -54,7 +54,7 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 		this._myEntitySpacialHashMap = null;
 		this._myEntityHashByID = [];
 		
-		this._myDefaultCamera = ECGame.EngineLib.Camera2.create();
+		this._myDefaultCamera = ECGame.EngineLib.Camera2D.create();
 		this._myCamera = null;
 	},
 	
@@ -117,7 +117,7 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			);
 			this._myEntityHashByID = [];
 			
-			this._myDefaultCamera = ECGame.EngineLib.Camera2.create();
+			//this._myDefaultCamera = ECGame.EngineLib.Camera2D.create();
 			this._myCamera = null;
 		},
 		
@@ -189,7 +189,7 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 				inGraphics.fillRect(anAABB);
 			}
 			
-			aCameraRect = this.getCamera().getRect();
+			aCameraRect = this.getCamera().getCaptureVolumeAABB2D();
 			aCameraRect.setLeftTop(
 				aCameraRect.getLeftTop().scale(aScale)
 			);

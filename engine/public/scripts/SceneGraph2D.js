@@ -90,7 +90,7 @@ ECGame.EngineLib.SceneGraph2D.prototype.render = function render(inGraphics)
 	aThis = this;
 	aRenderablesArray = [];
 	
-	aCameraRect = inGraphics.getCamera2D().getRect();
+	aCameraRect = inGraphics.getCamera2D().getCaptureVolumeAABB2D();
 	aFrameCount = ECGame.instance.getTimer().getFrameCount() * ECGame.instance.getNumberOfGraphicsDisplays() + inGraphics.getIndex();
 	
 	this._mySceneTree.walk(

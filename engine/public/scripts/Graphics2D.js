@@ -160,8 +160,8 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 			this._myCurrentCamera = inCamera;
 			if(inCamera)
 			{
-				this._myDrawOffsetX = inCamera.getRect().myX;
-				this._myDrawOffsetY = inCamera.getRect().myY;
+				this._myDrawOffsetX = inCamera.getCaptureVolumeAABB2D().myX;
+				this._myDrawOffsetY = inCamera.getCaptureVolumeAABB2D().myY;
 			}
 			else
 			{
