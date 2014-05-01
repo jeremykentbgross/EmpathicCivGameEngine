@@ -248,7 +248,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	}
 
 	include(inPublicEnginePath + "scripts/Input.js");
-	include(inPublicEnginePath + "scripts/Camera2D.js");
+	include(inPublicEnginePath + "scripts/World2D/Camera2D.js");
 	include(inPublicEnginePath + "scripts/GameObject.js");
 	include(inPublicEnginePath + "scripts/GameObjectRef.js");
 	include(inPublicEnginePath + "scripts/GameObjectCollection.js");
@@ -261,8 +261,8 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	include(inPublicEnginePath + "scripts/GameEvent.js");
 
 	include(inPublicEnginePath + "scripts/Entity/Entity.js");
-	include(inPublicEnginePath + "scripts/EntityComponent.js");
-	include(inPublicEnginePath + "scripts/EntityComponent_2DCamera.js");
+	include(inPublicEnginePath + "scripts/Entity/EntityComponent.js");
+	include(inPublicEnginePath + "scripts/Entity/EntityComponent_Camera2D.js");
 	include(inPublicEnginePath + "scripts/EntityComponent_Input.js");
 	include(inPublicEnginePath + "scripts/EntityComponent_Sprite.js");
 	include(inPublicEnginePath + "scripts/EntityComponent_Physics2D.js");
