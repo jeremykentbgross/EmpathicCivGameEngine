@@ -46,20 +46,20 @@ ECGame.unitTests.registerTest(
 				{
 					this.added = inEvent.entity;
 					
-					this._myOwner.registerListener('EntityAddedToWorld', this);
-					this._myOwner.registerListener('EntityRemovedFromWorld', this);
+					this._myOwningEntity.registerListener('EntityAddedToWorld', this);
+					this._myOwningEntity.registerListener('EntityRemovedFromWorld', this);
 				},
 				
 				onRemovedFromEntity : function onRemovedFromEntity(inEvent)
 				{
 					console.assert(
-						inEvent.entity === this._myOwner
+						inEvent.entity === this._myOwningEntity
 						,"Didn't belong to this entity!"
 					);
 					this.added = null;
 					
-					this._myOwner.deregisterListener('EntityAddedToWorld', this);
-					this._myOwner.deregisterListener('EntityRemovedFromWorld', this);
+					this._myOwningEntity.deregisterListener('EntityAddedToWorld', this);
+					this._myOwningEntity.deregisterListener('EntityRemovedFromWorld', this);
 				},
 				
 				onEntityAddedToWorld : function onEntityAddedToWorld(inEvent)
@@ -87,7 +87,7 @@ ECGame.unitTests.registerTest(
 		
 		console.assert(
 			aComponent.added === anEntity
-			&& anEntity === aComponent._myOwner
+			&& anEntity === aComponent._myOwningEntity
 			&& aComponent._containingWorld === 6
 			,"Did not add component successfully"
 		);
@@ -104,7 +104,7 @@ ECGame.unitTests.registerTest(
 		anEntity.removeComponent(aComponent);
 		console.assert(
 			aComponent.added === null
-			&& null === aComponent._myOwner 
+			&& null === aComponent._myOwningEntity 
 			&& aComponent._containingWorld === null,
 			"Did not remove component successfully"
 		);

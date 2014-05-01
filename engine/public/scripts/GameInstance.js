@@ -326,7 +326,7 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			ECGame.EngineLib.GameObject.registerClass();
 			ECGame.EngineLib.Entity.registerClass();
 			ECGame.EngineLib.EntityComponent.registerClass();
-			ECGame.EngineLib.EntityComponent_2DCamera.registerClass();
+			ECGame.EngineLib.EntityComponent_Camera2D.registerClass();
 			ECGame.EngineLib.EntityComponent_Physics2D.registerClass();
 			ECGame.EngineLib.EntityComponent_Input.registerClass();
 			ECGame.EngineLib.EntityComponent_Sprite.registerClass();

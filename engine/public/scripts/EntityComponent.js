@@ -1,8 +1,8 @@
 /*
-© Copyright 2012 Jeremy Gross
+	© Copyright 2012 Jeremy Gross
 	jeremykentbgross@gmail.com
 	Distributed under the terms of the GNU Lesser GPL (LGPL)
-		
+	
 	This file is part of EmpathicCivGameEngine™.
 	
 	EmpathicCivGameEngine™ is free software: you can redistribute it and/or modify
@@ -24,8 +24,7 @@ ECGame.EngineLib.EntityComponent = ECGame.EngineLib.Class.create({
 	{
 		this.GameObject();
 		
-		this._myOwner = null;//TODO rename owningEntity
-		//this._myServerOnly = false;//TODO at GameObject level!!
+		this._myOwningEntity = null;
 	},
 	Parents : [ECGame.EngineLib.GameObject],
 	flags : {},
@@ -33,28 +32,26 @@ ECGame.EngineLib.EntityComponent = ECGame.EngineLib.Class.create({
 	ChainDown : ['onAddedToEntity'],
 	Definition :
 	{
-		/*isServerOnly : function isServerOnly()//TODO at GameObject level!!
-		{
-			return this._myServerOnly;
-		},*/
-		
 		onAddedToEntity : function onAddedToEntity(inEvent)
 		{
-			if(this._myOwner)
+			if(this._myOwningEntity)
 			{
 				this.onRemovedFromEntity(
-					new ECGame.EngineLib.Events.RemovedFromEntity(inEvent.entity)
+					new ECGame.EngineLib.Events.RemovedFromEntity(this._myOwningEntity)
 				);
 			}
-			this._myOwner = inEvent.entity;
+			this._myOwningEntity = inEvent.entity;
 		},
 		onRemovedFromEntity : function onRemovedFromEntity(inEvent)
 		{
-			console.assert(inEvent.entity === this._myOwner);
-			this._myOwner = null;
+			console.assert(inEvent.entity === this._myOwningEntity);
+			this._myOwningEntity = null;
 		},
 		
-		//TODO add/remove world functions (chain down)
+		getOwningEntity : function getOwningEntity()
+		{
+			return this._myOwningEntity;
+		},
 		
 		//set<classname>NetDirty
 		clearNetDirty : function clearNetDirty(){return;},
@@ -63,10 +60,6 @@ ECGame.EngineLib.EntityComponent = ECGame.EngineLib.Class.create({
 		cleanup : function cleanup(){return;},
 		serialize : function serialize(){return;},
 		
-		copyFrom : function copyFrom(/*inOther*/)
-		{
-			//this._myServerOnly = inOther._myServerOnly;
-			return;
-		}
+		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });

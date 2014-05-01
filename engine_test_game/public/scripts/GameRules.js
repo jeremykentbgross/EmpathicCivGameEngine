@@ -364,7 +364,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			aComponent = ECGame.EngineLib.EntityComponent_Physics2D.create();
 			this._myReferenceEntity.addComponent(aComponent);
 			
-			aComponent = ECGame.EngineLib.EntityComponent_2DCamera.create(/*TODO params??*/);
+			aComponent = ECGame.EngineLib.EntityComponent_Camera2D.create(/*TODO params??*/);
 			this._myReferenceEntity.addComponent(aComponent);
 			
 			aComponent = ECGame.EngineLib.EntityComponent_SoundPlayer.create();
@@ -374,7 +374,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			{
 				this._myEntities.push(this._myReferenceEntity.clone());
 				this._myGameWorld.addEntity(this._myEntities[0]);
-				this._myGameWorld.setCamera(this._myEntities[0].getComponentByType(ECGame.EngineLib.EntityComponent_2DCamera)[0]);
+				this._myGameWorld.setCamera(this._myEntities[0].getComponentByType(ECGame.EngineLib.EntityComponent_Camera2D)[0]);
 			}
 		},
 		
@@ -445,7 +445,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				console.info("Setting owner for physics and input component(s) => Name: " + inEvent.user.userName + " ID: " + inEvent.user.userID);
 				anEntity.getComponentByType(ECGame.EngineLib.EntityComponent_Physics2D)[0].setNetOwner(inEvent.user.userID);
 				anEntity.getComponentByType(ECGame.EngineLib.EntityComponent_Input)[0].setNetOwner(inEvent.user.userID);
-				anEntity.getComponentByType(ECGame.EngineLib.EntityComponent_2DCamera)[0].setNetOwner(inEvent.user.userID);
+				anEntity.getComponentByType(ECGame.EngineLib.EntityComponent_Camera2D)[0].setNetOwner(inEvent.user.userID);
 			}
 			this._myGameWorld.addEntity(anEntity);
 			anEntity.addToNetGroup(this._myMasterNetGroup);

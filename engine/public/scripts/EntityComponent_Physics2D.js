@@ -69,7 +69,7 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 		
 		onAddedToEntity : function onAddedToEntity(/*inEvent*/)
 		{
-			var anOwner = this._myOwner;//inEntity.entity;
+			var anOwner = this._myOwningEntity;//inEntity.entity;
 		
 			//register for events		
 			anOwner.registerListener('RequestVelocity', this);
@@ -79,9 +79,9 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 			anOwner.registerListener('SetPosition', this);
 			//TODO anOwner.event(getposition, myPos);??
 			
-			this._myOwner.onEvent(
+			this._myOwningEntity.onEvent(
 				new ECGame.EngineLib.Events.UpdatedPhysicsStatus(
-					this._myOwner,
+					this._myOwningEntity,
 					this._myPosition,
 					this._myVelocity,
 					this._myAABB
@@ -91,7 +91,7 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 		
 		onRemovedFromEntity : function onRemovedFromEntity(/*inEvent*/)
 		{
-			var anOwner = this._myOwner;//inEntity.entity;
+			var anOwner = this._myOwningEntity;//inEntity.entity;
 			
 			//unregister for events
 			anOwner.deregisterListener('RequestVelocity', this);
@@ -100,7 +100,7 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 			
 			anOwner.deregisterListener('SetPosition', this);
 			
-			//this._myOwner = null;
+			//this._myOwningEntity = null;
 		},
 		
 		cleanup : function cleanup(){return;},
@@ -134,11 +134,11 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 				}
 				
 				//set position and let everyone else know
-				if(this._myOwner)
+				if(this._myOwningEntity)
 				{
-					this._myOwner.onEvent(
+					this._myOwningEntity.onEvent(
 						new ECGame.EngineLib.Events.UpdatedPhysicsStatus(
-							this._myOwner,
+							this._myOwningEntity,
 							this._myPosition.clone(),
 							this._myVelocity.clone(),
 							this._myAABB.clone()
@@ -162,9 +162,9 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 			this._myPhysicsObject.setOwner(this);
 			//TODO set the owner in the PhysObj for callbacks, triggers, etc?
 			
-			this._myOwner.onEvent(
+			this._myOwningEntity.onEvent(
 				new ECGame.EngineLib.Events.UpdatedPhysicsStatus(
-					this._myOwner,
+					this._myOwningEntity,
 					this._myPosition,
 					this._myVelocity,
 					this._myAABB
@@ -192,9 +192,9 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 		
 		onPhysicsObjectUpdated : function onPhysicsObjectUpdated(inEvent)
 		{
-			this._myOwner.onEvent(//TODO not have seperate event?
+			this._myOwningEntity.onEvent(//TODO not have seperate event?
 				new ECGame.EngineLib.Events.UpdatedPhysicsStatus(
-					this._myOwner,
+					this._myOwningEntity,
 					inEvent.position,
 					inEvent.velocity,
 					inEvent.boundingRect

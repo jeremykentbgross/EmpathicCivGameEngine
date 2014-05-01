@@ -96,9 +96,9 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 				}*/
 			}
 			
-			if(this._myOwner)
+			if(this._myOwningEntity)
 			{
-				this._myOwner.onEvent(new ECGame.EngineLib.Events.RequestVelocity(this._myDirection));
+				this._myOwningEntity.onEvent(new ECGame.EngineLib.Events.RequestVelocity(this._myDirection));
 			}
 			else
 			{
@@ -108,7 +108,7 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 		
 		onAddedToEntity : function onAddedToEntity(/*inEvent*/)
 		{
-			var owner = this._myOwner;//inEntity.entity;
+			var owner = this._myOwningEntity;//inEntity.entity;
 		
 			//register for events
 			owner.registerListener('EntityAddedToWorld', this);
@@ -121,7 +121,7 @@ ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 
 		onRemovedFromEntity : function onRemovedFromEntity(/*inEvent*/)
 		{
-			var owner = this._myOwner;//inEntity.entity;
+			var owner = this._myOwningEntity;//inEntity.entity;
 			
 			if(owner)
 			{

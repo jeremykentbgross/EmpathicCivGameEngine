@@ -154,7 +154,7 @@ ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 			}
 		},
 		
-		getOwner : function setOwner()
+		getOwner : function getOwner()
 		{
 			return this._myOwner;
 		},

@@ -61,14 +61,14 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			{
 				for(i = 0; i < aFrameEvents.length; ++i)
 				{
-					this._myOwner.onEvent(aFrameEvents[i]);
+					this._myOwningEntity.onEvent(aFrameEvents[i]);
 				}
 			}
 		},
 
 		onAddedToEntity : function onAddedToEntity(/*inEvent*/)
 		{
-			var owner = this._myOwner;//inEvent.entity;
+			var owner = this._myOwningEntity;//inEvent.entity;
 			
 			//register for events
 			owner.registerListener('UpdatedPhysicsStatus', this);
@@ -81,7 +81,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 
 		onRemovedFromEntity : function()
 		{
-			var owner = this._myOwner;//inEvent.entity;
+			var owner = this._myOwningEntity;//inEvent.entity;
 			
 			//unregister for events
 			owner.deregisterListener('UpdatedPhysicsStatus', this);
@@ -90,7 +90,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			
 			//todo remove from scenegraph
 			
-			//this._myOwner = null;
+			//this._myOwningEntity = null;
 		},
 
 		onUpdatedPhysicsStatus : function onUpdatedPhysicsStatus(inEvent)

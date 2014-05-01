@@ -1,8 +1,8 @@
 /*
-© Copyright 2012 Jeremy Gross
+	© Copyright 2012 Jeremy Gross
 	jeremykentbgross@gmail.com
 	Distributed under the terms of the GNU Lesser GPL (LGPL)
-		
+	
 	This file is part of EmpathicCivGameEngine™.
 	
 	EmpathicCivGameEngine™ is free software: you can redistribute it and/or modify
@@ -19,11 +19,13 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-ECGame.EngineLib.EntityComponent_2DCamera = ECGame.EngineLib.Class.create({
-	Constructor : function EntityComponent_2DCamera()
+ECGame.EngineLib.EntityComponent_Camera2D = ECGame.EngineLib.Class.create({
+	Constructor : function EntityComponent_Camera2D()
 	{
 		this.EntityComponent();
-		this.Camera2D();
+		this.Camera2D();	//TODO contain camera instead of inheriting it?
+		
+		this._myPosition = null;//TODO remove this, or keep it??
 	},
 	Parents : [ECGame.EngineLib.EntityComponent, ECGame.EngineLib.Camera2D],
 	flags : { netDynamic : true },
@@ -33,7 +35,7 @@ ECGame.EngineLib.EntityComponent_2DCamera = ECGame.EngineLib.Class.create({
 	{
 		onAddedToEntity : function onAddedToEntity(/*inEvent*/)
 		{
-			var owner = this._myOwner;//inEvent.entity;
+			var owner = this._myOwningEntity;//inEvent.entity;
 			
 			//register for events
 			owner.registerListener('UpdatedPhysicsStatus', this);
@@ -44,7 +46,7 @@ ECGame.EngineLib.EntityComponent_2DCamera = ECGame.EngineLib.Class.create({
 		},
 		onRemovedFromEntity : function onRemovedFromEntity(/*inEvent*/)
 		{
-			var owner = this._myOwner;//inEvent.entity;
+			var owner = this._myOwningEntity;//inEvent.entity;
 			
 			//unregister for events
 			owner.deregisterListener('UpdatedPhysicsStatus', this);
@@ -62,9 +64,9 @@ ECGame.EngineLib.EntityComponent_2DCamera = ECGame.EngineLib.Class.create({
 		onEntityAddedToWorld : function onEntityAddedToWorld(inEvent)
 		{
 			this._myMap = inEvent.world.getMap();
-			//TODO register as a camera entity with the world
+			//TODO register as a camera in/with the world??
 			
-			if(this.getNetOwnerID() === ECGame.instance.getLocalUser().userID)//TODO maybe make search from game rules to find cams that are local owned?
+			if(this.getNetOwnerID() === ECGame.instance.getLocalUser().userID)
 			{
 				inEvent.world.setCamera(this);
 			}
@@ -72,22 +74,21 @@ ECGame.EngineLib.EntityComponent_2DCamera = ECGame.EngineLib.Class.create({
 		
 		onEntityRemovedFromWorld : function onEntityRemovedFromWorld(/*inEvent*/)
 		{
-			//TODO unregister as a camera entity with the world
+			//TODO unregister as a camera entity with/in the world??
 			this._myMap = null;
 		},
 		
 		getTargetPosition : function getTargetPosition()
 		{
-			return this._position;
+			return this._myPosition;
 		},
 		
 		onUpdatedPhysicsStatus : function onUpdatedPhysicsStatus(inEvent)
 		{
-			//TODO look into bug why camera lags behind entity (maybe due to event listener order?)
-			this._position = inEvent.position;
-			this.centerOn(this._position, this._myMap);
+			this._myPosition = inEvent.position;
+			this.centerOn(this._myPosition, this._myMap);
 		},
 		
-		copyFrom : function copyFrom(/*inOther*/){return;}//TODO copy parent classes rect?
+		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });

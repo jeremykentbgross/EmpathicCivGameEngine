@@ -248,7 +248,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	}
 
 	include(inPublicEnginePath + "scripts/Input.js");
-	include(inPublicEnginePath + "scripts/Camera2.js");
+	include(inPublicEnginePath + "scripts/Camera2D.js");
 	include(inPublicEnginePath + "scripts/GameObject.js");
 	include(inPublicEnginePath + "scripts/GameObjectRef.js");
 	include(inPublicEnginePath + "scripts/GameObjectCollection.js");
