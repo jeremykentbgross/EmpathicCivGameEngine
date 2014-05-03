@@ -19,7 +19,7 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-ECGame.EngineLib.EntityComponent_Input = ECGame.EngineLib.Class.create(
+ECGame.Lib.EntityComponent_Input = ECGame.EngineLib.Class.create(
 {
 	Constructor : function EntityComponent_Input()
 	{

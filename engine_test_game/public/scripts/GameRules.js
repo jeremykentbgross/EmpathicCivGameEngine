@@ -61,7 +61,12 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
-		registerClasses : function registerClasses(){return;},
+		registerClasses : function registerClasses()
+		{
+			ECGame.Lib.EntityComponent_Physics2D.registerClass();
+			ECGame.Lib.EntityComponent_Input.registerClass();
+			ECGame.Lib.EntityComponent_Sprite.registerClass();
+		},
 		init : function init()
 		{
 			//TODO register ECGame.Lib GameObject classes
@@ -377,13 +382,13 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				
 			this._myReferenceEntity = ECGame.EngineLib.Entity.create();
 			
-			aComponent = ECGame.EngineLib.EntityComponent_Input.create();
+			aComponent = ECGame.Lib.EntityComponent_Input.create();
 			this._myReferenceEntity.addComponent(aComponent);
 			
-			aComponent = ECGame.EngineLib.EntityComponent_Sprite.create(this._myAnimations);
+			aComponent = ECGame.Lib.EntityComponent_Sprite.create(this._myAnimations);
 			this._myReferenceEntity.addComponent(aComponent);
 			
-			aComponent = ECGame.EngineLib.EntityComponent_Physics2D.create();
+			aComponent = ECGame.Lib.EntityComponent_Physics2D.create();
 			this._myReferenceEntity.addComponent(aComponent);
 			
 			aComponent = ECGame.EngineLib.EntityComponent_Camera2D.create(/*TODO params??*/);
@@ -465,8 +470,8 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				anEntity = this._myReferenceEntity.clone();
 				this._myEntities[inEvent.user.userID] = anEntity;
 				console.info("Setting owner for physics and input component(s) => Name: " + inEvent.user.userName + " ID: " + inEvent.user.userID);
-				anEntity.getComponentByType(ECGame.EngineLib.EntityComponent_Physics2D)[0].setNetOwner(inEvent.user.userID);
-				anEntity.getComponentByType(ECGame.EngineLib.EntityComponent_Input)[0].setNetOwner(inEvent.user.userID);
+				anEntity.getComponentByType(ECGame.Lib.EntityComponent_Physics2D)[0].setNetOwner(inEvent.user.userID);
+				anEntity.getComponentByType(ECGame.Lib.EntityComponent_Input)[0].setNetOwner(inEvent.user.userID);
 				anEntity.getComponentByType(ECGame.EngineLib.EntityComponent_Camera2D)[0].setNetOwner(inEvent.user.userID);
 			}
 			this._myGameWorld.addEntity(anEntity);

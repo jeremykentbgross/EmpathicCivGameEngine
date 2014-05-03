@@ -19,7 +19,8 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
+ECGame.Lib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create(
+{
 	Constructor : function EntityComponent_Physics2D()
 	{
 		this.EntityComponent();
