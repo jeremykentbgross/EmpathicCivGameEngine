@@ -312,10 +312,21 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 		{
 			var anAnimation
 				,aFrameArray
-				,i
-				,j
+				,i ,j
+				,aNameList
 				;
 			
+			aNameList =
+			[
+				"Run_Right"
+				,"Run_RightDown"
+				,"Run_Down"
+				,"Run_LeftDown"
+				,"Run_Left"
+				,"Run_LeftUp"
+				,"Run_Up"
+				,"Run_UpRight"
+			];
 			aFrameArray = [];
 			for(j = 0; j < 8; ++j)
 			{
@@ -332,8 +343,19 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				}
 				anAnimation = new ECGame.EngineLib.Animation2D();
 				anAnimation.init('game/images/test_anims_run/jogSheet.png', 10, aFrameArray);
-				this._myAnimations.push(anAnimation);
+				ECGame.instance.getAssetManager().saveAnimation(aNameList[j], anAnimation);
 			}
+			aNameList =
+			[
+				"Facing_Right"
+				,"Facing_RightDown"
+				,"Facing_Down"
+				,"Facing_LeftDown"
+				,"Facing_Left"
+				,"Facing_LeftUp"
+				,"Facing_Up"
+				,"Facing_UpRight"
+			];
 			for(j = 0; j < 8; ++j)
 			{
 				aFrameArray = [];
@@ -345,7 +367,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				);
 				anAnimation = new ECGame.EngineLib.Animation2D();
 				anAnimation.init('game/images/test_anims_run/jogSheet.png', 10, aFrameArray);
-				this._myAnimations.push(anAnimation);
+				ECGame.instance.getAssetManager().saveAnimation(aNameList[j], anAnimation);
 			}
 		},
 		_initReferenceEntities : function _initReferenceEntities()

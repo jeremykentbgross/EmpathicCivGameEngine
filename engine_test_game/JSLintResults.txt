@@ -3,12 +3,6 @@
 ************************
 ***Starting JSLint:***
 
-Checking ../_unified_/engine/public/scripts/ArithmeticCompression.js
-1 errors found
-{
-	Empty block.
-	@../_unified_/engine/public/scripts/ArithmeticCompression.js::150:5
-
 ***Finished JSLint***
 ************************
 

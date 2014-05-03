@@ -262,9 +262,6 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	include(inPublicEnginePath + "scripts/Entity/Entity.js");
 	include(inPublicEnginePath + "scripts/Entity/EntityComponent.js");
 	include(inPublicEnginePath + "scripts/Entity/EntityComponent_Camera2D.js");
-	include(inPublicEnginePath + "scripts/EntityComponent_Input.js");
-	include(inPublicEnginePath + "scripts/EntityComponent_Sprite.js");
-	include(inPublicEnginePath + "scripts/EntityComponent_Physics2D.js");
 	include(inPublicEnginePath + "scripts/EntityComponent_SoundPlayer.js");
 
 	

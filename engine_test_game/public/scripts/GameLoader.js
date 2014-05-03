@@ -22,6 +22,10 @@
 ECGame.Lib.LoadGame = function LoadGame(include, inPublicGamePath/*, inPrivateGamePath*/)
 {
 	include(inPublicGamePath + "scripts/GameRules.js");
+	
+	include(inPublicGamePath + "scripts/EntityComponent_Input.js");
+	include(inPublicGamePath + "scripts/EntityComponent_Sprite.js");
+	include(inPublicGamePath + "scripts/EntityComponent_Physics2D.js");
 	/*
 	if(ECGame.Settings.Network.isServer)
 	{
