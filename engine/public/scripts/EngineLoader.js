@@ -215,11 +215,10 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	
 	include(inPublicEnginePath + "scripts/Utilities/Timer.js");
 	include(inPublicEnginePath + "scripts/Utilities/Updater.js");
+	include(inPublicEnginePath + "scripts/Utilities/AssetManager.js");
 	
 	if(!inIsServer)
 	{
-		include(inPublicEnginePath + "scripts/Utilities/AssetManager.js");
-		
 		if(ECGame.Settings.Network.isMultiplayer)
 		{
 			include(inPublicEnginePath + "scripts/ChatSystem.js");

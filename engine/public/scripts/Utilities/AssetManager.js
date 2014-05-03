@@ -44,6 +44,9 @@ ECGame.EngineLib.AssetManager = ECGame.EngineLib.Class.create({
 		
 		this._myDefaultSoundName = 'defaultsound';
 		this._mySoundInfoMap = {};
+		
+		this._myAnimationsMap = {};
+		//TODO someday: server storage/retrieval
 	},
 	Parents : [],
 	flags : {},
@@ -51,6 +54,37 @@ ECGame.EngineLib.AssetManager = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
+		/*
+		TODO:
+			Client: LocalStorage (of some sort..)
+			Server: DB
+			REST:
+				1) compare to local storage for pulling / storing new versions of assets
+					GET assets/index
+					=>
+					{
+						asset name : modified date //(on server)
+						...
+					}
+				
+				2) Pull actuall asset(s):
+					GET assets/...
+					=>
+					asset
+					
+				3) Save assets (debug mode only?)
+					POST assets/... asset
+		*/
+		
+		saveAnimation : function saveAnimation(inName, inAnimation)
+		{
+			this._myAnimationsMap[inName] = inAnimation;
+		},
+		loadAnimation : function loadAnimation(inName)
+		{
+			return this._myAnimationsMap[inName];
+		},
+		
 		loadImage : function loadImage(inFileName, outLoadTarget)
 		{
 			var anImageInfo
@@ -101,8 +135,6 @@ ECGame.EngineLib.AssetManager = ECGame.EngineLib.Class.create({
 				}
 			}
 		},
-		
-		
 		
 		loadSound : function loadSound(inFileName, outLoadTarget)
 		{		

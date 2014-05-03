@@ -1,8 +1,8 @@
 /*
-© Copyright 2012 Jeremy Gross
+	© Copyright 2012 Jeremy Gross
 	jeremykentbgross@gmail.com
 	Distributed under the terms of the GNU Lesser GPL (LGPL)
-		
+	
 	This file is part of EmpathicCivGameEngine™.
 	
 	EmpathicCivGameEngine™ is free software: you can redistribute it and/or modify
@@ -23,18 +23,57 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 {
 	Constructor : function EntityComponent_Sprite()
 	{
+		var anAssetManager
+			,anAngle
+			;
+		
+		//call parent constructor
 		this.EntityComponent();
 		
-		this._position = ECGame.EngineLib.Point2D.create();//TODO this isn't used, but shouldn't use topleft of aabb either
-		
-		this._animations = ECGame.instance._myGameRules._myAnimations;//HACK!!!!!//TODO 'null'/default object!! (object ref?)
-		this._currentAnimation = 8;//TODO why 8?
+		//create animation instance
 		this._myAnimationInstance = new ECGame.EngineLib.Animation2DInstance();
-/*TODO should be commented out?*/this._myAnimationInstance.setAnimation(this._animations[0]);//TODO should be a null/default object
-		this._myAnimationInstance._myDepth = 1;		//HACK ALSO??
 		
-		//TODO frame knows filename, offset, collision rects, (sound?) events, etc //TODO move this note to the frame class?
-		//TODO ^^^ same kind of thing for map tiles?
+		//load all the animations:
+		anAssetManager = ECGame.instance.getAssetManager();
+		this._myAnimations =
+		[
+			anAssetManager.loadAnimation("Run_Right")
+			,anAssetManager.loadAnimation("Run_RightDown")
+			,anAssetManager.loadAnimation("Run_Down")
+			,anAssetManager.loadAnimation("Run_LeftDown")
+			,anAssetManager.loadAnimation("Run_Left")
+			,anAssetManager.loadAnimation("Run_LeftUp")
+			,anAssetManager.loadAnimation("Run_Up")
+			,anAssetManager.loadAnimation("Run_UpRight")
+			,anAssetManager.loadAnimation("Facing_Right")
+			,anAssetManager.loadAnimation("Facing_RightDown")
+			,anAssetManager.loadAnimation("Facing_Down")
+			,anAssetManager.loadAnimation("Facing_LeftDown")
+			,anAssetManager.loadAnimation("Facing_Left")
+			,anAssetManager.loadAnimation("Facing_LeftUp")
+			,anAssetManager.loadAnimation("Facing_Up")
+			,anAssetManager.loadAnimation("Facing_UpRight")
+		];
+		
+		//set the starting animation to idle facing right
+		this._myCurrentAnimation = 8;
+		this._myAnimationInstance.setAnimation(this._myAnimations[this._myCurrentAnimation]);
+		
+		//compute possible directions
+		anAngle = 0;
+		this._myDirections =
+		[
+			new ECGame.EngineLib.Point2D(Math.cos(anAngle), Math.sin(anAngle)),
+			new ECGame.EngineLib.Point2D(Math.cos(anAngle+=2*Math.PI/8), Math.sin(anAngle)),
+			new ECGame.EngineLib.Point2D(Math.cos(anAngle+=2*Math.PI/8), Math.sin(anAngle)),
+			new ECGame.EngineLib.Point2D(Math.cos(anAngle+=2*Math.PI/8), Math.sin(anAngle)),
+			new ECGame.EngineLib.Point2D(Math.cos(anAngle+=2*Math.PI/8), Math.sin(anAngle)),
+			new ECGame.EngineLib.Point2D(Math.cos(anAngle+=2*Math.PI/8), Math.sin(anAngle)),
+			new ECGame.EngineLib.Point2D(Math.cos(anAngle+=2*Math.PI/8), Math.sin(anAngle)),
+			new ECGame.EngineLib.Point2D(Math.cos(anAngle+=2*Math.PI/8), Math.sin(anAngle))
+		];
+
+		this._myAnimationInstance._myDepth = 1;		//HACK ALSO??
 	},
 	
 	Parents : [ECGame.EngineLib.EntityComponent],
@@ -46,12 +85,6 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 	
 	Definition :
 	{
-		init : function init(inAnimations)
-		{
-			this._animations = inAnimations;
-			this._myAnimationInstance.setAnimation(this._animations[0]);
-		},
-		
 		update : function update(inUpdateData)
 		{
 			var aFrameEvents, i;
@@ -74,9 +107,7 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			owner.registerListener('UpdatedPhysicsStatus', this);
 			owner.registerListener('EntityAddedToWorld', this);
 			owner.registerListener('EntityRemovedFromWorld', this);
-			
-			//TODO owner.event(getposition, myPos);
-			//todo add to scene graph
+			//TODO owner.event(getposition, myPos);??
 		},
 
 		onRemovedFromEntity : function()
@@ -87,10 +118,6 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			owner.deregisterListener('UpdatedPhysicsStatus', this);
 			owner.deregisterListener('EntityAddedToWorld', this);
 			owner.deregisterListener('EntityRemovedFromWorld', this);
-			
-			//todo remove from scenegraph
-			
-			//this._myOwningEntity = null;
 		},
 
 		onUpdatedPhysicsStatus : function onUpdatedPhysicsStatus(inEvent)
@@ -99,8 +126,6 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 				,anAnimProbibility
 				,aBestAnimProb
 				,aDirection
-				,angle
-				,aDirections
 				;
 				
 			if(this._myWorld)
@@ -108,47 +133,32 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 				this._myWorld.getSceneGraph().removeItem(this._myAnimationInstance);
 			}
 			
-			this._position = inEvent.position;
 			this._myAnimationInstance._myAnchorPosition = inEvent.boundingRect.getLeftTop();//inEvent.position;
 			
 			if(inEvent.velocity.length() < 0.9)
 			{
-				if(this._currentAnimation < 8)
+				if(this._myCurrentAnimation < 8)
 				{
-					this._currentAnimation += 8;
+					this._myCurrentAnimation += 8;
 				}
-				this._myAnimationInstance.setAnimation(this._animations[this._currentAnimation]);
 			}
 			else
 			{
 				aDirection = inEvent.velocity.unit();
-				angle = 0;
-				aDirections =	//TODO these should be class constants
-				[
-					new ECGame.EngineLib.Point2D(Math.cos(angle), Math.sin(angle)),
-					new ECGame.EngineLib.Point2D(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new ECGame.EngineLib.Point2D(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new ECGame.EngineLib.Point2D(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new ECGame.EngineLib.Point2D(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new ECGame.EngineLib.Point2D(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new ECGame.EngineLib.Point2D(Math.cos(angle+=2*Math.PI/8), Math.sin(angle)),
-					new ECGame.EngineLib.Point2D(Math.cos(angle+=2*Math.PI/8), Math.sin(angle))//,
-				];
 				anAnimProbibility = 0;
 				aBestAnimProb = 0;
 				for(i = 0; i < 8; ++i)
 				{
-					anAnimProbibility = aDirections[i].dot(aDirection);
+					anAnimProbibility = this._myDirections[i].dot(aDirection);
 					if(anAnimProbibility > aBestAnimProb)
 					{
 						aBestAnimProb = anAnimProbibility;
-						this._currentAnimation = i;
+						this._myCurrentAnimation = i;
 					}
 				}
-				this._myAnimationInstance.setAnimation(this._animations[this._currentAnimation]);
 			}
+			this._myAnimationInstance.setAnimation(this._myAnimations[this._myCurrentAnimation]);
 			
-			//TODO change renderable position everywhere it should change
 			if(this._myWorld)
 			{
 				this._myWorld.getSceneGraph().insertItem(this._myAnimationInstance);
@@ -173,16 +183,16 @@ ECGame.EngineLib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 		clearNetDirty : function clearNetDirty(){return;},
 		postSerialize : function postSerialize(){return;},
 		
-		cleanup : function cleanup(){return;},//TODO
-		serialize : function serialize(){return;},//TODO
+		cleanup : function cleanup(){return;},
+		serialize : function serialize(){return;},
 		
 		copyFrom : function copyFrom(inOther)
 		{
-			this._animations = inOther._animations;
-			this._currentAnimation = inOther._currentAnimation;
+			this._myAnimations = inOther._myAnimations;
+			this._myCurrentAnimation = inOther._myCurrentAnimation;
 			
 			this._myAnimationInstance = new ECGame.EngineLib.Animation2DInstance();
-			this._myAnimationInstance.setAnimation(this._animations[0]);
+			this._myAnimationInstance.setAnimation(this._myAnimations[0]);
 			this._myAnimationInstance._myDepth = inOther._myAnimationInstance._myDepth;
 		}
 	}

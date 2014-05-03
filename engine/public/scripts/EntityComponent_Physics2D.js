@@ -1,8 +1,8 @@
 /*
-© Copyright 2012 Jeremy Gross
+	© Copyright 2012 Jeremy Gross
 	jeremykentbgross@gmail.com
 	Distributed under the terms of the GNU Lesser GPL (LGPL)
-		
+	
 	This file is part of EmpathicCivGameEngine™.
 	
 	EmpathicCivGameEngine™ is free software: you can redistribute it and/or modify
@@ -27,12 +27,8 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 		this._myPosition = ECGame.EngineLib.Point2D.create(256, 256);
 		this._myVelocity = ECGame.EngineLib.Point2D.create();
 		
-		//TODO separate position from AABB in PhysicsSim2D
 		this._myAABB = ECGame.EngineLib.AABB2D.create(0, 0, 64, 64);
 		this._myAABB.setCenter(this._myPosition);
-		
-		//TODO make static? ser on !net?? how to set when added to world? get rid of it?
-		this._myRange = ECGame.EngineLib.AABB2D.create(0, 0, 65535, 65535);
 		
 		this._myPhysicsObject = null;
 	},
@@ -46,26 +42,27 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 	
 	Definition :
 	{
-		SerializeFormat :	//TODO part of Class def?
+		SerializeFormat :
 		[
 			{
-				name : '_myPosition',//??TODO Target Position, can set velocity towards this instead of the position
+				//TODO?? Target Position instead: can set velocity towards this instead of the position
+				//TODO?? somehow should do delta position instead??
+				name : '_myPosition',
 				net : true,
 				type : 'position',
-				min : null,	//this._myRange.getLeftTop(),
-				max : null	//this._myRange.getRightBottom(),
+				min : ECGame.EngineLib.Point2D.create(0, 0),
+				max : ECGame.EngineLib.Point2D.create(65535, 65535)
 			},
 			{
-				name : '_myVelocity',	//TODO not used atm???? (yes, it allows proper animation to play)
+				//TODO not used atm???? (yes, it allows proper animation to play)
+				name : '_myVelocity',
 				net : true,
-				type : 'position',//TODO type should be vector2 instead
-				min : ECGame.EngineLib.Point2D.create(-512,-512),	//TODO replace hack numbers
-				max : ECGame.EngineLib.Point2D.create(512,512)	//TODO replace hack numbers
+				type : 'position',
+				min : ECGame.EngineLib.Point2D.create(-512,-512),
+				max : ECGame.EngineLib.Point2D.create(512,512)
 			}
-			//TODO rect NOT net!
+			//TODO AABB2D NOT net!
 		],
-		
-		init : function init(){	return;	},//TODO needed?
 		
 		onAddedToEntity : function onAddedToEntity(/*inEvent*/)
 		{
@@ -75,9 +72,7 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 			anOwner.registerListener('RequestVelocity', this);
 			anOwner.registerListener('EntityAddedToWorld', this);
 			anOwner.registerListener('EntityRemovedFromWorld', this);
-			
 			anOwner.registerListener('SetPosition', this);
-			//TODO anOwner.event(getposition, myPos);??
 			
 			this._myOwningEntity.onEvent(
 				new ECGame.EngineLib.Events.UpdatedPhysicsStatus(
@@ -97,10 +92,7 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 			anOwner.deregisterListener('RequestVelocity', this);
 			anOwner.deregisterListener('EntityAddedToWorld', this);
 			anOwner.deregisterListener('EntityRemovedFromWorld', this);
-			
 			anOwner.deregisterListener('SetPosition', this);
-			
-			//this._myOwningEntity = null;
 		},
 		
 		cleanup : function cleanup(){return;},
@@ -111,29 +103,24 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 		
 		serialize : function serialize(inSerializer)
 		{
-			var aFormat;
-			
 			//serialize
-			aFormat = this.EntityComponent_Physics2D.SerializeFormat;
-			aFormat[0].min = this._myRange.getLeftTop();
-			aFormat[0].max = this._myRange.getRightBottom();
-			inSerializer.serializeObject(this, aFormat);
+			inSerializer.serializeObject(this, this.EntityComponent_Physics2D.SerializeFormat);
 			
 			//TODO serialize delta position 99% of time, and full position every so often
 			//TODO server side: make sure full position is within some reasonable range
-			
-			//TODO bool to serialize range (just like obj owner) so it can change to ideal size for its containing map
+			//TODO bool to serialize dynamic position range (just like obj owner) so it can change to ideal size for its containing map
 			//TODO examine client server feedback!!
+			
 			if(inSerializer.isReading())
 			{
 				this._myAABB.setCenter(this._myPosition);
 				if(this._myPhysicsObject)
 				{
 					this._myPhysicsObject.setAABB(this._myAABB);
-					//this._myPhysicsObject.requestVelocity(this._myVelocity);	//TODO sending input, physics master control, etc..
+					//this._myPhysicsObject.requestVelocity(this._myVelocity);//TODO send input, physics master control, etc..
 				}
 				
-				//set position and let everyone else know
+				//let everyone else know about new state
 				if(this._myOwningEntity)
 				{
 					this._myOwningEntity.onEvent(
@@ -160,7 +147,6 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 			this._myPhysicsObject.setAABB(this._myAABB);
 			this._myPhysicsObject.setActive();
 			this._myPhysicsObject.setOwner(this);
-			//TODO set the owner in the PhysObj for callbacks, triggers, etc?
 			
 			this._myOwningEntity.onEvent(
 				new ECGame.EngineLib.Events.UpdatedPhysicsStatus(
@@ -213,7 +199,6 @@ ECGame.EngineLib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create({
 			this._myPosition.copyFrom(inOther._myPosition);
 			this._myVelocity.copyFrom(inOther._myVelocity);
 			this._myAABB.copyFrom(inOther._myAABB);
-			//this._myRange.copyFrom(inOther._myRange);//TODO used? Set when added to world?
 		}
 	}
 });

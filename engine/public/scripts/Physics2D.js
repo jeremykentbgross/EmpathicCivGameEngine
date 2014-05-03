@@ -24,7 +24,7 @@
 //separate broad/narrow/resolution
 //rays
 //fix update (events)
-
+//TODO separate position from AABB in PhysicsSim2D
 
 //TODO extract colidable parent class
 ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({

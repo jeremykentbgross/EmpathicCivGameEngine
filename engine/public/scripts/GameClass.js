@@ -32,6 +32,7 @@ ECGame.EngineLib.Class.create({
 	ChainUp : [],
 	ChainDown : [],
 	//TODO? mustOverride //pure virtual
+	//TODO: SerializeFormat:
 	Definition :
 	{
 		

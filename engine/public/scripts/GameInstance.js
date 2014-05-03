@@ -338,6 +338,8 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			
 			//TODO also needs to manage prefabs?
 			
+			//Init Asset Manager
+			this._myAssetManager = ECGame.EngineLib.AssetManager.create();
 			
 			if(ECGame.Settings.Network.isServer)
 			{
@@ -410,9 +412,6 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 						//TODO
 					break;*/
 				}
-			
-				//Init Asset Manager
-				this._myAssetManager = ECGame.EngineLib.AssetManager.create();
 				
 				//Init Sound
 				this._mySoundSystem = ECGame.EngineLib.SoundSystem.create();

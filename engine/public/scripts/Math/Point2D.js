@@ -42,6 +42,14 @@ ECGame.EngineLib.Point2D.prototype.equal = function equal(inOther)
 
 
 
+ECGame.EngineLib.Point2D.prototype.set = function set(inX, inY)
+{
+	this.myX = inX || 0;
+	this.myY = inY || 0;
+};
+
+
+
 ECGame.EngineLib.Point2D.prototype.clone = function clone()
 {
 	return new ECGame.EngineLib.Point2D(this.myX, this.myY);

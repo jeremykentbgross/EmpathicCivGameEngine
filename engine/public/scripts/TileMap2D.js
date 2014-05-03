@@ -507,7 +507,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 				;
 				
 			inSerializer.serializeObject(this, this.TileMap2D._serializeFormat);
-			
+			//TODO runtime length encoding!!!!!!!!!!!!
 			if(!inSerializer.isNetMode() && !this._myUsingNetViews)
 			{
 				if(inSerializer.isReading())
