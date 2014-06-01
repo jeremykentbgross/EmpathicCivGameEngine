@@ -42,16 +42,25 @@ ECGame.EngineLib.Renderable2D = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
-		init : function init(inAABB2D, inDepth, inAnchorPosition)
+		init : function init(inAABB2D, inDepth, inAnchorPosition)//TODO is this used??
 		{
 			this._myAABB = inAABB2D;
 			this._myDepth = inDepth;
 			this._myAnchorPosition = inAnchorPosition;
-		},
+		}
 		
-		render : function render(/*inGraphics*/)//abstract!!
+		,render : function render(/*inGraphics*/)//abstract!!
 		{
 			console.assert(false, "This method must be overridden");
+		}
+		
+		,getAnchorPosition : function getAnchorPosition()
+		{
+			return this._myAnchorPosition;
+		}
+		,setAnchorPosition : function setAnchorPosition(inAnchorPosition)
+		{
+			this._myAnchorPosition = inAnchorPosition;
 		}
 	}
 });

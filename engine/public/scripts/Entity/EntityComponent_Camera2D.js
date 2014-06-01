@@ -23,11 +23,11 @@ ECGame.EngineLib.EntityComponent_Camera2D = ECGame.EngineLib.Class.create({
 	Constructor : function EntityComponent_Camera2D()
 	{
 		this.EntityComponent();
-		this.Camera2D();	//TODO contain camera instead of inheriting it?
 		
-		this._myPosition = null;//TODO remove this, or keep it??
+		this._myCamera = ECGame.EngineLib.Camera2D.create();
+		this._myPosition = ECGame.EngineLib.Point2D.create();
 	},
-	Parents : [ECGame.EngineLib.EntityComponent, ECGame.EngineLib.Camera2D],
+	Parents : [ECGame.EngineLib.EntityComponent],
 	flags : { netDynamic : true },
 	ChainUp : null,
 	ChainDown : null,
@@ -41,10 +41,9 @@ ECGame.EngineLib.EntityComponent_Camera2D = ECGame.EngineLib.Class.create({
 			owner.registerListener('UpdatedPhysicsStatus', this);
 			owner.registerListener('EntityAddedToWorld', this);
 			owner.registerListener('EntityRemovedFromWorld', this);
-			
-			//TODO owner.event(getposition, myPos);??
-		},
-		onRemovedFromEntity : function onRemovedFromEntity(/*inEvent*/)
+		}
+		
+		,onRemovedFromEntity : function onRemovedFromEntity(/*inEvent*/)
 		{
 			var owner = this._myOwningEntity;//inEvent.entity;
 			
@@ -52,43 +51,62 @@ ECGame.EngineLib.EntityComponent_Camera2D = ECGame.EngineLib.Class.create({
 			owner.deregisterListener('UpdatedPhysicsStatus', this);
 			owner.deregisterListener('EntityAddedToWorld', this);
 			owner.deregisterListener('EntityRemovedFromWorld', this);
-		},
+		}
 		
-		//set<classname>NetDirty
-		clearNetDirty : function clearNetDirty(){return;},
-		postSerialize : function postSerialize(){return;},
-		
-		cleanup : function cleanup(){return;},
-		serialize : function serialize(){return;},
-		
-		onEntityAddedToWorld : function onEntityAddedToWorld(inEvent)
+		,onEntityAddedToWorld : function onEntityAddedToWorld(inEvent)
 		{
 			this._myMap = inEvent.world.getMap();
-			//TODO register as a camera in/with the world??
 			
 			if(this.getNetOwnerID() === ECGame.instance.getLocalUser().userID)
 			{
 				inEvent.world.setCamera(this);
 			}
-		},
+		}
 		
-		onEntityRemovedFromWorld : function onEntityRemovedFromWorld(/*inEvent*/)
+		,onEntityRemovedFromWorld : function onEntityRemovedFromWorld(/*inEvent*/)
 		{
-			//TODO unregister as a camera entity with/in the world??
 			this._myMap = null;
-		},
+		}
 		
-		getTargetPosition : function getTargetPosition()
+		,onUpdatedPhysicsStatus : function onUpdatedPhysicsStatus(inEvent)
 		{
-			return this._myPosition;
-		},
-		
-		onUpdatedPhysicsStatus : function onUpdatedPhysicsStatus(inEvent)
-		{
-			this._myPosition = inEvent.position;
+			this._myPosition.copyFrom(inEvent.position);
 			this.centerOn(this._myPosition, this._myMap);
-		},
+		}
 		
-		copyFrom : function copyFrom(/*inOther*/){return;}
+		//set<classname>NetDirty
+		,clearNetDirty : function clearNetDirty(){return;}
+		,postSerialize : function postSerialize(){return;}
+		,copyFrom : function copyFrom(/*inOther*/){return;}
+		,cleanup : function cleanup(){return;}
+		,serialize : function serialize(){return;}
+		
+		
+		////////////////////////////////////////////
+		//camera wrap functions/////////////////////
+		,centerOn : function centerOn(inTargetCenter, inMap)
+		{
+			this._myCamera.centerOn(inTargetCenter, inMap);
+			this._myOwningEntity.onEvent(
+				new ECGame.EngineLib.Events.CameraVolumeUpdate(
+					this
+					,this.getCaptureVolumeAABB2D()
+				)
+			);
+		}
+		,getTargetPosition : function getTargetPosition()
+		{
+			return this._myPosition;	//return this._myCamera.getTargetPosition();
+		}
+		,getCaptureVolumeAABB2D : function getCaptureVolumeAABB2D()
+		{
+			return this._myCamera.getCaptureVolumeAABB2D();
+		}
+		,debugDraw : function debugDraw(inGraphics)
+		{
+			this._myCamera.debugDraw(inGraphics);
+		}
+		//camera wrap functions/////////////////////
+		////////////////////////////////////////////
 	}
 });

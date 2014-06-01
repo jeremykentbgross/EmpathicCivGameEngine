@@ -277,6 +277,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	include(inPublicEnginePath + "scripts/Animation2D/Animation2DFrame.js");
 	include(inPublicEnginePath + "scripts/Animation2D/Animation2D.js");
 	include(inPublicEnginePath + "scripts/Animation2D/Animation2DInstance.js");
+	include(inPublicEnginePath + "scripts/Animation2D/LayeredAnimation2DInstances.js");
 	
 	include(inPublicEnginePath + "scripts/ParticleEffect.js");
 	

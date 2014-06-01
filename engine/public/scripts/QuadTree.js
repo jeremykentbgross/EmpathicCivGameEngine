@@ -25,7 +25,7 @@ ECGame.EngineLib.QuadTreeItem = ECGame.EngineLib.Class.create({
 	Constructor : function QuadTreeItem(inAABB)
 	{
 		this._myAABB = inAABB;
-		this._myOwningNodes = [];
+		this._myOwningNodes = [];//TODO use these, examine uses
 		
 		this._myID = ECGame.EngineLib.QuadTreeItem._ourNextID++;
 	},

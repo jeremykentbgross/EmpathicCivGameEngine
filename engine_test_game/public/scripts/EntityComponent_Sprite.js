@@ -135,7 +135,7 @@ ECGame.Lib.EntityComponent_Sprite = ECGame.EngineLib.Class.create(
 			
 			this._myAnimationInstance._myAnchorPosition = inEvent.boundingRect.getLeftTop();//inEvent.position;
 			
-			if(inEvent.velocity.length() < 0.9)
+			if(inEvent.velocity.getLength() < 0.9)
 			{
 				if(this._myCurrentAnimation < 8)
 				{

@@ -66,6 +66,12 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 				aDestroyInstanceList,
 				//binary buffer
 				aBinaryBuffer;
+			
+			//if we are not locally identified yet, don't update netgroup (TODO call from parent caller?)
+			if(ECGame.instance.getLocalUser().userID === ECGame.EngineLib.User.USER_IDS.NEW_USER)
+			{
+				return;
+			}
 				
 			//send all new, dirty, and destroyed instances to all users
 			for(aCurrentUserIndex in this._myUsers)
@@ -121,11 +127,18 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 					}
 				}
 				
-				if(aNewInstanceList.length !== 0
+				/*
+				TODO:
+				//Send if:
+				//	X - data
+				//	0 - ack
+				//	0 - time since last send
+				if(
+					aNewInstanceList.length !== 0
 					|| aDirtyInstanceList.length !== 0
 					|| aDestroyInstanceList.length !== 0
 				)
-				{
+				{*/
 					aBinaryBuffer = this._myNetwork.serializeOut(
 						aCurrentUser,
 						aNewInstanceList,
@@ -133,7 +146,7 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 						aDestroyInstanceList
 					);
 					aCurrentUser.mySocket.send(aBinaryBuffer);
-				}
+				/*}*/
 			}
 			
 			//clear our lists for the next frame

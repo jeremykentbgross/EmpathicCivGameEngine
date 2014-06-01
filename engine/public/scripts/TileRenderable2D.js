@@ -37,7 +37,7 @@ ECGame.EngineLib.TileRenderable2D = ECGame.EngineLib.Class.create({
 			//set in parent class init (not called from here)
 			this._myAABB = inAABB2D;
 			this._myDepth = inDepth;
-			this._myAnchorPosition = inAnchorPosition;
+			this.setAnchorPosition(inAnchorPosition);
 			
 			//class specific
 			this._myTileDescription = inTileDescription;
@@ -60,7 +60,7 @@ ECGame.EngineLib.TileRenderable2D = ECGame.EngineLib.Class.create({
 			
 			inGraphics.drawImage(
 				this._myTileDescription.getImage(),
-				this._myAnchorPosition.subtract(this._myTileDescription.getAnchor())//TODO src rect??
+				this.getAnchorPosition().subtract(this._myTileDescription.getAnchor())//TODO src rect??
 			);
 		}
 	}

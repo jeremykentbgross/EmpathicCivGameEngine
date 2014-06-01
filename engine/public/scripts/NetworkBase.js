@@ -164,6 +164,20 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				max : ECGame.EngineLib.User.USER_IDS.MAX_EVER
 			},
 			{
+				name : 'frame',
+				type : 'int',
+				net : true,
+				min : 0,
+				max : ECGame.Settings.Network.maxFrameWrapForPing
+			},
+			{
+				name : 'acknowledgingFrame',
+				type : 'int',
+				net : true,
+				min : 0,
+				max : ECGame.Settings.Network.maxFrameWrapForPing
+			},
+			{
 				name : 'newObjects',
 				type : 'int',
 				net : true,
@@ -202,9 +216,6 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				max : 4096	//note: this assumes a max of 4096 objects of any given type.  may want max items per type in the future
 			}
 		];
-		
-		
-		
 	},
 	Parents : [ECGame.EngineLib.EventSystem],
 	flags : {},
@@ -236,6 +247,11 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				aClassName,
 				anInstanceMap,
 				anInstanceID;
+				
+			if(!ECGame.Settings.Network.isServer && ECGame.Settings.isDebugDraw_NetworkMessages())
+			{
+				this.debugDraw(ECGame.instance.getGraphics());
+			}
 			
 			for(aNetGroupIndex in this._myNetGroups)
 			{
@@ -309,7 +325,9 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 			
 			this._mySerializer.init({BINARY_MODE : true, NET_MODE : false});
 			
-			aMessageHeader.userID = ECGame.instance.getLocalUser().userID;
+			aMessageHeader.userID = ECGame.instance.getLocalUser().userID;	//the local user is sending the packet
+			aMessageHeader.frame = inUser.createUnacknowledgedNetFrame();
+			aMessageHeader.acknowledgingFrame = inUser.myLastRecievedFrame;	//the last frame received from the target
 			aMessageHeader.newObjects = Math.min(this._ourMaxItemsPerMessage, inNewInstanceList.length);
 			aMessageHeader.dirtyObjects = Math.min(this._ourMaxItemsPerMessage, inDirtyInstanceList.length);
 			aMessageHeader.destroyObjects = Math.min(this._ourMaxItemsPerMessage, inDestroyInstanceList.length);
@@ -392,13 +410,15 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 			{
 				this._mySerializer.serializeObject(aMessageHeader, this._ourMessageHeaderFormat);
 				
-				//check that the username matches the socket user
+				//check that the username matches the user on the socket
 				console.assert(
-					(aMessageHeader.userID === inUser.userID
-					//|| inUser.userID === ECGame.EngineLib.User.USER_IDS.SERVER
-					)
-					,"Net user not identifying self correctly: " + (aMessageHeader.userID + ' != ' + inUser.userID)
-				);//TODO should this assert or return?  Where is it caught? can we disrupt lots of the server function by asserting here
+					aMessageHeader.userID === inUser.userID
+					,"Net user not identifying self correctly: "
+						+ (aMessageHeader.userID + ' != ' + inUser.userID)
+						+ " " + JSON.stringify(aMessageHeader, null, '\t')
+				);
+				
+				inUser.acknowledgedNetFrame(aMessageHeader);
 				
 				//for all the new objects:
 				for(i = 0; i < aMessageHeader.newObjects; ++i)

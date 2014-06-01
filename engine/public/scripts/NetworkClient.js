@@ -52,11 +52,21 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			this._myWebsocket.onmessage = this._onMessage;
 			this._myWebsocket.onerror = this._onError;
 			this._myWebsocket.myECGameSocket = this;
+			
+			//Other side of the connection is the server.
+			this._myUser = new ECGame.EngineLib.User("Server", ECGame.EngineLib.User.USER_IDS.SERVER);
+		},
+		
+		getUser : function getUser()
+		{
+			return this._myUser;
 		},
 		
 		_onOpen : function _onOpen(/*inEvent*/)//_onConnectedToServer
 		{
-			var aThis;	//var i, binary;//HACK
+			var aThis
+				,aLocalUser
+				;
 			
 			aThis = this.myECGameSocket;
 			
@@ -65,29 +75,20 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 				console.info("Connected to Server, awaiting ID validation...");
 			}
 			
-			//Other side of the connection is the server.
-			aThis._myUser = new ECGame.EngineLib.User("Server", ECGame.EngineLib.User.USER_IDS.SERVER);
 			aThis._myUser.mySocket = aThis;
 			
 			//TODO handle removing this user on disconnect!
 			ECGame.instance.getNetwork().getNetGroup('master_netgroup').addUser(aThis._myUser);
 			
 			//Send my ID to server
-			aThis.send(JSON.stringify(ECGame.instance.getLocalUser()));
-			
-			////////
-			
-			//HACK!!!!
-			//console.trace();
-			//console.log(inEvent);
-		/*	aThis.send("Hello!");
-			
-			binary = new Uint8Array(20);
-			for(i = 0; i < binary.length; ++i) {
-				binary[i] = Math.floor((Math.random() * 256));
-			}
-			//this._myWebsocket.send(binary.buffer);
-			aThis.send(binary);*/
+			aLocalUser = ECGame.instance.getLocalUser();
+			aThis.send(JSON.stringify(
+				{
+					userName : aLocalUser.userName,
+					userID : aLocalUser.userID,
+					reconnectKey : aLocalUser.reconnectKey
+				}
+			));
 		},
 		
 		_onClose : function _onClose(/*inEvent*/)//_onDisconnectedFromServer
@@ -288,6 +289,11 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 		getName : function getName()
 		{
 			return 'NetworkClient';
+		}
+		
+		,debugDraw : function debugDraw(inGraphics)
+		{
+			this._mySocket.getUser().debugDraw(inGraphics);
 		}
 	}
 });

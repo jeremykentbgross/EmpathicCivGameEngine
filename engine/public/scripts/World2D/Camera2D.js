@@ -37,14 +37,7 @@ ECGame.EngineLib.Camera2D = ECGame.EngineLib.Class.create({
 	
 	Definition :
 	{
-		/*init : function init(inWidth, inHeight)
-		{
-			if(inWidth &&inHeight)
-			{
-				this._myCaptureVolume = ECGame.EngineLib.AABB2D.create(0, 0, inWidth, inHeight);
-			}
-		}
-		,*/centerOn : function centerOn(inTargetCenter, inMap)
+		centerOn : function centerOn(inTargetCenter, inMap)
 		{
 			var aLeftTop
 			;
@@ -72,6 +65,11 @@ ECGame.EngineLib.Camera2D = ECGame.EngineLib.Class.create({
 			return this._myCaptureVolume.getCenter();
 		}
 		
+		,getCaptureVolumeAABB2D : function getCaptureVolumeAABB2D()
+		{
+			return this._myCaptureVolume.clone();
+		}
+		
 		,debugDraw : function debugDraw(inGraphics)
 		{
 			var aCameraTarget
@@ -94,11 +92,6 @@ ECGame.EngineLib.Camera2D = ECGame.EngineLib.Class.create({
 			inGraphics.setFillStyle(ECGame.Settings.Debug.CameraTarget_DrawColor);
 			//draw the target
 			inGraphics.fillRect(aCameraTarget);
-		}
-		
-		,getCaptureVolumeAABB2D : function getCaptureVolumeAABB2D()
-		{
-			return this._myCaptureVolume.clone();
 		}
 	}
 });

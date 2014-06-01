@@ -27,6 +27,7 @@ ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 		this._myAnimation = null;
 		this._myCurrentFrame = 0;
 		this._myAccumulatedTime = 0;
+		this._myAnimationSpeed = 1;
 
 		//TODO flags (pong, repeat, callback, etc)
 
@@ -44,7 +45,11 @@ ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 			
 			anUpdateStartFrame = this._myCurrentFrame;
 			
-			this._myAccumulatedTime += inUpdateData.myAverageDeltaTime;
+			this._myAccumulatedTime += inUpdateData.myAverageDeltaTime * this._myAnimationSpeed;
+			while(this._myAccumulatedTime < 0)
+			{
+				this._myAccumulatedTime += this._myAnimation.getLength();
+			}
 			
 			//Note: accum / 1000 => seconds; seconds * frameRate => frames
 			this._myCurrentFrame = Math.floor((this._myAccumulatedTime / 1000) * this._myAnimation.getFrameRate());
@@ -69,9 +74,14 @@ ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 			}
 		},
 		
+		setAnimationSpeed : function setAnimationSpeed(inSpeed)
+		{
+			this._myAnimationSpeed = inSpeed;
+		},
+		
 		getAABB2D : function getAABB2D()
 		{
-			//TODO make set function for _myAnchorPosition so this can be updated ONLY when it is needed! This is SUPER unoptimal!
+			//TODO make set function for _myAnchorPosition so this can be updated ONLY when it is needed! This is unoptimal!
 			return ECGame.EngineLib.AABB2D.create(
 				this._myAABB.myX + this._myAnchorPosition.myX,
 				this._myAABB.myY + this._myAnchorPosition.myY,

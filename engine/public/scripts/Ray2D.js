@@ -51,7 +51,7 @@ ECGame.EngineLib.Ray2D = ECGame.EngineLib.Class.create({
 			this._myV = this._myP1.subtract(this._myP0);
 			
 			this._myT = 0;	//starting at 0 makes sure the ray goes the right direction in the first node.
-			this._myMaxT = this._myV.length();
+			this._myMaxT = this._myV.getLength();
 			
 			this._myV = this._myV.scale((1.0 / this._myMaxT));	//the same as v.normalize(), but reusing sqrt from length above
 			

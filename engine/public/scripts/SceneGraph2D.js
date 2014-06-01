@@ -99,7 +99,7 @@ ECGame.EngineLib.SceneGraph2D.prototype.render = function render(inGraphics)
 			if(aFrameCount > inItem._myLastFrameDrawn)
 			{
 				//calculate depth sorting position for this frame
-				inItem._myScreenPos = inItem._myAnchorPosition.subtract(aCameraRect.getLeftTop());
+				inItem._myScreenPos = inItem.getAnchorPosition().subtract(aCameraRect.getLeftTop());
 				inItem._myDrawOrderHelper = ECGame.EngineLib.Point2D.create(
 					inItem._myScreenPos.dot(aThis._rotMatrixRow1),
 					inItem._myScreenPos.dot(aThis._rotMatrixRow2)
@@ -152,7 +152,7 @@ ECGame.EngineLib.SceneGraph2D.prototype._debugDraw = function _debugDraw(inGraph
 	for(i in inRenderables)
 	{
 		aCurrentRenderable = inRenderables[i];
-		aScreenPosition = aCurrentRenderable._myAnchorPosition;
+		aScreenPosition = aCurrentRenderable.getAnchorPosition();
 		
 		aStringDrawOrder = String(i);
 		aStringDistance = '';

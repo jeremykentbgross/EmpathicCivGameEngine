@@ -120,14 +120,14 @@ ECGame.EngineLib.Point2D.prototype.min = function min(inOther)
 
 
 
-ECGame.EngineLib.Point2D.prototype.lengthSquared = function lengthSquared()
+ECGame.EngineLib.Point2D.prototype.getLengthSquared = function getLengthSquared()
 {
 	return this.myX * this.myX + this.myY * this.myY;
 };
 
 
 
-ECGame.EngineLib.Point2D.prototype.length = function length()
+ECGame.EngineLib.Point2D.prototype.getLength = function getLength()
 {
 	return Math.sqrt(this.myX * this.myX + this.myY * this.myY);
 };
@@ -167,3 +167,83 @@ ECGame.EngineLib.Point2D.prototype.floor = function floor()
 {
 	return new ECGame.EngineLib.Point2D(Math.floor(this.myX), Math.floor(this.myY));
 };
+
+
+
+ECGame.EngineLib.Point2D.prototype.findClosestVector = function findClosestVector(inVectorList)
+{
+	var aVectorProbibility
+		,aBestProbibility
+		,aThisUnitVector
+		,anIndex
+		,i
+		;
+	
+	aThisUnitVector = this.unit();
+	
+	aVectorProbibility = 0;
+	aBestProbibility = 0;
+	anIndex = -1;
+	
+	for(i = 0; i < inVectorList.length; ++i)
+	{
+		aVectorProbibility = inVectorList[i].dot(aThisUnitVector);
+		if(aVectorProbibility > aBestProbibility)
+		{
+			aBestProbibility = aVectorProbibility;
+			anIndex = i;
+		}
+	}
+	
+	return anIndex;
+};
+
+
+
+ECGame.EngineLib.Point2D.prototype.getClosest8DirectionIndex = function getClosest8DirectionIndex()
+{
+	return this.findClosestVector(ECGame.EngineLib.Point2D.my8Directions);
+};
+
+
+
+ECGame.EngineLib.Point2D.prototype.getClosest8Direction = function getClosest8Direction()
+{
+	return ECGame.EngineLib.Point2D.get8DirectionFromIndex(this.getClosest8DirectionIndex());
+};
+
+
+
+ECGame.EngineLib.Point2D.get8DirectionFromIndex = function get8DirectionFromIndex(inIndex)
+{
+	if(inIndex === -1)
+	{
+		return new ECGame.EngineLib.Point2D();
+	}
+	return this.my8Directions[inIndex].clone();
+};
+
+
+
+ECGame.EngineLib.Point2D.setupStaticData = function setupStaticData()
+{
+	var anAngle
+		,aDelta
+		;
+	
+	anAngle = 0;
+	aDelta = 2 * Math.PI / 8;
+	
+	this.my8Directions =
+	[
+		new ECGame.EngineLib.Point2D(Math.cos(anAngle), Math.sin(anAngle)),
+		new ECGame.EngineLib.Point2D(Math.cos(anAngle+=aDelta), Math.sin(anAngle)),
+		new ECGame.EngineLib.Point2D(Math.cos(anAngle+=aDelta), Math.sin(anAngle)),
+		new ECGame.EngineLib.Point2D(Math.cos(anAngle+=aDelta), Math.sin(anAngle)),
+		new ECGame.EngineLib.Point2D(Math.cos(anAngle+=aDelta), Math.sin(anAngle)),
+		new ECGame.EngineLib.Point2D(Math.cos(anAngle+=aDelta), Math.sin(anAngle)),
+		new ECGame.EngineLib.Point2D(Math.cos(anAngle+=aDelta), Math.sin(anAngle)),
+		new ECGame.EngineLib.Point2D(Math.cos(anAngle+=aDelta), Math.sin(anAngle))
+	];
+};
+ECGame.EngineLib.Point2D.setupStaticData();

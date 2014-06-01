@@ -148,7 +148,7 @@ ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 		requestVelocity : function requestVelocity(inVelocity)
 		{
 			this._myVelocity.copyFrom(inVelocity);
-			if(this._myVelocity.lengthSquared() > 0.01)
+			if(this._myVelocity.getLengthSquared() > 0.01)
 			{
 				this.setActive();
 			}

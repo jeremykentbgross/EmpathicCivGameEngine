@@ -193,11 +193,11 @@ ECGame.EngineLib.Events.Input = ECGame.EngineLib.Class.create({
 		
 		if(inMousePosition)
 		{
-			this.mouseLoc = inMousePosition.clone();//TODO rename mouseLoc to mousePos
+			this.myMousePosition = inMousePosition.clone();
 		}
 		else
 		{
-			this.mouseLoc = new ECGame.EngineLib.Point2D();
+			this.myMousePosition = new ECGame.EngineLib.Point2D();
 		}
 		this.buttons = inButtons || {};
 		this.keys = inKeys || {};
@@ -474,6 +474,29 @@ ECGame.EngineLib.Events.PlaySound = ECGame.EngineLib.Class.create({
 	}
 });
 //Sound Events//////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+//Camera////////////////////////////////////////////////////////////////////////////////
+ECGame.EngineLib.Events.CameraVolumeUpdate = ECGame.EngineLib.Class.create({
+	Constructor : function CameraVolumeUpdate(inCameraComponent, inAABB2D)
+	{
+		this.GameEventBase('onCameraVolumeUpdate');
+		this.myCameraComponent = inCameraComponent;
+		this.myAABB2D = inAABB2D;
+	},
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition :
+	{
+		copyFrom : function copyFrom(/*inOther*/){return;}//TODO
+	}
+});
+//Camera////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 
 

@@ -97,6 +97,8 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 			inWebSocket.on('error', this._onError);
 			inWebSocket.on('close', this._onClose);
 			inWebSocket.on('message', this._onMessage);
+			//inWebSocket.on('ping', function(){console.info(arguments)});
+			//inWebSocket.on('pong', function(){console.info(arguments)});
 		},
 		
 		_onOpen : function _onOpen()

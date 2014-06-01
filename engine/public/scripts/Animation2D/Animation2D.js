@@ -74,6 +74,10 @@ ECGame.EngineLib.Animation2D = ECGame.EngineLib.Class.create({
 		{
 			return this._myAnimationFrames.length;
 		},
+		getLength : function getLength()
+		{
+			return this.getFrameCount() / this.getFrameRate();
+		},
 		getFrameEvents : function getFrameEvents(inCurrentFrame)
 		{
 			return this._myAnimationFrames[inCurrentFrame].getFrameEvents();
