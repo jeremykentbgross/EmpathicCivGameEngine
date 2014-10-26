@@ -103,9 +103,6 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 		
 		_onOpen : function _onOpen()
 		{
-			/*var aThis;
-			aThis = this.myECGameSocket;*/
-			
 			console.trace();
 			console.log(arguments);
 		},
@@ -116,24 +113,32 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 			
 			aThis = this.myECGameSocket;
 			
-			//console.trace();
-			//console.log(arguments);
-			
 			if(ECGame.Settings.isDebugPrint_NetworkMessages())
 			{
 				console.info("Lost Client! " + aThis._myUser);
-				console.log(inCode, inMessage);//Probably going to be annoying, but clears up JSLint for the moment
+				console.log(inCode, inMessage/*, arguments*/);//Probably going to be annoying, but clears up JSLint for the moment
 			}
-			
-			//TODO broadcast chat command
-			//aThis._listenSocket.sockets.emit('msg', "User Disconnected: " + this.gameUser.userName);
+			//HACK:
+			if(ECGame.Settings.DEBUG
+			//	&& ECGame.Settings.Debug.NetworkMessages_Print	//TODO should have levels for net debug print
+			)
+			{
+				console.info("Lost Client!", arguments);
+			}
 			
 			aThis._myUser.mySocket = null;
 			
+			//Note: use to have only one netgroup that was joined by all by default.
+			//	removed it because it causes unneeded network sends at this time.  May want it back later.
+			//ECGame.instance.getNetwork().getNetGroup('master_netgroup').removeUser(aThis._myUser);
+
 			//TODO see if this user is considered properly connected/id'ed first..
 			aThis._myNetwork.onEvent(new ECGame.EngineLib.Events.ClientDisconnected(aThis._myUser));//TODO get rid of new!!!
 			
 			aThis._myNetwork._removeSocket(aThis);
+			
+			//TODO broadcast chat command
+			//aThis._listenSocket.sockets.emit('msg', "User Disconnected: " + this.gameUser.userName);
 		},
 		
 		_onMessage : function _onMessage(inMessage/*, inFlags*/)
@@ -236,6 +241,9 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 					}
 					
 					aThis._myUser.mySocket = aThis;
+					//Note: use to have only one netgroup that was joined by all by default.
+					//	removed it because it causes unneeded network sends at this time.  May want it back later.
+					//ECGame.instance.getNetwork().getNetGroup('master_netgroup').addUser(aThis._myUser);
 					aThis._myNetwork.onEvent(new ECGame.EngineLib.Events.IdentifiedUser(aThis._myUser));
 				}
 				else
@@ -268,6 +276,12 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 			}
 			
 			//TODO if not connected, queue send data to user object to resend later??
+			
+			if(this._myWebsocket.readyState !== 1/*ie WebSocket.OPEN*/)
+			{
+				console.log("Socket Closed, not sending data.");//TODO only print on debug?
+				return;
+			}
 			
 			this._myWebsocket.send(
 				inData//.buffer
@@ -358,7 +372,12 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
-		getName : function getName()
+		init : function init()
+		{
+			console.info("Network Game Server Started");
+		}
+		
+		,getName : function getName()
 		{
 			return 'NetworkServer';
 		},

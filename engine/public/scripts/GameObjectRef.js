@@ -19,7 +19,14 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//todo type checking version so ref is of a type known to class?
+/*
+TODO??
+	-get/set property (as value or string)
+	-toString method
+Note: would probably have to use https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty at owner level
+	At owner level defeats purpose
+*/
+//TODO type checking version so ref is of a type known to class?
 ECGame.EngineLib.GameObjectRef = function GameObjectRef(inPathOrValue)
 {
 	this._path = null;
@@ -60,6 +67,7 @@ ECGame.EngineLib.GameObjectRef.prototype.deref = function deref()
 		//if !valid path
 		if(pathTokens.length !== 2)
 		{
+			console.error("Invalid path: " + this._path);
 			return null;
 		}
 		//todo error/warn otherwise
@@ -68,7 +76,18 @@ ECGame.EngineLib.GameObjectRef.prototype.deref = function deref()
 		if(objectClass)
 		{
 			this._value = objectClass.getInstanceRegistry().findByName(pathTokens[1]);
-			this._path = null;
+			if(this._value)
+			{
+				this._path = null;
+			}
+			else
+			{
+				console.error("No object " + pathTokens[1] + " in " + this._path);
+			}
+		}
+		else
+		{
+			console.error("No Class named: " + pathTokens[0]);
 		}
 	}
 	
@@ -78,12 +97,23 @@ ECGame.EngineLib.GameObjectRef.prototype.deref = function deref()
 		if(objectClass)
 		{
 			this._value = objectClass.getInstanceRegistry().findByID(this.instanceID);
-			this.classID = -1;
-			this.instanceID = -1;
+			if(this._value)
+			{
+				this.classID = -1;
+				this.instanceID = -1;
+			}
+			else
+			{
+				console.error("No Object: " + objectClass.getName() + " with ID " + this.instanceID);
+			}
+		}
+		else
+		{
+			console.error("No classID: " + this.classID);
 		}
 	}
 	
-		
+	
 	return this._value;
 };
 

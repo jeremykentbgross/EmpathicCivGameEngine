@@ -28,12 +28,12 @@ ECGame.EngineLib.TimerUpdateData = function TimerUpdateData(
 	,inFrameTime
 )
 {
-	this.myDeltaTime = inDeltaTime;
-	this.myAverageDeltaTime = inAverageDeltaTime;
-	this.myFrameCount = inFrameCount;
-	this.myFrameTime = inFrameTime;
+	this.myDeltaTime = inDeltaTime || 0;
+	this.myAverageDeltaTime = inAverageDeltaTime || 1;
+	this.myFrameCount = inFrameCount || 0;
+	this.myFrameTime = inFrameTime || 0;
 	
-	this.myFPS = (1000 / inAverageDeltaTime).toFixed(3);
+	this.myFPS = (1000 / this.myAverageDeltaTime).toFixed(3);
 };
 
 
@@ -46,6 +46,8 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 		this._myFrameTimes = [];
 		this._myIntervalHandle = null;
 		this._myTimerCallbacks = ECGame.EngineLib.LinkedListNode.create();
+		
+		this._myLastUpdateData = new ECGame.EngineLib.TimerUpdateData();
 	},
 	Parents : [],
 	flags : {},
@@ -60,6 +62,10 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 		,getFrameTime : function getFrameTime()
 		{
 			return this._myFrameTime;
+		}
+		,getCurrentTime : function getCurrentTime()
+		{
+			return (new Date()).getTime();
 		}
 		
 		,setTimerCallback : function setTimerCallback(inTimeDelay, inCallback)
@@ -80,8 +86,12 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 
 		start : function start()
 		{
-			var i;
+			var aTargetMsPerFrame
+				,i
+				;
 				
+			aTargetMsPerFrame = 1000 / ECGame.Settings.Timer.targetFPS;
+			
 			this._myFrameTime = 0;
 			this._myFrameCount = 0;
 			this._myFrameTimes = [];
@@ -109,31 +119,37 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 						window.mozRequestAnimationFrame || 
 						window.oRequestAnimationFrame || 
 						window.msRequestAnimationFrame ||
-						function requestAnimFrame( callback ){
+						function requestAnimFrame(inCallback)
+						{
 							window.setTimeout(
-								callback
-								,1000 / ECGame.Settings.Timer.targetFPS
+								inCallback
+								,aTargetMsPerFrame
 							);
 						};
 				}
 				else
 				{
 					requestAnimFrame =
-						function requestAnimFrame( callback ){
+						function requestAnimFrame(inCallback)
+						{
 							setTimeout(
-								callback
-								,1000 / ECGame.Settings.Timer.targetFPS
+								inCallback
+								,aTargetMsPerFrame
 							);
 						};
 				}
 				
 				requestAnimFrame(this._onAnimFrame);
 			}
+			/*
+			//This didn't work out too well and was removed, but keeping note of it in comments for reference.
+			//http://www.sitepoint.com/creating-accurate-timers-in-javascript/
+			*/
 			else
 			{
 				this._myIntervalHandle = setInterval(
 					this._onAnimFrame
-					,1000 / ECGame.Settings.Timer.targetFPS
+					,aTargetMsPerFrame
 				);
 			}
 		},
@@ -153,6 +169,7 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 			{
 				//note must new it as it keeps the inTime it was created
 				inTime = (new Date()).getTime();//TODO use .now
+				//TODO window.performance.now()??????
 			}
 			
 			aDeltaTime = Math.max(0, inTime - this._myFrameTime);
@@ -219,7 +236,7 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 			}
 			
 			ECGame.instance.update(
-				new ECGame.EngineLib.TimerUpdateData(
+				this._myLastUpdateData = new ECGame.EngineLib.TimerUpdateData(
 					aDeltaTime
 					,(
 						ECGame.Settings.Timer.averageDeltaTimes ?
@@ -231,7 +248,7 @@ ECGame.EngineLib.Timer = ECGame.EngineLib.Class.create({
 				)
 			);
 			
-			if(ECGame.Settings.Timer.useRequestAnimFrame && ECGame.instance.isRunning())//TODO higher fps likely if at start??
+			if(ECGame.Settings.Timer.useRequestAnimFrame && ECGame.instance.isRunning())//TODO? would higher fps likely if this was at top
 			{
 				requestAnimFrame(this._onAnimFrame);
 			}

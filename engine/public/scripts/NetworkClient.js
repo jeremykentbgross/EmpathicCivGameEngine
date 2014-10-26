@@ -76,10 +76,8 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			}
 			
 			aThis._myUser.mySocket = aThis;
-			
-			//TODO handle removing this user on disconnect!
-			ECGame.instance.getNetwork().getNetGroup('master_netgroup').addUser(aThis._myUser);
-			
+			//ECGame.instance.getNetwork().getNetGroup('master_netgroup').addUser(aThis._myUser);//<=done when server acks
+
 			//Send my ID to server
 			aLocalUser = ECGame.instance.getLocalUser();
 			aThis.send(JSON.stringify(
@@ -97,19 +95,26 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			//http://www.iana.org/assignments/websocket/websocket.xml#subprotocol-name
 			var aThis;
 			
-			/*console.trace();
-			console.log(inEvent);
-			console.log(arguments);
-			//console.log(this._myWebsocket);*/
-			
 			aThis = this.myECGameSocket;
 			
+			if(ECGame.Settings.isDebugPrint_NetworkMessages())
+			{
+				console.info("Disconnected from Server.", arguments);
+				/*console.trace();
+				console.log(inEvent);
+				console.log(arguments);
+				//console.log(this._myWebsocket);*/
+			}
+			//HACK:
 			if(ECGame.Settings.DEBUG
 			//	&& ECGame.Settings.Debug.NetworkMessages_Print
 			)
 			{
-				console.info("Lost Server!");
+				console.info("Lost Server!", arguments);
 			}
+			
+			//aThis._myUser.mySocket = null;//set socket to null!? (like server), TODO try to reconnect!?!?
+			ECGame.instance.getNetwork().getNetGroup('master_netgroup').removeUser(aThis._myUser);
 			aThis._myNetwork.onEvent(new ECGame.EngineLib.Events.DisconnectedFromServer());//TODO get rid of new
 			
 			//TODO if not clean close try to reopen new socket!!!!!!!!!!
@@ -200,6 +205,7 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 						console.info("Connected to Server, ID validated!");
 					}
 					
+					ECGame.instance.getNetwork().getNetGroup('master_netgroup').addUser(aThis._myUser);
 					aThis._myNetwork.onEvent(new ECGame.EngineLib.Events.ConnectedToServer());//TODO get rid of new
 				}
 				else
@@ -228,6 +234,12 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 				}
 			}
 			
+			if(this._myWebsocket.readyState !== WebSocket.OPEN)
+			{
+				console.log("Socket Closed, not sending data.");//TODO only print on debug?
+				return;
+			}
+			
 			if(typeof inData === 'string')
 			{
 				this._myWebsocket.send(inData);
@@ -240,6 +252,11 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 		
 		close : function close(inCode, inReason)
 		{
+			//NOTE: In Chrome at least, we don't get the onclose event until the server acks the close.  Strange.
+			if(ECGame.Settings.isDebugPrint_NetworkMessages())
+			{
+				console.info("Starting Disconnect:", arguments);
+			}
 			this._myWebsocket.close(inCode, inReason);
 		}
 		
@@ -286,6 +303,12 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
+		init : function init()
+		{
+			console.info("Network Game Client Started");
+			this.createNetGroup('master_netgroup');
+		},
+		
 		getName : function getName()
 		{
 			return 'NetworkClient';

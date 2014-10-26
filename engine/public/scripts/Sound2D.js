@@ -33,7 +33,7 @@ ECGame.EngineLib.Sound2D = ECGame.EngineLib.Class.create(
 		this._myPanner.connect(inDestination);
 		this._myPanner.setPosition(inPosition.myX, inPosition.myY, 0);
 		this._myPanner.maxDistance = inRadius;
-		this._myPanner.distanceModel = this._myPanner.LINEAR_DISTANCE;
+		this._myPanner.distanceModel = "linear";//"inverse"/"exponential"/ not: this._myPanner.LINEAR_DISTANCE;
 		//TODO cones
 			
 		this.Sound(inSoundDescription, this._myPanner/*inSource, inStartedTime, inFileName*/);

@@ -31,14 +31,9 @@ http://www.html5rocks.com/en/tutorials/webaudio/fieldrunners/
 http://html5doctor.com/native-audio-in-the-browser/
 https://dvcs.w3.org/hg/audio/raw-file/tip/webaudio/specification.html
 
-**
 https://hacks.mozilla.org/2012/04/html5-audio-and-audio-sprites-this-should-be-simple/
 
-http://www.html5rocks.com/en/tutorials/webaudio/intro/
- 
-http://www.html5rocks.com/en/tutorials/webaudio/games/
- 
-http://www.html5rocks.com/en/tutorials/webaudio/positional_audio/
+https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Porting_webkitAudioContext_code_to_standards_based_AudioContext
  
 http://www.youtube.com/watch?v=FDL39J-i0yQ
  
@@ -99,13 +94,13 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 			this._myDynamicCompressor.connect(this._myContext.destination);
 			
 			//setup master volume
-			this._myMasterVolume = this._myContext.createGainNode();
+			this._myMasterVolume = this._myContext.createGain();
 			this._myMasterVolume.connect(this._myDynamicCompressor);
 			this._myMasterVolumeUserValue = 0;
 			this.setMasterVolume(ECGame.Settings.Sound.masterVolume);
 			
 			//setup effects volume
-			this._myEffectsVolume = this._myContext.createGainNode();
+			this._myEffectsVolume = this._myContext.createGain();
 			this._myEffectsVolume.connect(this._myMasterVolume);
 			this._myEffectsVolumeUserValue = 0;
 			this.setEffectsVolume(ECGame.Settings.Sound.effectsVolume);

@@ -49,12 +49,16 @@ ECGame.EngineLib.User = function User(inName, inID)
 	this.myLastAcknowledgedFrame = -1;//last acknowledged frame
 	this.myLastRecievedFrame = 0;	//most recent frame stamp sent to us by the other side that needs to be acknowledged
 	
+	this.myPing = 0;
 	this.myPings = [];
 	this.myNextPingIndex = 0;
 	for(i = 0; i < 128; ++i)
 	{
 		this.myPings[i] = 0;
 	}
+	
+	this._myRemoteFPS = [];
+	this._myRemoteAverageFPS = 0;
 };
 ECGame.EngineLib.User.prototype.constructor = ECGame.EngineLib.User;
 
@@ -71,6 +75,13 @@ ECGame.EngineLib.User.USER_IDS =
 
 
 
+ECGame.EngineLib.User.prototype.addRemoteFPS = function addRemoteFPS(inRemoteFPS)
+{
+	this._myRemoteFPS.push(inRemoteFPS);
+};
+
+
+
 ECGame.EngineLib.User.prototype.createUnacknowledgedNetFrame = function createUnacknowledgedNetFrame()
 {
 	var anUnacknowledgedNetFrame
@@ -81,10 +92,20 @@ ECGame.EngineLib.User.prototype.createUnacknowledgedNetFrame = function createUn
 	anUnacknowledgedNetFrame = 
 	{
 		myFrame : aTimer.getFrameCount() % (ECGame.Settings.Network.maxFrameWrapForPing + 1),
-		myTime : aTimer.getFrameTime()
+		myTime : aTimer.getCurrentTime()
 	};
 	
 	this.myUnacknowledgedFrames.push(anUnacknowledgedNetFrame);
+	
+	if(this.myUnacknowledgedFrames.length >= ECGame.Settings.Network.maxFrameWrapForPing)
+	{
+		this.mySocket.close(
+			4000
+			,"Timeout due to over extending max size of ping calculation on "
+				+ (ECGame.Settings.Network.isServer ? "server." : "client.")
+				+ " (" + this.myUnacknowledgedFrames.length  + "/" + ECGame.Settings.Network.maxFrameWrapForPing + ")"
+		);
+	}
 	
 	return anUnacknowledgedNetFrame.myFrame;
 };
@@ -130,7 +151,6 @@ ECGame.EngineLib.User.prototype.acknowledgedNetFrame = function acknowledgedNetF
 	{
 		console.info("BREAK END:" + this.myUnacknowledgedFrames.length);
 	}
-	console.assert(this.myUnacknowledgedFrames.length < 100);
 };
 
 ECGame.EngineLib.User.prototype._processAcknowledgedFrame = function _processAcknowledgedFrame(inAcknowledgedFrame, inMessageAcknowledgedFrame)
@@ -139,7 +159,7 @@ ECGame.EngineLib.User.prototype._processAcknowledgedFrame = function _processAck
 		;
 	
 	anIndex = this.myNextPingIndex % this.myPings.length;
-	this.myPings[anIndex] = (ECGame.instance.getTimer().getFrameTime() - inAcknowledgedFrame.myTime);
+	this.myPings[anIndex] = (ECGame.instance.getTimer().getCurrentTime() - inAcknowledgedFrame.myTime);
 	++this.myNextPingIndex;
 	
 	if(ECGame.Settings.isDebugPrint_NetworkPingCompute())
@@ -153,7 +173,7 @@ ECGame.EngineLib.User.prototype._processAcknowledgedFrame = function _processAck
 	}
 };
 
-ECGame.EngineLib.User.prototype.debugDraw = function debugDraw(inGraphics)
+ECGame.EngineLib.User.prototype.updatePing = function updatePing()//TODO rename computePing //and remoteFPS??
 {
 	var aTime
 		,aTotal
@@ -161,8 +181,8 @@ ECGame.EngineLib.User.prototype.debugDraw = function debugDraw(inGraphics)
 		;
 	
 	aTotal = 0;
-	aTime = ECGame.instance.getTimer().getFrameTime();
-	//TODO move much of this to an update with a listener (for Player)
+	aTime = ECGame.instance.getTimer().getCurrentTime();
+	
 	for(i = 0; i < this.myPings.length; ++i)
 	{
 		aTotal += this.myPings[i];
@@ -174,7 +194,42 @@ ECGame.EngineLib.User.prototype.debugDraw = function debugDraw(inGraphics)
 	
 	aTotal /= (this.myPings.length + this.myUnacknowledgedFrames.length);
 	
-	inGraphics.drawDebugText("Ping: " + aTotal.toFixed(3), ECGame.Settings.Debug.NetworkMessages_DrawColor);
+	this.myPing = aTotal;
+	
+	if(ECGame.Settings.Network.isServer)//HACK, cause debugDraw not called.
+	{
+		this._myRemoteFPS = [];
+	}
+};
+
+ECGame.EngineLib.User.prototype.debugDraw = function debugDraw(inGraphics)
+{
+	var aMessage = ''
+		,aCount = 0
+		,i
+		;
+	
+	this.updatePing();
+	inGraphics.drawDebugText("Ping: " + this.myPing.toFixed(3), ECGame.Settings.Debug.NetworkMessages_DrawColor);
+	
+	ECGame.instance.getGraphics().drawDebugText(
+		"Recv Packets: " + this._myRemoteFPS.length, ECGame.Settings.Debug.NetworkMessages_DrawColor
+	);
+	for(i = 0; i < this._myRemoteFPS.length; ++i)
+	{
+		aMessage += ', ' + this._myRemoteFPS[i].toFixed(3);
+		aCount += this._myRemoteFPS[i];
+	}
+	if(this._myRemoteFPS.length)
+	{
+		this._myRemoteAverageFPS = aCount / this._myRemoteFPS.length;
+	}
+	aMessage = "Server FPS: ("
+		+ this._myRemoteAverageFPS.toFixed(3)
+		+ ')' + aMessage;
+	ECGame.instance.getGraphics().drawDebugText(aMessage, ECGame.Settings.Debug.NetworkMessages_DrawColor);
+	
+	this._myRemoteFPS = [];
 };
 
 

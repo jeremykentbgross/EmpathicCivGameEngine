@@ -201,6 +201,7 @@ ECGame.WebServerTools.CodeCompressor.prototype.makeCompactGameLoader = function 
 	obfuscator.addIgnore('js');//TEMP HACK until strings removed correctly
 	
 	//audio
+	obfuscator.addIgnore('start');//Native Audio
 	obfuscator.addIgnore('setOrientation');//Native Audio
 	obfuscator.addIgnore('setPosition');//Native Audio
 	obfuscator.addIgnore('setVelocity');//Native Audio

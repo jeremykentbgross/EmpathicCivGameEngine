@@ -1,3 +1,3 @@
 #!/bin/bash
-xterm ./NodeDebuger.sh &
+xterm ./NodeDebugger.sh &
 xterm ./DebugServer.sh &

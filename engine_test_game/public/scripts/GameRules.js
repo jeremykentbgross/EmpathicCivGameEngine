@@ -157,7 +157,21 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					'ClientDisconnected',
 					this
 				);
-				this._myMasterNetGroup = aNetwork.getNetGroup('master_netgroup');
+				if(ECGame.Settings.Network.isServer)
+				{
+					/*Note: the server does not have any netgroups by default as it is up to the game
+						to decide what netgroups there should be and what users/objects should be assigned
+						to each.  A catch all is not recommended unless there is intended to be a 100% shared view
+						of everything on all clients, as each netgroup will send data regularly.  A catch all
+						on the server, or putting users in more than one netgroup, therefore causes a lot extra
+						unneeded net traffic.
+					*/
+					this._myMasterNetGroup = aNetwork.createNetGroup('master_netgroup');
+				}
+				else
+				{
+					this._myMasterNetGroup = aNetwork.getNetGroup('master_netgroup');
+				}
 			}
 		},
 		_initWorld : function _initWorld()
@@ -482,6 +496,8 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 		{
 			var anEntity;
 			
+			this._myMasterNetGroup.removeUser(inEvent.user);
+			
 			anEntity = this._myEntities[inEvent.user.userID];
 			this._myGameWorld.removeEntity(anEntity);
 			
@@ -564,7 +580,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				if(inInputEvent.buttons[0])
 				{
 					aWorld.getCamera().centerOn(
-						inInputEvent.mouseLoc.scale(aWorld.getSize() / ECGame.Settings.Graphics.backBufferWidth)
+						inInputEvent.myMousePosition.scale(aWorld.getSize() / ECGame.Settings.Graphics.backBufferWidth)
 						,aMap
 					);
 				}
@@ -573,7 +589,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			
 			
 			aCameraAABB2D = aWorld.getCamera().getCaptureVolumeAABB2D();
-			aMouseWorldPosition = inInputEvent.mouseLoc.add(aCameraAABB2D.getLeftTop());
+			aMouseWorldPosition = inInputEvent.myMousePosition.add(aCameraAABB2D.getLeftTop());
 			
 			
 			aSoundSystem = ECGame.instance.getSoundSystem();

@@ -49,11 +49,15 @@ ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel.pr
 
 ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel.prototype.setMinMax = function setMinMax(inMin, inMax)
 {
-	if(inMax - inMin + 1 > 65536)//TODO ifdebug
+	//Why was there this limit check?
+	//	=>	The ArithmeticCompression use to be limited to 16bits, now it is 32.
+	//		im leaving out the check for 0xFFFFFFFF (instead of 65536=0xFFFF) for now.
+	/*if(inMax - inMin + 1 > 65536)//TODO ifdebug??
 	{
-		console.assert(false, "Range is too large!");
+		//console.assert(false, "Range is too large!");
+		console.error("Range is too large!", arguments);
 		return;
-	}
+	}*/
 	this.myMin = inMin;
 	this.myMax = inMax;
 	return this;

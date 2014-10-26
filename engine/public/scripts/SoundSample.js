@@ -44,17 +44,27 @@ ECGame.EngineLib.SoundSample = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
-		createSourceBuffer : function createSourceBuffer()
+		createSourceBuffer : function createSourceBuffer(inDestination)
 		{
-			var aSourceBuffer;
+			var aSourceBuffer
+				,aContext
+				;
 			
-			aSourceBuffer = ECGame.instance.getSoundSystem()._myContext.createBufferSource();
+			aContext = ECGame.instance.getSoundSystem()._myContext;
+			
+			aSourceBuffer = aContext.createBufferSource();
 			aSourceBuffer.buffer = this._mySoundAsset._mySoundBuffer;
+			
 			aSourceBuffer._myFileName = this._mySoundAsset._myFileName;
 			aSourceBuffer._myAssetID = this._mySoundAsset._myID;
 			aSourceBuffer._mySampleID = this._myID;
+			
+			aSourceBuffer._myGain = aContext.createGain();
+			aSourceBuffer.connect(aSourceBuffer._myGain);
+			aSourceBuffer._myGain.connect(inDestination);
+			aSourceBuffer._myGain.gain.value = this._myVolume + Math.random() * 2 * this._myVolumeVariation - this._myVolumeVariation;
 			//TODO sample name?
-			aSourceBuffer.gain.value = this._myVolume + Math.random() * 2 * this._myVolumeVariation - this._myVolumeVariation;
+
 			//semitone == halfstep == 100 cents == 1/12 of an octave.
 			//	(+/- semiTone => 2 * X - 1)
 			//	playback = 2^(octave delta)

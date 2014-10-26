@@ -108,7 +108,7 @@ ECGame.Settings =
 	{
 		useRequestAnimFrame : false	//false -> requestAnimFrame is almost certainly less secure, and possibly slower
 		,averageDeltaTimes : false
-		,targetFPS : 120
+		,targetFPS : 120	//120
 	},
 	
 	Server :	//TODO move this to a private file

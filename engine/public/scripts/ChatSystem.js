@@ -63,7 +63,8 @@ ECGame.EngineLib.ChatSystem = ECGame.EngineLib.Class.create({
 			this._domChatContainer = document.getElementById('chatContainer');
 			
 			//set dynamic style to not accept mouse events:
-			this._domChatContainer.style['pointer-events'] = 'none';
+			this._domChatContainer.style['pointer-events'] = 'none';/////////////////////////////TODO make these a class!!!!
+			this._domChatContainer.style.pointerEvents = 'none';//for FireFox
 			
 			
 			
@@ -223,16 +224,20 @@ aThis._sendChatToChatLog("**CHAT IS BROKEN ATM**: " + aThis._domChatInput.value)
 			this._activeInput = !this._activeInput;
 			if(this._activeInput)
 			{
-				this._domChatContainer.style['pointer-events'] = '';
+				this._domChatContainer.style['pointer-events'] = '';/////////////////////////////TODO make these a class!!!!
+				this._domChatContainer.style.pointerEvents = '';//for FireFox
 				this._domChatContainer.style['border-color'] = '#00ff00';
+				this._domChatContainer.style.borderColor = '#00ff00';//for FireFox
 				this._domChatInput.focus();
 				//TODO for all inputs
 				ECGame.instance.getInput().setSupressKeyboardEvents(true);
 			}
 			else
 			{
-				this._domChatContainer.style['pointer-events'] = 'none';
+				this._domChatContainer.style['pointer-events'] = 'none';/////////////////////////////TODO make these a class!!!!
+				this._domChatContainer.style.pointerEvents = 'none';//for FireFox
 				this._domChatContainer.style['border-color'] = '#0000ff';
+				this._domChatContainer.style.borderColor = '#0000ff';//for FireFox
 				this._domChatInput.blur();
 				//TODO for all inputs
 				ECGame.instance.getInput().setSupressKeyboardEvents(false);

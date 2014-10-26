@@ -83,29 +83,31 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 			var aRequest
 				,aScript
 				,aScriptSource
+				,aFullPathFileName
 				;
 			
 			//setup the full relative filename
-			inFileName = 
+			aFullPathFileName = 
 				window.location.protocol + '\/\/'
 				+ window.location.host + '/'
 				+ inFileName;
 			
 			//synchronously get the code
 			aRequest = new XMLHttpRequest();
-			aRequest.open('GET', inFileName, false);
+			aRequest.open('GET', aFullPathFileName, false);
 			aRequest.send();
 			
 			//set the returned script text while adding special comment to 
 			// auto include in debugger source listing:
 			aScriptSource = aRequest.responseText
-				+ '\n\/\/\/\/# sourceURL=' + inFileName + '\n';
+				+ '\n\/\/# sourceURL=' + aFullPathFileName + '\n';
 			
 			//if(true)
 			//{
 				//create a dom element to hold the code
 				aScript = document.createElement('script');
 				aScript.type = 'text/javascript';
+				aScript.id = inFileName;	//tried using this as variations of the id for debug readability
 				
 				//set the script tag text, including the debugger id at the end!!
 				aScript.text = aScriptSource;

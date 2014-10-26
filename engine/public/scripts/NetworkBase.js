@@ -177,6 +177,13 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				min : 0,
 				max : ECGame.Settings.Network.maxFrameWrapForPing
 			},
+			{//sends frame delta time
+				name : 'deltaTime'
+				,type : 'int'
+				,net : true
+				,min : 0
+				,max : 500
+			},
 			{
 				name : 'newObjects',
 				type : 'int',
@@ -220,12 +227,11 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 	Parents : [ECGame.EngineLib.EventSystem],
 	flags : {},
 	ChainUp : [],
-	ChainDown : [],
+	ChainDown : ['init'],
 	Definition :
 	{
 		init : function init()
 		{
-			this.createNetGroup('master_netgroup');
 			ECGame.instance.getUpdater("MasterUpdater").addUpdate(this);
 		},
 		
@@ -274,6 +280,16 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 			this._mySerializedObjects = {};
 		},
 		
+		registerSerializedObject : function registerSerializedObject(inObject)
+		{
+			var aClassName
+				;
+			
+			aClassName = inObject.getClass().getName();
+			this._mySerializedObjects[aClassName] = this._mySerializedObjects[aClassName] || {};
+			this._mySerializedObjects[aClassName][inObject.getID()] = inObject;
+		},
+		
 		createNetGroup : function createNetGroup(inName)
 		{
 			if(!this._myNetGroups[inName])
@@ -306,7 +322,6 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 			var anObject,
 				aMessageHeader,
 				anObjectHeader,
-				aClassName,
 				i;
 				
 			inNewInstanceList = inNewInstanceList || [];
@@ -328,6 +343,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 			aMessageHeader.userID = ECGame.instance.getLocalUser().userID;	//the local user is sending the packet
 			aMessageHeader.frame = inUser.createUnacknowledgedNetFrame();
 			aMessageHeader.acknowledgingFrame = inUser.myLastRecievedFrame;	//the last frame received from the target
+			aMessageHeader.deltaTime = Math.min(500, ECGame.instance.getTimer()._myLastUpdateData.myDeltaTime);//TODO don't access private without get()
 			aMessageHeader.newObjects = Math.min(this._ourMaxItemsPerMessage, inNewInstanceList.length);
 			aMessageHeader.dirtyObjects = Math.min(this._ourMaxItemsPerMessage, inDirtyInstanceList.length);
 			aMessageHeader.destroyObjects = Math.min(this._ourMaxItemsPerMessage, inDestroyInstanceList.length);
@@ -349,9 +365,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					);
 				}
 				
-				aClassName = anObject.getClass().getName();
-				this._mySerializedObjects[aClassName] = this._mySerializedObjects[aClassName] || {};
-				this._mySerializedObjects[aClassName][anObject.getID()] = anObject;
+				this.registerSerializedObject(anObject);
 			}
 			
 			this._mySerializer.setNetMode(true);
@@ -368,9 +382,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					console.info("Net write to " + inUser.userName + ':' + JSON.stringify(anObjectHeader));
 				}
 				
-				aClassName = anObject.getClass().getName();
-				this._mySerializedObjects[aClassName] = this._mySerializedObjects[aClassName] || {};
-				this._mySerializedObjects[aClassName][anObject.getID()] = anObject;
+				this.registerSerializedObject(anObject);
 			}
 			
 			for(i = 0; i < aMessageHeader.destroyObjects; ++i)
@@ -409,6 +421,8 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 			try
 			{
 				this._mySerializer.serializeObject(aMessageHeader, this._ourMessageHeaderFormat);
+				
+				inUser.addRemoteFPS(1000 / Math.max(aMessageHeader.deltaTime, 1));
 				
 				//check that the username matches the user on the socket
 				console.assert(
@@ -461,7 +475,10 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 						anObject = anObjectClass.create();
 						anObject.setID(anObjectHeader.instanceID);
 						//add network created objects to the master netgroup //TODO maybe it should go in the users netgroup also/instead..
-						this.getNetGroup('master_netgroup').addObject(anObject);
+						if(!ECGame.Settings.Network.isServer)
+						{
+							this.getNetGroup('master_netgroup').addObject(anObject);
+						}
 					}
 					else// if(ECGame.Settings.isDebugPrint_NetworkMessages())	//TODO this branch should not be possible in the future!
 					{

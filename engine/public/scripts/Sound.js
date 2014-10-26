@@ -37,8 +37,6 @@ ECGame.EngineLib.Sound = ECGame.EngineLib.Class.create(
 	{
 		play : function play(/*inTimeDelay*/)
 		{
-			/*inTimeDelay = inTimeDelay || 0;
-			this._mySource.noteOn(inTimeDelay);*/
 			this._mySource = this._myDescription.createAndPlaySourceBuffer(this._myDestination);
 			if(ECGame.Settings.isDebugPrint_Sound())
 			{
@@ -49,7 +47,7 @@ ECGame.EngineLib.Sound = ECGame.EngineLib.Class.create(
 		stop : function stop(inTimeDelay)
 		{
 			inTimeDelay = inTimeDelay || 0;
-			this._mySource.noteOff(inTimeDelay);
+			this._mySource.stop(inTimeDelay);
 		},
 		
 		/*
@@ -74,11 +72,20 @@ ECGame.EngineLib.Sound = ECGame.EngineLib.Class.create(
 		*/
 		isPlaying : function isPlaying()
 		{
-			return (this._mySource.playbackState === this._mySource.PLAYING_STATE);
+			/*
+				https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Porting_webkitAudioContext_code_to_standards_based_AudioContext
+				If you need to compare this attribute to PLAYING_STATE,
+				you can compare the value of AudioContext.currentTime
+				to the first argument passed to start() to know whether
+				playback has started or not.
+			*/
+			return !this._mySource._myIsFinished
+				&& this._mySource.context.currentTime > this._mySource._myStartTime
+			;
 		},
 		isFinished : function isFinished()
 		{
-			return (this._mySource.playbackState === this._mySource.FINISHED_STATE);
+			return this._mySource._myIsFinished;//TODO guess this should not be private
 		},
 		
 		_getDebugPlayingString : function _getDebugPlayingString()//TODO overload this as well!!

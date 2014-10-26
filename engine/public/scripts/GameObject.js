@@ -168,6 +168,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			return this._myNetDirty;
 		},
 		
+		//inUserID - allows the server to locally set objects dirty as the client it is receiving from, so changes will be correctly forward to others.
 		setNetDirty : function setNetDirty(inUserID)
 		{
 			if(this.canUserModifyNet())

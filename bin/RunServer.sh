@@ -15,5 +15,7 @@ ln -s ../logs/$filename ../logs/log.txt
 gedit ../logs/$filename &
 
 #run node with the log
-node ../engine/private/scripts/main.js > ../logs/$filename
+echo "TODO errors to file also!!"
+node --version &> ../logs/$filename
+node ../engine/private/scripts/main.js >> ../logs/$filename  2>&1
 

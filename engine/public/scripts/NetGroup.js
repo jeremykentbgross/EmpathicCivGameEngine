@@ -65,7 +65,8 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 				aDirtyInstanceList,
 				aDestroyInstanceList,
 				//binary buffer
-				aBinaryBuffer;
+				aBinaryBuffer,
+				i;
 			
 			//if we are not locally identified yet, don't update netgroup (TODO call from parent caller?)
 			if(ECGame.instance.getLocalUser().userID === ECGame.EngineLib.User.USER_IDS.NEW_USER)
@@ -81,6 +82,7 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 				if(!aCurrentUser.mySocket)
 				{
 					//TODO queue changes for reconnect?? if so, handle correctly in game too..
+					console.info("User is not connected:", aCurrentUser.userName);
 					continue;
 				}
 				
@@ -148,6 +150,62 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 					aCurrentUser.mySocket.send(aBinaryBuffer);
 				/*}*/
 			}
+			
+			/*
+			TODO!!!!!!!!!!!!!!!!!!!!!!!!!
+			The "for all user list" code above, and the 
+				"make sure all were registered as serialized objects" code below
+				should be merged into one, something like follows:
+				
+				newInstances = ... + register??
+				sharedDirtyInstances = ... + register??
+				destroyedInstances = ... + register??
+				for all forward objects
+					customDirtyInstances[user id] = forwardObjects + register??
+				for all users
+					send(
+						newInstances
+						sharedDirtyInstances.concat(customDirtyInstances[user id])
+						destroyedInstances
+					)
+			*/
+			
+			///////////////////////////////////////////////////////////////////////////////////////////////////
+			//in case there are no users in here at present, we still want to clear all the objects dirty flags
+			
+			aDirtyInstanceList = [];
+			//queue up new instances
+			for(aClassName in this._myNewInstances)
+			{
+				anInstanceList = this._myNewInstances[aClassName];
+				aDirtyInstanceList = aDirtyInstanceList.concat(anInstanceList);
+			}
+			//queue up dirty instances
+			for(aClassName in this._myNetDirtyInstances)
+			{
+				anInstanceList = this._myNetDirtyInstances[aClassName];
+				aDirtyInstanceList = aDirtyInstanceList.concat(anInstanceList);
+			}
+			//queue up dirty instances from other clients
+			for(aClassName in this._myForwardDirtyObjects)
+			{
+				aUserMap = this._myForwardDirtyObjects[aClassName];
+				for(aSourceUserIndex in aUserMap)
+				{
+					anInstanceList = aUserMap[aSourceUserIndex];
+					aDirtyInstanceList = aDirtyInstanceList.concat(anInstanceList);
+				}
+			}
+			for(i = 0; i < aDirtyInstanceList.length; ++i)
+			{
+				//in case there are no users in here at present, we still want to clear all the objects dirty flags
+				this._myNetwork.registerSerializedObject(aDirtyInstanceList[i]);
+			}
+			
+			//in case there are no users in here at present, we still want to clear all the objects dirty flags
+			///////////////////////////////////////////////////////////////////////////////////////////////////
+			
+			
 			
 			//clear our lists for the next frame
 			this._myNewInstances = {};

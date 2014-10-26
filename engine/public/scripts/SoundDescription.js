@@ -66,18 +66,20 @@ ECGame.EngineLib.SoundDescription = ECGame.EngineLib.Class.create({
 				aSource = makeSource probablity weighted random sample;
 				aSource.loop = (repeat === -1);	//maybe not the best way
 				aSource.connect(inDestination);
-				aSource.noteOn(	//how to handle this with actual sound object??
+				aSource.start(	//how to handle this with actual sound object??
 					time + i * _myRepeatDelay
 					+ Math.random() * 2 * _myRepeatDelayVariation - _myRepeatDelayVariation
+					//when, offset, duration
 				);
 			}
 			for (var i = 0; i < repeat; i++)
 			{
 				aSource = makeSource probablity weighted random sample;
 				aSource.connect(inDestination);
-				aSource.noteOn(	//how to handle this with actual sound object??
+				aSource.start(	//how to handle this with actual sound object??
 					time + i * _myRepeatDelay
 					+ Math.random() * 2 * _myRepeatDelayVariation - _myRepeatDelayVariation
+					//when, offset, duration
 				);
 			}
 			return aSources[];??
@@ -99,15 +101,29 @@ ECGame.EngineLib.SoundDescription = ECGame.EngineLib.Class.create({
 				aTotal += aSample._myProbablity;
 				if(aTotal >= aRandomValue)
 				{
-					aSourceBuffer = aSample.createSourceBuffer();
-					aSourceBuffer.connect(inDestination);
-					aSourceBuffer.noteOn(0);
-					aSourceBuffer._myStartTime = ECGame.instance.getSoundSystem()._myContext.currentTime;
+					aSourceBuffer = aSample.createSourceBuffer(inDestination);
+
+					aSourceBuffer._myIsFinished = false;
+					aSourceBuffer.onended = this._onFinishedPlayingCallback;
+					
+					aSourceBuffer._myStartTime = ECGame.instance.getSoundSystem()._myContext.currentTime;//0;
+					aSourceBuffer.start(
+						aSourceBuffer._myStartTime	//when - how long until starting?
+						//,offset - where in the buffer to start playback
+						//,duration - how much of the clip to play
+					);
+		//			aSourceBuffer._myStartTime += ECGame.instance.getSoundSystem()._myContext.currentTime;
 					aSourceBuffer._mySoundDescriptionID = this._myID;
 					//TODO add description name
+					
 					return aSourceBuffer;
 				}
 			}
+		}
+		
+		,_onFinishedPlayingCallback : function _onFinishedPlayingCallback(inEvent)
+		{
+			inEvent.target._myIsFinished = true;
 		}
 	}
 });
