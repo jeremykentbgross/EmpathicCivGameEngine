@@ -26,7 +26,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 		this._mouseLoc = ECGame.EngineLib.Point2D.create(0, 0);
 		this._keys = {};
 		this._keysPressed = {};
-		this._buttons = {};
+		this._buttons = {};//TODO optimization: buttons and clicked should be arrays, and in the event as well!!
 		this._clicked = {};
 		this._active = false;
 		

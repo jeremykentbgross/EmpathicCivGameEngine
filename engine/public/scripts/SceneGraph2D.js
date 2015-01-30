@@ -55,9 +55,7 @@ ECGame.EngineLib.SceneGraph2D.prototype.init = function init(inMapSize, inMinNod
 //TODO more like physics handles? maybe?***************************
 ECGame.EngineLib.SceneGraph2D.prototype.insertItem = function insertItem(inRenderableItem)
 {
-	inRenderableItem._mySceneGraphOwningNodes = [];
-	this._mySceneTree.insertToAllBestFitting(inRenderableItem, inRenderableItem._mySceneGraphOwningNodes);
-
+	this._mySceneTree.insertToAllBestFitting(inRenderableItem);
 	inRenderableItem._myLastFrameDrawn = inRenderableItem._myLastFrameDrawn || 0;
 };
 
@@ -65,16 +63,7 @@ ECGame.EngineLib.SceneGraph2D.prototype.insertItem = function insertItem(inRende
 
 ECGame.EngineLib.SceneGraph2D.prototype.removeItem = function removeItem(inRenderableItem)
 {
-	var aNodeIndex
-		,aNodeArray
-		;
-	
-	aNodeArray = inRenderableItem._mySceneGraphOwningNodes;
-	for(aNodeIndex in aNodeArray)
-	{
-		aNodeArray[aNodeIndex].deleteItem(inRenderableItem);//todo optimize this to deleteItemFromNode
-	}
-	inRenderableItem._mySceneGraphOwningNodes = [];
+	inRenderableItem.removeFromQuadTree();
 };
 
 

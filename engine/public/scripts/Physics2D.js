@@ -36,7 +36,6 @@ ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 		this._myStatus = null;
 		this._myDensity = null;
 		this._myVelocity = null;
-		this._myOwningNodes = null;
 		this._myActiveLinkedListNode = null;
 		this._myOwner = null;
 	},
@@ -58,7 +57,7 @@ ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 			this._myStatus = this.PhysicsObject2D.STATUS__STATIC;
 			this._myDensity = 1;
 			this._myVelocity = ECGame.EngineLib.Point2D.create();
-			this._myOwningNodes = [];
+			//this._myOwningNodes = [];//TODO call parent init?
 			this._myActiveLinkedListNode = ECGame.EngineLib.LinkedListNode.create(this);			
 			this._myOwner = null;
 			inPhysicsSystem._myObjectsMap[this.getID()] = this;
@@ -118,7 +117,7 @@ ECGame.EngineLib.PhysicsObject2D = ECGame.EngineLib.Class.create({
 		},
 		isActive : function isActive()
 		{
-			return this._myStatus === this.PhysicsObject2D.STATUS__ACTIVE;
+			return this._myStatus === this.PhysicsObject2D.STATUS__ACTIVE;//TODO or always active??
 		},
 		
 		setAlwaysActive : function setAlwaysActive()
@@ -266,20 +265,12 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 				inPhysicsObject._myAABB
 			);
 			
-			this._myDetectionTree.insertToAllBestFitting(inPhysicsObject, inPhysicsObject._myOwningNodes);
+			this._myDetectionTree.insertToAllBestFitting(inPhysicsObject);
 		},
 		
 		_removePhysicsObjectFromTree : function _removePhysicsObjectFromTree(inPhysicsObject)
 		{
-			var nodeIndex,
-				nodeArray;
-			
-			nodeArray = inPhysicsObject._myOwningNodes;
-
-			for(nodeIndex in nodeArray)
-			{
-				nodeArray[nodeIndex].deleteItem(inPhysicsObject);
-			}
+			inPhysicsObject.removeFromQuadTree();
 			/*	
 			this._myDetectionTree.walk(////////////////////TODO TEMP DEBUG CHECK?? or keep?
 				function ?funcname?(inItem)
@@ -288,8 +279,8 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 					{
 						console.error("Object collided with itself??");
 						
-						for(nodeIndex in nodeArray)///////////////////////////////////
-							nodeArray[nodeIndex].deleteItem(inPhysicsObject);
+						//for(nodeIndex in nodeArray)///////////////////////////////////
+						//	nodeArray[nodeIndex].deleteItem(inPhysicsObject);
 						
 						return;
 					}
@@ -297,8 +288,6 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 				//,inPhysicsObject._myAABB
 			);////////////////////TODO TEMP DEBUG CHECK?? or keep?
 			*/
-				
-			inPhysicsObject._myOwningNodes = [];
 		},
 		
 		createNewPhysicsObject : function createNewPhysicsObject()//TODO remove this?? or rename!
@@ -330,6 +319,8 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 			aDeltaTime = inUpdateData.myAverageDeltaTime || 1;//TODO needed??
 			
 			this._myAccumulatedTime += aDeltaTime;
+			
+			this._myCollisionsRenderList = [];
 			
 			while(this._myAccumulatedTime > 1)
 			{
@@ -413,7 +404,10 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 				}
 				
 				//remember collisions for rendering:
-				this._myCollisionsRenderList = this._myCollisions;
+				if(ECGame.Settings.isDebugDraw_Physics())
+				{
+					this._myCollisionsRenderList.concat(this._myCollisions);
+				}
 				
 				//clear collisions:
 				this._myCollisions = [];

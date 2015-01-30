@@ -99,13 +99,14 @@ ECGame.EngineLib.Entity = ECGame.EngineLib.Class.create({
 		{
 			inoutReturnValues = inoutReturnValues || [];
 			
-			this._myComponentCollection.forall(
+			this._myComponentCollection.forAll(
 				function callback(inComponent)
 				{
 					if(inComponent.isA(inType))
 					{
 						inoutReturnValues.push(inComponent);
 					}
+					return true;
 				}
 			);
 			
@@ -116,10 +117,11 @@ ECGame.EngineLib.Entity = ECGame.EngineLib.Class.create({
 		addToNetGroup : function addToNetGroup(inNetGroup)
 		{
 			inNetGroup.addObject(this);
-			this._myComponentCollection.forall(
+			this._myComponentCollection.forAll(
 				function callback(inComponent)
 				{
 					inNetGroup.addObject(inComponent);
+					return true;
 				}
 			);
 		},
@@ -127,10 +129,11 @@ ECGame.EngineLib.Entity = ECGame.EngineLib.Class.create({
 		removeFromNetGroup : function removeFromNetGroup(inNetGroup)
 		{
 			inNetGroup.removeObject(this);
-			this._myComponentCollection.forall(
+			this._myComponentCollection.forAll(
 				function callback(inComponent)
 				{
 					inNetGroup.removeObject(inComponent);
+					return true;
 				}
 			);
 		},
@@ -171,13 +174,14 @@ ECGame.EngineLib.Entity = ECGame.EngineLib.Class.create({
 				this._myWorld.removeEntity(this);
 			}
 			
-			this._myComponentCollection.forall(
+			this._myComponentCollection.forAll(
 				function callback(inComponent)
 				{
 					inComponent.onRemovedFromEntity(
 						new ECGame.EngineLib.Events.RemovedFromEntity(aThis)
 					);
 					inComponent.destroy();
+					return true;
 				}
 			);
 			this._myComponentCollection.cleanup();
@@ -216,10 +220,11 @@ ECGame.EngineLib.Entity = ECGame.EngineLib.Class.create({
 			
 			//TODO properly remove all existing components
 			
-			inOther._myComponentCollection.forall(
+			inOther._myComponentCollection.forAll(
 				function callback(inComponent)
 				{
 					aThis.addComponent(inComponent.clone());
+					return true;
 				}
 			);
 		}

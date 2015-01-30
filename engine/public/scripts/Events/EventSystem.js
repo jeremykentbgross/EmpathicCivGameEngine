@@ -89,6 +89,7 @@ ECGame.EngineLib.EventSystem.prototype.onEvent = function onEvent(inEvent)
 		function CollectListeners(inListener)
 		{
 			aListeners.push(inListener);
+			//return true;//TODO the linked list doesn't check this i think..
 		}
 	);
 	

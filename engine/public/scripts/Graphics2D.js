@@ -42,6 +42,8 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 		this._myDrawOffsetX = 0;
 		this._myDrawOffsetY = 0;
 		
+		this._myLineWidth = 0;
+		
 		this._myInput = null;
 	},
 	Parents : [],
@@ -75,6 +77,8 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 			this._myDebugTextAssociatedColorsArray = [];
 			
 			this._myInput = ECGame.EngineLib.Input.create(this, this._myCanvas);
+			
+			this.setLineWidth(1);
 			
 			return true;
 		},
@@ -177,6 +181,12 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 		///////////////////////////////////////////////////////////////////////
 		//context wrapper functions////////////////////////////////////////////
 		
+		setLineWidth : function setLineWidth(inWidth)
+		{
+			this._myLineWidth = inWidth;
+			this._myBackBufferCanvas2DContext.lineWidth = inWidth;
+		},
+		
 		beginPath : function beginPath()
 		{
 			this._myBackBufferCanvas2DContext.beginPath();
@@ -223,6 +233,16 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 			this._myBackBufferCanvas2DContext.globalAlpha = inAlpha;
 		},
 		
+		createLinearGradientY : function createLinearGradientY(inAABB2D)
+		{
+			return this._myBackBufferCanvas2DContext.createLinearGradient(
+				Math.round(0/*inAABB2D.myX - this._myDrawOffsetX*/),	//x0
+				Math.round(inAABB2D.myY - this._myDrawOffsetY),	//y0
+				Math.round(0/*inAABB2D.myX + inAABB2D.myWidth - this._myDrawOffsetX*/),	//x1
+				Math.round(inAABB2D.myY + inAABB2D.myHeight - this._myDrawOffsetY)	//y1
+			);
+		},
+		
 		//fill funtions
 		setFillStyle : function setFillStyle(inFillStyle)
 		{
@@ -254,18 +274,24 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 		},
 		strokeRect : function strokeRect(inAABB2D)
 		{
+			//see lineWidth section: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Applying_styles_and_colors
+			var aPartialPixedOffset = (this._myLineWidth % 2 === 1 ? 0.5 : 0);//TODO do this for lines too
+			
 			this._myBackBufferCanvas2DContext.strokeRect(
-				Math.round(inAABB2D.myX - this._myDrawOffsetX),
-				Math.round(inAABB2D.myY - this._myDrawOffsetY),
+				Math.round(inAABB2D.myX - this._myDrawOffsetX) + aPartialPixedOffset,
+				Math.round(inAABB2D.myY - this._myDrawOffsetY) + aPartialPixedOffset,
 				Math.round(inAABB2D.myWidth),
 				Math.round(inAABB2D.myHeight)
 			);
 		},
 		strokeRectXYWH : function strokeRectXYWH(inX, inY, inWidth, inHeight)
 		{
+			//see lineWidth section: https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Applying_styles_and_colors
+			var aPartialPixedOffset = (this._myLineWidth % 2 === 1 ? 0.5 : 0);
+			
 			this._myBackBufferCanvas2DContext.strokeRect(
-				Math.round(inX - this._myDrawOffsetX),
-				Math.round(inY - this._myDrawOffsetY),
+				Math.round(inX - this._myDrawOffsetX) + aPartialPixedOffset,
+				Math.round(inY - this._myDrawOffsetY) + aPartialPixedOffset,
 				Math.round(inWidth),
 				Math.round(inHeight)
 			);

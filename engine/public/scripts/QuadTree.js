@@ -38,7 +38,7 @@ ECGame.EngineLib.QuadTreeItem = ECGame.EngineLib.Class.create({
 
 	Definition :
 	{
-		_ourNextID : 0	//this is needed by the raytracer, physics system, etc
+		_ourNextID : 0	//this is needed by the ray-tracer, physics system, etc
 		,getID : function getID()
 		{
 			return this._myID;
@@ -46,7 +46,7 @@ ECGame.EngineLib.QuadTreeItem = ECGame.EngineLib.Class.create({
 		
 		,init : function init(inAABB)
 		{
-			this._myAABB = inAABB;
+			this._myAABB = inAABB;//TODO is this called?? should this function even exist? clone copyFrom this var if it does!
 			this._myOwningNodes = [];
 		}
 		
@@ -59,9 +59,20 @@ ECGame.EngineLib.QuadTreeItem = ECGame.EngineLib.Class.create({
 			this._myAABB.copyFrom(inAABB2D);
 		}
 		
-		//TODO removeFromTree()
-		//TODO addedToNode
-		//TODO manage owning nodes
+		,removeFromQuadTree : function removeFromQuadTree()
+		{
+			var i;
+			for(i = 0; i < this._myOwningNodes.length; ++i)
+			{
+				this._myOwningNodes[i].deleteItemFromNode(this);
+			}
+			this._myOwningNodes = [];
+		}
+		
+		,isInTree : function isInTree()
+		{
+			return this._myOwningNodes.length !== 0;
+		}
 	}
 });
 
@@ -154,9 +165,7 @@ ECGame.EngineLib.QuadTree = ECGame.EngineLib.Class.create({
 			}
 		}
 		
-		//Note: you can delete the inserted item strait from the list of outContainingNodes
-		//TODO change functionality to write containing nodes to the item
-		,insertToSmallestContaining : function insertToSmallestContaining(inItem, outContainingNodes, inTargetNodesMinSize)
+		,insertToSmallestContaining : function insertToSmallestContaining(inItem, inTargetNodesMinSize)
 		{
 			var i, aThisNodesSize;
 			
@@ -171,10 +180,7 @@ ECGame.EngineLib.QuadTree = ECGame.EngineLib.Class.create({
 					
 					//it doesn't fit in the children so it goes here
 					this._myItems.push(inItem);
-					if(outContainingNodes)
-					{
-						outContainingNodes.push(this);
-					}
+					inItem._myOwningNodes.push(this);
 				}
 				else
 				{
@@ -186,16 +192,14 @@ ECGame.EngineLib.QuadTree = ECGame.EngineLib.Class.create({
 					{
 						for(i = 0; i < this._myChildren.length; ++i)
 						{
-							this._myChildren[i].insertToSmallestContaining(inItem, outContainingNodes, inTargetNodesMinSize);
+							this._myChildren[i].insertToSmallestContaining(inItem, inTargetNodesMinSize);
 						}
 					}
 				}
 			}
 		}
 		
-		//Note: you can delete the inserted item strait from the list of outContainingNodes
-		//TODO change functionality to write containing nodes to the item
-		,insertToAllBestFitting : function insertToAllBestFitting(inItem, outContainingNodes, inTargetNodesMinSize)
+		,insertToAllBestFitting : function insertToAllBestFitting(inItem, inTargetNodesMinSize)
 		{
 			var i, aThisNodesSize;
 			
@@ -215,10 +219,7 @@ ECGame.EngineLib.QuadTree = ECGame.EngineLib.Class.create({
 					
 					//it doesn't fit in the children so it goes here
 					this._myItems.push(inItem);
-					if(outContainingNodes)
-					{
-						outContainingNodes.push(this);
-					}
+					inItem._myOwningNodes.push(this);
 				}
 				else
 				{
@@ -230,7 +231,7 @@ ECGame.EngineLib.QuadTree = ECGame.EngineLib.Class.create({
 					{
 						for(i = 0; i < this._myChildren.length; ++i)
 						{
-							this._myChildren[i].insertToAllBestFitting(inItem, outContainingNodes, inTargetNodesMinSize);
+							this._myChildren[i].insertToAllBestFitting(inItem, inTargetNodesMinSize);
 						}
 					}
 				}
@@ -246,7 +247,7 @@ ECGame.EngineLib.QuadTree = ECGame.EngineLib.Class.create({
 				inTargetNodesMinSize = inTargetNodesMinSize || Math.max(inItem.getAABB2D().myWidth, inItem.getAABB2D().myHeight);
 				aThisNodesSize = Math.max(this._myAABB.myWidth, this._myAABB.myHeight);
 				
-				//if there are children and the children are not to small to contain the item:
+				//if there are children and the children are not too small to contain the item:
 				if(this._myChildren !== null && !(aThisNodesSize / 2 < Math.max(inTargetNodesMinSize, this._myMinSize)))
 				{
 					for(i = 0; i < this._myChildren.length; ++i)
@@ -259,10 +260,24 @@ ECGame.EngineLib.QuadTree = ECGame.EngineLib.Class.create({
 				if(i !== -1)
 				{
 					this._myItems.splice(i,1);
+					//TODO remove from owning nodes
 				}
 				
 				this.pruneTowardsRoot();
 			}
+		}
+		
+		,deleteItemFromNode : function deleteItemFromNode(inItem)
+		{
+			var i;
+			
+			i = this._myItems.indexOf(inItem);
+			if(i !== -1)
+			{
+				this._myItems.splice(i,1);
+			}
+			
+			this.pruneTowardsRoot();
 		}
 		
 		/*

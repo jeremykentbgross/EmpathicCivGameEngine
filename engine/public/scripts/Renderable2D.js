@@ -28,8 +28,6 @@ ECGame.EngineLib.Renderable2D = ECGame.EngineLib.Class.create({
 		
 		//TODO maybe should have get functions for all these?
 		
-		//array of nodes that contain this renderable in the scene graph
-		this._mySceneGraphOwningNodes = null;					//accessed only by the scenegraph
 		this._myLastFrameDrawn = -1;							//accessed only by the scenegraph
 		this._myDepth = 0;										//accessed many places (should it be private or smthg?)
 		this._myAnchorPosition = new ECGame.EngineLib.Point2D();
@@ -44,9 +42,9 @@ ECGame.EngineLib.Renderable2D = ECGame.EngineLib.Class.create({
 	{
 		init : function init(inAABB2D, inDepth, inAnchorPosition)//TODO is this used??
 		{
-			this._myAABB = inAABB2D;
+			this._myAABB = inAABB2D;//parent quadtreeitem member var
 			this._myDepth = inDepth;
-			this._myAnchorPosition = inAnchorPosition;
+			this._myAnchorPosition.copyFrom(inAnchorPosition);
 		}
 		
 		,render : function render(/*inGraphics*/)//abstract!!
@@ -60,7 +58,12 @@ ECGame.EngineLib.Renderable2D = ECGame.EngineLib.Class.create({
 		}
 		,setAnchorPosition : function setAnchorPosition(inAnchorPosition)
 		{
-			this._myAnchorPosition = inAnchorPosition;
+			this._myAnchorPosition.copyFrom(inAnchorPosition);
+		}
+		
+		,getAABB2D : function getAABB2D()
+		{
+			return this._myAABB.offset(this._myAnchorPosition);
 		}
 	}
 });

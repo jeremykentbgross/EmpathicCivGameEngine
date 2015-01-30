@@ -50,8 +50,10 @@ ECGame.EngineLib.GameObjectRef = function GameObjectRef(inPathOrValue)
 ECGame.EngineLib.GameObjectRef.prototype.constructor = ECGame.EngineLib.GameObjectRef;
 	
 
-
-ECGame.EngineLib.GameObjectRef.prototype.deref = function deref()
+/*
+inSafe - fails silently, returning null
+*/
+ECGame.EngineLib.GameObjectRef.prototype.deref = function deref(inSafe)
 {
 	var objectClass, pathTokens;
 			
@@ -67,7 +69,10 @@ ECGame.EngineLib.GameObjectRef.prototype.deref = function deref()
 		//if !valid path
 		if(pathTokens.length !== 2)
 		{
-			console.error("Invalid path: " + this._path);
+			if(!inSafe)
+			{
+				console.error("Invalid path: " + this._path);
+			}
 			return null;
 		}
 		//todo error/warn otherwise
@@ -80,12 +85,12 @@ ECGame.EngineLib.GameObjectRef.prototype.deref = function deref()
 			{
 				this._path = null;
 			}
-			else
+			else if(!inSafe)
 			{
 				console.error("No object " + pathTokens[1] + " in " + this._path);
 			}
 		}
-		else
+		else if(!inSafe)
 		{
 			console.error("No Class named: " + pathTokens[0]);
 		}
@@ -102,12 +107,12 @@ ECGame.EngineLib.GameObjectRef.prototype.deref = function deref()
 				this.classID = -1;
 				this.instanceID = -1;
 			}
-			else
+			else if(!inSafe)
 			{
 				console.error("No Object: " + objectClass.getName() + " with ID " + this.instanceID);
 			}
 		}
-		else
+		else if(!inSafe)
 		{
 			console.error("No classID: " + this.classID);
 		}

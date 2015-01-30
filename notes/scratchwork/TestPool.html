@@ -1,0 +1,241 @@
+<html>
+	<body>
+		<script type="text/javascript">
+		
+			var DEBUG_POOL = false;
+			
+			function Pool(inType)
+			{
+				this.type = inType;
+				
+				this.free = [];
+				this.freeCount = 0;
+				
+				if(DEBUG_POOL)
+				{
+					this.inUse = [];
+					this.inUseCount = 0;
+				}
+				
+				Pool.instances.push(this);
+			}
+			Pool.instances = [];
+			
+			Pool.create = function create(inClass)
+			{
+				inClass.pool = new Pool(inClass);
+				inClass.create = this._create;
+				inClass.prototype.destroy = this._destroy;
+			}
+
+			Pool.report = function report()
+			{
+				for(var i = 0; i < this.instances.length; ++i)
+				{
+					this.instances[i].report();
+				}
+			};
+			
+			Pool.prototype.allocate = function allocate()
+			{
+				var anItem;
+				
+				if(this.freeCount)
+				{
+					--this.freeCount;
+					anItem = this.free[this.freeCount];
+				}
+				else
+				{
+					anItem = new this.type;
+				}
+				
+				if(DEBUG_POOL)
+				{
+					this.inUse[this.inUseCount] = anItem;
+					++this.inUseCount;
+					anItem._allocateLocation = (new Error()).stack.substr("Error\n".length);
+				}
+				
+				return anItem;
+			};
+			
+			Pool.prototype.deallocate = function deallocate(inItem)
+			{
+				var anIndex;
+				
+				this.free[this.freeCount] = inItem;
+				++this.freeCount;
+				
+				if(DEBUG_POOL)
+				{
+					anIndex = this.inUse.indexOf(inItem);
+					if(anIndex === -1)
+					{
+						console.error("Item is not pooled as", this.type.name, inItem);
+						return;
+					}
+					this.inUse[anIndex] = this.inUse[this.inUse.length - 1];
+					this.inUse[this.inUse.length - 1] = null;
+					--this.inUseCount;
+				}
+			};
+			
+			Pool.prototype.report = function report()
+			{
+				var aLocationCountMap
+					,aLocation
+					,i
+					;
+				
+				if(DEBUG_POOL)
+				{
+					console.log(this.type.name + '(max): ' + this.inUse.length);
+					
+					aLocationCountMap = {};
+					for(i = 0; i < this.inUseCount; ++i)
+					{
+						//console.log("Unallocated " + this.type + ' at:\n'
+						//	+ this.inUse[i]._allocateLocation);
+						if(aLocationCountMap[this.inUse[i]._allocateLocation])
+						{
+							++aLocationCountMap[this.inUse[i]._allocateLocation];
+						}
+						else
+						{
+							aLocationCountMap[this.inUse[i]._allocateLocation] = 1;
+						}
+					}
+					for(aLocation in aLocationCountMap)
+					{
+						console.log(
+							this.type.name + ": "
+							+ aLocationCountMap[aLocation] + " unallocated from:\n"
+							+ aLocation
+						);
+					}
+				}
+			};
+			
+			Pool._create = function create()
+			{
+				var anItem
+					;
+					
+				anItem =  this.pool.allocate();
+				this.apply(anItem, arguments);
+				
+				return anItem;
+			};
+			
+			Pool._destroy = function destroy()
+			{
+				if(this.cleanup)
+				{
+					this.cleanup();
+				}
+				this.constructor.pool.deallocate(this);
+			};
+			
+			
+			
+			
+			
+			
+			
+			
+			
+
+			
+			
+			
+			
+			
+			function Point2D(inX, inY)
+			{
+				this.x = inX;
+				this.y = inY;
+			};
+	/*		Point2D.prototype.cleanup = function()
+			{
+				console.log("clean", this);
+			}*/
+			Pool.create(Point2D);
+			
+			
+			/*Point2D.create(Math.random(), Math.random());
+			Point2D.create(Math.random(), Math.random());
+			Point2D.create(Math.random(), Math.random()).destroy();
+			Point2D.create(Math.random(), Math.random()).destroy();*/
+			
+			
+			function AABB2D(inX, inY, inW, inH)
+			{
+				this.x = inX;
+				this.y = inY;
+				this.w = inW;
+				this.h = inH;
+			}
+			AABB2D.prototype.cleanup = function()
+			{
+				console.log("release ", this);
+			}
+			Pool.create(AABB2D);
+			
+			AABB2D.create(
+				Math.random()
+				,Math.random()
+				,Math.random()
+				,Math.random()
+			).destroy();
+			AABB2D.create(
+				Math.random()
+				,Math.random()
+				,Math.random()
+				,Math.random()
+			).destroy();
+			
+			Pool.report();
+			
+			
+			
+			
+			//http://jsperf.com/pooltest
+			
+						
+			
+			window.requestAnimFrame =
+				(function()
+				{
+					return  window.requestAnimationFrame       ||
+						window.webkitRequestAnimationFrame ||
+						window.mozRequestAnimationFrame    ||
+						function(callback)
+						{
+							window.setTimeout(callback, 1000 / 60);
+						};
+				})();
+			
+			
+			
+			
+			(function animloop()
+			{
+				requestAnimFrame(animloop);
+				var aPoint;
+				/*for(var aCount = 0; aCount < 300000; ++aCount)
+				{
+					aPoint = Point2D.create(Math.random(), Math.random());
+					aPoint.destroy();
+				}*/
+				for(var aCount = 0; aCount < 300000; ++aCount)
+				{
+					aPoint = new Point2D(Math.random(), Math.random());
+				}
+			})();
+			
+			
+			
+		</script>
+	</body>
+</html>

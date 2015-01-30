@@ -56,6 +56,8 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 		
 		this._myDefaultCamera = ECGame.EngineLib.Camera2D.create();
 		this._myCamera = null;
+		
+		this._myDebugRayList = [];//TODO should be in physics I think!!
 	},
 	
 	Parents : [ECGame.EngineLib.GameObject],
@@ -126,6 +128,7 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 		render : function render(inGraphics)
 		{
 			var aCamera
+				,i
 				;
 			
 			aCamera = this.getCamera();
@@ -144,6 +147,18 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			if(ECGame.Settings.isDebugDraw_Physics())
 			{
 				this._myPhysics.debugDraw(inGraphics);
+				//TODO move physics ray tracing stuff into physics
+				for(i = 0; i < this._myDebugRayList.length; ++i)//TODO make ray trace separate debug draw??
+				{
+					this._myDebugRayList[i].debugDraw(inGraphics);
+					++this._myDebugRayList[i]._myWorldDebugDrawCount;
+					if(this._myDebugRayList[i]._myWorldDebugDrawCount > 10)//TODO HACK should be for a time instead of frames?
+					{
+						this._myDebugRayList.shift();
+						--i;
+					}
+				}
+				//this._myDebugRayList = [];
 			}
 			
 			//debug draw camera target point
@@ -199,6 +214,24 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 			inGraphics.setStrokeStyle('rgba(255, 255, 255, 1)');
 			inGraphics.strokeRect(aCameraRect);
 		},
+		
+		firePhysicsRay : function firePhysicsRay(inStart, inEnd)
+		{
+			var aRayTracer
+				;
+				
+			aRayTracer = new ECGame.EngineLib.RayTracer2D.create();
+			if(ECGame.Settings.isDebugDraw_Physics())
+			{
+				this._myDebugRayList.push(aRayTracer);
+				aRayTracer._myWorldDebugDrawCount = 0;//TODO hack: should be part of the actual class
+			}
+			return aRayTracer.fireRay(
+				this._myPhysics._myDetectionTree
+				,inStart//.clone()
+				,inEnd//.clone()
+			);
+		},
 
 		addEntity : function addEntity(
 			inEntity
@@ -233,24 +266,16 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 		,_removedEntity : function _removedEntity(inEntity)
 		{
 			var aCurrentEntityHash
-				,aNodeArray
-				,aNodeIndex
 				;
 				
 			inEntity.deregisterListener('UpdatedPhysicsStatus', this);
 			
 			//unregisterfromhashmap
 			aCurrentEntityHash = this._myEntityHashByID[inEntity.getID()];
-			delete this._myEntityHashByID[inEntity.getID()];
 			if(aCurrentEntityHash)
 			{
-				//remove it
-				aNodeArray = aCurrentEntityHash.myContainingNodes;
-				for(aNodeIndex in aNodeArray)
-				{
-					aNodeArray[aNodeIndex].deleteItem(aCurrentEntityHash);
-				}
-				aCurrentEntityHash.myContainingNodes = [];
+				delete this._myEntityHashByID[inEntity.getID()];
+				aCurrentEntityHash.removeFromQuadTree();
 			}
 			
 			//tell the entity it has been removed //TODO this should be an event?
@@ -282,20 +307,12 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 		onUpdatedPhysicsStatus : function onUpdatedPhysicsStatus(inEvent)
 		{
 			var aCurrentEntityHash
-				,aNodeIndex
-				,aNodeArray
 				;
 			
 			aCurrentEntityHash = this._myEntityHashByID[inEvent.myEntity.getID()];
 			if(aCurrentEntityHash)
 			{
-				//remove it
-				aNodeArray = aCurrentEntityHash.myContainingNodes;
-				for(aNodeIndex in aNodeArray)
-				{
-					aNodeArray[aNodeIndex].deleteItem(aCurrentEntityHash);
-				}
-				aCurrentEntityHash.myContainingNodes = [];
+				aCurrentEntityHash.removeFromQuadTree();
 			}
 			else
 			{
@@ -303,13 +320,9 @@ ECGame.EngineLib.World2D = ECGame.EngineLib.Class.create(
 				aCurrentEntityHash = ECGame.EngineLib.QuadTreeItem.create(inEvent.boundingRect.clone());//TODO subclass of QuadTreeItem
 				this._myEntityHashByID[inEvent.myEntity.getID()] = aCurrentEntityHash;
 				aCurrentEntityHash.myEntity = inEvent.myEntity;
-				aCurrentEntityHash.myContainingNodes = [];
 			}
 			aCurrentEntityHash.setAABB2D(inEvent.boundingRect);
-			this._myEntitySpacialHashMap.insertToAllBestFitting(
-				aCurrentEntityHash
-				,aCurrentEntityHash.myContainingNodes
-			);
+			this._myEntitySpacialHashMap.insertToAllBestFitting(aCurrentEntityHash);
 		},
 		
 		getPhysics : function getPhysics()

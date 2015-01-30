@@ -91,9 +91,15 @@ ECGame.EngineLib.GameObjectCollection = ECGame.EngineLib.Class.create({
 		
 		,add : function add(inGameObject, inTrackDelta)
 		{
-			if(ECGame.Settings.DEBUG)
+			var anIndex;
+			/*if(ECGame.Settings.DEBUG)
 			{
 				console.assert(this._myRemovedGameObjects.indexOf(inGameObject) === -1);
+			}*/
+			anIndex = this._myRemovedGameObjects.indexOf(inGameObject);
+			if(anIndex !== -1)
+			{
+				this._myRemovedGameObjects.swapBackPop(anIndex);
 			}
 			
 			if(this._myGameObjects.indexOf(inGameObject) !== -1)
@@ -103,7 +109,7 @@ ECGame.EngineLib.GameObjectCollection = ECGame.EngineLib.Class.create({
 			}
 			
 			this._myGameObjects.push(inGameObject);
-			if(inTrackDelta)
+			if(inTrackDelta && anIndex === -1)
 			{
 				this._myAddedGameObjects.push(inGameObject);
 			}
@@ -224,13 +230,16 @@ ECGame.EngineLib.GameObjectCollection = ECGame.EngineLib.Class.create({
 			this._myRemovedGameObjectRefs = [];
 		}
 		
-		,forall : function forall(inCallback)
+		,forAll : function forAll(inCallback)
 		{
 			var i;
 			
 			for(i = 0; i < this._myGameObjects.length; ++i)
 			{
-				inCallback(this._myGameObjects[i]);
+				if(!inCallback(this._myGameObjects[i]))
+				{
+					return;
+				}
 			}
 		}
 		

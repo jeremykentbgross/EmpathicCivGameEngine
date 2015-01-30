@@ -153,7 +153,7 @@ ECGame.Settings =
 			regexp : true,		//if the . should be allowed in regexp literals
 			rhino : false,		//if the Rhino environment globals should be predefined
 			unparam : false,		//if unused parameters should be tolerated
-			sloppy : true,		//if the 'use strict'; pragma is optional
+/*TODO use strict*/			sloppy : true,		//if the 'use strict'; pragma is optional
 			stupid : false,		//if really stupid practices are tolerated
 			sub : false,			//if all forms of subscript notation are tolerated
 			todo : true,			//if TODO comments are tolerated

@@ -157,11 +157,11 @@ ECGame.EngineLib.AssetManager = ECGame.EngineLib.Class.create({
 					//Decode asynchronously
 					ECGame.instance.getSoundSystem()._myContext.decodeAudioData(
 						aRequest.response,
-						function decodedCallback(buffer)
+						function decodedCallback(inBuffer)
 						{
 							var i;
 							
-							aSoundInfo.mySoundBuffer = buffer;
+							aSoundInfo.mySoundBuffer = inBuffer;
 							aSoundInfo.myIsLoaded = true;
 							
 							//set targets to have the loaded sound

@@ -97,6 +97,7 @@ ECGame.EngineLib.Registry.prototype.forAll = function forAll(inFunction)
 	var i;
 	for(i in this._myInstancesByName)
 	{
+		//TODO allow to break out of the loop by returning false??
 		inFunction(this._myInstancesByName[i]);
 	}
 };

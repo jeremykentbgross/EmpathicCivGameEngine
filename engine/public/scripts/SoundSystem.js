@@ -333,10 +333,10 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 		/*
 		TODO
 		pause:
-			forall playing sounds
+			forAll playing sounds
 				pause
 		resume:
-			forall playing sounds
+			forAll playing sounds
 				resume
 		*/
 		

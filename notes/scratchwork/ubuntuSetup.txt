@@ -1,0 +1,13 @@
+sudu apt-get update
+sudo apt-get install git
+sudo apt-get install vim
+
+curl http://nodejs.org/dist/v0.10.35/node-v0.10.35-linux-x64.tar.gz > node-v0.10.35-linux-x64.tar.gz
+tar -zxvf node-v0.10.35-linux-x64.tar.gz 
+
+#TODO links
+
+#TODO git clone git@github.com:jeremykentbgross/EmpathicCivGameEngine.git
+
+cd EmpathicCivGameEngine/bin/
+sudo ~/bin/node ../engine/private/scripts/main.js 

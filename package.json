@@ -12,7 +12,7 @@
 	"dependencies" :
 	{
 		"express": "3.0.5",
-		"node-inspector" : "0.3.0preview1",
+		"node-inspector" : "0.4.0",
 		"npmedge" : "0.1.2",
 		"ws" : "0.4.25"
 	}

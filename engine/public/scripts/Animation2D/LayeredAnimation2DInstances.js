@@ -24,6 +24,7 @@ ECGame.EngineLib.LayeredAnimation2DInstances = ECGame.EngineLib.Class.create({
 	{
 		this.Renderable2D();
 		
+		this._myMasterLayeredAnimations = [];
 		this._myLayeredAnimations = [];
 	},
 	Parents : [ECGame.EngineLib.Renderable2D],
@@ -39,7 +40,10 @@ ECGame.EngineLib.LayeredAnimation2DInstances = ECGame.EngineLib.Class.create({
 			
 			for(i = 0; i < inLayers; ++i)
 			{
-				this._myLayeredAnimations[i] = ECGame.EngineLib.Animation2DInstance.create();
+				this._myMasterLayeredAnimations[i] =
+					this._myLayeredAnimations[i] =
+					ECGame.EngineLib.Animation2DInstance.create()
+				;
 			}
 		}
 		
@@ -90,14 +94,43 @@ ECGame.EngineLib.LayeredAnimation2DInstances = ECGame.EngineLib.Class.create({
 			return aReturnAABB2D;
 		}
 		
+		//TODO may need to remove from scene graph and then re-add for these to work properly!!!
 		,setAnimation : function setAnimation(inAnimation, inLayer)
 		{
-			this._myLayeredAnimations[inLayer].setAnimation(inAnimation);
+			if(this.isInTree())
+			{
+				console.warn("Already in scene graph, changing animation might change AABB.");
+			}
+			this._myMasterLayeredAnimations[inLayer].setAnimation(inAnimation);
+			this._myLayeredAnimations[inLayer] = this._myMasterLayeredAnimations[inLayer];
+			this._myLayeredAnimations[inLayer].setAnchorPosition(this._myAnchorPosition);
+		}
+		//TODO may need to remove from scene graph and then re-add for these to work properly!!!
+		,setNestedLayeredAnimation : function setNestedLayeredAnimation(inLayeredAnimation, inLayer)
+		{
+			if(this.isInTree())
+			{
+				console.warn("Already in scene graph, changing animation might change AABB.");
+			}
+			this._myLayeredAnimations[inLayer] = inLayeredAnimation;
+			this._myLayeredAnimations[inLayer].setAnchorPosition(this._myAnchorPosition);
 		}
 		
 		,setAnimationSpeed : function setAnimationSpeed(inSpeed, inLayer)
 		{
-			this._myLayeredAnimations[inLayer].setAnimationSpeed(inSpeed);
+			var i;
+			
+			if(inLayer)
+			{
+				this._myLayeredAnimations[inLayer].setAnimationSpeed(inSpeed);
+			}
+			else
+			{
+				for(i = 0; i < this._myLayeredAnimations.length; ++i)
+				{
+					this._myLayeredAnimations[i].setAnimationSpeed(inSpeed);
+				}
+			}
 		}
 		
 		,setAnchorPosition : function setAnchorPosition(inAnchorPosition)

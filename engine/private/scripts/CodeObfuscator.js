@@ -296,7 +296,12 @@ ECGame.WebServerTools.Obfuscator.prototype.run = function run()
 	for(i = 0; i < aReorderingArray.length; ++i)
 	{
 		aLogString += 'Parameter Variable:\t' + aReorderingArray[i]
-			+ (aReorderingArray[i].indexOf('in') !== 0 ? '\t\t\t*****' : '')//highlight incorrectly named parameters
+			+ (
+				aReorderingArray[i].indexOf('in') !== 0
+				&& aReorderingArray[i].indexOf('out') !== 0
+					? '\t\t\t*****'
+					: ''
+			)//highlight incorrectly named parameters
 			+ '\n';
 	}
 	

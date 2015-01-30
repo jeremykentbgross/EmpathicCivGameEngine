@@ -51,6 +51,16 @@ ECGame.EngineLib.AABB2D = ECGame.EngineLib.Class.create({
 			this.myHeight = inOther.myHeight;
 		},
 		
+		offset : function offset(inPoint)
+		{
+			return new ECGame.EngineLib.AABB2D(
+				this.myX + inPoint.myX
+				,this.myY + inPoint.myY
+				,this.myWidth
+				,this.myHeight
+			);
+		},
+		
 		containsPoint : function containsPoint(inPoint)
 		{
 			if(inPoint.myX < this.myX)//left

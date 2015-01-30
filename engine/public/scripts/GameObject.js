@@ -234,11 +234,11 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			return false;
 		},
 		
-		serialize : function serialize(serializer)
+		serialize : function serialize(inSerializer)
 		{
 			var aStartingOwner;
 			
-			if(!serializer)
+			if(!inSerializer)
 			{
 				return;
 			}
@@ -248,9 +248,9 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			//HACK TODO this should not be done like this!!
 			//This is because if it isn't marked as net serialize it probably IS a net serialize but it needs a 'full' serialize
 			//TODO probably need some way to do net and netfull
-			this._myGameObjectNetDirty = this._myGameObjectNetDirty || !serializer.isNetMode();
+			this._myGameObjectNetDirty = this._myGameObjectNetDirty || !inSerializer.isNetMode();
 			
-			serializer.serializeObject(this, this.GameObject._serializeFormat);
+			inSerializer.serializeObject(this, this.GameObject._serializeFormat);
 			
 			if(ECGame.Settings.isDebugPrint_NetworkMessages() || ECGame.Settings.isDebugPrint_GameObject())
 			{

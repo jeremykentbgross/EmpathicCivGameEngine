@@ -7,15 +7,14 @@ filename=log_$(date +%s).txt
 rm ../logs/log.txt
 
 #create the file
-touch ../logs/$filename
+echo "Log for $filename\n" > ../logs/$filename
 
 #link the log.txt to the newest log file we are going to create:
 ln -s ../logs/$filename ../logs/log.txt
 
-gedit ../logs/$filename &
+#TODO make param to do this or not: gedit ../logs/$filename &
 
 #run node with the log
-echo "TODO errors to file also!!"
 node --version &> ../logs/$filename
 node ../engine/private/scripts/main.js >> ../logs/$filename  2>&1
 

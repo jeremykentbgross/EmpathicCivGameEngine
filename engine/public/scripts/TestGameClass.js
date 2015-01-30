@@ -22,7 +22,7 @@ ECGame.unitTests.registerTest(
 	"GameClass",
 	function()
 	{
-		var ClassNamespace
+		var aClassNamespace
 			,testClass1
 			,testClass2
 			,foundClass
@@ -32,33 +32,33 @@ ECGame.unitTests.registerTest(
 			,chainTestObject
 			;
 		
-		ClassNamespace = {};
+		aClassNamespace = {};
 		
 		ECGame.EngineLib.Class.createInstanceRegistry();
 		
-		ClassNamespace.TestClass1 = ECGame.EngineLib.Class.create({
+		aClassNamespace.TestClass1 = ECGame.EngineLib.Class.create({
 			Constructor : function TestClass1(){return;},
 			Parents : null,
 			flags : {},
 			Definition :
 			{
-				Func1 : function Func1()
+				testFunction1 : function testFunction1()
 				{
 					this.Func1Called = true;
 				}
 			}
 		});
 		
-		ClassNamespace.TestClass2 = ECGame.EngineLib.Class.create({
+		aClassNamespace.TestClass2 = ECGame.EngineLib.Class.create({
 			Constructor : function TestClass2()
 			{
 				this.TestClass1();
 			},
-			Parents : [ClassNamespace.TestClass1],
+			Parents : [aClassNamespace.TestClass1],
 			flags : {},
 			Definition :
 			{
-				Func2 : function Func2()
+				testFunction2 : function testFunction2()
 				{
 					this.Func2Called = true;
 				},
@@ -68,20 +68,20 @@ ECGame.unitTests.registerTest(
 		
 		
 		
-		testClass1 = new ClassNamespace.TestClass1();
-		testClass1.Func1();
+		testClass1 = new aClassNamespace.TestClass1();
+		testClass1.testFunction1();
 		console.assert(testClass1.Func1Called, "Function failed from new'ed class instance!");
 		
 		
 		
-		testClass2 = ClassNamespace.TestClass2.create();
-		console.assert(ClassNamespace.TestClass2.StaticThing === 'HaHa!', "Inherited functions failed from created class instance!");
+		testClass2 = aClassNamespace.TestClass2.create();
+		console.assert(aClassNamespace.TestClass2.StaticThing === 'HaHa!', "Inherited functions failed from created class instance!");
 		
-		testClass2.Func1();
-		testClass2.Func2();
+		testClass2.testFunction1();
+		testClass2.testFunction2();
 		console.assert(testClass2.Func1Called && testClass2.Func2Called, "Inherited functions failed from created class instance!");
 
-		ClassNamespace.TestObjectClass1 = ECGame.EngineLib.Class.create({
+		aClassNamespace.TestObjectClass1 = ECGame.EngineLib.Class.create({
 			Constructor : function TestObjectClass1()
 			{
 				this.GameObject();
@@ -109,11 +109,11 @@ ECGame.unitTests.registerTest(
 				}
 			}
 		});
-		ClassNamespace.TestObjectClass1.registerClass();
+		aClassNamespace.TestObjectClass1.registerClass();
 		
 		foundClass = ECGame.EngineLib.Class.getInstanceRegistry().findByName('TestObjectClass1');
 		testObjectClass1 = foundClass.create();
-		console.assert(testObjectClass1.isA(ClassNamespace.TestObjectClass1), "isA() Failed on found created class!");
+		console.assert(testObjectClass1.isA(aClassNamespace.TestObjectClass1), "isA() Failed on found created class!");
 		
 		found = foundClass.getInstanceRegistry().findByName(testObjectClass1.getName());
 		console.assert(testObjectClass1 === found, "Failed to find class instance!");
@@ -124,12 +124,12 @@ ECGame.unitTests.registerTest(
 		console.assert(!found, "Found destroyed object in registry!");
 		
 		
-		ClassNamespace.TestObjectClass2 = ECGame.EngineLib.Class.create({
+		aClassNamespace.TestObjectClass2 = ECGame.EngineLib.Class.create({
 			Constructor : function TestObjectClass2()
 			{
 				this.TestObjectClass1();
 			},
-			Parents : [ClassNamespace.TestObjectClass1],
+			Parents : [aClassNamespace.TestObjectClass1],
 			flags : {},
 			Definition :
 			{
@@ -150,7 +150,7 @@ ECGame.unitTests.registerTest(
 			}
 		});
 		
-		chainTestObject = ClassNamespace.TestObjectClass2.create();
+		chainTestObject = aClassNamespace.TestObjectClass2.create();
 		chainTestObject.chainUp();
 		chainTestObject.chainDown();
 		

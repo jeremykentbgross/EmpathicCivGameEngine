@@ -110,8 +110,8 @@ ECGame.EngineLib.TileDescription2D = ECGame.EngineLib.Class.create({
 			aPhysicsObject = null;
 			
 			aTileRenderableAABB2D = ECGame.EngineLib.AABB2D.create(
-				inTileInstanceAABB2D.myX - this._myAnchor.myX,
-				inTileInstanceAABB2D.myY - this._myAnchor.myY,
+				- this._myAnchor.myX,
+				- this._myAnchor.myY,
 				this._mySize.myX,	//TODO _myImage.width,//todo consider possible =>tile.scaledRect
 				this._mySize.myY	//TODO _myImage.height	//NO srcRect size
 			);

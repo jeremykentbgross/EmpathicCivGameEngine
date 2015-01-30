@@ -79,6 +79,11 @@ ECGame.EngineLib.ArithmeticCompressionModels.EvenProbabilityIntegerRangeModel.pr
 	//	high : valueHigh
 	//};
 	
+	if(!(inValue <= this.myMax && inValue >= this.myMin))
+	{
+		range = 0;//BREAK POINT HERE!!!
+	}
+	
 	console.assert(
 		inValue <= this.myMax
 		&& inValue >= this.myMin,

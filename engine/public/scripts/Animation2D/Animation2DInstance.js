@@ -43,6 +43,11 @@ ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 		{
 			var anUpdateStartFrame;
 			
+			if(!this._myAnimation)
+			{
+				return;
+			}
+			
 			anUpdateStartFrame = this._myCurrentFrame;
 			
 			this._myAccumulatedTime += inUpdateData.myAverageDeltaTime * this._myAnimationSpeed;
@@ -67,6 +72,11 @@ ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 		
 		render : function render(inGraphics)
 		{
+			if(!this._myAnimation)
+			{
+				return;
+			}
+			
 			this._myAnimation.render(inGraphics, this._myCurrentFrame, this._myAnchorPosition);
 			if(ECGame.Settings.isDebugDraw_Sprite())
 			{
@@ -79,21 +89,23 @@ ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 			this._myAnimationSpeed = inSpeed;
 		},
 		
-		getAABB2D : function getAABB2D()
-		{
-			//TODO make set function for _myAnchorPosition so this can be updated ONLY when it is needed! This is unoptimal!
-			return ECGame.EngineLib.AABB2D.create(
-				this._myAABB.myX + this._myAnchorPosition.myX,
-				this._myAABB.myY + this._myAnchorPosition.myY,
-				this._myAABB.myWidth,
-				this._myAABB.myHeight
-			);
-		},
-		
+		//TODO may need to remove from scene graph and then re-add for these to work properly!!!
 		setAnimation : function setAnimation(inAnimation)
 		{
+			if(this.isInTree())
+			{
+				console.warn("Already in scene graph, changing animation might change AABB.");
+			}
+			
 			this._myAnimation = inAnimation;
-			this._myAABB = inAnimation.getAABB2D();
+			if(this._myAnimation)
+			{
+				this._myAABB = inAnimation.getAABB2D();
+			}
+			else
+			{
+				this._myAABB = ECGame.EngineLib.AABB2D.create(0,0,10,10);//some small aabb
+			}
 		},
 		
 		debugDraw : function debugDraw(inGraphics)

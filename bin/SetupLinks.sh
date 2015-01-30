@@ -1,16 +1,17 @@
-echo "TODO!!!!!!"
-mkdir ..\_public_
-mklink /D ..\_public_\engine\ ..\engine\public\
-mklink /D ..\_public_\game\ ..\engine_test_game\public\
-mklink /D ..\_public_\3rdParty\ ..\3rdParty\public\
-mklink /D ..\_public_\engine_editor\ ..\editor\public\
-mklink ..\_public_\game.html ..\engine\public\html\game.html
-mklink ..\_public_\welcome.html ..\engine\public\html\welcome.html
-mkdir ..\_private_
-mklink /D ..\_private_\engine\ ..\engine\private\
-mklink /D ..\_private_\game\ ..\engine_test_game\private\
-mklink /D ..\_private_\3rdParty\ ..\3rdParty\private\
-mklink /D ..\_private_\engine_editor\ ..\editor\private\
-mkdir ..\_unified_
-mklink /D ..\_unified_\engine\ ..\engine\
-mklink /D ..\_unified_\game\ ..\engine_test_game\
+#!/bin/bash
+mkdir ../_public_
+ln -s ../engine/public/ ../_public_/engine
+ln -s ../engine_test_game/public/ ../_public_/game
+ln -s ../3rdParty/public/ ../_public_/3rdParty
+ln -s ../editor/public/ ../_public_/engine_editor
+ln -s ../engine/public/html/game.html ../_public_/game.html
+ln -s ../engine/public/html/welcome.html ../_public_/welcome.html
+mkdir ../_private_
+ln -s ../engine/private/ ../_private_/engine
+ln -s ../engine_test_game/private/ ../_private_/game
+ln -s ../3rdParty/private/ ../_private_/3rdParty
+ln -s ../editor/private/ ../_private_/engine_editor
+mkdir ../_unified_
+ln -s ../engine/ ../_unified_/engine
+ln -s ../engine_test_game/ ../_unified_/game
+mkdir ../logs

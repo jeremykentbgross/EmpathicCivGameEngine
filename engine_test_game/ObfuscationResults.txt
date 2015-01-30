@@ -54,8 +54,6 @@ Final NameSpace:	EntityRemovedFromWorld
 Final NameSpace:	EvenProbabilityIntegerRangeModel
 Final NameSpace:	EventSystem
 Final NameSpace:	Events
-Final NameSpace:	Func1
-Final NameSpace:	Func2
 Final NameSpace:	GameEventBase
 Final NameSpace:	GameInstance
 Final NameSpace:	GameLocalization
@@ -206,6 +204,7 @@ Final NameSpace:	copyFrom
 Final NameSpace:	create
 Final NameSpace:	createAndPlaySourceBuffer
 Final NameSpace:	createInstanceRegistry
+Final NameSpace:	createLinearGradientY
 Final NameSpace:	createNetGroup
 Final NameSpace:	createNewPhysicsObject
 Final NameSpace:	createSourceBuffer
@@ -220,6 +219,7 @@ Final NameSpace:	decodedCallback
 Final NameSpace:	delayNetworkMessage
 Final NameSpace:	deleteContained
 Final NameSpace:	deleteItem
+Final NameSpace:	deleteItemFromNode
 Final NameSpace:	deref
 Final NameSpace:	deregister
 Final NameSpace:	deregisterListener
@@ -246,10 +246,10 @@ Final NameSpace:	findSmallestContainingAncestor
 Final NameSpace:	findSmallestContainingDescendant
 Final NameSpace:	findSmallestContainingNodeFromHere
 Final NameSpace:	findWhere
+Final NameSpace:	firePhysicsRay
 Final NameSpace:	fireRay
 Final NameSpace:	floor
 Final NameSpace:	forAll
-Final NameSpace:	forall
 Final NameSpace:	fromJSON
 Final NameSpace:	generateNextAssetID
 Final NameSpace:	generateNextSampleID
@@ -389,6 +389,7 @@ Final NameSpace:	isDebugPrint_Sound
 Final NameSpace:	isDebugPrint_Updater
 Final NameSpace:	isFinished
 Final NameSpace:	isGameObjectNetDirty
+Final NameSpace:	isInTree
 Final NameSpace:	isNetDirty
 Final NameSpace:	isNetMode
 Final NameSpace:	isNumber
@@ -410,6 +411,7 @@ Final NameSpace:	min
 Final NameSpace:	moveTo
 Final NameSpace:	multiply
 Final NameSpace:	normalize
+Final NameSpace:	offset
 Final NameSpace:	onAddedToEntity
 Final NameSpace:	onBlur
 Final NameSpace:	onChatSubmit
@@ -453,6 +455,7 @@ Final NameSpace:	remove
 Final NameSpace:	removeComponent
 Final NameSpace:	removeEntity
 Final NameSpace:	removeFromNetGroup
+Final NameSpace:	removeFromQuadTree
 Final NameSpace:	removeItem
 Final NameSpace:	removeObject
 Final NameSpace:	removeUpdate
@@ -501,10 +504,12 @@ Final NameSpace:	setFont
 Final NameSpace:	setID
 Final NameSpace:	setImage
 Final NameSpace:	setLeftTop
+Final NameSpace:	setLineWidth
 Final NameSpace:	setListenerPosition
 Final NameSpace:	setMasterVolume
 Final NameSpace:	setMinMax
 Final NameSpace:	setName
+Final NameSpace:	setNestedLayeredAnimation
 Final NameSpace:	setNetDirty
 Final NameSpace:	setNetMode
 Final NameSpace:	setNetOwner
@@ -536,6 +541,8 @@ Final NameSpace:	strokeRect
 Final NameSpace:	strokeRectXYWH
 Final NameSpace:	subtract
 Final NameSpace:	swapBackPop
+Final NameSpace:	testFunction1
+Final NameSpace:	testFunction2
 Final NameSpace:	this
 Final NameSpace:	tileCoordinateToWorldAABB
 Final NameSpace:	toBinary
@@ -593,8 +600,6 @@ Function Name:	EntityRemovedFromWorld
 Function Name:	EvenProbabilityIntegerRangeModel
 Function Name:	EventSystem
 Function Name:	Events
-Function Name:	Func1
-Function Name:	Func2
 Function Name:	GameEventBase
 Function Name:	GameInstance
 Function Name:	GameObject
@@ -741,6 +746,7 @@ Function Name:	copyFrom
 Function Name:	create
 Function Name:	createAndPlaySourceBuffer
 Function Name:	createInstanceRegistry
+Function Name:	createLinearGradientY
 Function Name:	createNetGroup
 Function Name:	createNewPhysicsObject
 Function Name:	createSourceBuffer
@@ -755,6 +761,7 @@ Function Name:	decodedCallback
 Function Name:	delayNetworkMessage
 Function Name:	deleteContained
 Function Name:	deleteItem
+Function Name:	deleteItemFromNode
 Function Name:	deref
 Function Name:	deregister
 Function Name:	deregisterListener
@@ -781,10 +788,10 @@ Function Name:	findSmallestContainingAncestor
 Function Name:	findSmallestContainingDescendant
 Function Name:	findSmallestContainingNodeFromHere
 Function Name:	findWhere
+Function Name:	firePhysicsRay
 Function Name:	fireRay
 Function Name:	floor
 Function Name:	forAll
-Function Name:	forall
 Function Name:	fromJSON
 Function Name:	generateNextAssetID
 Function Name:	generateNextSampleID
@@ -923,6 +930,7 @@ Function Name:	isDebugPrint_Sound
 Function Name:	isDebugPrint_Updater
 Function Name:	isFinished
 Function Name:	isGameObjectNetDirty
+Function Name:	isInTree
 Function Name:	isNetDirty
 Function Name:	isNetMode
 Function Name:	isNumber
@@ -944,6 +952,7 @@ Function Name:	min
 Function Name:	moveTo
 Function Name:	multiply
 Function Name:	normalize
+Function Name:	offset
 Function Name:	onAddedToEntity
 Function Name:	onBlur
 Function Name:	onChatSubmit
@@ -986,6 +995,7 @@ Function Name:	remove
 Function Name:	removeComponent
 Function Name:	removeEntity
 Function Name:	removeFromNetGroup
+Function Name:	removeFromQuadTree
 Function Name:	removeItem
 Function Name:	removeObject
 Function Name:	removeUpdate
@@ -1034,10 +1044,12 @@ Function Name:	setFont
 Function Name:	setID
 Function Name:	setImage
 Function Name:	setLeftTop
+Function Name:	setLineWidth
 Function Name:	setListenerPosition
 Function Name:	setMasterVolume
 Function Name:	setMinMax
 Function Name:	setName
+Function Name:	setNestedLayeredAnimation
 Function Name:	setNetDirty
 Function Name:	setNetMode
 Function Name:	setNetOwner
@@ -1069,6 +1081,8 @@ Function Name:	strokeRect
 Function Name:	strokeRectXYWH
 Function Name:	subtract
 Function Name:	swapBackPop
+Function Name:	testFunction1
+Function Name:	testFunction2
 Function Name:	tileCoordinateToWorldAABB
 Function Name:	toBinary
 Function Name:	toggleActiveInput
@@ -1085,7 +1099,6 @@ Function Name:	worldPositionToTileCoordinate
 
 
 Parameter Variables:
-Parameter Variable:	buffer			*****
 Parameter Variable:	in2DCamera
 Parameter Variable:	inAABB
 Parameter Variable:	inAABB2D
@@ -1126,6 +1139,7 @@ Parameter Variable:	inDestination
 Parameter Variable:	inDestroyInstanceList
 Parameter Variable:	inDirtyInstanceList
 Parameter Variable:	inEncodeToText
+Parameter Variable:	inEnd
 Parameter Variable:	inEndAngle
 Parameter Variable:	inEndingPoint
 Parameter Variable:	inEntity
@@ -1166,6 +1180,7 @@ Parameter Variable:	inKeys
 Parameter Variable:	inKeysPressed
 Parameter Variable:	inLHS
 Parameter Variable:	inLayer
+Parameter Variable:	inLayeredAnimation
 Parameter Variable:	inLayers
 Parameter Variable:	inLeft
 Parameter Variable:	inListener
@@ -1237,6 +1252,7 @@ Parameter Variable:	inRenderables
 Parameter Variable:	inRenderer
 Parameter Variable:	inRight
 Parameter Variable:	inRootNode
+Parameter Variable:	inSafe
 Parameter Variable:	inSamples
 Parameter Variable:	inScalar
 Parameter Variable:	inSerializer
@@ -1248,6 +1264,7 @@ Parameter Variable:	inSoundDescriptionID
 Parameter Variable:	inSoundSampleIDs
 Parameter Variable:	inSpeed
 Parameter Variable:	inSrcRect
+Parameter Variable:	inStart
 Parameter Variable:	inStartAngle
 Parameter Variable:	inStartingPoint
 Parameter Variable:	inString
@@ -1296,16 +1313,12 @@ Parameter Variable:	inX
 Parameter Variable:	inY
 Parameter Variable:	include
 Parameter Variable:	inoutReturnValues
-Parameter Variable:	outContainingNodes			*****
-Parameter Variable:	outDeletedItems			*****
-Parameter Variable:	outLoadTarget			*****
-Parameter Variable:	serializer			*****
-Parameter Variable:	value			*****
+Parameter Variable:	outDeletedItems
+Parameter Variable:	outLoadTarget
 
 
 
 Local Variables:
-Local Variable:	ClassNamespace			*****
 Local Variable:	Constructor			*****
 Local Variable:	ECGame			*****
 Local Variable:	GameLocalization			*****
@@ -1327,6 +1340,7 @@ Local Variable:	aChangedTile
 Local Variable:	aCharIndex
 Local Variable:	aChild
 Local Variable:	aClassName
+Local Variable:	aClassNamespace
 Local Variable:	aClearTileValue
 Local Variable:	aCollisionList
 Local Variable:	aCollisionRect
@@ -1417,15 +1431,14 @@ Local Variable:	aNewT
 Local Variable:	aNewWidth
 Local Variable:	aNewWidthToHeight
 Local Variable:	aNode
-Local Variable:	aNodeArray
 Local Variable:	aNodeCollisionSize
-Local Variable:	aNodeIndex
 Local Variable:	aNumEncodedBytes
 Local Variable:	aNumValues
 Local Variable:	aNumValuesToProcess
 Local Variable:	aOnInput
 Local Variable:	aPackerBinary
 Local Variable:	aPackerText
+Local Variable:	aPartialPixedOffset
 Local Variable:	aPassedTest
 Local Variable:	aPassedTests
 Local Variable:	aPercentPlayed
@@ -1581,8 +1594,6 @@ Local Variable:	mouseRatio			*****
 Local Variable:	msg			*****
 Local Variable:	newInstance			*****
 Local Variable:	newItem			*****
-Local Variable:	nodeArray			*****
-Local Variable:	nodeIndex			*****
 Local Variable:	obj1			*****
 Local Variable:	obj2			*****
 Local Variable:	objCenter			*****
@@ -1881,6 +1892,7 @@ Member Variable:	_myCurrentCamera
 Member Variable:	_myCurrentFrame
 Member Variable:	_myCurrentNode
 Member Variable:	_myCurrentPoint
+Member Variable:	_myDebugRayList
 Member Variable:	_myDebugTextArray
 Member Variable:	_myDebugTextAssociatedColorsArray
 Member Variable:	_myDefaultCamera
@@ -1948,12 +1960,14 @@ Member Variable:	_myLastUpdateData
 Member Variable:	_myLayeredAnimations
 Member Variable:	_myLeft
 Member Variable:	_myLeftString
+Member Variable:	_myLineWidth
 Member Variable:	_myListenerPosition2D
 Member Variable:	_myLocalUser
 Member Variable:	_myMap
 Member Variable:	_myMapRef
 Member Variable:	_myMapSize
 Member Variable:	_myMapSizeInTiles
+Member Variable:	_myMasterLayeredAnimations
 Member Variable:	_myMasterNetGroup
 Member Variable:	_myMasterUpdater
 Member Variable:	_myMasterVolume
@@ -2013,7 +2027,6 @@ Member Variable:	_myRight
 Member Variable:	_myRightString
 Member Variable:	_mySamples
 Member Variable:	_mySceneGraph
-Member Variable:	_mySceneGraphOwningNodes
 Member Variable:	_mySceneTree
 Member Variable:	_myScreenPos
 Member Variable:	_mySerializeFormat
@@ -2274,7 +2287,6 @@ Included Word:	ChainDown
 Included Word:	ChainUp
 Included Word:	ChatSystem
 Included Word:	Class
-Included Word:	ClassNamespace
 Included Word:	ClientDisconnected
 Included Word:	ClientSideWebSocket
 Included Word:	CodeValidator
@@ -2311,9 +2323,7 @@ Included Word:	Events
 Included Word:	FrameStats_Draw
 Included Word:	FrameStats_DrawColor
 Included Word:	FrameStats_Print
-Included Word:	Func1
 Included Word:	Func1Called
-Included Word:	Func2
 Included Word:	Func2Called
 Included Word:	GameEventBase
 Included Word:	GameInstance
@@ -2640,6 +2650,7 @@ Included Word:	_myCurrentCamera
 Included Word:	_myCurrentFrame
 Included Word:	_myCurrentNode
 Included Word:	_myCurrentPoint
+Included Word:	_myDebugRayList
 Included Word:	_myDebugTextArray
 Included Word:	_myDebugTextAssociatedColorsArray
 Included Word:	_myDefaultCamera
@@ -2707,12 +2718,14 @@ Included Word:	_myLastUpdateData
 Included Word:	_myLayeredAnimations
 Included Word:	_myLeft
 Included Word:	_myLeftString
+Included Word:	_myLineWidth
 Included Word:	_myListenerPosition2D
 Included Word:	_myLocalUser
 Included Word:	_myMap
 Included Word:	_myMapRef
 Included Word:	_myMapSize
 Included Word:	_myMapSizeInTiles
+Included Word:	_myMasterLayeredAnimations
 Included Word:	_myMasterNetGroup
 Included Word:	_myMasterUpdater
 Included Word:	_myMasterVolume
@@ -2772,7 +2785,6 @@ Included Word:	_myRight
 Included Word:	_myRightString
 Included Word:	_mySamples
 Included Word:	_mySceneGraph
-Included Word:	_mySceneGraphOwningNodes
 Included Word:	_mySceneTree
 Included Word:	_myScreenPos
 Included Word:	_mySerializeFormat
@@ -2880,6 +2892,7 @@ Included Word:	aChangedTile
 Included Word:	aCharIndex
 Included Word:	aChild
 Included Word:	aClassName
+Included Word:	aClassNamespace
 Included Word:	aClearTileValue
 Included Word:	aCollisionList
 Included Word:	aCollisionRect
@@ -2970,15 +2983,14 @@ Included Word:	aNewT
 Included Word:	aNewWidth
 Included Word:	aNewWidthToHeight
 Included Word:	aNode
-Included Word:	aNodeArray
 Included Word:	aNodeCollisionSize
-Included Word:	aNodeIndex
 Included Word:	aNumEncodedBytes
 Included Word:	aNumValues
 Included Word:	aNumValuesToProcess
 Included Word:	aOnInput
 Included Word:	aPackerBinary
 Included Word:	aPackerText
+Included Word:	aPartialPixedOffset
 Included Word:	aPassedTest
 Included Word:	aPassedTests
 Included Word:	aPercentPlayed
@@ -3152,6 +3164,7 @@ Included Word:	counter
 Included Word:	createAABB
 Included Word:	createAndPlaySourceBuffer
 Included Word:	createInstanceRegistry
+Included Word:	createLinearGradientY
 Included Word:	createNetGroup
 Included Word:	createNewPhysicsObject
 Included Word:	createSourceBuffer
@@ -3169,6 +3182,7 @@ Included Word:	default2DRadius
 Included Word:	delayNetworkMessage
 Included Word:	deleteContained
 Included Word:	deleteItem
+Included Word:	deleteItemFromNode
 Included Word:	deref
 Included Word:	deregister
 Included Word:	deregisterListener
@@ -3202,12 +3216,12 @@ Included Word:	findItemNode
 Included Word:	findSmallestContainingAncestor
 Included Word:	findSmallestContainingDescendant
 Included Word:	findSmallestContainingNodeFromHere
+Included Word:	firePhysicsRay
 Included Word:	fireRay
 Included Word:	flagIndex
 Included Word:	flags
 Included Word:	fontSize
 Included Word:	forAll
-Included Word:	forall
 Included Word:	force
 Included Word:	forin
 Included Word:	format
@@ -3358,6 +3372,7 @@ Included Word:	inDestination
 Included Word:	inDestroyInstanceList
 Included Word:	inDirtyInstanceList
 Included Word:	inEncodeToText
+Included Word:	inEnd
 Included Word:	inEndAngle
 Included Word:	inEndingPoint
 Included Word:	inEntity
@@ -3398,6 +3413,7 @@ Included Word:	inKeys
 Included Word:	inKeysPressed
 Included Word:	inLHS
 Included Word:	inLayer
+Included Word:	inLayeredAnimation
 Included Word:	inLayers
 Included Word:	inLeft
 Included Word:	inListener
@@ -3469,6 +3485,7 @@ Included Word:	inRenderables
 Included Word:	inRenderer
 Included Word:	inRight
 Included Word:	inRootNode
+Included Word:	inSafe
 Included Word:	inSamples
 Included Word:	inScalar
 Included Word:	inSerializer
@@ -3480,6 +3497,7 @@ Included Word:	inSoundDescriptionID
 Included Word:	inSoundSampleIDs
 Included Word:	inSpeed
 Included Word:	inSrcRect
+Included Word:	inStart
 Included Word:	inStartAngle
 Included Word:	inStartingPoint
 Included Word:	inString
@@ -3573,6 +3591,7 @@ Included Word:	isDebugPrint_Sound
 Included Word:	isDebugPrint_Updater
 Included Word:	isFinished
 Included Word:	isGameObjectNetDirty
+Included Word:	isInTree
 Included Word:	isMultiplayer
 Included Word:	isNetDirty
 Included Word:	isNetMode
@@ -3661,8 +3680,6 @@ Included Word:	newInstance
 Included Word:	newItem
 Included Word:	newcap
 Included Word:	node
-Included Word:	nodeArray
-Included Word:	nodeIndex
 Included Word:	nomen
 Included Word:	normalize
 Included Word:	obfuscateNames
@@ -3670,6 +3687,7 @@ Included Word:	obj1
 Included Word:	obj2
 Included Word:	objCenter
 Included Word:	objectClass
+Included Word:	offset
 Included Word:	onAddedToEntity
 Included Word:	onBlur
 Included Word:	onChatSubmit
@@ -3695,7 +3713,6 @@ Included Word:	onTestEvent
 Included Word:	onUpdatedPhysicsStatus
 Included Word:	ourFrameRayCounter
 Included Word:	outArray
-Included Word:	outContainingNodes
 Included Word:	outDeletedItems
 Included Word:	outEvents
 Included Word:	outLoadTarget
@@ -3737,6 +3754,7 @@ Included Word:	remove
 Included Word:	removeComponent
 Included Word:	removeEntity
 Included Word:	removeFromNetGroup
+Included Word:	removeFromQuadTree
 Included Word:	removeItem
 Included Word:	removeNewlines
 Included Word:	removeNonNewlineWhiteSpace
@@ -3770,7 +3788,6 @@ Included Word:	serializeObject
 Included Word:	serializeOut
 Included Word:	serializePoint2D
 Included Word:	serializeString
-Included Word:	serializer
 Included Word:	serverInit
 Included Word:	set
 Included Word:	setAABB
@@ -3791,10 +3808,12 @@ Included Word:	setFont
 Included Word:	setID
 Included Word:	setImage
 Included Word:	setLeftTop
+Included Word:	setLineWidth
 Included Word:	setListenerPosition
 Included Word:	setMasterVolume
 Included Word:	setMinMax
 Included Word:	setName
+Included Word:	setNestedLayeredAnimation
 Included Word:	setNetDirty
 Included Word:	setNetMode
 Included Word:	setNetOwner
@@ -3825,6 +3844,8 @@ Included Word:	subtract
 Included Word:	targetFPS
 Included Word:	testClass1
 Included Word:	testClass2
+Included Word:	testFunction1
+Included Word:	testFunction2
 Included Word:	testObjectClass1
 Included Word:	theClass
 Included Word:	tileCoordinateToWorldAABB
@@ -4260,6 +4281,7 @@ Unmapped Word:	_myIsFinished
 Unmapped Word:	_mySampleID
 Unmapped Word:	_mySoundDescriptionID
 Unmapped Word:	_myStartTime
+Unmapped Word:	_myWorldDebugDrawCount
 Unmapped Word:	_unified_
 Unmapped Word:	acknowledgingFrame
 Unmapped Word:	alert
@@ -4295,6 +4317,7 @@ Unmapped Word:	createBufferSource
 Unmapped Word:	createDynamicsCompressor
 Unmapped Word:	createElement
 Unmapped Word:	createGain
+Unmapped Word:	createLinearGradient
 Unmapped Word:	createPanner
 Unmapped Word:	currentTime
 Unmapped Word:	custom
@@ -4346,6 +4369,7 @@ Unmapped Word:	keypress
 Unmapped Word:	keyup
 Unmapped Word:	layerX
 Unmapped Word:	layerY
+Unmapped Word:	lineWidth
 Unmapped Word:	listener
 Unmapped Word:	load
 Unmapped Word:	location
@@ -4361,7 +4385,6 @@ Unmapped Word:	mouseout
 Unmapped Word:	mouseover
 Unmapped Word:	mouseup
 Unmapped Word:	mp3
-Unmapped Word:	myContainingNodes
 Unmapped Word:	myLastRayToTouchMe
 Unmapped Word:	n
 Unmapped Word:	netConnected
@@ -4577,6 +4600,7 @@ Localized String:	"PhysicsUpdater"
 Localized String:	"NewUser"
 Localized String:	"QuadTree Node is not a square."
 Localized String:	"This method must be overridden"
+Localized String:	"Already in scene graph, changing animation might change AABB."
 Localized String:	"Debug Drawing SceneGraph"
 Localized String:	"SceneGraph Draw calls:"
 Localized String:	"Currently unsupported number of tiles"

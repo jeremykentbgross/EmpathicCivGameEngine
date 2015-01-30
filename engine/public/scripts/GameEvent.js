@@ -293,7 +293,7 @@ ECGame.EngineLib.Events.ClientDisconnected = ECGame.EngineLib.Class.create({
 	}
 });
 
-//TODO rename NetMsg
+//TODO rename NetMsg or *ChatMessage*
 ECGame.EngineLib.Events.Msg = ECGame.EngineLib.Class.create({
 	Constructor : function Msg(inMsg)
 	{

@@ -57,7 +57,7 @@ ECGame.EngineLib.ArithmeticCompresser = ECGame.EngineLib.Class.create({
 			this._encoded = 0;
 		},
 		
-		encode : function encode(value, inModel)
+		encode : function encode(inValue, inModel)
 		{
 			var encodeRange,
 				valueRange,
@@ -65,7 +65,7 @@ ECGame.EngineLib.ArithmeticCompresser = ECGame.EngineLib.Class.create({
 			
 			encodeRange = (this._high - this._low) + 1;
 			
-			valueRange = inModel.getProbabilityRange(value);
+			valueRange = inModel.getProbabilityRange(inValue);
 			
 			this._high = Math.floor(this._low + encodeRange * valueRange.high - 1);
 			this._low = Math.floor(this._low + encodeRange * valueRange.low);
@@ -116,7 +116,7 @@ ECGame.EngineLib.ArithmeticCompresser = ECGame.EngineLib.Class.create({
 				this._high = (2 * this._high + 1) % this._ONE;
 			}
 			
-			console.assert(false, "Encode failed!" + value + inModel.getString());
+			console.assert(false, "Encode failed!" + inValue + inModel.getString());
 		},
 		
 		decode : function decode(inModel)
