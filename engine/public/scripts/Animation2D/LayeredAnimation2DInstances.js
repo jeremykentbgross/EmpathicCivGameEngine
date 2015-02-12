@@ -26,6 +26,8 @@ ECGame.EngineLib.LayeredAnimation2DInstances = ECGame.EngineLib.Class.create({
 		
 		this._myMasterLayeredAnimations = [];
 		this._myLayeredAnimations = [];
+		
+		this._myAABBDirty = false;
 	},
 	Parents : [ECGame.EngineLib.Renderable2D],
 	flags : {},
@@ -80,18 +82,27 @@ ECGame.EngineLib.LayeredAnimation2DInstances = ECGame.EngineLib.Class.create({
 		
 		,getAABB2D : function getAABB2D()
 		{
-			var aReturnAABB2D
+			if(this._myAABBDirty)
+			{
+				this._updateAABB2D();
+				this._myAABBDirty = false;
+			}
+			return this._myAABB.offset(this._myAnchorPosition);
+		}
+		,_updateAABB2D : function _updateAABB2D()
+		{
+			var aNewAABB
 				,i
 				;
 			
-			//TODO optimize this by generating it on dirty (see Animation2DInstance.getAABB2D())
-			aReturnAABB2D = this._myLayeredAnimations[0].getAABB2D().clone();
+			aNewAABB = this._myLayeredAnimations[0].getAABB2D().clone();
 			for(i = 1; i < this._myLayeredAnimations.length; ++i)
 			{
-				aReturnAABB2D = aReturnAABB2D.getUnion(this._myLayeredAnimations[i].getAABB2D());
+				//TODO need a self_Union/self_XXX
+				aNewAABB = aNewAABB.getUnion(this._myLayeredAnimations[i].getAABB2D());
 			}
 			
-			return aReturnAABB2D;
+			this._myAABB.copyFrom(aNewAABB.offset(this._myAnchorPosition.scale(-1)));
 		}
 		
 		//TODO may need to remove from scene graph and then re-add for these to work properly!!!
@@ -104,6 +115,7 @@ ECGame.EngineLib.LayeredAnimation2DInstances = ECGame.EngineLib.Class.create({
 			this._myMasterLayeredAnimations[inLayer].setAnimation(inAnimation);
 			this._myLayeredAnimations[inLayer] = this._myMasterLayeredAnimations[inLayer];
 			this._myLayeredAnimations[inLayer].setAnchorPosition(this._myAnchorPosition);
+			this._myAABBDirty = true;
 		}
 		//TODO may need to remove from scene graph and then re-add for these to work properly!!!
 		,setNestedLayeredAnimation : function setNestedLayeredAnimation(inLayeredAnimation, inLayer)
@@ -114,6 +126,7 @@ ECGame.EngineLib.LayeredAnimation2DInstances = ECGame.EngineLib.Class.create({
 			}
 			this._myLayeredAnimations[inLayer] = inLayeredAnimation;
 			this._myLayeredAnimations[inLayer].setAnchorPosition(this._myAnchorPosition);
+			this._myAABBDirty = true;
 		}
 		
 		,setAnimationSpeed : function setAnimationSpeed(inSpeed, inLayer)
@@ -143,6 +156,7 @@ ECGame.EngineLib.LayeredAnimation2DInstances = ECGame.EngineLib.Class.create({
 				this._myLayeredAnimations[i].setAnchorPosition(inAnchorPosition);
 			}
 			this._myAnchorPosition = inAnchorPosition;
+			this._myAABBDirty = true;
 		}
 	}
 });

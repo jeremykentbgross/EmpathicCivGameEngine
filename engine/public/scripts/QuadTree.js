@@ -24,7 +24,7 @@
 ECGame.EngineLib.QuadTreeItem = ECGame.EngineLib.Class.create({
 	Constructor : function QuadTreeItem(inAABB)
 	{
-		this._myAABB = inAABB;
+		this._myAABB = inAABB || ECGame.EngineLib.AABB2D.create();
 		this._myOwningNodes = [];//TODO use these, examine uses
 		
 		this._myID = ECGame.EngineLib.QuadTreeItem._ourNextID++;
@@ -46,7 +46,7 @@ ECGame.EngineLib.QuadTreeItem = ECGame.EngineLib.Class.create({
 		
 		,init : function init(inAABB)
 		{
-			this._myAABB = inAABB;//TODO is this called?? should this function even exist? clone copyFrom this var if it does!
+			this._myAABB.copyFrom(inAABB);
 			this._myOwningNodes = [];
 		}
 		

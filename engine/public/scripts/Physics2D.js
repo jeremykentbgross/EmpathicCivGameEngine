@@ -406,7 +406,7 @@ ECGame.EngineLib.Physics2D = ECGame.EngineLib.Class.create({
 				//remember collisions for rendering:
 				if(ECGame.Settings.isDebugDraw_Physics())
 				{
-					this._myCollisionsRenderList.concat(this._myCollisions);
+					this._myCollisionsRenderList = this._myCollisionsRenderList.concat(this._myCollisions);
 				}
 				
 				//clear collisions:

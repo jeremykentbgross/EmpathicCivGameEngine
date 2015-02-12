@@ -100,11 +100,11 @@ ECGame.EngineLib.Animation2DInstance = ECGame.EngineLib.Class.create({
 			this._myAnimation = inAnimation;
 			if(this._myAnimation)
 			{
-				this._myAABB = inAnimation.getAABB2D();
+				this._myAABB.copyFrom(inAnimation.getAABB2D());
 			}
 			else
 			{
-				this._myAABB = ECGame.EngineLib.AABB2D.create(0,0,10,10);//some small aabb
+				this._myAABB.init(0, 0, 10, 10);// = ECGame.EngineLib.AABB2D.create(0,0,10,10);//some small aabb
 			}
 		},
 		
