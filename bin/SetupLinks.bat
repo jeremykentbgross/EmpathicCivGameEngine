@@ -1,3 +1,6 @@
+rmdir /s /q ..\_public_
+rmdir /s /q ..\_private_
+rmdir /s /q ..\_unified_
 mkdir ..\_public_
 mklink /D ..\_public_\engine\ ..\engine\public\
 mklink /D ..\_public_\game\ ..\engine_test_game\public\
