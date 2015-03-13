@@ -1,5 +1,7 @@
 #!/bin/bash
 
+cd $(dirname $(readlink -f "$0"))
+
 #file name for log output
 filename=log_$(date +%s).txt
 
@@ -16,5 +18,5 @@ ln -s ../logs/$filename ../logs/log.txt
 
 #run node with the log
 node --version &> ../logs/$filename
-node ../engine/private/scripts/main.js >> ../logs/$filename  2>&1
+authbind --deep node ../engine/private/scripts/main.js >> ../logs/$filename  2>&1
 

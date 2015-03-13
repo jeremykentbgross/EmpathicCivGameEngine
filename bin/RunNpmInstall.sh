@@ -1,4 +1,7 @@
 #!/bin/bash
+
+cd $(dirname $(readlink -f "$0"))
+
 cd ..
 npm update npm -g
 npm list
