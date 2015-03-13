@@ -2,5 +2,5 @@
 
 cd $(dirname $(readlink -f "$0"))
 
-xterm ./NodeDebugger.sh &
-xterm ./DebugServer.sh &
+xterm ./ECGE_NodeDebugger.sh &
+xterm ./ECGE_DebugServer.sh &
