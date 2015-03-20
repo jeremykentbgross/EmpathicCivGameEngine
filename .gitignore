@@ -1,10 +1,8 @@
-*.zip
-dojo-release-1.7.2/
-business.txt
 *~
 logs/
 node_modules/
+generated/
 _public_/
+_protected_/
 _private_/
 _unified_/
-generated/
