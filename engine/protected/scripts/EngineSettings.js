@@ -54,9 +54,9 @@ ECGame.Settings =
 		
 		,NoCanvasSupportedMessage :
 			"Sorry your browser does not support Canvas. Please use different browser:<br/>" +
-			"<a href=\"http:\/\/www.google.com/chrome\">Get Chrome (**RECOMMENDED!**) </a><br/>" +
+			"<a href=\"http:\/\/www.google.com/chrome\">Get Chrome (**RECOMMENDED!**)</a><br/>" +
 			"or<br/>" +
-			"<a href=\"http:\/\/www.mozilla-europe.org/en/firefox/\">Get Firefox (**No Audio Support**) </a>"
+			"<a href=\"http:\/\/www.mozilla-europe.org/en/firefox/\">Get Firefox</a>"
 		
 		//use 3d?
 		//canvas (2d), webgl (3d), threejs (3d), noDefault (none)
@@ -124,6 +124,7 @@ ECGame.Settings =
 		,useModifiedNamesNotPureObfuscate : false//false
 		,saveResultsNotesToFile : true//true
 		,logRequests : false
+		,logRequestsVerbose : false
 		//:only working when compressing client code
 		////////////////////////////////////////////
 		

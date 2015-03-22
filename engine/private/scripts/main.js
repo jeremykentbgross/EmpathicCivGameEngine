@@ -21,17 +21,17 @@
 
 /*global LoadEngine */
 
-require("../../public/scripts/EngineLoader");
+require("../../protected/scripts/EngineLoader");
 
 function ECGServer_Main()
 {
 	//Paths looks wrong (because they will run from inside the loader)
 	LoadEngine(
 		true,
-		"../",	//engine public parth
+		"../",	//engine protected path
 		"../../private/",	//engine private path
-		"../../../_public_/game/",/*TODO get some command line param or something!*/
-		"../../../_private_/game/"/*TODO get some command line param or something!*/
+		"../../../_protected_/game/",	/*TODO get some command line param or something!*/
+		"../../../_private_/game/"		/*TODO get some command line param or something!*/
 	);
 }
 //call it!

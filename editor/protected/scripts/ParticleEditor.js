@@ -137,7 +137,7 @@ ECGame.EditorLib.ParticleEditor = ECGame.EngineLib.Class.create({
 				//listen for the window to close/unload
 				aThis._myWindow.addEventListener(
 					'unload'
-					,function childWindowUnloaded(inEvent)
+					,function childWindowUnloaded(/*inEvent*/)
 					{
 						//TODO destroy this, cleanup, etc..
 						//console.info(arguments);
@@ -147,7 +147,7 @@ ECGame.EditorLib.ParticleEditor = ECGame.EngineLib.Class.create({
 				//listen for the master window to close/unload
 				window.addEventListener(
 					'unload'
-					,function childWindowUnloaded(inEvent)
+					,function childWindowUnloaded(/*inEvent*/)
 					{
 						//TODO destroy this, cleanup, etc..
 						//console.info(arguments);
@@ -172,7 +172,7 @@ ECGame.EditorLib.ParticleEditor = ECGame.EngineLib.Class.create({
 	//TODO? mustOverride //pure virtual
 	Definition :
 	{
-		update : function update(inUpdateData)
+		update : function update(/*inUpdateData*/)
 		{
 			if(!this._myGraphics)
 			{

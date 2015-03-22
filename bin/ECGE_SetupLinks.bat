@@ -14,6 +14,7 @@ mklink /D ..\_protected_\3rdParty\ ..\3rdParty\protected\
 mklink /D ..\_protected_\engine_editor\ ..\editor\protected\
 mklink ..\_protected_\game.html ..\engine\protected\html\game.html
 mklink ..\_protected_\welcome.html ..\engine\protected\html\welcome.html
+mklink /D ..\_protected_\docs\ ..\docs\
 mkdir ..\_private_
 mklink /D ..\_private_\engine\ ..\engine\private\
 mklink /D ..\_private_\game\ ..\engine_test_game\private\
@@ -22,6 +23,5 @@ mklink /D ..\_private_\engine_editor\ ..\editor\private\
 mkdir ..\_unified_
 mklink /D ..\_unified_\engine\ ..\engine\
 mklink /D ..\_unified_\game\ ..\engine_test_game\
-mklink /D ..\_unified_\3rdParty\ ..\3rdParty\
 mklink /D ..\_unified_\engine_editor\ ..\editor\
 

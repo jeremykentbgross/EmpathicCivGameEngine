@@ -57,13 +57,13 @@ ECGame.WebServerTools.CodeCompressor.prototype.makeCompactGameLoader = function 
 		systemIgnoreIndex;
 	
 	//get the gameloader source code
-	gameLoaderSrc = fs.readFileSync('../engine/public/scripts/EngineLoader.js', 'utf8');
+	gameLoaderSrc = fs.readFileSync('../engine/protected/scripts/EngineLoader.js', 'utf8');
 	
 	
-	///////////////////////////////////////////////////////
-	//replace the public engine includes with the real code
+	//////////////////////////////////////////////////////////
+	//replace the protected engine includes with the real code
 	//find all the includes that are not commented out:
-	regEx = new RegExp('\\n\\s*include\\x28inPublicEnginePath \\x2b \\"\\w+(\\x2f\\w+)*\\x2ejs\\"\\x29\\x3b', 'g');
+	regEx = new RegExp('\\n\\s*include\\x28inProtectedEnginePath \\x2b \\"\\w+(\\x2f\\w+)*\\x2ejs\\"\\x29\\x3b', 'g');
 	values = gameLoaderSrc.match(regEx);
 	regEx.compile('\\"\\w+(\\x2f\\w+)*\\x2ejs\\"');
 	//for all those includes, replace the include with the actual code!
@@ -75,15 +75,15 @@ ECGame.WebServerTools.CodeCompressor.prototype.makeCompactGameLoader = function 
 		fileSourceCode = fs.readFileSync(path, 'utf8');
 		gameLoaderSrc = gameLoaderSrc.replace(values[i], '\n' + fileSourceCode);
 	}
-	//replace the public engine includes with the real code
-	///////////////////////////////////////////////////////
+	//replace the protected engine includes with the real code
+	//////////////////////////////////////////////////////////
 	
-	///////////////////////////////////////////////////////
-	//replace the public game includes with the real code
+	//////////////////////////////////////////////////////////
+	//replace the protected game includes with the real code
 	for(j = 0; j < 2; ++j)	//Do it 2x because the first time it will just load the GameLoader
 	{
 		//find all the includes that are not commented out:
-		regEx = new RegExp('\\n\\s*include\\x28inPublicGamePath \\x2b \\"\\w+(\\x2f\\w+)*\\x2ejs\\"\\x29\\x3b', 'g');
+		regEx = new RegExp('\\n\\s*include\\x28inProtectedGamePath \\x2b \\"\\w+(\\x2f\\w+)*\\x2ejs\\"\\x29\\x3b', 'g');
 		values = gameLoaderSrc.match(regEx);
 		
 		if(!values)
@@ -102,8 +102,8 @@ ECGame.WebServerTools.CodeCompressor.prototype.makeCompactGameLoader = function 
 			gameLoaderSrc = gameLoaderSrc.replace(values[i], '\n' + fileSourceCode);
 		}
 	}
-	//replace the public game includes with the real code
-	///////////////////////////////////////////////////////
+	//replace the protected game includes with the real code
+	//////////////////////////////////////////////////////////
 	
 	
 	obfuscator = new ECGame.WebServerTools.Obfuscator();
@@ -238,9 +238,9 @@ ECGame.WebServerTools.CodeCompressor.prototype.makeCompactGameLoader = function 
 		+ '© Copyright 2012 Jeremy Gross\n'
 		+ 'jeremykentbgross@gmail.com\n'
 		+ '*/\n'
-		+ 'LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEnginePath, inPublicGamePath, inPrivateGamePath){'
+		+ 'LoadEngine = function LoadEngine(inIsServer, inProtectedEnginePath, inPrivateEnginePath, inProtectedGamePath, inPrivateGamePath){'
 		+ obfuscator.getObfuscatedCode()
-		+ obfuscator.getObfuscatedName('LoadEngine') + '(inIsServer, inPublicEnginePath, inPrivateEnginePath, inPublicGamePath, inPrivateGamePath);'
+		+ obfuscator.getObfuscatedName('LoadEngine') + '(inIsServer, inProtectedEnginePath, inPrivateEnginePath, inProtectedGamePath, inPrivateGamePath);'
 		+ '};';
 	this._code = new Buffer(obfuscatedSrc);
 };

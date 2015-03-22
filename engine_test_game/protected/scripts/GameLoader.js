@@ -19,13 +19,17 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-ECGame.Lib.LoadGame = function LoadGame(include, inPublicGamePath/*, inPrivateGamePath*/)
+ECGame.Lib.LoadGame = function LoadGame(
+	include
+	,inProtectedGamePath
+	//,inPrivateGamePath
+)
 {
-	include(inPublicGamePath + "scripts/GameRules.js");
+	include(inProtectedGamePath + "scripts/GameRules.js");
 	
-	include(inPublicGamePath + "scripts/EntityComponent_Input.js");
-	include(inPublicGamePath + "scripts/EntityComponent_Sprite.js");
-	include(inPublicGamePath + "scripts/EntityComponent_Physics2D.js");
+	include(inProtectedGamePath + "scripts/EntityComponent_Input.js");
+	include(inProtectedGamePath + "scripts/EntityComponent_Sprite.js");
+	include(inProtectedGamePath + "scripts/EntityComponent_Physics2D.js");
 	/*
 	if(ECGame.Settings.Network.isServer)
 	{

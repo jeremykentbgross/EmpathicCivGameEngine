@@ -161,6 +161,7 @@ Final NameSpace:	_setSleeping
 Final NameSpace:	_setupSinglePaneGraphics
 Final NameSpace:	_setupSplit4WayGraphics
 Final NameSpace:	_setupSplitHorizontalGraphics
+Final NameSpace:	_updateAABB2D
 Final NameSpace:	_windowResized
 Final NameSpace:	aTestResultsFunction
 Final NameSpace:	acknowledgedNetFrame
@@ -703,6 +704,7 @@ Function Name:	_setSleeping
 Function Name:	_setupSinglePaneGraphics
 Function Name:	_setupSplit4WayGraphics
 Function Name:	_setupSplitHorizontalGraphics
+Function Name:	_updateAABB2D
 Function Name:	_windowResized
 Function Name:	aTestResultsFunction
 Function Name:	acknowledgedNetFrame
@@ -1239,8 +1241,8 @@ Parameter Variable:	inPriority
 Parameter Variable:	inPrivateEnginePath
 Parameter Variable:	inPrivateGamePath
 Parameter Variable:	inProbability
-Parameter Variable:	inPublicEnginePath
-Parameter Variable:	inPublicGamePath
+Parameter Variable:	inProtectedEnginePath
+Parameter Variable:	inProtectedGamePath
 Parameter Variable:	inRHS
 Parameter Variable:	inRadius
 Parameter Variable:	inReason
@@ -1425,6 +1427,7 @@ Local Variable:	aNet
 Local Variable:	aNetGroup
 Local Variable:	aNetGroupIndex
 Local Variable:	aNetwork
+Local Variable:	aNewAABB
 Local Variable:	aNewHeight
 Local Variable:	aNewInstanceList
 Local Variable:	aNewT
@@ -1857,6 +1860,7 @@ Member Variable:	_low			*****
 Member Variable:	_mouseLoc			*****
 Member Variable:	_myAABB
 Member Variable:	_myAABB2D
+Member Variable:	_myAABBDirty
 Member Variable:	_myAccumulatedTime
 Member Variable:	_myActiveLinkedListNode
 Member Variable:	_myActiveObjectsList
@@ -2151,6 +2155,7 @@ Member Variable:	keys			*****
 Member Variable:	keysPressed			*****
 Member Variable:	length			*****
 Member Variable:	logRequests			*****
+Member Variable:	logRequestsVerbose			*****
 Member Variable:	low			*****
 Member Variable:	masterVolume			*****
 Member Variable:	maxArrayLength			*****
@@ -2615,6 +2620,7 @@ Included Word:	_low
 Included Word:	_mouseLoc
 Included Word:	_myAABB
 Included Word:	_myAABB2D
+Included Word:	_myAABBDirty
 Included Word:	_myAccumulatedTime
 Included Word:	_myActiveLinkedListNode
 Included Word:	_myActiveObjectsList
@@ -2872,6 +2878,7 @@ Included Word:	_setupSplitHorizontalGraphics
 Included Word:	_specialChars
 Included Word:	_supressKeyboardEvents
 Included Word:	_underflow_bits
+Included Word:	_updateAABB2D
 Included Word:	_value
 Included Word:	_windowResized
 Included Word:	aAudioSystem
@@ -2977,6 +2984,7 @@ Included Word:	aNet
 Included Word:	aNetGroup
 Included Word:	aNetGroupIndex
 Included Word:	aNetwork
+Included Word:	aNewAABB
 Included Word:	aNewHeight
 Included Word:	aNewInstanceList
 Included Word:	aNewT
@@ -3472,8 +3480,8 @@ Included Word:	inPriority
 Included Word:	inPrivateEnginePath
 Included Word:	inPrivateGamePath
 Included Word:	inProbability
-Included Word:	inPublicEnginePath
-Included Word:	inPublicGamePath
+Included Word:	inProtectedEnginePath
+Included Word:	inProtectedGamePath
 Included Word:	inRHS
 Included Word:	inRadius
 Included Word:	inReason
@@ -3612,6 +3620,7 @@ Included Word:	loadImage
 Included Word:	loadSound
 Included Word:	loadSoundAssets
 Included Word:	logRequests
+Included Word:	logRequestsVerbose
 Included Word:	loops
 Included Word:	low
 Included Word:	managed
@@ -3903,21 +3912,7 @@ Ignored Word:	Array
 Ignored Word:	ArrayBuffer
 Ignored Word:	Boolean
 Ignored Word:	Buffer
-Ignored Word:	COUNTER_HTTP_CLIENT_REQUEST
-Ignored Word:	COUNTER_HTTP_CLIENT_RESPONSE
-Ignored Word:	COUNTER_HTTP_SERVER_REQUEST
-Ignored Word:	COUNTER_HTTP_SERVER_RESPONSE
-Ignored Word:	COUNTER_NET_SERVER_CONNECTION
-Ignored Word:	COUNTER_NET_SERVER_CONNECTION_CLOSE
 Ignored Word:	Console
-Ignored Word:	DTRACE_HTTP_CLIENT_REQUEST
-Ignored Word:	DTRACE_HTTP_CLIENT_RESPONSE
-Ignored Word:	DTRACE_HTTP_SERVER_REQUEST
-Ignored Word:	DTRACE_HTTP_SERVER_RESPONSE
-Ignored Word:	DTRACE_NET_SERVER_CONNECTION
-Ignored Word:	DTRACE_NET_SOCKET_READ
-Ignored Word:	DTRACE_NET_SOCKET_WRITE
-Ignored Word:	DTRACE_NET_STREAM_END
 Ignored Word:	DataView
 Ignored Word:	Date
 Ignored Word:	E
@@ -4452,9 +4447,9 @@ Unmapped Word:	ws
 Localized Strings:
 Localized String:	"scripts/ServerConsoleMods.js"
 Localized String:	"Sorry your browser does not support Canvas. Please use different browser:<br/>"
-Localized String:	"<a href=\"http:\/\/www.google.com/chrome\">Get Chrome (**RECOMMENDED!**) </a><br/>"
+Localized String:	"<a href=\"http:\/\/www.google.com/chrome\">Get Chrome (**RECOMMENDED!**)</a><br/>"
 Localized String:	"or<br/>"
-Localized String:	"<a href=\"http:\/\/www.mozilla-europe.org/en/firefox/\">Get Firefox (**No Audio Support**) </a>"
+Localized String:	"<a href=\"http:\/\/www.mozilla-europe.org/en/firefox/\">Get Firefox</a>"
 Localized String:	"***Running Unit Tests***"
 Localized String:	"\nRunning Test: "
 Localized String:	"Failed Test: "

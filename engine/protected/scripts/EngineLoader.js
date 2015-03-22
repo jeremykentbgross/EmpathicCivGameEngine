@@ -21,7 +21,13 @@
 
 /*global LoadEngine:true */
 
-LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEnginePath, inPublicGamePath, inPrivateGamePath)//TODO inAppLoaderPath
+LoadEngine = function LoadEngine(
+	inIsServer
+	,inProtectedEnginePath
+	,inPrivateEnginePath
+	,inProtectedGamePath
+	,inPrivateGamePath
+)
 {
 	var include
 		;
@@ -131,10 +137,10 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	{
 		include : include
 		
-		,PublicEnginePath : inPublicEnginePath
+		,PublicEnginePath : inProtectedEnginePath
 		,PrivateEnginePath : inPrivateEnginePath
 		
-		,PublicGamePath : inPublicGamePath
+		,PublicGamePath : inProtectedGamePath
 		,PrivateGamePath : inPrivateGamePath
 	};
 	///////////////////////////////INCLUDE SETUP//////////////////////////////////
@@ -144,8 +150,8 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	//TODO: AssetPath("..."), Localize("...") + unmarked strings to obfuscate category
 	
 	//Load the settings flags first:
-	include(inPublicEnginePath + "scripts/EngineSettings.js");
-	include(inPublicGamePath + "scripts/GameSettings.js");
+	include(inProtectedEnginePath + "scripts/EngineSettings.js");
+	include(inProtectedGamePath + "scripts/GameSettings.js");
 	//TODO include GameSettings from game folder? (or will be done by user?)
 	
 	//Set the server flag in the global system
@@ -155,11 +161,11 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 		
 	if(ECGame.Settings.RUN_UNIT_TESTS)
 	{
-		include(inPublicEnginePath + "scripts/UnitTestFramework/UnitTestFramework.js");
+		include(inProtectedEnginePath + "scripts/UnitTestFramework/UnitTestFramework.js");
 		ECGame.unitTests = ECGame.EngineLib.UnitTestFramework.create();
 	}
 	
-	include(inPublicEnginePath + "scripts/GameClass.js");
+	include(inProtectedEnginePath + "scripts/GameClass.js");
 	
 	
 	
@@ -202,96 +208,96 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	//////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////// ENGINE SCRIPTS //////////////////////////////
 	//TODO order these better:
-	include(inPublicEnginePath + "scripts/Misc/Helpers.js");
-	include(inPublicEnginePath + "scripts/Misc/JsNativeExtensions.js");
+	include(inProtectedEnginePath + "scripts/Misc/Helpers.js");
+	include(inProtectedEnginePath + "scripts/Misc/JsNativeExtensions.js");
 	
-	include(inPublicEnginePath + "scripts/Math/AABB2D.js");
-	include(inPublicEnginePath + "scripts/Math/Point2D.js");
+	include(inProtectedEnginePath + "scripts/Math/AABB2D.js");
+	include(inProtectedEnginePath + "scripts/Math/Point2D.js");
 	
-	include(inPublicEnginePath + "scripts/BresenhamsLine.js");/////
-	include(inPublicEnginePath + "scripts/Registry.js");////
+	include(inProtectedEnginePath + "scripts/BresenhamsLine.js");/////
+	include(inProtectedEnginePath + "scripts/Registry.js");////
 	
-	include(inPublicEnginePath + "scripts/DataStructures/LinkedListNode.js");
+	include(inProtectedEnginePath + "scripts/DataStructures/LinkedListNode.js");
 	
-	include(inPublicEnginePath + "scripts/Events/EventSystem.js");
+	include(inProtectedEnginePath + "scripts/Events/EventSystem.js");
 	
-	include(inPublicEnginePath + "scripts/Utilities/Timer.js");
-	include(inPublicEnginePath + "scripts/Utilities/Updater.js");
-	include(inPublicEnginePath + "scripts/Utilities/AssetManager.js");
+	include(inProtectedEnginePath + "scripts/Utilities/Timer.js");
+	include(inProtectedEnginePath + "scripts/Utilities/Updater.js");
+	include(inProtectedEnginePath + "scripts/Utilities/AssetManager.js");
 	
 	if(!inIsServer)
 	{
 		if(ECGame.Settings.Network.isMultiplayer)
 		{
-			include(inPublicEnginePath + "scripts/ChatSystem.js");
+			include(inProtectedEnginePath + "scripts/ChatSystem.js");
 		}
-		include(inPublicEnginePath + "scripts/Graphics2D.js");
-		include(inPublicEnginePath + "scripts/SoundAsset.js");
-		include(inPublicEnginePath + "scripts/SoundSample.js");
-		include(inPublicEnginePath + "scripts/SoundDescription.js");
-		include(inPublicEnginePath + "scripts/SoundSystem.js");
-		include(inPublicEnginePath + "scripts/Sound.js");
-		include(inPublicEnginePath + "scripts/Sound2D.js");
+		include(inProtectedEnginePath + "scripts/Graphics2D.js");
+		include(inProtectedEnginePath + "scripts/SoundAsset.js");
+		include(inProtectedEnginePath + "scripts/SoundSample.js");
+		include(inProtectedEnginePath + "scripts/SoundDescription.js");
+		include(inProtectedEnginePath + "scripts/SoundSystem.js");
+		include(inProtectedEnginePath + "scripts/Sound.js");
+		include(inProtectedEnginePath + "scripts/Sound2D.js");
 	}
 	if(ECGame.Settings.Network.isMultiplayer)
 	{
-		include(inPublicEnginePath + "scripts/NetUser.js");
-		include(inPublicEnginePath + "scripts/NetGroup.js");
-		include(inPublicEnginePath + "scripts/NetworkBase.js");
+		include(inProtectedEnginePath + "scripts/NetUser.js");
+		include(inProtectedEnginePath + "scripts/NetGroup.js");
+		include(inProtectedEnginePath + "scripts/NetworkBase.js");
 		if(inIsServer)
 		{
 			include(inPrivateEnginePath + "scripts/NetworkServer.js");
 		}
 		else
 		{
-			include(inPublicEnginePath + "scripts/NetworkClient.js");
+			include(inProtectedEnginePath + "scripts/NetworkClient.js");
 		}
 	}
 
-	include(inPublicEnginePath + "scripts/Input.js");
-	include(inPublicEnginePath + "scripts/World2D/Camera2D.js");
-	include(inPublicEnginePath + "scripts/GameObject.js");
-	include(inPublicEnginePath + "scripts/GameObjectRef.js");
-	include(inPublicEnginePath + "scripts/GameObjectCollection.js");
+	include(inProtectedEnginePath + "scripts/Input.js");
+	include(inProtectedEnginePath + "scripts/World2D/Camera2D.js");
+	include(inProtectedEnginePath + "scripts/GameObject.js");
+	include(inProtectedEnginePath + "scripts/GameObjectRef.js");
+	include(inProtectedEnginePath + "scripts/GameObjectCollection.js");
 
-	include(inPublicEnginePath + "scripts/Compression/BitPacker.js");//TODO if multiplayer?
-	include(inPublicEnginePath + "scripts/Compression/ArithmeticCompression.js");//TODO if multiplayer?
-	include(inPublicEnginePath + "scripts/Compression/ArithmeticCompressionModels.js");//TODO if multiplayer?
-	include(inPublicEnginePath + "scripts/BinarySerializer.js");//TODO if multiplayer?
+	include(inProtectedEnginePath + "scripts/Compression/BitPacker.js");//TODO if multiplayer?
+	include(inProtectedEnginePath + "scripts/Compression/ArithmeticCompression.js");//TODO if multiplayer?
+	include(inProtectedEnginePath + "scripts/Compression/ArithmeticCompressionModels.js");//TODO if multiplayer?
+	include(inProtectedEnginePath + "scripts/BinarySerializer.js");//TODO if multiplayer?
 	
-	include(inPublicEnginePath + "scripts/GameEvent.js");
+	include(inProtectedEnginePath + "scripts/GameEvent.js");
 
-	include(inPublicEnginePath + "scripts/Entity/Entity.js");
-	include(inPublicEnginePath + "scripts/Entity/EntityComponent.js");
-	include(inPublicEnginePath + "scripts/Entity/EntityComponent_Camera2D.js");
-	include(inPublicEnginePath + "scripts/EntityComponent_SoundPlayer.js");
+	include(inProtectedEnginePath + "scripts/Entity/Entity.js");
+	include(inProtectedEnginePath + "scripts/Entity/EntityComponent.js");
+	include(inProtectedEnginePath + "scripts/Entity/EntityComponent_Camera2D.js");
+	include(inProtectedEnginePath + "scripts/EntityComponent_SoundPlayer.js");
 
 	
-	include(inPublicEnginePath + "scripts/GameInstance.js");
-	include(inPublicEnginePath + "scripts/QuadTree.js");
+	include(inProtectedEnginePath + "scripts/GameInstance.js");
+	include(inProtectedEnginePath + "scripts/QuadTree.js");
 	
-	include(inPublicEnginePath + "scripts/Renderable2D.js");
+	include(inProtectedEnginePath + "scripts/Renderable2D.js");
 	
-	include(inPublicEnginePath + "scripts/TileDescription2D.js");
-	include(inPublicEnginePath + "scripts/TileInstance2D.js");
-	include(inPublicEnginePath + "scripts/TileRenderable2D.js");
+	include(inProtectedEnginePath + "scripts/TileDescription2D.js");
+	include(inProtectedEnginePath + "scripts/TileInstance2D.js");
+	include(inProtectedEnginePath + "scripts/TileRenderable2D.js");
 	
-	include(inPublicEnginePath + "scripts/Animation2D/Animation2DFrame.js");
-	include(inPublicEnginePath + "scripts/Animation2D/Animation2D.js");
-	include(inPublicEnginePath + "scripts/Animation2D/Animation2DInstance.js");
-	include(inPublicEnginePath + "scripts/Animation2D/LayeredAnimation2DInstances.js");
+	include(inProtectedEnginePath + "scripts/Animation2D/Animation2DFrame.js");
+	include(inProtectedEnginePath + "scripts/Animation2D/Animation2D.js");
+	include(inProtectedEnginePath + "scripts/Animation2D/Animation2DInstance.js");
+	include(inProtectedEnginePath + "scripts/Animation2D/LayeredAnimation2DInstances.js");
 	
-	include(inPublicEnginePath + "scripts/ParticleEffect.js");
+	include(inProtectedEnginePath + "scripts/ParticleEffect.js");
 	
-	include(inPublicEnginePath + "scripts/SceneGraph2D.js");
+	include(inProtectedEnginePath + "scripts/SceneGraph2D.js");
 	
-	include(inPublicEnginePath + "scripts/TileMap2D.js");
-	include(inPublicEnginePath + "scripts/Physics2D.js");
-	include(inPublicEnginePath + "scripts/Ray2D.js");
-	include(inPublicEnginePath + "scripts/RayTracer2D.js");
-	include(inPublicEnginePath + "scripts/TileSet2D.js");
-	include(inPublicEnginePath + "scripts/World2D.js");
-	include(inPublicEnginePath + "scripts/GameRulesBase.js");
+	include(inProtectedEnginePath + "scripts/TileMap2D.js");
+	include(inProtectedEnginePath + "scripts/Physics2D.js");
+	include(inProtectedEnginePath + "scripts/Ray2D.js");
+	include(inProtectedEnginePath + "scripts/RayTracer2D.js");
+	include(inProtectedEnginePath + "scripts/TileSet2D.js");
+	include(inProtectedEnginePath + "scripts/World2D.js");
+	include(inProtectedEnginePath + "scripts/GameRulesBase.js");
 	//////////////////////////////// ENGINE SCRIPTS //////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////
 	
@@ -302,16 +308,16 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	if(ECGame.Settings.RUN_UNIT_TESTS)
 	{			
 		//ENGINE UNIT TESTS:
-		include(inPublicEnginePath + "scripts/TestGameClass.js");//////////
+		include(inProtectedEnginePath + "scripts/TestGameClass.js");//////////
 		
-		include(inPublicEnginePath + "scripts/Events/UnitTests/TestEventSystem.js");
+		include(inProtectedEnginePath + "scripts/Events/UnitTests/TestEventSystem.js");
 		
-		include(inPublicEnginePath + "scripts/Compression/UnitTests/TestBitPacker.js");
-		include(inPublicEnginePath + "scripts/Compression/UnitTests/TestArithmeticCompression.js");
+		include(inProtectedEnginePath + "scripts/Compression/UnitTests/TestBitPacker.js");
+		include(inProtectedEnginePath + "scripts/Compression/UnitTests/TestArithmeticCompression.js");
 
-		include(inPublicEnginePath + "scripts/TestBinarySerializer.js");/////
+		include(inProtectedEnginePath + "scripts/TestBinarySerializer.js");/////
 		
-		include(inPublicEnginePath + "scripts/Entity/UnitTests/TestEntity.js");
+		include(inProtectedEnginePath + "scripts/Entity/UnitTests/TestEntity.js");
 		
 		/*if(inIsServer)
 		{
@@ -319,7 +325,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 		}*/
 		
 		//TEMP UNIT TESTS:
-		//include(inPublicEnginePath + "LangTests.js");
+		//include(inProtectedEnginePath + "LangTests.js");
 	}
 	//////////////////////////////// ENGINE UNIT TEST ////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////
@@ -327,7 +333,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	
 	
 	//////////////////////////////////////////////////////////////////////////////
-	///////////////////////////////// GAME SCRIPTS ///////////////////////////////
+	///////////////////////////////// EDITOR SCRIPTS /////////////////////////////
 	if(ECGame.Settings.Editor.Enabled)
 	{
 		/**!
@@ -343,15 +349,15 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 			include("engine_editor/" + "scripts/ParticleEditor.js");
 		}
 	}
-	///////////////////////////////// GAME SCRIPTS ///////////////////////////////
+	///////////////////////////////// EDITOR SCRIPTS /////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////
 	
 	
 	
 	//////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////// GAME SCRIPTS ///////////////////////////////
-	include(inPublicGamePath + "scripts/GameLoader.js");
-	ECGame.Lib.LoadGame(include, inPublicGamePath, inPrivateGamePath);
+	include(inProtectedGamePath + "scripts/GameLoader.js");
+	ECGame.Lib.LoadGame(include, inProtectedGamePath, inPrivateGamePath);
 	///////////////////////////////// GAME SCRIPTS ///////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////
 	
@@ -359,7 +365,7 @@ LoadEngine = function LoadEngine(inIsServer, inPublicEnginePath, inPrivateEngine
 	
 	//////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////// RUN! ///////////////////////////////////
-	if(inIsServer && ECGame.Settings.Server.jslintCheckCode)
+	if(inIsServer && ECGame.Settings.Server.jslintCheckCode)//TODO jshint also
 	{
 		(new ECGame.WebServerTools.CodeValidator()).validateDirectoryTree('../_unified_');
 	}
