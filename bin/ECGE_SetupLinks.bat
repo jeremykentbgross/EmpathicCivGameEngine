@@ -24,4 +24,4 @@ mkdir ..\_unified_
 mklink /D ..\_unified_\engine\ ..\engine\
 mklink /D ..\_unified_\game\ ..\engine_test_game\
 mklink /D ..\_unified_\engine_editor\ ..\editor\
-
+mkdir ..\logs

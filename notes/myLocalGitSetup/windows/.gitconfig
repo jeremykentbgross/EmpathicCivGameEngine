@@ -2,12 +2,12 @@
 	name = Jeremy Kent B Gross
 	email = jeremykentbgross@gmail.com
 [merge]
-    tool = p4mergeScript
-    keepBackup = false
+	tool = p4mergeScript
+	keepBackup = false
 [mergetool "p4mergeScript"]
-	cmd = ~/p4merge "$BASE" "$LOCAL" "$REMOTE" "$MERGED"
-    keepTemporaries = false
-    trustExitCode = false
-    keepBackup = false
+	cmd = ~/p4MergeGitHelper "$BASE" "$LOCAL" "$REMOTE" "$MERGED"
+	keepTemporaries = false
+	trustExitCode = false
+	keepBackup = false
 [diff]
-    external = ~/p4diff
+	external = ~/p4DiffGitHelper
