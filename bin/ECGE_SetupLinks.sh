@@ -22,9 +22,7 @@ ln -s ../engine/protected/ ../_protected_/engine
 ln -s ../engine_test_game/protected/ ../_protected_/game
 ln -s ../3rdParty/protected/ ../_protected_/3rdParty
 ln -s ../editor/protected/ ../_protected_/engine_editor
-# Special webpage links:
-ln -s ../engine/protected/html/game.html ../_protected_/game.html
-ln -s ../engine/protected/html/welcome.html ../_protected_/welcome.html
+
 # Docs links:
 ln -s ../docs/ ../_protected_/docs
 

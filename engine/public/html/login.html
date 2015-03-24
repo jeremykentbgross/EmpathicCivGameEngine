@@ -1,0 +1,67 @@
+<!--
+© Copyright 2012 Jeremy Gross
+	jeremykentbgross@gmail.com
+	Distributed under the terms of the GNU Lesser GPL (LGPL)
+		
+	This file is part of EmpathicCivGameEngine.
+	
+	EmpathicCivGameEngine is free software: you can redistribute it and/or modify
+	it under the terms of the GNU Lesser General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	EmpathicCivGameEngine is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Lesser General Public License for more details.
+	
+	You should have received a copy of the GNU Lesser General Public License
+	along with EmpathicCivGameEngine.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<link rel="stylesheet" type="text/css" href="../../engine/css/Login.css">
+		<link rel="stylesheet" type="text/css" href="../../game/css/Login.css">
+	</head>
+	<body>
+		<div id="formContainer">
+			<form id="loginForm" action="/_public_/login" method="post">
+				<div>
+					<label>Username:</label><br/>
+					<input type="email" name="username"/>
+				</div>
+				<div>
+					<label>Password:</label><br/>
+					<input type="password" name="password"/>
+				</div>
+				<div>
+					<input type="submit" value="Log In"/>
+					<!--	TODO forgot password	-->
+				</div>
+			</form>
+			<!--	-->
+			<br/><hr/><br/>
+			<form id="registerForm" action="/_public_/register" method="post">
+				<div>
+					<label>New Username:</label><br/>
+					<input type="email" name="username"/>
+				</div>
+				<div>
+					<label>New Password:</label><br/>
+					<input type="password" name="password"/>
+				</div>
+				<div>
+					<label>New Password Verify:</label><br/>
+					<input type="password" name="passwordVerify"/>
+				</div>
+				<div id="registerButtonDiv">
+					<input type="submit" value="Register"/>
+				</div>
+			</form>
+			<!--	TODO captcha for registration	-->
+		</div>
+		<!-- -->
+	</body>
+</html>

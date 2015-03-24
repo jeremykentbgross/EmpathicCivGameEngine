@@ -33,14 +33,28 @@ anError = console.error;
 console.info = function info()
 {
 	var args = Array.prototype.slice.call(arguments);
-	args.unshift("INFO:");
+	args.unshift("INFO:[" + (new Date()).toISOString() + "]:");
 	anInfo.apply(this, args);
+
+	/*var anErrorObject = new Error();
+	anErrorObject.name = "INFO:[" + (new Date()).toISOString() + "]";
+	anErrorObject.message = util.format.apply(this, arguments);
+	Error.captureStackTrace(anErrorObject, / *arguments.callee* /info);
+	anInfo.apply(
+		this
+		,[
+			anErrorObject.stack.substring(
+				0,
+				anErrorObject.stack.indexOf('\n', anErrorObject.stack.indexOf('\n') + 1)
+			)
+		]
+	);*/
 };
 
 console.warn = function warn()
 {
 	var anErrorObject = new Error();
-	anErrorObject.name = "WARNING";
+	anErrorObject.name = "WARNING:[" + (new Date()).toISOString() + "]";
 	anErrorObject.message = util.format.apply(this, arguments);
 	Error.captureStackTrace(anErrorObject, /*arguments.callee*/warn);
 	aWarn.apply(this, [anErrorObject.stack]);
@@ -49,7 +63,7 @@ console.warn = function warn()
 console.error = function error()
 {
 	var anErrorObject = new Error();
-	anErrorObject.name = "ERROR";
+	anErrorObject.name = "ERROR:[" + (new Date()).toISOString() + "]";
 	anErrorObject.message = util.format.apply(this, arguments);
 	Error.captureStackTrace(anErrorObject, /*arguments.callee*/error);
 	anError.apply(this, [anErrorObject.stack]);
@@ -58,8 +72,19 @@ console.error = function error()
 console.trace = function trace()
 {
 	var anErrorObject = new Error();
-	anErrorObject.name = "TRACE";
+	anErrorObject.name = "TRACE:[" + (new Date()).toISOString() + "]";
 	anErrorObject.message = util.format.apply(this, arguments);
 	Error.captureStackTrace(anErrorObject, /*arguments.callee*/trace);
 	anError.apply(this, [anErrorObject.stack]);
 };
+
+//TODO is this the right place for this?
+process.on(
+	'uncaughtException'
+	,function (inError)
+	{
+		console.error('uncaughtException:', inError.message);
+		console.error(inError.stack);
+		process.exit(1);
+	}
+);

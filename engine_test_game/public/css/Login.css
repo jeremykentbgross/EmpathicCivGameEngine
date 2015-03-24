@@ -1,0 +1,56 @@
+html
+{
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+}
+
+body
+{
+	background: linear-gradient(to top right, #008000, #000000, #000080);
+	//background-image: url("../images/jeremydarizportrait.jpg");
+	width: 100%;
+	height: 100%;
+	margin: 0px;
+	padding: 0px
+}
+
+#formContainer
+{
+	background-color : #000000;
+	color : rgba(255, 255, 255, 1.0);
+	opacity : 0.5;
+
+	position : absolute;
+	//margin : 100px 100px;
+	padding: 10px;
+	bottom : 16%;
+	right : 9%;
+
+	z-index : 1;
+
+	text-align : center;
+
+	border : 1px solid white;
+	box-shadow: 00px 00px 10px #FFFFFF;
+
+	cursor : auto;
+	
+	font-size : 100%;
+
+	overflow : auto;
+}
+
+#registerForm
+{
+	text-align : left;
+}
+
+#registerButtonDiv
+{
+	text-align : center;
+}
+
+
+

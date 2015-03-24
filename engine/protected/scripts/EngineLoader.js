@@ -173,6 +173,20 @@ LoadEngine = function LoadEngine(
 	//////////////////////////////// SERVER SCRIPTS //////////////////////////////
 	if(inIsServer)
 	{
+		if(ECGame.Settings.Server.useMongoose)
+		{
+			/**!
+				@namespace: Mongoose
+				/parentNamespace: ECGame.WebServerTools
+				/description: This is the namespace for all mongoose related objects
+			*/
+			ECGame.WebServerTools.Mongoose = function ECGameWebServerMongoose() { return; };
+			ECGame.WebServerTools.Mongoose = new ECGame.WebServerTools.Mongoose();
+
+			include(inPrivateEnginePath + "scripts/Mongoose/MongooseConnection.js");
+			include(inPrivateEnginePath + "scripts/Mongoose/MongooseUserModel.js");
+			include(inPrivateEnginePath + "scripts/Mongoose/MongooseUserAuth.js");
+		}
 		include(inPrivateEnginePath + "scripts/WebServer.js");
 		include(inPrivateEnginePath + "scripts/DocJS.js");
 		include(inPrivateEnginePath + "scripts/CodeObfuscator.js"); /**! @todo: consider naming just Obfuscator*/
@@ -376,9 +390,18 @@ LoadEngine = function LoadEngine(
 	if(inIsServer)
 	{
 		ECGame.webServer = new ECGame.WebServerTools.WebServer();
-		ECGame.webServer.run();
+		ECGame.webServer.run(
+			function serverIsRunning()
+			{
+				if(ECGame.Settings.Network.isMultiplayer)
+				{
+					ECGame.instance = ECGame.EngineLib.GameInstance.create();
+					ECGame.instance.run();
+				}
+			}
+		);
 	}
-	if(!inIsServer || ECGame.Settings.Network.isMultiplayer)
+	if(!inIsServer)
 	{
 		ECGame.instance = ECGame.EngineLib.GameInstance.create();
 		ECGame.instance.run();

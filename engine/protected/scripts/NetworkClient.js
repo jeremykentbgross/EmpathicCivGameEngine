@@ -37,14 +37,10 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 		init : function init(inNetwork)
 		{
 			this._myNetwork = inNetwork;
-			if(ECGame.Settings.Network.GamePort !== null)
-			{
-				this._myWebsocket = new WebSocket('ws:\/\/' + location.hostname + ':' + ECGame.Settings.Network.GamePort);
-			}
-			else
-			{
-				this._myWebsocket = new WebSocket('ws:\/\/' + location.hostname);
-			}
+			this._myWebsocket = new WebSocket(
+				(ECGame.Settings.Server.useHttps ? 'wss:\/\/' : 'ws:\/\/')
+				+ location.hostname
+			);
 			this._myWebsocket.binaryType = 'arraybuffer';
 			
 			this._myWebsocket.onopen = this._onOpen;

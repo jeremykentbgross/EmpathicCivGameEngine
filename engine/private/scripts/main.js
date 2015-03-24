@@ -25,6 +25,8 @@ require("../../protected/scripts/EngineLoader");
 
 function ECGServer_Main()
 {
+	console.log("All System Versions:\n" + JSON.stringify(process.versions, null, '\t') + "\n");
+
 	//Paths looks wrong (because they will run from inside the loader)
 	LoadEngine(
 		true,

@@ -99,8 +99,6 @@ ECGame.Settings =
 	{
 		isServer : false	//TODO consider function for this
 		,isMultiplayer : true
-		,GamePort : null	//if null then it defaults (I don't know to what), cannot put 80 here.
-		//TODO editorPort : ??
 		,maxFrameWrapForPing : 120 * 30	//120fps * 30s === max needed frame loop
 	},
 	
@@ -114,6 +112,8 @@ ECGame.Settings =
 	Server :	//TODO move this to a private file
 	{
 		generateDocumentation : false//true
+
+		//TODO all these should be in a subobject:
 		,compressClientCode : true//true	//TODO should also only be considered in debug.
 		////////////////////////////////////////////
 		//only working when compressing client code:
@@ -123,10 +123,35 @@ ECGame.Settings =
 		,obfuscateNames : true//true
 		,useModifiedNamesNotPureObfuscate : false//false
 		,saveResultsNotesToFile : true//true
-		,logRequests : false
-		,logRequestsVerbose : false
 		//:only working when compressing client code
 		////////////////////////////////////////////
+
+		//TODO should be in a subobject:
+		,logRequests : false
+		,logRequestsVerbose : false		//WARNING: can cause passwords to print to log
+
+		,useHttps : true				//WARNING: should always be used when requiring logins!
+		//TODO cert file paths
+
+		,requireSessionLogins : true	//WARNING: requires useMongoose, and should use https
+		,Session :
+		{
+			timeout : 1000 * 60 * 15	//15min
+			,secret : "This is not, the greatest song in the world, this is just a tribute."
+
+			,needLoginPath : '/_public_/engine/html/login.html'
+			,loginSuccessPath : '/_protected_/engine/html/welcome.html'
+		}
+
+		,useMongoose : true
+		,Mongoose :
+		{
+			//TODO userName, password
+			host : "127.0.0.1"
+			,port : "27017"
+			,dbName : "ECGE"
+		}
+
 		
 		//TODO jshint also
 		,jslintCheckCode : true	//TODO disable in !DEBUG (looks like it adds some global vars that are ignored in obf)

@@ -90,6 +90,7 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 			this._myWebsocket = inWebSocket;
 			this._myWebsocket.myECGameSocket = this;
 			
+//TODO handle user from request
 			//this._myUser = inWebSocket.upgradeReq.myECGameUser;	//TODO if we ever have FB identification or something..
 			this._myUser = new ECGame.EngineLib.User();	//start with an unidentified user
 			
@@ -333,18 +334,20 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 		this._myIdentifiedUsers = [];
 		this._mySockets = [];
 		
-		//TODO move these out!! (to where?)
+		//TODO move these out!! (to where?: maybe this.vars instead of global namespace!!)
 		ECGame.WebServerTools.wsLib = require('ws');
 		ECGame.WebServerTools.WebSocketServer = ECGame.WebServerTools.wsLib.Server;
 		ECGame.WebServerTools.WebSocket = ECGame.WebServerTools.wsLib.WebSocket;
-		
+
 		//http://www.iana.org/assignments/websocket/websocket.xml#subprotocol-name
 		this._myWebSocketServer = new ECGame.WebServerTools.WebSocketServer(
 			//options:
-			{			
+			{
 				//host String
-				port : ECGame.Settings.Network.GamePort,
-				server : ECGame.webServer.httpServer, //http.Server
+				//port : //do not set because we use the http(s) server instead
+				server : (ECGame.Settings.Server.useHttps //http.Server
+					? ECGame.webServer.myHttpsServer
+					: ECGame.webServer.myHttpServer),
 				verifyClient : this._verifyClient	//Function
 				//path String
 				//noServer Boolean
@@ -364,7 +367,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 		this._myWebSocketServer.on('headers', this._onHeaders);
 		this._myWebSocketServer.on('connection', this._onConnection);
 		
-		console.info("TCP Server running.");
+		console.info("Websocket Server running.");
 	},
 	Parents : [ECGame.EngineLib.NetworkBase],
 	flags : {},
@@ -374,7 +377,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 	{
 		init : function init()
 		{
-			console.info("Network Game Server Started");
+			console.info("Network Game Server Started");//TODO why is this init here? Why so much in constructor?
 		}
 		
 		,getName : function getName()
@@ -382,22 +385,62 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 			return 'NetworkServer';
 		},
 		
-		_verifyClient : function _verifyClient(inInfo, inClientVerifiedFunction)//???????????????
+		_verifyClient : function _verifyClient(inInfo, inClientVerifiedFunction)
 		{
-			//var aUserID;
-			
-	//		console.trace();
-	//		console.log(arguments);
-			
-			//TODO fb id? find user if they exist, otherwise create a new one or boot them.
-//			aUserID = ++(ECGame.EngineLib.User.USER_IDS.CURRENT_MAX);
-//			inInfo.req.myECGameUser = new ECGame.EngineLib.User("User" + aUserID, aUserID);
-			if(ECGame.Settings.isDebugPrint_NetworkMessages())
+			var aRequest
+				;
+
+			aRequest = inInfo.req;
+
+			//if we require sessions, see if this is a valid user!
+			if(ECGame.Settings.Server.requireSessionLogins)
 			{
-				console.log(inInfo);
+				ECGame.webServer.mySession(
+					aRequest, {}
+					,function parsedSession()
+					{
+						if(!aRequest.session)
+						{
+							console.error("Couldn't get session during websocket client verify");
+							inClientVerifiedFunction(false);
+							return;
+						}
+						if(ECGame.Settings.isDebugPrint_NetworkMessages())
+						{
+							console.info(aRequest.session);
+						}
+						ECGame.webServer.myPassportInit(
+							aRequest, {}
+							,function parsePassport()
+							{
+								//??can fail here??
+
+								ECGame.webServer.myPassportSession(
+									aRequest, {}
+									,function setupPassportSession()
+									{
+										if(!aRequest.isAuthenticated())
+										{
+											console.info("User not authenticated");
+											inClientVerifiedFunction(false);
+											return;
+										}
+										if(ECGame.Settings.isDebugPrint_NetworkMessages())
+										{
+											console.info(aRequest.user);
+										}
+										inClientVerifiedFunction(true);
+									}
+								);
+							}
+						);
+					}
+				);
 			}
-			
-			inClientVerifiedFunction(true);
+			else
+			{
+				inClientVerifiedFunction(true);
+			}
 		},
 		
 		
@@ -418,9 +461,8 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 		
 		_onHeaders : function _onHeaders(/*inHeaders*/)
 		{
+			//console.trace(inHeaders);	//TODO when is this called??
 			return;
-			//console.trace();
-			//console.log(inHeaders);
 		},
 		
 		_onConnection : function _onConnection(inWebSocket)//_onClientConnected
@@ -428,23 +470,18 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 			var aThis,
 				aSocket;
 			
-//			console.trace();
-//			console.log(inWebSocket);
-			
 			aThis = ECGame.instance.getNetwork();
 			
 			//create server side socket
 			aSocket = ECGame.EngineLib.ServerSideWebSocket.create(inWebSocket, aThis);
 			aThis._mySockets.push(aSocket);
+
 			//TODO event??
-			
 			//TODO log connection
 			
 			//TODO tell everone they have connected with a chat message CommandObject:
 			//inConnectedSocket.broadcast.emit('msg', "User Connected: " + inConnectedSocket.gameUser.userName);
 
-			
-			
 			//TODO keep alive msgs??	//Ping!!
 			/*setInterval(
 				function()

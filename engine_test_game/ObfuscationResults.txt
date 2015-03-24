@@ -40,6 +40,7 @@ Final NameSpace:	ECGame
 Final NameSpace:	ECGameEditorLib
 Final NameSpace:	ECGameEngineLib
 Final NameSpace:	ECGameLib
+Final NameSpace:	ECGameWebServerMongoose
 Final NameSpace:	ECGameWebServerTools
 Final NameSpace:	EngineLib
 Final NameSpace:	Entity
@@ -486,6 +487,7 @@ Final NameSpace:	serializeOut
 Final NameSpace:	serializePoint2D
 Final NameSpace:	serializeString
 Final NameSpace:	serverInit
+Final NameSpace:	serverIsRunning
 Final NameSpace:	set
 Final NameSpace:	setAABB
 Final NameSpace:	setAABB2D
@@ -588,6 +590,7 @@ Function Name:	ECGame
 Function Name:	ECGameEditorLib
 Function Name:	ECGameEngineLib
 Function Name:	ECGameLib
+Function Name:	ECGameWebServerMongoose
 Function Name:	ECGameWebServerTools
 Function Name:	Entity
 Function Name:	EntityAddedToWorld
@@ -1027,6 +1030,7 @@ Function Name:	serializeOut
 Function Name:	serializePoint2D
 Function Name:	serializeString
 Function Name:	serverInit
+Function Name:	serverIsRunning
 Function Name:	set
 Function Name:	setAABB
 Function Name:	setAABB2D
@@ -1657,7 +1661,6 @@ Member Variable:	FrameStats_Print			*****
 Member Variable:	Func1Called			*****
 Member Variable:	Func2Called			*****
 Member Variable:	GameObject_Print			*****
-Member Variable:	GamePort			*****
 Member Variable:	Graphics			*****
 Member Variable:	INPUT			*****
 Member Variable:	Input_Active_DrawColor			*****
@@ -1743,6 +1746,7 @@ Member Variable:	MaxNumberOfTiles			*****
 Member Variable:	MaxTileSize			*****
 Member Variable:	MinTileSize			*****
 Member Variable:	MinimapTileResolution			*****
+Member Variable:	Mongoose			*****
 Member Variable:	NETWORK			*****
 Member Variable:	NET_MODE			*****
 Member Variable:	NEW_USER			*****
@@ -1788,6 +1792,7 @@ Member Variable:	STATUS__STATIC			*****
 Member Variable:	SceneGraph_Draw			*****
 Member Variable:	SerializeFormat			*****
 Member Variable:	Server			*****
+Member Variable:	Session			*****
 Member Variable:	Settings			*****
 Member Variable:	Sound_Area_DrawColor			*****
 Member Variable:	Sound_Draw			*****
@@ -2127,6 +2132,7 @@ Member Variable:	configurable			*****
 Member Variable:	counter			*****
 Member Variable:	customType			*****
 Member Variable:	data			*****
+Member Variable:	dbName			*****
 Member Variable:	default2DRadius			*****
 Member Variable:	devel			*****
 Member Variable:	direction			*****
@@ -2143,6 +2149,7 @@ Member Variable:	focus			*****
 Member Variable:	forin			*****
 Member Variable:	generateDocumentation			*****
 Member Variable:	high			*****
+Member Variable:	host			*****
 Member Variable:	id			*****
 Member Variable:	insertNode_ListFront			*****
 Member Variable:	instance			*****
@@ -2156,6 +2163,7 @@ Member Variable:	keysPressed			*****
 Member Variable:	length			*****
 Member Variable:	logRequests			*****
 Member Variable:	logRequestsVerbose			*****
+Member Variable:	loginSuccessPath			*****
 Member Variable:	low			*****
 Member Variable:	masterVolume			*****
 Member Variable:	maxArrayLength			*****
@@ -2211,6 +2219,7 @@ Member Variable:	myWidth
 Member Variable:	myX
 Member Variable:	myY
 Member Variable:	name			*****
+Member Variable:	needLoginPath			*****
 Member Variable:	net			*****
 Member Variable:	netDynamic			*****
 Member Variable:	netOnly			*****
@@ -2223,6 +2232,7 @@ Member Variable:	passfail			*****
 Member Variable:	placeholder			*****
 Member Variable:	plusplus			*****
 Member Variable:	pop			*****
+Member Variable:	port			*****
 Member Variable:	position			*****
 Member Variable:	precision			*****
 Member Variable:	properties			*****
@@ -2234,21 +2244,26 @@ Member Variable:	regexp			*****
 Member Variable:	removeNewlines			*****
 Member Variable:	removeNonNewlineWhiteSpace			*****
 Member Variable:	removeTextForLocalization			*****
+Member Variable:	requireSessionLogins			*****
 Member Variable:	resizable			*****
 Member Variable:	rhino			*****
 Member Variable:	saveResultsNotesToFile			*****
+Member Variable:	secret			*****
 Member Variable:	sloppy			*****
 Member Variable:	speedOfSound			*****
 Member Variable:	stupid			*****
 Member Variable:	sub			*****
 Member Variable:	targetFPS			*****
+Member Variable:	timeout			*****
 Member Variable:	todo			*****
 Member Variable:	type			*****
 Member Variable:	unitTests			*****
 Member Variable:	unparam			*****
 Member Variable:	up1			*****
 Member Variable:	up2			*****
+Member Variable:	useHttps			*****
 Member Variable:	useModifiedNamesNotPureObfuscate			*****
+Member Variable:	useMongoose			*****
 Member Variable:	useRequestAnimFrame			*****
 Member Variable:	user			*****
 Member Variable:	userID			*****
@@ -2308,6 +2323,7 @@ Included Word:	ECGame
 Included Word:	ECGameEditorLib
 Included Word:	ECGameEngineLib
 Included Word:	ECGameLib
+Included Word:	ECGameWebServerMongoose
 Included Word:	ECGameWebServerTools
 Included Word:	Editor
 Included Word:	EditorLib
@@ -2339,7 +2355,6 @@ Included Word:	GameObjectDestroyed
 Included Word:	GameObjectNetDirty
 Included Word:	GameObjectRef
 Included Word:	GameObject_Print
-Included Word:	GamePort
 Included Word:	GameRules
 Included Word:	GameRulesBase
 Included Word:	Graphics
@@ -2436,6 +2451,7 @@ Included Word:	MaxNumberOfTiles
 Included Word:	MaxTileSize
 Included Word:	MinTileSize
 Included Word:	MinimapTileResolution
+Included Word:	Mongoose
 Included Word:	Msg
 Included Word:	NETWORK
 Included Word:	NET_MODE
@@ -2501,6 +2517,7 @@ Included Word:	SceneGraph2D
 Included Word:	SceneGraph_Draw
 Included Word:	SerializeFormat
 Included Word:	Server
+Included Word:	Session
 Included Word:	SetPosition
 Included Word:	Settings
 Included Word:	Sound
@@ -3181,6 +3198,7 @@ Included Word:	createUnacknowledgedNetFrame
 Included Word:	createUpdater
 Included Word:	current
 Included Word:	customType
+Included Word:	dbName
 Included Word:	debugDraw
 Included Word:	debugDrawCallback
 Included Word:	debugPrint
@@ -3338,6 +3356,7 @@ Included Word:	getValueFromProbability
 Included Word:	getWidthHeight
 Included Word:	getWorld
 Included Word:	high
+Included Word:	host
 Included Word:	i
 Included Word:	in2DCamera
 Included Word:	inAABB
@@ -3621,6 +3640,7 @@ Included Word:	loadSound
 Included Word:	loadSoundAssets
 Included Word:	logRequests
 Included Word:	logRequestsVerbose
+Included Word:	loginSuccessPath
 Included Word:	loops
 Included Word:	low
 Included Word:	managed
@@ -3682,6 +3702,7 @@ Included Word:	myUserID
 Included Word:	myWidth
 Included Word:	myX
 Included Word:	myY
+Included Word:	needLoginPath
 Included Word:	net
 Included Word:	netDynamic
 Included Word:	netOnly
@@ -3739,6 +3760,7 @@ Included Word:	play
 Included Word:	playPositionalSoundEffect2D
 Included Word:	playSoundEffect
 Included Word:	plusplus
+Included Word:	port
 Included Word:	position
 Included Word:	postSerialize
 Included Word:	precision
@@ -3779,6 +3801,7 @@ Included Word:	renderMiniMap
 Included Word:	replaceCallback
 Included Word:	requestAnimFrame
 Included Word:	requestVelocity
+Included Word:	requireSessionLogins
 Included Word:	resizable
 Included Word:	rhino
 Included Word:	run
@@ -3786,6 +3809,7 @@ Included Word:	runTests
 Included Word:	saveAnimation
 Included Word:	saveResultsNotesToFile
 Included Word:	scale
+Included Word:	secret
 Included Word:	sendMessage
 Included Word:	serialize
 Included Word:	serializeBool
@@ -3798,6 +3822,7 @@ Included Word:	serializeOut
 Included Word:	serializePoint2D
 Included Word:	serializeString
 Included Word:	serverInit
+Included Word:	serverIsRunning
 Included Word:	set
 Included Word:	setAABB
 Included Word:	setAABB2D
@@ -3858,6 +3883,7 @@ Included Word:	testFunction2
 Included Word:	testObjectClass1
 Included Word:	theClass
 Included Word:	tileCoordinateToWorldAABB
+Included Word:	timeout
 Included Word:	toBinary
 Included Word:	todo
 Included Word:	toggleActiveInput
@@ -3871,7 +3897,9 @@ Included Word:	up2
 Included Word:	update
 Included Word:	updatePing
 Included Word:	updateTimerCallback
+Included Word:	useHttps
 Included Word:	useModifiedNamesNotPureObfuscate
+Included Word:	useMongoose
 Included Word:	useRequestAnimFrame
 Included Word:	user
 Included Word:	valueHigh
@@ -4277,6 +4305,8 @@ Unmapped Word:	_mySampleID
 Unmapped Word:	_mySoundDescriptionID
 Unmapped Word:	_myStartTime
 Unmapped Word:	_myWorldDebugDrawCount
+Unmapped Word:	_protected_
+Unmapped Word:	_public_
 Unmapped Word:	_unified_
 Unmapped Word:	acknowledgingFrame
 Unmapped Word:	alert
@@ -4348,8 +4378,8 @@ Unmapped Word:	graphicsContainer
 Unmapped Word:	grass
 Unmapped Word:	ground_256
 Unmapped Word:	gt
-Unmapped Word:	host
 Unmapped Word:	hostname
+Unmapped Word:	html
 Unmapped Word:	images
 Unmapped Word:	inError
 Unmapped Word:	innerHeight
@@ -4368,6 +4398,7 @@ Unmapped Word:	lineWidth
 Unmapped Word:	listener
 Unmapped Word:	load
 Unmapped Word:	location
+Unmapped Word:	login
 Unmapped Word:	lt
 Unmapped Word:	marginLeft
 Unmapped Word:	marginTop
@@ -4440,7 +4471,9 @@ Unmapped Word:	wall_256
 Unmapped Word:	waterSub
 Unmapped Word:	wav
 Unmapped Word:	webkitAudioContext
+Unmapped Word:	welcome
 Unmapped Word:	ws
+Unmapped Word:	wss
 
 
 
@@ -4450,6 +4483,10 @@ Localized String:	"Sorry your browser does not support Canvas. Please use differ
 Localized String:	"<a href=\"http:\/\/www.google.com/chrome\">Get Chrome (**RECOMMENDED!**)</a><br/>"
 Localized String:	"or<br/>"
 Localized String:	"<a href=\"http:\/\/www.mozilla-europe.org/en/firefox/\">Get Firefox</a>"
+Localized String:	"This is not, the greatest song in the world, this is just a tribute."
+Localized String:	"127.0.0.1"
+Localized String:	"27017"
+Localized String:	"ECGE"
 Localized String:	"***Running Unit Tests***"
 Localized String:	"\nRunning Test: "
 Localized String:	"Failed Test: "
@@ -4464,6 +4501,9 @@ Localized String:	" does not implement chain function "
 Localized String:	" trying to inherit function "
 Localized String:	" redeclares "
 Localized String:	" as a chain function."
+Localized String:	"scripts/Mongoose/MongooseConnection.js"
+Localized String:	"scripts/Mongoose/MongooseUserModel.js"
+Localized String:	"scripts/Mongoose/MongooseUserAuth.js"
 Localized String:	"scripts/WebServer.js"
 Localized String:	"scripts/DocJS.js"
 Localized String:	"scripts/CodeObfuscator.js"

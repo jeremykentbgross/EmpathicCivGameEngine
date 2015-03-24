@@ -79,7 +79,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			this._myTileset = ECGame.EngineLib.TileSet2D.create(//TODO serialize this and do not create it here but only on server!!!!!!!
 				[
 					ECGame.EngineLib.TileDescription2D.create(
-						'game/images/grass.png'
+						'../../game/images/grass.png'
 						,ECGame.EngineLib.Point2D.create(64,64)//inSize
 						,ECGame.EngineLib.Point2D.create()//inAnchorPoint
 						,0//inDepth
@@ -87,7 +87,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						,null//inPhysicsAABB
 					),
 					ECGame.EngineLib.TileDescription2D.create(
-						'game/images/test/waterSub.png' //'images/water.png'
+						'../../game/images/test/waterSub.png' //'images/water.png'
 						,ECGame.EngineLib.Point2D.create(/*64,64*/96,96)//inSize
 						,ECGame.EngineLib.Point2D.create()//inAnchorPoint
 						,0//inDepth
@@ -95,7 +95,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						,ECGame.EngineLib.AABB2D.create(0, 0, 64, 64)//inPhysicsAABB
 					),
 					ECGame.EngineLib.TileDescription2D.create(
-						'game/images/ground_256.png'//'game/images/ground_level01_01.png' //'images/test/groundSub5.png' // 'images/dirt.png',
+						'../../game/images/ground_256.png'//'../../game/images/ground_level01_01.png' //'images/test/groundSub5.png' // 'images/dirt.png',
 						,ECGame.EngineLib.Point2D.create(/*64,64*/96,96)//inSize
 						,ECGame.EngineLib.Point2D.create()//inAnchorPoint
 						,0//inDepth
@@ -103,7 +103,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						,null//inPhysicsAABB
 					),
 					ECGame.EngineLib.TileDescription2D.create(
-						'game/images/dirt.png2'//HACK 'images/wall_level01_01__.png'
+						'../../game/images/dirt.png2'//HACK 'images/wall_level01_01__.png'
 						,ECGame.EngineLib.Point2D.create(64,64)//inSize
 						,ECGame.EngineLib.Point2D.create()//inAnchorPoint
 						,0//inDepth
@@ -111,7 +111,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 						,null//inPhysicsAABB
 					),
 					ECGame.EngineLib.TileDescription2D.create(
-						'game/images/wall_256.png'//'game/images/wall_level01_01.png'//'images/test/wall.png' //
+						'../../game/images/wall_256.png'//'../../game/images/wall_level01_01.png'//'images/test/wall.png' //
 						,ECGame.EngineLib.Point2D.create(96,96)//inSize
 						,ECGame.EngineLib.Point2D.create(32, 32)//inAnchorPoint
 						,1//inDepth
@@ -252,11 +252,11 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					[
 						//note: 0 index is really the null sound or placeholder
 						new ECGame.EngineLib.SoundAsset(aSoundSystem.generateNextAssetID()
-							,'game/sounds/Step1_Gravel.wav')
+							,'../../game/sounds/Step1_Gravel.wav')
 						,new ECGame.EngineLib.SoundAsset(aSoundSystem.generateNextAssetID()
-							,'game/sounds/Step2_Gravel.wav')
+							,'../../game/sounds/Step2_Gravel.wav')
 						,new ECGame.EngineLib.SoundAsset(aSoundSystem.generateNextAssetID()
-							,'game/sounds/Step2b_Gravel.wav')
+							,'../../game/sounds/Step2b_Gravel.wav')
 					]
 				);
 				aSoundSystem.setSoundSamples(
@@ -361,7 +361,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					);
 				}
 				anAnimation = new ECGame.EngineLib.Animation2D();
-				anAnimation.init('game/images/test_anims_run/jogSheet.png', 10, aFrameArray);
+				anAnimation.init('../../game/images/test_anims_run/jogSheet.png', 10, aFrameArray);
 				ECGame.instance.getAssetManager().saveAnimation(aNameList[j], anAnimation);
 			}
 			aNameList =
@@ -385,7 +385,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 					)
 				);
 				anAnimation = new ECGame.EngineLib.Animation2D();
-				anAnimation.init('game/images/test_anims_run/jogSheet.png', 10, aFrameArray);
+				anAnimation.init('../../game/images/test_anims_run/jogSheet.png', 10, aFrameArray);
 				ECGame.instance.getAssetManager().saveAnimation(aNameList[j], anAnimation);
 			}
 		},

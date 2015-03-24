@@ -116,7 +116,7 @@ ECGame.EngineLib.SoundSystem = ECGame.EngineLib.Class.create({
 			this.loadSoundAssets(
 				[
 					new ECGame.EngineLib.SoundAsset(this.generateNextAssetID()
-						,'engine/sounds/placeholder.mp3')//TODO should beep be in the test game and something else placeholder
+						,'../../engine/sounds/placeholder.mp3')//TODO should beep be in the test game and something else placeholder
 				]
 			);
 			
