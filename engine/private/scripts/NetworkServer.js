@@ -20,63 +20,29 @@
 */
 
 
+
+//See: //https://github.com/einaros/ws/blob/master/doc/ws.md
 /*
-FROM: //https://github.com/einaros/ws/blob/master/doc/ws.md
-
-webSocket = new ws.WebSocket(
-	address,//String|Array
-	//options
-	{
-		protocol String
-		protocolVersion Number|String
-		-- the following only apply if address is a String
-		host String
-		origin String
-		pfx String|Buffer
-		key String|Buffer
-		passphrase String
-		cert String|Buffer
-		ca Array
-		ciphers String
-		rejectUnauthorized Boolean
-	}
-);
-//Instantiating with an address creates a new WebSocket client object. If address is an Array (request, socket, rest), it is instantiated as a Server client (e.g. called from the ws.Server).
-
-websocket.bytesReceived	//Received bytes count.
-websocket.readyState	//WebSocket.CONNECTING, WebSocket.OPEN, WebSocket.CLOSING, WebSocket.CLOSED.
-websocket.protocolVersion	//The WebSocket protocol version used for this connection, 8, 13 or hixie-76 (the latter only for server clients).
-websocket.url	//The URL of the WebSocket server (only for clients)
-websocket.supports	//Describes the feature of the used protocol version. E.g. supports.binary is a boolean that describes if the connection supports binary messages.
-websocket.close([code], [data])	//Gracefully closes the connection, after sending a description message
-websocket.pause()	//Pause the client stream
+WTF are these:
 websocket.ping([data], [options], [dontFailWhenClosed])	//Sends a ping. data is sent, options is an object with members mask and binary. dontFailWhenClosed indicates whether or not to throw if the connection isnt open.
 websocket.pong([data], [options], [dontFailWhenClosed])	//Sends a pong. data is sent, options is an object with members mask and binary. dontFailWhenClosed indicates whether or not to throw if the connection isnt open.
+websocket.on('ping', function(){console.info(arguments)});
+websocket.on('pong', function(){console.info(arguments)});
+
+websocket.pause()	//Pause the client stream
 websocket.resume()	//Resume the client stream
-websocket.send(data, [options], [callback])	//Sends data through the connection. options can be an object with members mask and binary. The optional callback is executed after the send completes.
-websocket.stream([options], callback)	//Streams data through calls to a user supplied function. options can be an object with members mask and binary. callback is executed on successive ticks of which send is function(data, final).
+
 websocket.terminate()	//Immediately shuts down the connection
-
-websocket.onopen
-websocket.onerror
-websocket.onclose
-websocket.onmessage	//Emulates the W3C Browser based WebSocket interface using function members.
-websocket.addEventListener(method, listener)	//Emulates the W3C Browser based WebSocket interface using addEventListener.
-
-Event: 'error'	function(error) { }	//If the client emits an error, this event is emitted (errors from the underlying net.Socket are forwarded here).
-Event: 'close'	function(code, message) { }	//Is emitted when the connection is closed. code is defined in the WebSocket specification.
-	//The close event is also emitted when then underlying net.Socket closes the connection (end or close).
-Event: 'message'	function(data, flags) { }	//Is emitted when data is received. flags is an object with member binary.
-Event: 'ping'	function(data, flags) { }	//Is emitted when a ping is received. flags is an object with member binary.
-Event: 'pong'	function(data, flags) { }	//Is emitted when a pong is received. flags is an object with member binary.
-Event: 'open'	function () { }	//Emitted when the connection is established.
 */
+
+
+
 ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
-	Constructor : function ServerSideWebSocket()//_onClientConnected
+	Constructor : function ServerSideWebSocket()//_onClientConnected..
 	{
 		this._myNetwork = null;
 		this._myWebsocket = null;
-		this._myUser = null;
+		this._myNetUser = null;
 	},
 	Parents : [],
 	flags : {},
@@ -86,26 +52,66 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 	{
 		init : function init(inWebSocket, inNetwork)
 		{
+			var aUserName;
+
 			this._myNetwork = inNetwork;
 			this._myWebsocket = inWebSocket;
 			this._myWebsocket.myECGameSocket = this;
-			
-//TODO handle user from request
-			//this._myUser = inWebSocket.upgradeReq.myECGameUser;	//TODO if we ever have FB identification or something..
-			this._myUser = new ECGame.EngineLib.User();	//start with an unidentified user
+
+			if(ECGame.Settings.Server.requireSessionLogins)
+			{
+				aUserName = inWebSocket.upgradeReq.user.userName;
+				aUserName = aUserName.substr(0, aUserName.indexOf('@'));
+
+				//if this is a reconnect:
+				if(this._myNetwork._myIdentifiedUsers[aUserName])
+				{
+					this._myNetUser = this._myNetwork._myIdentifiedUsers[aUserName];
+				}
+				else
+				{
+					this._myNetUser = new ECGame.EngineLib.NetUser(
+						aUserName
+						,++ECGame.EngineLib.NetUser.USER_IDS.CURRENT_MAX
+					);
+				}
+			}
+			else
+			{
+				this._myNetUser = new ECGame.EngineLib.NetUser(
+					"Player:" + (++ECGame.EngineLib.NetUser.USER_IDS.CURRENT_MAX)
+					,ECGame.EngineLib.NetUser.USER_IDS.CURRENT_MAX
+				);
+			}
+
+			this._myNetUser.mySocket = this;
+			this._myNetwork._myIdentifiedUsers[this._myNetUser.userName] = this._myNetUser;
+
+			this.send(
+				JSON.stringify(
+					{
+						userName: this._myNetUser.userName
+						,userID: this._myNetUser.userID
+					}
+				)
+			);
+			this._myNetwork.onEvent(new ECGame.EngineLib.Events.IdentifiedUser(this._myNetUser));
 			
 			inWebSocket.on('open', this._onOpen);	//not ever recieved, I think because we are connected to, not connecting
 			inWebSocket.on('error', this._onError);
 			inWebSocket.on('close', this._onClose);
 			inWebSocket.on('message', this._onMessage);
-			//inWebSocket.on('ping', function(){console.info(arguments)});
-			//inWebSocket.on('pong', function(){console.info(arguments)});
+
+			//some socket errors can cause problems without the websocket erroring:
+			inWebSocket._socket.on('error', this._onError);
 		},
 		
-		_onOpen : function _onOpen()
+		_onOpen : function _onOpen() //never called, I think because this is for outgoing calls only
 		{
-			console.trace();
-			console.log(arguments);
+			if(ECGame.Settings.isDebugPrint_NetworkMessagesConnectionChanges())
+			{
+				console.trace(arguments);
+			}
 		},
 
 		_onClose : function _onClose(inCode, inMessage)//_onClientDisconnected
@@ -114,27 +120,22 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 			
 			aThis = this.myECGameSocket;
 			
-			if(ECGame.Settings.isDebugPrint_NetworkMessages())
+			if(ECGame.Settings.isDebugPrint_NetworkMessagesConnectionChanges())
 			{
-				console.info("Lost Client! " + aThis._myUser);
-				console.log(inCode, inMessage/*, arguments*/);//Probably going to be annoying, but clears up JSLint for the moment
-			}
-			//HACK:
-			if(ECGame.Settings.DEBUG
-			//	&& ECGame.Settings.Debug.NetworkMessages_Print	//TODO should have levels for net debug print
-			)
-			{
-				console.info("Lost Client!", arguments);
+				console.info(
+					"User Disconnected: " + aThis._myNetUser.getDebugName()
+					,inCode
+					,inMessage
+				);
 			}
 			
-			aThis._myUser.mySocket = null;
+			aThis._myNetUser.mySocket = null;
 			
 			//Note: use to have only one netgroup that was joined by all by default.
 			//	removed it because it causes unneeded network sends at this time.  May want it back later.
-			//ECGame.instance.getNetwork().getNetGroup('master_netgroup').removeUser(aThis._myUser);
+			//ECGame.instance.getNetwork().getNetGroup('master_netgroup').removeUser(aThis._myNetUser);
 
-			//TODO see if this user is considered properly connected/id'ed first..
-			aThis._myNetwork.onEvent(new ECGame.EngineLib.Events.ClientDisconnected(aThis._myUser));//TODO get rid of new!!!
+			aThis._myNetwork.onEvent(new ECGame.EngineLib.Events.ClientDisconnected(aThis._myNetUser));//TODO get rid of new!!!
 			
 			aThis._myNetwork._removeSocket(aThis);
 			
@@ -142,114 +143,41 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 			//aThis._listenSocket.sockets.emit('msg', "User Disconnected: " + this.gameUser.userName);
 		},
 		
-		_onMessage : function _onMessage(inMessage/*, inFlags*/)
+		_onMessage : function _onMessage(inMessage/*, inFlags.binary*/)
 		{
 			var aThis
-				,aRecievedObj
-				,aUser
 				;
-			
-			//console.trace();
-			//console.log('Flags:', inFlags);
-			//console.log('TypeOf:', typeof inMessage);
 			
 			aThis = this.myECGameSocket;
 			
-			if(ECGame.Settings.isDebugPrint_NetworkMessages())
+			if(ECGame.Settings.isDebugPrint_NetworkMessagesPackets())
 			{
 				if(typeof inMessage === 'string')
 				{
-					console.info("Net Message Recv (text):" + inMessage);
+					console.info("Net Message Recv (text length " + inMessage.length + ") from " + aThis._myNetUser.getDebugName() + ":" + inMessage);
 				}
 				else
 				{
-					console.info("Net Message Recv (binary):" + JSON.stringify(new Uint8Array(inMessage)));
+					console.info("Net Message Recv (binary length " + inMessage.length + ") from " + aThis._myNetUser.getDebugName() + ":" + JSON.stringify(new Uint8Array(inMessage)));
 				}
 			}
-			
-			if(aThis._myUser.userID !== ECGame.EngineLib.User.USER_IDS.NEW_USER)
+
+			if(typeof inMessage !== 'string')
 			{
-				if(typeof inMessage !== 'string')
+				if(!ECGame.Settings.getDebugSimulatedLagTime())
 				{
-					if(!ECGame.Settings.getDebugSimulatedLagTime())
-					{
-						aThis._myNetwork.serializeIn(aThis._myUser, new Uint8Array(inMessage));
-					}
-					else
-					{
-						ECGame.instance.getTimer().setTimerCallback(
-							ECGame.Settings.getDebugSimulatedLagTime(),
-							function delayNetworkMessage()
-							{
-								aThis._myNetwork.serializeIn(aThis._myUser, new Uint8Array(inMessage));
-								return false;
-							}
-						);
-					}
-				}
-				/*else
-				{
-					//TODO inNetwork.event Msg
-					//aThis._myNetwork.serializeIn(aThis._myUser, inMessage);
-					//console.info('Message:', inMessage);
-				}*/
-			}
-			//handle connection handshake / ID
-			else
-			{
-				if(typeof inMessage === 'string')
-				{
-					aRecievedObj = JSON.parse(inMessage);
-					if(ECGame.Settings.isDebugPrint_NetworkMessages())
-					{
-						console.info('User ID Message:' + inMessage);
-					}
-					//verify the object is valid
-					if(typeof aRecievedObj.userName !== 'string'
-						|| typeof aRecievedObj.userID !== 'number'
-						|| typeof aRecievedObj.reconnectKey !== 'number'
-					)
-					{
-						console.warn("Ill formed User Identification!");
-						return;
-					}
-					
-					//get existing user
-					aUser = aThis._myNetwork._myIdentifiedUsers[aRecievedObj.userID];
-					
-					//if there is no user by this id, we assign them a new id!
-					if(!aUser)
-					{
-						//set our user for this socket to be the client
-						aThis._myUser.userName = aRecievedObj.userName;
-						aThis._myUser.userID = aRecievedObj.userID = ++(ECGame.EngineLib.User.USER_IDS.CURRENT_MAX);
-						aThis._myUser.reconnectKey = aRecievedObj.reconnectKey;
-						//remember the user/client for reconnects:
-						aThis._myNetwork._myIdentifiedUsers[aRecievedObj.userID] = aThis._myUser;
-						//tell them who they are going to be from now on:
-						aThis.send(JSON.stringify(aThis._myUser));
-					}
-					//make sure they are the same user as before:
-					else if(aUser.reconnectKey === aRecievedObj.reconnectKey /*&& !aUser.connected ??*/)
-					{
-						aThis._myUser = aThis._myNetwork._myIdentifiedUsers[aRecievedObj.userID];
-					}
-					else
-					{
-						console.warn("Recieved false reconectKey from unidentified user.");
-						aThis.close();
-						return;
-					}
-					
-					aThis._myUser.mySocket = aThis;
-					//Note: use to have only one netgroup that was joined by all by default.
-					//	removed it because it causes unneeded network sends at this time.  May want it back later.
-					//ECGame.instance.getNetwork().getNetGroup('master_netgroup').addUser(aThis._myUser);
-					aThis._myNetwork.onEvent(new ECGame.EngineLib.Events.IdentifiedUser(aThis._myUser));
+					aThis._myNetwork.serializeIn(aThis._myNetUser, new Uint8Array(inMessage));
 				}
 				else
 				{
-					console.warn("Recieved data from unidentified user.");
+					ECGame.instance.getTimer().setTimerCallback(
+						ECGame.Settings.getDebugSimulatedLagTime(),
+						function delayNetworkMessage()
+						{
+							aThis._myNetwork.serializeIn(aThis._myNetUser, new Uint8Array(inMessage));
+							return false;
+						}
+					);
 				}
 			}
 		},
@@ -264,31 +192,35 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 		
 		send : function send(inData)
 		{
-			if(ECGame.Settings.isDebugPrint_NetworkMessages())
+			if(ECGame.Settings.isDebugPrint_NetworkMessagesPackets())
 			{
 				if(typeof inData === 'string')
 				{
-					console.info("Net Send (text) to " + this._myUser.userName + ':' + inData);
+					console.info("Net Send (text length " + inData.length + ") to " + this._myNetUser.getDebugName() + ':' + inData);
 				}
 				else
 				{
-					console.info("Net Send (binary) to " + this._myUser.userName + ':' + JSON.stringify(inData));
+					console.info("Net Send (binary length " + inData.length + ") to " + this._myNetUser.getDebugName() + ':' + JSON.stringify(inData));
 				}
 			}
 			
-			//TODO if not connected, queue send data to user object to resend later??
+			//TODO if not connected, queue send data to user object to resend later?? => in netuser?
 			
 			if(this._myWebsocket.readyState !== 1/*ie WebSocket.OPEN*/)
 			{
-				console.log("Socket Closed, not sending data.");//TODO only print on debug?
+				if(ECGame.Settings.isDebugPrint_NetworkMessagesConnectionChanges())
+				{
+					console.info("Socket closed, unable to send data to " + this._myNetUser.getDebugName());
+				}
 				return;
 			}
 			
 			this._myWebsocket.send(
-				inData//.buffer
+				new Buffer(inData)//.buffer
 				,{
 					binary : (typeof inData !== 'string')
-					//, mask: true
+					//,mask: true
+					,compress : true
 				},
 				this._onError
 			);
@@ -296,42 +228,23 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 		
 		close : function close(inCode, inReason)
 		{
+			if(ECGame.Settings.isDebugPrint_NetworkMessagesConnectionChanges())
+			{
+				console.info("Closing socket on user:", this._myNetUser.getDebugName(), inCode, inReason);
+			}
 			this._myWebsocket.close(inCode, inReason);
 		}
-		
-		//TODO getStatus
-		//websocket.readyState	//WebSocket.CONNECTING, WebSocket.OPEN, WebSocket.CLOSING, WebSocket.CLOSED.
 	}
 });
 
 
 
-
-
-
-/*
-//SERVER
-	-listenSocket
-		-connection => _onClientConnected
-	_onClientConnected()
-		//connect functions to new socket
-		-id => _onIdRecv
-		-msg => _onMsgRecv
-		-data => _onDataRecv
-		-obj => _onObjectsRecv
-		-disconnect => _onClientDisconnected
-		//tell everyone new connection
-		//serialize all to new connection
-	_onClientDisconnected()
-		//tell all about the disconect
-		//emit disconnect event
-*/
 ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 	Constructor : function NetworkServer()
 	{
 		this.NetworkBase();
 		
-		this._myIdentifiedUsers = [];
+		this._myIdentifiedUsers = {};
 		this._mySockets = [];
 		
 		//TODO move these out!! (to where?: maybe this.vars instead of global namespace!!)
@@ -339,35 +252,20 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 		ECGame.WebServerTools.WebSocketServer = ECGame.WebServerTools.wsLib.Server;
 		ECGame.WebServerTools.WebSocket = ECGame.WebServerTools.wsLib.WebSocket;
 
-		//http://www.iana.org/assignments/websocket/websocket.xml#subprotocol-name
 		this._myWebSocketServer = new ECGame.WebServerTools.WebSocketServer(
 			//options:
 			{
-				//host String
-				//port : //do not set because we use the http(s) server instead
-				server : (ECGame.Settings.Server.useHttps //http.Server
+				server : (ECGame.Settings.Server.useHttps
 					? ECGame.webServer.myHttpsServer
 					: ECGame.webServer.myHttpServer),
-				verifyClient : this._verifyClient	//Function
-				//path String
-				//noServer Boolean
-				//disableHixie Boolean
-				//clientTracking Boolean
+				verifyClient : this._verifyClient
 			}
-			//callback function(?)??
 		);
-		/*
-		this._myWebSocketServer.close([code], [data]);//closes server and all client sockets
-		this._myWebSocketServer.handleUpgrade(request, socket, upgradeHead, callback)??????????????????
-		this._myWebSocketServer.on('error', function ?name?(inError){return;});
-		this._myWebSocketServer.on('headers', function ?name?(inHeaders){return;});
-		this._myWebSocketServer.on('connection', function ?name?(inSocket){return;});
-		*/
+
 		this._myWebSocketServer.on('error', this._onError);
-		this._myWebSocketServer.on('headers', this._onHeaders);
 		this._myWebSocketServer.on('connection', this._onConnection);
 		
-		console.info("Websocket Server running.");
+		console.log("Websocket Server running.");
 	},
 	Parents : [ECGame.EngineLib.NetworkBase],
 	flags : {},
@@ -377,18 +275,23 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 	{
 		init : function init()
 		{
-			console.info("Network Game Server Started");//TODO why is this init here? Why so much in constructor?
-		}
+			console.log("Network Game Server Started");
+		},
 		
-		,getName : function getName()
+		getName : function getName()
 		{
 			return 'NetworkServer';
 		},
 		
-		_verifyClient : function _verifyClient(inInfo, inClientVerifiedFunction)
+		//note: inClientVerifiedCallback(inResult, inHttpErrorCode, inHttpReason)
+		_verifyClient : function _verifyClient(inInfo, inClientVerifiedCallback)
 		{
 			var aRequest
+				,aUserName
+				,aThis
 				;
+			
+			aThis = ECGame.instance.getNetwork();
 
 			aRequest = inInfo.req;
 
@@ -402,12 +305,15 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 						if(!aRequest.session)
 						{
 							console.error("Couldn't get session during websocket client verify");
-							inClientVerifiedFunction(false);
+							inClientVerifiedCallback(false);
 							return;
 						}
-						if(ECGame.Settings.isDebugPrint_NetworkMessages())
+						if(ECGame.Settings.isDebugPrint_NetworkMessagesConnectionChanges())
 						{
-							console.info(aRequest.session);
+							console.info(
+								"Websocket verify session:\n"
+								+ JSON.stringify(aRequest.session, null, '\t')
+							);
 						}
 						ECGame.webServer.myPassportInit(
 							aRequest, {}
@@ -421,15 +327,30 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 									{
 										if(!aRequest.isAuthenticated())
 										{
-											console.info("User not authenticated");
-											inClientVerifiedFunction(false);
+											console.warn("User not authenticated");//??warn? hacker??
+											inClientVerifiedCallback(false);
 											return;
 										}
-										if(ECGame.Settings.isDebugPrint_NetworkMessages())
+
+										aUserName = aRequest.user.userName;
+										aUserName = aUserName.substr(0, aUserName.indexOf('@'));
+										//if user already connected return false
+										if(aThis._myIdentifiedUsers[aUserName]
+											&& aThis._myIdentifiedUsers[aUserName].mySocket)
 										{
-											console.info(aRequest.user);
+											console.warn("User double connect");//??warn? hacker??
+											inClientVerifiedCallback(false);
+											return;
 										}
-										inClientVerifiedFunction(true);
+
+										if(ECGame.Settings.isDebugPrint_NetworkMessagesConnectionChanges())
+										{
+											console.info(
+												"Websocket approving user:\n"
+												+ JSON.stringify(aRequest.user, null, '\t')
+											);
+										}
+										inClientVerifiedCallback(true);
 									}
 								);
 							}
@@ -439,30 +360,25 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 			}
 			else
 			{
-				inClientVerifiedFunction(true);
+				inClientVerifiedCallback(true);
 			}
 		},
 		
 		
-		close : function close(inCode, inReason)
+		close : function close(/*inCode, inReason*/)	//TODO take no params
 		{
+			console.trace("Is this in use??");
+			//TODO msg about this??
 			//closes server and all client sockets
-			this._myWebSocketServer.close(inCode, inReason);
+			this._myWebSocketServer.close();
 		},
 		
-
 		_onError : function _onError(inError)
 		{
 			if(inError)
 			{
 				console.error(inError);
 			}
-		},
-		
-		_onHeaders : function _onHeaders(/*inHeaders*/)
-		{
-			//console.trace(inHeaders);	//TODO when is this called??
-			return;
 		},
 		
 		_onConnection : function _onConnection(inWebSocket)//_onClientConnected
@@ -477,39 +393,23 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 			aThis._mySockets.push(aSocket);
 
 			//TODO event??
-			//TODO log connection
+
+			if(ECGame.Settings.isDebugPrint_NetworkMessagesConnectionChanges())
+			{
+				console.info("User Connected:" + aSocket._myNetUser.getDebugName());
+			}
 			
 			//TODO tell everone they have connected with a chat message CommandObject:
 			//inConnectedSocket.broadcast.emit('msg', "User Connected: " + inConnectedSocket.gameUser.userName);
 
-			//TODO keep alive msgs??	//Ping!!
-			/*setInterval(
-				function()
-				{
-					inWebSocket.send("don't close on me now", {}, this._onError);
-				},
-				1000
-			);*/
-			/*setInterval(
-				function()
-				{
-					inWebSocket.close();
-				},
-				20000
-			);*/
+			//TODO keep alive msgs??
+			//=>	Ping!! (?setInterval) should be at socket level, not manual packets in base
 		},
 		
 		_removeSocket : function _removeSocket(inSocket)//TODO consider using ws built in clientTracking instead (which will close all of them automatically when the server closes
 		{
-			var anIndex, aLength;
-			
-			anIndex = this._mySockets.indexOf(inSocket);
-			if(anIndex !== -1)
-			{
-				aLength = this._mySockets.length;
-				this._mySockets[anIndex] = this._mySockets[aLength - 1];
-				this._mySockets.pop();
-			}
+			this._mySockets.swapBackPop(this._mySockets.indexOf(inSocket));//TODO swapBackPopItem
 		}
 	}
 });
+

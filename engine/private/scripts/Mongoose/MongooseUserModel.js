@@ -22,7 +22,7 @@
 
 /////////////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////////////
-var bcrypt = require('bcrypt');	//TODO http://stackoverflow.com/questions/14573488/error-compiling-bcrypt-node-js
+var bcrypt = require('bcryptjs');
 var Schema = require('mongoose').Schema;
 
 var encryptionComplexity = 12;
@@ -105,7 +105,7 @@ ECGame.WebServerTools.Mongoose.UserModelSchema.methods.setPassword = function(in
 
 ECGame.WebServerTools.Mongoose.UserModelSchema.methods.authenticate = function(inPassword, inCallback)
 {
-	console.info("Authenticating:", JSON.stringify(this, null, '\t'));
+	console.info("Authenticating:\n" + JSON.stringify(this, null, '\t'));
 
 	bcrypt.compare(String(inPassword), this.passwordHash, inCallback);
 };

@@ -340,7 +340,7 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			
 			if(ECGame.Settings.Network.isServer)
 			{
-				this._myLocalUser = new ECGame.EngineLib.User("Server", ECGame.EngineLib.User.USER_IDS.SERVER);
+				this._myLocalUser = new ECGame.EngineLib.NetUser("Server", ECGame.EngineLib.NetUser.USER_IDS.SERVER);
 				
 				switch(ECGame.Settings.Graphics.mode)
 				{
@@ -375,11 +375,7 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 				window.addEventListener('orientationchange', this._windowResized, false);
 				window.addEventListener('load', this._windowResized, false);
 				
-				//TODO use FB id or something in the future
-				this._myLocalUser = new ECGame.EngineLib.User(
-					"NewUser" + Math.floor(Math.random()*65536)
-					,ECGame.EngineLib.User.USER_IDS.NEW_USER
-				);
+				this._myLocalUser = new ECGame.EngineLib.NetUser();
 				
 				//Init graphics
 				switch(ECGame.Settings.Graphics.mode)

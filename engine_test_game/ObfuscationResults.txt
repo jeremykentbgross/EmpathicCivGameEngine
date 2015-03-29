@@ -78,6 +78,7 @@ Final NameSpace:	LoadGame
 Final NameSpace:	Msg
 Final NameSpace:	NetGroup
 Final NameSpace:	NetObjects
+Final NameSpace:	NetUser
 Final NameSpace:	NetworkBase
 Final NameSpace:	NetworkClient
 Final NameSpace:	ParticleEffect
@@ -121,7 +122,6 @@ Final NameSpace:	UnitTestFramework
 Final NameSpace:	UpdateChildren
 Final NameSpace:	UpdatedPhysicsStatus
 Final NameSpace:	Updater
-Final NameSpace:	User
 Final NameSpace:	WebServerTools
 Final NameSpace:	World2D
 Final NameSpace:	_addedComponent
@@ -280,6 +280,7 @@ Final NameSpace:	getCurrentLength
 Final NameSpace:	getCurrentNode
 Final NameSpace:	getCurrentPoint
 Final NameSpace:	getCurrentTime
+Final NameSpace:	getDebugName
 Final NameSpace:	getDebugSimulatedLagTime
 Final NameSpace:	getEffectsVolume
 Final NameSpace:	getEndPoint
@@ -384,7 +385,10 @@ Final NameSpace:	isDebugPrint
 Final NameSpace:	isDebugPrint_FrameStats
 Final NameSpace:	isDebugPrint_GameObject
 Final NameSpace:	isDebugPrint_Input
-Final NameSpace:	isDebugPrint_NetworkMessages
+Final NameSpace:	isDebugPrint_NetworkMessagesBasic
+Final NameSpace:	isDebugPrint_NetworkMessagesConnectionChanges
+Final NameSpace:	isDebugPrint_NetworkMessagesDetailed
+Final NameSpace:	isDebugPrint_NetworkMessagesPackets
 Final NameSpace:	isDebugPrint_NetworkPingCompute
 Final NameSpace:	isDebugPrint_Obfuscation
 Final NameSpace:	isDebugPrint_Sound
@@ -625,6 +629,7 @@ Function Name:	LoadGame
 Function Name:	Msg
 Function Name:	NetGroup
 Function Name:	NetObjects
+Function Name:	NetUser
 Function Name:	NetworkBase
 Function Name:	NetworkClient
 Function Name:	ParticleEffect
@@ -667,7 +672,6 @@ Function Name:	UnitTestFramework
 Function Name:	UpdateChildren
 Function Name:	UpdatedPhysicsStatus
 Function Name:	Updater
-Function Name:	User
 Function Name:	World2D
 Function Name:	_addedComponent
 Function Name:	_addedEntity
@@ -825,6 +829,7 @@ Function Name:	getCurrentLength
 Function Name:	getCurrentNode
 Function Name:	getCurrentPoint
 Function Name:	getCurrentTime
+Function Name:	getDebugName
 Function Name:	getDebugSimulatedLagTime
 Function Name:	getEffectsVolume
 Function Name:	getEndPoint
@@ -928,7 +933,10 @@ Function Name:	isDebugPrint
 Function Name:	isDebugPrint_FrameStats
 Function Name:	isDebugPrint_GameObject
 Function Name:	isDebugPrint_Input
-Function Name:	isDebugPrint_NetworkMessages
+Function Name:	isDebugPrint_NetworkMessagesBasic
+Function Name:	isDebugPrint_NetworkMessagesConnectionChanges
+Function Name:	isDebugPrint_NetworkMessagesDetailed
+Function Name:	isDebugPrint_NetworkMessagesPackets
 Function Name:	isDebugPrint_NetworkPingCompute
 Function Name:	isDebugPrint_Obfuscation
 Function Name:	isDebugPrint_Sound
@@ -1994,6 +2002,8 @@ Member Variable:	_myNetDirty
 Member Variable:	_myNetDirtyInstances
 Member Variable:	_myNetGroups
 Member Variable:	_myNetOwnerID
+Member Variable:	_myNetUser
+Member Variable:	_myNetUsers
 Member Variable:	_myNetwork
 Member Variable:	_myNewInstances
 Member Variable:	_myNextAssetID
@@ -2078,8 +2088,6 @@ Member Variable:	_myUp
 Member Variable:	_myUpString
 Member Variable:	_myUpdateList
 Member Variable:	_myUpdaterMap
-Member Variable:	_myUser
-Member Variable:	_myUsers
 Member Variable:	_myUsingNetViews
 Member Variable:	_myV
 Member Variable:	_myVelocity
@@ -2239,7 +2247,6 @@ Member Variable:	properties			*****
 Member Variable:	prototype			*****
 Member Variable:	push			*****
 Member Variable:	recieved			*****
-Member Variable:	reconnectKey			*****
 Member Variable:	regexp			*****
 Member Variable:	removeNewlines			*****
 Member Variable:	removeNonNewlineWhiteSpace			*****
@@ -2458,6 +2465,7 @@ Included Word:	NET_MODE
 Included Word:	NEW_USER
 Included Word:	NetGroup
 Included Word:	NetObjects
+Included Word:	NetUser
 Included Word:	Network
 Included Word:	NetworkBase
 Included Word:	NetworkClient
@@ -2564,7 +2572,6 @@ Included Word:	Updater
 Included Word:	Updater_Draw
 Included Word:	Updater_DrawColor
 Included Word:	Updater_Print
-Included Word:	User
 Included Word:	Value
 Included Word:	WebServer
 Included Word:	WebServerTools
@@ -2766,6 +2773,8 @@ Included Word:	_myNetDirty
 Included Word:	_myNetDirtyInstances
 Included Word:	_myNetGroups
 Included Word:	_myNetOwnerID
+Included Word:	_myNetUser
+Included Word:	_myNetUsers
 Included Word:	_myNetwork
 Included Word:	_myNewInstances
 Included Word:	_myNextAssetID
@@ -2850,8 +2859,6 @@ Included Word:	_myUp
 Included Word:	_myUpString
 Included Word:	_myUpdateList
 Included Word:	_myUpdaterMap
-Included Word:	_myUser
-Included Word:	_myUsers
 Included Word:	_myUsingNetViews
 Included Word:	_myV
 Included Word:	_myVelocity
@@ -3284,6 +3291,7 @@ Included Word:	getCurrentLength
 Included Word:	getCurrentNode
 Included Word:	getCurrentPoint
 Included Word:	getCurrentTime
+Included Word:	getDebugName
 Included Word:	getDebugSimulatedLagTime
 Included Word:	getEffectsVolume
 Included Word:	getEndPoint
@@ -3611,7 +3619,10 @@ Included Word:	isDebugPrint
 Included Word:	isDebugPrint_FrameStats
 Included Word:	isDebugPrint_GameObject
 Included Word:	isDebugPrint_Input
-Included Word:	isDebugPrint_NetworkMessages
+Included Word:	isDebugPrint_NetworkMessagesBasic
+Included Word:	isDebugPrint_NetworkMessagesConnectionChanges
+Included Word:	isDebugPrint_NetworkMessagesDetailed
+Included Word:	isDebugPrint_NetworkMessagesPackets
 Included Word:	isDebugPrint_NetworkPingCompute
 Included Word:	isDebugPrint_Obfuscation
 Included Word:	isDebugPrint_Sound
@@ -3711,7 +3722,6 @@ Included Word:	newItem
 Included Word:	newcap
 Included Word:	node
 Included Word:	nomen
-Included Word:	normalize
 Included Word:	obfuscateNames
 Included Word:	obj1
 Included Word:	obj2
@@ -3944,6 +3954,7 @@ Ignored Word:	Console
 Ignored Word:	DataView
 Ignored Word:	Date
 Ignored Word:	E
+Ignored Word:	EPSILON
 Ignored Word:	Empty
 Ignored Word:	Error
 Ignored Word:	EvalError
@@ -3955,13 +3966,17 @@ Ignored Word:	Infinity
 Ignored Word:	Int16Array
 Ignored Word:	Int32Array
 Ignored Word:	Int8Array
+Ignored Word:	Intl
 Ignored Word:	JSON
 Ignored Word:	LN10
 Ignored Word:	LN2
 Ignored Word:	LOG10E
 Ignored Word:	LOG2E
+Ignored Word:	MAX_SAFE_INTEGER
 Ignored Word:	MAX_VALUE
+Ignored Word:	MIN_SAFE_INTEGER
 Ignored Word:	MIN_VALUE
+Ignored Word:	Map
 Ignored Word:	Math
 Ignored Word:	NEGATIVE_INFINITY
 Ignored Word:	NaN
@@ -3970,12 +3985,15 @@ Ignored Word:	Object
 Ignored Word:	PI
 Ignored Word:	POSITIVE_INFINITY
 Ignored Word:	POWER2_INT_TABLE
+Ignored Word:	Promise
 Ignored Word:	RangeError
 Ignored Word:	ReferenceError
 Ignored Word:	RegExp
 Ignored Word:	SQRT1_2
 Ignored Word:	SQRT2
+Ignored Word:	Set
 Ignored Word:	String
+Ignored Word:	Symbol
 Ignored Word:	SyntaxError
 Ignored Word:	TypeError
 Ignored Word:	URIError
@@ -3984,6 +4002,8 @@ Ignored Word:	Uint16Array
 Ignored Word:	Uint32Array
 Ignored Word:	Uint8Array
 Ignored Word:	Uint8ClampedArray
+Ignored Word:	WeakMap
+Ignored Word:	WeakSet
 Ignored Word:	__defineGetter__
 Ignored Word:	__defineSetter__
 Ignored Word:	__lookupGetter__
@@ -3993,15 +4013,18 @@ Ignored Word:	_stdout
 Ignored Word:	_times
 Ignored Word:	abs
 Ignored Word:	acos
+Ignored Word:	acosh
 Ignored Word:	addEventListener
 Ignored Word:	anchor
 Ignored Word:	apply
 Ignored Word:	arc
 Ignored Word:	arguments
 Ignored Word:	asin
+Ignored Word:	asinh
 Ignored Word:	assert
 Ignored Word:	atan
 Ignored Word:	atan2
+Ignored Word:	atanh
 Ignored Word:	beginPath
 Ignored Word:	big
 Ignored Word:	bind
@@ -4015,6 +4038,7 @@ Ignored Word:	call
 Ignored Word:	caller
 Ignored Word:	case
 Ignored Word:	catch
+Ignored Word:	cbrt
 Ignored Word:	ceil
 Ignored Word:	charAt
 Ignored Word:	charCodeAt
@@ -4025,6 +4049,7 @@ Ignored Word:	clearImmediate
 Ignored Word:	clearInterval
 Ignored Word:	clearTimeout
 Ignored Word:	closePath
+Ignored Word:	clz32
 Ignored Word:	color
 Ignored Word:	compile
 Ignored Word:	concat
@@ -4034,6 +4059,7 @@ Ignored Word:	const
 Ignored Word:	constructor
 Ignored Word:	continue
 Ignored Word:	cos
+Ignored Word:	cosh
 Ignored Word:	create
 Ignored Word:	data
 Ignored Word:	decodeURI
@@ -4041,6 +4067,7 @@ Ignored Word:	decodeURIComponent
 Ignored Word:	defineProperties
 Ignored Word:	defineProperty
 Ignored Word:	delete
+Ignored Word:	deliverChangeRecords
 Ignored Word:	dir
 Ignored Word:	do
 Ignored Word:	document
@@ -4052,6 +4079,7 @@ Ignored Word:	emit
 Ignored Word:	encodeURI
 Ignored Word:	encodeURIComponent
 Ignored Word:	entityify
+Ignored Word:	entries
 Ignored Word:	enumerable
 Ignored Word:	error
 Ignored Word:	escape
@@ -4059,6 +4087,7 @@ Ignored Word:	eval
 Ignored Word:	every
 Ignored Word:	exec
 Ignored Word:	exp
+Ignored Word:	expm1
 Ignored Word:	export
 Ignored Word:	false
 Ignored Word:	fillRect
@@ -4073,6 +4102,7 @@ Ignored Word:	for
 Ignored Word:	forEach
 Ignored Word:	freeze
 Ignored Word:	fromCharCode
+Ignored Word:	fround
 Ignored Word:	function
 Ignored Word:	getDate
 Ignored Word:	getDay
@@ -4081,8 +4111,10 @@ Ignored Word:	getHours
 Ignored Word:	getMilliseconds
 Ignored Word:	getMinutes
 Ignored Word:	getMonth
+Ignored Word:	getNotifier
 Ignored Word:	getOwnPropertyDescriptor
 Ignored Word:	getOwnPropertyNames
+Ignored Word:	getOwnPropertySymbols
 Ignored Word:	getPrototypeOf
 Ignored Word:	getSeconds
 Ignored Word:	getTime
@@ -4099,10 +4131,12 @@ Ignored Word:	getYear
 Ignored Word:	global
 Ignored Word:	hasOwnProperty
 Ignored Word:	height
+Ignored Word:	hypot
 Ignored Word:	id
 Ignored Word:	if
 Ignored Word:	ignoreCase
 Ignored Word:	import
+Ignored Word:	imul
 Ignored Word:	in
 Ignored Word:	indexOf
 Ignored Word:	info
@@ -4116,9 +4150,11 @@ Ignored Word:	isDigit
 Ignored Word:	isExtensible
 Ignored Word:	isFinite
 Ignored Word:	isFrozen
+Ignored Word:	isInteger
 Ignored Word:	isNaN
 Ignored Word:	isNumber
 Ignored Word:	isPrototypeOf
+Ignored Word:	isSafeInteger
 Ignored Word:	isSealed
 Ignored Word:	italics
 Ignored Word:	join
@@ -4136,6 +4172,9 @@ Ignored Word:	lineTo
 Ignored Word:	link
 Ignored Word:	localeCompare
 Ignored Word:	log
+Ignored Word:	log10
+Ignored Word:	log1p
+Ignored Word:	log2
 Ignored Word:	map
 Ignored Word:	match
 Ignored Word:	max
@@ -4149,11 +4188,13 @@ Ignored Word:	msg
 Ignored Word:	multiline
 Ignored Word:	name
 Ignored Word:	new
+Ignored Word:	normalize
 Ignored Word:	now
 Ignored Word:	null
 Ignored Word:	number
 Ignored Word:	oRequestAnimationFrame
 Ignored Word:	object
+Ignored Word:	observe
 Ignored Word:	parse
 Ignored Word:	parseFloat
 Ignored Word:	parseInt
@@ -4166,7 +4207,6 @@ Ignored Word:	propertyIsEnumerable
 Ignored Word:	prototype
 Ignored Word:	push
 Ignored Word:	random
-Ignored Word:	reconnectKey
 Ignored Word:	reduce
 Ignored Word:	reduceRight
 Ignored Word:	replace
@@ -4190,6 +4230,7 @@ Ignored Word:	setMinutes
 Ignored Word:	setMonth
 Ignored Word:	setOrientation
 Ignored Word:	setPosition
+Ignored Word:	setPrototypeOf
 Ignored Word:	setSeconds
 Ignored Word:	setTime
 Ignored Word:	setTimeout
@@ -4203,7 +4244,9 @@ Ignored Word:	setUTCSeconds
 Ignored Word:	setVelocity
 Ignored Word:	setYear
 Ignored Word:	shift
+Ignored Word:	sign
 Ignored Word:	sin
+Ignored Word:	sinh
 Ignored Word:	slice
 Ignored Word:	small
 Ignored Word:	some
@@ -4227,6 +4270,7 @@ Ignored Word:	supplant
 Ignored Word:	swapBackPop
 Ignored Word:	switch
 Ignored Word:	tan
+Ignored Word:	tanh
 Ignored Word:	test
 Ignored Word:	this
 Ignored Word:	throw
@@ -4254,16 +4298,19 @@ Ignored Word:	trim
 Ignored Word:	trimLeft
 Ignored Word:	trimRight
 Ignored Word:	true
+Ignored Word:	trunc
 Ignored Word:	try
 Ignored Word:	type
 Ignored Word:	typeof
 Ignored Word:	undefined
 Ignored Word:	unescape
+Ignored Word:	unobserve
 Ignored Word:	unshift
 Ignored Word:	userID
 Ignored Word:	userName
 Ignored Word:	value
 Ignored Word:	valueOf
+Ignored Word:	values
 Ignored Word:	var
 Ignored Word:	void
 Ignored Word:	warn
@@ -4538,7 +4585,7 @@ Localized String:	" at ("
 Localized String:	"----Pos:("
 Localized String:	"), Radius:"
 Localized String:	"----Vel:("
-Localized String:	"Guest"
+Localized String:	"Player"
 Localized String:	"Timeout due to over extending max size of ping calculation on "
 Localized String:	"server."
 Localized String:	"client."
@@ -4573,22 +4620,23 @@ Localized String:	"Dirty Network Object doesn't exists!:"
 Localized String:	"Network Changing: "
 Localized String:	"Not the owner, skipping changes!: "
 Localized String:	"Net destroy remotely order from "
-Localized String:	"Network object to destroy doesn't exists!:"
+Localized String:	"Network object to destroy doesn't exists (probably destroyed already)!:"
 Localized String:	"Network Destroying: "
 Localized String:	"scripts/NetworkServer.js"
 Localized String:	"Server"
 Localized String:	"Connected to Server, awaiting ID validation..."
 Localized String:	"Disconnected from Server."
-Localized String:	"Lost Server!"
-Localized String:	"Net Message Recv (text):"
-Localized String:	"Net Message Recv (binary):"
+Localized String:	"Net Message Recv (text length "
+Localized String:	") from "
+Localized String:	":"
+Localized String:	"Net Message Recv (binary length "
 Localized String:	"User ID Message:"
 Localized String:	"Ill formed User Identification!"
-Localized String:	"Connected to Server, ID validated!"
-Localized String:	"Recieved bad id data from server."
-Localized String:	"Net Send (text) to "
-Localized String:	"Net Send (binary) to "
-Localized String:	"Socket Closed, not sending data."
+Localized String:	"Connected to Server, ID updated!"
+Localized String:	"Net Send (text length "
+Localized String:	") to "
+Localized String:	"Net Send (binary length "
+Localized String:	"Socket closed, unable to send data."
 Localized String:	"Starting Disconnect:"
 Localized String:	"Network Game Client Started"
 Localized String:	"Input: "
@@ -4601,8 +4649,8 @@ Localized String:	"Down:"
 Localized String:	"Pressed:"
 Localized String:	"New GameObject: "
 Localized String:	"Destroying GameObject: "
-Localized String:	" start owner: "
-Localized String:	" end owner: "
+Localized String:	" => given from: "
+Localized String:	" to: "
 Localized String:	"Invalid path: "
 Localized String:	"No object "
 Localized String:	" in "
@@ -4632,7 +4680,6 @@ Localized String:	"<canvas id='canvas4WayBottomLeft'>"
 Localized String:	"<canvas id='canvas4WayBottomRight'>"
 Localized String:	"SpritesUpdater"
 Localized String:	"PhysicsUpdater"
-Localized String:	"NewUser"
 Localized String:	"QuadTree Node is not a square."
 Localized String:	"This method must be overridden"
 Localized String:	"Already in scene graph, changing animation might change AABB."
@@ -4708,8 +4755,7 @@ Localized String:	"Facing_UpRight"
 Localized String:	"Server Reboot in "
 Localized String:	" seconds."
 Localized String:	" minutes."
-Localized String:	"Setting owner for physics and input component(s) => Name: "
-Localized String:	" ID: "
+Localized String:	"Setting owner for physics and input component(s) => "
 Localized String:	"Game Over! Server Restarting!!!"
 Localized String:	"Up"
 Localized String:	"Down"

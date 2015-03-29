@@ -42,7 +42,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			console.info("New GameObject: " + aThisClass.getName() + ':' + this._myName + ':' + this._myID, true);
 		}
 		
-		this._myNetOwnerID = ECGame.EngineLib.User.USER_IDS.SERVER;
+		this._myNetOwnerID = ECGame.EngineLib.NetUser.USER_IDS.SERVER;
 		this._myNetDirty = false;
 		this._myGameObjectNetDirty = false;
 	},
@@ -68,7 +68,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 				type : 'int',
 				net : true,
 				min : 0,
-				max : ECGame.EngineLib.User.USER_IDS.MAX_EVER,
+				max : ECGame.EngineLib.NetUser.USER_IDS.MAX_EVER,
 				condition : 'isGameObjectNetDirty'
 			}
 			//TODO name/id (NOT net?)
@@ -155,7 +155,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			
 			aLocalUser = ECGame.instance.getLocalUser();
 			if(this._myNetOwnerID !== aLocalUser.userID
-				&& aLocalUser.userID !== ECGame.EngineLib.User.USER_IDS.SERVER)
+				&& aLocalUser.userID !== ECGame.EngineLib.NetUser.USER_IDS.SERVER)
 			{
 				return false;
 			}
@@ -199,10 +199,24 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		
 		setNetOwner : function setNetOwner(inOwner)
 		{
+			var aStartingOwner = this._myNetOwnerID;
+
 			if(this.setNetDirty())	//only the owner or the server can change the ownership
 			{
 				this._myNetOwnerID = inOwner;
 				this._myGameObjectNetDirty = true;
+
+				if(ECGame.Settings.isDebugPrint_NetworkMessagesBasic() || ECGame.Settings.isDebugPrint_GameObject())
+				{
+					if(aStartingOwner !== this._myNetOwnerID)
+					{
+						console.info(
+							this.getTxtPath()
+							+ " => given from: " + aStartingOwner	//TODO display names as well as id's
+							+ " to: " + this._myNetOwnerID
+						);
+					}
+				}
 			}
 		},
 
@@ -252,12 +266,15 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			
 			inSerializer.serializeObject(this, this.GameObject._serializeFormat);
 			
-			if(ECGame.Settings.isDebugPrint_NetworkMessages() || ECGame.Settings.isDebugPrint_GameObject())
+			if(ECGame.Settings.isDebugPrint_NetworkMessagesBasic() || ECGame.Settings.isDebugPrint_GameObject())
 			{
 				if(aStartingOwner !== this._myNetOwnerID)
 				{
-					console.info(this.getTxtPath() + " start owner: " + aStartingOwner);
-					console.info(this.getTxtPath() + " end owner: " + this._myNetOwnerID);
+					console.info(
+						this.getTxtPath()
+						+ " => given from: " + aStartingOwner	//TODO display names as well as id's
+						+ " to: " + this._myNetOwnerID
+					);
 				}
 			}
 		},

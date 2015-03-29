@@ -30,7 +30,7 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 	Constructor : function NetGroup()
 	{
 		this._myNetwork = null;
-		this._myUsers = [];
+		this._myNetUsers = [];
 		this._myTrackedInstances = {};
 		this._myNewInstances = {};
 		this._myNetDirtyInstances = {};
@@ -69,20 +69,20 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 				i;
 			
 			//if we are not locally identified yet, don't update netgroup (TODO call from parent caller?)
-			if(ECGame.instance.getLocalUser().userID === ECGame.EngineLib.User.USER_IDS.NEW_USER)
+			if(ECGame.instance.getLocalUser().userID === ECGame.EngineLib.NetUser.USER_IDS.NEW_USER)
 			{
 				return;
 			}
 				
 			//send all new, dirty, and destroyed instances to all users
-			for(aCurrentUserIndex in this._myUsers)
+			for(aCurrentUserIndex in this._myNetUsers)
 			{
-				aCurrentUser = this._myUsers[aCurrentUserIndex];
+				aCurrentUser = this._myNetUsers[aCurrentUserIndex];
 				
 				if(!aCurrentUser.mySocket)
 				{
 					//TODO queue changes for reconnect?? if so, handle correctly in game too..
-					console.info("User is not connected:", aCurrentUser.userName);
+					console.info("User is not connected:", aCurrentUser.getDebugName());
 					continue;
 				}
 				
@@ -225,13 +225,13 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 			//TODO consider changing to avoid double serialization
 			
 			//if the user is already here, bail
-			if(this._myUsers.indexOf(inUser) !== -1)
+			if(this._myNetUsers.indexOf(inUser) !== -1)
 			{
 				return;
 			}
 			
 			//add the user
-			this._myUsers.push(inUser);
+			this._myNetUsers.push(inUser);
 			
 			if(!ECGame.Settings.Network.isServer)
 			{
@@ -257,12 +257,12 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 		{
 			var anIndex, aLength;
 			
-			anIndex = this._myUsers.indexOf(inUser);
+			anIndex = this._myNetUsers.indexOf(inUser);
 			if(anIndex !== -1)
 			{
-				aLength = this._myUsers.length;
-				this._myUsers[anIndex] = this._myUsers[aLength - 1];
-				this._myUsers.pop();
+				aLength = this._myNetUsers.length;
+				this._myNetUsers[anIndex] = this._myNetUsers[aLength - 1];
+				this._myNetUsers.pop();
 			}
 			//TODO consider sending all _myTrackedInstances for destruction (like maybe a team switch?)
 		},

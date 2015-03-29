@@ -30,9 +30,11 @@ ln -s ../logs/$filename ../logs/$linkname
 echo "Node.js version:" >> ../logs/$filename
 node --version >> ../logs/$filename
 echo "" >> ../logs/$filename
-echo "Outdated npm packages:" >> ../logs/$filename
-node ../node_modules/npmedge/bin/npmedge ../package.json 2> /dev/null 1>> ../logs/$filename
-echo "" >> ../logs/$filename
 
-authbind --deep node ../engine/private/scripts/main.js >> ../logs/$filename  2>&1
+#echo "Outdated npm packages:" >> ../logs/$filename
+#node ../node_modules/npmedge/lib/main ../package.json 2> /dev/null 1>> ../logs/$filename
+#node ../node_modules/npmedge/lib/main ../package.json >> ../logs/$filename 2>&1
+#echo "" >> ../logs/$filename
+
+authbind --deep node ../engine/private/scripts/main.js >> ../logs/$filename 2>&1
 

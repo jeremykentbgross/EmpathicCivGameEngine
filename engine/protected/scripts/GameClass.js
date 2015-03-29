@@ -393,7 +393,7 @@ ECGame.EngineLib.Class.serializeAll = function serializeAll(inSerializer)
 			type : 'int',
 			net : true,
 			min : 0,
-			max : ECGame.EngineLib.User.USER_IDS.MAX_EVER
+			max : ECGame.EngineLib.NetUser.USER_IDS.MAX_EVER
 		},
 		{
 			name : 'numObjects',

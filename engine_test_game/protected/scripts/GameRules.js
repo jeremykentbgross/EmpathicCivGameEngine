@@ -483,7 +483,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			{
 				anEntity = this._myReferenceEntity.clone();
 				this._myEntities[inEvent.user.userID] = anEntity;
-				console.info("Setting owner for physics and input component(s) => Name: " + inEvent.user.userName + " ID: " + inEvent.user.userID);
+				console.info("Setting owner for physics and input component(s) => " + inEvent.user.getDebugName());
 				anEntity.getComponentByType(ECGame.Lib.EntityComponent_Physics2D)[0].setNetOwner(inEvent.user.userID);
 				anEntity.getComponentByType(ECGame.Lib.EntityComponent_Input)[0].setNetOwner(inEvent.user.userID);
 				anEntity.getComponentByType(ECGame.EngineLib.EntityComponent_Camera2D)[0].setNetOwner(inEvent.user.userID);
@@ -502,7 +502,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			this._myGameWorld.removeEntity(anEntity);
 			
 			//anEntity.removeFromNetGroup(this._myMasterNetGroup);
-			anEntity.destroy();	//TODO remove from group ^^^ and then set destory on timer if they dont reconnect
+//			anEntity.destroy();	//TODO remove from group ^^^ and then set destory on timer if they dont reconnect
 		},
 		
 		render : function render(inGraphics)

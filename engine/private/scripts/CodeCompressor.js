@@ -211,7 +211,6 @@ ECGame.WebServerTools.CodeCompressor.prototype.makeCompactGameLoader = function 
 	//TODO, instead of ignoring these, server side should interpret them!!!
 	obfuscator.addIgnore('userName');//network user object field
 	obfuscator.addIgnore('userID');//network user object field
-	obfuscator.addIgnore('reconnectKey');//network user object field
 	//TODO depricate(d?)
 	obfuscator.addIgnore('msg');//network msg type
 	obfuscator.addIgnore('data');//network msg type

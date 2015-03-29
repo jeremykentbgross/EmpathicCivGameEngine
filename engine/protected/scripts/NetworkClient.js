@@ -18,15 +18,21 @@
 	You should have received a copy of the GNU Lesser General Public License
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
+
+
+
 /*global WebSocket */
 
 //http://www.w3.org/TR/websockets/#the-websocket-interface
+
+
+
 ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 	Constructor : function ClientSideWebSocket()
 	{
 		this._myNetwork = null;
 		this._myWebsocket = null;
-		this._myUser = null;
+		this._myNetUser = null;
 	},
 	Parents : [],
 	flags : {},
@@ -50,39 +56,28 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			this._myWebsocket.myECGameSocket = this;
 			
 			//Other side of the connection is the server.
-			this._myUser = new ECGame.EngineLib.User("Server", ECGame.EngineLib.User.USER_IDS.SERVER);
+			this._myNetUser = new ECGame.EngineLib.NetUser("Server", ECGame.EngineLib.NetUser.USER_IDS.SERVER);
 		},
 		
 		getUser : function getUser()
 		{
-			return this._myUser;
+			return this._myNetUser;
 		},
 		
 		_onOpen : function _onOpen(/*inEvent*/)//_onConnectedToServer
 		{
 			var aThis
-				,aLocalUser
 				;
 			
 			aThis = this.myECGameSocket;
 			
-			if(ECGame.Settings.isDebugPrint_NetworkMessages())
+			if(ECGame.Settings.isDebugPrint_NetworkMessagesConnectionChanges())
 			{
 				console.info("Connected to Server, awaiting ID validation...");
 			}
 			
-			aThis._myUser.mySocket = aThis;
-			//ECGame.instance.getNetwork().getNetGroup('master_netgroup').addUser(aThis._myUser);//<=done when server acks
-
-			//Send my ID to server
-			aLocalUser = ECGame.instance.getLocalUser();
-			aThis.send(JSON.stringify(
-				{
-					userName : aLocalUser.userName,
-					userID : aLocalUser.userID,
-					reconnectKey : aLocalUser.reconnectKey
-				}
-			));
+			aThis._myNetUser.mySocket = aThis;
+			//ECGame.instance.getNetwork().getNetGroup('master_netgroup').addUser(aThis._myNetUser);//<=done when server acks
 		},
 		
 		_onClose : function _onClose(/*inEvent*/)//_onDisconnectedFromServer
@@ -93,27 +88,14 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 			
 			aThis = this.myECGameSocket;
 			
-			if(ECGame.Settings.isDebugPrint_NetworkMessages())
+			if(ECGame.Settings.isDebugPrint_NetworkMessagesConnectionChanges())
 			{
 				console.info("Disconnected from Server.", arguments);
-				/*console.trace();
-				console.log(inEvent);
-				console.log(arguments);
-				//console.log(this._myWebsocket);*/
-			}
-			//HACK:
-			if(ECGame.Settings.DEBUG
-			//	&& ECGame.Settings.Debug.NetworkMessages_Print
-			)
-			{
-				console.info("Lost Server!", arguments);
 			}
 			
-			//aThis._myUser.mySocket = null;//set socket to null!? (like server), TODO try to reconnect!?!?
-			ECGame.instance.getNetwork().getNetGroup('master_netgroup').removeUser(aThis._myUser);
+			//aThis._myNetUser.mySocket = null;//set socket to null!? (like server), TODO try to reconnect!?!?
+			ECGame.instance.getNetwork().getNetGroup('master_netgroup').removeUser(aThis._myNetUser);
 			aThis._myNetwork.onEvent(new ECGame.EngineLib.Events.DisconnectedFromServer());//TODO get rid of new
-			
-			//TODO if not clean close try to reopen new socket!!!!!!!!!!
 		},
 		
 		_onMessage : function _onMessage(inEvent)
@@ -123,91 +105,69 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 				,aRecievedObj
 				,aLocalUser
 				;
-			
-			//console.trace();
-			//console.log(inEvent);
-			//console.log(typeof inEvent.data);
-			
+
 			aThis = this.myECGameSocket;
 			inMessage = inEvent.data;
 			aLocalUser = ECGame.instance.getLocalUser();
 			
-			if(ECGame.Settings.isDebugPrint_NetworkMessages())
+			if(ECGame.Settings.isDebugPrint_NetworkMessagesPackets())
 			{
 				if(typeof inMessage === 'string')
 				{
-					console.info("Net Message Recv (text):" + inMessage);
+					console.info("Net Message Recv (text length " + inMessage.length + ") from " + aThis._myNetUser.getDebugName() + ":" + inMessage);
 				}
 				else
 				{
-					console.info("Net Message Recv (binary):" + JSON.stringify(new Uint8Array(inMessage)));
+					console.info("Net Message Recv (binary length " + new Uint8Array(inMessage).length + ") from " + aThis._myNetUser.getDebugName() + ":" + JSON.stringify(new Uint8Array(inMessage)));
 				}
 			}
-			
-			if(aLocalUser.userID !== ECGame.EngineLib.User.USER_IDS.NEW_USER)
+
+			if(typeof inMessage !== 'string')
 			{
-				if(typeof inMessage !== 'string')
+				if(!ECGame.Settings.getDebugSimulatedLagTime())
 				{
-					if(!ECGame.Settings.getDebugSimulatedLagTime())
-					{
-						aThis._myNetwork.serializeIn(aThis._myUser, new Uint8Array(inMessage));
-					}
-					else
-					{
-						ECGame.instance.getTimer().setTimerCallback(
-							ECGame.Settings.getDebugSimulatedLagTime(),
-							function delayNetworkMessage()
-							{
-								aThis._myNetwork.serializeIn(aThis._myUser, new Uint8Array(inMessage));
-								return false;
-							}
-						);
-					}
-					//console.log(new Float32Array(inMessage));
+					aThis._myNetwork.serializeIn(aThis._myNetUser, new Uint8Array(inMessage));
 				}
-				/*else
+				else
 				{
-					//TODO inNetwork.event Msg
-					//aThis._myNetwork.serializeIn(aThis._myUser, inMessage);
-					//console.log(inMessage);
-				}*/
+					ECGame.instance.getTimer().setTimerCallback(
+						ECGame.Settings.getDebugSimulatedLagTime(),
+						function delayNetworkMessage()
+						{
+							aThis._myNetwork.serializeIn(aThis._myNetUser, new Uint8Array(inMessage));
+							return false;
+						}
+					);
+				}
 			}
-			//if we are unidentified we should expect the server to id us before getting any other messages
 			else
 			{
-				if(typeof inMessage === 'string')
+				if(ECGame.Settings.isDebugPrint_NetworkMessagesConnectionChanges())
 				{
-					aRecievedObj = JSON.parse(inMessage);
-					if(ECGame.Settings.isDebugPrint_NetworkMessages())
-					{
-						console.info("User ID Message:" + inMessage);
-					}
-					//verify the object is valid
-					if(typeof aRecievedObj.userName !== 'string'
-						|| typeof aRecievedObj.userID !== 'number'
-						|| typeof aRecievedObj.reconnectKey !== 'number'
-					)
-					{
-						console.warn("Ill formed User Identification!");
-						return;
-					}
-					
-					aLocalUser.userName = aRecievedObj.userName;
-					aLocalUser.userID = aRecievedObj.userID;
-					aLocalUser.reconnectKey = aRecievedObj.reconnectKey;
-					
-					if(ECGame.Settings.isDebugPrint_NetworkMessages())
-					{
-						console.info("Connected to Server, ID validated!");
-					}
-					
-					ECGame.instance.getNetwork().getNetGroup('master_netgroup').addUser(aThis._myUser);
-					aThis._myNetwork.onEvent(new ECGame.EngineLib.Events.ConnectedToServer());//TODO get rid of new
+					console.info("User ID Message:" + inMessage);
 				}
-				else
+
+				aRecievedObj = JSON.parse(inMessage);
+
+				//verify the object is valid
+				if(typeof aRecievedObj.userName !== 'string'
+					|| typeof aRecievedObj.userID !== 'number'
+				)
 				{
-					console.warn("Recieved bad id data from server.");
+					console.warn("Ill formed User Identification!");
+					return;
 				}
+
+				aLocalUser.userName = aRecievedObj.userName;
+				aLocalUser.userID = aRecievedObj.userID;
+				
+				if(ECGame.Settings.isDebugPrint_NetworkMessagesConnectionChanges())
+				{
+					console.info("Connected to Server, ID updated!");
+				}
+				
+				ECGame.instance.getNetwork().getNetGroup('master_netgroup').addUser(aThis._myNetUser);
+				aThis._myNetwork.onEvent(new ECGame.EngineLib.Events.ConnectedToServer());//TODO get rid of new
 			}
 		},
 		
@@ -218,21 +178,24 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 		
 		send : function send(inData)
 		{
-			if(ECGame.Settings.isDebugPrint_NetworkMessages())
+			if(ECGame.Settings.isDebugPrint_NetworkMessagesPackets())
 			{
 				if(typeof inData === 'string')
 				{
-					console.info("Net Send (text) to " + this._myUser.userName + ':' + inData);
+					console.info("Net Send (text length " + inData.length + ") to " + this._myNetUser.getDebugName() + ':' + inData);
 				}
 				else
 				{
-					console.info("Net Send (binary) to " + this._myUser.userName + ':' + JSON.stringify(inData));
+					console.info("Net Send (binary length " + inData.length + ") to " + this._myNetUser.getDebugName() + ':' + JSON.stringify(inData));
 				}
 			}
 			
 			if(this._myWebsocket.readyState !== WebSocket.OPEN)
 			{
-				console.log("Socket Closed, not sending data.");//TODO only print on debug?
+				if(ECGame.Settings.isDebugPrint_NetworkMessagesConnectionChanges())
+				{
+					console.info("Socket closed, unable to send data.");
+				}
 				return;
 			}
 			
@@ -249,49 +212,23 @@ ECGame.EngineLib.ClientSideWebSocket = ECGame.EngineLib.Class.create({
 		close : function close(inCode, inReason)
 		{
 			//NOTE: In Chrome at least, we don't get the onclose event until the server acks the close.  Strange.
-			if(ECGame.Settings.isDebugPrint_NetworkMessages())
+			if(ECGame.Settings.isDebugPrint_NetworkMessagesConnectionChanges())
 			{
 				console.info("Starting Disconnect:", arguments);
 			}
 			this._myWebsocket.close(inCode, inReason);
 		}
-		
-		//TODO getStatus
-		/*
-		const unsigned short CONNECTING = 0;
-		const unsigned short OPEN = 1;
-		const unsigned short CLOSING = 2;
-		const unsigned short CLOSED = 3;
-		readonly attribute unsigned short readyState;
-		*/
 	}
 });
 
 
 
-/*
-//CLIENT
-	-_socket
-		-connect => _onConnectedToServer
-		-disconnect => _onDisconnectedFromServer
-		-id => _onIdRecv
-		-msg => _onMsgRecv
-		-data => _onDataRecv
-		-obj => _onObjectsRecv
-	_onConnectedToServer()
-		//assign socket server user
-		//send local userid
-		//connected event
-	_onDisconnectedFromServer()
-		//disconnected event
-*/
 ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 	Constructor : function NetworkClient()
 	{
 		this.NetworkBase();
-		//TODO create user/socket??
-		//TODO should be creating server user and server user group that is subscribed to all?
 		this._mySocket = ECGame.EngineLib.ClientSideWebSocket.create(this);
+		this.createNetGroup('master_netgroup');
 	},
 	Parents : [ECGame.EngineLib.NetworkBase],
 	flags : {},
@@ -301,8 +238,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 	{
 		init : function init()
 		{
-			console.info("Network Game Client Started");
-			this.createNetGroup('master_netgroup');
+			console.log("Network Game Client Started");
 		},
 		
 		getName : function getName()

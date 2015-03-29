@@ -32,23 +32,24 @@ anError = console.error;
 
 console.info = function info()
 {
-	var args = Array.prototype.slice.call(arguments);
-	args.unshift("INFO:[" + (new Date()).toISOString() + "]:");
-	anInfo.apply(this, args);
+	var anErrorObject
+		,anArgsList
+		;
 
-	/*var anErrorObject = new Error();
-	anErrorObject.name = "INFO:[" + (new Date()).toISOString() + "]";
-	anErrorObject.message = util.format.apply(this, arguments);
-	Error.captureStackTrace(anErrorObject, / *arguments.callee* /info);
-	anInfo.apply(
-		this
-		,[
-			anErrorObject.stack.substring(
-				0,
-				anErrorObject.stack.indexOf('\n', anErrorObject.stack.indexOf('\n') + 1)
-			)
-		]
-	);*/
+	anErrorObject = new Error();
+	anErrorObject.name = "";
+	anErrorObject.message = "";
+	Error.captureStackTrace(anErrorObject, /*arguments.callee*/info);
+
+	anArgsList = Array.prototype.slice.call(arguments);
+	anArgsList.unshift("INFO:[" + (new Date()).toISOString() + "]:");
+	anArgsList.push(
+		anErrorObject.stack.substring(
+			0,
+			anErrorObject.stack.indexOf('\n', anErrorObject.stack.indexOf('\n') + 1)
+		).replace(/\(.*\//g, '(') + '\n'
+	);
+	anInfo.apply(this, anArgsList);
 };
 
 console.warn = function warn()
@@ -79,12 +80,12 @@ console.trace = function trace()
 };
 
 //TODO is this the right place for this?
-process.on(
+/*process.on(
 	'uncaughtException'
 	,function (inError)
 	{
 		console.error('uncaughtException:', inError.message);
 		console.error(inError.stack);
-		process.exit(1);
+		//process.exit(1);
 	}
-);
+);*/

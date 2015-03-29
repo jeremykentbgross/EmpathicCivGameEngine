@@ -130,10 +130,10 @@ ECGame.Settings =
 		,logRequests : false
 		,logRequestsVerbose : false		//WARNING: can cause passwords to print to log
 
-		,useHttps : true				//WARNING: should always be used when requiring logins!
+		,useHttps : false//false				//WARNING: should always be used when requiring logins!
 		//TODO cert file paths
 
-		,requireSessionLogins : true	//WARNING: requires useMongoose, and should use https
+		,requireSessionLogins : false//false	//WARNING: requires useMongoose, and should use https
 		,Session :
 		{
 			timeout : 1000 * 60 * 15	//15min
@@ -143,7 +143,7 @@ ECGame.Settings =
 			,loginSuccessPath : '/_protected_/engine/html/welcome.html'
 		}
 
-		,useMongoose : true
+		,useMongoose : false//false
 		,Mongoose :
 		{
 			//TODO userName, password
@@ -310,9 +310,18 @@ ECGame.Settings =
 		//Network
 		NetworkMessages_Draw : true,
 		NetworkMessages_DrawColor : 'rgba(0, 128, 255, 1)',
-		NetworkMessages_Print : false,	//TODO: print levels?	0 - none, 1 - connection, 2 - Basic, 3 - detailed, 4 - packet
+
+		/*
+		NetworkMessages_Print:
+			0 - none
+			1 - connection changes
+			2 - Basic	(create/destroy/chown)
+			3 - detailed	(updates/dirty)
+			4 - packet
+			5 - ping	//TODO (currently ping is in packets
+		*/
+		NetworkMessages_Print : 1,//1
 		NetworkPingCompute_Print : false,
-		//TODO NetworkDetailedMessages_Print
 		Network_SimulatedLag : 0,
 		
 		WorldSpacialHash_Draw : false,
@@ -344,22 +353,27 @@ ECGame.Settings =
 	{
 		return this.isDebugDraw() && this.Debug.TextMessages_Draw;
 	},
+
 	isDebugDraw_SceneGraph : function isDebugDraw_SceneGraph()
 	{
 		return this.isDebugDraw() && this.Debug.SceneGraph_Draw;
 	},
+
 	isDebugDraw_Map : function isDebugDraw_Map()
 	{
 		return this.isDebugDraw() && this.Debug.Map_Draw;
 	},
+
 	isDebugDraw_Physics : function isDebugDraw_Physics()
 	{
 		return this.isDebugDraw() && this.Debug.Physics_Draw;
 	},
+
 	isDebugDraw_CameraTarget : function isDebugDraw_CameraTarget()
 	{
 		return this.isDebugDraw() && this.Debug.CameraTarget_Draw;
 	},
+
 	isDebugDraw_Input : function isDebugDraw_Input()
 	{
 		return this.isDebugDraw() && this.Debug.Input_Draw;
@@ -372,6 +386,7 @@ ECGame.Settings =
 	{
 		return this.isDebugDraw() && this.Debug.Input_MouseCursor_Draw;
 	},
+
 	isDebugDraw_FrameStats : function isDebugDraw_FrameStats()
 	{
 		return this.isDebugDraw() && this.Debug.FrameStats_Draw;
@@ -380,10 +395,12 @@ ECGame.Settings =
 	{
 		return this.isDebugPrint() && this.Debug.FrameStats_Print;
 	},
+
 	isDebugPrint_GameObject : function isDebugPrint_GameObject()
 	{
 		return this.isDebugPrint() && this.Debug.GameObject_Print;
 	},
+
 	isDebugPrint_Sound : function isDebugPrint_Sound()
 	{
 		return this.isDebugPrint() && this.Debug.Sound_Print;
@@ -392,19 +409,41 @@ ECGame.Settings =
 	{
 		return this.isDebugDraw() && this.Debug.Sound_Draw;
 	},
+
 	isDebugDraw_Sprite : function isDebugDraw_Sprite()
 	{
 		return this.isDebugDraw() && this.Debug.Sprite_Draw;
 	},
+
 	isDebugDraw_NetworkMessages : function isDebugDraw_NetworkMessages()
 	{
 		return this.isDebugDraw() && this.Debug.NetworkMessages_Draw;
 	},
-	isDebugPrint_NetworkMessages : function isDebugPrint_NetworkMessages()
+	/*
+	NetworkMessages_Print:
+		0 - none
+		1 - connection changes
+		2 - Basic	(create/destroy/chown)
+		3 - detailed	(updates/dirty)
+		4 - packet
+		5 - ping	//TODO (currently ping is in packets
+	*/
+	isDebugPrint_NetworkMessagesConnectionChanges : function isDebugPrint_NetworkMessagesConnectionChanges()
 	{
-		return this.isDebugPrint() && this.Debug.NetworkMessages_Print;
+		return this.isDebugPrint() && (this.Debug.NetworkMessages_Print >= 1);
 	},
-	
+	isDebugPrint_NetworkMessagesBasic : function isDebugPrint_NetworkMessagesBasic()
+	{
+		return this.isDebugPrint() && (this.Debug.NetworkMessages_Print >= 2);
+	},
+	isDebugPrint_NetworkMessagesDetailed : function isDebugPrint_NetworkMessagesDetailed()
+	{
+		return this.isDebugPrint() && (this.Debug.NetworkMessages_Print >= 3);
+	},
+	isDebugPrint_NetworkMessagesPackets : function isDebugPrint_NetworkMessagesPackets()
+	{
+		return this.isDebugPrint() && (this.Debug.NetworkMessages_Print >= 4);
+	},
 	isDebugPrint_NetworkPingCompute : function isDebugPrint_NetworkPingCompute()
 	{
 		return this.isDebugPrint() && this.Debug.NetworkPingCompute_Print;
@@ -417,10 +456,12 @@ ECGame.Settings =
 		}
 		return this.Debug.Network_SimulatedLag;
 	},
+
 	isDebugPrint_Obfuscation : function isDebugPrint_Obfuscation()
 	{
 		return this.isDebugPrint() && this.Debug.Obfuscation_Print;
 	},	
+
 	isDebugPrint_Updater : function isDebugPrint_Updater()
 	{
 		return this.isDebugPrint() && this.Debug.Updater_Print;
@@ -429,6 +470,7 @@ ECGame.Settings =
 	{
 		return this.isDebugDraw() && this.Debug.Updater_Draw;
 	}
+
 	,isDebugDraw_WorldSpacialHash : function isDebugDraw_WorldSpacialHash()
 	{
 		return this.isDebugDraw() && this.Debug.WorldSpacialHash_Draw;

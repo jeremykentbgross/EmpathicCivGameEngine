@@ -19,7 +19,6 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//TODO rename Object NetUser
 
 /*//all user objects should be added to netgroups as objects
 User : Object
@@ -35,13 +34,12 @@ User : Object
 */
 //TODO make server id for smaller messages!!
 //Note: watch out when adding new values to this structure as it is serialized
-ECGame.EngineLib.User = function User(inName, inID)
+ECGame.EngineLib.NetUser = function NetUser(inName, inID)
 {
 	var i;
 	
-	this.userName = inName || "Guest";	//TODO give random name here??
-	this.userID = inID || ECGame.EngineLib.User.USER_IDS.NEW_USER;
-	this.reconnectKey = Math.random();
+	this.userName = inName || "Player";
+	this.userID = inID || ECGame.EngineLib.NetUser.USER_IDS.NEW_USER;
 	
 	this.mySocket = null;
 	
@@ -60,9 +58,9 @@ ECGame.EngineLib.User = function User(inName, inID)
 	this._myRemoteFPS = [];
 	this._myRemoteAverageFPS = 0;
 };
-ECGame.EngineLib.User.prototype.constructor = ECGame.EngineLib.User;
+ECGame.EngineLib.NetUser.prototype.constructor = ECGame.EngineLib.NetUser;
 
-ECGame.EngineLib.User.USER_IDS =
+ECGame.EngineLib.NetUser.USER_IDS =
 {
 	UNUSED : 0
 	,SERVER : 1
@@ -75,14 +73,21 @@ ECGame.EngineLib.User.USER_IDS =
 
 
 
-ECGame.EngineLib.User.prototype.addRemoteFPS = function addRemoteFPS(inRemoteFPS)
+ECGame.EngineLib.NetUser.prototype.getDebugName = function getDebugName()
+{
+	return this.userName + '(' + this.userID + ')';
+};
+
+
+
+ECGame.EngineLib.NetUser.prototype.addRemoteFPS = function addRemoteFPS(inRemoteFPS)
 {
 	this._myRemoteFPS.push(inRemoteFPS);
 };
 
 
 
-ECGame.EngineLib.User.prototype.createUnacknowledgedNetFrame = function createUnacknowledgedNetFrame()
+ECGame.EngineLib.NetUser.prototype.createUnacknowledgedNetFrame = function createUnacknowledgedNetFrame()
 {
 	var anUnacknowledgedNetFrame
 		,aTimer
@@ -110,7 +115,7 @@ ECGame.EngineLib.User.prototype.createUnacknowledgedNetFrame = function createUn
 	return anUnacknowledgedNetFrame.myFrame;
 };
 
-ECGame.EngineLib.User.prototype.acknowledgedNetFrame = function acknowledgedNetFrame(inMessageHeader)
+ECGame.EngineLib.NetUser.prototype.acknowledgedNetFrame = function acknowledgedNetFrame(inMessageHeader)
 {
 	if(ECGame.Settings.isDebugPrint_NetworkPingCompute())
 	{
@@ -153,7 +158,7 @@ ECGame.EngineLib.User.prototype.acknowledgedNetFrame = function acknowledgedNetF
 	}
 };
 
-ECGame.EngineLib.User.prototype._processAcknowledgedFrame = function _processAcknowledgedFrame(inAcknowledgedFrame, inMessageAcknowledgedFrame)
+ECGame.EngineLib.NetUser.prototype._processAcknowledgedFrame = function _processAcknowledgedFrame(inAcknowledgedFrame, inMessageAcknowledgedFrame)
 {
 	var anIndex
 		;
@@ -173,7 +178,7 @@ ECGame.EngineLib.User.prototype._processAcknowledgedFrame = function _processAck
 	}
 };
 
-ECGame.EngineLib.User.prototype.updatePing = function updatePing()//TODO rename computePing //and remoteFPS??
+ECGame.EngineLib.NetUser.prototype.updatePing = function updatePing()//TODO rename computePing //and remoteFPS??
 {
 	var aTime
 		,aTotal
@@ -202,7 +207,7 @@ ECGame.EngineLib.User.prototype.updatePing = function updatePing()//TODO rename 
 	}
 };
 
-ECGame.EngineLib.User.prototype.debugDraw = function debugDraw(inGraphics)
+ECGame.EngineLib.NetUser.prototype.debugDraw = function debugDraw(inGraphics)
 {
 	var aMessage = ''
 		,aCount = 0
