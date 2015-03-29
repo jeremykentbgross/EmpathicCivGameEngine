@@ -79,6 +79,29 @@ console.trace = function trace()
 	anError.apply(this, [anErrorObject.stack]);
 };
 
+(
+	function traceChildProcesses()
+	{
+		var aChildProcess
+			,anOldSpawnFunction
+			;
+			
+		aChildProcess = require("child_process");
+		anOldSpawnFunction = aChildProcess.spawn;
+		
+		function mySpawn()
+		{
+			var aResult;
+			console.log('spawn called');
+			console.trace();
+			console.log(arguments);
+			aResult = anOldSpawnFunction.apply(this, arguments);
+			return aResult;
+		}
+		aChildProcess.spawn = mySpawn;
+	}()
+);
+
 //TODO is this the right place for this?
 /*process.on(
 	'uncaughtException'

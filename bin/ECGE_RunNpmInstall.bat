@@ -1,4 +1,5 @@
 cd ..
+rmdir /s /q .\node_modules
 call npm update npm -g
 call npm list
 call npm install
