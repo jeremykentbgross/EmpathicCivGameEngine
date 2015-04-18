@@ -95,7 +95,7 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 					}
 				)
 			);
-			this._myNetwork.onEvent(new ECGame.EngineLib.Events.IdentifiedUser(this._myNetUser));
+			this._myNetwork.onEvent(new ECGame.EngineLib.Events.ClientConnected(this._myNetUser));
 			
 			inWebSocket.on('open', this._onOpen);	//not ever recieved, I think because we are connected to, not connecting
 			inWebSocket.on('error', this._onError);
@@ -334,7 +334,7 @@ ECGame.EngineLib.Network = ECGame.EngineLib.Class.create({
 
 										aUserName = aRequest.user.userName;
 										aUserName = aUserName.substr(0, aUserName.indexOf('@'));
-										//if user already connected return false
+										//if user already connected return false, NO => disconnect the old and approve the new
 										if(aThis._myIdentifiedUsers[aUserName]
 											&& aThis._myIdentifiedUsers[aUserName].mySocket)
 										{

@@ -30,6 +30,7 @@ Final NameSpace:	Camera2D
 Final NameSpace:	CameraVolumeUpdate
 Final NameSpace:	ChatSystem
 Final NameSpace:	Class
+Final NameSpace:	ClientConnected
 Final NameSpace:	ClientDisconnected
 Final NameSpace:	ClientSideWebSocket
 Final NameSpace:	CollectListeners
@@ -67,7 +68,6 @@ Final NameSpace:	GameRules
 Final NameSpace:	GameRulesBase
 Final NameSpace:	Graphics2D
 Final NameSpace:	HandleCanvasContainerResize
-Final NameSpace:	IdentifiedUser
 Final NameSpace:	ImageLoaderInfo
 Final NameSpace:	Input
 Final NameSpace:	LayeredAnimation2DInstances
@@ -421,6 +421,7 @@ Final NameSpace:	offset
 Final NameSpace:	onAddedToEntity
 Final NameSpace:	onBlur
 Final NameSpace:	onChatSubmit
+Final NameSpace:	onClientConnected
 Final NameSpace:	onClientDisconnected
 Final NameSpace:	onConnectedToServer
 Final NameSpace:	onDisconnectedFromServer
@@ -430,7 +431,6 @@ Final NameSpace:	onError
 Final NameSpace:	onEvent
 Final NameSpace:	onGameObjectDestroyed
 Final NameSpace:	onGameObjectNetDirty
-Final NameSpace:	onIdentifiedUser
 Final NameSpace:	onInput
 Final NameSpace:	onMsg
 Final NameSpace:	onPhysicsObjectUpdated
@@ -584,6 +584,7 @@ Function Name:	Camera2D
 Function Name:	CameraVolumeUpdate
 Function Name:	ChatSystem
 Function Name:	Class
+Function Name:	ClientConnected
 Function Name:	ClientDisconnected
 Function Name:	ClientSideWebSocket
 Function Name:	CollectListeners
@@ -619,7 +620,6 @@ Function Name:	GameRules
 Function Name:	GameRulesBase
 Function Name:	Graphics2D
 Function Name:	HandleCanvasContainerResize
-Function Name:	IdentifiedUser
 Function Name:	ImageLoaderInfo
 Function Name:	Input
 Function Name:	LayeredAnimation2DInstances
@@ -969,6 +969,7 @@ Function Name:	offset
 Function Name:	onAddedToEntity
 Function Name:	onBlur
 Function Name:	onChatSubmit
+Function Name:	onClientConnected
 Function Name:	onClientDisconnected
 Function Name:	onConnectedToServer
 Function Name:	onDisconnectedFromServer
@@ -978,7 +979,6 @@ Function Name:	onError
 Function Name:	onEvent
 Function Name:	onGameObjectDestroyed
 Function Name:	onGameObjectNetDirty
-Function Name:	onIdentifiedUser
 Function Name:	onInput
 Function Name:	onMsg
 Function Name:	onPhysicsObjectUpdated
@@ -1816,6 +1816,7 @@ Member Variable:	TextBackground_DrawColor			*****
 Member Variable:	TextDefault_DrawColor			*****
 Member Variable:	TextMessages_Draw			*****
 Member Variable:	Text_Size			*****
+Member Variable:	TraceSubProcesses			*****
 Member Variable:	UNUSED			*****
 Member Variable:	USER_IDS			*****
 Member Variable:	UpdateOrder			*****
@@ -2144,6 +2145,7 @@ Member Variable:	dbName			*****
 Member Variable:	default2DRadius			*****
 Member Variable:	devel			*****
 Member Variable:	direction			*****
+Member Variable:	domain			*****
 Member Variable:	dopplerFactor			*****
 Member Variable:	down1			*****
 Member Variable:	down2			*****
@@ -2314,6 +2316,7 @@ Included Word:	ChainDown
 Included Word:	ChainUp
 Included Word:	ChatSystem
 Included Word:	Class
+Included Word:	ClientConnected
 Included Word:	ClientDisconnected
 Included Word:	ClientSideWebSocket
 Included Word:	CodeValidator
@@ -2368,7 +2371,6 @@ Included Word:	Graphics
 Included Word:	Graphics2D
 Included Word:	HandleCanvasContainerResize
 Included Word:	INPUT
-Included Word:	IdentifiedUser
 Included Word:	ImageLoaderInfo
 Included Word:	Input
 Included Word:	Input_Active_DrawColor
@@ -2562,6 +2564,7 @@ Included Word:	TileRenderable2D
 Included Word:	TileSet2D
 Included Word:	Timer
 Included Word:	TimerUpdateData
+Included Word:	TraceSubProcesses
 Included Word:	UNUSED
 Included Word:	USER_IDS
 Included Word:	UnitTestFramework
@@ -3224,6 +3227,7 @@ Included Word:	devel
 Included Word:	direction
 Included Word:	disableTab
 Included Word:	divide
+Included Word:	domain
 Included Word:	dot
 Included Word:	down1
 Included Word:	down2
@@ -3722,7 +3726,6 @@ Included Word:	newItem
 Included Word:	newcap
 Included Word:	node
 Included Word:	nomen
-Included Word:	normalize
 Included Word:	obfuscateNames
 Included Word:	obj1
 Included Word:	obj2
@@ -3732,6 +3735,7 @@ Included Word:	offset
 Included Word:	onAddedToEntity
 Included Word:	onBlur
 Included Word:	onChatSubmit
+Included Word:	onClientConnected
 Included Word:	onClientDisconnected
 Included Word:	onConnectedToServer
 Included Word:	onDisconnectedFromServer
@@ -3741,7 +3745,6 @@ Included Word:	onError
 Included Word:	onEvent
 Included Word:	onGameObjectDestroyed
 Included Word:	onGameObjectNetDirty
-Included Word:	onIdentifiedUser
 Included Word:	onInput
 Included Word:	onMsg
 Included Word:	onPhysicsObjectUpdated
@@ -3951,24 +3954,11 @@ Ignored Word:	Array
 Ignored Word:	ArrayBuffer
 Ignored Word:	Boolean
 Ignored Word:	Buffer
-Ignored Word:	COUNTER_HTTP_CLIENT_REQUEST
-Ignored Word:	COUNTER_HTTP_CLIENT_RESPONSE
-Ignored Word:	COUNTER_HTTP_SERVER_REQUEST
-Ignored Word:	COUNTER_HTTP_SERVER_RESPONSE
-Ignored Word:	COUNTER_NET_SERVER_CONNECTION
-Ignored Word:	COUNTER_NET_SERVER_CONNECTION_CLOSE
 Ignored Word:	Console
-Ignored Word:	DTRACE_HTTP_CLIENT_REQUEST
-Ignored Word:	DTRACE_HTTP_CLIENT_RESPONSE
-Ignored Word:	DTRACE_HTTP_SERVER_REQUEST
-Ignored Word:	DTRACE_HTTP_SERVER_RESPONSE
-Ignored Word:	DTRACE_NET_SERVER_CONNECTION
-Ignored Word:	DTRACE_NET_SOCKET_READ
-Ignored Word:	DTRACE_NET_SOCKET_WRITE
-Ignored Word:	DTRACE_NET_STREAM_END
 Ignored Word:	DataView
 Ignored Word:	Date
 Ignored Word:	E
+Ignored Word:	EPSILON
 Ignored Word:	Empty
 Ignored Word:	Error
 Ignored Word:	EvalError
@@ -3980,13 +3970,17 @@ Ignored Word:	Infinity
 Ignored Word:	Int16Array
 Ignored Word:	Int32Array
 Ignored Word:	Int8Array
+Ignored Word:	Intl
 Ignored Word:	JSON
 Ignored Word:	LN10
 Ignored Word:	LN2
 Ignored Word:	LOG10E
 Ignored Word:	LOG2E
+Ignored Word:	MAX_SAFE_INTEGER
 Ignored Word:	MAX_VALUE
+Ignored Word:	MIN_SAFE_INTEGER
 Ignored Word:	MIN_VALUE
+Ignored Word:	Map
 Ignored Word:	Math
 Ignored Word:	NEGATIVE_INFINITY
 Ignored Word:	NaN
@@ -3995,12 +3989,15 @@ Ignored Word:	Object
 Ignored Word:	PI
 Ignored Word:	POSITIVE_INFINITY
 Ignored Word:	POWER2_INT_TABLE
+Ignored Word:	Promise
 Ignored Word:	RangeError
 Ignored Word:	ReferenceError
 Ignored Word:	RegExp
 Ignored Word:	SQRT1_2
 Ignored Word:	SQRT2
+Ignored Word:	Set
 Ignored Word:	String
+Ignored Word:	Symbol
 Ignored Word:	SyntaxError
 Ignored Word:	TypeError
 Ignored Word:	URIError
@@ -4009,6 +4006,8 @@ Ignored Word:	Uint16Array
 Ignored Word:	Uint32Array
 Ignored Word:	Uint8Array
 Ignored Word:	Uint8ClampedArray
+Ignored Word:	WeakMap
+Ignored Word:	WeakSet
 Ignored Word:	__defineGetter__
 Ignored Word:	__defineSetter__
 Ignored Word:	__lookupGetter__
@@ -4018,15 +4017,18 @@ Ignored Word:	_stdout
 Ignored Word:	_times
 Ignored Word:	abs
 Ignored Word:	acos
+Ignored Word:	acosh
 Ignored Word:	addEventListener
 Ignored Word:	anchor
 Ignored Word:	apply
 Ignored Word:	arc
 Ignored Word:	arguments
 Ignored Word:	asin
+Ignored Word:	asinh
 Ignored Word:	assert
 Ignored Word:	atan
 Ignored Word:	atan2
+Ignored Word:	atanh
 Ignored Word:	beginPath
 Ignored Word:	big
 Ignored Word:	bind
@@ -4040,6 +4042,7 @@ Ignored Word:	call
 Ignored Word:	caller
 Ignored Word:	case
 Ignored Word:	catch
+Ignored Word:	cbrt
 Ignored Word:	ceil
 Ignored Word:	charAt
 Ignored Word:	charCodeAt
@@ -4050,6 +4053,7 @@ Ignored Word:	clearImmediate
 Ignored Word:	clearInterval
 Ignored Word:	clearTimeout
 Ignored Word:	closePath
+Ignored Word:	clz32
 Ignored Word:	color
 Ignored Word:	compile
 Ignored Word:	concat
@@ -4059,6 +4063,7 @@ Ignored Word:	const
 Ignored Word:	constructor
 Ignored Word:	continue
 Ignored Word:	cos
+Ignored Word:	cosh
 Ignored Word:	create
 Ignored Word:	data
 Ignored Word:	decodeURI
@@ -4066,6 +4071,7 @@ Ignored Word:	decodeURIComponent
 Ignored Word:	defineProperties
 Ignored Word:	defineProperty
 Ignored Word:	delete
+Ignored Word:	deliverChangeRecords
 Ignored Word:	dir
 Ignored Word:	do
 Ignored Word:	document
@@ -4077,6 +4083,7 @@ Ignored Word:	emit
 Ignored Word:	encodeURI
 Ignored Word:	encodeURIComponent
 Ignored Word:	entityify
+Ignored Word:	entries
 Ignored Word:	enumerable
 Ignored Word:	error
 Ignored Word:	escape
@@ -4084,6 +4091,7 @@ Ignored Word:	eval
 Ignored Word:	every
 Ignored Word:	exec
 Ignored Word:	exp
+Ignored Word:	expm1
 Ignored Word:	export
 Ignored Word:	false
 Ignored Word:	fillRect
@@ -4098,6 +4106,7 @@ Ignored Word:	for
 Ignored Word:	forEach
 Ignored Word:	freeze
 Ignored Word:	fromCharCode
+Ignored Word:	fround
 Ignored Word:	function
 Ignored Word:	getDate
 Ignored Word:	getDay
@@ -4106,8 +4115,10 @@ Ignored Word:	getHours
 Ignored Word:	getMilliseconds
 Ignored Word:	getMinutes
 Ignored Word:	getMonth
+Ignored Word:	getNotifier
 Ignored Word:	getOwnPropertyDescriptor
 Ignored Word:	getOwnPropertyNames
+Ignored Word:	getOwnPropertySymbols
 Ignored Word:	getPrototypeOf
 Ignored Word:	getSeconds
 Ignored Word:	getTime
@@ -4124,10 +4135,12 @@ Ignored Word:	getYear
 Ignored Word:	global
 Ignored Word:	hasOwnProperty
 Ignored Word:	height
+Ignored Word:	hypot
 Ignored Word:	id
 Ignored Word:	if
 Ignored Word:	ignoreCase
 Ignored Word:	import
+Ignored Word:	imul
 Ignored Word:	in
 Ignored Word:	indexOf
 Ignored Word:	info
@@ -4141,9 +4154,11 @@ Ignored Word:	isDigit
 Ignored Word:	isExtensible
 Ignored Word:	isFinite
 Ignored Word:	isFrozen
+Ignored Word:	isInteger
 Ignored Word:	isNaN
 Ignored Word:	isNumber
 Ignored Word:	isPrototypeOf
+Ignored Word:	isSafeInteger
 Ignored Word:	isSealed
 Ignored Word:	italics
 Ignored Word:	join
@@ -4161,6 +4176,9 @@ Ignored Word:	lineTo
 Ignored Word:	link
 Ignored Word:	localeCompare
 Ignored Word:	log
+Ignored Word:	log10
+Ignored Word:	log1p
+Ignored Word:	log2
 Ignored Word:	map
 Ignored Word:	match
 Ignored Word:	max
@@ -4174,11 +4192,13 @@ Ignored Word:	msg
 Ignored Word:	multiline
 Ignored Word:	name
 Ignored Word:	new
+Ignored Word:	normalize
 Ignored Word:	now
 Ignored Word:	null
 Ignored Word:	number
 Ignored Word:	oRequestAnimationFrame
 Ignored Word:	object
+Ignored Word:	observe
 Ignored Word:	parse
 Ignored Word:	parseFloat
 Ignored Word:	parseInt
@@ -4214,6 +4234,7 @@ Ignored Word:	setMinutes
 Ignored Word:	setMonth
 Ignored Word:	setOrientation
 Ignored Word:	setPosition
+Ignored Word:	setPrototypeOf
 Ignored Word:	setSeconds
 Ignored Word:	setTime
 Ignored Word:	setTimeout
@@ -4227,7 +4248,9 @@ Ignored Word:	setUTCSeconds
 Ignored Word:	setVelocity
 Ignored Word:	setYear
 Ignored Word:	shift
+Ignored Word:	sign
 Ignored Word:	sin
+Ignored Word:	sinh
 Ignored Word:	slice
 Ignored Word:	small
 Ignored Word:	some
@@ -4251,6 +4274,7 @@ Ignored Word:	supplant
 Ignored Word:	swapBackPop
 Ignored Word:	switch
 Ignored Word:	tan
+Ignored Word:	tanh
 Ignored Word:	test
 Ignored Word:	this
 Ignored Word:	throw
@@ -4278,16 +4302,19 @@ Ignored Word:	trim
 Ignored Word:	trimLeft
 Ignored Word:	trimRight
 Ignored Word:	true
+Ignored Word:	trunc
 Ignored Word:	try
 Ignored Word:	type
 Ignored Word:	typeof
 Ignored Word:	undefined
 Ignored Word:	unescape
+Ignored Word:	unobserve
 Ignored Word:	unshift
 Ignored Word:	userID
 Ignored Word:	userName
 Ignored Word:	value
 Ignored Word:	valueOf
+Ignored Word:	values
 Ignored Word:	var
 Ignored Word:	void
 Ignored Word:	warn

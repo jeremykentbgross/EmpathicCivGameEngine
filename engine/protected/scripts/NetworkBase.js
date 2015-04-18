@@ -57,7 +57,7 @@ Network TODOs:
 
 /*
 TODO:
-	Events.IdentifiedUser			//GameRules spawn
+	Events.ClientConnected			//GameRules spawn
 	Events.ClientDisconnected		//GameRules unspawn
 	Events.ConnectedToServer		//chat
 	Events.DisconnectedFromServer	//chat

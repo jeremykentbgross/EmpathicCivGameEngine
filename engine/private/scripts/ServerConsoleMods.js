@@ -19,16 +19,25 @@
 	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+//requires:
 var util
+	,childProcess
+	//console originals
 	,anInfo
 	,aWarn
 	,anError
+	//spawn original
+	,aChildProcessSpawn
 	;
 
 util = require('util');
+childProcess = require("child_process");
+
 anInfo = console.info;
 aWarn = console.warn;
 anError = console.error;
+
+aChildProcessSpawn = childProcess.spawn;
 
 console.info = function info()
 {
@@ -79,28 +88,17 @@ console.trace = function trace()
 	anError.apply(this, [anErrorObject.stack]);
 };
 
-(
-	function traceChildProcesses()
+
+
+childProcess.spawn = function spawn()
+{
+	if(ECGame.Settings.Debug.TraceSubProcesses)
 	{
-		var aChildProcess
-			,anOldSpawnFunction
-			;
-			
-		aChildProcess = require("child_process");
-		anOldSpawnFunction = aChildProcess.spawn;
-		
-		function mySpawn()
-		{
-			var aResult;
-			console.log('spawn called');
-			console.trace();
-			console.log(arguments);
-			aResult = anOldSpawnFunction.apply(this, arguments);
-			return aResult;
-		}
-		aChildProcess.spawn = mySpawn;
-	}()
-);
+		console.trace('spawn called\n', arguments);
+	}
+	return aChildProcessSpawn.apply(this, arguments);
+};
+
 
 //TODO is this the right place for this?
 /*process.on(

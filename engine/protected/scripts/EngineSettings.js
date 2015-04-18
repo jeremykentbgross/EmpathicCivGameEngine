@@ -141,6 +141,8 @@ ECGame.Settings =
 
 			,needLoginPath : '/_public_/engine/html/login.html'
 			,loginSuccessPath : '/_protected_/engine/html/welcome.html'
+
+			,domain : undefined	//'.domain.com', //<=note '.' shares with subdomains http://stackoverflow.com/questions/23178104/node-js-passport-session-cookie-domain
 		}
 
 		,useMongoose : false//false
@@ -332,6 +334,8 @@ ECGame.Settings =
 		Text_Size : 12,
 		
 		Obfuscation_Print : false,//TODO maybe put with the other obfuscation stuff
+
+		TraceSubProcesses : false,
 		
 		Updater_Print : false,
 		Updater_Draw : true,

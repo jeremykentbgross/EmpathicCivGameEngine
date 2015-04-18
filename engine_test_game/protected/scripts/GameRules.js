@@ -150,7 +150,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				aNetwork = ECGame.instance.getNetwork();
 				
 				aNetwork.registerListener(
-					'IdentifiedUser',
+					'ClientConnected',
 					this
 				);
 				aNetwork.registerListener(
@@ -469,7 +469,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 		},
 		
 		//TODO fix bug: sometimes spawns 2 characters instead of one, why?
-		onIdentifiedUser : function onIdentifiedUser(inEvent)
+		onClientConnected : function onClientConnected(inEvent)
 		{
 			var anEntity;
 			

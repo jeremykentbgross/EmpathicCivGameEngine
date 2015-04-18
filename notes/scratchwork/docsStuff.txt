@@ -1,0 +1,66 @@
+
+/*!
+@function
+@param
+@namespace
+*/
+MyNamespace = function asdf(){}
+ 
+/*!
+@class: MyClass
+@namespace: MyNamespace
+*/
+MyNamespace.MyClass = Class(
+{
+            /*!
+            @constructor: MyClass
+            @param: asdf
+            */
+            Constuctor: function MyClass(asdf)
+            {
+            },
+           
+            //! @bodyBegin: MyNamespace.MyClass
+            Description:
+            {
+                        /*!
+                        @function: asdf
+                        */
+                        //! @methodBegin: MyNamespace.MyClass.asdf
+                        asdf : function asdf()
+                        {
+                        }
+                        //! @methodEnd: MyNamespace.MyClass.asdf
+            }
+            //! @bodyEnd: MyClass
+});
+ 
+ 
+http://www.stack.nl/~dimitri/doxygen/manual/commands.html#cmd_intro
+http://www.oracle.com/technetwork/java/javase/documentation/index-137868.html#tag
+http://en.wikipedia.org/wiki/Javadoc
+http://code.google.com/p/jsdoc-toolkit/w/list
+http://usejsdoc.org/#JSDoc3_Tag_Dictionary
+
+
+@type (ns, class, func, memb);
+@name;
+@param type(s) name;
+@owner/scope
+@pub/priv/pro
+@parent
+Namespaces.Nsn.Classes.classname.methods. =
+{
+};
+
+
+@depricated?? (depricated index?)
+@type (ns, class, func, memb);
+@name;
+@param type(s) name;
+@owner/scope
+@pub/priv/pro
+@parent
+Namespaces.Nsn.Classes.classname.methods. =
+{
+};

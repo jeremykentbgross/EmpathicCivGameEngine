@@ -124,7 +124,7 @@ ECGame.WebServerTools.WebServer.prototype._setupContentEntryPoints = function _s
 				{
 					maxAge : ECGame.Settings.Server.Session.timeout
 					//,secure: true	//????
-					//domain: '.domain.com', //<=note '.' TODO	http://stackoverflow.com/questions/23178104/node-js-passport-session-cookie-domain
+					,domain: ECGame.Settings.Server.Session.domain
 				}
 				,resave: false
 				,saveUninitialized: false

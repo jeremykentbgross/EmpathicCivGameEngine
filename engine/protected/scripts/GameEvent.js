@@ -259,11 +259,10 @@ ECGame.EngineLib.Events.DisconnectedFromServer = ECGame.EngineLib.Class.create({
 	}
 });
 
-//TODO should rename this Identified>Net<User
-ECGame.EngineLib.Events.IdentifiedUser = ECGame.EngineLib.Class.create({
-	Constructor : function IdentifiedUser(inUser)
+ECGame.EngineLib.Events.ClientConnected = ECGame.EngineLib.Class.create({
+	Constructor : function ClientConnected(inUser)
 	{
-		this.GameEventBase('onIdentifiedUser');
+		this.GameEventBase('onClientConnected');
 		this.user = inUser;
 	},
 	Parents : [ECGame.EngineLib.Events.GameEventBase],
