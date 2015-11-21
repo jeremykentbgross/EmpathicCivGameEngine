@@ -69,7 +69,7 @@ ECGame.EngineLib.BitPacker = ECGame.EngineLib.Class.create({
 			
 			if(ECGame.Settings.DEBUG)
 			{
-				//TODO print warnings if out of bounds
+				//TODO print warnings if out of bounds...
 				inBits = Math.floor(inBits);
 				inBits = Math.max(inBits, 1);
 				inBits = Math.min(inBits, this._BITCAP);
@@ -80,7 +80,7 @@ ECGame.EngineLib.BitPacker = ECGame.EngineLib.Class.create({
 			
 			if(ECGame.Settings.DEBUG)
 			{
-				//TODO print warnings if out of bounds
+				//TODO print warnings if out of bounds...
 				inValue = Math.floor(inValue);
 				inValue = Math.min(inValue, aPower - 1);
 				inValue = Math.max(inValue, 0);

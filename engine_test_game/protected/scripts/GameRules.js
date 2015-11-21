@@ -125,6 +125,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			{
 				this._initWorld();
 			}
+
 			this._initAudioAssets();
 			this._initAnimations();
 			if(ECGame.Settings.Network.isServer || !ECGame.Settings.Network.isMultiplayer)
@@ -489,7 +490,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				anEntity.getComponentByType(ECGame.EngineLib.EntityComponent_Camera2D)[0].setNetOwner(inEvent.user.userID);
 			}
 			this._myGameWorld.addEntity(anEntity);
-			anEntity.addToNetGroup(this._myMasterNetGroup);
+			this._myMasterNetGroup.addObject(anEntity);
 		},
 		
 		onClientDisconnected : function onClientDisconnected(inEvent)
@@ -501,7 +502,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			anEntity = this._myEntities[inEvent.user.userID];
 			this._myGameWorld.removeEntity(anEntity);
 			
-			//anEntity.removeFromNetGroup(this._myMasterNetGroup);
+/*TODO uncomment??*/	//this._myMasterNetGroup.removeObject(anEntity);
 //			anEntity.destroy();	//TODO remove from group ^^^ and then set destory on timer if they dont reconnect
 		},
 		
@@ -574,6 +575,21 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				return;
 			}
 			aMap = aWorld.getMap();
+
+//HACK
+			if(!this.myTestTrigger){
+			//test triggers
+			this.myTestTrigger = aWorld.getPhysics().createNewPhysicsObject();
+			this.myTestTrigger.setAABB(
+				ECGame.EngineLib.AABB2D.create(
+					500
+					,500
+					,200
+					,200
+				)
+			);
+			this.myTestTrigger.setTrigger();}
+//end HACK
 			
 			if(inInputEvent.myInputID === 1)
 			{
@@ -668,7 +684,9 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			}
 			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_P])
 			{
-				ECGame.Settings.Debug.Physics_Draw = !ECGame.Settings.Debug.Physics_Draw;
+				ECGame.Settings.Debug.Physics_Print =
+					ECGame.Settings.Debug.Physics_Draw =
+						!ECGame.Settings.Debug.Physics_Draw;
 			}
 			if(inInputEvent.keysPressed[inInputEvent.KEYBOARD.KEY_I])
 			{

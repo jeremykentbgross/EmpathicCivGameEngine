@@ -341,6 +341,88 @@ ECGame.EngineLib.Events.NetObjects = ECGame.EngineLib.Class.create({
 		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
+
+
+
+
+
+ECGame.EngineLib.Events.AddedToNetGroup = ECGame.EngineLib.Class.create({
+	Constructor : function AddedToNetGroup(inNetGroup)
+	{
+		this.GameEventBase('onAddedToNetGroup');
+		this.myNetGroup = inNetGroup;
+	},
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition : 
+	{
+		init : function init(inNetGroup)
+		{
+			this.myNetGroup = inNetGroup;
+		},
+		copyFrom : function copyFrom(/*inOther*/){return;}
+	}
+});
+ECGame.EngineLib.Events.RemovedFromNetGroup = ECGame.EngineLib.Class.create({
+	Constructor : function RemovedFromNetGroup(inNetGroup)
+	{
+		this.GameEventBase('onRemovedFromNetGroup');
+		this.myNetGroup = inNetGroup;
+	},
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition : 
+	{
+		init : function init(inNetGroup)
+		{
+			this.myNetGroup = inNetGroup;
+		},
+		copyFrom : function copyFrom(/*inOther*/){return;}
+	}
+});
+
+ECGame.EngineLib.Events.AddedNetChildObject = ECGame.EngineLib.Class.create({
+	Constructor : function AddedNetChildObject(inChildObject)
+	{
+		this.GameEventBase('onAddedNetChildObject');
+		this.myChildToAddToNetGroups = inChildObject;
+	},
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition : 
+	{
+		init : function init(inChildObject)
+		{
+			this.myChildToAddToNetGroups = inChildObject;
+		},
+		copyFrom : function copyFrom(/*inOther*/){return;}
+	}
+});
+ECGame.EngineLib.Events.RemovedNetChildObject = ECGame.EngineLib.Class.create({
+	Constructor : function RemovedNetChildObject(inChildObject)
+	{
+		this.GameEventBase('onRemovedNetChildObject');
+		this.myChildToRemoveFromNetGroups = inChildObject;
+	},
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition : 
+	{
+		init : function init(inChildObject)
+		{
+			this.myChildToRemoveFromNetGroups = inChildObject;
+		},
+		copyFrom : function copyFrom(/*inOther*/){return;}
+	}
+});
 //Network Events////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 
@@ -387,13 +469,14 @@ ECGame.EngineLib.Events.SetPosition = ECGame.EngineLib.Class.create({
 });
 
 //TODO SetPhysicsStatus/GetPhysicsStatus (all valid fields)??
-/*ECGame.EngineLib.Events.GetPhysicsStatus = ECGame.EngineLib.Class.create({
-	Constructor : function GetPhysicsStatus()
+/*ECGame.EngineLib.Events.SetPhysicsStatus = ECGame.EngineLib.Class.create({
+	Constructor : function SetPhysicsStatus()
 	{
-		this.GameEventBase('onGetPhysicsStatus');
+		this.GameEventBase('onSetPhysicsStatus');
 		this.myPosition = null;
 		this.myVelocity = null;
 		this.myAABB = null;
+//flags to add/remove, etc.. friction??
 	},
 	Parents : [ECGame.EngineLib.Events.GameEventBase],
 	flags : {},
@@ -404,6 +487,26 @@ ECGame.EngineLib.Events.SetPosition = ECGame.EngineLib.Class.create({
 		copyFrom : function copyFrom(/ *inOther* /){return;}
 	}
 });*/
+//TODO spit file && see if some should be in game/testgame
+ECGame.EngineLib.Events.GetPhysicsStatus = ECGame.EngineLib.Class.create({
+	Constructor : function GetPhysicsStatus()
+	{
+		this.GameEventBase('onGetPhysicsStatus');
+
+		this.myPosition = null;
+		this.myVelocity = null;
+		this.myAABB = null;
+	},
+
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition :
+	{
+		copyFrom : function copyFrom(/*inOther*/){return;}
+	}
+});
 
 ECGame.EngineLib.Events.UpdatedPhysicsStatus = ECGame.EngineLib.Class.create({
 	Constructor : function UpdatedPhysicsStatus(inEntity, inPos, inVel, inAABB)
@@ -497,5 +600,131 @@ ECGame.EngineLib.Events.CameraVolumeUpdate = ECGame.EngineLib.Class.create({
 });
 //Camera////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////
+//Triggers//////////////////////////////////////////////////////////////////////////////
+ECGame.EngineLib.Events.TriggerStartTouching = ECGame.EngineLib.Class.create({
+	Constructor : function TriggerStartTouching()
+	{
+		this.GameEventBase('onTriggerStartTouching');
+		this.myTrigger = null;
+		this.myTouchedObject = null;
+		this.myIntersection = null;
+	},
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition :
+	{
+		init : function init(inTrigger, inTouchedObject, inIntersection)
+		{
+			this.myTrigger = inTrigger;
+			this.myTouchedObject = inTouchedObject;
+			this.myIntersection = inIntersection;
+		}
+
+		,copyFrom : function copyFrom(/*inOther*/){return;}//TODO
+	}
+});
+
+ECGame.EngineLib.Events.TriggerTouching = ECGame.EngineLib.Class.create({
+	Constructor : function TriggerTouching()
+	{
+		this.GameEventBase('onTriggerTouching');
+		this.myTrigger = null;
+		this.myTouchedObject = null;
+		this.myIntersection = null;
+	},
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition :
+	{
+		init : function init(inTrigger, inTouchedObject, inIntersection)
+		{
+			this.myTrigger = inTrigger;
+			this.myTouchedObject = inTouchedObject;
+			this.myIntersection = inIntersection;
+		}
+
+		,copyFrom : function copyFrom(/*inOther*/){return;}//TODO
+	}
+});
+
+ECGame.EngineLib.Events.TriggerEntered = ECGame.EngineLib.Class.create({
+	Constructor : function TriggerEntered()
+	{
+		this.GameEventBase('onTriggerEntered');
+		this.myTrigger = null;
+		this.myTouchedObject = null;
+	},
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition :
+	{
+		init : function init(inTrigger, inTouchedObject)
+		{
+			this.myTrigger = inTrigger;
+			this.myTouchedObject = inTouchedObject;
+		}
+
+		,copyFrom : function copyFrom(/*inOther*/){return;}//TODO
+	}
+});
+
+ECGame.EngineLib.Events.TriggerLeft = ECGame.EngineLib.Class.create({
+	Constructor : function TriggerLeft()
+	{
+		this.GameEventBase('onTriggerLeft');
+		this.myTrigger = null;
+		this.myTouchedObject = null;
+	},
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition :
+	{
+		init : function init(inTrigger, inTouchedObject)
+		{
+			this.myTrigger = inTrigger;
+			this.myTouchedObject = inTouchedObject;
+		}
+
+		,copyFrom : function copyFrom(/*inOther*/){return;}//TODO
+	}
+});
+
+ECGame.EngineLib.Events.TriggerStoppedTouching = ECGame.EngineLib.Class.create({
+	Constructor : function TriggerStoppedTouching()
+	{
+		this.GameEventBase('onTriggerStoppedTouching');
+		this.myTrigger = null;
+		this.myTouchedObject = null;
+	},
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition :
+	{
+		init : function init(inTrigger, inTouchedObject)
+		{
+			this.myTrigger = inTrigger;
+			this.myTouchedObject = inTouchedObject;
+		}
+
+		,copyFrom : function copyFrom(/*inOther*/){return;}//TODO
+	}
+});
+//Triggers//////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+
 
 

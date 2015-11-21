@@ -102,6 +102,12 @@ LoadEngine = function LoadEngine(
 			aRequest = new XMLHttpRequest();
 			aRequest.open('GET', aFullPathFileName, false);
 			aRequest.send();
+			/*NOTE:^^ XMLHttpRequest.open(..., async=false) doesn't work on Firefox.
+				This seems to be why audio doesn't work in FF when the code isn't compressed as one file.
+				If needed, this can be fixed by queueing the files to request in an array and poping the next
+				during "onload", but this requires that function calls made lower in this file also somehow
+				be queued.  Atm this isn't a priority to me, but if needed can be done for debuging firefox
+			*/
 			
 			//set the returned script text while adding special comment to 
 			// auto include in debugger source listing:
@@ -116,13 +122,15 @@ LoadEngine = function LoadEngine(
 				aScript.id = inFileName;	//tried using this as variations of the id for debug readability
 				
 				//set the script tag text, including the debugger id at the end!!
-				aScript.text = aScriptSource;
+				aScript.text/*?vs textContent?*/ = aScriptSource;
 							
 				//append the code to the dom
 				document.getElementsByTagName('body')[0].appendChild(aScript);
 			//}
 			/*else
 			{
+				//This works also, but eval is marked as evil when lint'ing.
+				//	Left in to document alternative solutions and why they are not currently used.
 				eval(aScriptSource);
 			}*/
 		};

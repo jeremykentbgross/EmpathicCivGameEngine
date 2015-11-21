@@ -292,7 +292,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 		{
 			var i, inputString, inputEvent;
 			
-			if(ECGame.Settings.DEBUG && !ECGame.Settings.Network.isServer)
+			if(ECGame.Settings.isDebugDraw())
 			{
 				inputString = "Input: " +
 					(this._active ? "Active" : "Inactive" ) + 

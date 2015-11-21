@@ -93,7 +93,7 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 			inRenderer.render(this);
 			
 			//debug draw stats
-			if(ECGame.Settings.DEBUG)
+			if(ECGame.Settings.isDebugDraw())
 			{
 				this._drawDebugText();
 			}

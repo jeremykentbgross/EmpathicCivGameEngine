@@ -148,7 +148,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		{
 			var aLocalUser;
 			
-			if(!ECGame.Settings.Network.isMultiplayer || !this.getClass()._flags.netDynamic)
+			if(!ECGame.Settings.Network.isMultiplayer || !this.getClass().getFlags().netDynamic)
 			{
 				return false;
 			}
@@ -232,18 +232,18 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		
 		isA : function isA(inClass)//TODO note that this only checks first/primary parents!
 		{
-			var current = this.getClass()._constructor;
-			while(current)
+			var aCurrent = this.getClass().getConstructor();
+			while(aCurrent)
 			{
-				if(current === inClass || current.name === inClass)
+				if(aCurrent === inClass || aCurrent.name === inClass)
 				{
 					return true;
 				}
-				if(!current.getClass)
+				if(!aCurrent.getClass)
 				{
 					return false;
 				}
-				current = current.getClass()._parent;
+				aCurrent = aCurrent.getClass().getParent();
 			}
 			return false;
 		},

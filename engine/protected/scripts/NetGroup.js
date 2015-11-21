@@ -147,7 +147,10 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 						aDirtyInstanceList,
 						aDestroyInstanceList
 					);
-					aCurrentUser.mySocket.send(aBinaryBuffer);
+					if(aCurrentUser.mySocket)//can be disconnected during serialize above
+					{
+						aCurrentUser.mySocket.send(aBinaryBuffer);
+					}
 				/*}*/
 			}
 			
@@ -299,6 +302,11 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 			//listen to object messages: onNetDirty / onDestroy
 			inObject.registerListener('GameObjectNetDirty', this);
 			inObject.registerListener('GameObjectDestroyed', this);
+			inObject.registerListener('AddedNetChildObject', this);
+			inObject.registerListener('RemovedNetChildObject', this);
+
+			//tell the object it has been added:
+			inObject.onEvent(ECGame.EngineLib.Events.AddedToNetGroup.create(this));
 			
 			//make sure there is a list for this class
 			this._myDestroyInstances[aClassName] = this._myDestroyInstances[aClassName] || [];
@@ -355,6 +363,11 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 			//stop listening to object messages: onNetDirty / onDestroy
 			inObject.deregisterListener('GameObjectNetDirty', this);
 			inObject.deregisterListener('GameObjectDestroyed', this);
+			inObject.deregisterListener('AddedNetChildObject', this);
+			inObject.deregisterListener('RemovedNetChildObject', this);
+
+			//tell the object it has been removed:
+			inObject.onEvent(ECGame.EngineLib.Events.RemovedFromNetGroup.create(this));
 			
 			//be sure this list exists
 			this._myNewInstances[aClassName] = this._myNewInstances[aClassName] || [];
@@ -379,6 +392,15 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 			}
 			
 			//TODO remove from myForwardObjects?
+		},
+
+		onAddedNetChildObject: function onAddedNetChildObject(inEvent)
+		{
+			this.addObject(inEvent.myChildToAddToNetGroups);
+		},
+		onRemovedNetChildObject: function onRemovedNetChildObject(inEvent)
+		{
+			this.removeObject(inEvent.myChildToRemoveFromNetGroups);
 		},
 		
 		onGameObjectNetDirty : function onGameObjectNetDirty(inEvent)

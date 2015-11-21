@@ -270,14 +270,14 @@ ECGame.EngineLib.BinarySerializer = ECGame.EngineLib.Class.create({
 					name : 'classID',
 					type : 'int',
 					net : true,
-					min : 0,
+					min : -1,
 					max : ECGame.EngineLib.Class.getInstanceRegistry().getMaxID()
 				},
 				{
 					name : 'instanceID',
 					type : 'int',
 					net : true,
-					min : 0,
+					min : -1,
 					max : 4096	//note: this assumes a max of 4096 objects of any given type.  may want max items per type in the future
 				}
 			];

@@ -402,7 +402,7 @@ ECGame.EngineLib.TileMap2D = ECGame.EngineLib.Class.create(
 			
 			//delete from the tilemap tree
 			this._myTileInstanceTree.deleteContained(inRect, aDeletedTilesArray);
-			if(ECGame.Settings.DEBUG)
+			if(ECGame.Settings.isDebugPrint())
 			{
 				if(aDeletedTilesArray.length > 1)
 				{

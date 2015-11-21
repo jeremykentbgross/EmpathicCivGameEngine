@@ -41,6 +41,9 @@ ECGame.EngineLib.Entity = ECGame.EngineLib.Class.create({
 				aThis._removedComponent(inComponent);
 			}
 		);
+
+		this.registerListener('AddedToNetGroup', this);
+		this.registerListener('RemovedFromNetGroup', this);
 	},
 	
 	Parents : [ECGame.EngineLib.GameObject],
@@ -56,17 +59,18 @@ ECGame.EngineLib.Entity = ECGame.EngineLib.Class.create({
 		{
 			if(this._myComponentCollection.add(inComponent, this.canUserModifyNet()))
 			{
+				//TODO (if components dynamically updated) event: AddedNetChildObject
 				this.setNetDirty();
 			}
 		},
 		_addedComponent : function _addedComponent(inComponent)
 		{
-			inComponent.onAddedToEntity(
+			inComponent.onAddedToEntity(//TODO call event, not function
 				new ECGame.EngineLib.Events.AddedToEntity(this)
 			);
 			if(this._myWorld)
 			{
-				inComponent.onEntityAddedToWorld(
+				inComponent.onEntityAddedToWorld(//TODO call event, not function
 					new ECGame.EngineLib.Events.EntityAddedToWorld(this._myWorld, this)
 				);
 			}
@@ -76,6 +80,7 @@ ECGame.EngineLib.Entity = ECGame.EngineLib.Class.create({
 		{
 			if(this._myComponentCollection.remove(inComponent, this.canUserModifyNet()))
 			{
+				//TODO (if components dynamically updated) event: RemovedNetChildObject
 				this.setNetDirty();
 			}
 		},
@@ -83,14 +88,14 @@ ECGame.EngineLib.Entity = ECGame.EngineLib.Class.create({
 		{
 			if(this._myWorld)
 			{
-				inComponent.onEntityRemovedFromWorld(
+				inComponent.onEntityRemovedFromWorld(//TODO call event, not function
 					new ECGame.EngineLib.Events.EntityRemovedFromWorld(
 						this._myWorld
 						,this
 					)
 				);
 			}
-			inComponent.onRemovedFromEntity(
+			inComponent.onRemovedFromEntity(//TODO call event, not function
 				new ECGame.EngineLib.Events.RemovedFromEntity(this)
 			);
 		},
@@ -113,26 +118,24 @@ ECGame.EngineLib.Entity = ECGame.EngineLib.Class.create({
 			return inoutReturnValues;
 		},
 		
-		//TODO make this event?
-		addToNetGroup : function addToNetGroup(inNetGroup)
+		onAddedToNetGroup : function onAddedToNetGroup(inEvent)
 		{
-			inNetGroup.addObject(this);
+			//console.info(this.getName());
 			this._myComponentCollection.forAll(
 				function callback(inComponent)
 				{
-					inNetGroup.addObject(inComponent);
+					inEvent.myNetGroup.addObject(inComponent);
 					return true;
 				}
 			);
 		},
-		//TODO make this event?
-		removeFromNetGroup : function removeFromNetGroup(inNetGroup)
+		onRemovedFromNetGroup : function onRemovedFromNetGroup(inEvent)
 		{
-			inNetGroup.removeObject(this);
+			//console.info(this.getName());
 			this._myComponentCollection.forAll(
 				function callback(inComponent)
 				{
-					inNetGroup.removeObject(inComponent);
+					inEvent.myNetGroup.removeObject(inComponent);
 					return true;
 				}
 			);
@@ -154,6 +157,19 @@ ECGame.EngineLib.Entity = ECGame.EngineLib.Class.create({
 			{
 				this.onEvent(new ECGame.EngineLib.Events.EntityRemovedFromWorld(this._myWorld, this));
 				this._myWorld = null;
+			}
+		},
+
+		addToWorld : function addToWorld(inWorld)//TODO is this redundant? should/does world tell entity to remove from existing?
+		{
+			this.removeFromWorld();
+			inWorld.addEntity(this);
+		},
+		removeFromWorld : function removeFromWorld()//TODO liike addToWorld: is this redundant? (don't think so here..)
+		{
+			if(this._myWorld)
+			{
+				this._myWorld.removeEntity(this);
 			}
 		},
 		

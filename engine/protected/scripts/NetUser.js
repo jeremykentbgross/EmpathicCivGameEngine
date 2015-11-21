@@ -36,14 +36,14 @@ User : Object
 //Note: watch out when adding new values to this structure as it is serialized
 ECGame.EngineLib.NetUser = function NetUser(inName, inID)
 {
-	var i;
+	//var i;
 	
 	this.userName = inName || "Player";
 	this.userID = inID || ECGame.EngineLib.NetUser.USER_IDS.NEW_USER;
 	
 	this.mySocket = null;
 	
-	this.myUnacknowledgedFrames = [];//sent frames that are unacknowledged; TODO linkedlist
+	/*this.myUnacknowledgedFrames = [];//sent frames that are unacknowledged; TODO linkedlist
 	this.myLastAcknowledgedFrame = -1;//last acknowledged frame
 	this.myLastRecievedFrame = 0;	//most recent frame stamp sent to us by the other side that needs to be acknowledged
 	
@@ -53,7 +53,8 @@ ECGame.EngineLib.NetUser = function NetUser(inName, inID)
 	for(i = 0; i < 128; ++i)
 	{
 		this.myPings[i] = 0;
-	}
+	}*/
+	this.setupConnectionData();
 	
 	this._myRemoteFPS = [];
 	this._myRemoteAverageFPS = 0;
@@ -83,6 +84,25 @@ ECGame.EngineLib.NetUser.prototype.getDebugName = function getDebugName()
 ECGame.EngineLib.NetUser.prototype.addRemoteFPS = function addRemoteFPS(inRemoteFPS)
 {
 	this._myRemoteFPS.push(inRemoteFPS);
+};
+
+
+
+ECGame.EngineLib.NetUser.prototype.setupConnectionData = function setupConnectionData()
+{
+	var i;
+
+	this.myUnacknowledgedFrames = [];//sent frames that are unacknowledged; TODO linkedlist
+	this.myLastAcknowledgedFrame = -1;//last acknowledged frame
+	this.myLastRecievedFrame = 0;	//most recent frame stamp sent to us by the other side that needs to be acknowledged
+	
+	this.myPing = 0;
+	this.myPings = [];
+	this.myNextPingIndex = 0;
+	for(i = 0; i < 128; ++i)
+	{
+		this.myPings[i] = 0;
+	}
 };
 
 

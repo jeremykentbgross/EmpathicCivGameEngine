@@ -122,7 +122,7 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 			
 			if(ECGame.Settings.isDebugPrint_NetworkMessagesConnectionChanges())
 			{
-				console.info(
+				console./*info*/warn(//TODO change from warn back to info once we solve the close 2x or none bug
 					"User Disconnected: " + aThis._myNetUser.getDebugName()
 					,inCode
 					,inMessage
@@ -136,6 +136,7 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 			//ECGame.instance.getNetwork().getNetGroup('master_netgroup').removeUser(aThis._myNetUser);
 
 			aThis._myNetwork.onEvent(new ECGame.EngineLib.Events.ClientDisconnected(aThis._myNetUser));//TODO get rid of new!!!
+aThis._myNetUser.setupConnectionData();
 			
 			aThis._myNetwork._removeSocket(aThis);
 			
@@ -232,7 +233,9 @@ ECGame.EngineLib.ServerSideWebSocket = ECGame.EngineLib.Class.create({
 			{
 				console.info("Closing socket on user:", this._myNetUser.getDebugName(), inCode, inReason);
 			}
-			this._myWebsocket.close(inCode, inReason);
+			this._myWebsocket.close(inCode, inReason);//TODO does this get the close event?? maybe not. debug ping timeout
+			//HACK because not called by ^^^^; BUT also BUG: called 2x when called manually wtf??:
+			this._onClose.apply(this._myWebsocket, [null, 'Closed Manualy']);
 		}
 	}
 });

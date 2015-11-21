@@ -35,22 +35,22 @@ ECGame.EngineLib.EntityComponent_Camera2D = ECGame.EngineLib.Class.create({
 	{
 		onAddedToEntity : function onAddedToEntity(/*inEvent*/)
 		{
-			var owner = this._myOwningEntity;//inEvent.entity;
+			var anOwner = this.getOwningEntity();//inEvent.entity;
 			
 			//register for events
-			owner.registerListener('UpdatedPhysicsStatus', this);
-			owner.registerListener('EntityAddedToWorld', this);
-			owner.registerListener('EntityRemovedFromWorld', this);
+			anOwner.registerListener('UpdatedPhysicsStatus', this);
+			anOwner.registerListener('EntityAddedToWorld', this);
+			anOwner.registerListener('EntityRemovedFromWorld', this);
 		}
 		
 		,onRemovedFromEntity : function onRemovedFromEntity(/*inEvent*/)
 		{
-			var owner = this._myOwningEntity;//inEvent.entity;
+			var anOwner = this.getOwningEntity();//inEvent.entity;
 			
 			//unregister for events
-			owner.deregisterListener('UpdatedPhysicsStatus', this);
-			owner.deregisterListener('EntityAddedToWorld', this);
-			owner.deregisterListener('EntityRemovedFromWorld', this);
+			anOwner.deregisterListener('UpdatedPhysicsStatus', this);
+			anOwner.deregisterListener('EntityAddedToWorld', this);
+			anOwner.deregisterListener('EntityRemovedFromWorld', this);
 		}
 		
 		,onEntityAddedToWorld : function onEntityAddedToWorld(inEvent)

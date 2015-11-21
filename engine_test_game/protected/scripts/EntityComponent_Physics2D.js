@@ -32,6 +32,8 @@ ECGame.Lib.EntityComponent_Physics2D = ECGame.EngineLib.Class.create(
 		this._myAABB.setCenter(this._myPosition);
 		
 		this._myPhysicsObject = null;
+
+		this.registerListener('PhysicsObjectUpdated', this);
 	},
 	
 	Parents : [ECGame.EngineLib.EntityComponent],

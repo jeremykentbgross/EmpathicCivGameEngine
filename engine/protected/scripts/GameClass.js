@@ -43,30 +43,16 @@ ECGame.EngineLib.Class.create({
 
 ECGame.EngineLib.Class = function Class(inConstructor, inParents)
 {
-	this._constructor = inConstructor;
-	
+	this._myConstructor = inConstructor;
 	if(inParents)
 	{
-		this._parent = inParents[0];//TODO is this needed? or just parents?
-		this._parents = inParents;
+		this._myParent = inParents[0];//TODO is this needed? or just parents?
+		this._myParents = inParents;//<=Not used atm!
 	}
-	
-	this._childClasses = [];//TODO flag for not track a child class
-	
-	this._flags = {};
-	
-	this._classID = -1;
-	
-	this._instanceRegistry = null;
-	
-//	this._newInstances = [];
-//	this._netDirtyInstances = [];
-	/*
-	TODOs:
-	newInstances,
-	netDirtyInstances,
-	destroyedInstances
-	*/
+	this._myChildClasses = [];//<=also not used atm; TODO flag for not track a child class
+	this._myFlags = {};
+	this._myClassID = -1;
+	this._myInstanceRegistry = null;
 };
 ECGame.EngineLib.Class.prototype.constructor = ECGame.EngineLib.Class;
 
@@ -74,42 +60,42 @@ ECGame.EngineLib.Class.prototype.constructor = ECGame.EngineLib.Class;
 
 ECGame.EngineLib.Class.create = function create(inParams)
 {
-	var theClass,
+	var aClass,
 		//breaking up params:
 		Constructor,
-		inParents,
-		inDefinition,
-		inFlags,
+		aParentsList,
+		aDefinition,
+		aFlags,
 		//parsing helpers
-		parentIndex,
-		parent,
-		parentClass,
-		propertyName,
-		property,
-		methodName,
-		methods,
-		methodIndex,
-		flagIndex,
-		managed,
+		aParentIndex,
+		aParent,
+		aParentClass,
+		aPropertyName,
+		aProperty,
+		aMethodName,
+		aMethods,
+		aMethodIndex,
+		aFlagIndex,
+		aManaged,
 		//source text for constuctor
-		constructorSrc;
+		aConstructorSrc;
 	
 	//params:
 	Constructor = inParams.Constructor;
-	inParents = inParams.Parents;
-	inDefinition = inParams.Definition;
-	inFlags = inParams.flags;
+	aParentsList = inParams.Parents;
+	aDefinition = inParams.Definition;
+	aFlags = inParams.flags;
 	
 	Constructor.prototype[Constructor.name] = Constructor;
 	Constructor.prototype.constructor = Constructor;
 	Constructor.prototype._chainUpMethods = {};
 	Constructor.prototype._chainDownMethods = {};
 	
-	theClass = new ECGame.EngineLib.Class(Constructor, inParents);
+	aClass = new ECGame.EngineLib.Class(Constructor, aParentsList);
 	
 	if(ECGame.Settings.DEBUG)
 	{
-		constructorSrc =
+		aConstructorSrc =
 			Constructor.toString()
 			/*remove block comments:*/
 			.replace(/\x2f\x2a[\S\s]*?\x2a\x2f/g, '')
@@ -117,186 +103,186 @@ ECGame.EngineLib.Class.create = function create(inParams)
 			.replace(/\x2f\x2f[^\n]*\n/g, '\n');
 	}
 	
-	for(parentIndex in inParents)
+	for(aParentIndex in aParentsList)//TODO should be for<length??
 	{
-		parent = inParents[parentIndex];
+		aParent = aParentsList[aParentIndex];
 		
 		if(ECGame.Settings.DEBUG)
 		{
 			//make sure the contructor has call to this parent constructor that is not commented out
-			if(constructorSrc.indexOf('this.' + parent.name) === -1)
+			if(aConstructorSrc.indexOf('this.' + aParent.name) === -1)
 			{
 				console.warn(
-					Constructor.name + " does not call parent constructor " + parent.name
+					Constructor.name + " does not call parent constructor " + aParent.name
 				);
 			}
 		}
 		
 		//copy prototypes
-		for(propertyName in parent.prototype)
+		for(aPropertyName in aParent.prototype)
 		{
-			property = parent.prototype[propertyName];
+			aProperty = aParent.prototype[aPropertyName];
 			
-			if(propertyName === '_chainUpMethods')
+			if(aPropertyName === '_chainUpMethods')
 			{
-				for(methodName in property)
+				for(aMethodName in aProperty)
 				{
-					if(Constructor.prototype._chainUpMethods[methodName])
+					if(Constructor.prototype._chainUpMethods[aMethodName])
 					{
-						console.warn(Constructor.name + " trying to inherit chain function " + methodName + " from an additional parent: " + parent.name);
+						console.warn(Constructor.name + " trying to inherit chain function " + aMethodName + " from an additional parent: " + aParent.name);
 						continue;
 					}
 					
-					Constructor.prototype._chainUpMethods[methodName] = [];
-					methods = property[methodName];
-					for(methodIndex = 0; methodIndex < methods.length; ++methodIndex)
+					Constructor.prototype._chainUpMethods[aMethodName] = [];
+					aMethods = aProperty[aMethodName];
+					for(aMethodIndex = 0; aMethodIndex < aMethods.length; ++aMethodIndex)
 					{
-						Constructor.prototype._chainUpMethods[methodName].push(methods[methodIndex]);
+						Constructor.prototype._chainUpMethods[aMethodName].push(aMethods[aMethodIndex]);
 					}
 					
-					if(!inDefinition[methodName])
+					if(!aDefinition[aMethodName])
 					{
-						console.warn(Constructor.name + " does not implement chain function " + methodName);
+						console.warn(Constructor.name + " does not implement chain function " + aMethodName);
 					}
 					else
 					{
-						Constructor.prototype._chainUpMethods[methodName].unshift(inDefinition[methodName]);
+						Constructor.prototype._chainUpMethods[aMethodName].unshift(aDefinition[aMethodName]);
 					}
 				}
 			}
-			else if(propertyName === '_chainDownMethods')
+			else if(aPropertyName === '_chainDownMethods')
 			{
-				for(methodName in property)
+				for(aMethodName in aProperty)
 				{
-					if(Constructor.prototype._chainDownMethods[methodName])
+					if(Constructor.prototype._chainDownMethods[aMethodName])
 					{
-						console.warn(Constructor.name + " trying to inherit chain function " + methodName + " from an additional parent: " + parent.name);
+						console.warn(Constructor.name + " trying to inherit chain function " + aMethodName + " from an additional parent: " + aParent.name);
 						continue;
 					}
 					
-					Constructor.prototype._chainDownMethods[methodName] = [];
-					methods = property[methodName];
-					for(methodIndex = 0; methodIndex < methods.length; ++methodIndex)
+					Constructor.prototype._chainDownMethods[aMethodName] = [];
+					aMethods = aProperty[aMethodName];
+					for(aMethodIndex = 0; aMethodIndex < aMethods.length; ++aMethodIndex)
 					{
-						Constructor.prototype._chainDownMethods[methodName].push(methods[methodIndex]);
+						Constructor.prototype._chainDownMethods[aMethodName].push(aMethods[aMethodIndex]);
 					}
 					
-					if(!inDefinition[methodName])
+					if(!aDefinition[aMethodName])
 					{
-						console.warn(Constructor.name + " does not implement chain function " + methodName);
+						console.warn(Constructor.name + " does not implement chain function " + aMethodName);
 					}
 					else
 					{
-						Constructor.prototype._chainDownMethods[methodName].push(inDefinition[methodName]);
+						Constructor.prototype._chainDownMethods[aMethodName].push(aDefinition[aMethodName]);
 					}
 				}
 			}
-			else if(Constructor.prototype[propertyName])
+			else if(Constructor.prototype[aPropertyName])
 			{
-				console.warn(Constructor.name + " trying to inherit function " + methodName + " from an additional parent: " + parent.name);
+				console.warn(Constructor.name + " trying to inherit function " + aMethodName + " from an additional parent: " + aParent.name);
 			}
 			else
 			{
-				Constructor.prototype[propertyName] = property;
+				Constructor.prototype[aPropertyName] = aProperty;
 			}
 		}
 		
-		for(propertyName in parent)
+		for(aPropertyName in aParent)
 		{
-			Constructor[propertyName] = property;
+			Constructor[aPropertyName] = aProperty;
 		}
 		
-		Constructor.prototype[parent.name] = parent;
-		if(parent.getClass && parent.getClass())
+		Constructor.prototype[aParent.name] = aParent;
+		if(aParent.getClass && aParent.getClass())
 		{
-			parentClass = parent.getClass();
+			aParentClass = aParent.getClass();
 			//TODO IFF track this class
-			parentClass._childClasses.push(Constructor);
-			for(flagIndex in parentClass._flags)
+			aParentClass._myChildClasses.push(Constructor);
+			for(aFlagIndex in aParentClass._myFlags)
 			{
-				theClass._flags[flagIndex] = parentClass._flags[flagIndex];
+				aClass._myFlags[aFlagIndex] = aParentClass._myFlags[aFlagIndex];
 			}
 		}
 	}
 	
 	Constructor.prototype[Constructor.name] = Constructor;
-	for(flagIndex in inFlags)
+	for(aFlagIndex in aFlags)
 	{
-		theClass._flags[flagIndex] = inFlags[flagIndex];
+		aClass._myFlags[aFlagIndex] = aFlags[aFlagIndex];
 	}
 		
-	for(propertyName in inDefinition)
+	for(aPropertyName in aDefinition)
 	{
 		//don't copy over chain functions directly
-		if(Constructor.prototype._chainUpMethods[propertyName] || Constructor.prototype._chainDownMethods[propertyName])
+		if(Constructor.prototype._chainUpMethods[aPropertyName] || Constructor.prototype._chainDownMethods[aPropertyName])
 		{
 			continue;
 		}
 		
-		if(typeof inDefinition[propertyName] === 'function')
+		if(typeof aDefinition[aPropertyName] === 'function')
 		{
-			Constructor.prototype[propertyName] = inDefinition[propertyName];
+			Constructor.prototype[aPropertyName] = aDefinition[aPropertyName];
 		}
 		else
 		{
-			Constructor[propertyName] = inDefinition[propertyName];
+			Constructor[aPropertyName] = aDefinition[aPropertyName];
 		}
 	}
 	
-	for(methodIndex in inParams.ChainUp)
+	for(aMethodIndex in inParams.ChainUp)
 	{
-		methodName = inParams.ChainUp[methodIndex];
-		if(Constructor.prototype._chainUpMethods[methodName])
+		aMethodName = inParams.ChainUp[aMethodIndex];
+		if(Constructor.prototype._chainUpMethods[aMethodName])
 		{
-			console.warn(Constructor.name + " redeclares " + methodName + " as a chain function.");
+			console.warn(Constructor.name + " redeclares " + aMethodName + " as a chain function.");
 			continue;
 		}
-		Constructor.prototype._chainUpMethods[methodName] = [];
-		Constructor.prototype._chainUpMethods[methodName].unshift(Constructor.prototype[methodName]);
+		Constructor.prototype._chainUpMethods[aMethodName] = [];
+		Constructor.prototype._chainUpMethods[aMethodName].unshift(Constructor.prototype[aMethodName]);
 		
-		Constructor.prototype[methodName] = ECGame.EngineLib.Class._createChainUpFunction(methodName);
+		Constructor.prototype[aMethodName] = ECGame.EngineLib.Class._createChainUpFunction(aMethodName);
 	}
-	for(methodIndex in inParams.ChainDown)
+	for(aMethodIndex in inParams.ChainDown)
 	{
-		methodName = inParams.ChainDown[methodIndex];
-		if(Constructor.prototype._chainDownMethods[methodName])
+		aMethodName = inParams.ChainDown[aMethodIndex];
+		if(Constructor.prototype._chainDownMethods[aMethodName])
 		{
-			console.warn(Constructor.name + " redeclares " + methodName + " as a chain function.");
+			console.warn(Constructor.name + " redeclares " + aMethodName + " as a chain function.");
 			continue;
 		}
-		Constructor.prototype._chainDownMethods[methodName] = [];
-		Constructor.prototype._chainDownMethods[methodName].push(Constructor.prototype[methodName]);
+		Constructor.prototype._chainDownMethods[aMethodName] = [];
+		Constructor.prototype._chainDownMethods[aMethodName].push(Constructor.prototype[aMethodName]);
 		
-		Constructor.prototype[methodName] = ECGame.EngineLib.Class._createChainDownFunction(methodName);
+		Constructor.prototype[aMethodName] = ECGame.EngineLib.Class._createChainDownFunction(aMethodName);
 	}
 	
-	theClass.create = Constructor.create = function create()
+	aClass.create = Constructor.create = function create()
 	{
-		var newItem = new Constructor();
+		var aNewItem = new Constructor();
 		if(Constructor.prototype.init && arguments.length)
 		{
-			Constructor.prototype.init.apply(newItem, arguments);
+			Constructor.prototype.init.apply(aNewItem, arguments);
 		}
-		return newItem;
+		return aNewItem;
 	};
 	
 	Constructor.getClass = Constructor.prototype.getClass = function getClass()
 	{
-		return theClass;
+		return aClass;
 	};
 	
-	managed = Constructor.prototype.isA && Constructor.prototype.isA('GameObject');
-	if(managed)
+	aManaged = Constructor.prototype.isA && Constructor.prototype.isA('GameObject');
+	if(aManaged)
 	{
-		theClass.createInstanceRegistry();
+		aClass.createInstanceRegistry();
 		
 		Constructor.registerClass = function registerClass()
 		{
-			var classRegistry = ECGame.EngineLib.Class.getInstanceRegistry();
-			if(classRegistry.findByName(theClass.getName()) !== theClass)
+			var aClassRegistry = ECGame.EngineLib.Class.getInstanceRegistry();
+			if(aClassRegistry.findByName(aClass.getName()) !== aClass)
 			{
-				theClass._classID = classRegistry.getUnusedID();
-				classRegistry.register(theClass);
+				aClass._myClassID = aClassRegistry.getUnusedID();
+				aClassRegistry.register(aClass);
 			}
 		};
 	}
@@ -311,30 +297,51 @@ ECGame.EngineLib.Class.create = function create(inParams)
 
 
 
+ECGame.EngineLib.Class.prototype.getConstructor = function getConstructor()
+{
+	return this._myConstructor;
+};
+
+
+
+ECGame.EngineLib.Class.prototype.getParent = function getParent()
+{
+	return this._myParent;
+};
+
+
+
 ECGame.EngineLib.Class.prototype.getName = function getName()
 {
-	return this._constructor.name;
+	return this._myConstructor.name;
+};
+
+
+
+ECGame.EngineLib.Class.prototype.getFlags = function getFlags()
+{
+	return this._myFlags;
 };
 
 
 
 ECGame.EngineLib.Class.prototype.getID = function getID()
 {
-	return this._classID;
+	return this._myClassID;
 };
 
 
 
 ECGame.EngineLib.Class.prototype.createInstanceRegistry = ECGame.EngineLib.Class.createInstanceRegistry = function createInstanceRegistry()//TODO rename reset?
 {
-	this._instanceRegistry = new ECGame.EngineLib.Registry();
+	this._myInstanceRegistry = new ECGame.EngineLib.Registry();
 };
 
 
 
 ECGame.EngineLib.Class.prototype.getInstanceRegistry = ECGame.EngineLib.Class.getInstanceRegistry = function getInstanceRegistry()
 {
-	return this._instanceRegistry;
+	return this._myInstanceRegistry;
 };
 
 
@@ -343,12 +350,12 @@ ECGame.EngineLib.Class._createChainUpFunction = function _createChainUpFunction(
 {
 	return function()
 	{
-		var funcIndex,
-			funcArray;
-		funcArray = this._chainUpMethods[inMethodName];
-		for(funcIndex in funcArray)
+		var aFunctionIndex,
+			aFunctionArray;
+		aFunctionArray = this._chainUpMethods[inMethodName];
+		for(aFunctionIndex in aFunctionArray)
 		{
-			funcArray[funcIndex].apply(this, arguments);
+			aFunctionArray[aFunctionIndex].apply(this, arguments);
 		}
 	};
 };
@@ -359,12 +366,12 @@ ECGame.EngineLib.Class._createChainDownFunction = function _createChainDownFunct
 {
 	return function()
 	{
-		var funcIndex,
-			funcArray;
-		funcArray = this._chainDownMethods[inMethodName];
-		for(funcIndex in funcArray)
+		var aFunctionIndex,
+			aFunctionArray;
+		aFunctionArray = this._chainDownMethods[inMethodName];
+		for(aFunctionIndex in aFunctionArray)
 		{
-			funcArray[funcIndex].apply(this, arguments);
+			aFunctionArray[aFunctionIndex].apply(this, arguments);
 		}
 	};
 };

@@ -98,7 +98,7 @@ ECGame.Settings =
 	Network :
 	{
 		isServer : false	//TODO consider function for this
-		,isMultiplayer : true
+		,isMultiplayer : true	//TODO: non multiplayer is broken, fix!
 		,maxFrameWrapForPing : 120 * 30	//120fps * 30s === max needed frame loop
 	},
 	
@@ -249,6 +249,7 @@ ECGame.Settings =
 		//TODO colors
 		
 		//physics
+		Physics_Print : false,
 		Physics_Draw : false,
 		Physics_StaticObject_DrawColor : 'rgba(0, 0, 0, 0.5)',
 		Physics_SleepingObject_DrawColor : 'rgba(0, 0, 255, 0.5)',
@@ -371,6 +372,10 @@ ECGame.Settings =
 	isDebugDraw_Physics : function isDebugDraw_Physics()
 	{
 		return this.isDebugDraw() && this.Debug.Physics_Draw;
+	},
+	isDebugPrint_Physics : function isDebugPrint_Physics()
+	{
+		return this.isDebugPrint() && this.Debug.Physics_Print;
 	},
 
 	isDebugDraw_CameraTarget : function isDebugDraw_CameraTarget()
