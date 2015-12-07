@@ -271,7 +271,7 @@ ECGame.EngineLib.BinarySerializer = ECGame.EngineLib.Class.create({
 					type : 'int',
 					net : true,
 					min : -1,
-					max : ECGame.EngineLib.Class.getInstanceRegistry().getMaxID()
+					max : ECGame.EngineLib.Class.getMaxInstanceID()
 				},
 				{
 					name : 'instanceID',

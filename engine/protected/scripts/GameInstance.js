@@ -253,8 +253,18 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			
 			try
 			{
-				//TODO pass update struct instead
+				//TODO consider having updater.debugDraw() here seperate from actual update
 				this._myMasterUpdater.update(inUpdateData);
+
+				//debug draw classes:
+				if(ECGame.Settings.isDebugDraw_Classes())
+				{
+					ECGame.EngineLib.Class.debugDraw();
+					if(this.myServerMonitor)
+					{
+						this.myServerMonitor.debugDrawClass();
+					}
+				}
 				
 				if(!ECGame.Settings.Network.isServer)
 				{
@@ -332,6 +342,14 @@ ECGame.EngineLib.GameInstance = ECGame.EngineLib.Class.create({
 			ECGame.EngineLib.TileMap2D.registerClass();
 			ECGame.EngineLib.TileSet2D.registerClass();
 			this._myGameRules.registerClasses();
+			if(ECGame.Settings.Debug.UseServerMonitor)
+			{
+				ECGame.EngineLib.ServerMonitor.registerClass();
+				if(ECGame.Settings.Network.isServer)
+				{
+					this.myServerMonitor = ECGame.EngineLib.ServerMonitor.create();
+				}
+			}
 			
 			//TODO also needs to manage prefabs?
 			

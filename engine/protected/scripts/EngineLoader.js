@@ -173,10 +173,10 @@ LoadEngine = function LoadEngine(
 		ECGame.unitTests = ECGame.EngineLib.UnitTestFramework.create();
 	}
 	
+	include(inProtectedEnginePath + "scripts/Registry.js");
+	include(inProtectedEnginePath + "scripts/Events/EventSystem.js");
 	include(inProtectedEnginePath + "scripts/GameClass.js");
-	
-	
-	
+
 	//////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////// SERVER SCRIPTS //////////////////////////////
 	if(inIsServer)
@@ -216,6 +216,7 @@ LoadEngine = function LoadEngine(
 			if(ECGame.Settings.RUN_UNIT_TESTS)
 			{
 				ECGame.unitTests.runTests();
+				//TODO delete unit tests now?
 			}
 			ECGame.webServer = new ECGame.WebServerTools.WebServer();
 			ECGame.webServer.run();
@@ -237,11 +238,8 @@ LoadEngine = function LoadEngine(
 	include(inProtectedEnginePath + "scripts/Math/Point2D.js");
 	
 	include(inProtectedEnginePath + "scripts/BresenhamsLine.js");/////
-	include(inProtectedEnginePath + "scripts/Registry.js");////
 	
 	include(inProtectedEnginePath + "scripts/DataStructures/LinkedListNode.js");
-	
-	include(inProtectedEnginePath + "scripts/Events/EventSystem.js");
 	
 	include(inProtectedEnginePath + "scripts/Utilities/Timer.js");
 	include(inProtectedEnginePath + "scripts/Utilities/Updater.js");
@@ -281,6 +279,11 @@ LoadEngine = function LoadEngine(
 	include(inProtectedEnginePath + "scripts/GameObject.js");
 	include(inProtectedEnginePath + "scripts/GameObjectRef.js");
 	include(inProtectedEnginePath + "scripts/GameObjectCollection.js");
+
+	if(ECGame.Settings.Debug.UseServerMonitor)
+	{
+		include(inProtectedEnginePath + "scripts/ServerMonitor.js");
+	}
 
 	include(inProtectedEnginePath + "scripts/Compression/BitPacker.js");//TODO if multiplayer?
 	include(inProtectedEnginePath + "scripts/Compression/ArithmeticCompression.js");//TODO if multiplayer?
@@ -394,6 +397,7 @@ LoadEngine = function LoadEngine(
 	if(ECGame.Settings.RUN_UNIT_TESTS)
 	{
 		ECGame.unitTests.runTests();
+		//TODO delete unit tests now?
 	}
 	if(inIsServer)
 	{

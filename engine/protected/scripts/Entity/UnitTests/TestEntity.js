@@ -37,7 +37,7 @@ ECGame.unitTests.registerTest(
 				this.EntityComponent();
 			},
 			Parents : [ECGame.EngineLib.EntityComponent],
-			flags : {},
+			flags : { bastardClass: true },
 			ChainUp : [],
 			ChainDown : [],
 			Definition :
@@ -110,7 +110,10 @@ ECGame.unitTests.registerTest(
 		);
 		
 		anEntity.removedFromWorld(7);
+		//TODO should I be testing the world state or something?
 		anEntity.destroy();
+		aComponent.destroy();//required because component was removed first, else it should delete
+		//TODO trace destroy for components when deleted on client from server
 		
 		return true;
 	}

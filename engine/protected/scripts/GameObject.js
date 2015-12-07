@@ -23,19 +23,17 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 	Constructor : function GameObject()
 	{
 		var aThisClass,
-			aRegistry,
 			anInstanceID;
 		
 		//call parent constructor
 		this.EventSystem();
 			
 		aThisClass = this.getClass();
-		aRegistry = aThisClass.getInstanceRegistry();
-		anInstanceID = aRegistry.getUnusedID();
+		anInstanceID = aThisClass.getUnusedInstanceID();
 
 		this._myName = aThisClass.getName() + '_' + anInstanceID;
 		this._myID = anInstanceID;
-		aRegistry.register(this);
+		aThisClass.registerInstance(this);
 		
 		if(ECGame.Settings.isDebugPrint_GameObject())
 		{
@@ -92,9 +90,9 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		
 		setName : function setName(inName)
 		{
-			this.getClass().getInstanceRegistry().deregister(this);
+			this.getClass().deregisterInstance(this);
 			this._myName = inName;			
-			this.getClass().getInstanceRegistry().register(this);
+			this.getClass().registerInstance(this);
 				
 			//TODO event to all listeners: name changed!
 		},
@@ -106,9 +104,9 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		
 		setID : function setID(inID)
 		{
-			this.getClass().getInstanceRegistry().deregister(this);
+			this.getClass().deregisterInstance(this);
 			this._myID = inID;
-			this.getClass().getInstanceRegistry().register(this);
+			this.getClass().registerInstance(this);
 				
 			//TODO event to all listeners: ID changed!
 		},
@@ -130,7 +128,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 			this.cleanup();
 			
 			//remove from the instance list
-			this.getClass().getInstanceRegistry().deregister(this);
+			this.getClass().deregisterInstance(this);
 			
 			//wipe all properties
 			for(aProperty in this)
@@ -288,7 +286,7 @@ ECGame.EngineLib.GameObject = ECGame.EngineLib.Class.create({
 		
 		copyFrom : function copyFrom(inOther)
 		{
-			this.setName(this.getName() + '_(Copy_of_' + inOther.getName()+')');
+			this.setName(this.getName() + " (Copy of " + inOther.getName()+")");
 		}
 		
 		,getUpdatePriority : function getUpdatePriority()

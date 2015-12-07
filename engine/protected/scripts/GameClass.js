@@ -28,7 +28,8 @@ ECGame.EngineLib.Class.create({
 	Parents : [],
 	flags : {},
 		//netDynamic: sends dynamic messages over the network
-		//TODO clientOnly??(<-how), serverOnly, clientCreatable??
+		//	TODO clientOnly??(<-how), serverOnly, clientCreatable??
+		//bastardClass: don't register as child with the parent (usually for unit test only GameObjects)
 	ChainUp : [],
 	ChainDown : [],
 	//TODO? mustOverride //pure virtual
@@ -41,6 +42,8 @@ ECGame.EngineLib.Class.create({
 */
 
 
+///////////////////////////////////////////////////////////////////////////
+//Constructor of Class/////////////////////////////////////////////////////
 ECGame.EngineLib.Class = function Class(inConstructor, inParents)
 {
 	this._myConstructor = inConstructor;
@@ -49,15 +52,23 @@ ECGame.EngineLib.Class = function Class(inConstructor, inParents)
 		this._myParent = inParents[0];//TODO is this needed? or just parents?
 		this._myParents = inParents;//<=Not used atm!
 	}
-	this._myChildClasses = [];//<=also not used atm; TODO flag for not track a child class
+	this._myChildClasses = [];
 	this._myFlags = {};
 	this._myClassID = -1;
 	this._myInstanceRegistry = null;
+	if(ECGame.Settings.Debug.UseServerMonitor && ECGame.Settings.Network.isServer)
+	{
+		this._myEventSystem = null;
+	}
 };
 ECGame.EngineLib.Class.prototype.constructor = ECGame.EngineLib.Class;
+//Constructor of Class/////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
 
 
 
+///////////////////////////////////////////////////////////////////////////
+//Class Factory function://////////////////////////////////////////////////
 ECGame.EngineLib.Class.create = function create(inParams)
 {
 	var aClass,
@@ -196,8 +207,11 @@ ECGame.EngineLib.Class.create = function create(inParams)
 		if(aParent.getClass && aParent.getClass())
 		{
 			aParentClass = aParent.getClass();
-			//TODO IFF track this class
-			aParentClass._myChildClasses.push(Constructor);
+
+			if(!aFlags.bastardClass)
+			{
+				aParentClass._myChildClasses.push(Constructor);
+			}
 			for(aFlagIndex in aParentClass._myFlags)
 			{
 				aClass._myFlags[aFlagIndex] = aParentClass._myFlags[aFlagIndex];
@@ -278,11 +292,13 @@ ECGame.EngineLib.Class.create = function create(inParams)
 		
 		Constructor.registerClass = function registerClass()
 		{
-			var aClassRegistry = ECGame.EngineLib.Class.getInstanceRegistry();
-			if(aClassRegistry.findByName(aClass.getName()) !== aClass)
+			var aClassClass;
+
+			aClassClass = ECGame.EngineLib.Class;
+			if(aClassClass.findInstanceByName(aClass.getName()) !== aClass)
 			{
-				aClass._myClassID = aClassRegistry.getUnusedID();
-				aClassRegistry.register(aClass);
+				aClass._myClassID = aClassClass.getUnusedInstanceID();
+				aClassClass.registerInstance(aClass);
 			}
 		};
 	}
@@ -294,64 +310,340 @@ ECGame.EngineLib.Class.create = function create(inParams)
 	
 	return Constructor;
 };
+//Class Factory function://////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
 
 
 
+///////////////////////////////////////////////////////////////////////////
+//Basic get functions://///////////////////////////////////////////////////
 ECGame.EngineLib.Class.prototype.getConstructor = function getConstructor()
 {
 	return this._myConstructor;
 };
-
-
 
 ECGame.EngineLib.Class.prototype.getParent = function getParent()
 {
 	return this._myParent;
 };
 
-
-
 ECGame.EngineLib.Class.prototype.getName = function getName()
 {
 	return this._myConstructor.name;
 };
-
-
+ECGame.EngineLib.Class.getName = function getName()
+{
+	return 'Class';
+};
 
 ECGame.EngineLib.Class.prototype.getFlags = function getFlags()
 {
 	return this._myFlags;
 };
 
-
-
 ECGame.EngineLib.Class.prototype.getID = function getID()
 {
 	return this._myClassID;
 };
+//Basic get functions://///////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
 
 
 
-ECGame.EngineLib.Class.prototype.createInstanceRegistry = ECGame.EngineLib.Class.createInstanceRegistry = function createInstanceRegistry()//TODO rename reset?
+///////////////////////////////////////////////////////////////////////////
+//Debug Draw helpers///////////////////////////////////////////////////////
+ECGame.EngineLib.Class.getDebugString = function getDebugString()
+{
+	var aReturnString;
+
+	//if we draw class hierarchy then start with GameObject:
+	if(ECGame.Settings.Debug.Classes_DrawAsHierarchy)
+	{
+		aReturnString = ECGame.EngineLib.GameObject.getClass().getDebugString();
+	}
+	//else do it normally:
+	else
+	{
+		aReturnString = '+' + this.getName();
+
+		this._myInstanceRegistry.forAll(
+			function eachClassInstances(inInstance)
+			{
+				aReturnString += '\n' + inInstance.getDebugString(true, 1);
+			}
+		);
+	}
+
+	return aReturnString;
+};
+ECGame.EngineLib.Class.debugDraw = function debugDraw(inManualString)
+{
+/*	
+	//if we draw class hierarchy then start with GameObject and return:
+	if(ECGame.Settings.Debug.Classes_DrawAsHierarchy)
+	{
+		ECGame.EngineLib.GameObject.getClass().debugDraw();
+		return;
+	}
+	//else do it normally:
+
+	ECGame.instance.getGraphics().drawDebugText(
+		'+' + this.getName()
+		,ECGame.Settings.Debug.Classes_DrawColor
+	);
+
+	this._myInstanceRegistry.forAll(
+		function drawClassInstances(inInstance)
+		{
+			inInstance.debugDraw(true, 1);
+		}
+	);
+*/
+	var aStringArray
+		,i
+		;
+
+	aStringArray = (inManualString || "+++Client Object Tree:+++\n" + this.getDebugString()).split(/\n/g);
+
+	for(i = 0; i < aStringArray.length; ++i)
+	{
+		ECGame.instance.getGraphics().drawDebugText(
+			aStringArray[i]
+			//choose the color based on if its a class or object instance:
+			//	Note: classes lead with a '+' after possible appropriate indentation
+			,aStringArray[i].match(/^(\|\t)*\+/)
+				? ECGame.Settings.Debug.Classes_DrawColor
+				: ECGame.Settings.Debug.Classes_Instances_DrawColor
+		);
+	}
+};
+ECGame.EngineLib.Class.prototype.getDebugString = function getDebugString(inNoRecursive, inDepth)
+{
+	var i
+		,aReturnString
+		,aLeadString
+		;
+
+	inDepth = inDepth || 0;
+	aLeadString = '';
+
+	for(i = 0; i < inDepth; ++i)
+	{
+		aLeadString += '|\t';
+	}
+
+	aReturnString = aLeadString + '+' + this.getName() + ' (' + this.getID() + ')';
+
+	this._myInstanceRegistry.forAll(
+		function eachInstances(inInstance)
+		{
+			aReturnString += '\n' + aLeadString + '|\t(' + inInstance.getID() + ') ' + inInstance.getName();
+		}
+	);
+
+	if(!inNoRecursive)
+	{
+		++inDepth;
+		for(i = 0; i < this._myChildClasses.length; ++i)
+		{
+			aReturnString += '\n' + this._myChildClasses[i].getClass().getDebugString(inNoRecursive, inDepth);
+		}
+	}
+
+	return aReturnString;
+};
+/*
+ECGame.EngineLib.Class.prototype.debugDraw = function debugDraw(inNoRecursive, inDepth)
+{
+	//TODO use updater leading depth function!!
+	var i, aString = '';
+	for(i = 0; i < inDepth; ++i)
+	{
+		aString += '|\t';
+	}
+
+	inDepth = inDepth || 0;
+
+	ECGame.instance.getGraphics().drawDebugText(
+		aString + '+' + this.getName() + ' (' + this.getID() + ')'
+		,ECGame.Settings.Debug.Classes_DrawColor
+	);
+	this._myInstanceRegistry.forAll(
+		function drawClassInstances(inInstance)
+		{
+			ECGame.instance.getGraphics().drawDebugText(
+				aString + '|\t(' + inInstance.getID() + ') ' + inInstance.getName()
+				,ECGame.Settings.Debug.Classes_Instances_DrawColor
+			);
+		}
+	);
+
+	if(!inNoRecursive)
+	{
+		++inDepth;
+		for(i = 0; i < this._myChildClasses.length; ++i)
+		{
+			this._myChildClasses[i].getClass().debugDraw(inNoRecursive, inDepth);
+		}
+	}
+};
+*/
+//Debug Draw helpers///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+
+
+
+///////////////////////////////////////////////////////////////////////////
+//Instance Tracking:///////////////////////////////////////////////////////
+ECGame.EngineLib.Class.prototype.createInstanceRegistry
+	= ECGame.EngineLib.Class.createInstanceRegistry
+	= function createInstanceRegistry()
 {
 	this._myInstanceRegistry = new ECGame.EngineLib.Registry();
+
+	if(ECGame.Settings.Debug.UseServerMonitor && ECGame.Settings.Network.isServer)
+	{
+		this._myEventSystem = ECGame.EngineLib.EventSystem.create();
+	}
 };
+//=>
+//Create a master class registry
+//	(note: atm this is for availablity in unit tests, and it will be recreated
+//	in the Game.instance)
+ECGame.EngineLib.Class.createInstanceRegistry();
 
 
 
-ECGame.EngineLib.Class.prototype.getInstanceRegistry = ECGame.EngineLib.Class.getInstanceRegistry = function getInstanceRegistry()
+ECGame.EngineLib.Class.prototype._getInstanceRegistry
+	= ECGame.EngineLib.Class._getInstanceRegistry
+	= function _getInstanceRegistry()
 {
 	return this._myInstanceRegistry;
 };
 
 
 
+/*ECGame.EngineLib.Class.prototype.getMaxInstanceID
+	= */ECGame.EngineLib.Class.getMaxInstanceID
+	= function getMaxInstanceID()
+{
+	return this._myInstanceRegistry.getMaxID();
+};
+ECGame.EngineLib.Class.prototype.getUnusedInstanceID
+	= ECGame.EngineLib.Class.getUnusedInstanceID
+	= function getUnusedInstanceID()
+{
+	return this._myInstanceRegistry.getUnusedID();
+};
+
+
+
+ECGame.EngineLib.Class.prototype.registerInstance =
+	ECGame.EngineLib.Class.registerInstance =
+	function registerInstance(inItem)
+{
+	this._myInstanceRegistry.register(inItem);
+};
+ECGame.EngineLib.Class.prototype.deregisterInstance =
+	ECGame.EngineLib.Class.deregisterInstance =
+	function deregisterInstance(inItem)
+{
+	this._myInstanceRegistry.deregister(inItem);
+};
+if(ECGame.Settings.Debug.UseServerMonitor && ECGame.Settings.Network.isServer)
+{
+	//TODO make this path override inside a server only file
+
+	ECGame.EngineLib.Class.registerInstance = function registerInstance(inClass)
+	{
+		this._myInstanceRegistry.register(inClass);
+		inClass.registerListener('GameObjectRegistered', this);
+		inClass.registerListener('GameObjectDeregistered', this);
+	};
+	ECGame.EngineLib.Class.prototype.registerInstance = function registerInstance(inInstance)
+	{
+		this._myInstanceRegistry.register(inInstance);
+		this._myEventSystem.onEvent(
+			new ECGame.EngineLib.Events.GameObjectRegistered(inInstance)
+		);
+	};
+	/*
+	ECGame.EngineLib.Class.deregisterInstance = function deregisterInstance(inClass)
+	{
+		this._myInstanceRegistry.deregister(inClass);
+		inClass.deregisterListener(..., this);//TODO GameObjectDeregistered
+	};*/
+	ECGame.EngineLib.Class.prototype.deregisterInstance = function deregisterInstance(inInstance)
+	{
+		this._myInstanceRegistry.deregister(inInstance);
+		this._myEventSystem.onEvent(
+			new ECGame.EngineLib.Events.GameObjectDeregistered(inInstance)
+		);
+	};
+
+	ECGame.EngineLib.Class.prototype.registerListener =
+		ECGame.EngineLib.Class.registerListener =
+		function registerListener(inEvent, inListener)
+	{
+		this._myEventSystem.registerListener(inEvent, inListener);
+	};
+	ECGame.EngineLib.Class.prototype.deregisterListener =
+		ECGame.EngineLib.Class.deregisterListener =
+		function deregisterListener(inEvent, inListener)
+	{
+		this._myEventSystem.deregisterListener(inEvent, inListener);
+	};
+	ECGame.EngineLib.Class.onGameObjectRegistered = function onGameObjectRegistered(inEvent)
+	{
+		//refire it:
+		this._myEventSystem.onEvent(inEvent);
+	};
+	ECGame.EngineLib.Class.onGameObjectDeregistered = function onGameObjectDeregistered(inEvent)
+	{
+		//refire it:
+		this._myEventSystem.onEvent(inEvent);
+	};
+}
+
+
+
+ECGame.EngineLib.Class.prototype.findInstanceByName
+	= ECGame.EngineLib.Class.findInstanceByName
+	= function findInstanceByName(inName)
+{
+	return this._myInstanceRegistry.findByName(inName);
+};
+ECGame.EngineLib.Class.prototype.findInstanceByID
+	= ECGame.EngineLib.Class.findInstanceByID
+	= function findInstanceByID(inID)
+{
+	return this._myInstanceRegistry.findByID(inID);
+};
+
+
+
+ECGame.EngineLib.Class.prototype.forAllInstances
+	= ECGame.EngineLib.Class.forAllInstances
+	= function forAllInstances(inCallback)
+{
+	return this._myInstanceRegistry.forAll(inCallback);
+};
+//Instance Tracking:///////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+
+
+
+
+///////////////////////////////////////////////////////////////////////////
+//Private helper functions/////////////////////////////////////////////////
 ECGame.EngineLib.Class._createChainUpFunction = function _createChainUpFunction(inMethodName)
 {
-	return function()
+	return function ChainUp()
 	{
-		var aFunctionIndex,
-			aFunctionArray;
+		var aFunctionIndex
+			,aFunctionArray
+			;
+
 		aFunctionArray = this._chainUpMethods[inMethodName];
 		for(aFunctionIndex in aFunctionArray)
 		{
@@ -359,15 +651,14 @@ ECGame.EngineLib.Class._createChainUpFunction = function _createChainUpFunction(
 		}
 	};
 };
-
-
-
 ECGame.EngineLib.Class._createChainDownFunction = function _createChainDownFunction(inMethodName)
 {
-	return function()
+	return function ChainDown()
 	{
-		var aFunctionIndex,
-			aFunctionArray;
+		var aFunctionIndex
+			,aFunctionArray
+			;
+
 		aFunctionArray = this._chainDownMethods[inMethodName];
 		for(aFunctionIndex in aFunctionArray)
 		{
@@ -375,9 +666,18 @@ ECGame.EngineLib.Class._createChainDownFunction = function _createChainDownFunct
 		}
 	};
 };
+//Private helper functions/////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////
+
+
+
+
+
 
 
 /*
+Old scratch work, maybe useful for later:
+
 ECGame.EngineLib.Class.serializeAll = function serializeAll(inSerializer)
 {
 	var dirtyObjects,
@@ -417,7 +717,7 @@ ECGame.EngineLib.Class.serializeAll = function serializeAll(inSerializer)
 			type : 'int',
 			net : true,
 			min : 0,
-			max : ECGame.EngineLib.Class.getInstanceRegistry().getMaxID()
+			max : ECGame.EngineLib.Class.getInstance Registry().getMaxID()
 		},
 		{
 			name : 'instanceID',
@@ -433,10 +733,10 @@ ECGame.EngineLib.Class.serializeAll = function serializeAll(inSerializer)
 	
 	if()//writing
 	{
-		ECGame.EngineLib.Class.getInstanceRegistry().forAll(
+		ECGame.EngineLib.Class.getInstance Registry().forAll(
 			function ?TODOFuncName?(inClass)
 			{
-				inClass.getInstanceRegistry().forAll(
+				inClass.getInstance Registry().forAll(
 					function ?name?(inObject)
 					{
 						dirtyObjects.push(inObject);
@@ -468,8 +768,8 @@ ECGame.EngineLib.Class.serializeAll = function serializeAll(inSerializer)
 			for(i = 0; i < serializeHeader.numObjects; ++i)
 			{
 				inSerializer.serializeObject(objectHeader, objectHeaderFormat);
-				objectClass = ECGame.EngineLib.Class.getInstanceRegistry().findByID(objectHeader.classID);
-				object = objectClass.getInstanceRegistry().findByID(objectHeader.instanceID);
+				objectClass = ECGame.EngineLib.Class.getInstance Registry().findByID(objectHeader.classID);
+				object = objectClass.getInstance Registry().findByID(objectHeader.instanceID);
 				
 				//if not found, and not server, create it
 				if(!object)

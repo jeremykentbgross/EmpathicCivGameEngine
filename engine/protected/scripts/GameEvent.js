@@ -98,6 +98,37 @@ ECGame.EngineLib.Events.GameObjectDestroyed = ECGame.EngineLib.Class.create({
 		copyFrom : function copyFrom(/*inOther*/){return;}
 	}
 });
+
+ECGame.EngineLib.Events.GameObjectRegistered = ECGame.EngineLib.Class.create({
+	Constructor : function GameObjectRegistered(inObject)
+	{
+		this.GameEventBase('onGameObjectRegistered');
+		this.myObject = inObject;
+	},
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition : 
+	{
+		copyFrom : function copyFrom(/*inOther*/){return;}
+	}
+});
+ECGame.EngineLib.Events.GameObjectDeregistered = ECGame.EngineLib.Class.create({
+	Constructor : function GameObjectDeregistered(inObject)
+	{
+		this.GameEventBase('onGameObjectDeregistered');
+		this.myObject = inObject;
+	},
+	Parents : [ECGame.EngineLib.Events.GameEventBase],
+	flags : {},
+	ChainUp : [],
+	ChainDown : [],
+	Definition : 
+	{
+		copyFrom : function copyFrom(/*inOther*/){return;}
+	}
+});
 //GameObject Events/////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////
 

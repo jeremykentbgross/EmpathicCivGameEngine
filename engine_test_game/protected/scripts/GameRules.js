@@ -33,7 +33,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 		this._myMinPhysicsPartitionSize = 8;
 		
 		//game world
-		this._myGameWorld = null;	//ECGame.EngineLib.World2D.getClass().getInstanceRegistry().findByID(1)
+		this._myGameWorld = null;	//ECGame.EngineLib.World2D.getClass().findInstanceByID(1)
 		this._myTileset = null;		//TODO serialize this and do not create it here but only on server!!!!!!!
 		
 		//entity stuff:
@@ -396,20 +396,26 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				;
 				
 			this._myReferenceEntity = ECGame.EngineLib.Entity.create();
+			this._myReferenceEntity.setName("ReferenceEntity");
 			
 			aComponent = ECGame.Lib.EntityComponent_Input.create();
+			aComponent.setName("ReferenceEntityComponent_Input");
 			this._myReferenceEntity.addComponent(aComponent);
 			
 			aComponent = ECGame.Lib.EntityComponent_Sprite.create(this._myAnimations);
+			aComponent.setName("ReferenceEntityComponent_Sprite");
 			this._myReferenceEntity.addComponent(aComponent);
 			
 			aComponent = ECGame.Lib.EntityComponent_Physics2D.create();
+			aComponent.setName("ReferenceEntityComponent_Physics");
 			this._myReferenceEntity.addComponent(aComponent);
 			
 			aComponent = ECGame.EngineLib.EntityComponent_Camera2D.create(/*TODO params??*/);
+			aComponent.setName("ReferenceEntityComponent_Camera2D");
 			this._myReferenceEntity.addComponent(aComponent);
 			
 			aComponent = ECGame.EngineLib.EntityComponent_SoundPlayer.create();
+			aComponent.setName("ReferenceEntityComponent_SoundPlayer");
 			this._myReferenceEntity.addComponent(aComponent);
 			
 			if(!ECGame.Settings.Network.isMultiplayer)
@@ -502,8 +508,9 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			anEntity = this._myEntities[inEvent.user.userID];
 			this._myGameWorld.removeEntity(anEntity);
 			
+			//TODO: iff reconnects (ie https/??)
 /*TODO uncomment??*/	//this._myMasterNetGroup.removeObject(anEntity);
-//			anEntity.destroy();	//TODO remove from group ^^^ and then set destory on timer if they dont reconnect
+			anEntity.destroy();	//TODO remove from group ^^^ and then set destory on timer if they dont reconnect
 		},
 		
 		render : function render(inGraphics)
@@ -514,7 +521,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 			
 			if(ECGame.instance.isRunning())
 			{
-				aWorld = ECGame.EngineLib.World2D.getClass().getInstanceRegistry().findByID(1);
+				aWorld = ECGame.EngineLib.World2D.getClass().findInstanceByID(1);
 				if(!aWorld)
 				{
 					return;
@@ -569,7 +576,7 @@ ECGame.Lib.GameRules = ECGame.EngineLib.Class.create({
 				,aMap
 				;
 			
-			aWorld = ECGame.EngineLib.World2D.getClass().getInstanceRegistry().findByID(1);
+			aWorld = ECGame.EngineLib.World2D.getClass().findInstanceByID(1);
 			if(!aWorld)
 			{
 				return;

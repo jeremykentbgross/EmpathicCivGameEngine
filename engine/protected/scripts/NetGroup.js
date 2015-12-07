@@ -47,6 +47,12 @@ ECGame.EngineLib.NetGroup = ECGame.EngineLib.Class.create({
 		init : function init(inNetwork)
 		{
 			this._myNetwork = inNetwork;
+
+			//TODO instead of adding it here, add it per user based on permissions??
+			if(ECGame.Settings.Debug.UseServerMonitor && ECGame.Settings.Network.isServer)
+			{
+				this.addObject(ECGame.instance.myServerMonitor);
+			}
 		},
 		
 		update : function update(/*inUpdateData*/)

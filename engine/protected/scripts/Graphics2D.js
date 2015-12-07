@@ -37,6 +37,8 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 		
 		this._myDebugTextArray = null;
 		this._myDebugTextAssociatedColorsArray = null;
+		this._myDebugTextStartIndex = 0;
+		this._myTabReplaceString = "        ";
 		
 		this._myCurrentCamera = null;
 		this._myDrawOffsetX = 0;
@@ -77,6 +79,8 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 			this._myDebugTextAssociatedColorsArray = [];
 			
 			this._myInput = ECGame.EngineLib.Input.create(this, this._myCanvas);
+			//register for input to scroll debug draw text:
+			this._myInput.registerListener('Input', this);
 			
 			this.setLineWidth(1);
 			
@@ -106,12 +110,23 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 		
 		drawDebugText : function drawDebugText(inText, inColor)
 		{
+			var i;
+
 			inColor = inColor || ECGame.Settings.Debug.TextDefault_DrawColor;
 			
 			if(ECGame.Settings.isDebugDraw_Text())
 			{
-				this._myDebugTextArray.push(' ' + inText + ' ');
-				this._myDebugTextAssociatedColorsArray.push(inColor);
+				//setup tabs, global and multiple line:
+				inText = inText.replace(/\t/g, this._myTabReplaceString);
+
+				//split lines also
+				inText = inText.split(/\n|\r/g);//	\f-form feed also?
+
+				for(i = 0; i < inText.length; ++i)
+				{
+					this._myDebugTextArray.push(' ' + inText[i] + ' ');
+					this._myDebugTextAssociatedColorsArray.push(inColor);
+				}
 			}
 		},
 		
@@ -365,6 +380,17 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 		//context wrapper functions////////////////////////////////////////////
 		///////////////////////////////////////////////////////////////////////
 		
+		onInput : function onInput(inEvent)
+		{
+			if(inEvent.keys[inEvent.KEYBOARD.KEY_PageUp])
+			{
+				--this._myDebugTextStartIndex;
+			}
+			if(inEvent.keys[inEvent.KEYBOARD.KEY_PageDown])
+			{
+				++this._myDebugTextStartIndex;
+			}
+		},
 		
 		_drawDebugText : function _drawDebugText()
 		{
@@ -383,6 +409,15 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 			//set font
 			this._myBackBufferCanvas2DContext.font = fontSize + 'px Arial';
 
+			//clamp the start index to [0, n-1]
+			this._myDebugTextStartIndex = Math.max(
+				0
+				,Math.min(
+					this._myDebugTextStartIndex
+					,this._myDebugTextArray.length - 1
+				)
+			);
+
 			//figure out a backdrop box size to draw text in and draw it
 			maxWidth = 0;
 			for(i = 0; i < this._myDebugTextArray.length; ++i)
@@ -395,11 +430,11 @@ ECGame.EngineLib.Graphics2D = ECGame.EngineLib.Class.create({
 				x,
 				y,
 				maxWidth,
-				fontSize * (this._myDebugTextArray.length + 0.5)
+				fontSize * (this._myDebugTextArray.length - this._myDebugTextStartIndex + 0.5)
 			);
 			
 			//draw all the text in the correct color
-			for(i = 0; i < this._myDebugTextArray.length; ++i)
+			for(i = this._myDebugTextStartIndex; i < this._myDebugTextArray.length; ++i)
 			{
 				this._myBackBufferCanvas2DContext.fillStyle = this._myDebugTextAssociatedColorsArray[i];
 				y += fontSize;

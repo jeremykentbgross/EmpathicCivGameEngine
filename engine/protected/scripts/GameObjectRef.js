@@ -77,10 +77,10 @@ ECGame.EngineLib.GameObjectRef.prototype.deref = function deref(inSafe)
 		}
 		//todo error/warn otherwise
 		
-		objectClass = ECGame.EngineLib.Class.getInstanceRegistry().findByName(pathTokens[0]);
+		objectClass = ECGame.EngineLib.Class.findInstanceByName(pathTokens[0]);
 		if(objectClass)
 		{
-			this._value = objectClass.getInstanceRegistry().findByName(pathTokens[1]);
+			this._value = objectClass.findInstanceByName(pathTokens[1]);
 			if(this._value)
 			{
 				this._path = null;
@@ -98,10 +98,10 @@ ECGame.EngineLib.GameObjectRef.prototype.deref = function deref(inSafe)
 	
 	if(this.classID !== -1 && this.instanceID !== -1)
 	{
-		objectClass = ECGame.EngineLib.Class.getInstanceRegistry().findByID(this.classID);
+		objectClass = ECGame.EngineLib.Class.findInstanceByID(this.classID);
 		if(objectClass)
 		{
-			this._value = objectClass.getInstanceRegistry().findByID(this.instanceID);
+			this._value = objectClass.findInstanceByID(this.instanceID);
 			if(this._value)
 			{
 				this.classID = -1;

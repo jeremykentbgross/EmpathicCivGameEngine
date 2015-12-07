@@ -33,9 +33,7 @@ ECGame.unitTests.registerTest(
 			;
 		
 		aClassNamespace = {};
-		
-		ECGame.EngineLib.Class.createInstanceRegistry();
-		
+
 		aClassNamespace.TestClass1 = ECGame.EngineLib.Class.create({
 			Constructor : function TestClass1(){return;},
 			Parents : null,
@@ -88,7 +86,7 @@ ECGame.unitTests.registerTest(
 				this.counter = 0;
 			},
 			Parents : [ECGame.EngineLib.GameObject],
-			flags : {},
+			flags : { bastardClass: true },
 			ChainUp : ['chainUp'],
 			ChainDown : ['chainDown'],
 			Definition :
@@ -111,16 +109,16 @@ ECGame.unitTests.registerTest(
 		});
 		aClassNamespace.TestObjectClass1.registerClass();
 		
-		aFoundClass = ECGame.EngineLib.Class.getInstanceRegistry().findByName('TestObjectClass1');
+		aFoundClass = ECGame.EngineLib.Class.findInstanceByName('TestObjectClass1');
 		aTestObjectClass1 = aFoundClass.create();
 		console.assert(aTestObjectClass1.isA(aClassNamespace.TestObjectClass1), "isA() Failed on found created class!");
 		
-		aFoundInstance = aFoundClass.getInstanceRegistry().findByName(aTestObjectClass1.getName());
+		aFoundInstance = aFoundClass.findInstanceByName(aTestObjectClass1.getName());
 		console.assert(aTestObjectClass1 === aFoundInstance, "Failed to find class instance!");
 		
 		anInstanceName = aTestObjectClass1.getName();
 		aTestObjectClass1.destroy();
-		aFoundInstance = aFoundClass.getInstanceRegistry().findByName(anInstanceName);
+		aFoundInstance = aFoundClass.findInstanceByName(anInstanceName);
 		console.assert(!aFoundInstance, "Found destroyed object in registry!");
 		
 		
@@ -161,6 +159,8 @@ ECGame.unitTests.registerTest(
 			aChainTestObject.down2 === 4,
 			"Chain up and down calls are not working!"
 		);
+
+		aChainTestObject.destroy();
 		
 		return true;
 	}

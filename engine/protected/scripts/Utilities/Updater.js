@@ -109,13 +109,13 @@ ECGame.EngineLib.Updater = ECGame.EngineLib.Class.create({
 						+ (
 							anUpdateArray[i].getName ?
 							anUpdateArray[i].getName()
-							:'?'
+							:'????'
 						)
 						+ " (Priority:"
 						+ (
 							anUpdateArray[i].getUpdatePriority ?
 							anUpdateArray[i].getUpdatePriority()
-							:'??????????????????????'
+							:'????'
 						)
 						 + ')'
 					);
@@ -142,7 +142,7 @@ ECGame.EngineLib.Updater = ECGame.EngineLib.Class.create({
 			aLeadString = '';
 			for(i = 0; i < inDepth; ++i)
 			{
-				aLeadString += '    ';
+				aLeadString += '\t';
 			}
 			
 			return aLeadString;

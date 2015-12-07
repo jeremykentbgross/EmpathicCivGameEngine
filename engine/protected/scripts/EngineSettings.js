@@ -266,6 +266,11 @@ ECGame.Settings =
 		CameraTarget_Size : 10,
 		CameraTarget_DrawColor : 'rgba(255, 255, 0, 1)',
 		//TODO draw entity position locators
+
+		Classes_Draw : true,
+		Classes_DrawAsHierarchy : false,
+		Classes_DrawColor : 'rgba(0, 192, 128, 1)',
+		Classes_Instances_DrawColor : 'rgba(255, 255, 255, 1)',
 		
 		//QuadTree
 		QuadTree_Node_DrawColor : 'rgba(64, 64, 64, 1)',
@@ -313,7 +318,6 @@ ECGame.Settings =
 		//Network
 		NetworkMessages_Draw : true,
 		NetworkMessages_DrawColor : 'rgba(0, 128, 255, 1)',
-
 		/*
 		NetworkMessages_Print:
 			0 - none
@@ -336,11 +340,14 @@ ECGame.Settings =
 		
 		Obfuscation_Print : false,//TODO maybe put with the other obfuscation stuff
 
-		TraceSubProcesses : false,
+		TraceSubProcesses : false,	//for getting traces to external/system function calls
 		
 		Updater_Print : false,
 		Updater_Draw : true,
-		Updater_DrawColor : 'rgba(0, 255, 0, 1)'
+		Updater_DrawColor : 'rgba(0, 255, 0, 1)',
+
+		//Note: changing this requires restarting server:
+		UseServerMonitor: true
 	},
 	
 	//helper isDebug functions
@@ -479,6 +486,11 @@ ECGame.Settings =
 	{
 		return this.isDebugDraw() && this.Debug.Updater_Draw;
 	}
+//
+	,isDebugDraw_Classes : function isDebugDraw_Classes()
+	{
+		return this.isDebugDraw() && this.Debug.Classes_Draw;
+	}
 
 	,isDebugDraw_WorldSpacialHash : function isDebugDraw_WorldSpacialHash()
 	{
@@ -498,7 +510,7 @@ ECGame.Settings =
 
 
 ///////////////////////////////////////////////////////////////////
-//NOTE: CUSTOM LOCAL CHANGES GO BELOW HERE
+//NOTE: CUSTOM LOCAL CHANGES GO BELOW HERE (or better: in a game settings file using this format)
 //
 //example:
 //	ECGame.Settings.Debug.Physics_Draw = true;
@@ -508,3 +520,5 @@ ECGame.Settings =
 //ECGame.Settings.Debug.Text_Size = 10;
 //ECGame.Settings.Graphics.backBufferWidth = 1024;
 //ECGame.Settings.Graphics.backBufferHeight = 512;
+
+

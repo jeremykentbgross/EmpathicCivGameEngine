@@ -213,7 +213,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 				type : 'int',
 				net : true,
 				min : 0,
-				max : ECGame.EngineLib.Class.getInstanceRegistry().getMaxID()
+				max : ECGame.EngineLib.Class.getMaxInstanceID()
 			},
 			{
 				name : 'instanceID',
@@ -446,7 +446,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					}
 					
 					//find the class
-					anObjectClass = ECGame.EngineLib.Class.getInstanceRegistry().findByID(anObjectHeader.classID);
+					anObjectClass = ECGame.EngineLib.Class.findInstanceByID(anObjectHeader.classID);
 					if(!anObjectClass)
 					{
 						//TODO needs to be more than a warning here
@@ -459,7 +459,7 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					);
 
 					//find the instance
-					anObject = anObjectClass.getInstanceRegistry().findByID(anObjectHeader.instanceID);
+					anObject = anObjectClass.findInstanceByID(anObjectHeader.instanceID);
 //TODO: console.assert(!anObject ,"New Network Object already exists!:" + anObject.getTxtPath());
 					
 					//if not found, and not server, create it
@@ -499,14 +499,14 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					}
 					
 					//find the class
-					anObjectClass = ECGame.EngineLib.Class.getInstanceRegistry().findByID(anObjectHeader.classID);
+					anObjectClass = ECGame.EngineLib.Class.findInstanceByID(anObjectHeader.classID);
 					if(!anObjectClass)
 					{
 						console.warn("Unknown classID " + anObjectHeader.classID);
 					}
 					
 					//find the instance
-					anObject = anObjectClass.getInstanceRegistry().findByID(anObjectHeader.instanceID);
+					anObject = anObjectClass.findInstanceByID(anObjectHeader.instanceID);
 					console.assert(
 						anObject,
 						//TODO use proper object path style
@@ -583,13 +583,13 @@ ECGame.EngineLib.NetworkBase = ECGame.EngineLib.Class.create({
 					}
 					
 					//find the class
-					anObjectClass = ECGame.EngineLib.Class.getInstanceRegistry().findByID(anObjectHeader.classID);
+					anObjectClass = ECGame.EngineLib.Class.findInstanceByID(anObjectHeader.classID);
 					if(!anObjectClass)
 					{
 						console.warn("Unknown classID " + anObjectHeader.classID);
 					}
 					//find the instance
-					anObject = anObjectClass.getInstanceRegistry().findByID(anObjectHeader.instanceID);
+					anObject = anObjectClass.findInstanceByID(anObjectHeader.instanceID);
 					
 					if(!anObject)
 					{

@@ -41,11 +41,60 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 	ChainDown : [],
 	Definition :
 	{
+		//keyCode values:
+		//	https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/keyCode
+		//	Note: keyCode is supposed to be depricated, which could be a pain in my ass
+		//		KeyboardEvent (just in case i need to redo these):
+		//			https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent
 		KEYBOARD : {
+//			KEY_ : 0,
+//			KEY_ : 1,
+//			KEY_ : 2,
+//			KEY_ : 3,
+//			KEY_ : 4,
+//			KEY_ : 5,
+//			KEY_ : 6,
+//			KEY_ : 7,
+//			KEY_ : 8,
 			KEY_TAB : 9,
+//			KEY_ : 10,
+//			KEY_ : 11,
+//			KEY_ : 12,
 			KEY_RETURN : 13,
+//			KEY_ : 14,
+//			KEY_ : 15,
+//			KEY_ : 16,
+//			KEY_ : 17,
+//			KEY_ : 18,
+//			KEY_ : 19,
+//			KEY_ : 20,
+//			KEY_ : 21,
+//			KEY_ : 22,
+//			KEY_ : 23,
+//			KEY_ : 24,
+//			KEY_ : 25,
+//			KEY_ : 26,
 			KEY_ESC : 27,
-			
+//			KEY_ : 28,
+//			KEY_ : 29,
+//			KEY_ : 30,
+//			KEY_ : 31,
+//			KEY_ : 32,
+			KEY_PageUp : 33,
+			KEY_PageDown : 34,
+//			KEY_ : 35,
+//			KEY_ : 36,
+			KEY_ArrowLeft : 37,
+			KEY_ArrowUp : 38,
+			KEY_ArrowRight : 39,
+			KEY_ArrowDown : 40,
+//			KEY_ : 41,
+//			KEY_ : 42,
+//			KEY_ : 43,
+//			KEY_ : 44,
+//			KEY_ : 45,
+//			KEY_ : 46,
+//			KEY_ : 47,
 			KEY_0 : 48,
 			KEY_1 : 49,
 			KEY_2 : 50,
@@ -56,7 +105,13 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 			KEY_7 : 55,
 			KEY_8 : 56,
 			KEY_9 : 57,
-			
+//			KEY_ : 58,
+//			KEY_ : 59,
+//			KEY_ : 60,
+//			KEY_ : 61,
+//			KEY_ : 62,
+//			KEY_ : 63,
+//			KEY_ : 64,
 			KEY_A : 65,
 			KEY_B : 66,
 			KEY_C : 67,
@@ -83,7 +138,12 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 			KEY_X : 88,
 			KEY_Y : 89,
 			KEY_Z : 90,
-			
+//			KEY_ : 91,
+//			KEY_ : 92,
+//			KEY_ : 93,
+//			KEY_ : 94,
+//			KEY_ : 95,
+//			KEY_ : 96,
 			//WARNING: all the lower case ones don't seem to be generated in firefox!!
 			KEY_a : 97,
 			KEY_b : 98,
@@ -111,6 +171,7 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 			KEY_x : 120,
 			KEY_y : 121,
 			KEY_z : 122
+//			KEY_ : ???,
 		},
 		getName : function getName()
 		{
@@ -175,6 +236,8 @@ ECGame.EngineLib.Input = ECGame.EngineLib.Class.create({
 			this._supressKeyboardEvents = inSupress;
 		},
 		
+		//https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent
+		//https://developer.mozilla.org/en/docs/Web/API/MouseEvent
 		_handleInput : function _handleInput(inEvent)
 		{
 			var eventType

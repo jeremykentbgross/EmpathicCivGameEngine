@@ -483,6 +483,7 @@ ECGame.WebServerTools.Obfuscator.prototype._checkForErrors = function _checkForE
 	}
 	
 	//TODO document
+/*not correct for all cases, maybe put back later with a fix?:
 	regEx.compile('\\x7d\\s*([\\w]+\\x2e)+\\w+\\x3d', 'g');//	}asdf.asdf.prototype =
 	values = this._src.match(regEx);
 	if(values)
@@ -494,7 +495,7 @@ ECGame.WebServerTools.Obfuscator.prototype._checkForErrors = function _checkForE
 				console.warn("Missing ';' before member function definition: " + values[i]);//TODO change warning/assert?
 			}
 		}
-	}
+	}*/
 };
 
 
