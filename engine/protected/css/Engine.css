@@ -1,3 +1,29 @@
+/*
+	© Copyright 2011-2016 Jeremy Gross
+	jeremykentbgross@gmail.com
+	Distributed under the terms of the GNU Lesser GPL (LGPL)
+	
+	This file is part of EmpathicCivGameEngine™.
+	
+	EmpathicCivGameEngine™ is free software: you can redistribute it and/or modify
+	it under the terms of the GNU Lesser General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	EmpathicCivGameEngine™ is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Lesser General Public License for more details.
+	
+	You should have received a copy of the GNU Lesser General Public License
+	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*!!
+	* document: file
+	* description: This file is the css for the ECGE main page.
+*/
+
 body
 {
 	background-color : #000000;
@@ -79,11 +105,14 @@ canvas
 	display : none;
 }
 
-/*
-TODO either:
-1) Make chatContainerClass that is assigned by the chat system!
-2) Add the chatContainer with the chat system.
-ATM chat container is visible when it is not multiplayer!
+/*!!
+	* document: TODO
+	* category: Refactor
+	* priority: 8
+	* description: either:/
+		1) Make chatContainerClass that is assigned by the chat system!/
+		2) Add the chatContainer with the chat system./
+		ATM chat container is visible when it is not multiplayer!/
 */
 #chatContainer
 {
@@ -126,7 +155,7 @@ ATM chat container is visible when it is not multiplayer!
 {
 }
 
-/*TODO classes for chat from team, enemy, general, etc*/
+/*!!TODO Refactor 8:classes for chat from team, enemy, general, etc*/
 
 .netConnected
 {

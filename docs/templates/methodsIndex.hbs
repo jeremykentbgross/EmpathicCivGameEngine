@@ -1,0 +1,55 @@
+<!--
+	© Copyright 2011-2016 Jeremy Gross
+	jeremykentbgross@gmail.com
+	Distributed under the terms of the GNU Lesser GPL (LGPL)
+		
+	This file is part of EmpathicCivGameEngine™.
+	
+	EmpathicCivGameEngine™ is free software: you can redistribute it and/or modify
+	it under the terms of the GNU Lesser General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	EmpathicCivGameEngine™ is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Lesser General Public License for more details.
+	
+	You should have received a copy of the GNU Lesser General Public License
+	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!--!!
+	* document: file
+	* description: This file is a template for the ECGE Documentation Generation.  (Creates Method Index)
+-->
+
+<h3>Methods:</h3>
+<table>
+	<tbody>
+		<tr>
+			<td class="tableColumnLabel">ReturnType(s):</td>
+			<td class="tableColumnLabel">Origin:</td>
+			<td class="tableColumnLabel">Name:</td>
+			<!--<td class="tableColumnLabel">Description:</td>-->
+		</tr>
+		{{#each	containedMethods}}
+		<tr style="{{isOverrideStyle ../this this}}">
+			<td>{{> types returns}}</td>
+			<td>
+				{{#if namespace}}
+					<a href="/_protected_/docs/generated/namespaces/{{namespace}}.html" target="mainFrame">{{namespace}}</a>
+				{{/if}}
+				{{#if class}}
+					<a href="/_protected_/docs/generated/classes/{{class}}.html" target="mainFrame">{{class}}</a>
+				{{/if}}
+			</td>
+			<td><a href="#{{#if namespace}}{{namespace}}.{{/if}}{{#if class}}{{class}}.{{/if}}{{name}}">{{name}}</a>({{#each parameters}}{{#if @index}}, {{/if}}{{name}}{{/each}})
+				<!--<br/>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;* {{description}}-->
+			</td>
+			<!--<td>{{description}}</td>-->
+		</tr></s>
+		{{/each}}
+	</tbody>
+</table>
+

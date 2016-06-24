@@ -27,11 +27,15 @@
 		"mongoose": "3.8.25",
 		"connect-mongo": "0.8.0",
 
-		"node-inspector" : "0.4.0",
+		"node-inspector" : "0.12.5",
 
 		"npmedge" : "0.2.1",
 
-		"ws" : "0.7.1"
+		"ws" : "0.7.1",
+
+		"handlebars" : "4.0.5",
+		"node-plantuml" : "0.4.4",
+		"ajv" : "3.8.2"
 	}
 }
 

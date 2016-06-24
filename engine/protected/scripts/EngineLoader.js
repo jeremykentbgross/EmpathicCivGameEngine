@@ -1,5 +1,5 @@
 /*
-	© Copyright 2012 Jeremy Gross
+	© Copyright 2011-2016 Jeremy Gross
 	jeremykentbgross@gmail.com
 	Distributed under the terms of the GNU Lesser GPL (LGPL)
 	
@@ -21,6 +21,32 @@
 
 /*global LoadEngine:true */
 
+/*!!
+	* document: file
+	* description: This file contains the central/master engine loading function /
+		for the entire system
+*/
+
+/*!!
+	@ namespace: Global
+	* description: The Global Namespace.  Used for purely global functions/values.
+*/
+
+/*!!
+	@ method: LoadEngine
+	* namespace: Global
+	* description: The loading entry point for the engine and game
+	* parameters:
+	[
+		* parameter ["boolean"] inIsServer: Are we loading from the server (or the client)?
+		* parameter ["string"] inProtectedEnginePath: Path to the protected engine files
+		* parameter ["string"] inPrivateEnginePath: Path to the private engine files
+		* parameter ["string"] inProtectedGamePath: Path to the protected game files
+		* parameter ["string"] inPrivateGamePath: Path to the private game files
+	]
+	* returns: undefined
+*/
+//!!TODO Validate 8: Are the parameters here still really needed?
 LoadEngine = function LoadEngine(
 	inIsServer
 	,inProtectedEnginePath
@@ -30,46 +56,61 @@ LoadEngine = function LoadEngine(
 )
 {
 	var include
+		,createAndRunGame
 		;
 	
 	
 	//////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////Global Namespaces//////////////////////////////
 	//Setup Global namespaces:
-	/**!
-		@namespace: ECGame
-		/description: This is the master namespace for the entire game / engine
+
+	/*!!
+		* document: namespace
+		* name: ECGame
+		* description: This is the master namespace for the entire game / engine
 	*/
 	ECGame = function ECGame() { return; };
 	ECGame = new ECGame();
 	
-	/**!
-		@namespace: EngineLib
-		/parentNamespace: ECGame
-		/description: This is the engine namespace
+	/*!!
+		* document: namespace
+		* name: EngineLib
+		* namespace: ECGame
+		* description: This is the engine library namespace
 	*/
 	ECGame.EngineLib = function ECGameEngineLib() { return; };
 	ECGame.EngineLib = new ECGame.EngineLib();
 	
-	/**!
-		@namespace: Lib
-		/parentNamespace: ECGame
-		/description: This is the game specific namespace
+	/*!!
+		* document: namespace
+		* name: Lib
+		* namespace: ECGame
+		* description: This is the game specific library namespace
 	*/
 	ECGame.Lib = function ECGameLib() { return; };
 	ECGame.Lib = new ECGame.Lib();
 	
-	//ECGame.Settings TODO refactor/change how settings work?
-	//ECGame.instance
-	//ECGame.webServer
-	//GameLocalization
-	//ECGame.unitTests
+	createAndRunGame = function createAndRunGame()
+	{
+		/*!!
+			* document: member
+			* name: instance
+			* namespace: ECGame
+			* types: ["ECGame.EngineLib.GameInstance"]
+			* default: ECGame.EngineLib.GameInstance.create()
+			* description: the game instance
+		*/
+		ECGame.instance = ECGame.EngineLib.GameInstance.create();
+		ECGame.instance.run();
+	};
+
 	if(inIsServer)
 	{
-		/**!
-			@namespace: WebServerTools
-			/parentNamespace: ECGame
-			/description: This is the namespace for all webserver related tools
+		/*!!
+			* document: namespace
+			* name: WebServerTools
+			* namespace: ECGame
+			* description: This is the namespace for all webserver related tools
 		*/
 		ECGame.WebServerTools = function ECGameWebServerTools() { return; };
 		ECGame.WebServerTools = new ECGame.WebServerTools();
@@ -141,35 +182,88 @@ LoadEngine = function LoadEngine(
 		include(inPrivateEnginePath + "scripts/ServerConsoleMods.js");
 	}
 	
+	/*!!
+		* document: beginNamespace
+		* name: LoadParameters
+		* namespace: ECGame.EngineLib
+		* description: This isn't used atm
+	*/
+	//!!TODO Refactor 8: Remove this, it doesn't seem to be in use!
 	ECGame.EngineLib.LoadParameters = 
 	{
+		/*!!
+			* document: method
+			* name: include
+			* description: This is the include function for laoding files
+			* parameters: [
+				{
+					* name: inFileName
+					* types: ["string"]
+					* description: Name of the file to load
+				}
+			]
+			* returns: undefined
+		*/
 		include : include
-		
+		/*!!
+			* document: member
+			* name: PublicEnginePath
+			* description: Path for public engine files
+			* types: ["string"]
+			* default: Set by external loading function
+		*/
 		,PublicEnginePath : inProtectedEnginePath
+		/*!!
+			* document: member
+			* name: PrivateEnginePath
+			* description: Path for private engine files
+			* types: ["string"]
+			* default: Set by external loading function
+		*/
 		,PrivateEnginePath : inPrivateEnginePath
-		
+		/*!!
+			* document: member
+			* name: PublicGamePath
+			* description: Path for public game files
+			* types: ["string"]
+			* default: Set by external loading function
+		*/
 		,PublicGamePath : inProtectedGamePath
+		/*!!
+			* document: member
+			* name: PrivateGamePath
+			* description: Path for private game files
+			* types: ["string"]
+			* default: Set by external loading function
+		*/
 		,PrivateGamePath : inPrivateGamePath
 	};
+	//!!endNamespace: LoadParameters
 	///////////////////////////////INCLUDE SETUP//////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////
 
 	
-	//TODO: AssetPath("..."), Localize("...") + unmarked strings to obfuscate category
+	//!!TODO Feature 8: AssetPath(\"...\"), Localize(\"...\") + unmarked strings to obfuscate category
 	
 	//Load the settings flags first:
 	include(inProtectedEnginePath + "scripts/EngineSettings.js");
 	include(inProtectedGamePath + "scripts/GameSettings.js");
-	//TODO include GameSettings from game folder? (or will be done by user?)
 	
 	//Set the server flag in the global system
-	ECGame.Settings.Network.isServer = inIsServer;	//TODO this should be parameters for creating it!
+	ECGame.Settings.Network.isServer = inIsServer;
 	
-	//TODO make public and private loaders?
+	//!!TODO Refactor 8: make public and private loaders?
 		
 	if(ECGame.Settings.RUN_UNIT_TESTS)
 	{
 		include(inProtectedEnginePath + "scripts/UnitTestFramework/UnitTestFramework.js");
+		/*!!
+			@ member: unitTests
+			* namespace: ECGame
+			* types: ["ECGame.EngineLib.UnitTestFramework"]
+			* description: "Unit Test Collection"
+			* default: ECGame.EngineLib.UnitTestFramework.create()
+		*/
 		ECGame.unitTests = ECGame.EngineLib.UnitTestFramework.create();
 	}
 	
@@ -183,10 +277,11 @@ LoadEngine = function LoadEngine(
 	{
 		if(ECGame.Settings.Server.useMongoose)
 		{
-			/**!
-				@namespace: Mongoose
-				/parentNamespace: ECGame.WebServerTools
-				/description: This is the namespace for all mongoose related objects
+			/*!!
+				* document: namespace
+				* name: Mongoose
+				* namespace: ECGame.WebServerTools
+				* description: This is the namespace for all mongoose related objects
 			*/
 			ECGame.WebServerTools.Mongoose = function ECGameWebServerMongoose() { return; };
 			ECGame.WebServerTools.Mongoose = new ECGame.WebServerTools.Mongoose();
@@ -196,15 +291,15 @@ LoadEngine = function LoadEngine(
 			include(inPrivateEnginePath + "scripts/Mongoose/MongooseUserAuth.js");
 		}
 		include(inPrivateEnginePath + "scripts/WebServer.js");
-		include(inPrivateEnginePath + "scripts/DocJS.js");
-		include(inPrivateEnginePath + "scripts/CodeObfuscator.js"); /**! @todo: consider naming just Obfuscator*/
-		include(inPrivateEnginePath + "scripts/CodeCompressor.js"); /**! @todo: consider naming preprocessor or something*/
+		include(inPrivateEnginePath + "scripts/DocJS2.js");//include(inPrivateEnginePath + "scripts/DocJS.js");
+		include(inPrivateEnginePath + "scripts/CodeObfuscator.js"); //!!TODO Rename 8: consider naming just Obfuscator
+		include(inPrivateEnginePath + "scripts/CodeCompressor.js"); //!!TODO Rename 8: consider naming preprocessor or something
 		include(inPrivateEnginePath + "scripts/CodeValidator.js");
 		
 		if(ECGame.Settings.RUN_UNIT_TESTS)
 		{
 			include(inPrivateEnginePath + "scripts/unit_tests/TestObfuscator.js");
-			include(inPrivateEnginePath + "scripts/unit_tests/TestDocJS.js");
+			include(inPrivateEnginePath + "scripts/unit_tests/TestDocJS2.js");//include(inPrivateEnginePath + "scripts/unit_tests/TestDocJS.js");
 		}
 		
 		if(!ECGame.Settings.Network.isMultiplayer)
@@ -216,7 +311,7 @@ LoadEngine = function LoadEngine(
 			if(ECGame.Settings.RUN_UNIT_TESTS)
 			{
 				ECGame.unitTests.runTests();
-				//TODO delete unit tests now?
+				//!!TODO Refactor 8: delete unit tests now?
 			}
 			ECGame.webServer = new ECGame.WebServerTools.WebServer();
 			ECGame.webServer.run();
@@ -230,20 +325,21 @@ LoadEngine = function LoadEngine(
 	
 	//////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////// ENGINE SCRIPTS //////////////////////////////
-	//TODO order these better:
+	//!!TODO Refactor 8: order these better:
 	include(inProtectedEnginePath + "scripts/Misc/Helpers.js");
 	include(inProtectedEnginePath + "scripts/Misc/JsNativeExtensions.js");
 	
 	include(inProtectedEnginePath + "scripts/Math/AABB2D.js");
 	include(inProtectedEnginePath + "scripts/Math/Point2D.js");
 	
-	include(inProtectedEnginePath + "scripts/BresenhamsLine.js");/////
+	include(inProtectedEnginePath + "scripts/BresenhamsLine.js");//!!TODO Validate 8: BresenhamsLine inuse?
 	
 	include(inProtectedEnginePath + "scripts/DataStructures/LinkedListNode.js");
 	
 	include(inProtectedEnginePath + "scripts/Utilities/Timer.js");
 	include(inProtectedEnginePath + "scripts/Utilities/Updater.js");
 	include(inProtectedEnginePath + "scripts/Utilities/AssetManager.js");
+	include(inProtectedEnginePath + "scripts/PrefabObject.js");
 	
 	if(!inIsServer)
 	{
@@ -285,10 +381,13 @@ LoadEngine = function LoadEngine(
 		include(inProtectedEnginePath + "scripts/ServerMonitor.js");
 	}
 
-	include(inProtectedEnginePath + "scripts/Compression/BitPacker.js");//TODO if multiplayer?
-	include(inProtectedEnginePath + "scripts/Compression/ArithmeticCompression.js");//TODO if multiplayer?
-	include(inProtectedEnginePath + "scripts/Compression/ArithmeticCompressionModels.js");//TODO if multiplayer?
-	include(inProtectedEnginePath + "scripts/BinarySerializer.js");//TODO if multiplayer?
+	//!!TODO Refactor 8: if multiplayer?
+	//{
+		include(inProtectedEnginePath + "scripts/Compression/BitPacker.js");
+		include(inProtectedEnginePath + "scripts/Compression/ArithmeticCompression.js");
+		include(inProtectedEnginePath + "scripts/Compression/ArithmeticCompressionModels.js");
+		include(inProtectedEnginePath + "scripts/BinarySerializer.js");
+	//}
 	
 	include(inProtectedEnginePath + "scripts/GameEvent.js");
 
@@ -359,20 +458,27 @@ LoadEngine = function LoadEngine(
 	
 	//////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////// EDITOR SCRIPTS /////////////////////////////
-	if(ECGame.Settings.Editor.Enabled)
+	if(ECGame.Settings.Editor.Enabled)//!!TODO Rename 8: rename enabled
 	{
-		/**!
-			@namespace: EditorLib
-			/parentNamespace: ECGame
-			/description: This is the engine namespace
+		/*!!
+			* document: beginNamespace
+			* name: EditorLib
+			* namespace: ECGame
+			* description: This is the engine editor namespace
+		*/
+		//!!TODO Feature 5: editor
+		/*
+		Notice UI generation: http://json-schema.org/implementations.html
+		https://github.com/jdorn/json-editor
 		*/
 		ECGame.EditorLib = function ECGameEditorLib() { return; };
 		ECGame.EditorLib = new ECGame.EditorLib();
 		if(!inIsServer)
 		{
-			//TODO path for editor??
+			//!!TODO Refactor 8: path for editor??
 			include("engine_editor/" + "scripts/ParticleEditor.js");
 		}
+		//!!endNamespace: EditorLib
 	}
 	///////////////////////////////// EDITOR SCRIPTS /////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////
@@ -390,33 +496,40 @@ LoadEngine = function LoadEngine(
 	
 	//////////////////////////////////////////////////////////////////////////////
 	///////////////////////////////////// RUN! ///////////////////////////////////
-	if(inIsServer && ECGame.Settings.Server.jslintCheckCode)//TODO jshint also
+	if(inIsServer && ECGame.Settings.Server.jslintCheckCode)//!!TODO Feature 8: jshint also
 	{
 		(new ECGame.WebServerTools.CodeValidator()).validateDirectoryTree('../_unified_');
 	}
 	if(ECGame.Settings.RUN_UNIT_TESTS)
 	{
 		ECGame.unitTests.runTests();
-		//TODO delete unit tests now?
+		//!!TODO Refactor 8: delete unit tests now? => NO! delete unit tests at the end of runTests()
 	}
 	if(inIsServer)
 	{
+		/*!!
+			* document: member
+			* name: webServer
+			* namespace: ECGame
+			* types: ["ECGame.WebServerTools.WebServer"]
+			* default: new ECGame.WebServerTools.WebServer()
+			* description: The web server component serves static assets and manages logins
+		*/
+		//!!TODO Document 8: Document WebServer class
 		ECGame.webServer = new ECGame.WebServerTools.WebServer();
 		ECGame.webServer.run(
 			function serverIsRunning()
 			{
 				if(ECGame.Settings.Network.isMultiplayer)
 				{
-					ECGame.instance = ECGame.EngineLib.GameInstance.create();
-					ECGame.instance.run();
+					createAndRunGame();
 				}
 			}
 		);
 	}
 	if(!inIsServer)
 	{
-		ECGame.instance = ECGame.EngineLib.GameInstance.create();
-		ECGame.instance.run();
+		createAndRunGame();
 	}
 	///////////////////////////////////// RUN! ///////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////

@@ -294,10 +294,10 @@ ECGame.WebServerTools.WebServer.prototype._serveCoreContent = function _serveCor
 	aThis = this;
 
 	//generate and serve documentation
-	if(ECGame.Settings.Server.generateDocumentation) /**! @todo: NOT in final release mode! */
+	if(ECGame.Settings.Server.generateDocumentation) /*!!TODO Refactor 7: NOT in final release mode! */
 	{
 		docJS = ECGame.WebServerTools.DocJS.create();
-		docJS.loadDirectory('../_unified_');
+		docJS.loadDirectory('../_unified_', ['.js', '.html', '.css', '.hbs'], ['.git', 'docs/generated']);
 		docJS.run();
 
 		this.myExpressApp.get(
@@ -320,8 +320,8 @@ ECGame.WebServerTools.WebServer.prototype._serveCoreContent = function _serveCor
 	if(ECGame.Settings.Server.compressClientCode)
 	{
 		this.myCodeCompressor = new ECGame.WebServerTools.CodeCompressor(
-			'../_protected_/engine/',	/**! @todo: should now only need one path not two!?!? */
-			'../_protected_/game/'/**! @todo: put real game name here! */
+			'../_protected_/engine/',	//!!TODO Refactor 8: should now only need one path not two!?!?
+			'../_protected_/game/'
 		);
 		this.myCodeCompressor.makeCompactGameLoader();
 

@@ -1,0 +1,54 @@
+<!--
+	© Copyright 2011-2016 Jeremy Gross
+	jeremykentbgross@gmail.com
+	Distributed under the terms of the GNU Lesser GPL (LGPL)
+		
+	This file is part of EmpathicCivGameEngine™.
+	
+	EmpathicCivGameEngine™ is free software: you can redistribute it and/or modify
+	it under the terms of the GNU Lesser General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	EmpathicCivGameEngine™ is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Lesser General Public License for more details.
+	
+	You should have received a copy of the GNU Lesser General Public License
+	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!--!!
+	* document: file
+	* description: This file is a template for the ECGE Documentation Generation.  (Create Display for basic properties)
+-->
+
+<tr><td class="tableRowLabel">Name:</td><td>{{name}}</td></tr>
+<tr><td class="tableRowLabel">Description:</td><td>{{description}}</td></tr>
+{{#if namespace}}
+	<tr><td class="tableRowLabel">Parent Namespace:</td><td><a href="/_protected_/docs/generated/namespaces/{{namespace}}.html" target="mainFrame">{{namespace}}</a></td></tr>
+{{/if}}
+{{#if parents}}
+	<tr><td class="tableRowLabel">Parents:</td><td>
+		{{#each parents}}<a href="/_protected_/docs/generated/classes/{{this}}.html" target="mainFrame">{{this}}</a>{{/each}}
+	</td></tr>
+{{/if}}
+{{#if class}}
+	<tr><td class="tableRowLabel">Class:</td><td>
+		<a href="/_protected_/docs/generated/classes/{{class}}.html" target="mainFrame">{{class}}</a>
+	</td></tr>
+{{/if}}
+<tr><td class="tableRowLabel">Code Location:</td><td>
+	<a href="/_protected_/docs/generated/files/{{fileName}}.html#{{lineNumber}}">{{fileName}}:{{lineNumber}}</a>
+</td></tr>
+<!--Below todo's is optional, and maybe/maybe not best..-->
+{{#if containedTodos}}
+	<tr><td class="tableRowLabel">Todo's:</td><td>
+	{{> todoList this}}
+	</td></tr>
+{{/if}}
+<!--
+<li>Location: <a href="/_protected_/docs/generated/files/{{fileName}}.html#{{lineNumber}}" target="mainFrame">{{fileName}}:{{lineNumber}}</a></li>
+-->
+

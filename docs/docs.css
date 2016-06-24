@@ -1,107 +1,261 @@
+/*
+	© Copyright 2011-2016 Jeremy Gross
+	jeremykentbgross@gmail.com
+	Distributed under the terms of the GNU Lesser GPL (LGPL)
+	
+	This file is part of EmpathicCivGameEngine™.
+	
+	EmpathicCivGameEngine™ is free software: you can redistribute it and/or modify
+	it under the terms of the GNU Lesser General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	EmpathicCivGameEngine™ is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Lesser General Public License for more details.
+	
+	You should have received a copy of the GNU Lesser General Public License
+	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+/*!!
+	* document: file
+	* description: This file is the css for the ECGE Documentation pages.
+*/
+
+html
+{
+	background: linear-gradient(to top right, #008000, #000000, #000080);
+	/*background-size: cover;*/
+	background-attachment:fixed;
+
+	min-width: 100%;
+	min-height: 100%;
+	margin: 0px;
+	border: 0px;
+	padding: 0px;
+
+	color: white;
+	text-shadow:
+		-1px 0 black,
+		0 1px black,
+		1px 0 black,
+		0 -1px black;
+	font-family:sans-serif;
+}
+
 body
 {
-	background-color : #E0E0FF;
+	/*background-color : #E0E0FF;*/
+
+	margin: 10px;
+	border: 0px;
+	padding: 0px;
+	background-color:transparent;
 }
 
 h1
 {
-	background-color : #FFFFFF;
+	/*background-color : #FFFFFF;*/
 	
 	font-size : 300%;
 	text-align : center;
 	
-	border-style : outset;
+	/*border-style : outset;*/
 	border-width : 5px;
-	border-color : #C0C0FF;
+	/*border-color : #C0C0FF;*/
+
+	border-style:ridge;
+	border-radius: 10px;
 	
 	padding : 30px;
 }
+
 h2
 {
-	//background-color : #FFFFFF;
+	/*background-color : #FFFFFF;*/
 	
 	font-size : 150%;
 	text-align : left;
 	
-	border-style : solid;
+	/*border-style : solid;*/
 	border-width : 5px;
-	border-color : #C0C0FF;
+	/*border-color : #C0C0FF;*/
+
+	border-style:ridge;
+	border-radius: 10px;
 	
 	padding : 15px;
 }
+
 h3
 {
-	//background-color : #FFFFFF;
+	/*background-color : #FFFFFF;*/
 	
 	font-size : 125%;
 	text-align : left;
 	
-	border-style : solid;
+	/*border-style : solid;*/
 	border-width : 5px;
-	border-color : #C0C0FF;
+	/*border-color : #C0C0FF;*/
+
+	border-style:ridge;
+	border-radius: 10px;
 	
 	padding : 5px;
 }
+
 h4
 {
-	//background-color : #FFFFFF;
+	/*background-color : #FFFFFF;*/
+	
+	font-size : 100%;
+	text-align : left;
+	
+	/*border-style : solid;*/
+	border-width : 3px;
+	/*border-color : #C0C0FF;*/
+
+	border-style:ridge;
+	border-radius: 10px;
+	
+	padding : 2px;
+
+	/*just for h4:*/
+	font-weight: normal;
+	margin-left : 20px;
+}
+
+
+
+table, td, th
+{
+	/*background-color : #FFFFFF;*/
 	
 	font-size : 100%;
 	text-align : left;
 	
 	border-style : solid;
-	border-width : 3px;
-	border-color : #C0C0FF;
+	border-width : 1px;
+	border-color : #A0A0FF;
 	
-	padding : 2px;
+	padding : 1px;
 }
-
-#code
+table
 {
-	background-color : #000000;
-	color : #008000;
+	margin-left : 40px;
 }
-.keyword
+td ul, td ol
 {
-	background-color : #000000;
-	color : #0000FF;
+	margin: 0px;
 }
-.comment, .comment .keyword
+.tableRowLabel
 {
-	background-color : #000000;
-	color : #808080;
+	text-align: right;
+	font-weight: bold;
+}
+.tableColumnLabel
+{
+	/*text-align: left;*/
+	font-weight: bold;
 }
 
 a
 {
 	font-size : 110%;
 }
+a:link
+{
+	color : #40FF40;
+}
+a:visited
+{
+	color : #00FF00;
+}
+a:hover
+{
+	color : #4040FF;
+}
+a:active
+{
+	color : #FF4040;
+}
+
+hr
+{
+	border: 0px;
+	height: 5px;
+	margin-top: 20px;
+	background-image: linear-gradient(to right, rgba(0,0,0,0), rgba(0,0,0,1), rgba(0,0,0,0));
+}
+
+img
+{
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	background-color: white;
+}
+
+
 
 iframe
 {
-	overflow : auto;
+	/*overflow : auto;*/
+	/*resize: both;*/
+	border-width : 5px;
+	border-style:ridge;
+	border-radius: 10px;
 }
+
 #mainFrame
 {
 	position : absolute;
-	left : 31%;
+	left : 21%;
 	top : 1%;
-	width : 68%;
-	height : 98%;
+	width : 78%;
+	height : 97%;
 }
+
 #masterIndexFrame
 {
 	position : absolute;
 	left : 1%;
 	top : 1%;
-	width : 29%;
+	width : 19%;
 	height : 18%;
 }
+
 #indexFrame
 {
 	position : absolute;
 	left : 1%;
 	top : 21%;
-	width : 29%;
-	height : 78%;
+	width : 19%;
+	height : 77%;
 }
+
+
+
+pre	/*code format*/
+{
+	tab-size: 4;
+	margin: 0;
+}
+code	/*code format*/
+{
+	/*padding: 0;*/ /*doesn't seem to work anyway*/
+}
+
+.lineNumbersColumn
+{
+	float: left;
+	border-right: 1px solid green;
+	text-align: right;
+}
+
+
+

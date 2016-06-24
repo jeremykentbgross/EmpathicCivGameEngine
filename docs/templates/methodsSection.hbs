@@ -1,0 +1,61 @@
+<!--
+	© Copyright 2011-2016 Jeremy Gross
+	jeremykentbgross@gmail.com
+	Distributed under the terms of the GNU Lesser GPL (LGPL)
+		
+	This file is part of EmpathicCivGameEngine™.
+	
+	EmpathicCivGameEngine™ is free software: you can redistribute it and/or modify
+	it under the terms of the GNU Lesser General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+	
+	EmpathicCivGameEngine™ is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Lesser General Public License for more details.
+	
+	You should have received a copy of the GNU Lesser General Public License
+	along with EmpathicCivGameEngine™.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<!--!!
+	* document: file
+	* description: This file is a template for the ECGE Documentation Generation.  (Creates Method Section)
+-->
+
+<h3>Methods:</h3>
+
+{{#each	containedMethods}}
+	<h4 style="{{isOverrideStyle ../this this}}" id="{{#if namespace}}{{namespace}}.{{/if}}{{#if class}}{{class}}.{{/if}}{{name}}">Method: {{name}}</h4>
+	<table style="{{isOverrideStyle ../this this}}">
+		<tbody>
+			{{> basicProperties this}}
+
+			<tr><td class="tableRowLabel">
+				Parameters:</td><td>
+				<ol>
+				{{#each parameters}}
+					<li>{{name}}: {{description}} {{> types types}}{{#if default}} = {{default}}{{/if}}
+					</li>
+				{{/each}}
+				</ol>
+			</td></tr>
+
+			<tr><td class="tableRowLabel">Returns:</td><td> {{> types returns}}</td></tr>
+
+			<!--!!TODO Feature 8: more properties!-->
+
+			{{#if containedTodos}}
+				<tr><td class="tableRowLabel">Todo's:</td><td>
+				{{> todoList this}}
+				</td></tr>
+			{{/if}}
+		</tbody>
+	</table>
+	{{#if inlineUml}}
+		<img src="../methods/images/{{#if namespace}}{{namespace}}.{{/if}}{{#if class}}{{class}}.{{/if}}{{name}}.svg"></img>
+	{{/if}}
+	<hr>
+{{/each}}
+

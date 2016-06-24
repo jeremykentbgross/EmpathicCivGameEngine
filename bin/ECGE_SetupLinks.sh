@@ -22,8 +22,6 @@ ln -s ../engine/protected/ ../_protected_/engine
 ln -s ../engine_test_game/protected/ ../_protected_/game
 ln -s ../3rdParty/protected/ ../_protected_/3rdParty
 ln -s ../editor/protected/ ../_protected_/engine_editor
-
-# Docs links:
 ln -s ../docs/ ../_protected_/docs
 
 # Setup private links:
@@ -38,6 +36,7 @@ mkdir ../_unified_
 ln -s ../engine/ ../_unified_/engine
 ln -s ../engine_test_game/ ../_unified_/game
 ln -s ../editor/ ../_unified_/engine_editor
+ln -s ../docs/ ../_unified_/docs
 
 # Prepare logs directory
 mkdir ../logs
